@@ -10,7 +10,9 @@ export const {
     config
 } = createStitches({
     theme: {
-        colors: {},
+        colors: {
+            text: 'black'
+        },
         space: {},
         fontSizes: {},
         fonts: {},
@@ -28,5 +30,13 @@ export const {
 })
 
 globalCss({
-    "*": { margin: 10, padding: 0 }
+    "*": {
+        margin: 0,
+        padding: 0,
+        backgroundColor: 'SeaGreen',
+    },
+    'a:link': { 'text-decoration': 'none' },
+    'a:visited': { 'text-decoration': 'none', color: '$text'  },
+    'a:hover': { 'text-decoration': 'none' },
+    'a:active': { 'text-decoration': 'none' }
 })()
