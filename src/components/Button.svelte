@@ -13,6 +13,6 @@
   })
 </script>
 
-<button class={style()}>
+<button on:click class={style()}>
   <slot />
 </button>
