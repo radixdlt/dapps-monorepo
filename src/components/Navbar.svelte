@@ -4,6 +4,8 @@
   import { cubicOut } from "svelte/easing"
   import { onMount } from "svelte"
 
+  const pages: string[] = ["explorer", "staking"]
+
   const lineWidth = 50
 
   let windowResizeTrigger = {}
@@ -73,7 +75,8 @@
 
   <center>
     <a bind:this={homeRef} class={link()} on:click={select} href="/">home</a>
-    <a class={link()} on:click={select} href="/explorer">explorer</a>
-    <a class={link()} on:click={select} href="/staking">staking</a>
+    {#each pages as page}
+      <a class={link()} on:click={select} href={`/${page}`}>{page}</a>
+    {/each}
   </center>
 </div>
