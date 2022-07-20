@@ -3,7 +3,7 @@
 
   const style = css({
     backgroundColor: "gainsboro",
-    fontSize: "13px",
+    fontSize: "$small",
     border: "0",
     "&:hover": {
       backgroundColor: "lightgray"
