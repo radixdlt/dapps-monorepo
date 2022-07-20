@@ -17,66 +17,56 @@
 
   const line = css({
     position: "absolute",
-    border: "2px solid red",
+    border: "2px solid black",
     width: "50px",
-    marginTop: "20px"
+    marginTop: "20px",
+    borderRadius: "5px"
   })
 
-  let windowWidth: number = 0
+  let windowWidth: number
   let home: any
+  let selected: any
 
-  const linePosition: Tweened<number> = tweened(0, {
-    duration: 1000,
-    easing: cubicOut
-  })
-
-  const debounce = (func: any, delay: any) => {
-    let timer: any
-
-    return function () {
-      // @ts-ignore
-      const context = this
-      const args = arguments
-      clearTimeout(timer)
-      timer = setTimeout(() => func.apply(context, args), delay)
-    }
-  }
-
-  const setWindowWidth = () => {
-    windowWidth = window.innerWidth
-  }
-
-  const debouncedSetWindowWidth = debounce(setWindowWidth, 300)
+  let linePosition: Tweened<number>
 
   onMount(() => {
-    window.addEventListener("resize", debouncedSetWindowWidth)
+    windowWidth = window.innerWidth
+    linePosition = tweened(home.offsetLeft, {
+      duration: 1000,
+      easing: cubicOut
+    })
 
-    return () => {
-      window.removeEventListener("resize", debouncedSetWindowWidth)
-    }
+    window.addEventListener("resize", () => (windowWidth = window.innerWidth))
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        () => (windowWidth = window.innerWidth)
+      )
   })
 
-  const move = (e: any) => {
+  const select = (e: any) => {
     linePosition.set(e.target.offsetLeft)
+    selected = e.target
   }
 
-  const getLinePosition = () =>
-    (($linePosition === 0 ? home.offsetLeft : $linePosition) / windowWidth) *
-    100
-
+  let offset: number
+  $: {
+    if (linePosition) {
+      if (selected) linePosition.set(selected.offsetLeft)
+      offset = ($linePosition / windowWidth) * 100
+    }
+  }
 </script>
 
 <div class={navbar()}>
-  {#if home}
-    <div
-      class={line()}
-      style:left={`${getLinePosition()}vw`}
-    />
+  {#if offset}
+    <div class={line()} style:left={`${offset}vw`} />
   {/if}
 
   <center>
-    <a bind:this={home} class={link()} on:click={move} href="/index">home</a>
-    <a class={link()} on:click={move} href="/explorer">explorer</a>
-    <a class={link()} on:click={move} href="/staking">staking</a>
+    <a bind:this={home} class={link()} on:click={select} href="/">home</a>
+    <a class={link()} on:click={select} href="/explorer">explorer</a>
+    <a class={link()} on:click={select} href="/staking">staking</a>
   </center>
 </div>
