@@ -19,12 +19,12 @@
 
   const line = css({
     position: "absolute",
-    border: "2px solid black",
+    border: "1px solid black",
     width: `${lineWidth}px`,
     marginTop: "20px",
     borderRadius: "5px"
   })
-  
+
   let homeRef: any
   let selectedRef: any
   let linePosition: Tweened<number>
