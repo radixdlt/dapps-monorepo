@@ -29,9 +29,9 @@
   let selectedRef: any
   let linePosition: Tweened<number>
 
-  const getAlignedXPosition = (element1: any) =>
-    element1.getBoundingClientRect().x -
-    (lineWidth / 2 - element1.getBoundingClientRect().width / 2)
+  const getAlignedXPosition = (element: any) =>
+    element.getBoundingClientRect().x -
+    (lineWidth / 2 - element.getBoundingClientRect().width / 2)
 
   onMount(() => {
     linePosition = tweened(getAlignedXPosition(homeRef), {
