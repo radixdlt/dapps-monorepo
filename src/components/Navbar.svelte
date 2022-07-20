@@ -4,6 +4,8 @@
   import { cubicOut } from "svelte/easing"
   import { onMount } from "svelte"
 
+  const lineWidth = 50
+
   const navbar = css({
     marginTop: 15,
     height: 30
@@ -18,54 +20,49 @@
   const line = css({
     position: "absolute",
     border: "2px solid black",
-    width: "50px",
+    width: `${lineWidth}px`,
     marginTop: "20px",
     borderRadius: "5px"
   })
-
-  let windowWidth: number
-  let home: any
-  let selected: any
-
+  
+  let homeRef: any
+  let selectedRef: any
   let linePosition: Tweened<number>
 
+  const getAlignedXPosition = (element1: any) =>
+    element1.getBoundingClientRect().x -
+    (lineWidth / 2 - element1.getBoundingClientRect().width / 2)
+
   onMount(() => {
-    windowWidth = window.innerWidth
-    linePosition = tweened(home.offsetLeft, {
-      duration: 1000,
+    linePosition = tweened(getAlignedXPosition(homeRef), {
+      duration: 500,
       easing: cubicOut
     })
-
-    window.addEventListener("resize", () => (windowWidth = window.innerWidth))
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        () => (windowWidth = window.innerWidth)
-      )
   })
 
   const select = (e: any) => {
-    linePosition.set(e.target.offsetLeft)
-    selected = e.target
+    console.log("target", e.target.getBoundingClientRect())
+    selectedRef = e.target
   }
 
   let offset: number
   $: {
     if (linePosition) {
-      if (selected) linePosition.set(selected.offsetLeft)
-      offset = ($linePosition / windowWidth) * 100
+      if (selectedRef) {
+        linePosition.set(getAlignedXPosition(selectedRef))
+      }
+      offset = $linePosition
     }
   }
 </script>
 
 <div class={navbar()}>
   {#if offset}
-    <div class={line()} style:left={`${offset}vw`} />
+    <div class={line()} style:left={`${offset}px`} />
   {/if}
 
   <center>
-    <a bind:this={home} class={link()} on:click={select} href="/">home</a>
+    <a bind:this={homeRef} class={link()} on:click={select} href="/">home</a>
     <a class={link()} on:click={select} href="/explorer">explorer</a>
     <a class={link()} on:click={select} href="/staking">staking</a>
   </center>
