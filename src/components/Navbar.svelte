@@ -6,6 +6,8 @@
 
   const lineWidth = 50
 
+  let windowResizeTrigger = {}
+
   const navbar = css({
     marginTop: 15,
     height: 30
@@ -38,27 +40,35 @@
       duration: 500,
       easing: cubicOut
     })
+
+    window.addEventListener("resize", () => (windowResizeTrigger = {}))
+    return () =>
+      window.removeEventListener("resize", () => (windowResizeTrigger = {}))
   })
 
-  const select = (e: any) => {
-    console.log("target", e.target.getBoundingClientRect())
-    selectedRef = e.target
+  const select = (e: any) => (selectedRef = e.target)
+
+  const animateLine = (duration?: number) => {
+    if (!linePosition) return
+    linePosition.set(getAlignedXPosition(selectedRef || homeRef), {
+      duration
+    })
   }
 
-  let offset: number
   $: {
-    if (linePosition) {
-      if (selectedRef) {
-        linePosition.set(getAlignedXPosition(selectedRef))
-      }
-      offset = $linePosition
-    }
+    selectedRef
+    animateLine()
+  }
+
+  $: {
+    windowResizeTrigger
+    animateLine(0)
   }
 </script>
 
 <div class={navbar()}>
-  {#if offset}
-    <div class={line()} style:left={`${offset}px`} />
+  {#if linePosition}
+    <div class={line()} style:left={`${$linePosition}px`} />
   {/if}
 
   <center>
