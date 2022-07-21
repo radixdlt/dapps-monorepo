@@ -1,7 +1,7 @@
 <script lang="ts">
   import { css } from "@styles"
-import ConnectButton from "./ConnectButton.svelte";
-import Navbar from "./Navbar.svelte";
+  import ConnectButton from "./ConnectButton.svelte"
+  import Navbar from "./Navbar.svelte"
 
   const connectBtn = css({
     position: "fixed",
@@ -11,7 +11,7 @@ import Navbar from "./Navbar.svelte";
 
   const logo = css({
     fontFamily: "StreetFighter",
-    fontSize: 40,
+    fontSize: 40
   })
 
   const header = css({
@@ -35,7 +35,11 @@ import Navbar from "./Navbar.svelte";
 
 <style>
   .gradient-text {
-    background-image: linear-gradient(19deg, #21d4fd 0%, #b721ff 100%);
+    background-image: linear-gradient(
+      19deg,
+      hsl(191, 98%, 56%) 0%,
+      hsl(281, 100%, 56%) 100%
+    );
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;

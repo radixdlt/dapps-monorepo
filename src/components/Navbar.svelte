@@ -23,8 +23,8 @@
 
   const line = css({
     position: "absolute",
-    background: 'linear-gradient(19deg, #21d4fd 0%, #b721ff 100%)',
-    height: 3,
+    background: 'linear-gradient(19deg, hsl(191, 100%, 56%) 0%, hsl(281, 100%, 56%) 100%)',
+    height: 4,
     width: `${lineWidth}px`,
     marginTop: "22px",
     borderRadius: "5px",

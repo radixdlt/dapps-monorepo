@@ -3,7 +3,7 @@
   import { css, getCssText } from "@styles"
 
   const frame = css({
-    padding: "50px"
+    padding: '50px 300px 50px'
   })
 </script>
 
