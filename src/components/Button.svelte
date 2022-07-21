@@ -1,7 +1,10 @@
 <script lang="ts">
+  import type { CSS } from "@stitches/core/types/css-util"
   import { css } from "@styles"
 
-  const style = css({
+  export let style: CSS | undefined = undefined
+
+  const button = css({
     backgroundColor: "gainsboro",
     fontSize: "$small",
     border: "0",
@@ -9,10 +12,11 @@
       backgroundColor: "lightgray"
     },
     padding: 10,
-    borderRadius: 15
+    borderRadius: 10,
+    ...style
   })
 </script>
 
-<button on:click class={style()}>
+<button on:click class={button()}>
   <slot />
 </button>

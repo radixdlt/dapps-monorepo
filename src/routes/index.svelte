@@ -1,7 +1,8 @@
 <script lang="ts">
-  import Button from "@components/Button.svelte"
+  import { css } from "@styles"
+
+  const p = css({
+    marginTop: '30px',
+    fontStyle: "italic"
+  })
 </script>
-
-<h1>Radix Dashboard</h1>
-
-<Button>Test button</Button>

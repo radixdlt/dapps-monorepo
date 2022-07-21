@@ -4,7 +4,11 @@
   import { cubicOut } from "svelte/easing"
   import { onMount } from "svelte"
 
+  const pages: string[] = ["explorer", "staking"]
+
   const lineWidth = 50
+
+  let windowResizeTrigger = {}
 
   const navbar = css({
     marginTop: 15,
@@ -19,10 +23,12 @@
 
   const line = css({
     position: "absolute",
-    border: "1px solid black",
+    background: 'linear-gradient(19deg, hsl(191, 100%, 56%) 0%, hsl(281, 100%, 56%) 100%)',
+    height: 4,
     width: `${lineWidth}px`,
-    marginTop: "20px",
-    borderRadius: "5px"
+    marginTop: "22px",
+    borderRadius: "5px",
+    opacity: "50%"
   })
 
   let homeRef: any
@@ -35,35 +41,44 @@
 
   onMount(() => {
     linePosition = tweened(getAlignedXPosition(homeRef), {
-      duration: 500,
+      duration: 2000,
       easing: cubicOut
     })
+
+    const triggerResize = () => (windowResizeTrigger = {})
+
+    window.addEventListener("resize", triggerResize)
+    return () => window.removeEventListener("resize", triggerResize)
   })
 
-  const select = (e: any) => {
-    console.log("target", e.target.getBoundingClientRect())
-    selectedRef = e.target
+  const select = (e: any) => (selectedRef = e.target)
+
+  const animateLine = (duration?: number) => {
+    if (!linePosition) return
+    linePosition.set(getAlignedXPosition(selectedRef || homeRef), { duration })
   }
 
-  let offset: number
   $: {
-    if (linePosition) {
-      if (selectedRef) {
-        linePosition.set(getAlignedXPosition(selectedRef))
-      }
-      offset = $linePosition
-    }
+    selectedRef
+    animateLine()
+  }
+
+  $: {
+    windowResizeTrigger
+    animateLine(0)
   }
 </script>
 
 <div class={navbar()}>
-  {#if offset}
-    <div class={line()} style:left={`${offset}px`} />
+  {#if linePosition}
+    <div class={line()} style:left={`${$linePosition}px`} />
   {/if}
 
   <center>
     <a bind:this={homeRef} class={link()} on:click={select} href="/">home</a>
-    <a class={link()} on:click={select} href="/explorer">explorer</a>
-    <a class={link()} on:click={select} href="/staking">staking</a>
+
+    {#each pages as page}
+      <a class={link()} on:click={select} href={`/${page}`}>{page}</a>
+    {/each}
   </center>
 </div>
