@@ -11,7 +11,11 @@ export const {
 } = createStitches({
     theme: {
         colors: {
-            textColor: 'black'
+            black: '#343434',
+            primary: '#EE964B',
+            primaryLight: '#F8D4B4',
+            secondary: '#F95738',
+            text: '#F7FFF7'
         },
         space: {},
         fontSizes: {
@@ -35,6 +39,11 @@ globalCss({
     "*": {
         margin: 0,
         padding: 0
+    },
+    body: {
+        minWidth: '400px',
+        backgroundColor: "$black",
+        color: '$text'
     },
     'a:link': { 'text-decoration': 'none' },
     'a:visited': { 'text-decoration': 'none', color: '$text'  },

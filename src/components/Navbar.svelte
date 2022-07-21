@@ -23,10 +23,12 @@
 
   const line = css({
     position: "absolute",
-    border: "1px solid black",
+    border: "2px solid",
+    borderColor: '$primary',
     width: `${lineWidth}px`,
-    marginTop: "20px",
-    borderRadius: "5px"
+    marginTop: "22px",
+    borderRadius: "5px",
+    opacity: "50%"
   })
 
   let homeRef: any
@@ -43,18 +45,17 @@
       easing: cubicOut
     })
 
-    window.addEventListener("resize", () => (windowResizeTrigger = {}))
-    return () =>
-      window.removeEventListener("resize", () => (windowResizeTrigger = {}))
+    const triggerResize = () => (windowResizeTrigger = {})
+
+    window.addEventListener("resize", triggerResize)
+    return () => window.removeEventListener("resize", triggerResize)
   })
 
   const select = (e: any) => (selectedRef = e.target)
 
   const animateLine = (duration?: number) => {
     if (!linePosition) return
-    linePosition.set(getAlignedXPosition(selectedRef || homeRef), {
-      duration
-    })
+    linePosition.set(getAlignedXPosition(selectedRef || homeRef), { duration })
   }
 
   $: {
@@ -75,6 +76,7 @@
 
   <center>
     <a bind:this={homeRef} class={link()} on:click={select} href="/">home</a>
+
     {#each pages as page}
       <a class={link()} on:click={select} href={`/${page}`}>{page}</a>
     {/each}
