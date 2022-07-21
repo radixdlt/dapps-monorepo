@@ -6,7 +6,7 @@
   style={{
     backgroundColor: "$primary",
     "&:hover": {
-      backgroundColor: "$primaryLight"
+      filter: 'brightness(150%)'
     }
   }}
 >

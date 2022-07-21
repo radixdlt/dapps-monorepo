@@ -12,9 +12,12 @@ export const {
     theme: {
         colors: {
             black: '#343434',
-            primary: '#EE964B',
+            darker: '#525252',
+            dark: '#707070',
+            primary: '#47FFC8',
             primaryLight: '#F8D4B4',
             secondary: '#F95738',
+            contrast: '#73EEDC',
             text: '#F7FFF7'
         },
         space: {},
@@ -31,14 +34,19 @@ export const {
         radii: {},
         shadows: {},
         zIndices: {},
-        transitions: {},
+        transitions: {}
     },
+    utils: {
+        linearGradient: (value: string) => ({
+            backgroundImage: `linear-gradient(${value})`,
+        }),
+    }
 })
 
 globalCss({
     "*": {
         margin: 0,
-        padding: 0
+        padding: 0,
     },
     body: {
         minWidth: '400px',
@@ -46,7 +54,7 @@ globalCss({
         color: '$text'
     },
     'a:link': { 'text-decoration': 'none' },
-    'a:visited': { 'text-decoration': 'none', color: '$text'  },
+    'a:visited': { 'text-decoration': 'none', color: '$text' },
     'a:hover': { 'text-decoration': 'none' },
     'a:active': { 'text-decoration': 'none' }
 })()

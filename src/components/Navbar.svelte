@@ -23,8 +23,8 @@
 
   const line = css({
     position: "absolute",
-    border: "2px solid",
-    borderColor: '$primary',
+    background: 'linear-gradient(19deg, #21d4fd 0%, #b721ff 100%)',
+    height: 3,
     width: `${lineWidth}px`,
     marginTop: "22px",
     borderRadius: "5px",
@@ -41,7 +41,7 @@
 
   onMount(() => {
     linePosition = tweened(getAlignedXPosition(homeRef), {
-      duration: 500,
+      duration: 2000,
       easing: cubicOut
     })
 
