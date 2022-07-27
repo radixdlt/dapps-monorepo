@@ -2,6 +2,7 @@
   import { css } from "@styles"
 
   export let placeholder: string = ''
+  export let id: string
 
   const input = css({
     backgroundColor: '$dark',
@@ -11,4 +12,4 @@
   })
 </script>
 
-<input class={input()} placeholder={placeholder} type="text" />
+<input bind:value={id} class={input()} placeholder={placeholder} type="text" />
