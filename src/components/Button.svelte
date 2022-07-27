@@ -13,6 +13,7 @@
     },
     padding: 10,
     borderRadius: 10,
+    color: 'black',
     ...style
   })
 </script>

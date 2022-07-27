@@ -1,5 +1,5 @@
 import type { RequestHandler } from './__types/[transaction]'
-import { MAINNET_URL } from '../../constants'
+import { MAINNET_URL } from '../../../constants'
 
 export const GET: RequestHandler = async ({ params }) => {
     const response = await fetch(`${MAINNET_URL}/transaction/status`, {
