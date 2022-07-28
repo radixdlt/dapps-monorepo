@@ -56,3 +56,10 @@ globalCss({
     'input:hover': { 'outline': 'none' },
     'input:focus': { 'outline': 'none' }
 })()
+
+export const box = css({
+    backgroundColor: '$darker',
+    padding: 20,
+    marginTop: 50,
+    borderRadius: 15
+})

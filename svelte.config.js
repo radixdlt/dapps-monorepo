@@ -12,7 +12,8 @@ const config = {
 		},
 		alias: {
 			'@components': 'src/components',
-			'@styles': 'src/styles.ts'
+			'@styles': 'src/styles.ts',
+			'@types': 'src/types.ts'
 		}
 	}
 }
