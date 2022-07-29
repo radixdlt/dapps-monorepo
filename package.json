@@ -9,7 +9,8 @@
 		"prepare": "svelte-kit sync",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "cypress open"
+		"cypress": "cypress open",
+		"test": "cypress run"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
