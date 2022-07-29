@@ -25,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@stitches/core": "^1.2.8"
+		"@stitches/core": "^1.2.8",
+		"neverthrow": "^5.0.0"
 	}
 }

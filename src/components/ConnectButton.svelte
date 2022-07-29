@@ -1,5 +1,22 @@
 <script lang="ts">
+  import { Wallet } from "src/mock-sdk"
+import { accounts } from "src/stores";
+
   import Button from "./Button.svelte"
+
+  const connect = async () => {
+    if (!Wallet.isAvailable()) {
+      // TODO
+    }
+
+    const result = await Wallet.connect("Radix Dashboard", { accounts: "any" })
+    
+    if(result.isOk()) {
+      accounts.set(result.value.accounts)
+    } else {
+      // TODO
+    }
+  }
 </script>
 
 <Button
@@ -9,6 +26,7 @@
       backgroundColor: "$primaryLight"
     }
   }}
+  on:click={connect}
 >
   Connect
 </Button>
