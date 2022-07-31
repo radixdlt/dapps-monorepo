@@ -18,11 +18,7 @@ export const Wallet = {
     requestProof: () => { }
 }
 
-type Err = {
-    isErr: () => true
-}
-
-type Account = {
+export type Account = {
     label: string,
     address: string
 }
