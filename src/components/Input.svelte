@@ -8,7 +8,7 @@
     backgroundColor: '$dark',
     border: 'none',
     borderRadius: 10,
-    padding: 10
+    padding: 10,
   })
 </script>
 

@@ -1,27 +1,23 @@
 <script lang="ts">
   import { goto } from "$app/navigation"
   import Button from "@components/Button.svelte"
-
   import Input from "@components/Input.svelte"
-
-  import { css } from "@styles"
+  import { css } from "@stitches/core"
 
   let id: string
 
-  const frame = css({
-    display: "flex",
-    flexDirection: "column"
-  })
-
   const redirect = () => goto(`/explorer/transaction/${id}`)
+
+  const grid = css({
+    display: "grid",
+    grid: `auto / 90% 10%`,
+    columnGap: 10
+  })
 </script>
 
-<div class={frame()}>
+<div class={grid()}>
   <Input bind:id placeholder="Enter Transaction ID" />
+  <Button on:click={redirect}>Search</Button>
 </div>
 
-<Button style={{
-    marginTop: 10
-}} on:click={redirect}>Search</Button>
-
-<slot></slot>
+<slot />

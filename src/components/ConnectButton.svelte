@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Wallet } from "src/mock-sdk"
-import { accounts } from "src/stores";
+  import { Wallet } from "@sdk"
+  import { accounts } from "@stores"
 
   import Button from "./Button.svelte"
 
@@ -10,8 +10,8 @@ import { accounts } from "src/stores";
     }
 
     const result = await Wallet.connect("Radix Dashboard", { accounts: "any" })
-    
-    if(result.isOk()) {
+
+    if (result.isOk()) {
       accounts.set(result.value.accounts)
     } else {
       // TODO
