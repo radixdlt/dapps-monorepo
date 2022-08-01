@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation"
   import Button from "@components/Button.svelte"
   import Input from "@components/Input.svelte"
-  import { css } from "@stitches/core"
+  import { css } from "@styles"
 
   let id: string
 
