@@ -15,4 +15,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 exports.__esModule = true;
 __exportStar(require("./wallet"), exports);
+__exportStar(require("./gateway"), exports);
 //# sourceMappingURL=index.js.map

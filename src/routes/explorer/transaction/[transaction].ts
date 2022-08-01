@@ -1,22 +1,9 @@
 import type { RequestHandler } from './__types/[transaction]'
 import { MAINNET_URL } from '../../../constants'
+import { transactionStatus } from 'radix-js'
 
 export const GET: RequestHandler = async ({ params }) => {
-    const response = await fetch(`${MAINNET_URL}/transaction/status`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            network_identifier: {
-                network: "mainnet"
-            },
-            transaction_identifier: {
-                hash: params.transaction
-            }
-        })
-    })
+    const response = await transactionStatus(params.transaction, MAINNET_URL)
 
     const tx = await response.json()
 
