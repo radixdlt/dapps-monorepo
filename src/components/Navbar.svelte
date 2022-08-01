@@ -41,7 +41,6 @@
 
   onMount(() => {
     linePosition = tweened(getAlignedXPosition(homeRef), {
-      duration: 2000,
       easing: cubicOut
     })
 
@@ -60,7 +59,7 @@
 
   $: {
     selectedRef
-    animateLine()
+    animateLine(500)
   }
 
   $: {

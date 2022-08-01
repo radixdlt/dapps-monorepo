@@ -11,7 +11,7 @@
   })
 
   let selected: typeof $accounts[0]
-
+  
   $: selectedAccount.set(selected)
 </script>
 
