@@ -31,11 +31,11 @@
     opacity: "50%"
   })
 
-  let homeRef: any
-  let selectedRef: any
+  let homeRef: Element
+  let selectedRef: Element | null
   let linePosition: Tweened<number>
 
-  const getAlignedXPosition = (element: any) =>
+  const getAlignedXPosition = (element: Element) =>
     element.getBoundingClientRect().x -
     (lineWidth / 2 - element.getBoundingClientRect().width / 2)
 
@@ -50,7 +50,7 @@
     return () => window.removeEventListener("resize", triggerResize)
   })
 
-  const select = (e: any) => (selectedRef = e.target)
+  const select = (e: Event) => (selectedRef = e.target as Element)
 
   const animateLine = (duration?: number) => {
     if (!linePosition) return
