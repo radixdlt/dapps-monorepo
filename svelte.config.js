@@ -16,7 +16,8 @@ const config = {
 			'@types': 'src/types.ts',
 			'@sdk': 'src/mock-sdk.ts',
 			'@stores': 'src/stores.ts',
-			'@utils': 'src/utils.ts'
+			'@utils': 'src/utils.ts',
+			'@constants': 'src/constants.ts'
 		}
 	}
 }

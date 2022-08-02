@@ -1,21 +1,14 @@
 import type { RequestHandler } from './__types/[transaction]'
-import { MAINNET_URL } from '../../../constants'
-import { transactionStatus } from 'radix-js'
+import { MAINNET_URL } from '@constants'
+import { Gateway } from 'radix-js'
 
 export const GET: RequestHandler = async ({ params }) => {
-    const response = await transactionStatus(params.transaction, MAINNET_URL)
+    const response = await Gateway.transactionStatus(params.transaction)(MAINNET_URL)
 
-    const tx = await response.json()
-
-    if (response) {
-        return {
-            status: 200,
-            headers: {},
-            body: { tx }
-        }
-    }
-
-    return {
+    return response ? {
+        status: 200,
+        body: { tx: await response.json() }
+    } : {
         status: 404
     }
 }

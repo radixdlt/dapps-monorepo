@@ -1,1 +1,4 @@
-export declare const transactionStatus: (txID: string, networkUrl: string) => Promise<Response>;
+export declare const Gateway: {
+    transactionStatus: (txID: string) => (networkUrl: string) => Promise<Response>;
+    validators: (networkUrl: string) => Promise<Response>;
+};

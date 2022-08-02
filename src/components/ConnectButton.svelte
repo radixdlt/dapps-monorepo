@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Wallet } from 'radix-js'
   import { accounts } from "@stores"
-
   import Button from "./Button.svelte"
 
   const connect = async () => {

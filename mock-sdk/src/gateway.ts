@@ -1,4 +1,4 @@
-export const transactionStatus = (txID: string, networkUrl: string) => fetch(`${networkUrl}/transaction/status`, {
+const apiCall = (path: string, body?: any) => (networkUrl: string) => fetch(networkUrl + path, {
     method: 'POST',
     headers: {
         'Accept': 'application/json',
@@ -6,10 +6,21 @@ export const transactionStatus = (txID: string, networkUrl: string) => fetch(`${
     },
     body: JSON.stringify({
         network_identifier: {
-            network: "mainnet"
+            network: 'mainnet'
         },
-        transaction_identifier: {
-            hash: txID
-        }
+        ...body
     })
 })
+
+const transactionStatus = (txID: string) => apiCall('/transaction/status', {
+    transaction_identifier: {
+        hash: txID
+    }
+})
+
+const validators = apiCall('/validators')
+
+export const Gateway = {
+    transactionStatus,
+    validators
+}
