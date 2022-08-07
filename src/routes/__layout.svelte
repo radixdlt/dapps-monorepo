@@ -13,7 +13,15 @@
 <Header />
 
 <div class={frame()}>
+  {#if $navigating}
+    {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
+      <center>
+        <LoadingSpinner />
+      </center>
+    {/await}
+  {:else}
   <slot />
+  {/if}
 </div>
 
 <style>
