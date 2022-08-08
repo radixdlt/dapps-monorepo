@@ -11,7 +11,10 @@ const config = ({ command }) => ({
 			}
 		},
 		build: {
-			build: {}
+			build: {
+				minify: true,
+				sourcemap: false
+			}
 		}
 	}[command]))()
 })
