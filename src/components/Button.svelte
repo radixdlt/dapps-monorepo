@@ -18,6 +18,6 @@
   })
 </script>
 
-<button on:click class={button()}>
+<button {...$$restProps} on:click class={button()}>
   <slot />
 </button>

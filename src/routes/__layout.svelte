@@ -1,9 +1,11 @@
 <script>
   import Header from "@components/Header.svelte"
   import { css, getCssText } from "@styles"
+  import { navigating } from "$app/stores"
+  import LoadingSpinner from "@components/LoadingSpinner.svelte"
 
   const frame = css({
-    padding: '50px 300px 50px'
+    padding: "50px 300px 50px"
   })
 </script>
 
@@ -20,7 +22,7 @@
       </center>
     {/await}
   {:else}
-  <slot />
+    <slot />
   {/if}
 </div>
 
