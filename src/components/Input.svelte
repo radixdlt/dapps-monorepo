@@ -5,10 +5,10 @@
   export let id: string
 
   const input = css({
-    backgroundColor: '$dark',
+    backgroundColor: '$grey',
     border: 'none',
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: '$md',
+    padding: '$sm',
   })
 </script>
 

@@ -8,13 +8,13 @@
     gridItem: "connect",
     justifySelf: 'right',
     alignSelf: 'center',
-    marginRight: 20
+    marginRight: '$3xl'
   })
 
   const logo = css({
     gridItem: "logo",
     fontFamily: "StreetFighter",
-    fontSize: 40,
+    fontSize: '$4xl',
     justifySelf: 'center',
     alignSelf: 'center'
   })
@@ -23,7 +23,7 @@
     display: "grid",
     grid: `100% / 25% 50% 25%`,
     height: 80,
-    backgroundColor: "$darker"
+    backgroundColor: '$success'
   })
 
   const navbar = css({

@@ -5,15 +5,15 @@
   export let style: CSS | undefined = undefined
 
   const button = css({
-    backgroundColor: "gainsboro",
+    backgroundColor: '$primaryButton',
     fontSize: "$small",
     border: "0",
     "&:hover": {
-      backgroundColor: "lightgray"
+      backgroundColor: '$grey'
     },
-    padding: 10,
-    borderRadius: 10,
-    color: 'black',
+    padding: '$sm',
+    borderRadius: '$md',
+    color: 'white',
     ...style
   })
 </script>
