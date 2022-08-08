@@ -17,6 +17,7 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "cypress": "^10.3.1",
+    "husky": "^8.0.1",
     "svelte": "^3.44.0",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.6",
