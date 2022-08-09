@@ -1,8 +1,8 @@
 <script lang="ts">
   import { css } from '@styles';
-  import ConnectButton from './ConnectButton.svelte';
-  import Navbar from './Navbar.svelte';
-  import AccountPicker from './AccountPicker.svelte';
+  import ConnectButton from '../connect-button/ConnectButton.svelte';
+  import Navbar from '../navbar/Navbar.svelte';
+  import AccountPicker from '../account-picker/AccountPicker.svelte';
 
   const connectBtn = css({
     gridItem: 'connect',

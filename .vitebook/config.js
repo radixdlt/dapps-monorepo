@@ -8,6 +8,9 @@ export default defineConfig({
   alias: {
     $app: '/node_modules/@sveltejs/kit/assets/app',
     $lib: '/src/components',
+    '@styles': '/src/styles.ts',
+    '@stores': '/src/stores.ts',
+    '@utils': '/src/utils.ts'
   },
   plugins: [
     clientPlugin({ appFile: 'App.svelte' }),
