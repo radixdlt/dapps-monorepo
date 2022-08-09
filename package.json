@@ -12,15 +12,22 @@
     "cypress": "cypress open",
     "lint": "eslint src",
     "pretest": "yarn lint",
-    "test": "cypress run"
+    "test": "cypress run",
+    "vitebook:dev": "VITEBOOK=true vitebook dev",
+    "vitebook:build": "vitebook build",
+    "vitebook:preview": "vitebook preview"
   },
   "devDependencies": {
     "@stitches/core": "^1.2.8",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/eslint-config": "sveltejs/eslint-config",
     "@sveltejs/kit": "next",
+    "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "@vitebook/client": "^0.100.5",
+    "@vitebook/core": "^0.100.5",
+    "@vitebook/theme-default": "^0.100.5",
     "cypress": "^10.3.1",
     "eslint": "^8.21.0",
     "eslint-plugin-import": "^2.26.0",
