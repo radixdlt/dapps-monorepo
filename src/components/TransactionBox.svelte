@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { box, css } from "@styles"
-  import type { Transaction } from "@types"
-  import { shortenAddress, toWholeUnits } from "@utils"
-  import { fly } from "svelte/transition"
+  import { box, css } from '@styles'
+  import type { Transaction } from '@types'
+  import { shortenAddress, toWholeUnits } from '@utils'
+  import { fly } from 'svelte/transition'
 
   export let tx: Transaction
 
   const grid = css({
-    display: "grid",
-    gridTemplateColumns: "auto",
-    gridAutoRows: "30px",
+    display: 'grid',
+    gridTemplateColumns: 'auto',
+    gridAutoRows: '30px',
     gridTemplateAreas: `
         "key value"  
       `
   })
 
   const value = css({
-    justifySelf: "end"
+    justifySelf: 'end'
   })
 </script>
 

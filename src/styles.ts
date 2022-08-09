@@ -1,30 +1,30 @@
-import { createStitches } from "@stitches/core"
+import { createStitches } from '@stitches/core';
 
 const colors = {
-  darkBlue: "#003057",
-  blue: "#052CC0",
-  white: "#fff",
-  green: "#00ab84",
-  grey: "#f4f5f9",
-  darkGrey: "#6e7781",
-  red: "red",
-  orange: "orange"
-}
+  darkBlue: '#003057',
+  blue: '#052CC0',
+  white: '#fff',
+  green: '#00ab84',
+  grey: '#f4f5f9',
+  darkGrey: '#6e7781',
+  red: 'red',
+  orange: 'orange'
+};
 
 const space = {
-  0: "2px",
-  xs: "4px",
-  sm: "8px",
-  md: "16px",
-  lg: "24px",
-  xl: "32px",
-  "2xl": "40px",
-  "3xl": "48px",
-  "4xl": "64px",
-  "5xl": "80px",
-  "6xl": "96px",
-  "7xl": "160px"
-}
+  0: '2px',
+  xs: '4px',
+  sm: '8px',
+  md: '16px',
+  lg: '24px',
+  xl: '32px',
+  '2xl': '40px',
+  '3xl': '48px',
+  '4xl': '64px',
+  '5xl': '80px',
+  '6xl': '96px',
+  '7xl': '160px'
+};
 
 type spaceKeys = `$${keyof typeof space}`
 
@@ -59,45 +59,45 @@ export const {
       muted: colors.darkGrey
     },
     fontSizes: {
-      xs: "12px",
-      sm: "14px",
-      md: "16px",
-      lg: "18px",
-      xl: "20px",
-      "2xl": "24px",
-      "3xl": "28px",
-      "4xl": "32px",
-      "5xl": "36px",
-      "6xl": "42px",
-      "7xl": "48px",
-      "8xl": "54px",
-      "9xl": "60px",
-      "10xl": "68px",
-      "11xl": "76px",
-      "12xl": "84px",
-      "13xl": "92px"
+      xs: '12px',
+      sm: '14px',
+      md: '16px',
+      lg: '18px',
+      xl: '20px',
+      '2xl': '24px',
+      '3xl': '28px',
+      '4xl': '32px',
+      '5xl': '36px',
+      '6xl': '42px',
+      '7xl': '48px',
+      '8xl': '54px',
+      '9xl': '60px',
+      '10xl': '68px',
+      '11xl': '76px',
+      '12xl': '84px',
+      '13xl': '92px'
     },
     radii: {
-      sm: "3px",
-      md: "10px",
-      lg: "50%"
+      sm: '3px',
+      md: '10px',
+      lg: '50%'
     },
     space,
     fontWeights: {
-      200: "200",
-      400: "400",
-      600: "600"
+      200: '200',
+      400: '400',
+      600: '600'
     },
     sizes: {
-      1: "100%"
+      1: '100%'
     },
     borderWidths: {
-      sm: "1px",
-      md: "10px"
+      sm: '1px',
+      md: '10px'
     }
   },
   media: {
-    bp1: "(min-width: 480px)"
+    bp1: '(min-width: 480px)'
   },
   utils: {
     p: (value: spaceKeys) => ({
@@ -130,38 +130,38 @@ export const {
     ml: (value: spaceKeys) => ({ marginLeft: value }),
     mr: (value: spaceKeys) => ({ marginRight: value })
   }
-})
+});
 
 globalCss({
-  "*": {
-    fontFamily: "IBM Plex Sans",
-    fontWeight: "400"
+  '*': {
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: '400'
   }
-})()
+})();
 
 globalCss({
-  "*": {
+  '*': {
     margin: 0,
     padding: 0,
-    color: "$text"
+    color: '$text'
   },
   body: {
-    minWidth: "400px",
-    backgroundColor: "$black",
-    color: "$text"
+    minWidth: '400px',
+    backgroundColor: '$black',
+    color: '$text'
   },
-  "a:link": { "text-decoration": "none", color: "$text" },
-  "a:visited": { "text-decoration": "none", color: "$text" },
-  "a:hover": { "text-decoration": "none" },
-  "a:active": { "text-decoration": "none" },
-  "input:hover": { outline: "none" },
-  "input:focus": { outline: "none" }
-})()
+  'a:link': { 'text-decoration': 'none', color: '$text' },
+  'a:visited': { 'text-decoration': 'none', color: '$text' },
+  'a:hover': { 'text-decoration': 'none' },
+  'a:active': { 'text-decoration': 'none' },
+  'input:hover': { outline: 'none' },
+  'input:focus': { outline: 'none' }
+})();
 
 export const box = css({
-  backgroundColor: "$darker",
+  backgroundColor: '$darker',
   padding: 20,
   marginTop: 50,
   borderRadius: 15
-})
+});
 

@@ -1,35 +1,35 @@
 <script lang="ts">
-  import { css } from "@styles"
-  import ConnectButton from "./ConnectButton.svelte"
-  import Navbar from "./Navbar.svelte"
-  import AccountPicker from "./AccountPicker.svelte"
+  import { css } from '@styles';
+  import ConnectButton from './ConnectButton.svelte';
+  import Navbar from './Navbar.svelte';
+  import AccountPicker from './AccountPicker.svelte';
 
   const connectBtn = css({
-    gridItem: "connect",
+    gridItem: 'connect',
     justifySelf: 'right',
     alignSelf: 'center',
     marginRight: '$3xl'
-  })
+  });
 
   const logo = css({
-    gridItem: "logo",
-    fontFamily: "StreetFighter",
+    gridItem: 'logo',
+    fontFamily: 'StreetFighter',
     fontSize: '$4xl',
     justifySelf: 'center',
     alignSelf: 'center'
-  })
+  });
 
   const header = css({
-    display: "grid",
-    grid: `100% / 25% 50% 25%`,
+    display: 'grid',
+    grid: '100% / 25% 50% 25%',
     height: 80,
     backgroundColor: '$success'
-  })
+  });
 
   const navbar = css({
     justifySelf: 'center',
     alignSelf: 'center'
-  })
+  });
 </script>
 
 <div class={header()}>

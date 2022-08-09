@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { goto } from "$app/navigation"
-  import Button from "@components/Button.svelte"
-  import Input from "@components/Input.svelte"
-  import { css } from "@styles"
+  import { goto } from '$app/navigation'
+  import Button from '@components/Button.svelte'
+  import Input from '@components/Input.svelte'
+  import { css } from '@styles'
 
   let id: string
 
   const redirect = () => goto(`/explorer/transaction/${id}`)
 
   const grid = css({
-    display: "grid",
-    grid: `auto / 90% 10%`,
+    display: 'grid',
+    grid: 'auto / 90% 10%',
     columnGap: 10
   })
 </script>

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { css } from "@styles"
-  import { tweened, type Tweened } from "svelte/motion"
-  import { cubicOut } from "svelte/easing"
-  import { onMount } from "svelte"
+  import { css } from '@styles'
+  import { tweened, type Tweened } from 'svelte/motion'
+  import { cubicOut } from 'svelte/easing'
+  import { onMount } from 'svelte'
 
-  const pages: string[] = ["explorer", "staking"]
+  const pages: string[] = ['explorer', 'staking']
 
   const lineWidth = 50
 
@@ -16,19 +16,19 @@
   })
 
   const link = css({
-    position: "relative",
+    position: 'relative',
     marginLeft: 30,
     marginRight: 30
   })
 
   const line = css({
-    position: "absolute",
+    position: 'absolute',
     background: 'linear-gradient(19deg, hsl(191, 100%, 56%) 0%, hsl(281, 100%, 56%) 100%)',
     height: 4,
     width: `${lineWidth}px`,
-    marginTop: "22px",
-    borderRadius: "5px",
-    opacity: "50%"
+    marginTop: '22px',
+    borderRadius: '5px',
+    opacity: '50%'
   })
 
   let homeRef: Element
@@ -46,8 +46,8 @@
 
     const triggerResize = () => (windowResizeTrigger = {})
 
-    window.addEventListener("resize", triggerResize)
-    return () => window.removeEventListener("resize", triggerResize)
+    window.addEventListener('resize', triggerResize)
+    return () => window.removeEventListener('resize', triggerResize)
   })
 
   const select = (e: Event) => (selectedRef = e.target as Element)

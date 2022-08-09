@@ -6,7 +6,7 @@ type TokenAmount = {
 }
 
 type Action = {
-    type: "TransferTokens"
+    type: 'TransferTokens'
     from_account: {
         address: string
     }
@@ -34,7 +34,7 @@ export type Transaction = {
             hash: string
         }
         transaction_status: {
-            status: "CONFIRMED" | "REJECTED" | "PENDING"
+            status: 'CONFIRMED' | 'REJECTED' | 'PENDING'
             confirmed_time: string
             ledger_state_version: number
         }

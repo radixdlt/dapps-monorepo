@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { accounts, selectedAccount } from "@stores"
-  import { css } from "@styles"
-  import { shortenAddress } from "@utils"
+  import { accounts, selectedAccount } from '@stores'
+  import { css } from '@styles'
+  import { shortenAddress } from '@utils'
 
   const style = css({
-    color: "black",
+    color: 'black',
     height: 35,
     width: 140,
     marginRight: 10

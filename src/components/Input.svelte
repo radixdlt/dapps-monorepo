@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { css } from "@styles"
+  import { css } from '@styles'
 
   export let placeholder: string = ''
   export let id: string
@@ -8,7 +8,7 @@
     backgroundColor: '$grey',
     border: 'none',
     borderRadius: '$md',
-    padding: '$sm',
+    padding: '$sm'
   })
 </script>
 
