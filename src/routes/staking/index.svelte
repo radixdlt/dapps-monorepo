@@ -1,18 +1,3 @@
-<script lang="ts" context="module">
-    import type { Load } from './__types'
-    import { Gateway } from 'radix-js'
-    import { MAINNET_URL } from '@constants'
-  
-    export const prerender = false
-  
-    export const load: Load = async () => {
-      const response = await Gateway.validators(MAINNET_URL)
-      return {
-        props: { validators: await response.json() }
-      }
-    }
-  </script>
-  
   <script lang="ts">
     import { box, css } from '@styles'
     import type { Validators } from '@types'
