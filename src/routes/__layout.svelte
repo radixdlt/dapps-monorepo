@@ -1,12 +1,12 @@
 <script>
-  import Header from '@components/Header.svelte';
-  import { css, getCssText } from '@styles';
-  import { navigating } from '$app/stores';
-  import LoadingSpinner from '@components/LoadingSpinner.svelte';
+  import Header from '@components/header/Header.svelte'
+  import { css, getCssText } from '@styles'
+  import { navigating } from '$app/stores'
+  import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
 
   const frame = css({
     padding: '50px 300px 50px'
-  });
+  })
 </script>
 
 <!-- enables SSR of css -->
@@ -28,9 +28,9 @@
 
 <style>
   @font-face {
-    font-family: "StreetFighter";
+    font-family: 'StreetFighter';
     font-style: normal;
     font-weight: 400;
-    src: url("/fonts/Act_Of_Rejection.ttf") format("truetype");
+    src: url('/fonts/Act_Of_Rejection.ttf') format('truetype');
   }
 </style>

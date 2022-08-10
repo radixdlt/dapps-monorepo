@@ -14,7 +14,8 @@
     "lint": "eslint src",
     "pretest": "yarn lint & yarn prettier",
     "e2etest": "cypress run",
-    "test": "vitest --passWithNoTests",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
     "vitebook:dev": "VITEBOOK=true vitebook dev",
     "vitebook:build": "vitebook build",
     "vitebook:preview": "vitebook preview"

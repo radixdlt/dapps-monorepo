@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import Button from '@components/Button.svelte'
-  import Input from '@components/Input.svelte'
+  import Button from '@components/button/Button.svelte'
+  import Input from '@components/input/Input.svelte'
   import { css } from '@styles'
 
   let id: string
