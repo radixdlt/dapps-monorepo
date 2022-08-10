@@ -2,6 +2,4 @@
   import ConnectButton from './ConnectButton.svelte'
 </script>
 
-<ConnectButton>
-  Hello
-</ConnectButton>
+<ConnectButton>Hello</ConnectButton>

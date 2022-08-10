@@ -10,7 +10,8 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "cypress": "cypress open",
-    "prettier": "prettier --write src",
+    "prettier": "prettier --check src/**",
+    "prettier:fix": "prettier --write src/**",
     "lint": "eslint src",
     "pretest": "yarn lint & yarn prettier",
     "e2etest": "cypress run",
@@ -38,15 +39,16 @@
     "eslint-plugin-svelte3": "^4.0.0",
     "husky": "^8.0.1",
     "jsdom": "^20.0.0",
+    "node-sass": "^7.0.1",
     "prettier": "^2.7.1",
+    "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.6",
     "tslib": "^2.3.1",
     "typescript": "^4.7.4",
     "vite": "^3.0.0",
-    "vitest": "^0.21.1",
-    "node-sass": "^7.0.1"
+    "vitest": "^0.21.1"
   },
   "type": "module",
   "dependencies": {
