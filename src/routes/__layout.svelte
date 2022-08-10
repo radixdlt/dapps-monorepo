@@ -5,7 +5,7 @@
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
 
   const frame = css({
-    padding: '50px 300px 50px'
+    padding: '50px 100px 50px'
   })
 </script>
 
