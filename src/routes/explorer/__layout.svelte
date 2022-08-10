@@ -16,7 +16,7 @@
 </script>
 
 <div class={grid()}>
-  <Input bind:id placeholder="Enter Transaction ID" />
+  <Input bind:value={id} placeholder="Enter Transaction ID" />
   <Button on:click={redirect}>Search</Button>
 </div>
 

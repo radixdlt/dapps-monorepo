@@ -1,30 +1,8 @@
-  <script lang="ts">
-    import { box, css } from '@styles'
-    import type { Validators } from '@types'
-  
-    export let validators: Validators
-  
-    const frame = box({
-      css: {
-        display: 'flex',
-        flexDirection: 'column'
-      }
-    })
-  
-    const validatorBox = css({
-      display: 'grid',
-      grid: `
-        searchByName acceptingStake stakePrc ownerStake fee uptime searchByAddress .
-        
-      `
-    })
-  </script>
-  
-  <div class={frame}>
-    {#each validators.validators as validator}
-      <div class={validatorBox()}>
-        {validator.properties.name}
-      </div>
-    {/each}
-  </div>
-  
+<script lang="ts">
+  import ValidatorBox from "@components/validator-box/ValidatorBox.svelte"
+  import type { Validators } from "@types"
+
+  export let validators: Validators
+</script>
+
+<ValidatorBox {validators} />
