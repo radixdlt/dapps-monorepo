@@ -1,4 +1,4 @@
-import { createStitches } from '@stitches/core';
+import { createStitches } from '@stitches/core'
 
 const colors = {
   darkBlue: '#003057',
@@ -9,7 +9,7 @@ const colors = {
   darkGrey: '#6e7781',
   red: 'red',
   orange: 'orange'
-};
+}
 
 const space = {
   0: '2px',
@@ -24,7 +24,7 @@ const space = {
   '5xl': '80px',
   '6xl': '96px',
   '7xl': '160px'
-};
+}
 
 type spaceKeys = `$${keyof typeof space}`
 
@@ -130,14 +130,14 @@ export const {
     ml: (value: spaceKeys) => ({ marginLeft: value }),
     mr: (value: spaceKeys) => ({ marginRight: value })
   }
-});
+})
 
 globalCss({
   '*': {
     fontFamily: 'IBM Plex Sans',
     fontWeight: '400'
   }
-})();
+})()
 
 globalCss({
   '*': {
@@ -156,12 +156,11 @@ globalCss({
   'a:active': { 'text-decoration': 'none' },
   'input:hover': { outline: 'none' },
   'input:focus': { outline: 'none' }
-})();
+})()
 
 export const box = css({
   backgroundColor: '$darker',
   padding: 20,
   marginTop: 50,
   borderRadius: 15
-});
-
+})
