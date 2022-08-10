@@ -1,9 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-import { isVitebook } from './configs.js'
+import { configs } from './configs.js'
 
 /** @type {import('vite').UserConfigFn} */
 const config = ({ command }) => ({
-	plugins: [!isVitebook ? sveltekit() : null],
+	plugins: [!configs.flags.isVitebook ? sveltekit() : null],
 	...(() => ({
 		serve: {
 			build: {
