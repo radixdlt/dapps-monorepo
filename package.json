@@ -45,10 +45,12 @@
     "tslib": "^2.3.1",
     "typescript": "^4.7.4",
     "vite": "^3.0.0",
-    "vitest": "^0.21.1"
+    "vitest": "^0.21.1",
+    "node-sass": "^7.0.1"
   },
   "type": "module",
   "dependencies": {
+    "bignumber.js": "^9.1.0",
     "radix-js": "./mock-sdk"
   }
 }
