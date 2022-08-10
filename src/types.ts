@@ -42,14 +42,14 @@ export type Transaction = {
 }
 
 export type Validator = {
-  address: string,
-  name: string,
-  totalStake: number,
-  ownerStake: number,
-  uptimePercentage: number,
-  feePercentage: number,
-  stakePercentage: number,
-  ownerStakePercentage: number,
+  address: string
+  name: string
+  totalStake: number
+  ownerStake: number
+  uptimePercentage: number
+  feePercentage: number
+  stakePercentage: number
+  ownerStakePercentage: number
   stakeAccepted: boolean
 }
 
@@ -59,7 +59,7 @@ export type ValidatorsAPIResponse = {
     round: number
     timestamp: string
     version: number
-  },
+  }
   validators: {
     validator_identifier: {
       address: string
