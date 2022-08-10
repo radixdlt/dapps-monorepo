@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
   import TransactionBox from './TransactionBox.svelte'
+  import type { Transaction } from '@types'
 
   const tokenAmount = {
     value: '111',
@@ -8,7 +9,7 @@
     }
   }
 
-  const actions =  {
+  const actions = {
     type: 'TransferTokens',
     from_account: {
       address: 'addressfromaccount'
@@ -42,8 +43,7 @@
         ledger_state_version: 33
       }
     }
-  }
-
+  } as Transaction
 </script>
 
-<TransactionBox tx={transaction}/>
+<TransactionBox tx={transaction} />
