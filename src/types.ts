@@ -41,8 +41,16 @@ export type Transaction = {
   }
 }
 
-type Validator = ValidatorsAPIResponse['validators'][0] & {
-  stakePercentage: number
+export type Validator = {
+  address: string,
+  name: string,
+  totalStake: number,
+  ownerStake: number,
+  uptimePercentage: number,
+  feePercentage: number,
+  stakePercentage: number,
+  ownerStakePercentage: number,
+  stakeAccepted: boolean
 }
 
 export type ValidatorsAPIResponse = {
