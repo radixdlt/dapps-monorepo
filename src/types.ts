@@ -60,7 +60,7 @@ export type ValidatorsAPIResponse = {
     timestamp: string
     version: number
   }
-  validators: {
+  validators: Array<{
     validator_identifier: {
       address: string
     }
@@ -97,7 +97,7 @@ export type ValidatorsAPIResponse = {
       fork_id: string
       fork_name: string
     }
-  }[]
+  }>
 }
 
 export type Validators = Validator[]

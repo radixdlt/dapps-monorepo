@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Button from '@components/button/Button.svelte'
-
   import { css } from '@styles'
   import type { Validators } from '@types'
   import { shortenAddress } from '@utils'
@@ -38,16 +36,16 @@
   let searchAddress: string
 
   let filterStake: boolean
-  let filterStakeThreshold = 3
+  const filterStakeThreshold = 3
 
   let filterOwnerStake: boolean
-  let filterOwnerStakeThreshold = 10
+  const filterOwnerStakeThreshold = 10
 
   let filterFee: boolean
-  let filterFeeThreshold = 5
+  const filterFeeThreshold = 5
 
   let filterUptime: boolean
-  let filterUptimeThreshold = 99
+  const filterUptimeThreshold = 99
 
   const includesName = (name: string) =>
     searchName ? name.toLowerCase().includes(searchName.toLowerCase()) : true
