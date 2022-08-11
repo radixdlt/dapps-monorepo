@@ -10,7 +10,7 @@ export default defineConfig({
     $lib: '/src/components',
     '@styles': '/src/styles.ts',
     '@stores': '/src/stores.ts',
-    '@utils': '/src/utils.ts'
+    '@utils': '/src/utils/utils.ts'
   },
   plugins: [
     clientPlugin({ appFile: 'App.svelte' }),

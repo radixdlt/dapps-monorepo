@@ -1,12 +1,12 @@
 import type { RequestHandler } from './__types'
-import { MAINNET_URL } from '@constants'
+import { configs } from '@configs'
 import { Gateway } from 'radix-js'
 import type { Validator, ValidatorsAPIResponse } from '@types'
 import BigNumber from 'bignumber.js'
 
 export const GET: RequestHandler = async () => {
   const response: ValidatorsAPIResponse = await (
-    await Gateway.validators(MAINNET_URL)
+    await Gateway.validators(configs.url.MAINNET_URL)
   ).json()
 
   const validators = response.validators
