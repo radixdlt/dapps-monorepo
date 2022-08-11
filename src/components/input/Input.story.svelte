@@ -4,5 +4,4 @@
   let id = ''
 </script>
 
-
 <Input bind:id placeholder="Enter Transaction ID" />

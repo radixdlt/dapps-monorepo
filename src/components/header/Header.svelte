@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { css } from '@styles';
-  import ConnectButton from '../connect-button/ConnectButton.svelte';
-  import Navbar from '../navbar/Navbar.svelte';
-  import AccountPicker from '../account-picker/AccountPicker.svelte';
+  import { css } from '@styles'
+  import ConnectButton from '../connect-button/ConnectButton.svelte'
+  import Navbar from '../navbar/Navbar.svelte'
+  import AccountPicker from '../account-picker/AccountPicker.svelte'
 
   const connectBtn = css({
     gridItem: 'connect',
     justifySelf: 'right',
     alignSelf: 'center',
     marginRight: '$3xl'
-  });
+  })
 
   const logo = css({
     gridItem: 'logo',
@@ -17,19 +17,19 @@
     fontSize: '$4xl',
     justifySelf: 'center',
     alignSelf: 'center'
-  });
+  })
 
   const header = css({
     display: 'grid',
     grid: '100% / 25% 50% 25%',
     height: 80,
     backgroundColor: '$success'
-  });
+  })
 
   const navbar = css({
     justifySelf: 'center',
     alignSelf: 'center'
-  });
+  })
 </script>
 
 <div class={header()}>

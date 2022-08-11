@@ -12,4 +12,4 @@
   })
 </script>
 
-<input bind:value={value} class={input()} {placeholder} type="text" />
+<input bind:value class={input()} {placeholder} type="text" />
