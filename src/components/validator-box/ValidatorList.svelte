@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { selectedAccount } from '@stores'
+
   import { css } from '@styles'
   import type { Validators } from '@types'
   import { shortenAddress } from '@utils'
@@ -6,10 +8,12 @@
 
   export let validators: Validators
 
-  const validatorBox = css({
+  const baseColumns = '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr'
+
+  const validatorList = css({
     display: 'grid',
     gridTemplateRows: 'auto',
-    gridTemplateColumns: '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr',
+    gridTemplateColumns: baseColumns,
     rowGap: 15,
     columnGap: 10,
     '*': {
@@ -17,6 +21,10 @@
       overflow: 'hidden',
       textOverflow: 'ellipsis'
     }
+  })
+
+  const addedColumns = css({
+    gridTemplateColumns: `1fr 1fr ${baseColumns}`
   })
 
   const filterBtn = css({
@@ -85,7 +93,11 @@
   }
 </script>
 
-<div class={validatorBox()}>
+<div class={`${validatorList()} ${$selectedAccount ? addedColumns() : ''}`}>
+  {#if $selectedAccount}
+    <div />
+    <div class={header()}>My Stakes</div>
+  {/if}
   <div class={header()}>
     <Input bind:value={searchName} placeholder="Search by name" />
   </div>
@@ -123,6 +135,10 @@
   <div class={header()} />
 
   {#each filteredValidators as validator}
+    {#if $selectedAccount}
+      <input type="checkbox" />
+      <div>0</div>
+    {/if}
     {#each [validator.name, validator.stakeAccepted, `${validator.totalStake} (${validator.stakePercentage}%)`, `${validator.ownerStake} (${validator.ownerStakePercentage}%)`, validator.feePercentage, validator.uptimePercentage, shortenAddress(validator.address), '...'] as text}
       <div>{text}</div>
     {/each}
