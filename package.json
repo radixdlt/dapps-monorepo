@@ -13,7 +13,7 @@
     "prettier": "prettier --check src/**",
     "prettier:fix": "prettier --write src/**",
     "lint": "eslint src",
-    "pretest": "yarn lint & yarn prettier",
+    "pretest": "yarn lint && yarn prettier",
     "e2etest": "cypress run",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
