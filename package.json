@@ -40,7 +40,6 @@
     "eslint-plugin-svelte3": "^4.0.0",
     "husky": "^8.0.1",
     "jsdom": "^20.0.0",
-    "node-sass": "^7.0.1",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.44.0",
