@@ -4,6 +4,11 @@ import { configs } from './configs.js'
 /** @type {import('vite').UserConfigFn} */
 const config = ({ command }) => ({
 	plugins: [!configs.flags.isVitebook ? sveltekit() : null],
+	server: {
+		fs: {
+			allow: ['.']
+		}
+	},
 	...(() => ({
 		serve: {
 			build: {

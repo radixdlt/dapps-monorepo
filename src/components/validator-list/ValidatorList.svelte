@@ -2,11 +2,12 @@
   import { selectedAccount } from '@stores'
 
   import { css } from '@styles'
-  import type { Validators } from '@types'
+  import type { Stakes, Validators } from '@types'
   import { shortenAddress } from '@utils'
   import Input from '../input/Input.svelte'
 
   export let validators: Validators
+  export let stakes: Stakes | undefined = undefined
 
   const baseColumns = '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr'
 
@@ -135,9 +136,9 @@
   <div class={header()} />
 
   {#each filteredValidators as validator}
-    {#if $selectedAccount}
+    {#if $selectedAccount && stakes}
       <input type="checkbox" />
-      <div>0</div>
+      <div>{stakes.stakes[validator.address] ?? 0}</div>
     {/if}
     {#each [validator.name, validator.stakeAccepted, `${validator.totalStake} (${validator.stakePercentage}%)`, `${validator.ownerStake} (${validator.ownerStakePercentage}%)`, validator.feePercentage, validator.uptimePercentage, shortenAddress(validator.address), '...'] as text}
       <div>{text}</div>
