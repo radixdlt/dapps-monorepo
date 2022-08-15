@@ -2,15 +2,19 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { clientPlugin, defineConfig } from '@vitebook/client/node';
 import { defaultThemePlugin } from '@vitebook/theme-default/node';
 import preprocess from 'svelte-preprocess';
+import { configs } from '../configs'
+
+const aliasWithSlash = Object.entries(configs.alias).reduce((obj, [key, value]) => ({
+  ...obj,
+  [key]: `/${value}`
+}), {})
 
 export default defineConfig({
   include: ['src/**/*.story.svelte'],
   alias: {
     $app: '/node_modules/@sveltejs/kit/assets/app',
     $lib: '/src/components',
-    '@styles': '/src/styles.ts',
-    '@stores': '/src/stores.ts',
-    '@utils': '/src/utils/utils.ts'
+    ...aliasWithSlash,
   },
   plugins: [
     clientPlugin({ appFile: 'App.svelte' }),

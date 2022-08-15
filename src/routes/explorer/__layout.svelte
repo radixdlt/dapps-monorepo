@@ -4,7 +4,7 @@
   import Input from '@components/input/Input.svelte'
   import { css } from '@styles'
 
-  let id: string
+  let id: string = ''
 
   const redirect = () => goto(`/explorer/transaction/${id}`)
 
