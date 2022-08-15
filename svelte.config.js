@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
+import { configs } from './configs.js'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -21,5 +22,6 @@ const config = {
 		}
 	}
 }
+
 
 export default config

@@ -1,15 +1,16 @@
 import type { RequestHandler } from './__types'
-import { configs } from '@configs'
 import { Gateway } from 'radix-js'
 import type { Validator, ValidatorsAPIResponse } from '@types'
 import BigNumber from 'bignumber.js'
+import { MAINNET_URL } from '@constants'
+import { toWholeUnits } from '@utils'
 
 export const GET: RequestHandler = async () => {
-  const response: ValidatorsAPIResponse = await (
-    await Gateway.validators(configs.url.MAINNET_URL)
+  const validatorsResponse: ValidatorsAPIResponse = await (
+    await Gateway.validators(MAINNET_URL)
   ).json()
 
-  const validators = response.validators
+  const validators = validatorsResponse.validators
 
   const totalStake = validators.reduce(
     (accumulatedStake, validator) =>
@@ -17,17 +18,11 @@ export const GET: RequestHandler = async () => {
     BigNumber(0)
   )
 
-  const transformed: Validator[] = validators.map((validator) => ({
+  const transformedValidators: Validator[] = validators.map((validator) => ({
     address: validator.validator_identifier.address,
     name: validator.properties.name,
-    totalStake: BigNumber(validator.stake.value)
-      .div(10 ** 18)
-      .decimalPlaces(2)
-      .toNumber(),
-    ownerStake: BigNumber(validator.info.owner_stake.value)
-      .div(10 ** 18)
-      .decimalPlaces(2)
-      .toNumber(),
+    totalStake: toWholeUnits(validator.stake.value),
+    ownerStake: toWholeUnits(validator.info.owner_stake.value),
     uptimePercentage: validator.info.uptime.uptime_percentage,
     feePercentage: validator.properties.validator_fee_percentage,
     stakeAccepted: validator.properties.external_stake_accepted,
@@ -43,10 +38,12 @@ export const GET: RequestHandler = async () => {
       .toNumber()
   }))
 
-  return response
+
+
+  return validatorsResponse
     ? {
         status: 200,
-        body: { validators: transformed }
+        body: { validators: transformedValidators }
       }
     : {
         status: 404

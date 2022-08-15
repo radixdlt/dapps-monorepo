@@ -41,6 +41,22 @@ export type Transaction = {
   }
 }
 
+export type Stakes = {
+  pendingStakes: Record<string, number>
+  stakes: Record<string, number>
+}
+
+export type StakesAPIResponse = {
+  pending_stakes: Array<{
+    validator_identifier: string
+    value: string
+  }>
+  stakes: Array<{
+    validator_identifier: string
+    value: string
+  }>
+}
+
 export type Validator = {
   address: string
   name: string
