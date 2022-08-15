@@ -18,16 +18,13 @@
     ).json()
 
     transformedStakes = {
-      stakes: stakesResponse.stakes.reduce(
-        (accum, stake) => {
-          console.log(stake.validator_identifier, stake.value)
-          return {
+      stakes: stakesResponse.stakes.reduce((accum, stake) => {
+        console.log(stake.validator_identifier, stake.value)
+        return {
           ...accum,
           [stake.validator_identifier]: toWholeUnits(stake.value)
-          }
-        },
-        {}
-      ),
+        }
+      }, {}),
       pendingStakes: stakesResponse.pending_stakes.reduce(
         (accum, pendingStake) => ({
           ...accum,

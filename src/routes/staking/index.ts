@@ -38,8 +38,6 @@ export const GET: RequestHandler = async () => {
       .toNumber()
   }))
 
-
-
   return validatorsResponse
     ? {
         status: 200,
