@@ -1,14 +1,23 @@
 <script lang="ts">
-  import ValidatorBox from '@components/validator-list/ValidatorList.svelte'
+  import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import { selectedAccount } from '@stores'
   import type { Stakes, StakesAPIResponse, Validators } from '@types'
   import { Gateway } from 'radix-js'
   import { MAINNET_URL } from '@constants'
   import { toWholeUnits } from '@utils'
+  import { css } from '@styles'
 
   export let validators: Validators
 
   let transformedStakes: Stakes
+
+  let anyValidatorSelected: boolean
+
+  const header = css({
+    backgroundColor: '$grey',
+    position: 'absolute',
+    height: 50
+  })
 
   $: (async () => {
     if (!$selectedAccount) return
@@ -19,7 +28,6 @@
 
     transformedStakes = {
       stakes: stakesResponse.stakes.reduce((accum, stake) => {
-        console.log(stake.validator_identifier, stake.value)
         return {
           ...accum,
           [stake.validator_identifier]: toWholeUnits(stake.value)
@@ -36,4 +44,12 @@
   })()
 </script>
 
-<ValidatorBox {validators} stakes={transformedStakes} />
+{#if anyValidatorSelected}
+  <div class={header()} />
+{/if}
+
+<ValidatorList
+  {validators}
+  stakes={transformedStakes}
+  bind:anyValidatorSelected
+/>

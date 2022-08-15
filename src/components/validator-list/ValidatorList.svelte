@@ -8,6 +8,7 @@
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
+  export let anyValidatorSelected = false
 
   const baseColumns = '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr'
 
@@ -38,6 +39,9 @@
   const header = css({
     alignSelf: 'center'
   })
+
+  let validatorsSelected: boolean[] = []
+  $: anyValidatorSelected = validatorsSelected.length > 0 ? true : false
 
   let filteredValidators: Validators
 
@@ -137,7 +141,11 @@
 
   {#each filteredValidators as validator}
     {#if $selectedAccount && stakes}
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        bind:group={validatorsSelected}
+        value={validator.address}
+      />
       <div>{stakes.stakes[validator.address] ?? 0}</div>
     {/if}
     {#each [validator.name, validator.stakeAccepted, `${validator.totalStake} (${validator.stakePercentage}%)`, `${validator.ownerStake} (${validator.ownerStakePercentage}%)`, validator.feePercentage, validator.uptimePercentage, shortenAddress(validator.address), '...'] as text}
