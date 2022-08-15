@@ -26,6 +26,7 @@ jobs:
     - run: cd ./mock-sdk
     - run: yarn && yarn build
     - run: cd ..
+    - run: yarn add ./mock-sdk
     - run: yarn build
   
   formatting:
