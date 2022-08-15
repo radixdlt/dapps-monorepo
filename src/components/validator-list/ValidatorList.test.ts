@@ -51,12 +51,7 @@ describe('ValidatorList', () => {
 
       await user.type(searchInput, 'Searching for something random')
 
-      try {
-        getByText('Test Validator')
-      } catch {
-        expect(true)
-      }
-      throw Error('Validator rendered, but expected not to.')
+      expect(() => getByText('Test Validator')).toThrowError()
     })
   })
 })
