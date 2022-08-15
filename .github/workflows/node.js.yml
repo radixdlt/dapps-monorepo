@@ -23,9 +23,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: yarn
-    - run: cd ./mock-sdk
     - run: yarn && yarn build
-    - run: cd ..
+      working-directory: mock-sdk
     - run: yarn add ./mock-sdk
     - run: yarn build
   
