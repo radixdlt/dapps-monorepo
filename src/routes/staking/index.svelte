@@ -13,7 +13,7 @@
   export let validators: Validators
 
   let transformedStakes: Stakes
-  let selectedValidators: Array<(Validators[0] | undefined)> = []
+  let selectedValidators: Array<Validators[0] | undefined> = []
   let addStakePopupVisible = false
   let removeStakePopupVisible = false
 
