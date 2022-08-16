@@ -9,8 +9,8 @@ describe('#utils', () => {
   })
 
   it('Should return whole units', () => {
-    const originalValue = '10'
-    const expected = 1e-17
+    const originalValue = '100000000000000000000'
+    const expected = 100
     const result = toWholeUnits(originalValue)
     expect(result).toEqual(expected)
   })
