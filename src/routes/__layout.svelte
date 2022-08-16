@@ -1,6 +1,6 @@
 <script>
   import Header from '@components/header/Header.svelte'
-  import { css, getCssText } from '@styles'
+  import { getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
 </script>
