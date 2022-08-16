@@ -15,8 +15,15 @@ export const Wallet = {
         ]
     }),
     requestInfo: () => { },
-    requestProof: () => { }
+    requestProof: () => { },
+    sendTransaction: (manifest: Transaction) => {}
 }
+
+
+export const Transaction = (instructions: Instruction[]): Transaction => {}
+
+export type Transaction = any
+export type Instruction = any
 
 export type Account = {
     label: string,
