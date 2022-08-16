@@ -3,10 +3,6 @@
   import { css, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
-
-  const frame = css({
-    padding: '50px 100px 50px'
-  })
 </script>
 
 <!-- enables SSR of css -->
@@ -14,7 +10,7 @@
 
 <Header />
 
-<div class={frame()}>
+<div>
   {#if $navigating}
     {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
       <center>

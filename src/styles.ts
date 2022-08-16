@@ -11,7 +11,7 @@ const colors = {
   orange: 'orange'
 }
 
-const space = {
+export const space = {
   0: '2px',
   xs: '4px',
   sm: '8px',

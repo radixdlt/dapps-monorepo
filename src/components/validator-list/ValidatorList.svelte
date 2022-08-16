@@ -1,21 +1,20 @@
 <script lang="ts">
+  import Validator from './Validator.svelte'
   import { selectedAccount } from '@stores'
-
   import { css } from '@styles'
   import type { Stakes, Validators } from '@types'
-  import { shortenAddress } from '@utils'
   import Input from '../input/Input.svelte'
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
-  export let anyValidatorSelected = false
+  export let selectedValidators: (Validators[0] | undefined)[] = []
 
-  const baseColumns = '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr'
-
-  const validatorList = css({
+  $: validatorList = css({
     display: 'grid',
     gridTemplateRows: 'auto',
-    gridTemplateColumns: baseColumns,
+    gridTemplateColumns: `${
+      $selectedAccount ? '1fr 1fr' : ''
+    } 200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr`,
     rowGap: 15,
     columnGap: 10,
     '*': {
@@ -23,10 +22,6 @@
       overflow: 'hidden',
       textOverflow: 'ellipsis'
     }
-  })
-
-  const addedColumns = css({
-    gridTemplateColumns: `1fr 1fr ${baseColumns}`
   })
 
   const filterBtn = css({
@@ -39,9 +34,6 @@
   const header = css({
     alignSelf: 'center'
   })
-
-  let validatorsSelected: boolean[] = []
-  $: anyValidatorSelected = validatorsSelected.length > 0 ? true : false
 
   let filteredValidators: Validators
 
@@ -98,7 +90,7 @@
   }
 </script>
 
-<div class={`${validatorList()} ${$selectedAccount ? addedColumns() : ''}`}>
+<div class={validatorList()}>
   {#if $selectedAccount}
     <div />
     <div class={header()}>My Stakes</div>
@@ -139,17 +131,25 @@
   </div>
   <div class={header()} />
 
-  {#each filteredValidators as validator}
-    {#if $selectedAccount && stakes}
-      <input
-        type="checkbox"
-        bind:group={validatorsSelected}
-        value={validator.address}
-      />
-      <div>{stakes.stakes[validator.address] ?? 0}</div>
-    {/if}
-    {#each [validator.name, validator.stakeAccepted, `${validator.totalStake} (${validator.stakePercentage}%)`, `${validator.ownerStake} (${validator.ownerStakePercentage}%)`, validator.feePercentage, validator.uptimePercentage, shortenAddress(validator.address), '...'] as text}
-      <div>{text}</div>
-    {/each}
+  {#each filteredValidators as validator, index}
+    <Validator
+      name={validator.name}
+      stakeAccepted={validator.stakeAccepted}
+      totalStake={validator.totalStake}
+      stakePercentage={validator.stakePercentage}
+      ownerStake={validator.ownerStake}
+      ownerStakePercentage={validator.ownerStakePercentage}
+      feePercentage={validator.feePercentage}
+      uptimePercentage={validator.uptimePercentage}
+      address={validator.address}
+      stakes={{
+        stake: stakes?.stakes[validator.address],
+        pendingStake: stakes?.pendingStakes[validator.address]
+      }}
+      on:change={() =>
+        (selectedValidators[index] = selectedValidators[index]
+          ? undefined
+          : validator)}
+    />
   {/each}
 </div>
