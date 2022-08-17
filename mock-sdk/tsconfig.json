@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"lib": [ "DOM","es2015" ],
+		"lib": ["ES2015", "DOM"],
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
