@@ -9,6 +9,7 @@ export const configs = {
 		'@sdk': 'src/mock-sdk.ts',
 		'@stores': 'src/stores.ts',
 		'@utils': 'src/utils/utils.ts',
+		'@constants': 'src/constants.ts',
 		'@configs': 'configs.js'
 	}
 }
