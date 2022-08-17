@@ -7,7 +7,15 @@ all:
     TAG ?= $(GIT_BRANCH)-$(GIT_COMMIT)
     REPO ?= $(REGISTRY)/network-dashboard
 
-
 dev-server:
 	docker build -f Dockerfile --target=dev-server -t $(REPO):$(TAG) .
 	docker run -it -p 5173:5173 $(REPO):$(TAG)
+
+build:
+	docker build -f Dockerfile --target=prod-server -t $(REPO):$(TAG) .
+
+run-nginx: build
+	docker run -it -p 8080:80 $(REPO):$(TAG)
+
+build-with-remote-cache:
+	#to be added so that building on CI is faster
