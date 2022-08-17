@@ -3,7 +3,9 @@ import { Gateway } from 'radix-js'
 import { MAINNET_URL } from '@constants'
 
 export const GET: RequestHandler = async ({ params }) => {
-  const response = await Gateway.transactionStatus(params.transaction)(MAINNET_URL)
+  const response = await Gateway.transactionStatus(params.transaction)(
+    MAINNET_URL
+  )
 
   return response
     ? {
