@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Wallet = void 0;
+exports.Transaction = exports.Wallet = void 0;
 var neverthrow_1 = require("neverthrow");
 exports.Wallet = {
     isAvailable: function () { return true; },
@@ -17,6 +17,9 @@ exports.Wallet = {
         ]
     }); },
     requestInfo: function () { },
-    requestProof: function () { }
+    requestProof: function () { },
+    sendTransaction: function (manifest) { }
 };
+var Transaction = function (instructions) { };
+exports.Transaction = Transaction;
 //# sourceMappingURL=wallet.js.map

@@ -2,9 +2,6 @@ export const configs = {
 	flags: {
 		isVitebook: process.env.VITEBOOK === 'true'
 	},
-	url: {
-		MAINNET_URL: 'https://mainnet-gateway.radixdlt.com'
-	},
 	alias: {
 		'@components': 'src/components',
 		'@styles': 'src/styles.ts',
@@ -12,6 +9,7 @@ export const configs = {
 		'@sdk': 'src/mock-sdk.ts',
 		'@stores': 'src/stores.ts',
 		'@utils': 'src/utils/utils.ts',
+		'@constants': 'src/constants.ts',
 		'@configs': 'configs.js'
 	}
 }

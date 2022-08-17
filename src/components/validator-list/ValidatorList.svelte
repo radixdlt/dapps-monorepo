@@ -1,15 +1,20 @@
 <script lang="ts">
+  import Validator from './Validator.svelte'
+  import { selectedAccount } from '@stores'
   import { css } from '@styles'
-  import type { Validators } from '@types'
-  import { shortenAddress } from '@utils'
+  import type { Stakes, Validators } from '@types'
   import Input from '../input/Input.svelte'
 
   export let validators: Validators
+  export let stakes: Stakes | undefined = undefined
+  export let selectedValidators: Array<Validators[0] | undefined> = []
 
-  const validatorBox = css({
+  $: validatorList = css({
     display: 'grid',
     gridTemplateRows: 'auto',
-    gridTemplateColumns: '200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr',
+    gridTemplateColumns: `${
+      $selectedAccount ? '1fr 1fr' : ''
+    } 200px 1fr 2.5fr 2fr 1fr 1.5fr 2fr 1fr`,
     rowGap: 15,
     columnGap: 10,
     '*': {
@@ -85,7 +90,11 @@
   }
 </script>
 
-<div class={validatorBox()}>
+<div class={validatorList()}>
+  {#if $selectedAccount}
+    <div />
+    <div class={header()}>My Stakes</div>
+  {/if}
   <div class={header()}>
     <Input bind:value={searchName} placeholder="Search by name" />
   </div>
@@ -122,9 +131,25 @@
   </div>
   <div class={header()} />
 
-  {#each filteredValidators as validator}
-    {#each [validator.name, validator.stakeAccepted, `${validator.totalStake} (${validator.stakePercentage}%)`, `${validator.ownerStake} (${validator.ownerStakePercentage}%)`, validator.feePercentage, validator.uptimePercentage, shortenAddress(validator.address), '...'] as text}
-      <div>{text}</div>
-    {/each}
+  {#each filteredValidators as validator, index}
+    <Validator
+      name={validator.name}
+      stakeAccepted={validator.stakeAccepted}
+      totalStake={validator.totalStake}
+      stakePercentage={validator.stakePercentage}
+      ownerStake={validator.ownerStake}
+      ownerStakePercentage={validator.ownerStakePercentage}
+      feePercentage={validator.feePercentage}
+      uptimePercentage={validator.uptimePercentage}
+      address={validator.address}
+      stakes={{
+        stake: stakes?.stakes[validator.address],
+        pendingStake: stakes?.pendingStakes[validator.address]
+      }}
+      on:change={() =>
+        (selectedValidators[index] = selectedValidators[index]
+          ? undefined
+          : validator)}
+    />
   {/each}
 </div>

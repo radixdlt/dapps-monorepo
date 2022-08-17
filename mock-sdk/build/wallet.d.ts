@@ -4,7 +4,11 @@ export declare const Wallet: {
     connect: (name: string, info?: UserInfoRequest) => ResultAsync<UserInfo, Error>;
     requestInfo: () => void;
     requestProof: () => void;
+    sendTransaction: (manifest: Transaction) => void;
 };
+export declare const Transaction: (instructions: Instruction[]) => Transaction;
+export declare type Transaction = any;
+export declare type Instruction = any;
 export declare type Account = {
     label: string;
     address: string;

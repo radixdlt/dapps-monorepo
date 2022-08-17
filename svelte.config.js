@@ -11,7 +11,7 @@ const config = {
 		prerender: {
 			default: true
 		},
-		alias: configs.alias	
+		alias: configs.alias
 	}
 }
 
