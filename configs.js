@@ -10,6 +10,7 @@ export const configs = {
 		'@stores': 'src/stores.ts',
 		'@utils': 'src/utils/utils.ts',
 		'@constants': 'src/constants.ts',
+		'@gateway': 'src/gateway.ts',
 		'@configs': 'configs.js'
 	}
 }
