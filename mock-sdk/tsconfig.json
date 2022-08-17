@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"lib": [ "DOM","es2015" ],
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
@@ -10,6 +11,7 @@
 		"strict": true,
 		"rootDir": "src",
 		"outDir": "build",
-		"declaration": true
+		"declaration": true,
+		"noImplicitAny": false
 	}
 }
