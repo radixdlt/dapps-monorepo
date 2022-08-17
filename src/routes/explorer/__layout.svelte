@@ -15,9 +15,15 @@
   })
 </script>
 
-<div class={grid()}>
-  <Input bind:value={id} placeholder="Enter Transaction ID" />
-  <Button on:click={redirect}>Search</Button>
-</div>
+<div
+  class={css({
+    margin: '$lg 30%'
+  })()}
+>
+  <div class={grid()}>
+    <Input bind:value={id} placeholder="Enter Transaction ID" />
+    <Button on:click={redirect}>Search</Button>
+  </div>
 
-<slot />
+  <slot />
+</div>

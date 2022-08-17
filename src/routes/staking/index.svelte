@@ -69,8 +69,14 @@
   <RemoveStakePopup />
 {/if}
 
-<ValidatorList
-  {validators}
-  stakes={transformedStakes}
-  bind:selectedValidators
-/>
+<div
+  class={css({
+    margin: '0 $lg'
+  })()}
+>
+  <ValidatorList
+    {validators}
+    stakes={transformedStakes}
+    bind:selectedValidators
+  />
+</div>
