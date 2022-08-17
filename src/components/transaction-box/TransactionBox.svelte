@@ -1,7 +1,7 @@
 <script lang="ts">
   import { box, css } from '@styles'
-  import type { Transaction } from '@types'
-  import { shortenAddress, toWholeUnits } from '@utils'
+  import { shortenAddress } from '@utils'
+  import type { Transaction } from 'src/routes/explorer/transaction/[transaction]'
   import { fly } from 'svelte/transition'
 
   export let tx: Transaction
@@ -24,22 +24,22 @@
   <div class={grid()}>
     <div>status</div>
     <div class={value()}>
-      {tx.transaction.transaction_status.status}
+      {tx.status}
     </div>
 
     <div>from</div>
     <div class={value()}>
-      {shortenAddress(tx.transaction.actions[0].from_account.address)}
+      {shortenAddress(tx.actions[0].from)}
     </div>
 
     <div>to</div>
     <div class={value()}>
-      {shortenAddress(tx.transaction.actions[0].to_account.address)}
+      {shortenAddress(tx.actions[0].to)}
     </div>
 
     <div>amount</div>
     <div class={value()}>
-      {toWholeUnits(tx.transaction.actions[0].amount.value)}
+      {tx.actions[0].amount}
     </div>
   </div>
 </div>

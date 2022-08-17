@@ -48,47 +48,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.Gateway = void 0;
-var apiCall = function (path, body) { return function (networkUrl) {
-    return fetch(networkUrl + path, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(__assign({ network_identifier: {
-                network: 'mainnet'
-            } }, body))
-    });
-}; };
-var transactionStatus = function (txID) {
-    return apiCall('/transaction/status', {
-        transaction_identifier: {
-            hash: txID
-        }
-    });
-};
+var apiCall = function (path, body) { return function (networkUrl) { return fetch(networkUrl + path, {
+    method: 'POST',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(__assign({ network_identifier: {
+            network: 'mainnet'
+        } }, body))
+}).then(function (response) { return response.json(); }); }; };
+var transactionStatus = function (txID) { return apiCall('/transaction/status', {
+    transaction_identifier: {
+        hash: txID
+    }
+}); };
 var validators = apiCall('/validators');
 var getStakePositions = function (address) { return function (networkUrl) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, ({
-                json: function () { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        return [2 /*return*/, ({
-                                pending_stakes: [
-                                    {
-                                        validator_identifier: 'rv1qwukra5el9xl0efggr29a64kmr9t04m7a5r7zsxc8jtfr9ru7ue9u6z9g0h',
-                                        value: '3000000000000000000000'
-                                    }
-                                ],
-                                stakes: [
-                                    {
-                                        validator_identifier: 'rv1qfk9vhrzapxykvst6dk58y2pn3dj7xl44l8mklt69y7qcj86vad32rdxart',
-                                        value: '10000000000000000000000'
-                                    }
-                                ]
-                            })];
-                    });
-                }); }
+                pending_stakes: [
+                    {
+                        validator_identifier: 'rv1qwukra5el9xl0efggr29a64kmr9t04m7a5r7zsxc8jtfr9ru7ue9u6z9g0h',
+                        value: '3000000000000000000000'
+                    }
+                ],
+                stakes: [
+                    {
+                        validator_identifier: 'rv1qfk9vhrzapxykvst6dk58y2pn3dj7xl44l8mklt69y7qcj86vad32rdxart',
+                        value: '10000000000000000000000'
+                    }
+                ]
             })];
     });
 }); }; };

@@ -4,11 +4,10 @@
   import AddStakePopup from '@components/popup/add-stake-popup/AddStakePopup.svelte'
   import RemoveStakePopup from '@components/popup/remove-stake-popup/RemoveStakePopup.svelte'
   import { selectedAccount } from '@stores'
-  import type { Stakes, StakesAPIResponse, Validators } from '@types'
-  import { Gateway } from 'radix-js'
-  import { MAINNET_URL } from '@constants'
+  import type { Stakes, Validators } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
+  import { stakePositions } from '@gateway'
 
   export let validators: Validators
 
@@ -34,9 +33,7 @@
   $: (async () => {
     if (!$selectedAccount) return
 
-    const stakesResponse: StakesAPIResponse = await (
-      await Gateway.getStakePositions($selectedAccount.address)(MAINNET_URL)
-    ).json()
+    const stakesResponse = await stakePositions($selectedAccount.address)
 
     transformedStakes = {
       stakes: stakesResponse.stakes.reduce((accum, stake) => {
