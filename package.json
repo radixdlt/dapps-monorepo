@@ -52,6 +52,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@sveltejs/adapter-static": "^1.0.0-next.39",
     "bignumber.js": "^9.1.0",
     "radix-js": "./mock-sdk"
   }
