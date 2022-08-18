@@ -18,14 +18,4 @@
   }
 </script>
 
-<Button
-  style={{
-    backgroundColor: '$primary',
-    '&:hover': {
-      backgroundColor: '$primaryLight'
-    }
-  }}
-  on:click={connect}
->
-  Connect
-</Button>
+<Button on:click={connect}>Connect</Button>
