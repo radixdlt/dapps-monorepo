@@ -7,7 +7,7 @@
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
-  export let selectedValidators: Array<Validators[0] | undefined> = []
+  export let selectedValidators: Array<Validators[0]> = []
 
   $: validatorList = css({
     display: 'grid',
@@ -88,6 +88,16 @@
         !filteredByUptime(validator.uptimePercentage)
     )
   }
+
+  const updateValidatorList = (validator: Validators[0]) => {
+    if (selectedValidators.find((v) => v.address === validator.address)) {
+      selectedValidators = selectedValidators.filter(
+        (v) => v.address !== validator.address
+      )
+    } else {
+      selectedValidators = [...selectedValidators, validator]
+    }
+  }
 </script>
 
 <div class={validatorList()}>
@@ -131,7 +141,7 @@
   </div>
   <div class={header()} />
 
-  {#each filteredValidators as validator, index}
+  {#each filteredValidators as validator}
     <Validator
       name={validator.name}
       stakeAccepted={validator.stakeAccepted}
@@ -146,10 +156,7 @@
         stake: stakes?.stakes[validator.address],
         pendingStake: stakes?.pendingStakes[validator.address]
       }}
-      on:change={() =>
-        (selectedValidators[index] = selectedValidators[index]
-          ? undefined
-          : validator)}
+      on:change={() => updateValidatorList(validator)}
     />
   {/each}
 </div>
