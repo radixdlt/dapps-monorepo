@@ -1,6 +1,6 @@
 <script lang="ts">
   import { css } from '@styles'
-  import ConnectButton from '../connect-button/ConnectButton.svelte'
+  import ConnectButton from '../button/connect-button/ConnectButton.svelte'
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
 
