@@ -80,7 +80,7 @@ export const {
     radii: {
       sm: '3px',
       md: '10px',
-      lg: '50%'
+      lg: '15px'
     },
     space,
     fontWeights: {
