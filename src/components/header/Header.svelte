@@ -1,43 +1,16 @@
 <script lang="ts">
-  import { css } from '@styles'
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
-
-  const connectBtn = css({
-    gridItem: 'connect',
-    justifySelf: 'right',
-    alignSelf: 'center',
-    marginRight: '$3xl'
-  })
-
-  const logo = css({
-    gridItem: 'logo',
-    fontFamily: 'StreetFighter',
-    fontSize: '$4xl',
-    justifySelf: 'center',
-    alignSelf: 'center'
-  })
-
-  const header = css({
-    display: 'grid',
-    grid: '100% / 25% 50% 25%',
-    height: 80,
-    backgroundColor: '$success'
-  })
-
-  const navbar = css({
-    justifySelf: 'center',
-    alignSelf: 'center'
-  })
+  import { connectBtn, header, logo, navbar } from './styles'
 </script>
 
-<div class={header()}>
-  <div class={`gradient-text ${logo()}`}>Radix Dashboard</div>
-  <div class={navbar()}>
+<div class={header}>
+  <div class={`gradient-text ${logo}`}>Radix Dashboard</div>
+  <div class={navbar}>
     <Navbar />
   </div>
-  <div class={connectBtn()}>
+  <div class={connectBtn}>
     <AccountPicker />
     <ConnectButton />
   </div>
