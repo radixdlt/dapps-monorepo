@@ -97,7 +97,9 @@ export const {
     }
   },
   media: {
-    bp1: '(min-width: 480px)'
+    small: '(min-width: 640px)',
+    medium: '(min-width: 768px)',
+    large: '(min-width: 1024px)'
   },
   utils: {
     p: (value: spaceKeys) => ({

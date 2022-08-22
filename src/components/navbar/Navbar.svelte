@@ -1,36 +1,14 @@
 <script lang="ts">
-  import { css } from '@styles'
   import { tweened, type Tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
   import { onMount } from 'svelte'
+  import { line, link, navbar } from './styles'
 
   const pages: string[] = ['explorer', 'staking']
 
   const lineWidth = 50
 
   let windowResizeTrigger = {}
-
-  const navbar = css({
-    marginTop: 15,
-    height: 30
-  })
-
-  const link = css({
-    position: 'relative',
-    marginLeft: 30,
-    marginRight: 30
-  })
-
-  const line = css({
-    position: 'absolute',
-    background:
-      'linear-gradient(19deg, hsl(300, 100%, 56%) 0%, hsl(220, 100%, 56%) 100%)',
-    height: 4,
-    width: `${lineWidth}px`,
-    marginTop: '22px',
-    borderRadius: '5px',
-    opacity: '50%'
-  })
 
   let homeRef: Element
   let selectedRef: Element | null
@@ -69,16 +47,16 @@
   }
 </script>
 
-<div class={navbar()}>
+<div class={navbar}>
   {#if linePosition}
-    <div class={line()} style:left={`${$linePosition}px`} />
+    <div class={line(lineWidth)} style:left={`${$linePosition}px`} />
   {/if}
 
   <center>
-    <a bind:this={homeRef} class={link()} on:click={select} href="/">home</a>
+    <a bind:this={homeRef} class={link} on:click={select} href="/">home</a>
 
     {#each pages as page}
-      <a class={link()} on:click={select} href={`/${page}`}>{page}</a>
+      <a class={link} on:click={select} href={`/${page}`}>{page}</a>
     {/each}
   </center>
 </div>
