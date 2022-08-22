@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Wallet } from 'radix-js'
   import { accounts } from '@stores'
-  import Button from '../button/Button.svelte'
+  import Button from '../Button.svelte'
 
   const connect = async () => {
     if (!Wallet.isAvailable()) {
@@ -18,14 +18,4 @@
   }
 </script>
 
-<Button
-  style={{
-    backgroundColor: '$primary',
-    '&:hover': {
-      backgroundColor: '$primaryLight'
-    }
-  }}
-  on:click={connect}
->
-  Connect
-</Button>
+<Button on:click={connect}>Connect</Button>
