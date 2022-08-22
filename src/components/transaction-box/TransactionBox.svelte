@@ -8,7 +8,7 @@
   export let tx: Transaction
 </script>
 
-<div in:fly={{ y: 200, duration: 500 }} class={box()}>
+<div in:fly={{ y: 200, duration: 500 }} class={box}>
   <div class={grid}>
     <div>status</div>
     <div class={value}>

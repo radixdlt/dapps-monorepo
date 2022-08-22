@@ -9,12 +9,19 @@
   argTypes={{
     text: {
       control: 'text'
+    },
+    color: {
+      control: 'color'
     }
   }}
 />
 
 <Template let:args>
-  <Button>{args.text}</Button>
+  <Button
+    style={{
+      backgroundColor: args.color
+    }}>{args.text}</Button
+  >
 </Template>
 
 <Story
