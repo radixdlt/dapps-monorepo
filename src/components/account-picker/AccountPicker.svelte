@@ -1,14 +1,7 @@
 <script lang="ts">
   import { accounts, selectedAccount } from '@stores'
-  import { css } from '@styles'
   import { shortenAddress } from '@utils'
-
-  const style = css({
-    color: 'black',
-    height: 35,
-    width: 140,
-    marginRight: 10
-  })
+  import { selectAcc } from './styles'
 
   let selected: typeof $accounts[0]
 
@@ -16,7 +9,7 @@
 </script>
 
 {#if $accounts}
-  <select class={style()} bind:value={selected} name="accounts">
+  <select class={selectAcc} bind:value={selected} name="accounts">
     {#each $accounts as account}
       <option value={account}>
         {account.label}
