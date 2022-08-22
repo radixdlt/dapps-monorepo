@@ -1,9 +1,9 @@
 module.exports = {
-	extends: '@sveltejs',
-	rules: {
-		semi: [ 0, 'never' ]
-	},
-	settings: {
-		'svelte3/typescript': require('typescript')
-	}
+  extends: ['@sveltejs', 'plugin:storybook/recommended'],
+  rules: {
+    semi: [0, 'never']
+  },
+  settings: {
+    'svelte3/typescript': require('typescript')
+  }
 };
