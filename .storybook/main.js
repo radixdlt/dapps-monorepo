@@ -15,6 +15,7 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     '@storybook/addon-svelte-csf',
+    '@storybook/addon-actions'
   ],
   "framework": "@storybook/svelte",
   "core": {

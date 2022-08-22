@@ -1,25 +1,25 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
-  import Button from './Button.svelte'
+  import Input from './Input.svelte'
 </script>
 
 <Meta
-  title="Button"
-  component={Button}
+  title="Input"
+  component={Input}
   argTypes={{
-    text: {
+    placeholderText: {
       control: 'text'
     }
   }}
 />
 
 <Template let:args>
-  <Button>{args.text}</Button>
+  <Input placeholder={args.placeholderText} />
 </Template>
 
 <Story
   name="Primary"
   args={{
-    text: 'Test'
+    placeholderText: 'Placeholder'
   }}
 />

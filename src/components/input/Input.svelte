@@ -2,7 +2,7 @@
   import { css } from '@styles'
 
   export let placeholder: string = ''
-  export let value: string
+  export let value: string = ''
 
   const input = css({
     backgroundColor: '$grey',

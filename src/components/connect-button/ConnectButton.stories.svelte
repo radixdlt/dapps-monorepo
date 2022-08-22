@@ -6,7 +6,7 @@
 <Meta title="ConnectButton" component={ConnectButton} />
 
 <Template let:args>
-  <ConnectButton>Hello</ConnectButton>
+  <ConnectButton />
 </Template>
 
 <Story name="Primary" />
