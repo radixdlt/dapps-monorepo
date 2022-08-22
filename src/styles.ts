@@ -137,12 +137,7 @@ export const {
 globalCss({
   '*': {
     fontFamily: 'IBM Plex Sans',
-    fontWeight: '400'
-  }
-})()
-
-globalCss({
-  '*': {
+    fontWeight: '400',
     margin: 0,
     padding: 0,
     color: '$text'
@@ -165,4 +160,4 @@ export const box = css({
   padding: 20,
   marginTop: 50,
   borderRadius: 15
-})
+})()
