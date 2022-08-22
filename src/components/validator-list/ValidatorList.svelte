@@ -7,7 +7,7 @@
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
-  export let selectedValidators: Array<Validators[0] | undefined> = []
+  export let selectedValidators: Array<Validators[0]> = []
 
   let filteredValidators: Validators
 

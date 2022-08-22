@@ -39,7 +39,7 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      background: colors.white,
+      background: colors.darkBlue,
       action: colors.darkBlue,
       primary: colors.darkBlue,
       secondary: colors.green,
@@ -47,8 +47,8 @@ export const {
       info: colors.blue,
       success: colors.green,
       warning: colors.orange,
-      primaryButton: colors.darkBlue,
-      primaryButtonHover: colors.green,
+      primaryButton: colors.orange,
+      primaryButtonHover: colors.grey,
       primaryButtonText: colors.white,
       primaryGhostButton: colors.white,
       primaryGhostButtonText: colors.darkBlue,
@@ -80,7 +80,7 @@ export const {
     radii: {
       sm: '3px',
       md: '10px',
-      lg: '50%'
+      lg: '15px'
     },
     space,
     fontWeights: {
@@ -149,7 +149,7 @@ globalCss({
   },
   body: {
     minWidth: '400px',
-    backgroundColor: '$black',
+    backgroundColor: '$background',
     color: '$text'
   },
   'a:link': { 'text-decoration': 'none', color: '$text' },
@@ -161,7 +161,7 @@ globalCss({
 })()
 
 export const box = css({
-  backgroundColor: '$darker',
+  backgroundColor: '$grey',
   padding: 20,
   marginTop: 50,
   borderRadius: 15
