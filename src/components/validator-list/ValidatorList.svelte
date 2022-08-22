@@ -1,13 +1,13 @@
 <script lang="ts">
   import Validator from './Validator.svelte'
   import { selectedAccount } from '@stores'
-  import { css } from '@styles'
+  import { box, css } from '@styles'
   import type { Stakes, Validators } from '@types'
   import Input from '../input/Input.svelte'
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
-  export let selectedValidators: Array<Validators[0] | undefined> = []
+  export let selectedValidators: Array<Validators[0]> = []
 
   $: validatorList = css({
     display: 'grid',
@@ -88,68 +88,77 @@
         !filteredByUptime(validator.uptimePercentage)
     )
   }
+
+  const updateValidatorList = (validator: Validators[0]) => {
+    if (selectedValidators.find((v) => v.address === validator.address)) {
+      selectedValidators = selectedValidators.filter(
+        (v) => v.address !== validator.address
+      )
+    } else {
+      selectedValidators = [...selectedValidators, validator]
+    }
+  }
 </script>
 
-<div class={validatorList()}>
-  {#if $selectedAccount}
-    <div />
-    <div class={header()}>My Stakes</div>
-  {/if}
-  <div class={header()}>
-    <Input bind:value={searchName} placeholder="Search by name" />
-  </div>
-  <div class={header()}>ADS</div>
-  <button
-    on:click={() => (filterStake = !filterStake)}
-    class={`${filterBtn()} ${header()}`}
-  >
-    <input type="checkbox" bind:checked={filterStake} />{' Stake < 3%'}
-  </button>
-  <button
-    on:click={() => (filterOwnerStake = !filterOwnerStake)}
-    class={`${filterBtn()} ${header()}`}
-  >
-    <input
-      type="checkbox"
-      bind:checked={filterOwnerStake}
-    />{' Owner Stake > 10%'}
-  </button>
-  <button
-    on:click={() => (filterFee = !filterFee)}
-    class={`${filterBtn()} ${header()}`}
-  >
-    <input type="checkbox" bind:checked={filterFee} />{' Fee < 5%'}
-  </button>
-  <button
-    on:click={() => (filterUptime = !filterUptime)}
-    class={`${filterBtn()} ${header()}`}
-  >
-    <input type="checkbox" bind:checked={filterUptime} />{' Uptime > 99%'}
-  </button>
-  <div class={header()}>
-    <Input bind:value={searchAddress} placeholder="Search by address" />
-  </div>
-  <div class={header()} />
+<div class={box()}>
+  <div class={validatorList()}>
+    {#if $selectedAccount}
+      <div />
+      <div class={header()}>My Stakes</div>
+    {/if}
+    <div class={header()}>
+      <Input bind:value={searchName} placeholder="Search by name" />
+    </div>
+    <div class={header()}>ADS</div>
+    <button
+      on:click={() => (filterStake = !filterStake)}
+      class={`${filterBtn()} ${header()}`}
+    >
+      <input type="checkbox" bind:checked={filterStake} />{' Stake < 3%'}
+    </button>
+    <button
+      on:click={() => (filterOwnerStake = !filterOwnerStake)}
+      class={`${filterBtn()} ${header()}`}
+    >
+      <input
+        type="checkbox"
+        bind:checked={filterOwnerStake}
+      />{' Owner Stake > 10%'}
+    </button>
+    <button
+      on:click={() => (filterFee = !filterFee)}
+      class={`${filterBtn()} ${header()}`}
+    >
+      <input type="checkbox" bind:checked={filterFee} />{' Fee < 5%'}
+    </button>
+    <button
+      on:click={() => (filterUptime = !filterUptime)}
+      class={`${filterBtn()} ${header()}`}
+    >
+      <input type="checkbox" bind:checked={filterUptime} />{' Uptime > 99%'}
+    </button>
+    <div class={header()}>
+      <Input bind:value={searchAddress} placeholder="Search by address" />
+    </div>
+    <div class={header()} />
 
-  {#each filteredValidators as validator, index}
-    <Validator
-      name={validator.name}
-      stakeAccepted={validator.stakeAccepted}
-      totalStake={validator.totalStake}
-      stakePercentage={validator.stakePercentage}
-      ownerStake={validator.ownerStake}
-      ownerStakePercentage={validator.ownerStakePercentage}
-      feePercentage={validator.feePercentage}
-      uptimePercentage={validator.uptimePercentage}
-      address={validator.address}
-      stakes={{
-        stake: stakes?.stakes[validator.address],
-        pendingStake: stakes?.pendingStakes[validator.address]
-      }}
-      on:change={() =>
-        (selectedValidators[index] = selectedValidators[index]
-          ? undefined
-          : validator)}
-    />
-  {/each}
+    {#each filteredValidators as validator}
+      <Validator
+        name={validator.name}
+        stakeAccepted={validator.stakeAccepted}
+        totalStake={validator.totalStake}
+        stakePercentage={validator.stakePercentage}
+        ownerStake={validator.ownerStake}
+        ownerStakePercentage={validator.ownerStakePercentage}
+        feePercentage={validator.feePercentage}
+        uptimePercentage={validator.uptimePercentage}
+        address={validator.address}
+        stakes={{
+          stake: stakes?.stakes[validator.address],
+          pendingStake: stakes?.pendingStakes[validator.address]
+        }}
+        on:change={() => updateValidatorList(validator)}
+      />
+    {/each}
+  </div>
 </div>

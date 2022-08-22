@@ -1,18 +1,17 @@
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import Button from '@components/button/Button.svelte'
-  import AddStakePopup from '@components/popup/add-stake-popup/AddStakePopup.svelte'
-  import RemoveStakePopup from '@components/popup/remove-stake-popup/RemoveStakePopup.svelte'
   import { selectedAccount } from '@stores'
   import type { Stakes, Validators } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
   import { stakePositions } from '@gateway'
+  import StakePopup from '@components/popup/stake-popup/StakePopup.svelte'
 
   export let validators: Validators
 
   let transformedStakes: Stakes
-  let selectedValidators: Array<Validators[0] | undefined> = []
+  let selectedValidators: Array<Validators[0]> = []
   let addStakePopupVisible = false
   let removeStakePopupVisible = false
 
@@ -20,8 +19,11 @@
     (validator) => validator != undefined
   )
 
-  const showAddStakePopup = () => (addStakePopupVisible = true)
-  const showRemoveStakePopup = () => (removeStakePopupVisible = true)
+  const toggleAddStakePopup = () =>
+    (addStakePopupVisible = !addStakePopupVisible)
+
+  const toggleRemoveStakePopup = () =>
+    (removeStakePopupVisible = !removeStakePopupVisible)
 
   $: header = css({
     backgroundColor: `${anyValidatorSelected ? '$grey' : null}`,
@@ -56,17 +58,20 @@
 <div class={header()}>
   {#if anyValidatorSelected}
     <center>
-      <Button on:click={showAddStakePopup}>Add stake</Button>
-      <Button on:click={showRemoveStakePopup}>Remove stake</Button>
+      <Button on:click={toggleAddStakePopup}>Add stake</Button>
+      <Button on:click={toggleRemoveStakePopup}>Remove stake</Button>
     </center>
   {/if}
 </div>
 
-{#if showAddStakePopup}
-  <AddStakePopup />
-{/if}
-{#if showRemoveStakePopup}
-  <RemoveStakePopup />
+{#if addStakePopupVisible || removeStakePopupVisible}
+  <StakePopup
+    validators={selectedValidators}
+    onCancel={addStakePopupVisible
+      ? toggleAddStakePopup
+      : toggleRemoveStakePopup}
+    addOrRemove={addStakePopupVisible ? 'add' : 'remove'}
+  />
 {/if}
 
 <div

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { css } from '@styles'
-  import ConnectButton from '../connect-button/ConnectButton.svelte'
+  import ConnectButton from '../button/connect-button/ConnectButton.svelte'
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
 
@@ -47,8 +47,8 @@
   .gradient-text {
     background-image: linear-gradient(
       19deg,
-      hsl(191, 98%, 56%) 0%,
-      hsl(281, 100%, 56%) 100%
+      hsl(300, 98%, 56%) 0%,
+      hsl(220, 100%, 56%) 100%
     );
     background-clip: text;
     -webkit-background-clip: text;
