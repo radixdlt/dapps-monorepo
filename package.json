@@ -2,7 +2,7 @@
   "name": "dashboard-radix",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite serve",
+    "dev": "vite serve --host 0.0.0.0",
     "build": "vite build",
     "package": "svelte-kit package",
     "preview": "vite preview",
