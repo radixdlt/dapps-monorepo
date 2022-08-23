@@ -1,7 +1,7 @@
 import { css } from '@styles'
 
 export const navbar = css({
-  marginTop: 15,
+  marginTop: '$md',
   height: 30
 })()
 
@@ -18,7 +18,6 @@ export const line = (width: number) =>
       'linear-gradient(19deg, hsl(191, 100%, 56%) 0%, hsl(281, 100%, 56%) 100%)',
     height: 4,
     width: `${width}px`,
-    marginTop: '22px',
-    borderRadius: '5px',
+    marginTop: '$lg',
     opacity: '50%'
   })()

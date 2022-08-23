@@ -1,8 +1,8 @@
 import { css } from '@styles'
 
 export const selectAcc = css({
-  color: 'black',
+  color: '$primaryButton',
   height: 35,
   width: 140,
-  marginRight: 10
+  marginRight: '$sm'
 })()

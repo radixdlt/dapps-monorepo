@@ -11,6 +11,6 @@ export const btn = (style?: CSS) =>
     },
     padding: '$sm',
     borderRadius: '$md',
-    color: 'white',
+    color: '$primaryButtonText',
     ...style
   })()

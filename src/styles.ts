@@ -157,7 +157,7 @@ globalCss({
 
 export const box = css({
   backgroundColor: '$grey',
-  padding: 20,
-  marginTop: 50,
-  borderRadius: 15
+  padding: '$3xl',
+  marginTop: '$3xl',
+  borderRadius: '$md'
 })()
