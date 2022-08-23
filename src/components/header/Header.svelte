@@ -3,7 +3,7 @@
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
   import { connectBtn, header, logo, navbar } from './styles'
-  import { currentPage } from '@stores'
+  import { page } from '$app/stores'
 
   const pages = [
     {
@@ -24,7 +24,7 @@
 <div class={header}>
   <div class={`gradient-text ${logo}`}>Radix Dashboard</div>
   <div class={navbar}>
-    <Navbar initialSelectedId={$currentPage}>
+    <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
         <a id={page.title} href={page.path}>{page.title}</a>
       {/each}
