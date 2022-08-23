@@ -2,39 +2,42 @@
   import { tweened, type Tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
   import { onMount } from 'svelte'
-  import { line, link, navbar } from './styles'
+  import { line, navbar, slotParent } from './styles'
 
-  const pages: string[] = ['explorer', 'staking']
-
-  const lineWidth = 50
+  export let lineWidth = 50
+  export let initialSelectedId: string
 
   let windowResizeTrigger = {}
 
-  let homeRef: Element
-  let selectedRef: Element | null
+  let selectedRef: Element
   let linePosition: Tweened<number>
 
-  const getAlignedXPosition = (element: Element) =>
-    element.getBoundingClientRect().x -
-    (lineWidth / 2 - element.getBoundingClientRect().width / 2)
+  const getAlignedXPosition = () =>
+    selectedRef.getBoundingClientRect().x -
+    (lineWidth / 2 - selectedRef.getBoundingClientRect().width / 2)
 
   onMount(() => {
-    linePosition = tweened(getAlignedXPosition(homeRef), {
+    for (let i = 0; i < slotParentElement.children.length; i++) {
+      const child = slotParentElement.children[i]
+      child.addEventListener('click', select)
+      if (child.id === initialSelectedId) selectedRef = child
+    }
+
+    linePosition = tweened(getAlignedXPosition(), {
       easing: cubicOut
     })
 
     const triggerResize = () => (windowResizeTrigger = {})
 
     window.addEventListener('resize', triggerResize)
+
     return () => window.removeEventListener('resize', triggerResize)
   })
 
   const select = (e: Event) => (selectedRef = e.target as Element)
 
-  const animateLine = (duration?: number) => {
-    if (!linePosition) return
-    linePosition.set(getAlignedXPosition(selectedRef || homeRef), { duration })
-  }
+  const animateLine = (duration?: number) =>
+    linePosition?.set(getAlignedXPosition(), { duration })
 
   $: {
     selectedRef
@@ -45,6 +48,8 @@
     windowResizeTrigger
     animateLine(0)
   }
+
+  let slotParentElement: HTMLElement
 </script>
 
 <div class={navbar}>
@@ -52,11 +57,7 @@
     <div class={line(lineWidth)} style:left={`${$linePosition}px`} />
   {/if}
 
-  <center>
-    <a bind:this={homeRef} class={link} on:click={select} href="/">home</a>
-
-    {#each pages as page}
-      <a class={link} on:click={select} href={`/${page}`}>{page}</a>
-    {/each}
+  <center class={slotParent} bind:this={slotParentElement}>
+    <slot />
   </center>
 </div>

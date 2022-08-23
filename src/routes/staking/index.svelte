@@ -1,7 +1,7 @@
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import Button from '@components/button/Button.svelte'
-  import { selectedAccount } from '@stores'
+  import { currentPage, selectedAccount } from '@stores'
   import type { Stakes, Validators } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
@@ -9,6 +9,8 @@
   import StakePopup from '@components/popup/stake-popup/StakePopup.svelte'
 
   export let validators: Validators
+
+  currentPage.set('staking')
 
   let transformedStakes: Stakes
   let selectedValidators: Array<Validators[0]> = []

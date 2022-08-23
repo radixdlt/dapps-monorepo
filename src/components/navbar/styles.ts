@@ -5,12 +5,6 @@ export const navbar = css({
   height: 30
 })()
 
-export const link = css({
-  position: 'relative',
-  marginLeft: 30,
-  marginRight: 30
-})()
-
 export const line = (width: number) =>
   css({
     position: 'absolute',
@@ -22,3 +16,11 @@ export const line = (width: number) =>
     borderRadius: '5px',
     opacity: '50%'
   })()
+
+export const slotParent = css({
+  '> *': {
+    position: 'relative',
+    marginLeft: 30,
+    marginRight: 30
+  }
+})()
