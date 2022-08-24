@@ -149,7 +149,12 @@ globalCss({
     fontWeight: '400',
     margin: 0,
     padding: 0,
-    color: '$text'
+    color: '$text',
+    scrollbarWidth: 'none',
+    '-ms-overflow-style': 'none'
+  },
+  '*::-webkit-scrollbar': {
+    display: 'none'
   },
   body: {
     minWidth: '400px',
