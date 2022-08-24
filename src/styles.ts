@@ -8,11 +8,13 @@ const colors = {
   grey: '#f4f5f9',
   darkGrey: '#6e7781',
   red: 'red',
-  orange: 'orange'
+  orange: 'orange',
+  transparent: 'transparent'
 }
 
 export const space = {
-  0: '2px',
+  0: '0px',
+  '2xs': '2px',
   xs: '4px',
   sm: '8px',
   md: '16px',
@@ -39,6 +41,7 @@ export const {
 } = createStitches({
   theme: {
     colors: {
+      transparent: colors.transparent,
       background: colors.darkBlue,
       action: colors.darkBlue,
       primary: colors.darkBlue,
@@ -108,6 +111,12 @@ export const {
       paddingLeft: value,
       paddingRight: value
     }),
+    m: (value: spaceKeys) => ({
+      marginTop: value,
+      marginBottom: value,
+      marginLeft: value,
+      marginRight: value
+    }),
     pl: (value: spaceKeys) => ({
       paddingLeft: value
     }),
@@ -153,11 +162,4 @@ globalCss({
   'a:active': { 'text-decoration': 'none' },
   'input:hover': { outline: 'none' },
   'input:focus': { outline: 'none' }
-})()
-
-export const box = css({
-  backgroundColor: '$grey',
-  padding: '$3xl',
-  marginTop: '$3xl',
-  borderRadius: '$md'
 })()
