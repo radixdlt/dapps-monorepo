@@ -6,5 +6,9 @@
 <Meta title="Navbar" />
 
 <Story name="Primary">
-  <Navbar />
+  <Navbar initialSelectedId="first">
+    <p id="first">First</p>
+    <p>Second</p>
+    <p>Third</p>
+  </Navbar>
 </Story>
