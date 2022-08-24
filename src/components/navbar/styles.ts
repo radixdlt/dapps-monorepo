@@ -18,6 +18,8 @@ export const line = (width: number) =>
   })()
 
 export const slotParent = css({
+  display: 'flex',
+  flexDirection: 'row',
   '> *': {
     position: 'relative',
     marginLeft: 30,
