@@ -4,7 +4,7 @@
   import type { Stakes, Validators } from '@types'
   import Input from '../input/Input.svelte'
   import { filterBtn, header, validatorList } from './styles'
-  import { box } from '@styles'
+  import Box from '@components/box/Box.svelte'
 
   export let validators: Validators
   export let stakes: Stakes | undefined = undefined
@@ -75,7 +75,7 @@
   }
 </script>
 
-<div class={box}>
+<Box background="grey">
   <div class={validatorList(!!$selectedAccount)}>
     {#if $selectedAccount}
       <div />
@@ -136,4 +136,4 @@
       />
     {/each}
   </div>
-</div>
+</Box>

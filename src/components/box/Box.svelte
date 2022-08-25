@@ -214,6 +214,7 @@
   const box = css({
     backgroundColor: `$${background}`,
     borderRadius: '$sm',
+    p: '$md',
     variants
   })
 </script>
