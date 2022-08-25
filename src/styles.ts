@@ -41,8 +41,7 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      transparent: colors.transparent,
-      background: colors.darkBlue,
+      background: colors.white,
       action: colors.darkBlue,
       primary: colors.darkBlue,
       secondary: colors.green,
@@ -50,8 +49,8 @@ export const {
       info: colors.blue,
       success: colors.green,
       warning: colors.orange,
-      primaryButton: colors.orange,
-      primaryButtonHover: colors.grey,
+      primaryButton: colors.darkBlue,
+      primaryButtonHover: colors.green,
       primaryButtonText: colors.white,
       primaryGhostButton: colors.white,
       primaryGhostButtonText: colors.darkBlue,
@@ -59,7 +58,8 @@ export const {
       primaryGhostButtonHoverText: colors.white,
       borderColor: colors.grey,
       grey: colors.grey,
-      muted: colors.darkGrey
+      muted: colors.darkGrey,
+      transparent: 'transparent'
     },
     fontSizes: {
       xs: '12px',
