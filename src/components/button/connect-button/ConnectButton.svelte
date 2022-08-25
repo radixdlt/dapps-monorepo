@@ -18,4 +18,4 @@
   }
 </script>
 
-<Button on:click={connect}>Connect</Button>
+<Button size="small" on:click={connect}>Connect</Button>
