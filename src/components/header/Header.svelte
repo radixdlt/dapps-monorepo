@@ -2,8 +2,9 @@
   import ConnectButton from '../button/connect-button/ConnectButton.svelte'
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
-  import { connectBtn, header, logo, navbar } from './styles'
+  import { connectBtn, header, navbar } from './styles'
   import { page } from '$app/stores'
+  import Box from '@components/box/Box.svelte'
 
   const pages = [
     {
@@ -22,7 +23,9 @@
 </script>
 
 <div class={header}>
-  <div class={`gradient-text ${logo}`}>Radix Dashboard</div>
+  <Box>
+    <img alt="logo" height="50" width="200" src="/images/logo.png" />
+  </Box>
   <div class={navbar}>
     <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
