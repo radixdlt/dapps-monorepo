@@ -17,11 +17,9 @@
 />
 
 <Template let:args>
-  <Button
-    style={{
-      backgroundColor: args.color
-    }}>{args.text}</Button
-  >
+  <Button>{args.text}</Button>
+  <Button size="small">{args.text}</Button>
+  <Button ghost>{args.text}</Button>
 </Template>
 
 <Story
