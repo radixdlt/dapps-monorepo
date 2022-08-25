@@ -21,6 +21,23 @@
         }
       }
     },
+    mt: {
+      xsmall: {
+        mt: '$xs'
+      },
+      small: {
+        mt: '$sm'
+      },
+      medium: {
+        mt: '$md'
+      },
+      large: {
+        mt: '$lg'
+      },
+      none: {
+        mt: '$0'
+      }
+    },
     m: {
       xsmall: {
         m: '$xs'
@@ -167,6 +184,10 @@
         display: 'flex',
         justifyContent: 'flex-start'
       },
+      end: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+      },
       center: {
         display: 'flex',
         justifyContent: 'center'
@@ -203,6 +224,7 @@
   export let px: keyof typeof variants['px'] | undefined = undefined
   export let my: keyof typeof variants['my'] | undefined = undefined
   export let mx: keyof typeof variants['mx'] | undefined = undefined
+  export let mt: keyof typeof variants['mt'] | undefined = undefined
   export let border: keyof typeof variants['border'] | false = false
   export let flex: keyof typeof variants['flex'] | undefined = undefined
   export let items: keyof typeof variants['items'] | undefined = undefined
@@ -228,6 +250,7 @@
     px,
     py,
     m,
+    mt,
     mx,
     my,
     border,
