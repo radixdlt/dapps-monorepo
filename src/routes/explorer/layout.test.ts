@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/svelte'
 import userEvent from '@testing-library/user-event'
-
-import Explorer from './__layout.svelte'
+import Explorer from './+layout.svelte'
 import { vi } from 'vitest'
 import { goto } from '$app/navigation'
 
