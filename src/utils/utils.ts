@@ -13,3 +13,6 @@ export const toWholeUnits = (tokenValue: string) =>
     .div(10 ** XRD_DECIMALS)
     .decimalPlaces(2)
     .toNumber()
+
+export const capitalize = (text: string) =>
+  text[0].toUpperCase() + text.slice(1).toLowerCase()
