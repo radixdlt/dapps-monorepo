@@ -1,8 +1,8 @@
 <script lang="ts">
+  import type { PageData } from './$types'
   import TransactionBox from '@components/transaction-box/TransactionBox.svelte'
-  import type { Transaction } from './[transaction]'
 
-  export let tx: Transaction
+  export let data: PageData
 </script>
 
-<TransactionBox {tx} />
+<TransactionBox tx={data.tx} />

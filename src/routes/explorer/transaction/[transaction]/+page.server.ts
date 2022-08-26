@@ -1,4 +1,4 @@
-import type { RequestHandler } from './__types/[transaction]'
+import type { PageServerLoad } from './$types'
 import { transactionStatus } from '@gateway'
 import { toWholeUnits } from '@utils'
 
@@ -13,7 +13,7 @@ export type Transaction = {
   actions: Action[]
 }
 
-export const GET: RequestHandler = async ({ params }) => {
+export const load: PageServerLoad = async ({ params }) => {
   const response = await transactionStatus(params.transaction)
 
   const transformedResponse: Transaction = {
@@ -25,12 +25,7 @@ export const GET: RequestHandler = async ({ params }) => {
     }))
   }
 
-  return response
-    ? {
-        status: 200,
-        body: { tx: transformedResponse }
-      }
-    : {
-        status: 404
-      }
+  return {
+    tx: transformedResponse
+  }
 }

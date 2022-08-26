@@ -1,10 +1,10 @@
-import type { RequestHandler } from './__types'
+import type { PageServerLoad } from './$types'
 import type { Validator } from '@types'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { validators } from '@gateway'
 
-export const GET: RequestHandler = async () => {
+export const load: PageServerLoad = async () => {
   const response = await validators()
 
   const totalStake = response.validators.reduce(
@@ -35,12 +35,7 @@ export const GET: RequestHandler = async () => {
     })
   )
 
-  return response
-    ? {
-        status: 200,
-        body: { validators: transformedValidators }
-      }
-    : {
-        status: 404
-      }
+  return {
+    validators: transformedValidators
+  }
 }

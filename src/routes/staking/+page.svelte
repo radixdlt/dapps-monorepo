@@ -7,8 +7,9 @@
   import { css } from '@styles'
   import { stakePositions } from '@gateway'
   import StakePopup from '@components/popup/stake-popup/StakePopup.svelte'
+  import type { PageData } from './$types'
 
-  export let validators: Validators
+  export let data: PageData
 
   currentPage.set('staking')
 
@@ -82,7 +83,7 @@
   })()}
 >
   <ValidatorList
-    {validators}
+    validators={data.validators}
     stakes={transformedStakes}
     bind:selectedValidators
   />
