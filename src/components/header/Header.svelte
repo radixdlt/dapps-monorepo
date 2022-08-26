@@ -2,7 +2,7 @@
   import ConnectButton from '../button/connect-button/ConnectButton.svelte'
   import Navbar from '../navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
-  import { connectBtn, header, navbar } from './styles'
+  import { header } from './styles'
   import { page } from '$app/stores'
   import Box from '@components/box/Box.svelte'
 
@@ -26,17 +26,17 @@
   <Box>
     <img alt="logo" height="50" width="200" src="/images/logo.png" />
   </Box>
-  <div class={navbar}>
+  <Box mt="small" justify="center">
     <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
         <a id={page.title} href={page.path}>{page.title}</a>
       {/each}
     </Navbar>
-  </div>
-  <div class={connectBtn}>
+  </Box>
+  <Box mt="small" justify="center">
     <AccountPicker />
     <ConnectButton />
-  </div>
+  </Box>
 </div>
 
 <style>

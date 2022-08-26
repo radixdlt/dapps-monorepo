@@ -1,10 +1,5 @@
 import { css } from '@styles'
 
-export const navbar = css({
-  marginTop: '$md',
-  height: 30
-})()
-
 export const line = (width: number) =>
   css({
     position: 'absolute',

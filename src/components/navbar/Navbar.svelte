@@ -2,7 +2,7 @@
   import { tweened, type Tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
   import { onMount } from 'svelte'
-  import { line, navbar, slotParent } from './styles'
+  import { line, slotParent } from './styles'
 
   export let lineWidth = 50
   export let initialSelectedId: string
@@ -52,7 +52,7 @@
   let slotParentElement: HTMLElement
 </script>
 
-<div class={navbar}>
+<div>
   {#if linePosition}
     <div class={line(lineWidth)} style:left={`${$linePosition}px`} />
   {/if}
