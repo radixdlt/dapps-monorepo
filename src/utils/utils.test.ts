@@ -1,4 +1,4 @@
-import { shortenAddress, toWholeUnits } from './utils'
+import { capitalize, shortenAddress, toWholeUnits } from './utils'
 
 describe('#utils', () => {
   it('Should shorten address', () => {
@@ -12,6 +12,13 @@ describe('#utils', () => {
     const originalValue = '100000000000000000000'
     const expected = 100
     const result = toWholeUnits(originalValue)
+    expect(result).toEqual(expected)
+  })
+
+  it('Should capitalize', () => {
+    const originalText = 'hello world'
+    const expected = 'Hello world'
+    const result = capitalize(originalText)
     expect(result).toEqual(expected)
   })
 })
