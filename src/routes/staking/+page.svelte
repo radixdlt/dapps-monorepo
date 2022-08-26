@@ -1,7 +1,7 @@
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import Button from '@components/button/Button.svelte'
-  import { currentPage, selectedAccount } from '@stores'
+  import { selectedAccount } from '@stores'
   import type { Stakes, Validators } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
@@ -10,8 +10,6 @@
   import type { PageData } from './$types'
 
   export let data: PageData
-
-  currentPage.set('staking')
 
   let transformedStakes: Stakes
   let selectedValidators: Array<Validators[0]> = []
