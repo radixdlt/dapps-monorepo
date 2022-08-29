@@ -11,6 +11,7 @@ export const configs = {
 		'@utils': 'src/utils/utils.ts',
 		'@constants': 'src/constants.ts',
 		'@gateway': 'src/gateway.ts',
-		'@configs': 'configs.js'
+		'@configs': 'configs.js',
+		'@io': 'src/io'
 	}
 }
