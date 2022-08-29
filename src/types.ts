@@ -1,1 +1,7 @@
-export type { Validator, Validators, Stakes } from './io/gateway'
+export type {
+  Validator,
+  Validators,
+  StakesTransformed,
+  ValidatorTransformed,
+  ValidatorTransformedArray
+} from './io/gateway'

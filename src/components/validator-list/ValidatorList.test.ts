@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { render } from '@testing-library/svelte'
 import ValidatorList from './ValidatorList.svelte'
-import type { Validators } from '@types'
+import type { ValidatorTransformedArray } from '@types'
 import userEvent from '@testing-library/user-event'
 
-const validators: Validators = [
+const validators: ValidatorTransformedArray = [
   {
     address: '',
     name: 'Test Validator',

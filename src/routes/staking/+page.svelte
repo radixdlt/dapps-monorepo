@@ -2,17 +2,18 @@
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import Button from '@components/button/Button.svelte'
   import { selectedAccount } from '@stores'
-  import type { Stakes, Validators } from '@types'
+  import type { StakesTransformed, ValidatorTransformedArray } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
   import { stakePositions } from '@gateway'
   import StakePopup from '@components/popup/stake-popup/StakePopup.svelte'
   import type { PageData } from './$types'
+  import { StakesIO } from '@io/gateway'
 
   export let data: PageData
 
-  let transformedStakes: Stakes
-  let selectedValidators: Array<Validators[0]> = []
+  let transformedStakes: StakesTransformed
+  let selectedValidators: ValidatorTransformedArray = []
   let addStakePopupVisible = false
   let removeStakePopupVisible = false
 
@@ -37,15 +38,16 @@
     if (!$selectedAccount) return
 
     const stakesResponse = await stakePositions($selectedAccount.address)
+    const parsedStakes = StakesIO.parse(stakesResponse)
 
     transformedStakes = {
-      stakes: stakesResponse.stakes.reduce((accum, stake) => {
+      stakes: parsedStakes.stakes.reduce((accum, stake) => {
         return {
           ...accum,
           [stake.validator_identifier]: toWholeUnits(stake.value)
         }
       }, {}),
-      pendingStakes: stakesResponse.pending_stakes.reduce(
+      pendingStakes: parsedStakes.pending_stakes.reduce(
         (accum, pendingStake) => ({
           ...accum,
           [pendingStake.validator_identifier]: toWholeUnits(pendingStake.value)
