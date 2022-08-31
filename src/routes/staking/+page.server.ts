@@ -1,19 +1,21 @@
 import type { PageServerLoad } from './$types'
-import type { Validator } from '@types'
+import type { ValidatorTransformed } from '@types'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { validators } from '@gateway'
+import { ValidatorArrayIO, ValidatorTransformedArrayIO } from '../../io/gateway'
 
 export const load: PageServerLoad = async () => {
   const response = await validators()
+  const parsed = ValidatorArrayIO.parse(response)
 
-  const totalStake = response.validators.reduce(
+  const totalStake = parsed.validators.reduce(
     (accumulatedStake, validator) =>
       accumulatedStake.plus(validator.stake.value),
     BigNumber(0)
   )
 
-  const transformedValidators: Validator[] = response.validators.map(
+  const transformedValidators: ValidatorTransformed[] = parsed.validators.map(
     (validator) => ({
       address: validator.validator_identifier.address,
       name: validator.properties.name,
@@ -36,6 +38,6 @@ export const load: PageServerLoad = async () => {
   )
 
   return {
-    validators: transformedValidators
+    validators: ValidatorTransformedArrayIO.parse(transformedValidators)
   }
 }

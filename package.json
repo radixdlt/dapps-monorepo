@@ -67,6 +67,7 @@
   "type": "module",
   "dependencies": {
     "bignumber.js": "^9.1.0",
-    "radix-js": "./mock-sdk"
+    "radix-js": "./mock-sdk",
+    "zod": "^3.18.0"
   }
 }

@@ -1,10 +1,10 @@
 <script lang="ts">
   import Button from '@components/button/Button.svelte'
   import { css } from '@styles'
-  import type { Validator } from '@types'
+  import type { ValidatorTransformedArray } from '@types'
   import Popup from '../Popup.svelte'
 
-  export let validators: Validator[]
+  export let validators: ValidatorTransformedArray
   export let onCancel: (e: MouseEvent) => void
   export let addOrRemove: 'add' | 'remove'
 
