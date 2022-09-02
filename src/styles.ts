@@ -69,6 +69,7 @@ export const {
       borderColor: colors.grey,
       grey: colors.grey,
       muted: colors.grey4,
+      text: colors.grey1,
       transparent: 'transparent'
     },
     fontSizes: {
