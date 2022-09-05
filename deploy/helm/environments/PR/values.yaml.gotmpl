@@ -1,4 +1,4 @@
-{{ $DASHBOARD_IMAGE_TAG := .StateValues.ci.tag }} 
+{{ $DASHBOARD_IMAGE_TAG := .StateValues.ci.tags }} 
 image: 
     tag: {{$DASHBOARD_IMAGE_TAG}}
 
