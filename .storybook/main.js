@@ -24,6 +24,7 @@ module.exports = {
   "svelteOptions": {
     "preprocess": import("svelte-preprocess")
   },
+  staticDirs: ['../static'],
   async viteFinal(config, { configType }) {
     // return the customized config
     return mergeConfig(config, {
