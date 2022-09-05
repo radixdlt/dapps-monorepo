@@ -13,3 +13,4 @@ cypress/videos
 .temp
 node_modules/
 dist/
+.vscode
