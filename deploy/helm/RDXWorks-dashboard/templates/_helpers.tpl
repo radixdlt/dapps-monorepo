@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "RDXWorks-dashboard.name" -}}
+{{- define "rdxworks-dashboard.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "RDXWorks-dashboard.fullname" -}}
+{{- define "rdxworks-dashboard.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "RDXWorks-dashboard.chart" -}}
+{{- define "rdxworks-dashboard.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "RDXWorks-dashboard.labels" -}}
-helm.sh/chart: {{ include "RDXWorks-dashboard.chart" . }}
-{{ include "RDXWorks-dashboard.selectorLabels" . }}
+{{- define "rdxworks-dashboard.labels" -}}
+helm.sh/chart: {{ include "rdxworks-dashboard.chart" . }}
+{{ include "rdxworks-dashboard.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "RDXWorks-dashboard.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "RDXWorks-dashboard.name" . }}
+{{- define "rdxworks-dashboard.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "rdxworks-dashboard.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "RDXWorks-dashboard.serviceAccountName" -}}
+{{- define "rdxworks-dashboard.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "RDXWorks-dashboard.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "rdxworks-dashboard.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
