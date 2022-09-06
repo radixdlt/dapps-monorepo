@@ -28,14 +28,15 @@
 
 <Header />
 
-<div class={css({
-  position: 'fixed',
-  top: '$sm',
-  right: '$sm'
-})()}>
+<div
+  class={css({
+    position: 'fixed',
+    top: '$sm',
+    right: '$sm'
+  })()}
+>
   <Switch bind:enabled={darkModeEnabled} />
 </div>
-  
 
 <div>
   {#if $navigating}

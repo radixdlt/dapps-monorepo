@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { theme, css } from '../../styles'
+  import { css } from '../../styles'
 
   const variants = {
     full: {

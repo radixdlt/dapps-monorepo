@@ -200,7 +200,7 @@ globalCss({
   body: {
     minWidth: '400px',
     backgroundColor: '$background',
-    color: '$onBackground',
+    color: '$onBackground'
   },
   'a:link': { 'text-decoration': 'none', color: '$text' },
   'a:visited': { 'text-decoration': 'none', color: '$text' },
