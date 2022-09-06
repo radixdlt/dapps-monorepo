@@ -98,4 +98,17 @@ jobs:
           tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
           labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
 
-  
+  deploy_pull_request:
+    if: ${{ github.event_name == 'pull_request' }}
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
+    needs:
+      - push-dashboard
+      - setup-dashboard-tags
+    with:
+      env_name: pr
+      namespace:  dashboard-pr-deployer
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/dashboard-pr-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-pricemonitor-tags.outputs.json).labels['org.opencontainers.image.version'] }},
