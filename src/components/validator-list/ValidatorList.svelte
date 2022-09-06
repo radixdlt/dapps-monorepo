@@ -13,7 +13,6 @@
   export let validators: ValidatorTransformedArray
   export let stakes: Stakes | undefined = undefined
   export let selectedValidators: ValidatorTransformedArray = []
-  console.log(validators)
 
   let filteredValidators: ValidatorTransformedArray
 
