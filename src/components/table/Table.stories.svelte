@@ -94,4 +94,4 @@
 
 <Meta title="Table" />
 
-<Story name="Primary"><Table {columns} {validators} /></Story>
+<Story name="Primary"><Table {columns} data={validators} /></Story>
