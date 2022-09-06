@@ -97,6 +97,7 @@ export const {
       1: '100%'
     },
     borderWidths: {
+      0: '0px',
       sm: '1px',
       md: '10px'
     }
