@@ -1,7 +1,8 @@
 import { css } from '@styles'
 
 export const selectAcc = css({
-  color: '$primaryButton',
+  backgroundColor: '$pickerBackground',
+  color: '$onPickerBackground',
   height: 35,
   width: 140,
   marginRight: '$sm'

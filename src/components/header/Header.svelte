@@ -23,17 +23,17 @@
 </script>
 
 <div class={header}>
-  <Box>
+  <Box transparent>
     <img alt="logo" height="50" width="200" src="/images/logo.png" />
   </Box>
-  <Box mt="small" justify="center">
+  <Box mt="small" justify="center" transparent>
     <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
         <a id={page.title} href={page.path}>{page.title}</a>
       {/each}
     </Navbar>
   </Box>
-  <Box mt="small" justify="center">
+  <Box mt="small" justify="center" transparent>
     <AccountPicker />
     <ConnectButton />
   </Box>

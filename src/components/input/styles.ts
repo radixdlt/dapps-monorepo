@@ -1,7 +1,7 @@
 import { css } from '@styles'
 
 export const input = css({
-  backgroundColor: '$grey',
+  backgroundColor: '$surface',
   border: 'none',
   borderRadius: '$md',
   padding: '$sm'
