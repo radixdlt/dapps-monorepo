@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
-  import { css, getCssText } from '@styles'
+  import { css, darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
   import '../fonts.css'
@@ -10,6 +10,12 @@
   let darkModeEnabled: boolean
 
   let mounted = false
+
+  const toggleDarkMode = () => {
+    window.document.body.classList.toggle(darkTheme)
+    darkModeEnabled = window.document.body.classList.contains(darkTheme)
+  }
+
   onMount(() => {
     darkModeEnabled = localStorage.getItem('theme') === 'dark'
     mounted = true
@@ -34,7 +40,7 @@
     right: '$sm'
   })()}
 >
-  <Switch bind:enabled={darkModeEnabled} />
+  <Switch toggle={toggleDarkMode} enabled={darkModeEnabled} />
 </div>
 
 <div>
