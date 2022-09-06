@@ -5,7 +5,8 @@ const colors = {
   blue: '#052CC0',
   white: '#fff',
   green: '#00ab84',
-  grey: '#f4f5f9',
+  grey: '#E2E5ED',
+  grey1: '#003057',
   darkGrey: '#6e7781',
   red: 'red',
   orange: 'orange',
@@ -59,6 +60,7 @@ export const {
       borderColor: colors.grey,
       grey: colors.grey,
       muted: colors.darkGrey,
+      text: colors.grey1,
       transparent: 'transparent'
     },
     fontSizes: {
@@ -95,6 +97,7 @@ export const {
       1: '100%'
     },
     borderWidths: {
+      0: '0px',
       sm: '1px',
       md: '10px'
     }
