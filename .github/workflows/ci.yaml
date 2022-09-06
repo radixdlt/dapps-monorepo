@@ -106,7 +106,7 @@ jobs:
       - setup-dashboard-tags
     with:
       env_name: pr
-      namespace:  dashboard-pr-deployer
+      namespace:  dashboard-pr
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/dashboard-pr-deployer"
       eks_cluster: rdx-works-main-dev
@@ -120,7 +120,7 @@ jobs:
       - setup-dashboard-tags
     with:
       env_name: dev
-      namespace:  dashboard-dev-deployer
+      namespace:  dashboard-dev
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/dashboard-dev-deployer"
       eks_cluster: rdx-works-main-dev
