@@ -14,11 +14,9 @@
 
   let slideElement: HTMLElement
 
-  const toggle = () => {
-    enabled = !enabled
+  const toggle = () => (enabled = !enabled)
 
-    sliderXPosition.set(enabled ? width - sliderWidth - padding * 2 - 4 : 0)
-  }
+  $: sliderXPosition.set(enabled ? width - sliderWidth - padding * 2 - 4 : 0)
 </script>
 
 <Switch checked={enabled} on:change={toggle} class={container(width, padding)}>

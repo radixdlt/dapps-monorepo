@@ -1,24 +1,23 @@
-<script>
+<script lang="ts">
   import Header from '@components/header/Header.svelte'
-  import { css, darkTheme, getCssText } from '@styles'
+  import { css, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
   import '../fonts.css'
   import { onMount } from 'svelte'
   import Switch from '@components/switch/Switch.svelte'
 
-  let darkModeEnabled = false
+  let darkModeEnabled: boolean
 
   let mounted = false
   onMount(() => {
+    darkModeEnabled = localStorage.getItem('theme') === 'dark'
     mounted = true
   })
 
   $: {
     if (mounted) {
-      darkModeEnabled
-        ? document.body.classList.add(darkTheme)
-        : document.body.classList.remove(darkTheme)
+      localStorage.setItem('theme', darkModeEnabled ? 'dark' : 'light')
     }
   }
 </script>
