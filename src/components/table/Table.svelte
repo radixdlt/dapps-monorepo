@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ValidatorTransformedArray, ValidatorTransformed } from '@types'
   import Box from '@components/box/Box.svelte'
   import {
     createSvelteTable,
@@ -11,11 +10,11 @@
   import { writable } from 'svelte/store'
   import { css } from '@styles'
 
-  export let validators: ValidatorTransformedArray
-  export let columns: Array<ColumnDef<ValidatorTransformed>>
+  export let data
+  export let columns: Array<ColumnDef<unknown>>
 
-  const options = writable<TableOptions<ValidatorTransformed>>({
-    data: validators,
+  const options = writable<TableOptions<unknown>>({
+    data,
     columns,
     getCoreRowModel: getCoreRowModel()
   })
