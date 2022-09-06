@@ -1,6 +1,6 @@
 apiVersion: v2
-name: RDXWorks-dashboard
-description: A Helm chart for RDXWorks-dashboard
+name: rdxworks-dashboard
+description: A Helm chart for rdxworks-dashboard
 
 # A chart can be either an 'application' or a 'library' chart.
 #

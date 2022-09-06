@@ -10,6 +10,6 @@ environments:
   PR: {}
 releases:
   - name: dashboard
-    chart: ./RDXWorks-dashboard
+    chart: ./rdxworks-dashboard
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
