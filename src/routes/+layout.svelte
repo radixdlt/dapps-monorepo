@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
-  import { css, getCssText } from '@styles'
+  import { css, darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
   import '../fonts.css'
@@ -18,6 +18,7 @@
   $: {
     if (mounted) {
       localStorage.setItem('theme', darkModeEnabled ? 'dark' : 'light')
+      document.body.classList[darkModeEnabled ? 'add' : 'remove'](darkTheme)
     }
   }
 </script>
