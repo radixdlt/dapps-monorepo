@@ -111,4 +111,4 @@ jobs:
       role_to_assume: "arn:aws:iam::308190735829:role/dashboard-pr-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-pricemonitor-tags.outputs.json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ fromJSON(needs.setup-pricemonitor-tags.outputs.json).labels['org.opencontainers.image.version'] }}
