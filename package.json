@@ -66,6 +66,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
     "bignumber.js": "^9.1.0",
     "radix-js": "./mock-sdk",

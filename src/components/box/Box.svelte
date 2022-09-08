@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { theme, css } from '../../styles'
+  import { css } from '../../styles'
 
   const variants = {
     full: {
@@ -230,13 +230,13 @@
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
 
-  export let background: keyof typeof theme['colors'] | 'transparent' =
-    'transparent'
+  export let transparent: boolean = false
 
   const box = css({
-    backgroundColor: `$${background}`,
+    backgroundColor: `${transparent ? 'transparent' : '$surface'}`,
     borderRadius: '$sm',
     p: '$md',
+    color: '$onSurface',
     variants
   })
 </script>
