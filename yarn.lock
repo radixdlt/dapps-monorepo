@@ -1498,6 +1498,11 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@rgossiaux/svelte-headlessui@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@rgossiaux/svelte-headlessui/-/svelte-headlessui-1.0.2.tgz#9493251a40cd56d8bdc8f0f64623d886bb872b1e"
+  integrity sha512-sauopYTSivhzXe1kAvgawkhyYJcQlK8Li3p0d2OtcCIVprOzdbard5lbqWB4xHDv83zAobt2mR08oizO2poHLQ==
+
 "@rollup/pluginutils@^4.1.1", "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
@@ -2464,6 +2469,18 @@
     kleur "^4.1.5"
     magic-string "^0.26.2"
     svelte-hmr "^0.14.12"
+
+"@tanstack/svelte-table@^8.5.11":
+  version "8.5.11"
+  resolved "https://registry.yarnpkg.com/@tanstack/svelte-table/-/svelte-table-8.5.11.tgz#d12c53bd238759aa72927324f2a2ea60ef0a7dc3"
+  integrity sha512-HGWx44Rq9AZ+e/zmnHUqZonDQJh+HUHMV9YR6xAr+7qlXVdc7n/lQleHmlS3LkLLfKkrEUrGPtdXum155phNtg==
+  dependencies:
+    "@tanstack/table-core" "8.5.11"
+
+"@tanstack/table-core@8.5.11":
+  version "8.5.11"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.5.11.tgz#a23178a097df4b0b64bdfa6f79e6d8933e97c7f7"
+  integrity sha512-ZN61ockLaIAiiPbZfMKT2S03nbWx28OHg/nAiDnNfmN4QmAMcdwVajPn2QQwnNVGAr4jS4nbhbYzCcjq8livXQ==
 
 "@testing-library/dom@^8.1.0", "@testing-library/dom@^8.17.1", "@testing-library/dom@^8.3.0":
   version "8.17.1"

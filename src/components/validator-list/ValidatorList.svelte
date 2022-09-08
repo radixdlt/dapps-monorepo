@@ -1,17 +1,14 @@
 <script lang="ts">
   import Validator from './validator/Validator.svelte'
   import { selectedAccount } from '@stores'
-  import type {
-    Stakes,
-    ValidatorTransformed,
-    ValidatorTransformedArray
-  } from '@types'
+  import type { ValidatorTransformed, ValidatorTransformedArray } from '@types'
   import Input from '../input/Input.svelte'
   import { filterBtn, header, validatorList } from './styles'
   import Box from '@components/box/Box.svelte'
+  import type { StakesTransformed } from '@io/gateway'
 
   export let validators: ValidatorTransformedArray
-  export let stakes: Stakes | undefined = undefined
+  export let stakes: StakesTransformed | undefined = undefined
   export let selectedValidators: ValidatorTransformedArray = []
 
   let filteredValidators: ValidatorTransformedArray
@@ -79,7 +76,7 @@
   }
 </script>
 
-<Box background="grey">
+<Box>
   <div class={validatorList(!!$selectedAccount)}>
     {#if $selectedAccount}
       <div />

@@ -1,12 +1,16 @@
 import { createStitches } from '@stitches/core'
 
 const colors = {
+  background: '#E5E5E5',
+  darkBackground: '#0B151D',
+  blue: '	#052ec2',
   darkBlue: '#003057',
-  blue: '#052CC0',
-  white: '#fff',
-  green: '#00ab84',
-  grey: '#f4f5f9',
-  darkGrey: '#6e7781',
+  white: '#ffffff',
+  green: '#23b37e',
+  grey: '#e6e6e6',
+  grey2: '#8A8FA4',
+  grey3: '#F4F5F9',
+  grey4: '#172129',
   red: 'red',
   orange: 'orange',
   transparent: 'transparent'
@@ -41,14 +45,20 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      background: colors.white,
-      action: colors.darkBlue,
-      primary: colors.darkBlue,
-      secondary: colors.green,
+      background: colors.background,
+      onBackground: colors.darkBlue,
+      surface: colors.white,
+      onSurface: colors.darkBlue,
+      primary: colors.green,
+      onPrimary: colors.white,
+      action: colors.green,
+      secondary: colors.darkBlue,
       error: colors.red,
       info: colors.blue,
       success: colors.green,
       warning: colors.orange,
+      pickerBackground: colors.white,
+      onPickerBackground: colors.darkBlue,
       primaryButton: colors.darkBlue,
       primaryButtonHover: colors.green,
       primaryButtonText: colors.white,
@@ -58,7 +68,8 @@ export const {
       primaryGhostButtonHoverText: colors.white,
       borderColor: colors.grey,
       grey: colors.grey,
-      muted: colors.darkGrey,
+      muted: colors.grey4,
+      text: colors.grey1,
       transparent: 'transparent'
     },
     fontSizes: {
@@ -95,6 +106,8 @@ export const {
       1: '100%'
     },
     borderWidths: {
+      0: '0px',
+      0: '0px',
       sm: '1px',
       md: '10px'
     }
@@ -143,6 +156,37 @@ export const {
   }
 })
 
+export const darkTheme = createTheme({
+  colors: {
+    background: colors.darkBackground,
+    onBackground: colors.grey3,
+    surface: colors.grey4,
+    onSurface: colors.grey3,
+    onSurfaceDark: colors.grey2,
+    primary: colors.green,
+    onPrimary: colors.white,
+    action: colors.green,
+    secondary: colors.darkBlue,
+    error: colors.red,
+    info: colors.blue,
+    success: colors.green,
+    warning: colors.orange,
+    pickerBackground: colors.white,
+    onPickerBackground: colors.darkBlue,
+    primaryButton: colors.green,
+    primaryButtonHover: colors.darkBlue,
+    primaryButtonText: colors.white,
+    primaryGhostButton: colors.white,
+    primaryGhostButtonText: colors.darkBlue,
+    primaryGhostButtonHover: colors.blue,
+    primaryGhostButtonHoverText: colors.white,
+    borderColor: colors.grey,
+    grey: colors.grey,
+    muted: colors.grey4,
+    transparent: 'transparent'
+  }
+})
+
 globalCss({
   '*': {
     fontFamily: 'IBM Plex Sans',
@@ -159,7 +203,7 @@ globalCss({
   body: {
     minWidth: '400px',
     backgroundColor: '$background',
-    color: '$text'
+    color: '$onBackground'
   },
   'a:link': { 'text-decoration': 'none', color: '$text' },
   'a:visited': { 'text-decoration': 'none', color: '$text' },
