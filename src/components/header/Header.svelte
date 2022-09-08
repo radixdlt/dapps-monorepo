@@ -5,6 +5,7 @@
   import { header } from './styles'
   import { page } from '$app/stores'
   import Box from '@components/box/Box.svelte'
+  import { storage } from '@stores'
 
   const pages = [
     {
@@ -24,7 +25,14 @@
 
 <div class={header}>
   <Box transparent>
-    <img alt="logo" height="50" width="200" src="/images/logo.png" />
+    <img
+      alt="logo"
+      height="50"
+      width="200"
+      src={$storage.theme === 'light'
+        ? '/images/Radix_Logo_light_theme.svg'
+        : '/images/Radix_Logo_dark_theme.svg'}
+    />
   </Box>
   <Box mt="small" justify="center" transparent>
     <Navbar initialSelectedId={$page.routeId || 'home'}>

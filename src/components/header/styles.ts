@@ -6,6 +6,8 @@ export const header = css({
   alignItems: 'center',
   p: '$md',
   flexWrap: 'wrap',
+  backgroundColor: '$surface',
+  color: '$onSurface',
   variants: {
     layout: {
       desktop: {

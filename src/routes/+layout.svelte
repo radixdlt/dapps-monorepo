@@ -6,23 +6,22 @@
   import '../fonts.css'
   import { onMount } from 'svelte'
   import Switch from '@components/switch/Switch.svelte'
+  import { storage } from '@stores'
 
   let darkModeEnabled: boolean
   let mounted = false
 
-  const isDarkMode = () => localStorage.getItem('theme') === 'dark'
+  const isDarkMode = () => $storage.theme === 'dark'
 
-  const setTheme = (theme: 'light' | 'dark') => {
-    darkModeEnabled = theme === 'dark' ? true : false
-    localStorage.setItem('theme', theme)
-    window.document.body.classList[theme === 'dark' ? 'add' : 'remove'](
+  const setTheme = (_theme: 'light' | 'dark') => {
+    darkModeEnabled = _theme === 'dark' ? true : false
+    storage.set({ theme: _theme })
+    window.document.body.classList[_theme === 'dark' ? 'add' : 'remove'](
       darkTheme
     )
   }
 
-  const toggleTheme = () => {
-    setTheme(isDarkMode() ? 'light' : 'dark')
-  }
+  const toggleTheme = () => setTheme(isDarkMode() ? 'light' : 'dark')
 
   onMount(() => {
     if (isDarkMode()) {
@@ -45,7 +44,7 @@
       right: '$sm'
     })()}
   >
-    <Switch toggle={toggleTheme} enabled={darkModeEnabled} />
+    <Switch onToggle={toggleTheme} enabled={darkModeEnabled} />
   </div>
 
   <div>

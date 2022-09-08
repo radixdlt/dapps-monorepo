@@ -70,6 +70,7 @@
     "@tanstack/svelte-table": "^8.5.11",
     "bignumber.js": "^9.1.0",
     "radix-js": "./mock-sdk",
+    "svelte-local-storage-store": "^0.3.1",
     "zod": "^3.18.0"
   }
 }
