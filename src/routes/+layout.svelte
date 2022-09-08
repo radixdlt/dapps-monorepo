@@ -8,50 +8,55 @@
   import Switch from '@components/switch/Switch.svelte'
 
   let darkModeEnabled: boolean
-
   let mounted = false
 
-  const toggleDarkMode = () => {
-    window.document.body.classList.toggle(darkTheme)
-    darkModeEnabled = window.document.body.classList.contains(darkTheme)
+  const isDarkMode = () => localStorage.getItem('theme') === 'dark'
+
+  const setTheme = (theme: 'light' | 'dark') => {
+    darkModeEnabled = theme === 'dark' ? true : false
+    localStorage.setItem('theme', theme)
+    window.document.body.classList[theme === 'dark' ? 'add' : 'remove'](
+      darkTheme
+    )
+  }
+
+  const toggleTheme = () => {
+    setTheme(isDarkMode() ? 'light' : 'dark')
   }
 
   onMount(() => {
-    darkModeEnabled = localStorage.getItem('theme') === 'dark'
+    if (isDarkMode()) {
+      setTheme('dark')
+    }
     mounted = true
   })
-
-  $: {
-    if (mounted) {
-      localStorage.setItem('theme', darkModeEnabled ? 'dark' : 'light')
-      document.body.classList[darkModeEnabled ? 'add' : 'remove'](darkTheme)
-    }
-  }
 </script>
 
 <!-- enables SSR of css -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
-<Header />
+{#if mounted}
+  <Header />
 
-<div
-  class={css({
-    position: 'fixed',
-    top: '$sm',
-    right: '$sm'
-  })()}
->
-  <Switch toggle={toggleDarkMode} enabled={darkModeEnabled} />
-</div>
+  <div
+    class={css({
+      position: 'fixed',
+      top: '$sm',
+      right: '$sm'
+    })()}
+  >
+    <Switch toggle={toggleTheme} enabled={darkModeEnabled} />
+  </div>
 
-<div>
-  {#if $navigating}
-    {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
-      <center>
-        <LoadingSpinner />
-      </center>
-    {/await}
-  {:else}
-    <slot />
-  {/if}
-</div>
+  <div>
+    {#if $navigating}
+      {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
+        <center>
+          <LoadingSpinner />
+        </center>
+      {/await}
+    {:else}
+      <slot />
+    {/if}
+  </div>
+{/if}
