@@ -112,7 +112,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
-        ci.concurrency='--concurrency 1'
+        ci.concurrency=--concurrency 1
 
 
   deploy_dev:
@@ -128,4 +128,4 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
-        ci.concurrency='--concurrency 1'
+        ci.concurrency=--concurrency 1
