@@ -7,3 +7,7 @@ export const accounts = writable<UserInfo['accounts']>(undefined)
 export const selectedAccount = writable<Account>(undefined)
 
 export const storage = localStorageStore('storage', { theme: 'dark' })
+
+accounts.subscribe(accounts => {
+    selectedAccount.set(accounts?.[0])
+})
