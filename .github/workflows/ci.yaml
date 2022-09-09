@@ -114,7 +114,6 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
         ci.concurrency=--concurrency 1
 
-
   deploy_dev:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
