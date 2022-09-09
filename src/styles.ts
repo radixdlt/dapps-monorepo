@@ -40,7 +40,7 @@ export const space = {
   '7xl': '160px'
 }
 
-type spaceKeys = `$${keyof typeof space}`
+export type SpaceKeys = `$${keyof typeof space}`
 
 export const {
   css,
@@ -121,41 +121,41 @@ export const {
     large: '(min-width: 1024px)'
   },
   utils: {
-    p: (value: spaceKeys) => ({
+    p: (value: SpaceKeys) => ({
       paddingTop: value,
       paddingBottom: value,
       paddingLeft: value,
       paddingRight: value
     }),
-    m: (value: spaceKeys) => ({
+    m: (value: SpaceKeys) => ({
       marginTop: value,
       marginBottom: value,
       marginLeft: value,
       marginRight: value
     }),
-    pl: (value: spaceKeys) => ({
+    pl: (value: SpaceKeys) => ({
       paddingLeft: value
     }),
-    py: (value: spaceKeys) => ({
+    py: (value: SpaceKeys) => ({
       paddingTop: value,
       paddingBottom: value
     }),
-    px: (value: spaceKeys) => ({
+    px: (value: SpaceKeys) => ({
       paddingLeft: value,
       paddingRight: value
     }),
-    my: (value: spaceKeys) => ({
+    my: (value: SpaceKeys) => ({
       marginTop: value,
       marginBottom: value
     }),
-    mx: (value: spaceKeys) => ({
+    mx: (value: SpaceKeys) => ({
       marginLeft: value,
       marginRight: value
     }),
-    mt: (value: spaceKeys) => ({ marginTop: value }),
-    mb: (value: spaceKeys) => ({ marginBottom: value }),
-    ml: (value: spaceKeys) => ({ marginLeft: value }),
-    mr: (value: spaceKeys) => ({ marginRight: value })
+    mt: (value: SpaceKeys) => ({ marginTop: value }),
+    mb: (value: SpaceKeys) => ({ marginBottom: value }),
+    ml: (value: SpaceKeys) => ({ marginLeft: value }),
+    mr: (value: SpaceKeys) => ({ marginRight: value })
   }
 })
 

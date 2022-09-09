@@ -1,8 +1,19 @@
 import { css } from '@styles'
+import type { SpaceKeys } from '@styles'
 
-export const input = css({
-  backgroundColor: '$surface',
-  border: 'none',
-  borderRadius: '$md',
-  padding: '$sm'
-})()
+export const input = (borderRadius: SpaceKeys, icon?: string) =>
+  css({
+    color: '$onSurface',
+    border: 'none',
+    borderRadius,
+    padding: '$sm',
+    ...(() =>
+      icon
+        ? {
+            background: `url(${icon}) no-repeat`,
+            backgroundSize: '20px',
+            backgroundPosition: 'right 10px center'
+          }
+        : {})(),
+    backgroundColor: '$surface'
+  })()

@@ -25,7 +25,7 @@
 </script>
 
 <div class={header}>
-  <div style:flex-basis='20%'>
+  <div style:flex-basis="20%">
     <Box transparent>
       <img
         alt="logo"
@@ -44,7 +44,7 @@
       {/each}
     </Navbar>
   </Box>
-  <div style:flex-basis='20%' style:display="flex" style:align-items="center">
+  <div style:flex-basis="20%" style:display="flex" style:align-items="center">
     <Box justify="center" transparent>
       <AccountPicker />
       <ConnectButton />
