@@ -6,6 +6,7 @@
   import { page } from '$app/stores'
   import Box from '@components/box/Box.svelte'
   import { storage } from '@stores'
+  import ThemeSwitch from '@components/switch/theme-switch/ThemeSwitch.svelte'
 
   const pages = [
     {
@@ -24,36 +25,37 @@
 </script>
 
 <div class={header}>
-  <Box transparent>
-    <img
-      alt="logo"
-      height="50"
-      width="200"
-      src={$storage.theme === 'light'
-        ? '/images/Radix_Logo_light_theme.svg'
-        : '/images/Radix_Logo_dark_theme.svg'}
-    />
-  </Box>
-  <Box mt="small" justify="center" transparent>
+  <div style:flex-basis='20%'>
+    <Box transparent>
+      <img
+        alt="logo"
+        height="25"
+        width="100"
+        src={$storage.theme === 'light'
+          ? '/images/Radix_Logo_light_theme.svg'
+          : '/images/Radix_Logo_dark_theme.svg'}
+      />
+    </Box>
+  </div>
+  <Box justify="center" transparent>
     <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
         <a id={page.title} href={page.path}>{page.title}</a>
       {/each}
     </Navbar>
   </Box>
-  <Box mt="small" justify="center" transparent>
-    <AccountPicker />
-    <ConnectButton />
-  </Box>
+  <div style:flex-basis='20%' style:display="flex" style:align-items="center">
+    <Box justify="center" transparent>
+      <AccountPicker />
+      <ConnectButton />
+    </Box>
+    <ThemeSwitch />
+  </div>
 </div>
 
 <style>
   .gradient-text {
-    background-image: linear-gradient(
-      19deg,
-      hsl(300, 98%, 56%) 0%,
-      hsl(220, 100%, 56%) 100%
-    );
+    background-image: linear-gradient(19deg, #ff43ca 0%, #052cc0 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
