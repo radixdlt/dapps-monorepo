@@ -97,6 +97,9 @@ jobs:
           context: .
           tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
           labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
+      - name: Docker Image output
+        run: |
+          docker images
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
