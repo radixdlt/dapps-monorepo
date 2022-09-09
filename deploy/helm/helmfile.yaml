@@ -9,7 +9,9 @@ environments:
   dev: {}
   PR: {}
 releases:
+{{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
+    namespace: {{ $DASHBOARD_NS }}
     chart: ./rdxworks-dashboard
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
