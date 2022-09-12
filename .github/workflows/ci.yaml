@@ -3,10 +3,10 @@ name: Dashboard CI/CD
 on:
   push:
     branches:
-      - DO-757-dashboard
+      - main
   pull_request:
     branches:
-      - DO-757-dashboard
+      - main
 
 jobs:
   cancel_running_workflows:
@@ -118,7 +118,7 @@ jobs:
         ci.concurrency=--concurrency 1
 
   deploy_dev:
-    if: github.ref == 'refs/heads/DO-757-dashboard'
+    if: github.ref == 'refs/heads/main'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
