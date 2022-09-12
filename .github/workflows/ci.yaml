@@ -118,6 +118,7 @@ jobs:
         ci.concurrency=--concurrency 1
 
   deploy_dev:
+    if: github.ref == 'refs/heads/DO-757-dashboard'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
