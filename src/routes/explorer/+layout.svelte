@@ -1,6 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { navigating } from '$app/stores'
   import Input from '@components/input/Input.svelte'
+  import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
   import { container } from './style'
 
   let id: string
@@ -20,5 +22,13 @@
       />
     </form>
   </div>
-  <slot />
+  {#if $navigating}
+    <!-- {#await new Promise((resolve) => setTimeout(resolve, 200)) then} -->
+    <center>
+      <LoadingSpinner />
+    </center>
+    <!-- {/await} -->
+  {:else}
+    <slot />
+  {/if}
 </div>

@@ -2,7 +2,6 @@
   import Header from '@components/header/Header.svelte'
   import { getCssText } from '@styles'
   import { navigating } from '$app/stores'
-  import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
   import '../fonts.css'
   import { onMount } from 'svelte'
   let mounted = false
@@ -20,11 +19,7 @@
 
   <div>
     {#if $navigating}
-      {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
-        <center>
-          <LoadingSpinner />
-        </center>
-      {/await}
+      <slot />
     {:else}
       <slot />
     {/if}
