@@ -19,14 +19,13 @@ describe('#explorer layout', () => {
     expect(div).to.exist
   })
 
-  it('Should make sure typing transaction works and that it sends the id to next page', async () => {
+  it.only('Should make sure typing transaction works and that it sends the id to next page', async () => {
     render(Explorer)
     const input: HTMLInputElement = screen.getByPlaceholderText(
       'Enter Transaction ID'
     )
     await userEvent.type(input, 'test')
-    const button = screen.getByText('Search')
-    await userEvent.click(button)
+    await userEvent.keyboard('{enter}')
 
     expect(goto).toBeCalledWith('/explorer/transaction/test')
   })
