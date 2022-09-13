@@ -1,29 +1,34 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import Button from '@components/button/Button.svelte'
+  import { navigating } from '$app/stores'
   import Input from '@components/input/Input.svelte'
-  import { css } from '@styles'
+  import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
+  import { container } from './style'
 
-  let id: string = ''
+  let id: string
 
-  const redirect = () => goto(`/explorer/transaction/${id}`)
-
-  const grid = css({
-    display: 'grid',
-    grid: 'auto / 90% 10%',
-    columnGap: 10
-  })
+  const search = () => goto(`/explorer/transaction/${id}`)
 </script>
 
-<div
-  class={css({
-    margin: '$lg 30%'
-  })()}
->
-  <div class={grid()}>
-    <Input bind:value={id} placeholder="Enter Transaction ID" />
-    <Button on:click={redirect}>Search</Button>
+<div>
+  <div class={container}>
+    <form style:width="30%" on:submit={search}>
+      <Input
+        width="100%"
+        bind:value={id}
+        borderRadius="$lg"
+        placeholder="Enter Transaction ID"
+        icon="/images/search_icon.svg"
+      />
+    </form>
   </div>
-
-  <slot />
+  {#if $navigating}
+    {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
+      <center>
+        <LoadingSpinner />
+      </center>
+    {/await}
+  {:else}
+    <slot />
+  {/if}
 </div>

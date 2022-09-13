@@ -25,8 +25,7 @@ describe('#explorer layout', () => {
       'Enter Transaction ID'
     )
     await userEvent.type(input, 'test')
-    const button = screen.getByText('Search')
-    await userEvent.click(button)
+    await userEvent.keyboard('{enter}')
 
     expect(goto).toBeCalledWith('/explorer/transaction/test')
   })

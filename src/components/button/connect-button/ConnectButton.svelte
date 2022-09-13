@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Wallet } from 'radix-js'
-  import { accounts } from '@stores'
+  import { accounts, selectedAccount } from '@stores'
   import Button from '../Button.svelte'
 
   const connect = async () => {
@@ -12,6 +12,7 @@
 
     if (result.isOk()) {
       accounts.set(result.value.accounts)
+      selectedAccount.set(result.value.accounts[0])
     } else {
       // TODO
     }

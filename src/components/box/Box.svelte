@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { css } from '../../styles'
+  import type { CSS, VariantProps } from '@stitches/core'
+
+  import { css, config } from '../../styles'
 
   const variants = {
     full: {
@@ -215,6 +217,21 @@
     }
   } as const
 
+  export let transparent: boolean = false
+
+  export let cx: CSS<typeof config> = {}
+
+  const box = css({
+    backgroundColor: `${transparent ? 'transparent' : '$surface'}`,
+    borderRadius: '$sm',
+    p: '$md',
+    color: '$onSurface',
+    variants,
+    ...cx
+  })
+
+  type variantProps = VariantProps<typeof box>
+
   export let full: true | false = false
   export let pointer: true | false = false
   export let interactive: true | false = false
@@ -225,20 +242,10 @@
   export let my: keyof typeof variants['my'] | undefined = undefined
   export let mx: keyof typeof variants['mx'] | undefined = undefined
   export let mt: keyof typeof variants['mt'] | undefined = undefined
-  export let border: keyof typeof variants['border'] | false = false
+  export let border: variantProps['border'] = false
   export let flex: keyof typeof variants['flex'] | undefined = undefined
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
-
-  export let transparent: boolean = false
-
-  const box = css({
-    backgroundColor: `${transparent ? 'transparent' : '$surface'}`,
-    borderRadius: '$sm',
-    p: '$md',
-    color: '$onSurface',
-    variants
-  })
 </script>
 
 <div

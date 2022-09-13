@@ -3,7 +3,7 @@
   import { spring } from 'svelte/motion'
   import { container, slider } from './style'
 
-  export let toggle = () => {}
+  export let onToggle = () => {}
   export let enabled: boolean = false
   export let width: number = 50
 
@@ -18,6 +18,10 @@
   $: sliderXPosition.set(enabled ? width - sliderWidth - padding * 2 - 4 : 0)
 </script>
 
-<Switch checked={enabled} on:change={toggle} class={container(width, padding)}>
+<Switch
+  checked={enabled}
+  on:change={onToggle}
+  class={container(width, padding)}
+>
   <div class={slider(sliderWidth, $sliderXPosition)} />
 </Switch>
