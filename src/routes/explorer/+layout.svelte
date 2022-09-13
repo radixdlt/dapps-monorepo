@@ -23,11 +23,11 @@
     </form>
   </div>
   {#if $navigating}
-    <!-- {#await new Promise((resolve) => setTimeout(resolve, 200)) then} -->
-    <center>
-      <LoadingSpinner />
-    </center>
-    <!-- {/await} -->
+    {#await new Promise((resolve) => setTimeout(resolve, 200)) then}
+      <center>
+        <LoadingSpinner />
+      </center>
+    {/await}
   {:else}
     <slot />
   {/if}

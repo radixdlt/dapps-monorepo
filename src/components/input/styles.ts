@@ -7,13 +7,12 @@ export const input = (borderRadius: SpaceKeys, icon?: string) =>
     border: 'none',
     borderRadius,
     padding: '$sm',
-    ...(() =>
-      icon
-        ? {
-            background: `url(${icon}) no-repeat`,
-            backgroundSize: '20px',
-            backgroundPosition: 'right 10px center'
-          }
-        : {})(),
+    icon: icon
+      ? {
+          background: `url(${icon}) no-repeat`,
+          backgroundSize: '20px',
+          backgroundPosition: 'right 10px center'
+        }
+      : undefined,
     backgroundColor: '$surface'
   })()

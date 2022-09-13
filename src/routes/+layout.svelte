@@ -1,13 +1,21 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
-  import { getCssText } from '@styles'
+  import { darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import '../fonts.css'
   import { onMount } from 'svelte'
+  import { storage } from '@stores'
+
   let mounted = false
 
   onMount(() => {
     mounted = true
+
+    storage.subscribe((storage) =>
+      document.body.classList[storage.theme === 'dark' ? 'add' : 'remove'](
+        darkTheme
+      )
+    )
   })
 </script>
 
