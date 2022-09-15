@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
 
-  import { css, config } from '../../styles'
+  import { css, config } from '../../../styles'
 
   const variants = {
     full: {

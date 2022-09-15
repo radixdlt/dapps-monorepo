@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Box from '@components/box/Box.svelte'
+  import Box from '@components/_base/box/Box.svelte'
   import { shortenAddress } from '@utils'
   import type { Transaction } from 'src/routes/explorer/transaction/[transaction]/+page.server'
   import { fly } from 'svelte/transition'

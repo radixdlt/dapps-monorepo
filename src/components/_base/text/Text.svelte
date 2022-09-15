@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { css } from '../../styles'
+  import { css } from '../../../styles'
 
   const variants = {
     pointer: {

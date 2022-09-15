@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { navigating } from '$app/stores'
-  import Input from '@components/input/Input.svelte'
-  import LoadingSpinner from '@components/loading-spinner/LoadingSpinner.svelte'
+  import Input from '@components/_base/input/Input.svelte'
+  import LoadingSpinner from '@components/_base/loading-spinner/LoadingSpinner.svelte'
   import { container } from './style'
 
   let id: string
