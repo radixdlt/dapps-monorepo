@@ -1,12 +1,12 @@
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
-  import Button from '@components/button/Button.svelte'
+  import Button from '@components/_base/button/Button.svelte'
   import { selectedAccount } from '@stores'
   import type { StakesTransformed, ValidatorTransformedArray } from '@types'
   import { toWholeUnits } from '@utils'
   import { css } from '@styles'
   import { stakePositions } from '@gateway'
-  import StakePopup from '@components/popup/stake-popup/StakePopup.svelte'
+  import StakePopup from '@components/stake-popup/StakePopup.svelte'
   import type { PageData } from './$types'
   import { StakesIO } from '@io/gateway'
 

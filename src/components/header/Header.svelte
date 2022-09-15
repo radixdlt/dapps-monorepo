@@ -1,11 +1,11 @@
 <script lang="ts">
-  import ConnectButton from '../button/connect-button/ConnectButton.svelte'
-  import Navbar from '../navbar/Navbar.svelte'
+  import ConnectButton from '../_base/button/connect-button/ConnectButton.svelte'
+  import Navbar from '../_base/navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
   import { page } from '$app/stores'
-  import Box from '@components/box/Box.svelte'
+  import Box from '@components/_base/box/Box.svelte'
   import { storage } from '@stores'
-  import ThemeSwitch from '@components/switch/theme-switch/ThemeSwitch.svelte'
+  import ThemeSwitch from '@components/_base/switch/theme-switch/ThemeSwitch.svelte'
 
   const pages = [
     {
