@@ -69,6 +69,8 @@ jobs:
         run: npm run lint
       - name: Test
         run:  npm run test
+      - name: Test
+        run:  npm run coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
