@@ -141,15 +141,10 @@ jobs:
   run-e2e-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Use Node.js
-        uses: actions/setup-node@v2
+      - name: Run e2e tests on the PR environment
+        uses: cypress-io/github-action@v3
         with:
-          always-auth: true
-          node-version: 16.x
-      - name: Install dependencies
-        run: npm install
-      - name: Run e2e tests
-        run: npm run e2etest
+          build: 'npm run e2etest'
