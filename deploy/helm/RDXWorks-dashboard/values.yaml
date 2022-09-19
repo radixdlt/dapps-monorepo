@@ -12,12 +12,13 @@ image:
 
 imagePullSecrets:
   - name: docker-eu-gcr-dev-api
+
 nameOverride: "dashboard"
+
 fullnameOverride: "dashboard"
 
-# imagePullSecrets: []
-# nameOverride: ""
-# fullnameOverride: ""
+params:
+  NETWORK_GATEWAY_API: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
