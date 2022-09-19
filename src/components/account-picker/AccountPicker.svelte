@@ -1,16 +1,16 @@
 <script lang="ts">
+  import Select from '@components/_base/select/Select.svelte'
   import { accounts, selectedAccount } from '@stores'
   import { shortenAddress } from '@utils'
-  import { selectAcc } from './styles'
 </script>
 
-<select
-  class={selectAcc}
-  on:change={(e) => {
-    selectedAccount.set($accounts[e.currentTarget.selectedIndex])
+<Select
+  onChange={(e) =>
+    selectedAccount.set($accounts[e.currentTarget.selectedIndex])}
+  visible={!!$accounts}
+  size={{
+    width: '$3xl'
   }}
-  name="accounts"
-  style:visibility={$accounts ? 'visible' : 'hidden'}
 >
   {#if $accounts}
     {#each $accounts as account}
@@ -20,4 +20,4 @@
       </option>
     {/each}
   {/if}
-</select>
+</Select>
