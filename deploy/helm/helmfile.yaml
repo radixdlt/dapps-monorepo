@@ -7,11 +7,18 @@ helmDefaults:
   createNamespace: false
 environments:
   dev: {}
-  PR: {}
+  pr: {}
 releases:
 {{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
     namespace: {{ $DASHBOARD_NS }}
     chart: ./RDXWorks-dashboard
     values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: developer-access
+    namespace: {{ $DASHBOARD_NS }}
+    chart: ./developer-access
+    values:
+      - project: dashboard
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl

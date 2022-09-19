@@ -9,6 +9,7 @@ on:
       - main
 
 jobs:
+
   cancel_running_workflows:
     name: Cancel running workflows
     runs-on: ubuntu-20.04
@@ -20,10 +21,6 @@ jobs:
 
   setup-dashboard-tags:
     runs-on: ubuntu-latest
-    outputs:
-      tags: ${{ steps.docker-tags.outputs.tags }}
-      labels: ${{ steps.docker-tags.outputs.labels }}
-      json: ${{ steps.docker-tags.outputs.json }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -38,6 +35,10 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
+    outputs:
+      tags: ${{ steps.docker-tags.outputs.tags }}
+      labels: ${{ steps.docker-tags.outputs.labels }}
+      json: ${{ steps.docker-tags.outputs.json }}
 
   build-dashboard:
     runs-on: ubuntu-latest
@@ -109,13 +110,16 @@ jobs:
       - setup-dashboard-tags
     with:
       env_name: pr
-      namespace:  dashboard-pr
+      hierarchical_namespace: dashboard-ci-pr
+      namespace: distro-pr-${{ github.event.number }}
+      create_subns: true
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/dashboard-pr-deployer"
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
-        ci.concurrency=--concurrency 1
+        ci.tag=${{ needs.setup-tags.outputs.distro-tag }},
+        ci.prNumber=${{ github.event.number }},
+        ci.environment=pr
 
   deploy_dev:
     if: github.ref == 'refs/heads/main'
@@ -127,8 +131,7 @@ jobs:
       env_name: dev
       namespace:  dashboard-dev
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/dashboard-dev-deployer"
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
-        ci.concurrency=--concurrency 1
+        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }}
