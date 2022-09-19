@@ -70,9 +70,9 @@ export const {
       primaryGhostButtonText: colors.grey1,
       primaryGhostButtonHover: colors.blue1,
       primaryGhostButtonHoverText: colors.white,
-      borderColor: colors.grey1,
+      borderColor: colors.grey4,
       grey: colors.grey1,
-      muted: colors.grey4,
+      muted: colors.grey2,
       text: colors.grey1,
       transparent: 'transparent'
     },
@@ -187,9 +187,9 @@ export const darkTheme = createTheme({
     primaryGhostButtonText: colors.grey1,
     primaryGhostButtonHover: colors.blue1,
     primaryGhostButtonHoverText: colors.white,
-    borderColor: colors.grey1,
+    borderColor: colors.grey4,
     grey: colors.grey1,
-    muted: colors.grey4,
+    muted: colors.grey2,
     transparent: 'transparent'
   }
 })
