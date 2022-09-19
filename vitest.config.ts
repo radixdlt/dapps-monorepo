@@ -23,6 +23,9 @@ export default defineConfig({
     setupFiles: ['./setup-tests.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     globals: true,
-    environment: 'jsdom'
+    environment: 'jsdom',
+    coverage: {
+      reporter: ['text', 'lcov']
+    }
   }
 })
