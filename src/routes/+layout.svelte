@@ -10,13 +10,13 @@
 
   onMount(() => {
     mounted = true
-
-    storage.subscribe((storage) =>
-      document.body.classList[storage.theme === 'dark' ? 'add' : 'remove'](
-        darkTheme
-      )
-    )
   })
+
+  $: if (mounted) {
+    document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
+      darkTheme
+    )
+  }
 </script>
 
 <!-- enables SSR of css -->
