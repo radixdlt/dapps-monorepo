@@ -2,12 +2,11 @@
   import type { VariantProps } from '@stitches/core'
   import { config, css } from '@styles'
 
-  export let size:
-    | VariantProps<typeof style>['size']
-    | {
-        height?: `$${keyof typeof config['theme']['sizes']}`
-        width?: `$${keyof typeof config['theme']['sizes']}`
-      } = undefined
+  export let height: `$${keyof typeof config['theme']['sizes']}` | undefined =
+    undefined
+  export let width: `$${keyof typeof config['theme']['sizes']}` | undefined =
+    undefined
+  export let size: VariantProps<typeof style>['size'] | undefined = undefined
 
   export let onChange:
     | ((e: Event & { currentTarget: EventTarget & HTMLSelectElement }) => void)
@@ -39,13 +38,6 @@
   })
 </script>
 
-<select
-  class={style(
-    typeof size === 'object'
-      ? { css: { height: size.height, width: size.width } }
-      : { size }
-  )}
-  on:change={onChange}
->
+<select class={style({ css: { height, width }, size })} on:change={onChange}>
   <slot />
 </select>
