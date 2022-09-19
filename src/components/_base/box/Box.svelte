@@ -168,6 +168,10 @@
         display: 'flex',
         alignItems: 'center'
       },
+      stretch: {
+        display: 'flex',
+        alignItems: 'stretch'
+      },
       between: {
         display: 'flex',
         alignItems: 'space-between'
