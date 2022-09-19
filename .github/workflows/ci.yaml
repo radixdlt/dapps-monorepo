@@ -148,4 +148,4 @@ jobs:
         uses: cypress-io/github-action@v3
         with:
           build: 'npm run e2etest'
-          baseUrl: 'https://dashboard-bridge-pr-${{ github.event.number }}.rdx-works-main.extratools.works'
+          wait-on: 'https://dashboard-pr-${{ github.event.number }}.rdx-works-main.extratools.works'
