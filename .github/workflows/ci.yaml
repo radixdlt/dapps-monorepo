@@ -140,9 +140,6 @@ jobs:
 
   run-e2e-tests:
     runs-on: ubuntu-latest
-    needs:
-    - deploy_pull_request
-    - deploy_dev
     steps:
       - uses: actions/checkout@v2
         with:
