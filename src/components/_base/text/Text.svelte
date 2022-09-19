@@ -1,12 +1,7 @@
 <script lang="ts">
-  import { css } from '../../styles'
+  import { css } from '../../../styles'
 
   const variants = {
-    full: {
-      true: {
-        width: '100%'
-      }
-    },
     pointer: {
       true: {
         cursor: 'pointer'
@@ -140,77 +135,37 @@
         px: '$0'
       }
     },
-    border: {
+    color: {
+      primary: {
+        color: '$primary'
+      },
+      secondary: {
+        color: '$secondary'
+      },
+      tertiary: {
+        color: '$tertiary'
+      }
+    },
+    muted: {
       true: {
-        borderColor: '$borderColor',
-        borderStyle: 'solid',
-        borderRadius: '$sm'
+        color: '$muted'
       }
     },
-    flex: {
-      row: {
-        display: 'flex',
-        flexDirection: 'row'
+    size: {
+      xsmall: {
+        fontSize: '$xs'
       },
-      col: {
-        display: 'flex',
-        flexDirection: 'column'
-      }
-    },
-    items: {
-      start: {
-        display: 'flex',
-        justifyContent: 'flex-start'
+      small: {
+        fontSize: '$sm'
       },
-      center: {
-        display: 'flex',
-        alignItems: 'center'
+      medium: {
+        fontSize: '$md'
       },
-      between: {
-        display: 'flex',
-        alignItems: 'space-between'
+      large: {
+        fontSize: '$lg'
       },
-      around: {
-        display: 'flex',
-        alignItems: 'space-around'
-      },
-      evenly: {
-        display: 'flex',
-        alignItems: 'space-evenly'
-      }
-    },
-    justify: {
-      start: {
-        display: 'flex',
-        justifyContent: 'flex-start'
-      },
-      end: {
-        display: 'flex',
-        justifyContent: 'flex-end'
-      },
-      center: {
-        display: 'flex',
-        justifyContent: 'center'
-      },
-      between: {
-        display: 'flex',
-        justifyContent: 'space-between'
-      },
-      around: {
-        display: 'flex',
-        justifyContent: 'space-around'
-      },
-      evenly: {
-        display: 'flex',
-        justifyContent: 'space-evenly'
-      }
-    },
-    position: {
-      relative: {
-        position: 'relative'
-      },
-      absolute: {
-        position: 'absolute'
+      xlarge: {
+        fontSize: '$xl'
       }
     }
   } as const
@@ -225,24 +180,17 @@
   export let my: keyof typeof variants['my'] | undefined = undefined
   export let mx: keyof typeof variants['mx'] | undefined = undefined
   export let mt: keyof typeof variants['mt'] | undefined = undefined
-  export let border: keyof typeof variants['border'] | false = false
-  export let flex: keyof typeof variants['flex'] | undefined = undefined
-  export let items: keyof typeof variants['items'] | undefined = undefined
-  export let justify: keyof typeof variants['justify'] | undefined = undefined
+  export let color: keyof typeof variants['color'] | undefined = undefined
+  export let size: keyof typeof variants['size'] | undefined = undefined
+  export let muted: true | false = false
 
-  export let transparent: boolean = false
-
-  const box = css({
-    backgroundColor: `${transparent ? 'transparent' : '$surface'}`,
-    borderRadius: '$sm',
-    p: '$md',
-    color: '$onSurface',
+  const text = css({
     variants
   })
 </script>
 
 <div
-  class={box({
+  class={text({
     full,
     pointer,
     interactive,
@@ -253,10 +201,9 @@
     mt,
     mx,
     my,
-    border,
-    flex,
-    items,
-    justify
+    color,
+    size,
+    muted
   })}
 >
   <slot />

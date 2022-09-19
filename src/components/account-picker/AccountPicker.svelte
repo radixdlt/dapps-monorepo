@@ -2,19 +2,22 @@
   import { accounts, selectedAccount } from '@stores'
   import { shortenAddress } from '@utils'
   import { selectAcc } from './styles'
-
-  let selected: typeof $accounts[0]
-
-  $: selectedAccount.set(selected)
 </script>
 
-{#if $accounts}
-  <select class={selectAcc} bind:value={selected} name="accounts">
+<select
+  class={selectAcc}
+  on:change={(e) => {
+    selectedAccount.set($accounts[e.currentTarget.selectedIndex])
+  }}
+  name="accounts"
+  style:visibility={$accounts ? 'visible' : 'hidden'}
+>
+  {#if $accounts}
     {#each $accounts as account}
       <option value={account}>
         {account.label}
         {shortenAddress(account.address)}
       </option>
     {/each}
-  </select>
-{/if}
+  {/if}
+</select>

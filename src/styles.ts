@@ -1,18 +1,26 @@
 import { createStitches } from '@stitches/core'
 
 const colors = {
-  background: '#E5E5E5',
-  darkBackground: '#0B151D',
-  blue: '	#052ec2',
-  darkBlue: '#003057',
+  // Core colors
+  blue1: '#060F8F',
+  blue2: '#052CC0',
+  // Accent colors
+  blue3: '#20E4FF',
+  pink1: '#CE0D98',
+  pink2: '#FF43CA',
+  green1: '#00AB84',
+  green2: '#00C389',
+  green3: '#21FFBE',
+  // Neutral colors
   white: '#ffffff',
-  green: '#23b37e',
-  grey: '#e6e6e6',
+  charcoal1: '#414141',
+  grey0: '#0B151D',
+  grey01: '#172129',
+  grey1: '#003057',
   grey2: '#8A8FA4',
-  grey3: '#F4F5F9',
-  grey4: '#172129',
-  red: 'red',
-  orange: 'orange',
+  grey3: '#CED0D6',
+  grey4: '#E2E5ED',
+  grey5: '#F4F5F9',
   transparent: 'transparent'
 }
 
@@ -32,7 +40,7 @@ export const space = {
   '7xl': '160px'
 }
 
-type spaceKeys = `$${keyof typeof space}`
+export type SpaceKeys = `$${keyof typeof space}`
 
 export const {
   css,
@@ -45,29 +53,25 @@ export const {
 } = createStitches({
   theme: {
     colors: {
-      background: colors.background,
-      onBackground: colors.darkBlue,
+      background: colors.grey3,
+      onBackground: colors.grey1,
       surface: colors.white,
-      onSurface: colors.darkBlue,
-      primary: colors.green,
+      onSurface: colors.grey1,
+      primary: colors.green1,
       onPrimary: colors.white,
-      action: colors.green,
-      secondary: colors.darkBlue,
-      error: colors.red,
-      info: colors.blue,
-      success: colors.green,
-      warning: colors.orange,
+      action: colors.green1,
+      secondary: colors.grey1,
       pickerBackground: colors.white,
-      onPickerBackground: colors.darkBlue,
-      primaryButton: colors.darkBlue,
-      primaryButtonHover: colors.green,
+      onPickerBackground: colors.grey1,
+      primaryButton: colors.grey1,
+      primaryButtonHover: colors.green1,
       primaryButtonText: colors.white,
       primaryGhostButton: colors.white,
-      primaryGhostButtonText: colors.darkBlue,
-      primaryGhostButtonHover: colors.blue,
+      primaryGhostButtonText: colors.grey1,
+      primaryGhostButtonHover: colors.blue1,
       primaryGhostButtonHoverText: colors.white,
-      borderColor: colors.grey,
-      grey: colors.grey,
+      borderColor: colors.grey1,
+      grey: colors.grey1,
       muted: colors.grey4,
       text: colors.grey1,
       transparent: 'transparent'
@@ -103,10 +107,17 @@ export const {
       600: '600'
     },
     sizes: {
+      sm: '24px',
+      md: '32px',
+      lg: '48px',
+      '1/10': '10%',
+      '1/5': '20%',
+      '1/4': '25%',
+      '1/3': '33.333333%',
+      '2/3': '66.666667%',
       1: '100%'
     },
     borderWidths: {
-      0: '0px',
       0: '0px',
       sm: '1px',
       md: '10px'
@@ -118,70 +129,66 @@ export const {
     large: '(min-width: 1024px)'
   },
   utils: {
-    p: (value: spaceKeys) => ({
+    p: (value: SpaceKeys) => ({
       paddingTop: value,
       paddingBottom: value,
       paddingLeft: value,
       paddingRight: value
     }),
-    m: (value: spaceKeys) => ({
+    m: (value: SpaceKeys) => ({
       marginTop: value,
       marginBottom: value,
       marginLeft: value,
       marginRight: value
     }),
-    pl: (value: spaceKeys) => ({
+    pl: (value: SpaceKeys) => ({
       paddingLeft: value
     }),
-    py: (value: spaceKeys) => ({
+    py: (value: SpaceKeys) => ({
       paddingTop: value,
       paddingBottom: value
     }),
-    px: (value: spaceKeys) => ({
+    px: (value: SpaceKeys) => ({
       paddingLeft: value,
       paddingRight: value
     }),
-    my: (value: spaceKeys) => ({
+    my: (value: SpaceKeys) => ({
       marginTop: value,
       marginBottom: value
     }),
-    mx: (value: spaceKeys) => ({
+    mx: (value: SpaceKeys) => ({
       marginLeft: value,
       marginRight: value
     }),
-    mt: (value: spaceKeys) => ({ marginTop: value }),
-    mb: (value: spaceKeys) => ({ marginBottom: value }),
-    ml: (value: spaceKeys) => ({ marginLeft: value }),
-    mr: (value: spaceKeys) => ({ marginRight: value })
+    mt: (value: SpaceKeys) => ({ marginTop: value }),
+    mb: (value: SpaceKeys) => ({ marginBottom: value }),
+    ml: (value: SpaceKeys) => ({ marginLeft: value }),
+    mr: (value: SpaceKeys) => ({ marginRight: value })
   }
 })
 
 export const darkTheme = createTheme({
   colors: {
-    background: colors.darkBackground,
+    background: colors.grey0,
     onBackground: colors.grey3,
-    surface: colors.grey4,
+    surface: colors.grey01,
     onSurface: colors.grey3,
     onSurfaceDark: colors.grey2,
-    primary: colors.green,
+    primary: colors.green1,
     onPrimary: colors.white,
-    action: colors.green,
-    secondary: colors.darkBlue,
-    error: colors.red,
-    info: colors.blue,
-    success: colors.green,
-    warning: colors.orange,
+    action: colors.green1,
+    secondary: colors.grey1,
     pickerBackground: colors.white,
-    onPickerBackground: colors.darkBlue,
-    primaryButton: colors.green,
-    primaryButtonHover: colors.darkBlue,
+    onPickerBackground: colors.grey1,
+    primaryButton: colors.green1,
+    primaryButtonHover: colors.grey1,
     primaryButtonText: colors.white,
     primaryGhostButton: colors.white,
-    primaryGhostButtonText: colors.darkBlue,
-    primaryGhostButtonHover: colors.blue,
+    primaryGhostButtonText: colors.grey1,
+    primaryGhostButtonHover: colors.blue1,
     primaryGhostButtonHoverText: colors.white,
-    borderColor: colors.grey,
-    grey: colors.grey,
+    borderColor: colors.grey1,
+    grey: colors.grey1,
     muted: colors.grey4,
     transparent: 'transparent'
   }
@@ -193,7 +200,6 @@ globalCss({
     fontWeight: '400',
     margin: 0,
     padding: 0,
-    color: '$text',
     scrollbarWidth: 'none',
     '-ms-overflow-style': 'none'
   },
@@ -205,8 +211,8 @@ globalCss({
     backgroundColor: '$background',
     color: '$onBackground'
   },
-  'a:link': { 'text-decoration': 'none', color: '$text' },
-  'a:visited': { 'text-decoration': 'none', color: '$text' },
+  'a:link': { 'text-decoration': 'none', color: 'inherit' },
+  'a:visited': { 'text-decoration': 'none', color: 'inherit' },
   'a:hover': { 'text-decoration': 'none' },
   'a:active': { 'text-decoration': 'none' },
   'input:hover': { outline: 'none' },

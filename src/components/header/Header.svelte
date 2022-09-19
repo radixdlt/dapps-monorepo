@@ -1,10 +1,11 @@
 <script lang="ts">
-  import ConnectButton from '../button/connect-button/ConnectButton.svelte'
-  import Navbar from '../navbar/Navbar.svelte'
+  import ConnectButton from '../_base/button/connect-button/ConnectButton.svelte'
+  import Navbar from '../_base/navbar/Navbar.svelte'
   import AccountPicker from '../account-picker/AccountPicker.svelte'
-  import { header } from './styles'
   import { page } from '$app/stores'
-  import Box from '@components/box/Box.svelte'
+  import Box from '@components/_base/box/Box.svelte'
+  import { storage } from '@stores'
+  import ThemeSwitch from '@components/_base/switch/theme-switch/ThemeSwitch.svelte'
 
   const pages = [
     {
@@ -22,34 +23,37 @@
   ]
 </script>
 
-<div class={header}>
+<Box
+  flex="row"
+  items="center"
+  justify="between"
+  p="small"
+  cx={{
+    flexWrap: 'wrap'
+  }}
+>
   <Box transparent>
-    <img alt="logo" height="50" width="200" src="/images/logo.png" />
+    <img
+      alt="logo"
+      height="25"
+      width="100"
+      src={$storage.theme === 'light'
+        ? '/images/Radix_Logo_light_theme.svg'
+        : '/images/Radix_Logo_dark_theme.svg'}
+    />
   </Box>
-  <Box mt="small" justify="center" transparent>
+  <Box justify="center" transparent cx={{ ml: '$lg' }}>
     <Navbar initialSelectedId={$page.routeId || 'home'}>
       {#each pages as page}
         <a id={page.title} href={page.path}>{page.title}</a>
       {/each}
     </Navbar>
   </Box>
-  <Box mt="small" justify="center" transparent>
-    <AccountPicker />
-    <ConnectButton />
+  <Box justify="center" items="center">
+    <Box justify="center" transparent>
+      <AccountPicker />
+      <ConnectButton />
+    </Box>
+    <ThemeSwitch />
   </Box>
-</div>
-
-<style>
-  .gradient-text {
-    background-image: linear-gradient(
-      19deg,
-      hsl(300, 98%, 56%) 0%,
-      hsl(220, 100%, 56%) 100%
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-  }
-</style>
+</Box>

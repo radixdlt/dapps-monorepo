@@ -7,7 +7,7 @@ node_modules
 .env.*
 !.env.example
 cypress/videos
-
+coverage
 .DS_STORE
 .cache
 .temp
