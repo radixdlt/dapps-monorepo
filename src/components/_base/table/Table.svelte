@@ -22,6 +22,7 @@
   const table = createSvelteTable(options)
 
   const tableStyle = css({
+    width: '$1',
     borderCollapse: 'collapse'
   })
 
@@ -35,10 +36,8 @@
   })
 
   const thStyle = css({
-    backgroundColor: '$background',
-    borderTop: 'solid $grey',
     borderTopWidth: '$sm',
-    borderBottom: 'solid $grey',
+    borderBottom: 'solid $borderColor',
     padding: '$lg',
     textAlign: 'left',
     whiteSpace: 'nowrap',
@@ -50,7 +49,7 @@
   })
 
   const trStyle = css({
-    borderColor: '$grey',
+    borderColor: '$borderColor',
     borderStyle: 'solid',
     borderWidth: '$0',
     borderBottomWidth: '$sm'
