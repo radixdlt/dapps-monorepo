@@ -146,6 +146,8 @@ jobs:
           fetch-depth: 0
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v3
+        env:
+          CYPRESS_APP_URI: 'https://dashboard-pr-${{ github.event.number }}.rdx-works-main.extratools.works'
         with:
           build: 'npm run e2etest'
           wait-on: 'https://dashboard-pr-${{ github.event.number }}.rdx-works-main.extratools.works'
