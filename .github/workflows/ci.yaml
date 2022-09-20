@@ -139,18 +139,17 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }}
 
-  run-e2e-tests:
-    runs-on: ubuntu-latest
-    # needs:
-    # - deploy_pull_request
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v3
-        with:
-          build: 'npm run build'
-          start: "npm run dev"
-          command: "npm run e2etest"
-  #         wait-on: 'https://dashboard-pr-${{ github.event.number }}.rdx-works-main.extratools.works'
+  # run-e2e-tests:
+  #   runs-on: ubuntu-latest
+  #   # needs:
+  #   # - deploy_pull_request
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Run e2e tests on the PR environment
+  #       uses: cypress-io/github-action@v3
+  #       with:
+  #         build: 'npm run build'
+  #         start: "npm run dev"
+  #         command: "npm run e2etest"
