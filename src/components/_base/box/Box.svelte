@@ -218,6 +218,12 @@
       absolute: {
         position: 'absolute'
       }
+    },
+    shadow: {
+      true: {
+        boxShadow:
+          '0px 5px 19px -15px rgba(0,0,0,0.75)'
+      }
     }
   } as const
 
@@ -250,6 +256,7 @@
   export let flex: keyof typeof variants['flex'] | undefined = undefined
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
+  export let shadow: boolean | undefined = undefined
 </script>
 
 <div
@@ -267,7 +274,8 @@
     border,
     flex,
     items,
-    justify
+    justify,
+    shadow
   })}
 >
   <slot />
