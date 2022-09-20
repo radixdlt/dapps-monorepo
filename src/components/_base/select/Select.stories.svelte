@@ -1,6 +1,5 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
-
   import Select from './Select.svelte'
 </script>
 

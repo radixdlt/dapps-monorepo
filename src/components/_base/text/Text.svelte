@@ -2,6 +2,16 @@
   import { css } from '../../../styles'
 
   const variants = {
+    cellAlign: {
+      right: {
+        float: 'right'
+      }
+    },
+    bold: {
+      true: {
+        fontWeight: 'bold'
+      }
+    },
     pointer: {
       true: {
         cursor: 'pointer'
@@ -183,6 +193,9 @@
   export let color: keyof typeof variants['color'] | undefined = undefined
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let muted: true | false = false
+  export let bold: true | false = false
+  export let cellAlign: keyof typeof variants['cellAlign'] | undefined =
+    undefined
 
   const text = css({
     variants
@@ -203,7 +216,9 @@
     my,
     color,
     size,
-    muted
+    muted,
+    bold,
+    cellAlign
   })}
 >
   <slot />

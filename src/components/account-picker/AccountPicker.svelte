@@ -7,10 +7,8 @@
 <Select
   onChange={(e) =>
     selectedAccount.set($accounts[e.currentTarget.selectedIndex])}
-  visible={!!$accounts}
-  size={{
-    width: '$3xl'
-  }}
+  visible={$accounts !== undefined}
+  width="$3xl"
 >
   {#if $accounts}
     {#each $accounts as account}
