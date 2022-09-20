@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Wallet } from 'radix-js'
   import { accounts, selectedAccount } from '@stores'
-  import Button from '../Button.svelte'
+  import Button from '@components/_base/button/Button.svelte'
 
   const connect = async () => {
     if (!Wallet.isAvailable()) {
