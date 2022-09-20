@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "rdxworks-dashboard.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Chart.Name .Values.dashboard.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -11,10 +11,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "rdxworks-dashboard.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.dashboard.fullnameOverride }}
+{{- .Values.dashboard.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- $name := default .Chart.Name .Values.dashboard.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -54,9 +54,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "rdxworks-dashboard.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "rdxworks-dashboard.fullname" .) .Values.serviceAccount.name }}
+{{- if .Values.dashboard.serviceAccount.create }}
+{{- default (include "rdxworks-dashboard.fullname" .) .Values.dashboard.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.dashboard.serviceAccount.name }}
 {{- end }}
 {{- end }}
