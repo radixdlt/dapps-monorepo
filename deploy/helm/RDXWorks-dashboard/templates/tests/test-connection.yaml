@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "rdxworks-dashboard.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "rdxworks-dashboard.fullname" . }}:{{ .Values.dashboard.service.port }}']
   restartPolicy: Never
