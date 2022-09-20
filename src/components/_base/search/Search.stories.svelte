@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
-  import Input from './Input.svelte'
+  import Search from './Search.svelte'
 </script>
 
 <Meta
   title="Input"
-  component={Input}
+  component={Search}
   argTypes={{
     placeholderText: {
       control: 'text'
@@ -14,7 +14,7 @@
 />
 
 <Template let:args>
-  <Input placeholder={args.placeholderText} />
+  <Search placeholder={args.placeholderText} />
 </Template>
 
 <Story
