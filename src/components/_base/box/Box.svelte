@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
-
+  import { fly } from 'svelte/transition'
   import { css, config } from '../../../styles'
 
   const variants = {
@@ -250,9 +250,13 @@
   export let flex: keyof typeof variants['flex'] | undefined = undefined
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
+
+  export let inFly: { x?: number; y?: number; duration?: number } | undefined =
+    undefined
 </script>
 
 <div
+  in:fly={inFly}
   class={box({
     full,
     pointer,
