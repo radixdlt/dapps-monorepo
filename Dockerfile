@@ -2,6 +2,7 @@
 FROM node:16-alpine AS build-sdk
 ENV mock_sdk_dir=/tmp/mock-sdk
 COPY mock-sdk/package.json mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
+COPY default.conf /nginx/default.conf
 RUN cd $mock_sdk_dir && yarn
 RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
 
@@ -25,3 +26,4 @@ CMD yarn dev
 
 FROM nginx:alpine AS prod-server
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
+COPY --from=build-sdk /nginx/default.conf /etc/nginx/conf.d/default.conf 
