@@ -1,0 +1,24 @@
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: false
+  createNamespace: false
+environments:
+  dev: {}
+  pr: {}
+releases:
+{{ $DASHBOARD_NS := .Namespace }}
+  - name: dashboard
+    namespace: {{ $DASHBOARD_NS }}
+    chart: ./RDXWorks-dashboard
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: developer-access
+    namespace: {{ $DASHBOARD_NS }}
+    chart: ./developer-access
+    values:
+      - project: dashboard
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
