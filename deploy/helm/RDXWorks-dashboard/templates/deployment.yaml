@@ -38,7 +38,7 @@ spec:
             value: "{{ .Values.params.NETWORK_GATEWAY_API }}"
           ports:
             - name: http
-              containerPort: 5173
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             httpGet:
