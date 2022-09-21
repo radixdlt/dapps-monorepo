@@ -9,10 +9,9 @@
 <Box>
   <Box inFly={{ y: 200, duration: 500 }}>
     <Box
+      grid="auto"
       cx={{
         display: 'grid',
-        gridTemplateColumns: 'auto',
-        gridAutoRows: '30px',
         gridTemplateAreas: `
           "key value"  
         `
@@ -20,42 +19,22 @@
       transparent
     >
       <Box transparent>status</Box>
-      <Box
-        transparent
-        cx={{
-          justifySelf: 'end'
-        }}
-      >
+      <Box transparent justify="gridEnd">
         {tx.status}
       </Box>
 
       <Box transparent>from</Box>
-      <Box
-        cx={{
-          justifySelf: 'end'
-        }}
-        transparent
-      >
+      <Box justify="gridEnd" transparent>
         {shortenAddress(tx.actions[0].from)}
       </Box>
 
       <Box transparent>to</Box>
-      <Box
-        transparent
-        cx={{
-          justifySelf: 'end'
-        }}
-      >
+      <Box transparent justify="gridEnd">
         {shortenAddress(tx.actions[0].to)}
       </Box>
 
       <Box transparent>amount</Box>
-      <Box
-        cx={{
-          justifySelf: 'end'
-        }}
-        transparent
-      >
+      <Box justify="gridEnd" transparent>
         {tx.actions[0].amount}
       </Box>
     </Box>
