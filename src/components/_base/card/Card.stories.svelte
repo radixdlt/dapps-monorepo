@@ -3,18 +3,13 @@
   import Card from './Card.svelte'
 </script>
 
-<Meta
-  title="Card"
-  component={Card}
-/>
+<Meta title="Card" component={Card} />
 
-<Template let:args>
-  <Card>{args.text}</Card>
+<Template>
+  <Card>
+    <div slot="header">Header</div>
+    <div slot="body">Body</div>
+  </Card>
 </Template>
 
-<Story
-  name="Primary"
-  args={{
-    text: 'Test'
-  }}
-/>
+<Story name="Primary" />
