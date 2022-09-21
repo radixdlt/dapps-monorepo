@@ -11,7 +11,7 @@
     border: 'none',
     borderRadius,
     padding: '$sm',
-    background: 'url(\'/images/search_icon.svg\') no-repeat',
+    background: "url('/images/search_icon.svg') no-repeat",
     backgroundSize: '20px',
     backgroundPosition: 'right 10px center',
     backgroundColor: '$surface'
