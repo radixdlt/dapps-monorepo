@@ -4,7 +4,7 @@
 </script>
 
 <Meta
-  title="Input"
+  title="Search"
   component={Search}
   argTypes={{
     placeholderText: {

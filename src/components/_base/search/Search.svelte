@@ -6,28 +6,16 @@
   export let width: string = ''
   export let borderRadius: SpaceKeys = '$md'
 
-  const icon: string | undefined = '/images/search_icon.svg'
-
   $: style = css({
     color: '$onSurface',
     border: 'none',
     borderRadius,
     padding: '$sm',
-    icon: icon
-      ? {
-          background: `url(${icon}) no-repeat`,
-          backgroundSize: '20px',
-          backgroundPosition: 'right 10px center'
-        }
-      : undefined,
+    background: `url('/images/search_icon.svg') no-repeat`,
+    backgroundSize: '20px',
+    backgroundPosition: 'right 10px center',
     backgroundColor: '$surface'
   })()
 </script>
 
-<input
-  style:width
-  bind:value
-  class={style}
-  {placeholder}
-  type="text"
-/>
+<input style:width bind:value class={style} {placeholder} type="text" />
