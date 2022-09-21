@@ -2,7 +2,7 @@
   import Validator from './validator/Validator.svelte'
   import { selectedAccount } from '@stores'
   import type { ValidatorTransformed, ValidatorTransformedArray } from '@types'
-  import Input from '../_base/input/Input.svelte'
+  import Input from '../_base/search/Search.svelte'
   import { filterBtn, header, validatorList } from './styles'
   import Box from '@components/_base/box/Box.svelte'
   import type { StakesTransformed } from '@io/gateway'

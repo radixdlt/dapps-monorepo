@@ -1,6 +1,6 @@
 <script lang="ts">
+  import type { Transaction } from 'radix-js'
   import TransactionBox from './TransactionBox.svelte'
-  import type { Transaction } from '@types'
 
   const tokenAmount = {
     value: '111',
