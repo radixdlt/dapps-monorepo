@@ -221,7 +221,7 @@
     },
     shadow: {
       true: {
-        boxShadow: '0px 5px 19px -15px rgba(0,0,0,0.75)'
+        shadow: true
       }
     }
   } as const

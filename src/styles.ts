@@ -40,6 +40,7 @@ export const space = {
   '7xl': '160px'
 }
 
+type Color = `$${keyof typeof colors}`
 export type SpaceKeys = `$${keyof typeof space}`
 
 export const {
@@ -134,6 +135,9 @@ export const {
     large: '(min-width: 1024px)'
   },
   utils: {
+    shadow: () => ({
+      boxShadow: '0px 5px 19px -15px rgba(0,0,0,0.75)'
+    }),
     p: (value: SpaceKeys) => ({
       paddingTop: value,
       paddingBottom: value,
