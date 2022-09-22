@@ -2,34 +2,41 @@
   import Box from '@components/_base/box/Box.svelte'
   import { shortenAddress } from '@utils'
   import type { Transaction } from 'src/routes/explorer/transaction/[transaction]/+page.server'
-  import { fly } from 'svelte/transition'
-  import { grid, value } from './styles'
 
   export let tx: Transaction
 </script>
 
 <Box>
-  <div in:fly={{ y: 200, duration: 500 }}>
-    <div class={grid}>
-      <div>status</div>
-      <div class={value}>
+  <Box inFly={{ y: 200, duration: 500 }}>
+    <Box
+      grid="auto"
+      cx={{
+        display: 'grid',
+        gridTemplateAreas: `
+          "key value"  
+        `
+      }}
+      transparent
+    >
+      <Box transparent>status</Box>
+      <Box transparent justify="gridEnd">
         {tx.status}
-      </div>
+      </Box>
 
-      <div>from</div>
-      <div class={value}>
+      <Box transparent>from</Box>
+      <Box justify="gridEnd" transparent>
         {shortenAddress(tx.actions[0].from)}
-      </div>
+      </Box>
 
-      <div>to</div>
-      <div class={value}>
+      <Box transparent>to</Box>
+      <Box transparent justify="gridEnd">
         {shortenAddress(tx.actions[0].to)}
-      </div>
+      </Box>
 
-      <div>amount</div>
-      <div class={value}>
+      <Box transparent>amount</Box>
+      <Box justify="gridEnd" transparent>
         {tx.actions[0].amount}
-      </div>
-    </div>
-  </div>
+      </Box>
+    </Box>
+  </Box>
 </Box>

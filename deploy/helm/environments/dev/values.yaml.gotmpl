@@ -1,0 +1,23 @@
+{{ $DASHBOARD_IMAGE_TAG := .StateValues.ci.tag }} 
+
+dashboard:
+  image: 
+      tag: {{$DASHBOARD_IMAGE_TAG}}
+
+  params:
+    NETWORK_GATEWAY_API: "rdx-works-gateway.radixdlt.com"
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: dashboard-dev.rdx-works-main.extratools.works
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true

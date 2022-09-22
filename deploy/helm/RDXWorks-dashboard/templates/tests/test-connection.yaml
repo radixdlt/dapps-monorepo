@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "rdxworks-dashboard.fullname" . }}-test-connection"
+  labels:
+    {{- include "rdxworks-dashboard.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "rdxworks-dashboard.fullname" . }}:{{ .Values.dashboard.service.port }}']
+  restartPolicy: Never

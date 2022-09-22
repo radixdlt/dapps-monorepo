@@ -1,0 +1,28 @@
+{{- if .Values.dashboard.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "rdxworks-dashboard.fullname" . }}
+  labels:
+    {{- include "rdxworks-dashboard.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "rdxworks-dashboard.fullname" . }}
+  minReplicas: {{ .Values.dashboard.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.dashboard.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.dashboard.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.dashboard.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.dashboard.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.dashboard.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
