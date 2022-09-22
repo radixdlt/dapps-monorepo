@@ -135,7 +135,7 @@ export const {
     large: '(min-width: 1024px)'
   },
   utils: {
-    shadow: () => ({
+    shadow: (_: boolean) => ({
       boxShadow: '0px 5px 19px -15px rgba(0,0,0,0.75)'
     }),
     p: (value: SpaceKeys) => ({
