@@ -40,7 +40,6 @@ export const space = {
   '7xl': '160px'
 }
 
-type Color = `$${keyof typeof colors}`
 export type SpaceKeys = `$${keyof typeof space}`
 
 export const {
