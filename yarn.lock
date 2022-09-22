@@ -1498,6 +1498,20 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@radixdlt/wallet-sdk@/home/aleworm/wallet-sdk":
+  version "0.1.0-alpha"
+  dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
+"@radixdlt/wallet-sdk@file:../wallet-sdk":
+  version "0.1.0-alpha"
+  dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
 "@rgossiaux/svelte-headlessui@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@rgossiaux/svelte-headlessui/-/svelte-headlessui-1.0.2.tgz#9493251a40cd56d8bdc8f0f64623d886bb872b1e"
@@ -8191,6 +8205,11 @@ log-update@^4.0.0:
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
 
+loglevel@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.0.tgz#e7ec73a57e1e7b419cb6c6ac06bf050b67356114"
+  integrity sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA==
+
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -8686,6 +8705,11 @@ nested-error-stacks@^2.0.0, nested-error-stacks@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.1.1.tgz#26c8a3cee6cc05fbcf1e333cd2fc3e003326c0b5"
   integrity sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==
+
+neverthrow@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/neverthrow/-/neverthrow-5.0.0.tgz#b2f10c71b4da93cf310e02418d8d19ffc4b64ef2"
+  integrity sha512-JQAB+oyPwbqBRwRZCcH5Yi4ejb24Ul1vIQwwtWTveIZADQTmIpcnh9uQttW45wPnt8sVBxOuh73hCAMmUhXBiQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -10240,7 +10264,7 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxjs@^7.5.1:
+rxjs@^7.5.1, rxjs@^7.5.6:
   version "7.5.6"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.6.tgz#0446577557862afd6903517ce7cae79ecb9662bc"
   integrity sha512-dnyv2/YsXhnm461G+R/Pe5bWP41Nm6LBXEYWI6eiFP4fiwx6WRI/CD0zbdVAudd9xwLEF2IDcKXLHit0FYjUzw==

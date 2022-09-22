@@ -1,18 +1,16 @@
 <script lang="ts">
-  import { Wallet } from 'radix-js'
   import { accounts, selectedAccount } from '@stores'
   import Button from '@components/_base/button/Button.svelte'
+  import { request } from '../../wallet'
 
   const connect = async () => {
-    if (!Wallet.isAvailable()) {
-      // TODO
-    }
-
-    const result = await Wallet.connect('Radix Dashboard', { accounts: 'any' })
+    const result = await request({
+      accountAddresses: 'any'
+    })
 
     if (result.isOk()) {
-      accounts.set(result.value.accounts)
-      selectedAccount.set(result.value.accounts[0])
+      accounts.set(result.value.accountAddresses!)
+      selectedAccount.set(result.value.accountAddresses![0])
     } else {
       // TODO
     }
