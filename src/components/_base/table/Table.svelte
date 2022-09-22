@@ -7,15 +7,31 @@
     type ColumnDef,
     flexRender,
     type ColumnSort,
-    getSortedRowModel
+    getSortedRowModel,
+    getFilteredRowModel
   } from '@tanstack/svelte-table'
   import { writable } from 'svelte/store'
   import { css } from '@styles'
+  import { afterUpdate } from 'svelte'
+  import { includesString } from './filters'
 
   export let data
   export let columns: Array<ColumnDef<unknown>>
+  export let globalFilter: string | undefined = undefined
 
   let sorting: ColumnSort[] = []
+
+  const setGlobalFilter = () => {
+    options.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        globalFilter
+      }
+    }))
+  }
+
+  afterUpdate(setGlobalFilter)
 
   const setSorting = (updater: ColumnSort[] | Function) => {
     if (updater instanceof Function) {
@@ -36,11 +52,14 @@
     data,
     columns,
     state: {
-      sorting
+      sorting,
+      globalFilter
     },
+    globalFilterFn: includesString,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel()
   })
 
   const table = createSvelteTable(options)
