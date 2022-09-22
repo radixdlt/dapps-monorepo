@@ -1,0 +1,45 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.project }}-dev-role
+rules:
+  - apiGroups:
+      - ""
+      - "apps"
+      - "batch"
+      - "extensions"
+    resources:
+      - "configmaps"
+      - "cronjobs"
+      - "deployments"
+      - "events"
+      - "ingresses"
+      - "jobs"
+      - "pods"
+      - "pods/log"
+      - "services"
+      - "pods/portforward"
+{{- if .Values.developerAccess.pod.exec.enabled }}
+      - "pods/exec"
+{{- end }}
+    verbs:
+      - "create"
+      - "delete"
+      - "describe"
+      - "get"
+      - "list"
+      - "patch"
+      - "update"
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {{ .Values.project }}-dev-role-binding
+subjects:
+  - kind: User
+    name: {{ .Values.mappedUser }}
+roleRef:
+  kind: Role
+  name: {{ .Values.project }}-dev-role
+  apiGroup: rbac.authorization.k8s.io

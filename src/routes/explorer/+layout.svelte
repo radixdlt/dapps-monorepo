@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { navigating } from '$app/stores'
-  import Input from '@components/_base/input/Input.svelte'
   import LoadingSpinner from '@components/_base/loading-spinner/LoadingSpinner.svelte'
   import { container } from './style'
+  import Search from '@components/_base/search/Search.svelte'
 
   let id: string
 
@@ -13,13 +13,7 @@
 <div>
   <div class={container}>
     <form style:width="30%" on:submit={search}>
-      <Input
-        width="100%"
-        bind:value={id}
-        borderRadius="$lg"
-        placeholder="Enter Transaction ID"
-        icon="/images/search_icon.svg"
-      />
+      <Search width="100%" bind:value={id} placeholder="Enter Transaction ID" />
     </form>
   </div>
   {#if $navigating}
