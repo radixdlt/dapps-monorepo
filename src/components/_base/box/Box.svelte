@@ -244,6 +244,11 @@
       none: {
         gap: '$0'
       }
+    },
+    shadow: {
+      true: {
+        shadow: true
+      }
     }
   } as const
 
@@ -280,6 +285,7 @@
 
   export let inFly: { x?: number; y?: number; duration?: number } | undefined =
     undefined
+  export let shadow: boolean | undefined = undefined
 </script>
 
 <div
@@ -299,7 +305,8 @@
     flex,
     items,
     justify,
-    grid
+    grid,
+    shadow
   })}
 >
   <slot />
