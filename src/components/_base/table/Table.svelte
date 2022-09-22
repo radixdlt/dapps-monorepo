@@ -5,7 +5,9 @@
     type TableOptions,
     getCoreRowModel,
     type ColumnDef,
-    flexRender
+    flexRender,
+    type ColumnSort,
+    getSortedRowModel
   } from '@tanstack/svelte-table'
   import { writable } from 'svelte/store'
   import { css } from '@styles'
@@ -13,10 +15,32 @@
   export let data
   export let columns: Array<ColumnDef<unknown>>
 
+  let sorting: ColumnSort[] = []
+
+  const setSorting = (updater: ColumnSort[] | Function) => {
+    if (updater instanceof Function) {
+      sorting = updater(sorting)
+    } else {
+      sorting = updater
+    }
+    options.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        sorting
+      }
+    }))
+  }
+
   const options = writable<TableOptions<unknown>>({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    state: {
+      sorting
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel()
   })
 
   const table = createSvelteTable(options)
@@ -64,12 +88,25 @@
           {#each headerGroup.headers as header}
             <th class={thStyle()}>
               {#if !header.isPlaceholder}
-                <svelte:component
-                  this={flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                />
+                <Box
+                  interactiveText
+                  p="none"
+                  pointer={header.column.getCanSort()}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <svelte:component
+                    this={flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  />
+                  <Box p="none" inline mx="small">
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽'
+                    }[header.column.getIsSorted().toString()] ?? ''}
+                  </Box>
+                </Box>
               {/if}
             </th>
           {/each}
