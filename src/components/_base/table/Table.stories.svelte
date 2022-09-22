@@ -1,5 +1,7 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import Box from '../box/Box.svelte'
+  import Search from '../search/Search.svelte'
   import Table from './Table.svelte'
 
   const validators = [
@@ -90,8 +92,15 @@
       header: 'Stake Accepted'
     }
   ]
+
+  let filtered = ''
 </script>
 
 <Meta title="Table" />
 
-<Story name="Primary"><Table {columns} data={validators} /></Story>
+<Box>
+  <Search bind:value={filtered} />
+  <Story name="Primary"
+    ><Table bind:globalFilter={filtered} {columns} data={validators} /></Story
+  >
+</Box>
