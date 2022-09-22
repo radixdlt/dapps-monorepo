@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
-
+  import { fly } from 'svelte/transition'
   import { css, config } from '../../../styles'
 
   const variants = {
@@ -209,6 +209,9 @@
       evenly: {
         display: 'flex',
         justifyContent: 'space-evenly'
+      },
+      gridEnd: {
+        justifySelf: 'end'
       }
     },
     position: {
@@ -217,6 +220,29 @@
       },
       absolute: {
         position: 'absolute'
+      }
+    },
+    grid: {
+      auto: {
+        display: 'grid',
+        gridTemplateColumns: 'auto'
+      }
+    },
+    gap: {
+      xsmall: {
+        gap: '$xs'
+      },
+      small: {
+        gap: '$sm'
+      },
+      medium: {
+        gap: '$md'
+      },
+      large: {
+        gap: '$lg'
+      },
+      none: {
+        gap: '$0'
       }
     }
   } as const
@@ -250,9 +276,14 @@
   export let flex: keyof typeof variants['flex'] | undefined = undefined
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
+  export let grid: keyof typeof variants['grid'] | undefined = undefined
+
+  export let inFly: { x?: number; y?: number; duration?: number } | undefined =
+    undefined
 </script>
 
 <div
+  in:fly={inFly}
   class={box({
     full,
     pointer,
@@ -267,7 +298,8 @@
     border,
     flex,
     items,
-    justify
+    justify,
+    grid
   })}
 >
   <slot />
