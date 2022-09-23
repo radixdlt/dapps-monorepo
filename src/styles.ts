@@ -99,7 +99,8 @@ export const {
     radii: {
       sm: '3px',
       md: '10px',
-      lg: '15px'
+      lg: '15px',
+      searchBorder: '44px'
     },
     space,
     fontWeights: {
@@ -108,6 +109,7 @@ export const {
       600: '600'
     },
     sizes: {
+      xs: '16px',
       sm: '24px',
       md: '32px',
       lg: '48px',
