@@ -1,10 +1,12 @@
 <script lang="ts">
   import { accounts, selectedAccount } from '@stores'
   import Button from '@components/_base/button/Button.svelte'
-  import { request } from '../../wallet'
+  import WalletSdk from "@radixdlt/wallet-sdk";
 
   const connect = async () => {
-    const result = await request({
+    const sdk = WalletSdk()
+    
+    const result = await sdk.request({
       accountAddresses: 'any'
     })
 
