@@ -14,5 +14,6 @@ export const configs = {
 		'@configs': 'configs.js',
 		'@io': 'src/io',
 		'@wallet': 'src/wallet',
+		'@directives': 'src/directives'
 	}
 }

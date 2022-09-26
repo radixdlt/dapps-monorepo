@@ -5,18 +5,61 @@
     type TableOptions,
     getCoreRowModel,
     type ColumnDef,
-    flexRender
+    flexRender,
+    type ColumnSort,
+    getSortedRowModel,
+    getFilteredRowModel
   } from '@tanstack/svelte-table'
   import { writable } from 'svelte/store'
   import { css } from '@styles'
+  import { afterUpdate } from 'svelte'
+  import { includesString } from './filters'
 
   export let data
   export let columns: Array<ColumnDef<unknown>>
+  export let globalFilter: string | undefined = undefined
+
+  let sorting: ColumnSort[] = []
+
+  const setGlobalFilter = () => {
+    options.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        globalFilter
+      }
+    }))
+  }
+
+  afterUpdate(setGlobalFilter)
+
+  const setSorting = (updater: ColumnSort[] | Function) => {
+    if (updater instanceof Function) {
+      sorting = updater(sorting)
+    } else {
+      sorting = updater
+    }
+    options.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        sorting
+      }
+    }))
+  }
 
   const options = writable<TableOptions<unknown>>({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    state: {
+      sorting,
+      globalFilter
+    },
+    globalFilterFn: includesString,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel()
   })
 
   const table = createSvelteTable(options)
@@ -64,12 +107,25 @@
           {#each headerGroup.headers as header}
             <th class={thStyle()}>
               {#if !header.isPlaceholder}
-                <svelte:component
-                  this={flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                />
+                <Box
+                  interactiveText
+                  p="none"
+                  pointer={header.column.getCanSort()}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <svelte:component
+                    this={flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  />
+                  <Box p="none" inline mx="small">
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽'
+                    }[header.column.getIsSorted().toString()] ?? ''}
+                  </Box>
+                </Box>
               {/if}
             </th>
           {/each}

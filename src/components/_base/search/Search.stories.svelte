@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
+  import Box from '../box/Box.svelte'
   import Search from './Search.svelte'
 </script>
 
@@ -14,7 +15,9 @@
 />
 
 <Template let:args>
-  <Search placeholder={args.placeholderText} />
+  <Box transparent justify="center" cx={{ width: '$4xl' }}>
+    <Search placeholder={args.placeholderText} />
+  </Box>
 </Template>
 
 <Story

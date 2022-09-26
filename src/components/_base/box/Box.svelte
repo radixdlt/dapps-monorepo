@@ -9,9 +9,23 @@
         width: '100%'
       }
     },
+    inline: {
+      true: {
+        display: 'inline-flex'
+      }
+    },
     pointer: {
       true: {
         cursor: 'pointer'
+      }
+    },
+    interactiveText: {
+      true: {
+        cursor: 'pointer',
+        transition: 'color .2s,border-color .2s,background-color .2s',
+        '&:hover': {
+          color: '$primaryTextHover'
+        }
       }
     },
     interactive: {
@@ -270,6 +284,8 @@
   export let full: true | false = false
   export let pointer: true | false = false
   export let interactive: true | false = false
+  export let interactiveText: true | false = false
+  export let inline: true | false = false
   export let p: keyof typeof variants['p'] | undefined = undefined
   export let m: keyof typeof variants['m'] | undefined = undefined
   export let py: keyof typeof variants['py'] | undefined = undefined
@@ -286,14 +302,18 @@
   export let inFly: { x?: number; y?: number; duration?: number } | undefined =
     undefined
   export let shadow: boolean | undefined = undefined
+  export let onClick: undefined | ((event: unknown) => void) = undefined
 </script>
 
 <div
   in:fly={inFly}
+  on:click={onClick}
   class={box({
     full,
     pointer,
     interactive,
+    interactiveText,
+    inline,
     p,
     px,
     py,

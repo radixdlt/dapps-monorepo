@@ -63,6 +63,7 @@ export const {
       secondary: colors.grey1,
       pickerBackground: colors.white,
       onPickerBackground: colors.grey1,
+      primaryTextHover: colors.green2,
       primaryButton: colors.grey1,
       primaryButtonHover: colors.green1,
       primaryButtonText: colors.white,
@@ -98,7 +99,8 @@ export const {
     radii: {
       sm: '3px',
       md: '10px',
-      lg: '15px'
+      lg: '15px',
+      searchBorder: '44px'
     },
     space,
     fontWeights: {
@@ -107,6 +109,7 @@ export const {
       600: '600'
     },
     sizes: {
+      xs: '16px',
       sm: '24px',
       md: '32px',
       lg: '48px',
@@ -188,6 +191,7 @@ export const darkTheme = createTheme({
     secondary: colors.grey1,
     pickerBackground: colors.white,
     onPickerBackground: colors.grey1,
+    primaryTextHover: colors.green2,
     primaryButton: colors.green1,
     primaryButtonHover: colors.grey1,
     primaryButtonText: colors.white,
