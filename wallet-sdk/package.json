@@ -4,14 +4,7 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/wallet-sdk.umd.js",
-  "module": "./dist/wallet-sdk.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/wallet-sdk.es.js",
-      "require": "./dist/wallet-sdk.umd.js"
-    }
-  },
+  "main": "./dist/wallet-sdk.es.js",
   "types": "./dist/wallet-sdk.d.ts",
   "scripts": {
     "dev": "vite",
