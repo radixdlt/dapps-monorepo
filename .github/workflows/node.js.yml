@@ -26,6 +26,7 @@ jobs:
     - run: yarn && yarn build
       working-directory: mock-sdk
     - run: yarn add ./mock-sdk
+    - run: yarn add ./wallet-sdk
     - run: yarn build
   
   formatting:

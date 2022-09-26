@@ -1498,15 +1498,8 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@radixdlt/wallet-sdk@/home/aleworm/wallet-sdk":
-  version "0.1.0-alpha"
-  dependencies:
-    loglevel "^1.8.0"
-    neverthrow "^5.0.0"
-    rxjs "^7.5.6"
-
-"@radixdlt/wallet-sdk@file:../wallet-sdk":
-  version "0.1.0-alpha"
+"@radixdlt/wallet-sdk@./wallet-sdk":
+  version "0.1.1-alpha"
   dependencies:
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
