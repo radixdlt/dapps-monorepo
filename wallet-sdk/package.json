@@ -12,6 +12,7 @@
       "require": "./dist/wallet-sdk.umd.js"
     }
   },
+  "type": "module",
   "types": "./dist/wallet-sdk.d.ts",
   "scripts": {
     "dev": "vite",
