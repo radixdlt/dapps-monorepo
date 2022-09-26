@@ -12,6 +12,7 @@ export const configs = {
 		'@constants': 'src/constants.ts',
 		'@gateway': 'src/gateway.ts',
 		'@configs': 'configs.js',
-		'@io': 'src/io'
+		'@io': 'src/io',
+		'@wallet': 'src/wallet',
 	}
 }
