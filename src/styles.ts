@@ -1,4 +1,4 @@
-import { createStitches } from '@stitches/core'
+import { createStitches, defaultThemeMap } from '@stitches/core'
 
 const colors = {
   // Core colors
@@ -51,7 +51,14 @@ export const {
   createTheme,
   config
 } = createStitches({
+  themeMap: {
+    ...defaultThemeMap,
+    filter: 'filters'
+  },
   theme: {
+    filters: {
+      iconHover: 'brightness(0)'
+    },
     colors: {
       background: colors.grey3,
       onBackground: colors.grey1,
@@ -179,6 +186,9 @@ export const {
 })
 
 export const darkTheme = createTheme({
+  filters: {
+    iconHover: 'brightness(1.5)'
+  },
   colors: {
     background: colors.grey0,
     onBackground: colors.grey3,
