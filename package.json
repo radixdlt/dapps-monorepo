@@ -71,7 +71,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@radixdlt/wallet-sdk": "./wallet-sdk",
+    "@radixdlt/wallet-sdk": "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
     "bignumber.js": "^9.1.0",
