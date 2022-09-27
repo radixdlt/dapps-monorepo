@@ -13,6 +13,7 @@ export const configs = {
 		'@gateway': 'src/gateway.ts',
 		'@configs': 'configs.js',
 		'@io': 'src/io',
+		'@wallet': 'src/wallet',
 		'@directives': 'src/directives'
 	}
 }
