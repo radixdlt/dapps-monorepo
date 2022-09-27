@@ -9,9 +9,7 @@
     const { request } = await import('@wallet')
 
     connect = async () => {
-      const result = await request({
-        accountAddresses: 'any'
-      })
+      const result = await request()
       if (result.isOk()) {
         accounts.set(result.value.accountAddresses!)
         selectedAccount.set(result.value.accountAddresses![0])
