@@ -140,7 +140,7 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v3
         with:
-          file: ./Dockerfile
+          file: ./Dockerfile.storybook
           push: true
           context: .
           tags: ${{ needs.setup-storybook-tags.outputs.tags }}
