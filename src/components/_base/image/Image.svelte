@@ -1,5 +1,7 @@
 <script lang="ts">
-  import type { config } from '@styles'
+  import type { CSS } from '@stitches/core'
+
+  import { css, type config } from '@styles'
 
   export let src: string
   export let alt: string
@@ -7,6 +9,13 @@
     undefined
   export let width: `$${keyof typeof config['theme']['sizes']}` | undefined =
     undefined
+  export let cx: CSS<typeof config> = {}
+
+  const style = css({
+    width,
+    height,
+    ...cx
+  })
 </script>
 
-<img {alt} {src} {height} {width} />
+<img {alt} {src} class={style()} />
