@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js'
+import { Buffer } from 'buffer'
+import * as CryptoJS from 'crypto-js'
 
 const XRD_DECIMALS = 18
 
@@ -16,3 +18,19 @@ export const toWholeUnits = (tokenValue: string) =>
 
 export const capitalize = (text: string) =>
   text[0].toUpperCase() + text.slice(1).toLowerCase()
+
+export function hexStringFromByteArray(byteArray: Uint8Array): string {
+  return Buffer.from(byteArray).toString('hex')
+}
+
+export function byteArrayFromHex(hex: string): Uint8Array {
+  return Uint8Array.from(Buffer.from(hex, 'hex'))
+}
+
+export function hash(message: Uint8Array): Uint8Array {
+  return byteArrayFromHex(
+    CryptoJS.SHA256(
+      CryptoJS.enc.Hex.parse(hexStringFromByteArray(message))
+    ).toString()
+  )
+}

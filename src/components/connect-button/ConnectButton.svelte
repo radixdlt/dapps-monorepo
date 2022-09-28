@@ -6,10 +6,10 @@
   let connect: () => void
 
   onMount(async () => {
-    const { request } = await import('@wallet')
+    const { requestAddresses } = await import('@wallet')
 
     connect = async () => {
-      const result = await request()
+      const result = await requestAddresses()
       if (result.isOk()) {
         accounts.set(result.value.accountAddresses!)
         selectedAccount.set(result.value.accountAddresses![0])
