@@ -143,8 +143,8 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
-          labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
+          tags: ${{ needs.setup-storybook-tags.outputs.tags }}
+          labels: ${{ needs.setup-storybook-tags.outputs.labels }}
           target: "storybook"
       - name: Docker Image output
         run: |
