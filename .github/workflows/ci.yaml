@@ -155,6 +155,7 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
+      - push-storybook
       - setup-dashboard-tags
     with:
       env_name: pr
