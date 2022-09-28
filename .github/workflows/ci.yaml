@@ -39,6 +39,27 @@ jobs:
       labels: ${{ steps.docker-tags.outputs.labels }}
       json: ${{ steps.docker-tags.outputs.json }}
 
+  setup-storybook-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Docker tags for pricemonitoring
+        id: docker-tags
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            eu.gcr.io/dev-container-repo/storybook
+          tags: |
+            type=sha,event=pr
+            type=sha,event=branch
+            type=semver,pattern={{version}}
+    outputs:
+      tags: ${{ steps.docker-tags.outputs.tags }}
+      labels: ${{ steps.docker-tags.outputs.labels }}
+      json: ${{ steps.docker-tags.outputs.json }}
+
   build-dashboard:
     runs-on: ubuntu-latest
     steps:
@@ -100,6 +121,31 @@ jobs:
           tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
           labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
           target: "prod-server"
+      - name: Docker Image output
+        run: |
+          docker images
+
+  push-storybook:
+    runs-on: ubuntu-latest
+    needs: 
+    - setup-storybook-tags
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GCR
+        uses: docker/login-action@v1
+        with:
+          registry: eu.gcr.io
+          username: _json_key
+          password: ${{ secrets.GCR_EU_DEV_JSON_KEY }}
+      - name: Docker build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: ./Dockerfile
+          push: true
+          context: .
+          tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
+          labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
+          target: "storybook"
       - name: Docker Image output
         run: |
           docker images
