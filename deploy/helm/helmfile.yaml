@@ -16,6 +16,13 @@ releases:
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
+  - name: storybook
+    namespace: {{ $DASHBOARD_NS }}
+    installed: {{ ne .Environment.Name "prod" }}
+    chart: ./storybook
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
   - name: developer-access
     namespace: {{ $DASHBOARD_NS }}
     chart: ./developer-access

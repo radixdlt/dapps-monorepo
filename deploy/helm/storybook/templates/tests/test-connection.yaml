@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "rdxworks-storybook.fullname" . }}-test-connection"
+  labels:
+    {{- include "rdxworks-storybook.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "rdxworks-storybook.fullname" . }}:{{ .Values.storybook.service.port }}']
+  restartPolicy: Never

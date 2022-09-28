@@ -1,0 +1,28 @@
+{{- if .Values.storybook.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "rdxworks-storybook.fullname" . }}
+  labels:
+    {{- include "rdxworks-storybook.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "rdxworks-storybook.fullname" . }}
+  minReplicas: {{ .Values.storybook.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.storybook.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.storybook.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.storybook.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.storybook.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.storybook.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
