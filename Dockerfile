@@ -27,13 +27,11 @@ RUN cp -a $dashboard_dir/node_modules /usr/app/
 WORKDIR /usr/app/
 COPY . ./
 RUN yarn add ./mock-sdk
-RUN yarn install && yarn build && yarn build-storybook
+RUN yarn install && yarn build
 
 FROM install-dashboard AS dev-server
 CMD yarn dev
 
 FROM nginx:alpine AS prod-server
+COPY --from=install-dashboard /usr/app/dashboard.conf /etc/nginx/conf.d/default.conf
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
-
-FROM nginx:alpine AS storybook
-COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
