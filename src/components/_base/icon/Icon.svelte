@@ -18,7 +18,7 @@
       filter: 'grayscale(100%)'
     },
     '&:hover': {
-      filter: '$iconHover'
+      filter: interactive ? '$iconHover' : ''
     }
   }
 </script>
