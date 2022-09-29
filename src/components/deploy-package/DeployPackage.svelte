@@ -28,8 +28,6 @@
 
   let transitionEnded = false
 
-  let loading = false
-
   const upload = async (file: File) => {
     parsedWASM = (await createTransactionService()).extract_abi({
       package_wasm: Buffer.from(await file.arrayBuffer()).toString('hex')
@@ -49,14 +47,12 @@
     const { sendTransaction } = await import('@wallet')
 
     publishPackage = async () => {
-      loading = true
       const result = await sendTransaction(transaction, [
         parsedWASM.abi,
         parsedWASM.code
       ])
 
       if (result.isErr()) {
-        loading = false
         return // TODO handle error
       }
 
@@ -67,7 +63,6 @@
           receipt.committed.receipt.state_updates.new_global_entities[0]
             .global_address
       )
-      loading = false
     }
   })
 </script>
