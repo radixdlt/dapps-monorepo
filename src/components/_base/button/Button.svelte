@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { css } from '@stitches/core'
+  import { css } from '@styles'
 
   const variants = {
     full: {
@@ -38,9 +38,10 @@
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let border: keyof typeof variants['border'] | undefined = undefined
   export let ghost: true | false = false
+  export let disabled = false
 
-  const btn = css({
-    backgroundColor: '$primaryButton',
+  $: btn = css({
+    backgroundColor: disabled ? '$grey2' : '$primaryButton',
     borderWidth: '$sm',
     borderColor: '$borderColor',
     borderStyle: 'solid',
@@ -51,12 +52,17 @@
     padding: '$md $2xl',
     transition: 'color .2s,border-color .2s,background-color .2s',
     '&:hover': {
-      backgroundColor: '$primaryButtonHover'
+      backgroundColor: disabled ? '' : '$primaryButtonHover'
     },
     variants
   })
 </script>
 
-<button {...$$restProps} on:click class={btn({ full, size, border, ghost })}>
+<button
+  {...$$restProps}
+  {disabled}
+  on:click
+  class={btn({ full, size, border, ghost })}
+>
   <slot />
 </button>

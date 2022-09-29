@@ -2,6 +2,7 @@
   import Button from '@components/_base/button/Button.svelte'
   import { css } from '@styles'
 
+  export let name: string
   export let filetypes: string[] = ['.*']
   export let onFileSelected: (file: File) => void
 
@@ -29,6 +30,8 @@
 
 <input
   class={fileInputStyle}
+  {name}
+  multiple={false}
   type="file"
   accept={filetypes.join(',')}
   on:change={handleFileUpload}

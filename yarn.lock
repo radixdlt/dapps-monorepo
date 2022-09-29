@@ -1498,6 +1498,15 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@radixdlt/alphanet-gateway-api-v0-sdk@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-gateway-api-v0-sdk/-/alphanet-gateway-api-v0-sdk-0.1.4.tgz#682e4f8ab367e4f3c1b9ee5d59936d7b0ebcf602"
+  integrity sha512-CKUbrm/YtdHpQk887flkxiIvzTyhVo6UJqPY42lwrzKM15Etfbw3+nk2ebr+j1P7+sG+sNyYwh7b/SylGbKvkA==
+  dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
 "@radixdlt/alphanet-walletextension-sdk@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-walletextension-sdk/-/alphanet-walletextension-sdk-0.1.0.tgz#880ccf9d25ceab4474aab7ca4a512d18f6dd575a"
