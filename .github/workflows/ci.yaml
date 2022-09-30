@@ -170,7 +170,6 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-      - build-dashboard
     with:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
@@ -180,7 +179,7 @@ jobs:
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
 
@@ -200,7 +199,7 @@ jobs:
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
 
   # run-e2e-tests:
