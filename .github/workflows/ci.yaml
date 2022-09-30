@@ -156,6 +156,8 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - setup-dashboard-tags
+      - setup-storybook-tags
     with:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
