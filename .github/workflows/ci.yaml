@@ -158,7 +158,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
-          target: "storybook"
+          target: "dev-server"
       - name: Docker Image output
         run: |
           docker images
