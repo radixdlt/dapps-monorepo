@@ -157,6 +157,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-dashboard-tags
+      - setup-storybook-tags
     with:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
@@ -175,7 +176,9 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
+      - push-storybook
       - setup-dashboard-tags
+      - setup-storybook-tags
     with:
       env_name: dev
       namespace:  dashboard-dev
