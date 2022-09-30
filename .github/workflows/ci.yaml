@@ -52,27 +52,6 @@ jobs:
       storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
       storybook-json: ${{ steps.storybook-tags.outputs.json }}
 
-  # setup-storybook-tags:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Docker tags for pricemonitoring
-  #       id: docker-tags
-  #       uses: docker/metadata-action@v4
-  #       with:
-  #         images: |
-  #           eu.gcr.io/dev-container-repo/storybook
-  #         tags: |
-  #           type=sha,event=pr
-  #           type=sha,event=branch
-  #           type=semver,pattern={{version}}
-  #   outputs:
-  #     tags: ${{ steps.docker-tags.outputs.tags }}
-  #     labels: ${{ steps.docker-tags.outputs.labels }}
-  #     json: ${{ steps.docker-tags.outputs.json }}
-
   build-dashboard:
     runs-on: ubuntu-latest
     steps:
