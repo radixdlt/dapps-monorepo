@@ -1,6 +1,6 @@
 apiVersion: v2
 name: rdxworks-storybook
-description: A Helm chart for rdxworks-dashboard
+description: A Helm chart for rdxworks-dashboard storybook app
 
 # A chart can be either an 'application' or a 'library' chart.
 #
