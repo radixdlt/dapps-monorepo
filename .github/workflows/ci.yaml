@@ -120,7 +120,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
           labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
-          target: "prod-server"
+          target: "dev-server"
       - name: Docker Image output
         run: |
           docker images
@@ -145,7 +145,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-storybook-tags.outputs.tags }}
           labels: ${{ needs.setup-storybook-tags.outputs.labels }}
-          target: "storybook"
+          target: "dev-server"
       - name: Docker Image output
         run: |
           docker images
