@@ -34,4 +34,5 @@ CMD yarn dev
 
 FROM nginx:alpine AS prod-server
 COPY --from=install-dashboard /usr/app/dashboard.conf /etc/nginx/conf.d/default.conf
-COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
+#COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
+CMD yarn dev
