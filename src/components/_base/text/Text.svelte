@@ -1,29 +1,19 @@
 <script lang="ts">
   import { css } from '../../../styles'
 
+  const boldClass = css({
+    fontWeight: 'bold'
+  })()
+
   const variants = {
     cellAlign: {
       right: {
         float: 'right'
       }
     },
-    bold: {
-      true: {
-        fontWeight: 'bold'
-      }
-    },
     pointer: {
       true: {
         cursor: 'pointer'
-      }
-    },
-    interactive: {
-      true: {
-        cursor: 'pointer',
-        transition: 'color .2s,border-color .2s,background-color .2s',
-        '&:hover': {
-          backgroundColor: '$grey'
-        }
       }
     },
     mt: {
@@ -182,7 +172,7 @@
 
   export let full: true | false = false
   export let pointer: true | false = false
-  export let interactive: true | false = false
+  export let bold: true | false = false
   export let p: keyof typeof variants['p'] | undefined = undefined
   export let m: keyof typeof variants['m'] | undefined = undefined
   export let py: keyof typeof variants['py'] | undefined = undefined
@@ -193,20 +183,16 @@
   export let color: keyof typeof variants['color'] | undefined = undefined
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let muted: true | false = false
-  export let bold: true | false = false
   export let cellAlign: keyof typeof variants['cellAlign'] | undefined =
     undefined
 
   const text = css({
     variants
   })
-</script>
 
-<div
-  class={text({
+  const textClass = text({
     full,
     pointer,
-    interactive,
     p,
     px,
     py,
@@ -217,9 +203,10 @@
     color,
     size,
     muted,
-    bold,
     cellAlign
-  })}
->
+  })
+</script>
+
+<div class={bold ? textClass + ' ' + boldClass : textClass}>
   <slot />
 </div>
