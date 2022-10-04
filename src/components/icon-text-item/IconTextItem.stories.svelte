@@ -14,9 +14,7 @@
 />
 
 <Template let:args>
-  <IconTextItem isActive={args.isActive} icon="accounts"
-    >{args.text}</IconTextItem
-  >
+  <IconTextItem bold={args.bold} icon="accounts">{args.text}</IconTextItem>
 </Template>
 
 <Story
@@ -27,9 +25,9 @@
 />
 
 <Story
-  name="Active"
+  name="bold"
   args={{
     text: 'Accounts',
-    isActive: true
+    bold: true
   }}
 />
