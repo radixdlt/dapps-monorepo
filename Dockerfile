@@ -5,7 +5,7 @@
 FROM node:16-alpine AS build-sdk
 # Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
 ENV mock_sdk_dir=/tmp/mock-sdk
-COPY mock-sdk/package*.json mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
+COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
 RUN cd $mock_sdk_dir && yarn
 RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
 
@@ -27,10 +27,14 @@ RUN cp -a $dashboard_dir/node_modules /usr/app/
 WORKDIR /usr/app/
 COPY . ./
 RUN yarn add ./mock-sdk
-RUN yarn install && yarn build
+RUN yarn install && yarn build && yarn build-storybook
 
 FROM install-dashboard AS dev-server
 CMD yarn dev
+
+
+FROM nginx:alpine AS storybook
+COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
 
 FROM nginx:alpine AS prod-server
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
