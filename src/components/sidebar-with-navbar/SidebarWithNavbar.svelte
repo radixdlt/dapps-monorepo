@@ -4,6 +4,7 @@
 </script>
 
 <Sidebar disableClickOutside show>
-  <SidebarItem icon="dashboard">Dashboard</SidebarItem>
-  <SidebarItem icon="validators">Staking/Validators</SidebarItem>
+  <SidebarItem link="/explorer" icon="dashboard">Dashboard</SidebarItem>
+  <SidebarItem link="/staking" icon="validators">Staking/Validators</SidebarItem
+  >
 </Sidebar>
