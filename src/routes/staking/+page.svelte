@@ -29,9 +29,7 @@
 
   $: header = css({
     backgroundColor: `${anyValidatorSelected ? '$grey' : null}`,
-    height: 50,
-    marginBottom: 10,
-    paddingTop: 20
+    marginBottom: 10
   })
 
   $: (async () => {

@@ -7,9 +7,7 @@
   export let disableClickOutside = false
 
   const navStyle = css({
-    position: 'fixed',
-    top: 0,
-    left: 0,
+    gridArea: 'nav',
     height: '100%',
     py: '$lg',
     borderColor: '$borderColor',

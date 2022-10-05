@@ -5,7 +5,17 @@
   import Image from '@components/_base/image/Image.svelte'
 </script>
 
-<Box p="large" full items="center" justify="between">
+<Box
+  cx={{
+    gridArea: 'header',
+    borderBottom: 'solid',
+    borderWidth: '$sm',
+    borderColor: '$borderColor'
+  }}
+  px="large"
+  items="center"
+  justify="between"
+>
   <Image
     width="$3xl"
     alt="logo"
