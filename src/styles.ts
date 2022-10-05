@@ -135,7 +135,8 @@ export const {
     borderWidths: {
       0: '0px',
       sm: '1px',
-      md: '10px'
+      md: '5px',
+      lg: '10px'
     }
   },
   media: {
