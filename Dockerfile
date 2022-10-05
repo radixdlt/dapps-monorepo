@@ -32,5 +32,5 @@ RUN yarn install && yarn build
 FROM install-dashboard AS dev-server
 CMD yarn dev
 
-FROM nginx:alpine AS prod-server
+FROM nginx:16.17.1-alpine AS prod-server
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
