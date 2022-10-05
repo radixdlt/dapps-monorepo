@@ -132,12 +132,12 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v3
         with:
-          file: ./Dockerfile.storybook
+          file: ./Dockerfile
           push: true
           context: .
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
-          target: "dev-server"
+          target: "storybook"
       - name: Docker Image output
         run: |
           docker images
