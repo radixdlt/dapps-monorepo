@@ -6,6 +6,11 @@
   })()
 
   const variants = {
+    bold: {
+      true: {
+        fontWeight: 'bold'
+      }
+    },
     cellAlign: {
       right: {
         float: 'right'

@@ -4,13 +4,13 @@
   import { clickOutside } from '@directives/click-outside'
 
   export let show = false
+  export let disableClickOutside = false
 
   const navStyle = css({
     position: 'fixed',
     top: 0,
     left: 0,
     height: '100%',
-    px: '$lg',
     py: '$lg',
     borderColor: '$borderColor',
     borderWidth: '$sm',
@@ -20,7 +20,9 @@
   })
 
   const onOutsideClick = (_: any) => {
-    show = false
+    if (!disableClickOutside) {
+      show = false
+    }
   }
 </script>
 
