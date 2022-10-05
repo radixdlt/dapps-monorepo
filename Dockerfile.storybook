@@ -2,7 +2,7 @@
 # This speeds up the docker build process and will use docker cached layers if the package.json doesn't change.
 
 # Define the node image
-FROM node:16.17.0-alpine AS build-sdk
+FROM node:16.17.1-alpine AS build-sdk
 # Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
 ENV mock_sdk_dir=/tmp/mock-sdk
 COPY mock-sdk/package*.json mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
