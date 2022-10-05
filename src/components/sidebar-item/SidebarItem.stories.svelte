@@ -14,9 +14,10 @@
 />
 
 <Template let:args>
-  <SidebarItem isActive={args.isActive} icon="accounts">{args.text}</SidebarItem
+  <SidebarItem link="" isActive={args.isActive} icon="accounts"
+    >{args.text}</SidebarItem
   >
-  <SidebarItem icon="accounts">{args.text}</SidebarItem>
+  <SidebarItem link="" icon="accounts">{args.text}</SidebarItem>
 </Template>
 
 <Story

@@ -6,6 +6,7 @@
   export let isActive = false
   export let icon: keyof typeof icons
   export let isHovered = isActive
+  export let link: string
 
   const styles = css({
     borderStyle: 'solid',
@@ -22,7 +23,10 @@
   on:mouseleave={() => (isHovered = isActive)}
   class={isHovered ? styles() + ' ' + 'isHovered' : ''}
 >
-  <IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem>
+  <a href={link}
+    ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem
+    ></a
+  >
 </div>
 
 <style>

@@ -5,6 +5,8 @@
   import '../fonts.css'
   import { onMount } from 'svelte'
   import { storage } from '@stores'
+  import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
+  import Box from '@components/_base/box/Box.svelte'
 
   let mounted = false
 
@@ -22,14 +24,28 @@
 <!-- enables SSR of css -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
-{#if mounted}
-  <Header />
+<Box
+  p="none"
+  cx={{
+    display: 'grid',
+    height: '100vw',
+    gridTemplateColumns: '250px auto',
+    gridTemplateRows: '70px auto',
+    gridTemplateAreas: `
+      "header header"
+      "nav content"`
+  }}
+>
+  {#if mounted}
+    <Header />
+    <SidebarWithNavbar />
 
-  <div>
-    {#if $navigating}
-      <slot />
-    {:else}
-      <slot />
-    {/if}
-  </div>
-{/if}
+    <Box cx={{ gridArea: 'content' }}>
+      {#if $navigating}
+        <slot />
+      {:else}
+        <slot />
+      {/if}
+    </Box>
+  {/if}
+</Box>

@@ -230,7 +230,8 @@ globalCss({
     display: 'none'
   },
   body: {
-    minWidth: '400px',
+    minWidth: '100vw',
+    height: '100vh',
     backgroundColor: '$background',
     color: '$onBackground'
   },
