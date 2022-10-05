@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
-  import NextHeader from './NextHeader.svelte'
+  import Header from './Header.svelte'
 </script>
 
 <Meta
-  title="NextHeader"
-  component={NextHeader}
+  title="Header"
+  component={Header}
   argTypes={{
     text: {
       control: 'text'
@@ -14,7 +14,7 @@
 />
 
 <Template>
-  <NextHeader />
+  <Header />
 </Template>
 
 <Story name="Primary" />
