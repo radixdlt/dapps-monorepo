@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
-  import Sidebar from './SidebarWithNavbar.svelte'
+  import SidebarWithNavbar from './SidebarWithNavbar.svelte'
 </script>
 
-<Meta title="SidebarWithNavbar" component={Sidebar} />
+<Meta title="SidebarWithNavbar" component={SidebarWithNavbar} />
 
 <Template>
-  <Sidebar />
+  <SidebarWithNavbar page={{}} />
 </Template>
 
 <Story name="Primary" />

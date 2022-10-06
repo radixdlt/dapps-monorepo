@@ -99,7 +99,7 @@
   })
 </script>
 
-<Box>
+<Box p="none">
   <table class={tableStyle()}>
     <thead>
       {#each $table.getHeaderGroups() as headerGroup}

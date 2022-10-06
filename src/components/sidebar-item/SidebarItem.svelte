@@ -20,8 +20,8 @@
 
 <div
   on:mouseenter={() => (isHovered = true)}
-  on:mouseleave={() => (isHovered = isActive)}
-  class={isHovered ? styles() + ' ' + 'isHovered' : ''}
+  on:mouseleave={() => (isHovered = false)}
+  class={isHovered || isActive ? styles() + ' ' + 'isHovered' : ''}
 >
   <a href={link}
     ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem

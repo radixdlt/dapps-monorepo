@@ -16,3 +16,8 @@ export const toWholeUnits = (tokenValue: string) =>
 
 export const capitalize = (text: string) =>
   text[0].toUpperCase() + text.slice(1).toLowerCase()
+
+export const isSameRoute = (route: string, routeName: string) => {
+  const routeArray = route.split('/')
+  return routeArray[1] === routeName
+}
