@@ -9,11 +9,13 @@
   import StakePopup from '@components/stake-popup/StakePopup.svelte'
   import type { PageData } from './$types'
   import { StakesIO } from '@io/gateway'
+  import Card from '@components/_base/card/Card.svelte'
+  import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
 
   export let data: PageData
 
   let transformedStakes: StakesTransformed
-  let selectedValidators: ValidatorTransformedArray = []
+  const selectedValidators: ValidatorTransformedArray = []
   let addStakePopupVisible = false
   let removeStakePopupVisible = false
 
@@ -75,14 +77,9 @@
   />
 {/if}
 
-<div
-  class={css({
-    margin: '0 $lg'
-  })()}
->
-  <ValidatorList
-    validators={data.validators}
-    stakes={transformedStakes}
-    bind:selectedValidators
-  />
-</div>
+<Card>
+  <IconTextItem bold isIconColor icon="transactions" slot="header"
+    >Staking</IconTextItem
+  >
+  <ValidatorList slot="body" data={data.validators} />
+</Card>

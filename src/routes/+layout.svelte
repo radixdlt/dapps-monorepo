@@ -1,7 +1,7 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'
-  import { navigating } from '$app/stores'
+  import { navigating, page } from '$app/stores'
   import '../fonts.css'
   import { onMount } from 'svelte'
   import { storage } from '@stores'
@@ -38,7 +38,7 @@
 >
   {#if mounted}
     <Header />
-    <SidebarWithNavbar />
+    <SidebarWithNavbar page={$page} />
 
     <Box cx={{ gridArea: 'content' }}>
       {#if $navigating}

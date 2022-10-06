@@ -1,6 +1,6 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import ValidatorListTable from './ValidatorListTable.svelte'
+  import ValidatorList from './ValidatorList.svelte'
 
   const validators = [
     {
@@ -61,6 +61,6 @@
   ]
 </script>
 
-<Meta title="ValidatorListTable" />
+<Meta title="ValidatorList" />
 
-<Story name="Primary"><ValidatorListTable data={validators} /></Story>
+<Story name="Primary"><ValidatorList data={validators} /></Story>

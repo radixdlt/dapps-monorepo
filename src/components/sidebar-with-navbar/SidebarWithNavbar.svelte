@@ -1,10 +1,24 @@
 <script lang="ts">
   import SidebarItem from '@components/sidebar-item/SidebarItem.svelte'
   import Sidebar from '@components/_base/sidebar/Sidebar.svelte'
+  import type { Page } from '@sveltejs/kit'
+  import { isSameRoute } from '@utils'
+
+  export let page: Page<Record<string, string>>
+
+  const routes = [
+    { text: 'Staking/Validators', icon: 'validators', path: '/staking' },
+    { text: 'Dashboard', icon: 'dashboard', path: '/explorer' }
+  ] as const
 </script>
 
 <Sidebar disableClickOutside show>
-  <SidebarItem link="/explorer" icon="dashboard">Dashboard</SidebarItem>
-  <SidebarItem link="/staking" icon="validators">Staking/Validators</SidebarItem
-  >
+  {#each routes as route (route.path)}
+    <SidebarItem
+      icon={route.icon}
+      isActive={isSameRoute(route.path, page.routeId ?? '')}
+      link={route.path}
+      on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
+    >
+  {/each}
 </Sidebar>

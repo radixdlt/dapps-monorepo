@@ -13,7 +13,7 @@
 <div>
   <div class={container}>
     <form style:width="30%" on:submit={search}>
-      <Search width="100%" bind:value={id} placeholder="Enter Transaction ID" />
+      <Search bind:value={id} placeholder="Enter Transaction ID" />
     </form>
   </div>
   {#if $navigating}
