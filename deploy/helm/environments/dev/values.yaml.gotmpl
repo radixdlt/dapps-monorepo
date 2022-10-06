@@ -1,8 +1,22 @@
-{{ $DASHBOARD_IMAGE_TAG := .StateValues.ci.tag }} 
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+storybook:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: storybook-dashboard-dev.rdx-works-main.extratools.works
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
 
 dashboard:
   image: 
-      tag: {{$DASHBOARD_IMAGE_TAG}}
+      tag: {{$IMAGE_TAG}}
 
   params:
     NETWORK_GATEWAY_API: "rdx-works-gateway.radixdlt.com"

@@ -12,6 +12,11 @@ dev-server:
 	docker build -f Dockerfile --target=dev-server -t $(REPO):$(TAG) .
 	docker run -it -p 5173:5173 $(REPO):$(TAG)
 
+.PHONY: storybook
+storybook:
+	docker build -f Dockerfile --target=storybook -t $(REGISTRY)/dashboard-storybook:$(TAG) .
+	docker run -it -p  8080:80 $(REGISTRY)/dashboard-storybook:$(TAG)
+
 .PHONY: build
 build:
 	docker build -f Dockerfile --target=prod-server -t $(REPO):$(TAG) .

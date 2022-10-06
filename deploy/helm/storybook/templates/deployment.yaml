@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rdxworks-storybook.fullname" . }}
+  labels:
+    {{- include "rdxworks-storybook.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.storybook.autoscaling.enabled }}
+  replicas: {{ .Values.storybook.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "rdxworks-storybook.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.storybook.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "rdxworks-storybook.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.storybook.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rdxworks-storybook.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.storybook.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.storybook.securityContext | nindent 12 }}
+          image: "{{ .Values.storybook.image.repository }}:{{ .Values.storybook.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.storybook.image.pullPolicy }}
+          env:
+          {{- range $key, $value := .Values.storybook.params }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.storybook.resources | nindent 12 }}
+      {{- with .Values.storybook.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.storybook.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.storybook.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

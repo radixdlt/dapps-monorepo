@@ -18,14 +18,14 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-  setup-dashboard-tags:
+  setup-tags:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Docker tags for pricemonitoring
-        id: docker-tags
+      - name: Docker tags for dashboard
+        id: dashboard-tags
         uses: docker/metadata-action@v4
         with:
           images: |
@@ -34,10 +34,23 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
+      - name: Docker tags for storybook
+        id: storybook-tags
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            eu.gcr.io/dev-container-repo/storybook
+          tags: |
+            type=sha,event=pr
+            type=sha,event=branch
+            type=semver,pattern={{version}}
     outputs:
-      tags: ${{ steps.docker-tags.outputs.tags }}
-      labels: ${{ steps.docker-tags.outputs.labels }}
-      json: ${{ steps.docker-tags.outputs.json }}
+      dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
+      dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
+      dashboard-json: ${{ steps.dashboard-tags.outputs.json }}
+      storybook-tags: ${{ steps.storybook-tags.outputs.tags }}
+      storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
+      storybook-json: ${{ steps.storybook-tags.outputs.json }}
 
   build-dashboard:
     runs-on: ubuntu-latest
@@ -70,6 +83,8 @@ jobs:
         run:  npm run test
       - name: Coverage
         run:  npm run coverage
+      - name: prettier
+        run: yarn prettier
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
@@ -82,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: 
     - build-dashboard
-    - setup-dashboard-tags
+    - setup-tags
     steps:
       - uses: actions/checkout@v2
       - name: Login to GCR
@@ -97,9 +112,34 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-dashboard-tags.outputs.tags }}
-          labels: ${{ needs.setup-dashboard-tags.outputs.labels }}
-          target: "prod-server"
+          tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
+          labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
+          target: "dev-server"
+      - name: Docker Image output
+        run: |
+          docker images
+
+  push-storybook:
+    runs-on: ubuntu-latest
+    needs: 
+    - setup-tags
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GCR
+        uses: docker/login-action@v1
+        with:
+          registry: eu.gcr.io
+          username: _json_key
+          password: ${{ secrets.GCR_EU_DEV_JSON_KEY }}
+      - name: Docker build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: ./Dockerfile
+          push: true
+          context: .
+          tags: ${{ needs.setup-tags.outputs.storybook-tags }}
+          labels: ${{ needs.setup-tags.outputs.storybook-labels }}
+          target: "storybook"
       - name: Docker Image output
         run: |
           docker images
@@ -109,7 +149,8 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
-      - setup-dashboard-tags
+      - push-storybook
+      - setup-tags
     with:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
@@ -119,7 +160,7 @@ jobs:
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
 
@@ -128,7 +169,8 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
     needs:
       - push-dashboard
-      - setup-dashboard-tags
+      - push-storybook
+      - setup-tags
     with:
       env_name: dev
       namespace:  dashboard-dev
@@ -137,7 +179,7 @@ jobs:
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-dashboard-tags.outputs.json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
 
   # run-e2e-tests:
