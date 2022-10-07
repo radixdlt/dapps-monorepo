@@ -40,7 +40,7 @@
     <Header />
     <SidebarWithNavbar page={$page} />
 
-    <Box cx={{ gridArea: 'content' }}>
+    <Box p="none" cx={{ gridArea: 'content', backgroundColor: '$background' }}>
       {#if $navigating}
         <slot />
       {:else}

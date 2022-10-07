@@ -11,6 +11,7 @@
   import UptimeHeader from './cells/UptimeHeader.svelte'
 
   export let data: ValidatorTransformedArray
+  export let filtered = ''
 
   const columns = [
     {
@@ -55,4 +56,4 @@
   ]
 </script>
 
-<Table {data} {columns} />
+<Table globalFilter={filtered} {data} {columns} />
