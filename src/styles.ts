@@ -60,7 +60,7 @@ export const {
       iconHover: 'brightness(0)'
     },
     colors: {
-      background: colors.grey3,
+      background: colors.grey5,
       onBackground: colors.grey1,
       surface: colors.white,
       onSurface: colors.grey1,
@@ -219,6 +219,7 @@ export const darkTheme = createTheme({
 
 globalCss({
   '*': {
+    boxSizing: 'border-box',
     fontFamily: 'IBM Plex Sans',
     fontWeight: '400',
     margin: 0,
