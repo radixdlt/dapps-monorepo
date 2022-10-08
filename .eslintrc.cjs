@@ -3,7 +3,8 @@ module.exports = {
   extends: ['@sveltejs', 'plugin:storybook/recommended'],
   rules: {
     semi: [0, 'never'],
-    'unused-imports/no-unused-imports': 'error'
+    'unused-imports/no-unused-imports': 'error',
+    'import/namespace': ['error', { allowComputed: true }]
   },
   settings: {
     'svelte3/typescript': require('typescript')

@@ -1,23 +1,21 @@
 <script lang="ts">
   import { accounts, selectedAccount } from '@stores'
   import Button from '@components/_base/button/Button.svelte'
-  import { onMount } from 'svelte'
+  import { query } from '../../query-lib/'
+  import Box from '@components/_base/box/Box.svelte'
 
-  let connect: () => void
+  const { data, get, loading } = query('request')
 
-  onMount(async () => {
-    const { request } = await import('@wallet')
-
-    connect = async () => {
-      const result = await request()
-      if (result.isOk()) {
-        accounts.set(result.value.accountAddresses!)
-        selectedAccount.set(result.value.accountAddresses![0])
-      } else {
-        // TODO
-      }
-    }
-  })
+  if ($data) {
+    accounts.set($data?.accountAddresses)
+    selectedAccount.set($data.accountAddresses?.[0])
+  }
 </script>
 
-<Button size="small" on:click={connect}>Connect</Button>
+<Box transparent p="none">
+  {#if $loading}
+    <p>loading...</p>
+  {:else}
+    <Button size="small" on:click={get}>Connect</Button>
+  {/if}
+</Box>
