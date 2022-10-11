@@ -13,6 +13,7 @@
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import Search from '@components/_base/search/Search.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import ConnectButton from '@components/connect-button/ConnectButton.svelte'
 
   export let data: PageData
 
@@ -82,6 +83,7 @@
 {/if}
 
 <Box transparent py="none" px="large">
+  <ConnectButton />
   <Box m="large" transparent>
     <Search bind:value={filtered} />
   </Box>
