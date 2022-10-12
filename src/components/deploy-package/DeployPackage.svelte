@@ -25,8 +25,11 @@
 
   let transitionEnded = false
 
-  const { trigger: sendTransaction, data: sendTransactionData } =
-    mutate('sendTransaction')
+  const {
+    loading: publishing,
+    trigger: sendTransaction,
+    data: sendTransactionData
+  } = mutate('sendTransaction')
   const { trigger: postTransactionReceipt, data: transactionReceiptData } =
     mutate('transactionReceipt')
 
@@ -53,7 +56,6 @@
   }
 
   $: if ($sendTransactionData) {
-    console.log($sendTransactionData, 'sendTransactionData')
     postTransactionReceipt($sendTransactionData.transactionHash)
   }
 
@@ -81,7 +83,9 @@
         Upload WASM
       </UploadFileButton>
     {:else}
-      <Button on:click={deploy}>Publish</Button>
+      <Button on:click={deploy}
+        >{$publishing ? 'Publishing...' : 'Publish'}</Button
+      >
       <Box mt="large" inFly="left" transparent>
         {transaction}
       </Box>
