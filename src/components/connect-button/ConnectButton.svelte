@@ -4,7 +4,7 @@
   import { query } from '../../query-lib/'
   import Box from '@components/_base/box/Box.svelte'
 
-  const { data, get, loading } = query('request')
+  const { data, get, loading } = query('requestAddresses')
 
   if ($data) {
     accounts.set($data?.accountAddresses)

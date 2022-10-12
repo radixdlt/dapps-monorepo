@@ -1498,6 +1498,24 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@radixdlt/alphanet-gateway-api-v0-sdk@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-gateway-api-v0-sdk/-/alphanet-gateway-api-v0-sdk-0.1.4.tgz#682e4f8ab367e4f3c1b9ee5d59936d7b0ebcf602"
+  integrity sha512-CKUbrm/YtdHpQk887flkxiIvzTyhVo6UJqPY42lwrzKM15Etfbw3+nk2ebr+j1P7+sG+sNyYwh7b/SylGbKvkA==
+  dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
+"@radixdlt/alphanet-walletextension-sdk@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-walletextension-sdk/-/alphanet-walletextension-sdk-0.1.1.tgz#31a610b83b40ded0f6b03e945691635a80209974"
+  integrity sha512-t0ZqcHBPU5v9OEq0Qpv/MHFh9WJPuIuhOMnyDW/TmG6A3sgt9eGawe0i5C0fKjAH1KKqA+4bj3MCYLDyEacyPA==
+  dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
 "@radixdlt/wallet-sdk@./radixdlt-wallet-sdk-v0.1.0-alpha.tgz":
   version "0.1.0-alpha"
   resolved "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz#46813c4b5c65a4a9951b76353fcc0b27f03c92ce"
