@@ -8,6 +8,10 @@ export const _queryFn =
   ): Promise<ReturnType<K[T]['transformationFn']>> => {
     const { fn, decoder, transformationFn } = q[api]
     const response = await fn(params)
-    const decoded = decoder(response)
-    return transformationFn(decoded)
+    try {
+      const decoded = decoder(response)
+      return transformationFn(decoded)
+    } catch (e) {
+      throw Error(e.message)
+    }
   }

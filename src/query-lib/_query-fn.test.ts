@@ -13,6 +13,12 @@ describe('#queryfn', () => {
       fn: (res: any) => res,
       decoder: identity,
       transformationFn: identity
+    },
+
+    request3: {
+      fn: (res: any) => res,
+      decoder: vi.fn(),
+      transformationFn: identity
     }
   }
 
@@ -36,5 +42,12 @@ describe('#queryfn', () => {
   it('Should return param sent into queryFn', async () => {
     const query = await queryFn('request2', 'param')
     expect(query).toEqual('param')
+  })
+
+  it('Should throw error if decoder fails', async () => {
+    queries.request3.decoder.mockImplementationOnce(() => {
+      throw Error('decoder error')
+    })
+    await expect(queryFn('request3')).rejects.toThrow('decoder error')
   })
 })
