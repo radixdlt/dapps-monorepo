@@ -74,6 +74,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@radixdlt/alphanet-gateway-api-v0-sdk": "^0.1.4",
+    "@radixdlt/alphanet-walletextension-sdk": "^0.1.1",
     "@radixdlt/wallet-sdk": "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",

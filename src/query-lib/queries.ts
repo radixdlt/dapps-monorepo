@@ -1,7 +1,8 @@
 import WalletSdk from '@radixdlt/wallet-sdk'
+import { TransactionLibrary } from '../utils/transaction-library'
 import { makeQueries } from './_make-queries'
 
-export const request = makeQueries({
+export const requestAddresses = makeQueries({
   fn: async () => {
     const sdk = WalletSdk()
     const res = await sdk.request({
@@ -12,4 +13,13 @@ export const request = makeQueries({
   },
   decoder: (res) => res,
   transformationFn: (res) => res
+})
+
+export const createTransactionService = makeQueries({
+  fn: async () => fetch('./src/transaction_library.wasm'),
+  decoder: (res) => res,
+  transformationFn: async (res) => {
+    const blob: ArrayBuffer = await res.arrayBuffer()
+    return TransactionLibrary.fromWasmModuleBuffer(Buffer.from(blob))
+  }
 })
