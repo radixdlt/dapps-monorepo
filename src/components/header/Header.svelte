@@ -3,6 +3,7 @@
   import { storage } from '@stores'
   import ThemeSwitch from '@components/_base/switch/theme-switch/ThemeSwitch.svelte'
   import Image from '@components/_base/image/Image.svelte'
+  import ConnectButton from '@components/connect-button/ConnectButton.svelte'
 </script>
 
 <Box
@@ -23,5 +24,8 @@
       ? '/images/Radix_Logo_light_theme.svg'
       : '/images/Radix_Logo_dark_theme.svg'}
   />
-  <ThemeSwitch />
+  <Box cx={{ gap: '$md' }} p="none" flex="row" items="center">
+    <ConnectButton />
+    <ThemeSwitch />
+  </Box>
 </Box>

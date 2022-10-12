@@ -14,7 +14,7 @@
 
 <Box transparent p="none">
   {#if $loading}
-    <p>loading...</p>
+    <Button disabled size="small">Connecting...</Button>
   {:else}
     <Button size="small" on:click={get}>Connect</Button>
   {/if}
