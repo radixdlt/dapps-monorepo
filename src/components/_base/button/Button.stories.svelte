@@ -10,6 +10,9 @@
     text: {
       control: 'text'
     },
+    disabled: {
+      control: 'boolean'
+    },
     color: {
       control: 'color'
     }
@@ -20,6 +23,7 @@
   <Button>{args.text}</Button>
   <Button size="small">{args.text}</Button>
   <Button ghost>{args.text}</Button>
+  <Button disabled={args.disabled} on:click={console.log}>Disabled</Button>
 </Template>
 
 <Story
