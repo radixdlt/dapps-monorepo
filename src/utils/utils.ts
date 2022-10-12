@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import { Buffer } from 'buffer'
 import CryptoJS from 'crypto-js'
 
 const XRD_DECIMALS = 18

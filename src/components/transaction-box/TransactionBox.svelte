@@ -7,7 +7,7 @@
 </script>
 
 <Box>
-  <Box inFly={{ y: 200, duration: 500 }}>
+  <Box inFly="bottom">
     <Box
       grid="auto"
       cx={{

@@ -22,6 +22,15 @@
         borderWidth: '0'
       }
     },
+    active: {
+      true: {
+        backgroundColor: '$primary',
+        color: '$primaryButtonText',
+        '&:hover': {
+          backgroundColor: '$primary'
+        }
+      }
+    },
     ghost: {
       true: {
         backgroundColor: '$primaryGhostButton',
@@ -39,6 +48,7 @@
   export let border: keyof typeof variants['border'] | undefined = undefined
   export let ghost: true | false = false
   export let disabled: true | false = false
+  export let active: true | false = false
 
   const btn = css({
     backgroundColor: '$primaryButton',
@@ -56,7 +66,7 @@
     },
     variants
   })
-  const btnClass = btn({ full, size, border, ghost })
+  const btnClass = btn({ active, full, size, border, ghost })
   const disabledClass = css({
     backgroundColor: '$primaryButtonDisabled',
     color: '$grey',

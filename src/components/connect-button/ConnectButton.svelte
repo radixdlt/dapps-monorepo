@@ -6,7 +6,7 @@
 
   const { data, get, loading } = query('requestAddresses')
 
-  if ($data) {
+  $: if ($data) {
     accounts.set($data?.accountAddresses)
     selectedAccount.set($data.accountAddresses?.[0])
   }
@@ -15,6 +15,8 @@
 <Box transparent p="none">
   {#if $loading}
     <Button disabled size="small">Connecting...</Button>
+  {:else if $data}
+    <Button active disabled size="small">Connected</Button>
   {:else}
     <Button size="small" on:click={get}>Connect</Button>
   {/if}

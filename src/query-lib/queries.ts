@@ -1,5 +1,5 @@
-import WalletSdk from '@radixdlt/wallet-sdk'
-import { TransactionLibrary } from '../utils/transaction-library'
+import { RequestAddressesIO } from '@io/wallet'
+import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { makeQueries } from './_make-queries'
 
 export const requestAddresses = makeQueries({
@@ -11,15 +11,6 @@ export const requestAddresses = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => res,
+  decoder: (res) => RequestAddressesIO.parse(res),
   transformationFn: (res) => res
-})
-
-export const createTransactionService = makeQueries({
-  fn: async () => fetch('./src/transaction_library.wasm'),
-  decoder: (res) => res,
-  transformationFn: async (res) => {
-    const blob: ArrayBuffer = await res.arrayBuffer()
-    return TransactionLibrary.fromWasmModuleBuffer(Buffer.from(blob))
-  }
 })
