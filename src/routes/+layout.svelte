@@ -7,6 +7,7 @@
   import { storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import { goto } from '$app/navigation'
 
   let mounted = false
 
@@ -18,6 +19,7 @@
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
       darkTheme
     )
+    goto('/dashboard')
   }
 </script>
 
