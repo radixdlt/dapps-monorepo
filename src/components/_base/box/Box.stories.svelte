@@ -6,8 +6,8 @@
 <Meta title="Box" component={Box} />
 
 <Template>
-  <Box background="primaryButton">Hello</Box>
-  <Box py="medium" my="medium" background="primaryButton">Hello</Box>
+  <Box cx={{ width: '$3xl' }}>Hello</Box>
+  <Box py="medium" my="medium">Hello</Box>
 </Template>
 
 <Story name="Primary" />
