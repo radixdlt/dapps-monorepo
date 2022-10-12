@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import CryptoJS from 'crypto-js'
 
 const XRD_DECIMALS = 18
 
@@ -20,4 +21,20 @@ export const capitalize = (text: string) =>
 export const isSameRoute = (route: string, routeName: string) => {
   const routeArray = route.split('/')
   return routeArray[1] === routeName
+}
+
+export function hexStringFromByteArray(byteArray: Uint8Array): string {
+  return Buffer.from(byteArray).toString('hex')
+}
+
+export function byteArrayFromHex(hex: string): Uint8Array {
+  return Uint8Array.from(Buffer.from(hex, 'hex'))
+}
+
+export function hash(message: Uint8Array): Uint8Array {
+  return byteArrayFromHex(
+    CryptoJS.SHA256(
+      CryptoJS.enc.Hex.parse(hexStringFromByteArray(message))
+    ).toString()
+  )
 }
