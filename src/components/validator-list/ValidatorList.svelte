@@ -13,6 +13,7 @@
   export let data: ValidatorTransformedArray
   export let filtered = ''
 
+  // ts support for svelte seems to be broken, therefore we need to cast the data
   const columns = [
     {
       accessorKey: 'name',
@@ -53,7 +54,7 @@
       cell: (info) => shortenAddress(info.getValue()),
       header: 'Address'
     }
-  ]
+  ] as any
 </script>
 
 <Table globalFilter={filtered} {data} {columns} />
