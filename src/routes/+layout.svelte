@@ -7,7 +7,6 @@
   import { storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
-  import { goto } from '$app/navigation'
 
   let mounted = false
 
@@ -19,7 +18,6 @@
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
       darkTheme
     )
-    goto('/staking')
   }
 </script>
 
@@ -41,7 +39,14 @@
   {#if mounted}
     <Header />
     <SidebarWithNavbar page={$page} />
-    <Box p="none" cx={{ gridArea: 'content', backgroundColor: '$background' }}>
+    <Box
+      p="none"
+      cx={{
+        gridArea: 'content',
+        height: '100vh',
+        backgroundColor: '$background'
+      }}
+    >
       <slot />
     </Box>
     <center />

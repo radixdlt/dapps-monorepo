@@ -24,7 +24,11 @@
   })()
 </script>
 
-<Button on:click={fileInput.click}>
+<Button
+  on:click={() => {
+    fileInput.click()
+  }}
+>
   <slot />
 </Button>
 

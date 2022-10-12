@@ -128,3 +128,12 @@ export class TransactionLibrary {
     return pointer
   }
 }
+
+export const createTransactionService =
+  async (): Promise<TransactionLibrary> => {
+    const rawResponse: Response = await fetch(
+      './src/wasm-files/transaction_library.wasm'
+    )
+    const blob: ArrayBuffer = await rawResponse.arrayBuffer()
+    return TransactionLibrary.fromWasmModuleBuffer(Buffer.from(blob))
+  }
