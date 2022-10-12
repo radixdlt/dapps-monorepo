@@ -1,7 +1,7 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'
-  import { navigating, page } from '$app/stores'
+  import { page } from '$app/stores'
   import '../fonts.css'
   import { onMount } from 'svelte'
   import { storage } from '@stores'
@@ -19,7 +19,7 @@
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
       darkTheme
     )
-    goto('/dashboard')
+    goto('/staking')
   }
 </script>
 
@@ -41,13 +41,9 @@
   {#if mounted}
     <Header />
     <SidebarWithNavbar page={$page} />
-
     <Box p="none" cx={{ gridArea: 'content', backgroundColor: '$background' }}>
-      {#if $navigating}
-        <slot />
-      {:else}
-        <slot />
-      {/if}
+      <slot />
     </Box>
+    <center />
   {/if}
 </Box>
