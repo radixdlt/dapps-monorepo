@@ -5,6 +5,8 @@ import { toWholeUnits } from '@utils'
 import { validators } from '@gateway'
 import { ValidatorArrayIO, ValidatorTransformedArrayIO } from '../../io/gateway'
 
+export const prerender = true
+
 export const load: PageServerLoad = async () => {
   const response = await validators()
   const parsed = ValidatorArrayIO.parse(response)

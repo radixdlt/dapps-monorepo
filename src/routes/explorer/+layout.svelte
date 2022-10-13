@@ -1,3 +1,7 @@
+<script context="module">
+  export const prerender = true
+</script>
+
 <script lang="ts">
   import { goto } from '$app/navigation'
   import Search from '@components/_base/search/Search.svelte'
