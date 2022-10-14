@@ -9,7 +9,7 @@
     createTransactionService,
     type ExtractAbiResponse
   } from '../../utils/transaction-library'
-  import { mutate } from '../../query-lib'
+  import { mutate } from '@queries'
   import type { GlobalEntityId } from '@radixdlt/alphanet-gateway-api-v0-sdk'
 
   // Temporary for testing alphanet

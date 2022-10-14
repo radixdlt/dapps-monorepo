@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types'
-import { queryServer } from 'src/query-lib'
+import { queryServer } from '@queries'
 
 type Action = {
   from: string

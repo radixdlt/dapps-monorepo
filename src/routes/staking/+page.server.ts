@@ -1,4 +1,4 @@
-import { queryServer } from '../../query-lib'
+import { queryServer } from '@queries'
 import type { PageServerLoad } from './$types'
 
 export const prerender = true
