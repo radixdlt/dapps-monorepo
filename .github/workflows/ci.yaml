@@ -72,17 +72,17 @@ jobs:
         id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: npm install
+        run: yarn
       - name: Lint
-        run: npm run lint
-      - name: Test
-        run:  npm run test
+        run: yarn lint
+      - name: Svelte check
+        run:  yarn svelte-check
       - name: Coverage
-        run:  npm run coverage
+        run:  yarn coverage
       - name: prettier
         run: yarn prettier
       - name: SonarCloud Scan
