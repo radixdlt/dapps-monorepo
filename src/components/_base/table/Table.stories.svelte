@@ -62,19 +62,24 @@
     }
   ]
 
+  // ts ignores due to svelte table's lack of types
   const columns = [
     {
       accessorKey: 'name',
+      // @ts-ignore
       cell: (info) => info.getValue(),
       header: 'Name'
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.feePercentage,
       id: 'feepercentage',
+      // @ts-ignore
       cell: (info) => info.getValue(),
       header: () => 'Fee %'
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.totalStake,
       id: 'totalstake',
       header: () => 'Total Stake'

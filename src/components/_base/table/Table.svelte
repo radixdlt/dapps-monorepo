@@ -111,7 +111,7 @@
                   interactiveText
                   p="none"
                   pointer={header.column.getCanSort()}
-                  onClick={header.column.getToggleSortingHandler()}
+                  on:click={() => header.column.getToggleSortingHandler()}
                 >
                   <svelte:component
                     this={flexRender(

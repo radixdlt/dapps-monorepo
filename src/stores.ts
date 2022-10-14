@@ -6,8 +6,8 @@ type Account = {
   address: string
 }
 
-export const accounts = writable<Account[] | undefined>(undefined)
+export const accounts = writable<Account[]>(undefined)
 
-export const selectedAccount = writable<Account | undefined>(undefined)
+export const selectedAccount = writable<Account>(undefined)
 
 export const storage = localStorageStore('storage', { theme: 'dark' })
