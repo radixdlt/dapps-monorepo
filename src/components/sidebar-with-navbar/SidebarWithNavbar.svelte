@@ -4,7 +4,7 @@
   import type { Page } from '@sveltejs/kit'
   import { isSameRoute } from '@utils'
 
-  export let page: Page<Record<string, string>>
+  export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
   const routes = [
     { text: 'Staking/Validators', icon: 'validators', path: '/staking' },

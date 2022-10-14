@@ -17,33 +17,39 @@
   const columns = [
     {
       accessorKey: 'name',
+      // @ts-ignore
       cell: (info) => info.getValue(),
       header: 'Name'
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.stakeAccepted,
       id: 'stakeAccepted',
       header: () => 'ADS'
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.totalStake,
       id: 'totalStake',
       cell: TotalStake,
       header: TotalStakeHeader
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.ownerStake,
       id: 'ownerStake',
       cell: OwnerStake,
       header: OwnerStakeHeader
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.feePercentage,
       id: 'feepercentage',
       cell: RightAlignedText,
       header: FeeHeader
     },
     {
+      // @ts-ignore
       accessorFn: (row) => row.uptimePercentage,
       id: 'uptimePercentage',
       cell: RightAlignedText,
@@ -51,6 +57,7 @@
     },
     {
       accessorKey: 'address',
+      // @ts-ignore
       cell: (info) => shortenAddress(info.getValue()),
       header: 'Address'
     }

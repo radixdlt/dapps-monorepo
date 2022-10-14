@@ -5,6 +5,7 @@ import { MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
   TransactionIO,
+  TransactionTransformedIO,
   ValidatorArrayIO,
   ValidatorTransformedArrayIO
 } from '@io/gateway'
@@ -68,6 +69,6 @@ export const getTransactionStatus = makeQueries({
         amount: toWholeUnits(action.amount.value)
       }))
     }
-    return TransactionIO.parse(transformedResponse)
+    return TransactionTransformedIO.parse(transformedResponse)
   }
 })

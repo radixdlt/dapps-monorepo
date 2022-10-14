@@ -6,7 +6,7 @@
 <Meta title="SidebarWithNavbar" component={SidebarWithNavbar} />
 
 <Template>
-  <SidebarWithNavbar page={{}} />
+  <SidebarWithNavbar />
 </Template>
 
 <Story name="Primary" />
