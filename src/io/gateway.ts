@@ -81,6 +81,30 @@ export const ValidatorTransformedIO = object({
   stakeAccepted: boolean()
 })
 
+export const ActionIO = object({
+  from_account: object({ address: string() }),
+  to_account: object({ address: string() }),
+  amount: object({ value: string() })
+})
+
+export const TransactionIO = object({
+  transaction: object({
+    actions: array(ActionIO),
+    transaction_status: object({ status: string() })
+  })
+})
+
+export const ActionTransformedIO = object({
+  from: string(),
+  to: string(),
+  amount: number()
+})
+
+export const TransactionTransformedIO = object({
+  status: string(),
+  actions: array(ActionTransformedIO)
+})
+
 export const ValidatorArrayIO = object({ validators: array(ValidatorIO) })
 export const ValidatorTransformedArrayIO = array(ValidatorTransformedIO)
 
@@ -91,3 +115,4 @@ export type ValidatorTransformed = z.infer<typeof ValidatorTransformedIO>
 export type ValidatorTransformedArray = z.infer<
   typeof ValidatorTransformedArrayIO
 >
+export type Transaction = z.infer<typeof TransactionIO>

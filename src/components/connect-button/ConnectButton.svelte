@@ -1,14 +1,14 @@
 <script lang="ts">
   import { accounts, selectedAccount } from '@stores'
   import Button from '@components/_base/button/Button.svelte'
-  import { query } from '../../query-lib/'
+  import { query } from '@queries'
   import Box from '@components/_base/box/Box.svelte'
 
   const { data, get, loading } = query('requestAddresses')
 
   $: if ($data) {
-    accounts.set($data?.accountAddresses)
-    selectedAccount.set($data.accountAddresses?.[0])
+    accounts.set($data.accountAddresses)
+    selectedAccount.set($data.accountAddresses[0])
   }
 </script>
 

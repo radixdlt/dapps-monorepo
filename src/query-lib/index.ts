@@ -7,4 +7,5 @@ import { _mutateSvelte } from './_mutate-svelte'
 export { makeQueries } from './_make-queries'
 
 export const query = _querySvelte(_queryFn(queries))
+export const queryServer = _queryFn(queries)
 export const mutate = _mutateSvelte(_queryFn(mutations))
