@@ -7,8 +7,8 @@
   const { data, get, loading } = query('requestAddresses')
 
   $: if ($data) {
-    accounts.set($data?.accountAddresses)
-    selectedAccount.set($data.accountAddresses?.[0])
+    accounts.set($data.accountAddresses)
+    selectedAccount.set($data.accountAddresses[0])
   }
 </script>
 
