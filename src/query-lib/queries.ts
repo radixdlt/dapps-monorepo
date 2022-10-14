@@ -3,7 +3,11 @@ import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { makeQueries } from './_make-queries'
 import { MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
-import { ValidatorArrayIO, ValidatorTransformedArrayIO } from '@io/gateway'
+import {
+  TransactionIO,
+  ValidatorArrayIO,
+  ValidatorTransformedArrayIO
+} from '@io/gateway'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 
@@ -49,5 +53,21 @@ export const getValidators = makeQueries({
         .toNumber()
     }))
     return ValidatorTransformedArrayIO.parse(transformedValidators)
+  }
+})
+
+export const getTransactionStatus = makeQueries({
+  fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
+  decoder: TransactionIO.parse,
+  transformationFn: (res) => {
+    const transformedResponse = {
+      status: res.transaction.transaction_status.status,
+      actions: res.transaction.actions.map((action) => ({
+        from: action.from_account.address,
+        to: action.to_account.address,
+        amount: toWholeUnits(action.amount.value)
+      }))
+    }
+    return TransactionIO.parse(transformedResponse)
   }
 })
