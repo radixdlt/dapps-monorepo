@@ -1,6 +1,6 @@
 import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { TransactionApi } from '@radixdlt/alphanet-gateway-api-v0-sdk'
-import { makeQueries } from './_make-queries'
+import { makeQueries } from 'svelte-samlat'
 import { SendTransactionIO } from '@io/wallet'
 
 export const sendTransaction = makeQueries({

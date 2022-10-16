@@ -1,6 +1,6 @@
 import { RequestAddressesIO } from '@io/wallet'
 import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
-import { makeQueries } from './_make-queries'
+import { makeQueries } from 'svelte-samlat'
 import { MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
