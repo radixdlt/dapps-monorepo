@@ -68,7 +68,6 @@
 
 {#if !packageAddress}
   <Box
-    outFly="right"
     on:out;roend={() => (transitionEnded = true)}
     transparent
     flex="col"
@@ -86,7 +85,7 @@
       <Button on:click={deploy}
         >{$publishing ? 'Publishing...' : 'Publish'}</Button
       >
-      <Box mt="large" inFly="left" transparent>
+      <Box mt="large" transparent>
         {transaction}
       </Box>
     {/if}
@@ -94,7 +93,7 @@
 {/if}
 
 {#if transitionEnded}
-  <Box mt="large" inFly="left" transparent flex="col" items="center">
+  <Box mt="large" transparent flex="col" items="center">
     <Box transparent><Text p="large" size="large">Success! 🎉</Text></Box>
     <Box transparent>
       <Text>Package Address</Text>

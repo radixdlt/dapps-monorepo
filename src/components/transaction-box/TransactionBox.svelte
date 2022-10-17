@@ -7,7 +7,7 @@
 </script>
 
 <Box>
-  <Box inFly="bottom">
+  <Box>
     <Box
       grid="auto"
       cx={{
