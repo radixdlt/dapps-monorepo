@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
-  import { fly } from 'svelte/transition'
   import { css, config } from '@styles'
 
   const variants = {
@@ -300,32 +299,11 @@
   export let grid: keyof typeof variants['grid'] | undefined = undefined
 
   export let shadow: boolean | undefined = undefined
-
-  export let inFly: 'bottom' | 'left' | 'right' | 'top' | undefined = undefined
-  export let outFly: 'bottom' | 'left' | 'right' | 'top' | undefined = undefined
 </script>
 
 <div
-  in:fly={inFly === 'bottom'
-    ? { y: 200, duration: 500 }
-    : inFly === 'left'
-    ? { x: -200, duration: 500 }
-    : inFly === 'right'
-    ? { x: 200, duration: 500 }
-    : inFly === 'top'
-    ? { y: -200, duration: 500 }
-    : undefined}
-  out:fly={outFly === 'bottom'
-    ? { y: 200, duration: 500 }
-    : outFly === 'left'
-    ? { x: -200, duration: 500 }
-    : outFly === 'right'
-    ? { x: 200, duration: 500 }
-    : outFly === 'top'
-    ? { y: -200, duration: 500 }
-    : undefined}
-  on:outroend
   on:click
+  on:outroend
   class={box({
     full,
     pointer,
