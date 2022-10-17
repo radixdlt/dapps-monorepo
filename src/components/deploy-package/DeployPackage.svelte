@@ -23,8 +23,6 @@
   let packageAddress: GlobalEntityId
   let parsedWASM: ExtractAbiResponse
 
-  let transitionEnded = false
-
   const {
     loading: publishing,
     trigger: sendTransaction,
@@ -66,13 +64,8 @@
   }
 </script>
 
-{#if !packageAddress}
-  <Box
-    on:out;roend={() => (transitionEnded = true)}
-    transparent
-    flex="col"
-    items="center"
-  >
+{#if !packageAddress && !$sendTransactionData}
+  <Box transparent flex="col" items="center">
     {#if !parsedWASM}
       <UploadFileButton
         name="Select compiled Scrypto package"
@@ -92,12 +85,16 @@
   </Box>
 {/if}
 
-{#if transitionEnded}
+{#if $sendTransactionData}
   <Box mt="large" transparent flex="col" items="center">
     <Box transparent><Text p="large" size="large">Success! 🎉</Text></Box>
     <Box transparent>
       <Text>Package Address</Text>
     </Box>
-    {packageAddress}
+    <pre>
+    {packageAddress
+        ? JSON.stringify(packageAddress, null, 2)
+        : 'fetching data...'}
+    </pre>
   </Box>
 {/if}
