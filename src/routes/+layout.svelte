@@ -32,7 +32,8 @@
   p="none"
   cx={{
     display: 'grid',
-    height: '100vw',
+    height: '100vh',
+    overflowY: 'hidden',
     gridTemplateColumns: '250px auto',
     gridTemplateRows: '70px auto',
     gridTemplateAreas: `
@@ -48,6 +49,7 @@
       cx={{
         gridArea: 'content',
         height: '100vh',
+        overflowY: 'scroll',
         backgroundColor: '$background'
       }}
     >
