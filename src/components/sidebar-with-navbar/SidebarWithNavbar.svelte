@@ -3,6 +3,7 @@
   import Sidebar from '@components/_base/sidebar/Sidebar.svelte'
   import type { Page } from '@sveltejs/kit'
   import { isSameRoute } from '@utils'
+  import { navigating } from '@stores'
 
   export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
@@ -17,7 +18,8 @@
   {#each routes as route (route.path)}
     <SidebarItem
       icon={route.icon}
-      isActive={isSameRoute(route.path, page.routeId ?? '')}
+      isActive={isSameRoute(route.path, page.routeId ?? '') ||
+        $navigating === route.path}
       link={route.path}
       on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
     >

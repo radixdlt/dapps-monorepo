@@ -11,3 +11,5 @@ export const accounts = writable<Account[]>(undefined)
 export const selectedAccount = writable<Account>(undefined)
 
 export const storage = localStorageStore('storage', { theme: 'dark' })
+
+export const navigating = writable<string | undefined>(undefined)

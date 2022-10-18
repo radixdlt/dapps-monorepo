@@ -8,9 +8,10 @@
   import { page } from '$app/stores'
   import '../fonts.css'
   import { onMount } from 'svelte'
-  import { storage } from '@stores'
+  import { navigating, storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import { afterNavigate, beforeNavigate } from '$app/navigation'
 
   let mounted = false
 
@@ -23,6 +24,9 @@
       darkTheme
     )
   }
+
+  beforeNavigate((navigation) => navigating.set(navigation.to?.url.pathname))
+  afterNavigate(() => navigating.set(undefined))
 </script>
 
 <!-- enables SSR of css -->
