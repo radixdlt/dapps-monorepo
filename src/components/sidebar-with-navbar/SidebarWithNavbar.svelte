@@ -18,7 +18,7 @@
   {#each routes as route (route.path)}
     <SidebarItem
       icon={route.icon}
-      isActive={isSameRoute(route.path, page.routeId ?? '') ||
+      isActive={(isSameRoute(route.path, page.routeId ?? '') && !$navigating) ||
         $navigating === route.path}
       link={route.path}
       on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
