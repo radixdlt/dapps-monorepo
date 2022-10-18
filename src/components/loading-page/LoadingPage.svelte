@@ -5,7 +5,9 @@
 
 {#if $navigating}
   {#await new Promise((resolve) => setTimeout(resolve, 300)) then}
-    <LoadingSpinner />
+    <center>
+      <LoadingSpinner />
+    </center>
   {/await}
 {:else}
   <slot />
