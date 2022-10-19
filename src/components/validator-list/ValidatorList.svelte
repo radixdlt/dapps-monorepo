@@ -13,8 +13,6 @@
   export let data: ValidatorTransformedArray
   export let filtered = ''
 
-  console.log('data', data)
-
   // ts support for svelte seems to be broken, therefore we need to cast the data
   const columns = [
     {

@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { navigating } from '$app/stores'
   import LoadingSpinner from '@components/_base/loading-spinner/LoadingSpinner.svelte'
-  import { navigating } from '@stores'
 </script>
 
 {#if $navigating}

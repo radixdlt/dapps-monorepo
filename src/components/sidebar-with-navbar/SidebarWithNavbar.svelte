@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { navigating } from '$app/stores'
   import SidebarItem from '@components/sidebar-item/SidebarItem.svelte'
   import Sidebar from '@components/_base/sidebar/Sidebar.svelte'
   import type { Page } from '@sveltejs/kit'
   import { isSameRoute } from '@utils'
-  import { navigating } from '@stores'
 
   export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
@@ -19,7 +19,7 @@
     <SidebarItem
       icon={route.icon}
       isActive={(isSameRoute(route.path, page.routeId ?? '') && !$navigating) ||
-        $navigating === route.path}
+        $navigating?.to?.url.pathname === route.path}
       link={route.path}
       on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
     >
