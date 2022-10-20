@@ -1,7 +1,3 @@
-<script context="module">
-  export const prerender = true
-</script>
-
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
   import type { PageData } from './$types'
