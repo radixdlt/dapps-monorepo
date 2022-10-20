@@ -1,7 +1,3 @@
-<script context="module">
-  export const prerender = true
-</script>
-
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'

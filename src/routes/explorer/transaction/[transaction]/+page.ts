@@ -1,6 +1,8 @@
 import type { PageServerLoad } from './$types'
 import { queryServer } from '@queries'
 
+export const prerender = false
+
 type Action = {
   from: string
   to: string
