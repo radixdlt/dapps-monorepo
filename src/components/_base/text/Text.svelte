@@ -16,6 +16,23 @@
         cursor: 'pointer'
       }
     },
+    mb: {
+      xsmall: {
+        mb: '$xs'
+      },
+      small: {
+        mb: '$sm'
+      },
+      medium: {
+        mb: '$md'
+      },
+      large: {
+        mb: '$lg'
+      },
+      none: {
+        mb: '$0'
+      }
+    },
     mt: {
       xsmall: {
         mt: '$xs'
