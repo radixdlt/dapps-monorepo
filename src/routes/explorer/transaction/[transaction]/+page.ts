@@ -1,4 +1,4 @@
-import type { PageServerLoad } from './$types'
+import type { PageLoad } from './$types'
 import { queryServer } from '@queries'
 
 export const prerender = false
@@ -14,6 +14,6 @@ export type Transaction = {
   actions: Action[]
 }
 
-export const load: PageServerLoad = async ({ params }) => ({
+export const load: PageLoad = async ({ params }) => ({
   tx: await queryServer('getTransactionStatus', params.transaction)
 })
