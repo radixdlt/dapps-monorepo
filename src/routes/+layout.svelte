@@ -1,7 +1,7 @@
 <script lang="ts">
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'
-  import { page } from '$app/stores'
+  import { navigating, page } from '$app/stores'
   import '../fonts.css'
   import { onMount } from 'svelte'
   import { storage } from '@stores'
@@ -19,6 +19,7 @@
       darkTheme
     )
   }
+  navigating
 </script>
 
 <!-- enables SSR of css -->
@@ -49,7 +50,11 @@
         backgroundColor: '$background'
       }}
     >
-      <slot />
+      {#if $navigating}
+        <slot />
+      {:else}
+        <slot />
+      {/if}
     </Box>
     <center />
   {/if}
