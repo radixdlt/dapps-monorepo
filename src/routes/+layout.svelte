@@ -50,11 +50,7 @@
         backgroundColor: '$background'
       }}
     >
-      {#if $navigating}
-        <slot />
-      {:else}
-        <slot />
-      {/if}
+      <slot />
     </Box>
     <center />
   {/if}

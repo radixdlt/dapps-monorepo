@@ -9,7 +9,7 @@
 </script>
 
 <Box my="large" justify="center" transparent>
-  <form style:width="30%" on:submit={search}>
+  <form style:width="30%" on:submit|preventDefault={search}>
     <Search bind:value={id} placeholder="Enter Transaction ID" />
   </form>
   <slot />
