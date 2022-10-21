@@ -195,8 +195,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v4
         with:
-          build: 'npm run build'
-          start: "npm run dev"
-          command: "npm run e2etest"
+          start: yarn dev
+          wait-on: http://localhost:5173
+          browser: chrome
+          headed: true
