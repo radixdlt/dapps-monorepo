@@ -199,5 +199,3 @@ jobs:
         with:
           start: yarn dev
           wait-on: http://localhost:5173
-          browser: chrome
-          headed: true
