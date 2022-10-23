@@ -1,6 +1,0 @@
-mappedUser: "dev-user"
-project: null
-developerAccess:
-  pod:
-    exec:
-      enabled: false

@@ -162,6 +162,8 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
+        ci.helmGithubUser=${{ secrets.HELM_GH_USER }},
+        ci.helmGithubPass=${{ secrets.HELM_GH_PASS }},
         ci.environment=pr
 
   deploy_dev:
@@ -180,6 +182,8 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.helmGithubUser=${{ secrets.HELM_GH_USER }},
+        ci.helmGithubPass=${{ secrets.HELM_GH_PASS }},
         ci.environment=dev
 
   # run-e2e-tests:
