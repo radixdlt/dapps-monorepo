@@ -124,7 +124,7 @@ const EntityType = union([
   literal('KeyValueStore')
 ])
 
-const GlobalEntityIdIO = object({
+export const GlobalEntityIdIO = object({
   entity_type: EntityType,
   entity_address_hex: string(),
   global_address_hex: string(),
@@ -151,3 +151,4 @@ export type ValidatorTransformedArray = z.infer<
 >
 export type Transaction = z.infer<typeof TransactionIO>
 export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
+export type GlobalEntityId = z.infer<typeof GlobalEntityIdIO>
