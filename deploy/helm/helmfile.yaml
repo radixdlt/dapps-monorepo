@@ -11,8 +11,8 @@ environments:
 repositories:
   - name: rdx-works
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
-    username: {{ .StateValues.ci.helmGithubUser }}
-    password: {{ .StateValues.ci.helmGithubPass }}
+    username: {{ requiredEnv "HELM_GH_USER" }}
+    password: {{ requiredEnv "HELM_GH_PASS" }}
 releases:
 {{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
