@@ -146,7 +146,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
       - push-storybook
@@ -163,10 +163,13 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_dev:
     if: github.ref == 'refs/heads/main'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
       - push-storybook
@@ -181,6 +184,9 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   run-e2e-tests:
     runs-on: ubuntu-latest
