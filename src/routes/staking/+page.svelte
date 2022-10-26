@@ -1,12 +1,13 @@
 <script lang="ts">
   import ValidatorList from '@components/validator-list/ValidatorList.svelte'
-  import type { PageData } from './$types'
   import Card from '@components/_base/card/Card.svelte'
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import Search from '@components/_base/search/Search.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import { query } from '@queries'
 
-  export let data: PageData
+  const { data: validators, get } = query('getValidators')
+  get()
 
   let filtered = ''
 </script>
@@ -19,6 +20,11 @@
     <IconTextItem bold isIconColor icon="transactions" slot="header"
       >Staking</IconTextItem
     >
-    <ValidatorList {filtered} slot="body" data={data.validators} />
+
+    <ValidatorList
+      {filtered}
+      slot="body"
+      validators={new Promise(validators.subscribe)}
+    />
   </Card>
 </Box>

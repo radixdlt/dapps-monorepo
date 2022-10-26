@@ -8,8 +8,8 @@
   const search = () => goto(`/explorer/transaction/${id}`)
 </script>
 
-<Box my="large" justify="center" transparent>
-  <form style:width="30%" on:submit={search}>
+<Box my="large" transparent flex="col" items="center" gap="large">
+  <form style:width="30%" on:submit|preventDefault={search}>
     <Search bind:value={id} placeholder="Enter Transaction ID" />
   </form>
   <slot />

@@ -1,8 +1,23 @@
-<script lang="ts">
-  import type { PageData } from './$types'
-  import TransactionBox from '@components/transaction-box/TransactionBox.svelte'
+<script lang="ts" context="module">
+  type Action = {
+    from: string
+    to: string
+    amount: number
+  }
 
-  export let data: PageData
+  export type Transaction = {
+    status: string
+    actions: Action[]
+  }
 </script>
 
-<TransactionBox tx={data.tx} />
+<script lang="ts">
+  import TransactionBox from '@components/transaction-box/TransactionBox.svelte'
+  import { query } from '@queries'
+  import { page } from '$app/stores'
+
+  const { data, get } = query('getTransactionStatus')
+  get($page.params.transaction)
+</script>
+
+<TransactionBox tx={new Promise(data.subscribe)} />

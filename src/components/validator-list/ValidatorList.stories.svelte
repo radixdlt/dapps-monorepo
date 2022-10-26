@@ -63,4 +63,10 @@
 
 <Meta title="ValidatorList" />
 
-<Story name="Primary"><ValidatorList data={validators} /></Story>
+<Story name="Primary">
+  <ValidatorList validators={new Promise((resolve) => resolve(validators))} />
+</Story>
+
+<Story name="Loading">
+  <ValidatorList validators={new Promise((_) => {})} />
+</Story>

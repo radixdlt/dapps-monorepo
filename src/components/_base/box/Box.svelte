@@ -297,6 +297,7 @@
   export let items: keyof typeof variants['items'] | undefined = undefined
   export let justify: keyof typeof variants['justify'] | undefined = undefined
   export let grid: keyof typeof variants['grid'] | undefined = undefined
+  export let gap: keyof typeof variants['gap'] | undefined = undefined
 
   export let shadow: boolean | undefined = undefined
 </script>
@@ -321,6 +322,7 @@
     flex,
     items,
     justify,
+    gap,
     grid,
     shadow
   })}
