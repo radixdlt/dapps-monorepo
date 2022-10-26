@@ -4,9 +4,9 @@
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { useMachine } from '@xstate/svelte'
-  import { toggleMachine } from './state-machine'
+  import { stateMachine } from './deploy-package-state-machine'
 
-  const { state, send } = useMachine(toggleMachine)
+  const { state, send } = useMachine(stateMachine)
 </script>
 
 <Box transparent flex="col" items="center">

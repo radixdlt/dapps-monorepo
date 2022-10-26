@@ -92,85 +92,96 @@ type States =
       }
     }
 
-export const toggleMachine = createMachine<Context, Events, States>({
-  id: 'deploy-package',
-  initial: 'not-uploaded',
-  context: {
-    transaction,
-    parsedWASM: undefined,
-    transactionData: undefined,
-    receipt: undefined
+export const stateMachine = createMachine<Context, Events, States>(
+  {
+    id: 'deploy-package',
+    initial: 'not-uploaded',
+    predictableActionArguments: true,
+    context: {
+      transaction,
+      parsedWASM: undefined,
+      transactionData: undefined,
+      receipt: undefined
+    },
+    states: {
+      'not-uploaded': {
+        on: { UPLOAD: { target: 'uploading' } }
+      },
+      uploading: {
+        invoke: {
+          id: 'uploading',
+          src: 'upload',
+          onDone: {
+            target: 'unpublished',
+            actions: assign({
+              parsedWASM: (_, event) => event.data
+            })
+          }
+        }
+      },
+      unpublished: {
+        entry: assign({
+          transaction: (ctx) => {
+            if (!ctx.parsedWASM) {
+              throw new Error('Unexpected state')
+            }
+            return createFullTransaction(ctx.parsedWASM)
+          }
+        }),
+        on: { PUBLISH: { target: 'publishing' } }
+      },
+      publishing: {
+        invoke: {
+          id: 'publishing',
+          src: 'publish',
+          onDone: {
+            target: 'published',
+            actions: assign({
+              transactionData: (_, event: DoneInvokeEvent<SendTransaction>) =>
+                event.data
+            })
+          }
+        }
+      },
+      published: {
+        invoke: {
+          id: 'published',
+          src: 'getReceipt',
+          onDone: {
+            target: 'final',
+            actions: assign({
+              receipt: (_, event: DoneInvokeEvent<TransactionReceipt>) =>
+                event.data.committed.receipt.state_updates
+                  .new_global_entities[0]
+            })
+          }
+        }
+      },
+      final: {}
+    }
   },
-  states: {
-    'not-uploaded': {
-      on: { UPLOAD: { target: 'uploading' } }
-    },
-    uploading: {
-      invoke: {
-        id: 'uploading',
-        src: (_, event) => {
-          if (event.type !== 'UPLOAD') {
-            throw new Error('Unexpected event')
-          }
-          return upload(event.file)
-        },
-        onDone: {
-          target: 'unpublished',
-          actions: assign({
-            parsedWASM: (_, event) => event.data
-          })
+  {
+    services: {
+      getReceipt: (ctx) =>
+        mutateServer(
+          'transactionReceipt',
+          ctx.transactionData?.transactionHash
+        ),
+      publish: (ctx) => {
+        if (!ctx.parsedWASM) {
+          throw new Error('Missing parsed WASM')
         }
+        return mutateServer('sendTransaction', {
+          transactionManifest: ctx.transaction,
+          blobs: [ctx.parsedWASM.abi, ctx.parsedWASM.code]
+        })
+      },
+      upload: (_, event) => {
+        if (event.type !== 'UPLOAD') {
+          throw new Error('Unexpected event')
+        }
+        return upload(event.file)
       }
-    },
-    unpublished: {
-      entry: assign({
-        transaction: (ctx) => {
-          if (!ctx.parsedWASM) {
-            throw new Error('Unexpected state')
-          }
-          return createFullTransaction(ctx.parsedWASM)
-        }
-      }),
-      on: { PUBLISH: { target: 'publishing' } }
-    },
-    publishing: {
-      invoke: {
-        id: 'publishing',
-        src: (ctx) => {
-          if (!ctx.parsedWASM) {
-            throw new Error('Missing parsed WASM')
-          }
-          return mutateServer('sendTransaction', {
-            transactionManifest: ctx.transaction,
-            blobs: [ctx.parsedWASM.abi, ctx.parsedWASM.code]
-          })
-        },
-        onDone: {
-          target: 'published',
-          actions: assign({
-            transactionData: (_, event: DoneInvokeEvent<SendTransaction>) =>
-              event.data
-          })
-        }
-      }
-    },
-    published: {
-      invoke: {
-        id: 'published',
-        src: (ctx) =>
-          mutateServer(
-            'transactionReceipt',
-            ctx.transactionData?.transactionHash
-          ),
-        onDone: {
-          target: 'final',
-          actions: assign({
-            receipt: (_, event: DoneInvokeEvent<TransactionReceipt>) =>
-              event.data.committed.receipt.state_updates.new_global_entities[0]
-          })
-        }
-      }
-    },
-    final: {}
+    }
   }
-})
+)
