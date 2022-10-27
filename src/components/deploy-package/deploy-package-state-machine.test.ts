@@ -8,7 +8,7 @@ describe('#deploy state machine', () => {
   })
 
   it('should transition to publishing', () => {
-    const actualState = stateMachine.transition('unpublished', 'PUBLISH')
+    const actualState = stateMachine.transition('uploaded', 'PUBLISH')
     expect(actualState.matches('publishing')).toBeTruthy()
   })
 
@@ -29,7 +29,7 @@ describe('#deploy state machine', () => {
       fetchMachine.start()
       fetchMachine.send('UPLOAD')
 
-      if (state.matches('unpublished')) {
+      if (state.matches('uploaded')) {
         fetchMachine.send('PUBLISH')
       }
 

@@ -20,7 +20,7 @@
     </UploadFileButton>
   {:else if $state.matches('uploading')}
     Uploading...
-  {:else if $state.matches('unpublished')}
+  {:else if $state.matches('uploaded')}
     <Button on:click={() => send({ type: 'PUBLISH' })}>Publish</Button>
     <Box mt="large" transparent>
       {$state.context.transaction}

@@ -61,7 +61,7 @@ type States =
       }
     }
   | {
-      value: 'unpublished'
+      value: 'uploaded'
       context: Context & {
         parsedWASM: ExtractAbiResponse
         transactionData: undefined
@@ -112,14 +112,15 @@ export const stateMachine = createMachine<Context, Events, States>(
           id: 'uploading',
           src: 'upload',
           onDone: {
-            target: 'unpublished',
+            target: 'uploaded',
             actions: assign({
-              parsedWASM: (_, event) => event.data
+              parsedWASM: (_, event: DoneInvokeEvent<ExtractAbiResponse>) =>
+                event.data
             })
           }
         }
       },
-      unpublished: {
+      uploaded: {
         entry: assign({
           transaction: (ctx) => {
             if (!ctx.parsedWASM) {
