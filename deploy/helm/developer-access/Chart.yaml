@@ -1,5 +1,0 @@
-apiVersion: v2
-name: developer-access
-description: Provides developer access on the namespace through a pre-defined role
-type: application
-version: 0.1.0

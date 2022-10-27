@@ -1,4 +1,14 @@
-import z, { record, number, string, object, boolean, array, any } from 'zod'
+import z, {
+  record,
+  number,
+  string,
+  object,
+  boolean,
+  array,
+  any,
+  literal,
+  union
+} from 'zod'
 
 export const StakesIO = object({
   pending_stakes: array(
@@ -105,6 +115,30 @@ export const TransactionTransformedIO = object({
   actions: array(ActionTransformedIO)
 })
 
+const EntityType = union([
+  literal('System'),
+  literal('ResourceManager'),
+  literal('Component'),
+  literal('Package'),
+  literal('Vault'),
+  literal('KeyValueStore')
+])
+
+const GlobalEntityIdIO = object({
+  entity_type: EntityType,
+  entity_address_hex: string(),
+  global_address_hex: string(),
+  global_address: string()
+})
+
+export const TransactionReceiptIO = object({
+  committed: object({
+    receipt: object({
+      state_updates: object({ new_global_entities: array(GlobalEntityIdIO) })
+    })
+  })
+})
+
 export const ValidatorArrayIO = object({ validators: array(ValidatorIO) })
 export const ValidatorTransformedArrayIO = array(ValidatorTransformedIO)
 
@@ -116,3 +150,4 @@ export type ValidatorTransformedArray = z.infer<
   typeof ValidatorTransformedArrayIO
 >
 export type Transaction = z.infer<typeof TransactionIO>
+export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
