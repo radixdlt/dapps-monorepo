@@ -8,7 +8,6 @@ on:
     branches:
 
 jobs:
-
   cancel_running_workflows:
     name: Cancel running workflows
     runs-on: ubuntu-20.04
@@ -52,7 +51,7 @@ jobs:
       storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
       storybook-json: ${{ steps.storybook-tags.outputs.json }}
 
-  build-dashboard:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -63,6 +62,7 @@ jobs:
         with:
           always-auth: true
           node-version: 16.x
+          cache: yarn
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
@@ -75,16 +75,51 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install dependencies
-        run: yarn
+      - name: Build
+        run: yarn --frozen-lockfile && yarn build
+  
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          always-auth: true
+          node-version: 16.x
+          cache: yarn
       - name: Lint
-        run: yarn lint
-      - name: Svelte check
-        run:  yarn svelte-check
-      - name: Coverage
-        run:  yarn coverage
-      - name: prettier
-        run: yarn prettier
+        run:  yarn --frozen-lockfile && yarn lint
+
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          always-auth: true
+          node-version: 16.x
+          cache: yarn
+      - name: Prettier
+        run:  yarn --frozen-lockfile && yarn prettier
+
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          always-auth: true
+          node-version: 16.x
+          cache: yarn
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
@@ -93,11 +128,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  svelte-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          always-auth: true
+          node-version: 16.x
+          cache: yarn
+      - name: Svelte check
+        run:  yarn --frozen-lockfile && yarn svelte:check
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          always-auth: true
+          node-version: 16.x
+          cache: yarn
+      - name: Unit tests
+        run:  yarn --frozen-lockfile && yarn coverage
+
   push-dashboard:
     runs-on: ubuntu-latest
-    needs: 
-    - build-dashboard
-    - setup-tags
+    needs: [build, setup-tags]
     steps:
       - uses: actions/checkout@v2
       - name: Login to GCR
@@ -182,20 +245,20 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
 
-  run-e2e-tests:
-    runs-on: ubuntu-latest
-    # needs:
-    # - deploy_pull_request
-    steps:
-      - uses: actions/setup-node@v2
-        with:
-          always-auth: true
-          node-version: 16.x
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v4
-        with:
-          start: yarn dev
-          wait-on: http://localhost:5173
+#  run-e2e-tests:
+#    runs-on: ubuntu-latest
+#    # needs:
+#    # - deploy_pull_request
+#    steps:
+#      - uses: actions/setup-node@v2
+#        with:
+#          always-auth: true
+#          node-version: 16.x
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - name: Run e2e tests on the PR environment
+#        uses: cypress-io/github-action@v4
+#        with:
+#          start: yarn dev
+#          wait-on: http://localhost:5173
