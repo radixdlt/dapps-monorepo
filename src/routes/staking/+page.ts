@@ -1,6 +1,6 @@
 import { queryServer } from '@queries'
-import type { PageServerLoad } from './$types'
+import type { PageLoad } from './$types'
 
-export const load: PageServerLoad = async () => ({
+export const load: PageLoad = async () => ({
   validators: await queryServer('getValidators')
 })
