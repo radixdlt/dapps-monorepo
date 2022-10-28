@@ -159,6 +159,7 @@ jobs:
         run:  yarn --frozen-lockfile && yarn coverage
 
   push-dashboard:
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs: [build, setup-tags]
     steps:
@@ -183,6 +184,7 @@ jobs:
           docker images
 
   push-storybook:
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs: 
     - setup-tags
@@ -207,28 +209,28 @@ jobs:
         run: |
           docker images
 
-  deploy_pull_request:
-    if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: pr
-      hierarchical_namespace: dashboard-ci-pr
-      namespace: dashboard-pr-${{ github.event.number }}
-      create_subns: true
-      aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
-      eks_cluster: rdx-works-main-dev
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.prNumber=${{ github.event.number }},
-        ci.environment=pr
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+  # deploy_pull_request:
+  #   if: ${{ github.event.pull_request }}
+  #   uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+  #   needs:
+  #     - push-dashboard
+  #     - push-storybook
+  #     - setup-tags
+  #   with:
+  #     env_name: pr
+  #     hierarchical_namespace: dashboard-ci-pr
+  #     namespace: dashboard-pr-${{ github.event.number }}
+  #     create_subns: true
+  #     aws_region: eu-west-2
+  #     role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
+  #     eks_cluster: rdx-works-main-dev
+  #     helmfile_extra_vars: >-
+  #       ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+  #       ci.prNumber=${{ github.event.number }},
+  #       ci.environment=pr
+  #   secrets:
+  #     HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+  #     HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_dev:
     if: github.ref == 'refs/heads/main'
