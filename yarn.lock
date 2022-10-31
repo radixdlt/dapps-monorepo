@@ -11021,10 +11021,10 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.10.6:
     sorcery "^0.10.0"
     strip-indent "^3.0.0"
 
-svelte-samlat@^0.0.31:
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/svelte-samlat/-/svelte-samlat-0.0.31.tgz#9d56411c949b6cc34116f9fdf637ed796e27db7d"
-  integrity sha512-JbXxoYZnK8JB8P7+tJcqKA07dUPhuqC9OxfmB/Ro2zbBStwDdXiisf5qK2NwDup6wNcpm70uVsOhwoKPURHSKg==
+svelte-samlat@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/svelte-samlat/-/svelte-samlat-0.1.0.tgz#6f68b1b050bfee243eaf331f06d44b8dac60a070"
+  integrity sha512-SnQpKRLOgJizHZz7h6fRZMvd1bX5HbYoPxt3KexbP75WcQR5+PHtZzemBgJgiu1WLSHnnAg758AR0ZspyKm7WA==
   dependencies:
     svelte "^3.52.0"
 

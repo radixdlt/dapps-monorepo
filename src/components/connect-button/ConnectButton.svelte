@@ -4,18 +4,18 @@
   import { query } from '@queries'
   import Box from '@components/_base/box/Box.svelte'
 
-  const { data, get, loading } = query('requestAddresses')
+  const { get, state } = query('requestAddresses')
 
-  $: if ($data) {
-    accounts.set($data.accountAddresses)
-    selectedAccount.set($data.accountAddresses[0])
+  $: if ($state.status === 'success') {
+    accounts.set($state.data.accountAddresses)
+    selectedAccount.set($state.data.accountAddresses[0])
   }
 </script>
 
 <Box transparent p="none">
-  {#if $loading}
+  {#if $state.status === 'loading'}
     <Button disabled size="small">Connecting...</Button>
-  {:else if $data}
+  {:else if $state.status === 'success'}
     <Button active disabled size="small">Connected</Button>
   {:else}
     <Button size="small" on:click={get}>Connect</Button>
