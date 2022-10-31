@@ -3289,6 +3289,11 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
+"@xstate/svelte@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@xstate/svelte/-/svelte-2.0.0.tgz#b10c6b796c7205d0f22a7d6d8b8dd6291b346a9e"
+  integrity sha512-051btq174/fc0lsFUsl5xLbpzEGF4lg6unV1uimjQwKxYTwF2GZXKlcQx2dW7WYpqeH0CWoKvKtb2qIBsnxq5A==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -12200,6 +12205,11 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
+
+xstate@^4.33.6:
+  version "4.33.6"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.33.6.tgz#9e23f78879af106f1de853aba7acb2bc3b1eb950"
+  integrity sha512-A5R4fsVKADWogK2a43ssu8Fz1AF077SfrKP1ZNyDBD8lNa/l4zfR//Luofp5GSWehOQr36Jp0k2z7b+sH2ivyg==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.2"
