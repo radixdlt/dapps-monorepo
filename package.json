@@ -75,7 +75,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@aleworm/svelte-skeleton-loader": "^0.0.1",
+    "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@radixdlt/alphanet-gateway-api-v0-sdk": "^0.1.5",
     "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
     "@radixdlt/wallet-sdk": "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz",
