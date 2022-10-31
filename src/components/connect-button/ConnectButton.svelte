@@ -4,7 +4,7 @@
   import { query } from '@queries'
   import Box from '@components/_base/box/Box.svelte'
 
-  const { get, state } = query('requestAddresses')
+  const { get, state } = query('requestAddresses', undefined, { manual: true })
 
   $: if ($state.status === 'success') {
     accounts.set($state.data.accountAddresses)
