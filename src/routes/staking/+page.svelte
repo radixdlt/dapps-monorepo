@@ -8,11 +8,10 @@
 
   let filtered = ''
 
-  const { data, get } = query('getValidators')
-  get()
+  const { state } = query('getValidators')
 </script>
 
-{#if $data}
+{#if $state.status === 'success'}
   <Box transparent p="large">
     <Box m="large" transparent>
       <Search bind:value={filtered} />
@@ -22,7 +21,7 @@
         >Staking</IconTextItem
       >
 
-      <ValidatorList {filtered} slot="body" data={$data} />
+      <ValidatorList {filtered} slot="body" data={$state.data} />
     </Card>
   </Box>
 {/if}
