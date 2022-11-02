@@ -43,6 +43,6 @@
   />
 </Box>
 
-<style>
+<style global>
   @import 'filepond/dist/filepond.css';
 </style>

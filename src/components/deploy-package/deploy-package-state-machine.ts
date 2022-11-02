@@ -1,53 +1,43 @@
-import {
-  createTransactionService,
-  type ExtractAbiResponse
-} from '../../utils/transaction-library'
 import { assign, createMachine, type DoneInvokeEvent } from 'xstate'
 import { Buffer } from 'buffer'
 import { mutateServer } from '@queries'
-import { byteArrayFromHex, hash, hexStringFromByteArray } from '@utils'
+import { hash } from '@utils'
 import type { SendTransaction } from '@io/wallet'
 import type { GlobalEntityId, TransactionReceipt } from '@io/gateway'
 
 // Temporary for testing alphanet
+// TODO: replace with address of the system contract
 const transaction = `
     CALL_METHOD
-        ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42")
+        ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") 
         "lock_fee"
         Decimal("100");
   `
 
-const createFullTransaction = (parsedWASM: ExtractAbiResponse) => {
-  const codeHash: string = hexStringFromByteArray(
-    hash(byteArrayFromHex(parsedWASM.code))
-  )
-  const abiHash: string = hexStringFromByteArray(
-    hash(byteArrayFromHex(parsedWASM.abi))
-  )
+const createFullTransaction = (wasm: string, abi: string) => {
+  const codeHash: string = hash(wasm).toString('hex')
+  const abiHash: string = hash(abi).toString('hex')
   return (
     transaction + `PUBLISH_PACKAGE Blob("${codeHash}") Blob("${abiHash}");\n`
   )
 }
 
-const upload = async (file: File) =>
-  (await createTransactionService()).extract_abi({
-    package_wasm: Buffer.from(await file.arrayBuffer()).toString('hex')
-  })
-
 type Context = {
   transaction: string
-  parsedWASM?: ExtractAbiResponse
+  wasm?: string
+  abi?: string
   transactionData?: SendTransaction
   receipt?: GlobalEntityId
 }
 
-type Events = { type: 'UPLOAD'; file: File } | { type: 'PUBLISH' }
+type Events = { type: 'UPLOAD'; abi: File; wasm: File } | { type: 'PUBLISH' }
 
 type States =
   | {
       value: 'not-uploaded'
       context: Context & {
-        parsedWASM: undefined
+        wasm: undefined
+        abi: undefined
         transactionData: undefined
         receipt: undefined
       }
@@ -55,7 +45,8 @@ type States =
   | {
       value: 'uploading'
       context: Context & {
-        parsedWASM: undefined
+        wasm: undefined
+        abi: undefined
         transactionData: undefined
         receipt: undefined
       }
@@ -63,7 +54,8 @@ type States =
   | {
       value: 'uploaded'
       context: Context & {
-        parsedWASM: ExtractAbiResponse
+        wasm: string
+        abi: string
         transactionData: undefined
         receipt: undefined
       }
@@ -71,14 +63,16 @@ type States =
   | {
       value: 'publishing'
       context: Context & {
-        parsedWASM: ExtractAbiResponse
+        wasm: string
+        abi: string
         receipt: undefined
       }
     }
   | {
       value: 'published'
       context: Context & {
-        parsedWASM: ExtractAbiResponse
+        wasm: string
+        abi: string
         transactionData: SendTransaction
         receipt: undefined
       }
@@ -86,7 +80,8 @@ type States =
   | {
       value: 'final'
       context: Context & {
-        parsedWASM: ExtractAbiResponse
+        wasm: string
+        abi: string
         transactionData: SendTransaction
         receipt: GlobalEntityId
       }
@@ -99,7 +94,8 @@ export const stateMachine = createMachine<Context, Events, States>(
     predictableActionArguments: true,
     context: {
       transaction,
-      parsedWASM: undefined,
+      wasm: undefined,
+      abi: undefined,
       transactionData: undefined,
       receipt: undefined
     },
@@ -114,8 +110,12 @@ export const stateMachine = createMachine<Context, Events, States>(
           onDone: {
             target: 'uploaded',
             actions: assign({
-              parsedWASM: (_, event: DoneInvokeEvent<ExtractAbiResponse>) =>
-                event.data
+              wasm: (
+                _,
+                event: DoneInvokeEvent<{ wasm: string; abi: string }>
+              ) => event.data.wasm,
+              abi: (_, event: DoneInvokeEvent<{ wasm: string; abi: string }>) =>
+                event.data.abi
             })
           }
         }
@@ -123,10 +123,10 @@ export const stateMachine = createMachine<Context, Events, States>(
       uploaded: {
         entry: assign({
           transaction: (ctx) => {
-            if (!ctx.parsedWASM) {
+            if (!ctx.wasm || !ctx.abi) {
               throw new Error('Unexpected state')
             }
-            return createFullTransaction(ctx.parsedWASM)
+            return createFullTransaction(ctx.wasm, ctx.abi)
           }
         }),
         on: { PUBLISH: { target: 'publishing' } }
@@ -168,20 +168,23 @@ export const stateMachine = createMachine<Context, Events, States>(
           'transactionReceipt',
           ctx.transactionData?.transactionHash
         ),
-      publish: (ctx) => {
-        if (!ctx.parsedWASM) {
-          throw new Error('Missing parsed WASM')
+      publish: async (ctx) => {
+        if (!ctx.wasm || !ctx.abi) {
+          throw new Error('Unexpected state')
         }
         return mutateServer('sendTransaction', {
           transactionManifest: ctx.transaction,
-          blobs: [ctx.parsedWASM.abi, ctx.parsedWASM.code]
+          blobs: [ctx.wasm, ctx.abi]
         })
       },
-      upload: (_, event) => {
+      upload: async (_, event) => {
         if (event.type !== 'UPLOAD') {
           throw new Error('Unexpected event')
         }
-        return upload(event.file)
+        const wasm = Buffer.from(await event.wasm.arrayBuffer()).toString('hex')
+        const abi = Buffer.from(await event.abi.arrayBuffer()).toString('hex')
+
+        return { wasm, abi }
       }
     }
   }

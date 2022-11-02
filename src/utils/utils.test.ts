@@ -3,9 +3,9 @@ import {
   shortenAddress,
   toWholeUnits,
   isSameRoute,
-  byteArrayFromHex,
-  hash,
-  getFileExtension
+  getFileExtension,
+  bufferFromHex,
+  hash
 } from './utils'
 
 describe('#utils', () => {
@@ -40,7 +40,7 @@ describe('#utils', () => {
   it('Should convert byte array from hex string', () => {
     const hex = '01020304'
     const expected = Buffer.from([1, 2, 3, 4])
-    const result = byteArrayFromHex(hex)
+    const result = bufferFromHex(hex)
     expect(result).toEqual(expected)
   })
 

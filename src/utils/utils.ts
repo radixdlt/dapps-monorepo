@@ -24,12 +24,12 @@ export const isSameRoute = (route: string, routeName: string) => {
   return routeArray[1] === routeName
 }
 
-export function byteArrayFromHex(hex: string): Buffer {
+export function bufferFromHex(hex: string): Buffer {
   return Buffer.from(hex, 'hex')
 }
 
 export function hash(message: string): Buffer {
-  return byteArrayFromHex(
+  return bufferFromHex(
     CryptoJS.SHA256(CryptoJS.enc.Hex.parse(message)).toString()
   )
 }
