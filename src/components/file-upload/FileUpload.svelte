@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+  export type FileItem = { file: File; fileExtension: string }
+</script>
+
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   // @ts-ignore no type definitions available
@@ -8,18 +12,18 @@
   registerPlugin(FilePondPluginFileValidateType)
   const name = 'fileupload'
 
-  const handleAddFile = (_: Error, file: File) => {
+  const handleAddFile = (_: Error, file: FileItem) => {
     if (onAddFile && file) {
       onAddFile(file)
     }
   }
 
   export let acceptedFileTypes: string[] | undefined = undefined
-  export let onAddFile: (file: File) => void
+  export let onAddFile: (file: FileItem) => void
   export let labelIdle =
     "Drop the files or <span class='filepond--label-action'>Browse</span>"
 
-  export let onRemoveFile: (_: Error, file: File) => void
+  export let onRemoveFile: (_: Error, file: FileItem) => void
 
   const validation = (source: File) => {
     const type = getFileExtension(source.name)
@@ -35,9 +39,10 @@
 
 <Box transparent>
   <FileUpload
+    maxFiles={2}
     {name}
     fileValidateTypeDetectType={validation}
-    allowMultiple={true}
+    allowMultiple
     {acceptedFileTypes}
     onaddfile={handleAddFile}
     credits={false}
