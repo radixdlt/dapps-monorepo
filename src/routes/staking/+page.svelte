@@ -13,21 +13,15 @@
   $: validators = $state.data
 </script>
 
-{#if $state.status === 'success'}
-  <Box transparent p="large">
-    <Box m="large" transparent>
-      <Search bind:value={filtered} />
-    </Box>
-    <Card>
-      <IconTextItem bold isIconColor icon="transactions" slot="header"
-        >Staking</IconTextItem
-      >
-
-      <ValidatorList
-        {filtered}
-        slot="body"
-        {validators}
-      />
-    </Card>
+<Box transparent p="large">
+  <Box m="large" transparent>
+    <Search bind:value={filtered} />
   </Box>
-{/if}
+  <Card>
+    <IconTextItem bold isIconColor icon="transactions" slot="header"
+      >Staking</IconTextItem
+    >
+
+    <ValidatorList {filtered} slot="body" {validators} />
+  </Card>
+</Box>

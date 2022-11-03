@@ -19,6 +19,4 @@
   const { state } = query('getTransactionStatus', $page.params.transaction)
 </script>
 
-{#if $state.status === 'success'}
-  <TransactionBox tx={$state.data} />
-{/if}
+<TransactionBox tx={$state.data} />
