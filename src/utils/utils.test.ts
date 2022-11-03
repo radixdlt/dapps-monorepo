@@ -5,7 +5,8 @@ import {
   isSameRoute,
   hexStringFromByteArray,
   byteArrayFromHex,
-  hash
+  hash,
+  getFileExtension
 } from './utils'
 
 describe('#utils', () => {
@@ -58,6 +59,13 @@ describe('#utils', () => {
       111, 2, 1, 231, 159, 179, 197, 53, 110, 108, 119, 232, 155, 106, 128, 106
     ])
     const result = hash(byteArray)
+    expect(result).toEqual(expected)
+  })
+
+  it('Should extract extension from filename', () => {
+    const filename = 'test.txt'
+    const expected = 'txt'
+    const result = getFileExtension(filename)
     expect(result).toEqual(expected)
   })
 })
