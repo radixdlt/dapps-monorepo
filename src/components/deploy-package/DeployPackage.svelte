@@ -4,20 +4,45 @@
   import Text from '@components/_base/text/Text.svelte'
   import { useMachine } from '@xstate/svelte'
   import { stateMachine } from './deploy-package-state-machine'
-  import FileUpload from '@components/file-upload/FileUpload.svelte'
+  import FileUpload, {
+    type FileItem
+  } from '@components/file-upload/FileUpload.svelte'
+  import { without } from 'ramda'
 
   const { state, send } = useMachine(stateMachine)
-  const files: Record<string, File> = {}
+  const frozenAllowedExtensions = ['wasm', 'abi']
+  let acceptedFileTypes = ['wasm', 'abi']
 
-  const handleAddFile = (file: File) => {
-    files[file.name.split('.')[1]] = file
-    if (files.abi && files.wasm) send('UPLOAD', files)
+  let files: FileItem[] = []
+
+  const handleRemoveFile = (_: Error, file: FileItem) => {
+    files = without([file], files)
+    if (
+      files.length > 0 &&
+      files[0].fileExtension !== file.fileExtension &&
+      frozenAllowedExtensions.includes(file.fileExtension)
+    ) {
+      acceptedFileTypes.push(file.fileExtension)
+    }
+  }
+
+  const handleAddFile = (item: FileItem) => {
+    files.push(item)
+    acceptedFileTypes = without([item.fileExtension], acceptedFileTypes)
+
+    const wasm = files.find((file) => file.fileExtension === 'wasm')?.file
+    const abi = files.find((file) => file.fileExtension === 'abi')?.file
+    if (wasm && abi) send('UPLOAD', { wasm, abi })
   }
 </script>
 
 <Box transparent>
   {#if $state.matches('not-uploaded')}
-    <FileUpload onAddFile={handleAddFile} />
+    <FileUpload
+      {acceptedFileTypes}
+      onRemoveFile={handleRemoveFile}
+      onAddFile={handleAddFile}
+    />
   {:else if $state.matches('uploading')}
     Uploading...
   {:else if $state.matches('uploaded')}
