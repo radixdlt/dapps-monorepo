@@ -11,7 +11,8 @@
   import TotalStakeHeader from './cells/TotalStakeHeader.svelte'
   import UptimeHeader from './cells/UptimeHeader.svelte'
 
-  export let validators: Promise<ValidatorTransformedArray>
+  export let validators: ValidatorTransformedArray | undefined
+  export let loading = false
   export let filtered = ''
 
   const loaders = Array(10)
@@ -72,8 +73,8 @@
   }))
 </script>
 
-{#await validators}
-  <Table columns={loadingColumns} data={loaders} globalFilter={filtered} />
-{:then validators}
+{#if validators}
   <Table {columns} data={validators} globalFilter={filtered} />
-{/await}
+{:else if loading}
+  <Table columns={loadingColumns} data={loaders} globalFilter={filtered} />
+{/if}

@@ -8,6 +8,11 @@ helmDefaults:
 environments:
   dev: {}
   pr: {}
+repositories:
+  - name: rdx-works
+    url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
+    username: {{ requiredEnv "HELM_GH_USER" }}
+    password: {{ requiredEnv "HELM_GH_PASS" }}
 releases:
 {{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
@@ -25,7 +30,8 @@ releases:
 
   - name: developer-access
     namespace: {{ $DASHBOARD_NS }}
-    chart: ./developer-access
+    chart: rdx-works/developer-access
+    version: 1.0.0
     values:
       - project: dashboard
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl

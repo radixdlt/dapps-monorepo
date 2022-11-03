@@ -1,10 +1,22 @@
+<script lang="ts" context="module">
+  type Action = {
+    from: string
+    to: string
+    amount: number
+  }
+
+  export type Transaction = {
+    status: string
+    actions: Action[]
+  }
+</script>
+
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { shortenAddress } from '@utils'
-  import type { Transaction } from 'src/routes/explorer/transaction/[transaction]/+page.svelte'
 
-  export let tx: Promise<Transaction>
+  export let tx: Transaction | undefined
 
   const loaderWidth = 100
 </script>
@@ -20,38 +32,38 @@
     >
       <Box transparent>status</Box>
       <Box transparent justify="gridEnd">
-        {#await tx}
-          <SkeletonLoader width={loaderWidth} />
-        {:then tx}
+        {#if tx}
           {tx.status}
-        {/await}
+        {:else}
+          <SkeletonLoader width={loaderWidth} />
+        {/if}
       </Box>
 
       <Box transparent>from</Box>
       <Box justify="gridEnd" transparent>
-        {#await tx}
-          <SkeletonLoader width={loaderWidth} />
-        {:then tx}
+        {#if tx}
           {shortenAddress(tx.actions[0].from)}
-        {/await}
+        {:else}
+          <SkeletonLoader width={loaderWidth} />
+        {/if}
       </Box>
 
       <Box transparent>to</Box>
       <Box transparent justify="gridEnd">
-        {#await tx}
-          <SkeletonLoader width={loaderWidth} />
-        {:then tx}
+        {#if tx}
           {shortenAddress(tx.actions[0].to)}
-        {/await}
+        {:else}
+          <SkeletonLoader width={loaderWidth} />
+        {/if}
       </Box>
 
       <Box transparent>amount</Box>
       <Box justify="gridEnd" transparent>
-        {#await tx}
-          <SkeletonLoader width={loaderWidth} />
-        {:then tx}
+        {#if tx}
           {tx.actions[0].amount}
-        {/await}
+        {:else}
+          <SkeletonLoader width={loaderWidth} />
+        {/if}
       </Box>
     </Box>
   </Box>

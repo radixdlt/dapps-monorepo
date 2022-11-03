@@ -6,25 +6,28 @@
   import Box from '@components/_base/box/Box.svelte'
   import { query } from '@queries'
 
-  const { data: validators, get } = query('getValidators')
-  get()
-
   let filtered = ''
+
+  const { state } = query('getValidators')
+
+  $: validators = $state.data
 </script>
 
-<Box transparent p="large">
-  <Box m="large" transparent>
-    <Search bind:value={filtered} />
-  </Box>
-  <Card>
-    <IconTextItem bold isIconColor icon="transactions" slot="header"
-      >Staking</IconTextItem
-    >
+{#if $state.status === 'success'}
+  <Box transparent p="large">
+    <Box m="large" transparent>
+      <Search bind:value={filtered} />
+    </Box>
+    <Card>
+      <IconTextItem bold isIconColor icon="transactions" slot="header"
+        >Staking</IconTextItem
+      >
 
-    <ValidatorList
-      {filtered}
-      slot="body"
-      validators={new Promise(validators.subscribe)}
-    />
-  </Card>
-</Box>
+      <ValidatorList
+        {filtered}
+        slot="body"
+        {validators}
+      />
+    </Card>
+  </Box>
+{/if}

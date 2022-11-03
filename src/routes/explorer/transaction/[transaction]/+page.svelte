@@ -16,8 +16,9 @@
   import { query } from '@queries'
   import { page } from '$app/stores'
 
-  const { data, get } = query('getTransactionStatus')
-  get($page.params.transaction)
+  const { state } = query('getTransactionStatus', $page.params.transaction)
 </script>
 
-<TransactionBox tx={new Promise(data.subscribe)} />
+{#if $state.status === 'success'}
+  <TransactionBox tx={$state.data} />
+{/if}
