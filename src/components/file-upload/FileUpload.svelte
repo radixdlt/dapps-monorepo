@@ -8,7 +8,7 @@
   registerPlugin(FilePondPluginFileValidateType)
   const name = 'fileupload'
 
-  const handleAddFile = (_: Error, { file }: { file: File }) => {
+  const handleAddFile = (_: Error, file: File) => {
     if (onAddFile && file) {
       onAddFile(file)
     }
@@ -18,6 +18,8 @@
   export let onAddFile: (file: File) => void
   export let labelIdle =
     "Drop the files or <span class='filepond--label-action'>Browse</span>"
+
+  export let onRemoveFile: (_: Error, file: File) => void
 
   const validation = (source: File) => {
     const type = getFileExtension(source.name)
@@ -40,6 +42,7 @@
     onaddfile={handleAddFile}
     credits={false}
     {labelIdle}
+    onremovefile={onRemoveFile}
   />
 </Box>
 
