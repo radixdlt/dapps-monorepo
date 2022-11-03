@@ -1,23 +1,23 @@
 <script lang="ts">
-  import UploadFileButton from '@components/upload-file-button/UploadFileButton.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { useMachine } from '@xstate/svelte'
   import { stateMachine } from './deploy-package-state-machine'
+  import FileUpload from '@components/file-upload/FileUpload.svelte'
 
   const { state, send } = useMachine(stateMachine)
+  const files: Record<string, File> = {}
+
+  const handleAddFile = (file: File) => {
+    files[file.name.split('.')[1]] = file
+    if (files.abi && files.wasm) send('UPLOAD', files)
+  }
 </script>
 
-<Box transparent flex="col" items="center">
+<Box transparent>
   {#if $state.matches('not-uploaded')}
-    <UploadFileButton
-      name="Select compiled Scrypto package"
-      filetypes={['.wasm']}
-      onFileSelected={(file) => send({ type: 'UPLOAD', file })}
-    >
-      Upload WASM
-    </UploadFileButton>
+    <FileUpload onAddFile={handleAddFile} />
   {:else if $state.matches('uploading')}
     Uploading...
   {:else if $state.matches('uploaded')}
