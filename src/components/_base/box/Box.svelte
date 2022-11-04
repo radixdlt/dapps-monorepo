@@ -322,7 +322,6 @@
     flex,
     items,
     justify,
-    gap,
     grid,
     shadow,
     gap
