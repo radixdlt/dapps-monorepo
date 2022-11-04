@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: Get npm cache directory
         id: npm-cache-dir
@@ -88,7 +88,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: Lint
         run:  yarn --frozen-lockfile && yarn lint
@@ -103,7 +103,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: Prettier
         run:  yarn --frozen-lockfile && yarn prettier
@@ -118,7 +118,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -138,7 +138,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: Svelte check
         run:  yarn --frozen-lockfile && yarn svelte:check
@@ -153,7 +153,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           always-auth: true
-          node-version: 16.x
+          node-version: 16.17.1
           cache: yarn
       - name: Unit tests
         run:  yarn --frozen-lockfile && yarn coverage

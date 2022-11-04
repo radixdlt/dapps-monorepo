@@ -3,8 +3,8 @@ import {
   shortenAddress,
   toWholeUnits,
   isSameRoute,
-  hexStringFromByteArray,
-  byteArrayFromHex,
+  getFileExtension,
+  bufferFromHex,
   hash
 } from './utils'
 
@@ -37,27 +37,27 @@ describe('#utils', () => {
     expect(result).toEqual(expected)
   })
 
-  it('Should convert hex string from byte array', () => {
-    const byteArray = new Uint8Array([1, 2, 3, 4])
-    const expected = '01020304'
-    const result = hexStringFromByteArray(byteArray)
-    expect(result).toEqual(expected)
-  })
-
   it('Should convert byte array from hex string', () => {
     const hex = '01020304'
-    const expected = new Uint8Array([1, 2, 3, 4])
-    const result = byteArrayFromHex(hex)
+    const expected = Buffer.from([1, 2, 3, 4])
+    const result = bufferFromHex(hex)
     expect(result).toEqual(expected)
   })
 
   it('Should return a sha256 hash from byte array', () => {
-    const byteArray = new Uint8Array([1, 2, 3, 4])
-    const expected = new Uint8Array([
+    const hex = '01020304'
+    const expected = Buffer.from([
       159, 100, 167, 71, 225, 185, 127, 19, 31, 171, 182, 180, 71, 41, 108, 155,
       111, 2, 1, 231, 159, 179, 197, 53, 110, 108, 119, 232, 155, 106, 128, 106
     ])
-    const result = hash(byteArray)
+    const result = hash(hex)
+    expect(result).toEqual(expected)
+  })
+
+  it('Should extract extension from filename', () => {
+    const filename = 'test.txt'
+    const expected = 'txt'
+    const result = getFileExtension(filename)
     expect(result).toEqual(expected)
   })
 })
