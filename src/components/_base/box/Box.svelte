@@ -324,7 +324,8 @@
     justify,
     gap,
     grid,
-    shadow
+    shadow,
+    gap
   })}
 >
   <slot />
