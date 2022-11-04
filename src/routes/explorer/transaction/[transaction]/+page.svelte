@@ -19,4 +19,4 @@
   const { state } = query('getTransactionStatus', $page.params.transaction)
 </script>
 
-<TransactionBox tx={$state.data} />
+<TransactionBox tx={$state.data} loading={$state.status === 'loading'} />

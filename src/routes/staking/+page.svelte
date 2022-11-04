@@ -9,8 +9,6 @@
   let filtered = ''
 
   const { state } = query('getValidators')
-
-  $: validators = $state.data
 </script>
 
 <Box transparent p="large">
@@ -22,6 +20,11 @@
       >Staking</IconTextItem
     >
 
-    <ValidatorList {filtered} slot="body" {validators} />
+    <ValidatorList
+      {filtered}
+      slot="body"
+      validators={$state.data}
+      loading={$state.status === 'loading'}
+    />
   </Card>
 </Box>

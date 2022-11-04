@@ -17,7 +17,7 @@
   import { shortenAddress } from '@utils'
 
   export let tx: Transaction | undefined
-
+  export let loading: boolean
   const loaderWidth = 100
 </script>
 
@@ -32,37 +32,37 @@
     >
       <Box transparent>status</Box>
       <Box transparent justify="gridEnd">
-        {#if tx}
-          {tx.status}
-        {:else}
+        {#if loading}
           <SkeletonLoader width={loaderWidth} />
+        {:else if tx}
+          {tx.status}
         {/if}
       </Box>
 
       <Box transparent>from</Box>
       <Box justify="gridEnd" transparent>
-        {#if tx}
-          {shortenAddress(tx.actions[0].from)}
-        {:else}
+        {#if loading}
           <SkeletonLoader width={loaderWidth} />
+        {:else if tx}
+          {shortenAddress(tx.actions[0].from)}
         {/if}
       </Box>
 
       <Box transparent>to</Box>
       <Box transparent justify="gridEnd">
-        {#if tx}
-          {shortenAddress(tx.actions[0].to)}
-        {:else}
+        {#if loading}
           <SkeletonLoader width={loaderWidth} />
+        {:else if tx}
+          {shortenAddress(tx.actions[0].to)}
         {/if}
       </Box>
 
       <Box transparent>amount</Box>
       <Box justify="gridEnd" transparent>
-        {#if tx}
-          {tx.actions[0].amount}
-        {:else}
+        {#if loading}
           <SkeletonLoader width={loaderWidth} />
+        {:else if tx}
+          {tx.actions[0].amount}
         {/if}
       </Box>
     </Box>
