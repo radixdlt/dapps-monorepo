@@ -63,4 +63,10 @@
 
 <Meta title="ValidatorList" />
 
-<Story name="Primary"><ValidatorList data={validators} /></Story>
+<Story name="Primary">
+  <ValidatorList {validators} loading={false} />
+</Story>
+
+<Story name="Loading">
+  <ValidatorList {validators} loading />
+</Story>
