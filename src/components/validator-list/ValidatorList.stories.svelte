@@ -64,9 +64,9 @@
 <Meta title="ValidatorList" />
 
 <Story name="Primary">
-  <ValidatorList validators={new Promise((resolve) => resolve(validators))} />
+  <ValidatorList {validators} loading={false} />
 </Story>
 
 <Story name="Loading">
-  <ValidatorList validators={new Promise((_) => {})} />
+  <ValidatorList {validators} loading />
 </Story>
