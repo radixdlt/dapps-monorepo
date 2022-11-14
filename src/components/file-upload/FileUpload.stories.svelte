@@ -7,7 +7,10 @@
 <Meta title="FileUpload" />
 
 <Template>
-  <FileUpload onAddFile={action('file selected')} />
+  <FileUpload
+    onRemoveFile={action('onRemoveFile')}
+    onAddFile={action('file selected')}
+  />
 </Template>
 
 <Story name="Primary" />
