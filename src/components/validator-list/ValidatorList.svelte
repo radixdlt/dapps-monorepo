@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Table from '@components/_base/table/Table.svelte'
   import type { ValidatorTransformedArray } from '@types'
   import { shortenAddress } from '@utils'
@@ -10,8 +11,11 @@
   import TotalStakeHeader from './cells/TotalStakeHeader.svelte'
   import UptimeHeader from './cells/UptimeHeader.svelte'
 
-  export let data: ValidatorTransformedArray
+  export let validators: ValidatorTransformedArray | undefined
+  export let loading: boolean
   export let filtered = ''
+
+  const loaders = Array(10)
 
   // ts support for svelte seems to be broken, therefore we need to cast the data
   const columns = [
@@ -62,6 +66,15 @@
       header: 'Address'
     }
   ] as any
+
+  const loadingColumns = columns.map((column: any) => ({
+    ...column,
+    cell: () => SkeletonLoader
+  }))
 </script>
 
-<Table globalFilter={filtered} {data} {columns} />
+{#if loading}
+  <Table columns={loadingColumns} data={loaders} globalFilter={filtered} />
+{:else}
+  <Table {columns} data={validators} globalFilter={filtered} />
+{/if}

@@ -10,6 +10,7 @@
   import { without } from 'ramda'
 
   const { state, send } = useMachine(stateMachine)
+
   const allowedFileTypes = ['wasm', 'abi']
 
   let files: FileItem[] = []
@@ -33,8 +34,7 @@
       acceptedFileTypes={allowedFileTypes.filter(
         (type) => !files.map((file) => file.fileExtension).includes(type)
       )}
-      onRemoveFile={handleRemoveFile}
-      onAddFile={handleAddFile}
+      {acceptedFileTypes}
     />
   {:else if $state.matches('uploading')}
     Uploading...

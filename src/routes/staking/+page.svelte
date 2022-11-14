@@ -11,17 +11,20 @@
   const { state } = query('getValidators')
 </script>
 
-{#if $state.status === 'success'}
-  <Box transparent p="large">
-    <Box m="large" transparent>
-      <Search bind:value={filtered} />
-    </Box>
-    <Card>
-      <IconTextItem bold isIconColor icon="transactions" slot="header"
-        >Staking</IconTextItem
-      >
-
-      <ValidatorList {filtered} slot="body" data={$state.data} />
-    </Card>
+<Box transparent p="large">
+  <Box m="large" transparent>
+    <Search bind:value={filtered} />
   </Box>
-{/if}
+  <Card>
+    <IconTextItem bold isIconColor icon="transactions" slot="header"
+      >Staking</IconTextItem
+    >
+
+    <ValidatorList
+      {filtered}
+      slot="body"
+      validators={$state.data}
+      loading={$state.status === 'loading'}
+    />
+  </Card>
+</Box>

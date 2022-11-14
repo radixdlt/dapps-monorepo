@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@aleworm/svelte-skeleton-loader@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@aleworm/svelte-skeleton-loader/-/svelte-skeleton-loader-0.0.2.tgz#1b9a549f46f8863b3655f36df91d7c6893f15d64"
+  integrity sha512-XMQysSJhHL7MrHItYIDIc0FjUsynIGdvFtfaS7BP5/FSlFE+0i98cakgw763iYoMb8rGXyVyO7MUR/56RcXmWg==
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"

@@ -15,7 +15,7 @@
   import { afterUpdate } from 'svelte'
   import { includesString } from './filters'
 
-  export let data
+  export let data: any
   export let columns: Array<ColumnDef<unknown>>
   export let globalFilter: string | undefined = undefined
 
@@ -61,6 +61,12 @@
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel()
   })
+
+  $: options.update((options) => ({
+    ...options,
+    data,
+    columns
+  }))
 
   const table = createSvelteTable(options)
 
