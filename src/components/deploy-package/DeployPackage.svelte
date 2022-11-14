@@ -17,11 +17,13 @@
 
   const handleRemoveFile = (_: Error, file: FileItem) => {
     files = without([file], files)
-    if (
+
+    const shouldResetAcceptedFileTypes =
       files.length > 0 &&
       files[0].fileExtension !== file.fileExtension &&
       frozenAllowedExtensions.includes(file.fileExtension)
-    ) {
+
+    if (shouldResetAcceptedFileTypes) {
       acceptedFileTypes.push(file.fileExtension)
     }
   }
