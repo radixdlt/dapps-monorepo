@@ -10,28 +10,19 @@
   import { without } from 'ramda'
 
   const { state, send } = useMachine(stateMachine)
-  const frozenAllowedExtensions = ['wasm', 'abi']
-  let acceptedFileTypes = ['wasm', 'abi']
+  const allowedFileTypes = ['wasm', 'abi']
 
   let files: FileItem[] = []
 
-  const handleRemoveFile = (_: Error, file: FileItem) => {
-    files = without([file], files)
-    if (
-      files.length > 0 &&
-      files[0].fileExtension !== file.fileExtension &&
-      frozenAllowedExtensions.includes(file.fileExtension)
-    ) {
-      acceptedFileTypes.push(file.fileExtension)
-    }
-  }
+  const handleRemoveFile = (_: Error, file: FileItem) =>
+    (files = without([file], files))
 
   const handleAddFile = (item: FileItem) => {
-    files.push(item)
-    acceptedFileTypes = without([item.fileExtension], acceptedFileTypes)
+    files = [...files, item]
 
     const wasm = files.find((file) => file.fileExtension === 'wasm')?.file
     const abi = files.find((file) => file.fileExtension === 'abi')?.file
+
     if (wasm && abi) send('UPLOAD', { wasm, abi })
   }
 </script>
@@ -39,7 +30,9 @@
 <Box transparent>
   {#if $state.matches('not-uploaded')}
     <FileUpload
-      {acceptedFileTypes}
+      acceptedFileTypes={allowedFileTypes.filter(
+        (type) => !files.map((file) => file.fileExtension).includes(type)
+      )}
       onRemoveFile={handleRemoveFile}
       onAddFile={handleAddFile}
     />
