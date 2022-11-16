@@ -26,11 +26,15 @@ type Context = {
   transaction: string
   wasm?: string
   abi?: string
+  error?: Error
   transactionData?: SendTransaction
   receipt?: GlobalEntityId
 }
 
-type Events = { type: 'UPLOAD'; abi: File; wasm: File } | { type: 'PUBLISH' }
+type Events =
+  | { type: 'UPLOAD'; abi: File; wasm: File }
+  | { type: 'PUBLISH' }
+  | { type: 'RETRY' }
 
 type States =
   | {
@@ -86,6 +90,12 @@ type States =
         receipt: GlobalEntityId
       }
     }
+  | {
+      value: 'error'
+      context: Context & {
+        error: string
+      }
+    }
 
 export const stateMachine = createMachine<Context, Events, States>(
   {
@@ -96,6 +106,7 @@ export const stateMachine = createMachine<Context, Events, States>(
       transaction,
       wasm: undefined,
       abi: undefined,
+      error: undefined,
       transactionData: undefined,
       receipt: undefined
     },
@@ -116,6 +127,12 @@ export const stateMachine = createMachine<Context, Events, States>(
               ) => event.data.wasm,
               abi: (_, event: DoneInvokeEvent<{ wasm: string; abi: string }>) =>
                 event.data.abi
+            })
+          },
+          onError: {
+            target: 'error',
+            actions: assign({
+              error: (_, event: DoneInvokeEvent<Error>) => event.data
             })
           }
         }
@@ -141,6 +158,12 @@ export const stateMachine = createMachine<Context, Events, States>(
               transactionData: (_, event: DoneInvokeEvent<SendTransaction>) =>
                 event.data
             })
+          },
+          onError: {
+            target: 'error',
+            actions: assign({
+              error: (_, event: DoneInvokeEvent<Error>) => event.data
+            })
           }
         }
       },
@@ -155,8 +178,17 @@ export const stateMachine = createMachine<Context, Events, States>(
                 event.data.committed.receipt.state_updates
                   .new_global_entities[0]
             })
+          },
+          onError: {
+            target: 'error',
+            actions: assign({
+              error: (_, event: DoneInvokeEvent<Error>) => event.data
+            })
           }
         }
+      },
+      error: {
+        on: { RETRY: { target: 'not-uploaded' } }
       },
       final: {}
     }

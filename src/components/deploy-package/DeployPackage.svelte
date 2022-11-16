@@ -8,6 +8,7 @@
     type FileItem
   } from '@components/file-upload/FileUpload.svelte'
   import { without } from 'ramda'
+  import { AlertToast } from '@components/_base/toast/Toasts'
 
   const { state, send } = useMachine(stateMachine)
   const frozenAllowedExtensions = ['wasm', 'abi']
@@ -35,6 +36,14 @@
     const wasm = files.find((file) => file.fileExtension === 'wasm')?.file
     const abi = files.find((file) => file.fileExtension === 'abi')?.file
     if (wasm && abi) send('UPLOAD', { wasm, abi })
+  }
+
+  $: if ($state.matches('error')) {
+    AlertToast({
+      title: 'Package deployment',
+      text: $state.context.error.message,
+      type: 'error'
+    })()
   }
 </script>
 
@@ -65,6 +74,13 @@
       <pre>
         {JSON.stringify($state.context.receipt, null, 2)}
     </pre>
+    </Box>
+  {:else if $state.matches('error')}
+    <Box mt="large" transparent flex="col" items="center">
+      <Box transparent><Text p="large" size="large">Error! 😢</Text></Box>
+      <Button on:click={() => send({ type: 'RETRY' })}
+        >Click here to retry</Button
+      >
     </Box>
   {/if}
 </Box>
