@@ -38,7 +38,7 @@ yarn dev
 yarn e2etest
 ```
 
-unit/integration tests are written using [svelte-testing-library](https://github.com/testing-library/svelte-testing-library), and for e2e tests we use [cypress](https://www.cypress.io/).
+integration tests are written using [svelte-testing-library](https://github.com/testing-library/svelte-testing-library), and for e2e tests we use [cypress](https://www.cypress.io/).
 
 ### Run storybook
 
