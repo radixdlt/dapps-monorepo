@@ -7,6 +7,7 @@
   import { storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import Toast from '@components/_base/toast/_Toast.svelte'
 
   let mounted = false
 
@@ -24,6 +25,7 @@
 
 <!-- enables SSR of css -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
+<Toast />
 
 <Box
   p="none"

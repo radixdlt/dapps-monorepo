@@ -5,10 +5,19 @@
   import Search from '@components/_base/search/Search.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import { query } from '@queries'
+  import { AlertToast } from '@components/_base/toast/Toasts'
 
   let filtered = ''
 
   const { state } = query('getValidators')
+
+  $: if ($state.status === 'error') {
+    AlertToast({
+      title: 'Error',
+      text: $state.error.message,
+      type: 'error'
+    })
+  }
 </script>
 
 <Box transparent p="large">
