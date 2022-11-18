@@ -2,6 +2,12 @@
   import { css } from '@styles'
 
   const variants = {
+    connectButton: {
+      true: {
+        borderRadius: '$lg',
+        backgroundColor: '$connectButton'
+      }
+    },
     full: {
       true: {
         width: '$1'
@@ -49,6 +55,7 @@
   export let ghost: true | false = false
   export let disabled: true | false = false
   export let active: true | false = false
+  export let connectButton: true | false = false
 
   const btn = css({
     backgroundColor: '$primaryButton',
@@ -66,7 +73,7 @@
     },
     variants
   })
-  const btnClass = btn({ active, full, size, border, ghost })
+  const btnClass = btn({ active, full, size, border, ghost, connectButton })
   const disabledClass = css({
     backgroundColor: '$primaryButtonDisabled',
     color: '$grey',

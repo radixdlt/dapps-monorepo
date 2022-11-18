@@ -82,7 +82,8 @@ export const {
       grey: colors.grey1,
       muted: colors.grey2,
       text: colors.grey1,
-      transparent: 'transparent'
+      transparent: 'transparent',
+      connectButton: colors.blue1
     },
     fontSizes: {
       xs: '12px',
@@ -106,7 +107,7 @@ export const {
     radii: {
       sm: '3px',
       md: '10px',
-      lg: '15px',
+      lg: '12px',
       searchBorder: '44px'
     },
     space,
@@ -215,7 +216,8 @@ export const darkTheme = createTheme({
     borderColor: colors.grey4,
     grey: colors.grey1,
     muted: colors.grey2,
-    transparent: 'transparent'
+    transparent: 'transparent',
+    connectButton: colors.blue1
   }
 })
 

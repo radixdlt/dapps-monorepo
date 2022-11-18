@@ -23,10 +23,10 @@
 
 <Box transparent p="none">
   {#if $state.status === 'loading'}
-    <Button disabled size="small">Connecting...</Button>
+    <Button connectButton disabled size="small">Connecting...</Button>
   {:else if $state.status === 'success'}
-    <Button active disabled size="small">Connected</Button>
+    <Button connectButton active disabled size="small">Connected</Button>
   {:else}
-    <Button size="small" on:click={get}>Connect</Button>
+    <Button connectButton size="small" on:click={get}>Connect</Button>
   {/if}
 </Box>
