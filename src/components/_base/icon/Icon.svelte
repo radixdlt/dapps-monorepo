@@ -7,13 +7,14 @@
 
   export let isActive = false
   export let type: string
+  export let filter: string = ''
   export let interactive: boolean | undefined = undefined
 
   const style: CSS<typeof config> = {
     width: '$sm',
     height: '$sm',
     cursor: interactive ? 'pointer' : 'default',
-    filter: !isActive ? 'grayscale(100%)' : '',
+    filter: !isActive ? 'grayscale(100%)' : filter,
     '&:active': {
       filter: 'grayscale(100%)'
     },
