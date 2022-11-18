@@ -2,6 +2,13 @@
   import { css } from '@styles'
 
   const variants = {
+    connected: {
+      true: {
+        background: "url('/images/bg-connect-button.png') no-repeat",
+        backgroundSize: 'cover',
+        backgroundColor: '$connectButton'
+      }
+    },
     connectButton: {
       true: {
         borderRadius: '$lg',
@@ -49,15 +56,17 @@
     }
   }
 
-  export let full: keyof typeof variants['full'] | false = false
+  export let full: true | false = false
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let border: keyof typeof variants['border'] | undefined = undefined
   export let ghost: true | false = false
   export let disabled: true | false = false
   export let active: true | false = false
   export let connectButton: true | false = false
+  export let connected: true | false = false
 
   const btn = css({
+    display: 'inline-flex',
     backgroundColor: '$primaryButton',
     borderWidth: '$sm',
     borderColor: '$borderColor',
@@ -73,7 +82,15 @@
     },
     variants
   })
-  const btnClass = btn({ active, full, size, border, ghost, connectButton })
+  const btnClass = btn({
+    active,
+    full,
+    size,
+    border,
+    ghost,
+    connectButton,
+    connected
+  })
   const disabledClass = css({
     backgroundColor: '$primaryButtonDisabled',
     color: '$grey',
