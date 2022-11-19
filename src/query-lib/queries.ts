@@ -11,7 +11,6 @@ import {
 } from '@io/gateway'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
-import { withFormattedErrors } from './with-formatted-errors'
 
 export const requestAddresses = makeQueries({
   fn: async () => {
@@ -22,13 +21,13 @@ export const requestAddresses = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => withFormattedErrors(RequestAddressesIO, res),
+  decoder: RequestAddressesIO,
   transformationFn: (res) => res
 })
 
 export const getValidators = makeQueries({
   fn: async () => Gateway.validators(MAINNET_URL),
-  decoder: (res) => withFormattedErrors(ValidatorArrayIO, res),
+  decoder: ValidatorArrayIO,
   transformationFn: (res) => {
     const totalStake = res.validators.reduce(
       (accumulatedStake, validator) =>
@@ -60,16 +59,14 @@ export const getValidators = makeQueries({
 
 export const getTransactionStatus = makeQueries({
   fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
-  decoder: (res) => withFormattedErrors(TransactionIO, res),
-  transformationFn: (res) => {
-    const transformedResponse = {
+  decoder: TransactionIO,
+  transformationFn: (res) =>
+    TransactionTransformedIO({
       status: res.transaction.transaction_status.status,
       actions: res.transaction.actions.map((action) => ({
         from: action.from_account.address,
         to: action.to_account.address,
         amount: toWholeUnits(action.amount.value)
       }))
-    }
-    return TransactionTransformedIO.parse(transformedResponse)
-  }
+    })
 })

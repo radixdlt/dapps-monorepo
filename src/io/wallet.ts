@@ -1,10 +1,11 @@
+import { withFormattedErrors } from '@queries/with-formatted-errors'
 import z, { string, object, array } from 'zod'
 
-export const SendTransactionIO = object({
+const sendTransactionIOType = object({
   transactionHash: string()
 })
 
-export const RequestAddressesIO = object({
+const requestAddressesIOType = object({
   accountAddresses: array(
     object({
       address: string(),
@@ -13,5 +14,9 @@ export const RequestAddressesIO = object({
   )
 })
 
-export type SendTransaction = z.infer<typeof SendTransactionIO>
-export type RequestAddresses = z.infer<typeof RequestAddressesIO>
+export const SendTransactionIO = withFormattedErrors(sendTransactionIOType)
+
+export const RequestAddressesIO = withFormattedErrors(requestAddressesIOType)
+
+export type SendTransaction = z.infer<typeof sendTransactionIOType>
+export type RequestAddresses = z.infer<typeof requestAddressesIOType>

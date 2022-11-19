@@ -1,3 +1,4 @@
+import { withFormattedErrors } from '@queries/with-formatted-errors'
 import z, {
   record,
   number,
@@ -91,28 +92,28 @@ export const ValidatorTransformedIO = object({
   stakeAccepted: boolean()
 })
 
-export const ActionIO = object({
+const actionIOType = object({
   from_account: object({ address: string() }),
   to_account: object({ address: string() }),
   amount: object({ value: string() })
 })
 
-export const TransactionIO = object({
+const transactionIOType = object({
   transaction: object({
-    actions: array(ActionIO),
+    actions: array(actionIOType),
     transaction_status: object({ status: string() })
   })
 })
 
-export const ActionTransformedIO = object({
+const actionTransformedIOType = object({
   from: string(),
   to: string(),
   amount: number()
 })
 
-export const TransactionTransformedIO = object({
+const transactionTransformedIOType = object({
   status: string(),
-  actions: array(ActionTransformedIO)
+  actions: array(actionTransformedIOType)
 })
 
 const EntityType = union([
@@ -124,31 +125,46 @@ const EntityType = union([
   literal('KeyValueStore')
 ])
 
-export const GlobalEntityIdIO = object({
+const globalEntityIdIOType = object({
   entity_type: EntityType,
   entity_address_hex: string(),
   global_address_hex: string(),
   global_address: string()
 })
 
-export const TransactionReceiptIO = object({
+const transactionReceiptIOType = object({
   committed: object({
     receipt: object({
-      state_updates: object({ new_global_entities: array(GlobalEntityIdIO) })
+      state_updates: object({
+        new_global_entities: array(globalEntityIdIOType)
+      })
     })
   })
 })
 
-export const ValidatorArrayIO = object({ validators: array(ValidatorIO) })
+const validatorArrayIOType = object({ validators: array(ValidatorIO) })
+
+export const GlobalEntityIdIO = withFormattedErrors(globalEntityIdIOType)
+export const TransactionReceiptIO = withFormattedErrors(
+  transactionReceiptIOType
+)
+export const ValidatorArrayIO = withFormattedErrors(validatorArrayIOType)
+export const ActionIO = withFormattedErrors(actionIOType)
+export const TransactionIO = withFormattedErrors(transactionIOType)
+export const ActionTransformedIO = withFormattedErrors(actionTransformedIOType)
+export const TransactionTransformedIO = withFormattedErrors(
+  transactionTransformedIOType
+)
+
 export const ValidatorTransformedArrayIO = array(ValidatorTransformedIO)
 
 export type StakesTransformed = z.infer<typeof StakesTransformedIO>
 export type Validator = z.infer<typeof ValidatorIO>
-export type Validators = z.infer<typeof ValidatorArrayIO>
+export type Validators = z.infer<typeof validatorArrayIOType>
 export type ValidatorTransformed = z.infer<typeof ValidatorTransformedIO>
 export type ValidatorTransformedArray = z.infer<
   typeof ValidatorTransformedArrayIO
 >
-export type Transaction = z.infer<typeof TransactionIO>
-export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
-export type GlobalEntityId = z.infer<typeof GlobalEntityIdIO>
+export type Transaction = z.infer<typeof transactionIOType>
+export type TransactionReceipt = z.infer<typeof transactionReceiptIOType>
+export type GlobalEntityId = z.infer<typeof globalEntityIdIOType>

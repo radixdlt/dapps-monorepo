@@ -3,7 +3,6 @@ import { TransactionApi } from '@radixdlt/alphanet-gateway-api-v0-sdk'
 import { makeQueries } from 'svelte-samlat'
 import { SendTransactionIO } from '@io/wallet'
 import { TransactionReceiptIO } from '@io/gateway'
-import { withFormattedErrors } from './with-formatted-errors'
 
 export const sendTransaction = makeQueries({
   fn: async ({
@@ -18,7 +17,7 @@ export const sendTransaction = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => withFormattedErrors(SendTransactionIO, res),
+  decoder: SendTransactionIO,
   transformationFn: (res) => res
 })
 
@@ -27,6 +26,6 @@ export const transactionReceipt = makeQueries({
     new TransactionApi().transactionReceiptPost({
       v0CommittedTransactionRequest: { intent_hash: intentHash }
     }),
-  decoder: (res) => withFormattedErrors(TransactionReceiptIO, res),
+  decoder: TransactionReceiptIO,
   transformationFn: (res) => res
 })

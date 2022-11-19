@@ -25,7 +25,7 @@ describe('#with formatted errors', () => {
       test: literal('foo')
     })
     try {
-      withFormattedErrors(parser, { test2: { foo: 22 }, test: 'bar' })
+      withFormattedErrors(parser)({ test2: { foo: 22 }, test: 'bar' })
     } catch (error: any) {
       expect(error?.message).toEqual(str)
     }
