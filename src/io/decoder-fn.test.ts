@@ -1,5 +1,5 @@
 import { literal, object, string } from 'zod'
-import { withFormattedErrors } from './with-formatted-errors'
+import { decoderFn } from './decoder-fn'
 
 const str = `{
   "_errors": [],
@@ -20,12 +20,14 @@ const str = `{
 
 describe('#with formatted errors', () => {
   it('Should return formatted zod error', () => {
-    const parser = object({
-      test2: object({ foo: string() }),
-      test: literal('foo')
-    })
+    const parser = {
+      demoparser: object({
+        test2: object({ foo: string() }),
+        test: literal('foo')
+      })
+    }
     try {
-      withFormattedErrors(parser, { test2: { foo: 22 }, test: 'bar' })
+      decoderFn(parser)('demoparser', { test2: { foo: 22 }, test: 'bar' })
     } catch (error: any) {
       expect(error?.message).toEqual(str)
     }

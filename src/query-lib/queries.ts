@@ -1,17 +1,14 @@
-import { RequestAddressesIO } from '@io/wallet'
 import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { makeQueries } from 'svelte-samlat'
 import { MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
-  TransactionIO,
   TransactionTransformedIO,
-  ValidatorArrayIO,
   ValidatorTransformedArrayIO
 } from '@io/gateway'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
-import { withFormattedErrors } from './with-formatted-errors'
+import { decoders } from '@io'
 
 export const requestAddresses = makeQueries({
   fn: async () => {
@@ -22,13 +19,13 @@ export const requestAddresses = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => withFormattedErrors(RequestAddressesIO, res),
+  decoder: (res) => decoders('RequestAddressesIO', res),
   transformationFn: (res) => res
 })
 
 export const getValidators = makeQueries({
   fn: async () => Gateway.validators(MAINNET_URL),
-  decoder: (res) => withFormattedErrors(ValidatorArrayIO, res),
+  decoder: (res) => decoders('ValidatorArrayIO', res),
   transformationFn: (res) => {
     const totalStake = res.validators.reduce(
       (accumulatedStake, validator) =>
@@ -60,7 +57,7 @@ export const getValidators = makeQueries({
 
 export const getTransactionStatus = makeQueries({
   fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
-  decoder: (res) => withFormattedErrors(TransactionIO, res),
+  decoder: (res) => decoders('TransactionIO', res),
   transformationFn: (res) => {
     const transformedResponse = {
       status: res.transaction.transaction_status.status,
