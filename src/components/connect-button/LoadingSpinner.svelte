@@ -1,5 +1,6 @@
 <script lang="ts">
   import { css, keyframes } from '@styles'
+
   const rotate = keyframes({
     '0%': {
       transform: 'rotate(0deg)'
@@ -10,21 +11,20 @@
   })
 
   const spinnerColor = css({
-    display: 'inline-block',
     position: 'relative',
-    width: '80px',
-    height: '80px',
+    width: '$sm',
+    height: '$sm',
     div: {
       boxSizing: 'border-box',
       display: 'block',
       position: 'absolute',
-      width: '64px',
-      height: '64px',
-      margin: '8px',
-      border: '8px solid #fff',
-      borderRadius: 50,
+      left: '26px',
+      width: '$sm',
+      height: '$sm',
+      border: '2px solid #fff',
+      borderRadius: 30,
       animation: `${rotate} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite`,
-      borderColor: '$primary transparent transparent transparent'
+      borderColor: 'white transparent transparent transparent'
     },
     'div:nth-child(1)': {
       animationDelay: '-0.45s'
