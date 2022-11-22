@@ -31,7 +31,10 @@ module.exports = {
     return mergeConfig(config, {
       // customize the Vite config here
       resolve: {
-        alias: aliasWithSlash((await import('../configs.js')).configs.alias)
+        alias: {
+          ...aliasWithSlash((await import('../configs.js')).configs.alias),
+          '$env/static/public': '.storybook/mocks.ts'
+        }
       }
     })
   }
