@@ -18,7 +18,6 @@
       boxSizing: 'border-box',
       display: 'block',
       position: 'absolute',
-      left: '26px',
       width: '$sm',
       height: '$sm',
       border: '2px solid #fff',

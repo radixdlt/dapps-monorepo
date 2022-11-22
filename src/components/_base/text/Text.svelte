@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { css } from '../../../styles'
+  import type { CSS } from '@stitches/core'
+
+  import { config, css } from '../../../styles'
 
   const boldClass = css({
     fontWeight: 'bold'
@@ -187,6 +189,7 @@
     }
   } as const
 
+  export let cx: CSS<typeof config> = {}
   export let full: true | false = false
   export let pointer: true | false = false
   export let bold: true | false = false
@@ -204,7 +207,8 @@
     undefined
 
   const text = css({
-    variants
+    variants,
+    ...cx
   })
 
   const textClass = text({
