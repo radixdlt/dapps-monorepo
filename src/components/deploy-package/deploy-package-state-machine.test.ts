@@ -1,6 +1,10 @@
 import { interpret } from 'xstate'
 import { stateMachine } from './deploy-package-state-machine'
 
+vi.mock('$env/static/public', () => ({
+  PUBLIC_NETWORK_NAME: 'hammunet'
+}))
+
 describe('#deploy state machine', () => {
   it('should transition to uploading', () => {
     const actualState = stateMachine.transition('not-uploaded', 'UPLOAD')

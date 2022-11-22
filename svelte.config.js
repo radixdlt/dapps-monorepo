@@ -7,9 +7,12 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter({ fallback: 'fallback.html'}),
-		alias: configs.alias
-	}
+		adapter: adapter({ fallback: 'fallback.html' }),
+		alias: configs.alias,
+		env: {
+			dir: process.cwd()
+		}
+	},
 }
 
 

@@ -1,5 +1,5 @@
 import { makeQueries } from 'svelte-samlat'
-import { OLYMPIA_MAINNET_URL } from '@constants'
+import { networkConfig, OLYMPIA_MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
   Configuration,
@@ -17,7 +17,7 @@ import { getWalletSDK } from '../wallet-sdk'
 
 const transactionApi = new TransactionApi(
   new Configuration({
-    basePath: networkConfig.url
+    basePath: networkConfig?.url
   })
 )
 
