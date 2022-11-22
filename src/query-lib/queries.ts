@@ -17,14 +17,14 @@ import { decoders } from '@io'
 
 const transactionApi = new TransactionApi(
   new Configuration({
-    basePath: networkConfig.url
+    basePath: networkConfig?.url
   })
 )
 
 export const requestAddresses = makeQueries({
   fn: async () => {
     const sdk = WalletSdk({
-      networkId: networkConfig.id,
+      networkId: networkConfig?.id,
       dAppId
     })
     const res = await sdk.request({

@@ -1,11 +1,12 @@
 import { queryFn, querySvelte, mutateSvelte } from 'svelte-samlat'
 import * as queries from './queries'
 import * as mutations from './mutations'
-import WalletSdk, { Network } from '@radixdlt/wallet-sdk'
+import WalletSdk from '@radixdlt/wallet-sdk'
+import { networkConfig } from '@constants'
 
 export const getWalletSDK = () =>
   WalletSdk({
-    networkId: Network.Adapanet,
+    networkId: networkConfig?.id,
     dAppId: 'radixdlt.dashboard.com'
   })
 
