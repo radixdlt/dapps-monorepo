@@ -11,6 +11,8 @@
     },
     connectButton: {
       true: {
+        width: '$3xl',
+        height: '42px',
         borderRadius: '$lg',
         backgroundColor: '$connectButton'
       }
@@ -22,7 +24,7 @@
     },
     size: {
       small: {
-        padding: '$sm $xl',
+        padding: '$sm $lg',
         fontSize: '$sm'
       },
       iconSmall: {
@@ -67,6 +69,7 @@
 
   const btn = css({
     display: 'inline-flex',
+    alignItems: 'center',
     backgroundColor: '$primaryButton',
     borderWidth: '$sm',
     borderColor: '$borderColor',
