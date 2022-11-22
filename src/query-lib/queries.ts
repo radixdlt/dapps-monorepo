@@ -1,16 +1,14 @@
-import { RequestAddressesIO } from '@io/wallet'
 import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { makeQueries } from 'svelte-samlat'
 import { MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
-  TransactionIO,
   TransactionTransformedIO,
-  ValidatorArrayIO,
   ValidatorTransformedArrayIO
 } from '@io/gateway'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
+import { decoders } from '@io'
 
 export const requestAddresses = makeQueries({
   fn: async () => {
@@ -21,13 +19,13 @@ export const requestAddresses = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => RequestAddressesIO.parse(res),
+  decoder: (res) => decoders('RequestAddressesIO', res),
   transformationFn: (res) => res
 })
 
 export const getValidators = makeQueries({
   fn: async () => Gateway.validators(MAINNET_URL),
-  decoder: ValidatorArrayIO.parse,
+  decoder: (res) => decoders('ValidatorArrayIO', res),
   transformationFn: (res) => {
     const totalStake = res.validators.reduce(
       (accumulatedStake, validator) =>
@@ -59,7 +57,7 @@ export const getValidators = makeQueries({
 
 export const getTransactionStatus = makeQueries({
   fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
-  decoder: TransactionIO.parse,
+  decoder: (res) => decoders('TransactionIO', res),
   transformationFn: (res) => {
     const transformedResponse = {
       status: res.transaction.transaction_status.status,
