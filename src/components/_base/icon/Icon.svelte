@@ -5,15 +5,17 @@
 
   import Image from '../image/Image.svelte'
 
-  export let isActive = false
   export let type: string
+  export let filter: string = 'grayscale(100%)'
   export let interactive: boolean | undefined = undefined
+  export let height: keyof typeof config['theme']['sizes'] = 'sm'
+  export let width: keyof typeof config['theme']['sizes'] = 'sm'
 
   const style: CSS<typeof config> = {
-    width: '$sm',
-    height: '$sm',
+    width: `$${width}`,
+    height: `$${height}`,
     cursor: interactive ? 'pointer' : 'default',
-    filter: !isActive ? 'grayscale(100%)' : '',
+    filter,
     '&:active': {
       filter: 'grayscale(100%)'
     },

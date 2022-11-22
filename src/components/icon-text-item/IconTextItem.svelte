@@ -10,6 +10,9 @@
 </script>
 
 <Box flex="row" items="center">
-  <Icon isActive={isIconColor} type={icons[icon]} />
+  <Icon
+    filter={!isIconColor ? 'grayscale(100%)' : 'undefined'}
+    type={icons[icon]}
+  />
   <Text {bold} mx="medium"><slot /></Text>
 </Box>

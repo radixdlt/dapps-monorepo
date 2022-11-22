@@ -48,14 +48,16 @@ describe('Deploy package', () => {
     cy.visit('/deploy-package', { failOnStatusCode: true })
     const upload = getUploadElement()
     upload.selectFile('cypress/fixtures/hello.abi', { force: true })
+    cy.wait(200)
     upload.selectFile('cypress/fixtures/hello.abi', { force: true })
     cy.contains('File is of invalid type')
   })
 
-  it('error should persist on removing double abi and then readd it again', () => {
+  it('error should persist on removing double abi and then read it again', () => {
     cy.visit('/deploy-package', { failOnStatusCode: true })
     const upload = getUploadElement()
     upload.selectFile('cypress/fixtures/hello.abi', { force: true })
+    cy.wait(200)
     upload.selectFile('cypress/fixtures/hello.abi', { force: true })
     cy.contains('File is of invalid type')
     cy.contains('Remove').click()
