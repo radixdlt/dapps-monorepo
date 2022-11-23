@@ -21,8 +21,8 @@
   }
 
   $: if ($state.status === 'success') {
-    accounts.set($state.data.accountAddresses)
-    selectedAccount.set($state.data.accountAddresses[0])
+    accounts.set($state.data.oneTimeAccountAddresses)
+    selectedAccount.set($state.data.oneTimeAccountAddresses[0])
   }
 </script>
 

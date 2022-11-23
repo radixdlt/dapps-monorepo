@@ -75,6 +75,8 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Build
         run: yarn --frozen-lockfile && yarn build
   
@@ -90,6 +92,8 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Lint
         run:  yarn --frozen-lockfile && yarn lint
 
@@ -105,6 +109,8 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Prettier
         run:  yarn --frozen-lockfile && yarn prettier
 
@@ -140,6 +146,8 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Svelte check
         run:  yarn --frozen-lockfile && yarn svelte:check
 
@@ -155,6 +163,8 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Unit tests
         run:  yarn --frozen-lockfile && yarn coverage
 
@@ -178,6 +188,8 @@ jobs:
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: "dev-server"
+          build-args: |
+             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
       - name: Docker Image output
         run: |
           docker images
@@ -203,6 +215,8 @@ jobs:
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: "storybook"
+          build-args: |
+            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
       - name: Docker Image output
         run: |
           docker images
