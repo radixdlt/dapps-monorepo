@@ -83,7 +83,8 @@ export const {
       muted: colors.grey2,
       text: colors.grey1,
       transparent: 'transparent',
-      connectButton: colors.blue1
+      connectButton: colors.blue1,
+      connectButtonPopover: colors.blue2
     },
     fontSizes: {
       xs: '12px',
@@ -114,7 +115,8 @@ export const {
     fontWeights: {
       200: '200',
       400: '400',
-      600: '600'
+      600: '600',
+      700: '700'
     },
     sizes: {
       xs: '16px',
@@ -217,7 +219,8 @@ export const darkTheme = createTheme({
     grey: colors.grey1,
     muted: colors.grey2,
     transparent: 'transparent',
-    connectButton: colors.blue1
+    connectButton: colors.blue1,
+    connectButtonPopover: colors.blue2
   }
 })
 

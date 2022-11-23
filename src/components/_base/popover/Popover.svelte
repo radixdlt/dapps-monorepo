@@ -13,7 +13,7 @@
       <slot name="button" />
     </PopoverButton>
     <PopoverPanel>
-      <Box p="none" mx="none" mt="small" transparent>
+      <Box p="none" mx="none" transparent>
         <slot name="content" />
       </Box>
     </PopoverPanel>

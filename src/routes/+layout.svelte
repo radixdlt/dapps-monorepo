@@ -2,12 +2,12 @@
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
-  import '../fonts.css'
   import { onMount } from 'svelte'
   import { storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Toast from '@components/_base/toast/_Toast.svelte'
+  import '../fonts.css'
 
   let mounted = false
 
