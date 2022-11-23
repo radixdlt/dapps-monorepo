@@ -81,6 +81,7 @@ export const {
       borderColor: colors.grey4,
       grey: colors.grey1,
       muted: colors.grey2,
+      slightlyMuted: colors.grey4,
       text: colors.grey1,
       transparent: 'transparent',
       connectButton: colors.blue1,
@@ -218,6 +219,7 @@ export const darkTheme = createTheme({
     borderColor: colors.grey4,
     grey: colors.grey1,
     muted: colors.grey2,
+    slightlyMuted: colors.grey5,
     transparent: 'transparent',
     connectButton: colors.blue1,
     connectButtonPopover: colors.blue2

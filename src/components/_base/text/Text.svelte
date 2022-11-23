@@ -163,6 +163,14 @@
       },
       tertiary: {
         color: '$tertiary'
+      },
+      connect: {
+        color: ' $connectButtonPopover'
+      }
+    },
+    slightlyMuted: {
+      true: {
+        color: '$slightlyMuted'
       }
     },
     muted: {
@@ -200,9 +208,11 @@
   export let my: keyof typeof variants['my'] | undefined = undefined
   export let mx: keyof typeof variants['mx'] | undefined = undefined
   export let mt: keyof typeof variants['mt'] | undefined = undefined
+  export let mb: keyof typeof variants['mb'] | undefined = undefined
   export let color: keyof typeof variants['color'] | undefined = undefined
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let muted: true | false = false
+  export let slightlyMuted: true | false = false
   export let cellAlign: keyof typeof variants['cellAlign'] | undefined =
     undefined
 
@@ -219,12 +229,14 @@
     py,
     m,
     mt,
+    mb,
     mx,
     my,
     color,
     size,
     muted,
-    cellAlign
+    cellAlign,
+    slightlyMuted
   })
 </script>
 
