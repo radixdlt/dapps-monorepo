@@ -2,6 +2,11 @@ import { makeQueries } from 'svelte-samlat'
 import { OLYMPIA_MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
+  Configuration,
+  TransactionApi,
+  TransactionLookupOrigin
+} from '@radixdlt/babylon-gateway-api-sdk'
+import {
   TransactionTransformedIO,
   ValidatorTransformedArrayIO
 } from '@io/gateway'
@@ -9,6 +14,12 @@ import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
 import { getWalletSDK } from '../wallet-sdk'
+
+const transactionApi = new TransactionApi(
+  new Configuration({
+    basePath: networkConfig.url
+  })
+)
 
 export const requestAddresses = makeQueries({
   fn: async () => {
@@ -58,16 +69,19 @@ export const getValidators = makeQueries({
 })
 
 export const getTransactionStatus = makeQueries({
-  fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
+  fn: async (txID: string) =>
+    transactionApi.transactionStatus({
+      transactionStatusRequest: {
+        transaction_identifier: {
+          origin: TransactionLookupOrigin.Payload,
+          value_hex: txID
+        }
+      }
+    }),
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: (res) => {
     const transformedResponse = {
-      status: res.transaction.transaction_status.status,
-      actions: res.transaction.actions.map((action) => ({
-        from: action.from_account.address,
-        to: action.to_account.address,
-        amount: toWholeUnits(action.amount.value)
-      }))
+      status: res.transaction.transaction_status.status
     }
     return TransactionTransformedIO.parse(transformedResponse)
   }
