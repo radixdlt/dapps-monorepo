@@ -1,11 +1,11 @@
 import z, { string, object, array } from 'zod'
 
 export const SendTransactionIO = object({
-  transactionHash: string()
+  transactionIntentHash: string()
 })
 
 export const RequestAddressesIO = object({
-  accountAddresses: array(
+  ongoingAccountAddresses: array(
     object({
       address: string(),
       label: string()

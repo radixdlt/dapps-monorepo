@@ -1524,10 +1524,13 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/wallet-sdk@./radixdlt-wallet-sdk-v0.1.0-alpha.tgz":
-  version "0.1.0-alpha"
-  resolved "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz#46813c4b5c65a4a9951b76353fcc0b27f03c92ce"
+"@radixdlt/wallet-sdk@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.2.1.tgz#2a9114ae85f31f066af7b04c91f11269ea835fb9"
+  integrity sha512-/cB3DsM59QvIdvSieVQpAOrE9cj55+pzqR5OYrOjLiFtrk2Xmahu/EOK4GdMwJoez7pCBLmwfLt5k40bQh136Q==
   dependencies:
+    "@types/lodash.flow" "^3.5.7"
+    lodash.flow "^3.5.0"
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
@@ -2688,6 +2691,18 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/lodash.flow@^3.5.7":
+  version "3.5.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.flow/-/lodash.flow-3.5.7.tgz#fabf602692fe77e1b0ba3231b5b7095afbeae9de"
+  integrity sha512-F3avAQHJPiewhugySHZ8CUgnYRiJwauOU5/PQdxWs8VU3WDbPnyea1XQ8rC8VT+08J43Ycz9fH1QD+isJukAxA==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.188"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
+  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
 
 "@types/lodash@^4.14.167":
   version "4.14.186"
@@ -8156,6 +8171,11 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
+lodash.flow@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.flow/-/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
+  integrity sha512-ff3BX/tSioo+XojX4MOsOMhJw0nZoUEF011LX8g8d3gvjVbxd89cCio4BCXronjxcTUIJUoqKEUA+n4CqvvRPw==
 
 lodash.merge@^4.6.2:
   version "4.6.2"
