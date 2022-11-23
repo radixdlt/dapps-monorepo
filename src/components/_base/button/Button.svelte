@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { css } from '@styles'
+  import type { CSS } from '@stitches/core'
+
+  import { css, config } from '@styles'
 
   const variants = {
     connected: {
@@ -58,6 +60,7 @@
     }
   }
 
+  export let cx: CSS<typeof config> = {}
   export let full: true | false = false
   export let size: keyof typeof variants['size'] | undefined = undefined
   export let border: keyof typeof variants['border'] | undefined = undefined
@@ -70,6 +73,7 @@
   const btn = css({
     display: 'inline-flex',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '$primaryButton',
     borderWidth: '$sm',
     borderColor: '$borderColor',
@@ -83,8 +87,10 @@
     '&:hover': {
       backgroundColor: '$primaryButtonHover'
     },
-    variants
+    variants,
+    ...cx
   })
+
   const btnClass = btn({
     active,
     full,

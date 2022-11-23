@@ -8,6 +8,9 @@
   import { icons } from '../../icon-assets'
   import Text from '@components/_base/text/Text.svelte'
   import LoadingSpinner from './LoadingSpinner.svelte'
+  import Popover from '@components/_base/popover/Popover.svelte'
+  import Image from '@components/_base/image/Image.svelte'
+  import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
 
   const { get, state } = query('requestAddresses', undefined, { manual: true })
 
@@ -40,13 +43,45 @@
       /><Text mx="xsmall">Connected</Text>
     </Button>
   {:else}
-    <Button connectButton size="small" on:click={get}>
-      <Icon
-        height="xs"
-        width="xs"
-        type={icons['dashboard']}
-        filter="brightness(0) invert(1)"
-      /><Text mx="xsmall">Connect</Text>
-    </Button>
+    <Popover>
+      <Button slot="button" connectButton size="small">
+        <Icon
+          height="xs"
+          width="xs"
+          type={icons['dashboard']}
+          filter="brightness(0) invert(1)"
+        /><Text mx="xsmall">Connect</Text>
+      </Button>
+      <Box
+        cx={{ width: '$4xl', zIndex: 1000 }}
+        flex="col"
+        gap="medium"
+        connectButtonPopover
+        px="medium"
+        slot="content"
+      >
+        <Box flex="row" p="none" gap="medium" transparent>
+          <Image
+            cx={{ borderRadius: '$md' }}
+            src="/images/popover-radix-logo.png"
+            width="$lg"
+            alt="logo"
+          />
+          <Text bold>Connect your Radix Wallet</Text>
+        </Box>
+        <Button
+          cx={{ borderRadius: '$sm', backgroundColor: '$connectButton' }}
+          full
+          on:click={get}
+          size="small">Connect now</Button
+        >
+        <IconTextItem
+          textColor="$connectButtonPopover"
+          isIconColor
+          noPadding
+          icon="information">What is Radix Wallet?</IconTextItem
+        >
+      </Box>
+    </Popover>
   {/if}
 </Box>

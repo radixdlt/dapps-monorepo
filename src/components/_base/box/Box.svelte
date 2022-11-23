@@ -3,6 +3,17 @@
   import { css, config } from '@styles'
 
   const variants = {
+    connectButtonPopover: {
+      true: {
+        position: 'absolute',
+        mt: '$sm',
+        right: 105,
+        borderRadius: '$lg',
+        backgroundColor: '$background',
+        border: '1px solid $borderColor',
+        shadow: true
+      }
+    },
     full: {
       true: {
         width: '100%'
@@ -285,6 +296,7 @@
   export let interactive: true | false = false
   export let interactiveText: true | false = false
   export let inline: true | false = false
+  export let connectButtonPopover: true | false = false
   export let p: keyof typeof variants['p'] | undefined = undefined
   export let m: keyof typeof variants['m'] | undefined = undefined
   export let py: keyof typeof variants['py'] | undefined = undefined
@@ -311,6 +323,7 @@
     interactive,
     interactiveText,
     inline,
+    connectButtonPopover,
     p,
     px,
     py,
