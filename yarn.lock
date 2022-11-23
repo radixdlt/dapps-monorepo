@@ -1506,19 +1506,19 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@radixdlt/alphanet-gateway-api-v0-sdk@^0.1.5":
+"@radixdlt/alphanet-walletextension-sdk@^0.1.5":
   version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-gateway-api-v0-sdk/-/alphanet-gateway-api-v0-sdk-0.1.5.tgz#57d88a8c3d2fd56c201f2882d8fd1ad01dcfa24c"
-  integrity sha512-gF5Z3C3lT8pwe7U0AeyNEAfCS6hixkqQS6u+FCUsJ44swS8oRIi7Jr1A0GVHkc2amlU95WgJqDgXoP52Rwacog==
+  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-walletextension-sdk/-/alphanet-walletextension-sdk-0.1.5.tgz#47d8624a87486c00763100ae75e339c024a49907"
+  integrity sha512-lw7hdKAlelkjoMc8/dX8wt/PU5vsgBJNGO6UFi6OWR3Hns5nSCk0kEOiiS0Efb6jdnufoHxm8UFQZ1t8KvUNFg==
   dependencies:
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/alphanet-walletextension-sdk@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-walletextension-sdk/-/alphanet-walletextension-sdk-0.1.5.tgz#47d8624a87486c00763100ae75e339c024a49907"
-  integrity sha512-lw7hdKAlelkjoMc8/dX8wt/PU5vsgBJNGO6UFi6OWR3Hns5nSCk0kEOiiS0Efb6jdnufoHxm8UFQZ1t8KvUNFg==
+"@radixdlt/babylon-gateway-api-sdk@^1.0.0-alpha.2":
+  version "1.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-alpha.2.tgz#555e27cff69731140d2d02840ddefd187d094753"
+  integrity sha512-eBawgcEQfbAlVqF1X4w96y1pdx/X0HO6E8VdzMxI2AFwS3mvq/P0I/Hi1ByPO4yMKA7X1TMEpU6BHX5WG0C7qQ==
   dependencies:
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
