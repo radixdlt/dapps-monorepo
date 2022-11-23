@@ -1,6 +1,5 @@
-import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
 import { makeQueries } from 'svelte-samlat'
-import { MAINNET_URL } from '@constants'
+import { OLYMPIA_MAINNET_URL } from '@constants'
 import { Gateway } from 'radix-js'
 import {
   TransactionTransformedIO,
@@ -9,12 +8,15 @@ import {
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
+import { getWalletSDK } from '../wallet-sdk'
 
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const sdk = WalletSdk()
+    const sdk = getWalletSDK()
     const res = await sdk.request({
-      accountAddresses: 'any'
+      oneTimeAccountAddresses: {
+        requiresProofOfOwnership: false
+      }
     })
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
@@ -24,7 +26,7 @@ export const requestAddresses = makeQueries({
 })
 
 export const getValidators = makeQueries({
-  fn: async () => Gateway.validators(MAINNET_URL),
+  fn: async () => Gateway.validators(OLYMPIA_MAINNET_URL),
   decoder: (res) => decoders('ValidatorArrayIO', res),
   transformationFn: (res) => {
     const totalStake = res.validators.reduce(

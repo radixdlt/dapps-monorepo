@@ -198,7 +198,7 @@ export const stateMachine = createMachine<Context, Events, States>(
       getReceipt: (ctx) =>
         mutateServer(
           'transactionReceipt',
-          ctx.transactionData?.transactionHash
+          ctx.transactionData?.transactionIntentHash
         ),
       publish: async (ctx) => {
         if (!ctx.wasm || !ctx.abi) {
