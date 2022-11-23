@@ -3,7 +3,7 @@ import { Buffer } from 'buffer'
 import { mutateServer } from '@queries'
 import { hash } from '@utils'
 import type { SendTransaction } from '@io/wallet'
-import type { GlobalEntityId, TransactionReceipt } from '@io/gateway'
+import type { GlobalEntityId } from '@io/gateway'
 
 // Temporary for testing alphanet
 // TODO: replace with address of the system contract
@@ -167,26 +167,7 @@ export const stateMachine = createMachine<Context, Events, States>(
           }
         }
       },
-      published: {
-        invoke: {
-          id: 'published',
-          src: 'getReceipt',
-          onDone: {
-            target: 'final',
-            actions: assign({
-              receipt: (_, event: DoneInvokeEvent<TransactionReceipt>) =>
-                event.data.committed.receipt.state_updates
-                  .new_global_entities[0]
-            })
-          },
-          onError: {
-            target: 'error',
-            actions: assign({
-              error: (_, event: DoneInvokeEvent<Error>) => event.data
-            })
-          }
-        }
-      },
+      published: {},
       error: {
         on: { RETRY: { target: 'not-uploaded' } }
       },
@@ -195,11 +176,6 @@ export const stateMachine = createMachine<Context, Events, States>(
   },
   {
     services: {
-      getReceipt: (ctx) =>
-        mutateServer(
-          'transactionReceipt',
-          ctx.transactionData?.transactionIntentHash
-        ),
       publish: async (ctx) => {
         if (!ctx.wasm || !ctx.abi) {
           throw new Error('Unexpected state')
