@@ -5,14 +5,7 @@ import { hash } from '@utils'
 import type { SendTransaction } from '@io/wallet'
 import type { GlobalEntityId } from '@io/gateway'
 
-// Temporary for testing alphanet
-// TODO: replace with address of the system contract
-const transaction = `
-    CALL_METHOD
-        ComponentAddress("system_tdx_a_1qsqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqs2ufe42") 
-        "lock_fee"
-        Decimal("100");
-  `
+const transaction = ''
 
 const createFullTransaction = (wasm: string, abi: string) => {
   const codeHash: string = hash(wasm).toString('hex')
