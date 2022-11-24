@@ -8,7 +8,7 @@
   import Box from '@components/_base/box/Box.svelte'
   import { icons } from '../../../icon-assets'
 
-  export let handleConnect = () => {}
+  export let onConnect: () => void
   export let forceShow = false
 </script>
 
@@ -41,7 +41,7 @@
     <Button
       cx={{ borderRadius: '$sm', backgroundColor: '$connectButton' }}
       full
-      on:click={handleConnect}
+      on:click={onConnect}
       size="small">Connect now</Button
     >
     <IconTextItem

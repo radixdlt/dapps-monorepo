@@ -7,5 +7,5 @@
 <Meta title="ConnectPopover" component={ConnectPopover} />
 
 <Story name="Primary">
-  <ConnectPopover forceShow />
+  <ConnectPopover onConnect={() => {}} forceShow />
 </Story>
