@@ -1506,15 +1506,6 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@radixdlt/alphanet-gateway-api-v0-sdk@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-gateway-api-v0-sdk/-/alphanet-gateway-api-v0-sdk-0.1.5.tgz#57d88a8c3d2fd56c201f2882d8fd1ad01dcfa24c"
-  integrity sha512-gF5Z3C3lT8pwe7U0AeyNEAfCS6hixkqQS6u+FCUsJ44swS8oRIi7Jr1A0GVHkc2amlU95WgJqDgXoP52Rwacog==
-  dependencies:
-    loglevel "^1.8.0"
-    neverthrow "^5.0.0"
-    rxjs "^7.5.6"
-
 "@radixdlt/alphanet-walletextension-sdk@^0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@radixdlt/alphanet-walletextension-sdk/-/alphanet-walletextension-sdk-0.1.5.tgz#47d8624a87486c00763100ae75e339c024a49907"
@@ -1524,10 +1515,22 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/wallet-sdk@./radixdlt-wallet-sdk-v0.1.0-alpha.tgz":
-  version "0.1.0-alpha"
-  resolved "./radixdlt-wallet-sdk-v0.1.0-alpha.tgz#46813c4b5c65a4a9951b76353fcc0b27f03c92ce"
+"@radixdlt/babylon-gateway-api-sdk@^1.0.0-alpha.2":
+  version "1.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-alpha.2.tgz#555e27cff69731140d2d02840ddefd187d094753"
+  integrity sha512-eBawgcEQfbAlVqF1X4w96y1pdx/X0HO6E8VdzMxI2AFwS3mvq/P0I/Hi1ByPO4yMKA7X1TMEpU6BHX5WG0C7qQ==
   dependencies:
+    loglevel "^1.8.0"
+    neverthrow "^5.0.0"
+    rxjs "^7.5.6"
+
+"@radixdlt/wallet-sdk@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.2.1.tgz#2a9114ae85f31f066af7b04c91f11269ea835fb9"
+  integrity sha512-/cB3DsM59QvIdvSieVQpAOrE9cj55+pzqR5OYrOjLiFtrk2Xmahu/EOK4GdMwJoez7pCBLmwfLt5k40bQh136Q==
+  dependencies:
+    "@types/lodash.flow" "^3.5.7"
+    lodash.flow "^3.5.0"
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
@@ -2688,6 +2691,18 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/lodash.flow@^3.5.7":
+  version "3.5.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.flow/-/lodash.flow-3.5.7.tgz#fabf602692fe77e1b0ba3231b5b7095afbeae9de"
+  integrity sha512-F3avAQHJPiewhugySHZ8CUgnYRiJwauOU5/PQdxWs8VU3WDbPnyea1XQ8rC8VT+08J43Ycz9fH1QD+isJukAxA==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.188"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
+  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
 
 "@types/lodash@^4.14.167":
   version "4.14.186"
@@ -8156,6 +8171,11 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
+lodash.flow@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.flow/-/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
+  integrity sha512-ff3BX/tSioo+XojX4MOsOMhJw0nZoUEF011LX8g8d3gvjVbxd89cCio4BCXronjxcTUIJUoqKEUA+n4CqvvRPw==
 
 lodash.merge@^4.6.2:
   version "4.6.2"

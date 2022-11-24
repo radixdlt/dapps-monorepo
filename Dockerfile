@@ -1,6 +1,10 @@
 # To make use of docker layers, the npm install or yarn install is done first using temprorary directory
 # This speeds up the docker build process and will use docker cached layers if the package.json doesn't change.
 
+# Get NPM token from github
+ARG NPM_TOKEN
+
+
 # Define the node image
 FROM node:16.17.1-alpine AS build-sdk
 # Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
@@ -16,19 +20,23 @@ RUN ls -lR
 RUN yarn && yarn build
 
 FROM build-sdk AS install-dashboard
+ARG NPM_TOKEN
 # Below steps installs npm modules of root directory into /usr/app/
 ENV dashboard_dir=/tmp
-ENV sdk=radixdlt-wallet-sdk-v0.1.0-alpha.tgz
 COPY package*.json tsconfig.json yarn.lock $sdk $dashboard_dir/
-RUN cd $dashboard_dir && yarn install
-RUN cp -a $dashboard_dir/node_modules /usr/app/
+RUN cd $dashboard_dir
+COPY .npmrc.docker .npmrc
+RUN yarn install
+RUN cp -a node_modules /usr/app/
 
 # Below steps copies actual dashboard code and runs build steps
 WORKDIR /usr/app/
 COPY . ./
+
+COPY .npmrc.docker .npmrc
+COPY .env.sample .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
-
 FROM install-dashboard AS dev-server
 CMD yarn dev
 

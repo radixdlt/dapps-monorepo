@@ -99,7 +99,6 @@ export const ActionIO = object({
 
 export const TransactionIO = object({
   transaction: object({
-    actions: array(ActionIO),
     transaction_status: object({ status: string() })
   })
 })
@@ -111,8 +110,7 @@ export const ActionTransformedIO = object({
 })
 
 export const TransactionTransformedIO = object({
-  status: string(),
-  actions: array(ActionTransformedIO)
+  status: string()
 })
 
 const EntityType = union([
@@ -150,5 +148,6 @@ export type ValidatorTransformedArray = z.infer<
   typeof ValidatorTransformedArrayIO
 >
 export type Transaction = z.infer<typeof TransactionIO>
+export type TransactionTransformed = z.infer<typeof TransactionTransformedIO>
 export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
 export type GlobalEntityId = z.infer<typeof GlobalEntityIdIO>

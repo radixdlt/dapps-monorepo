@@ -1,7 +1,12 @@
-import WalletSdk from '@radixdlt/alphanet-walletextension-sdk'
+import WalletSdk from '@radixdlt/wallet-sdk'
 import { makeQueries } from 'svelte-samlat'
-import { MAINNET_URL } from '@constants'
+import { dAppId, OLYMPIA_MAINNET_URL, networkConfig } from '@constants'
 import { Gateway } from 'radix-js'
+import {
+  Configuration,
+  TransactionApi,
+  TransactionLookupOrigin
+} from '@radixdlt/babylon-gateway-api-sdk'
 import {
   TransactionTransformedIO,
   ValidatorTransformedArrayIO
@@ -10,11 +15,22 @@ import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
 
+const transactionApi = new TransactionApi(
+  new Configuration({
+    basePath: networkConfig?.url
+  })
+)
+
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const sdk = WalletSdk()
+    const sdk = WalletSdk({
+      networkId: networkConfig?.id,
+      dAppId
+    })
     const res = await sdk.request({
-      accountAddresses: 'any'
+      oneTimeAccountAddresses: {
+        requiresProofOfOwnership: false
+      }
     })
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
@@ -24,7 +40,7 @@ export const requestAddresses = makeQueries({
 })
 
 export const getValidators = makeQueries({
-  fn: async () => Gateway.validators(MAINNET_URL),
+  fn: async () => Gateway.validators(OLYMPIA_MAINNET_URL),
   decoder: (res) => decoders('ValidatorArrayIO', res),
   transformationFn: (res) => {
     const totalStake = res.validators.reduce(
@@ -56,16 +72,19 @@ export const getValidators = makeQueries({
 })
 
 export const getTransactionStatus = makeQueries({
-  fn: async (txID: string) => Gateway.transactionStatus(txID)(MAINNET_URL),
+  fn: async (txID: string) =>
+    transactionApi.transactionStatus({
+      transactionStatusRequest: {
+        transaction_identifier: {
+          origin: TransactionLookupOrigin.Payload,
+          value_hex: txID
+        }
+      }
+    }),
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: (res) => {
     const transformedResponse = {
-      status: res.transaction.transaction_status.status,
-      actions: res.transaction.actions.map((action) => ({
-        from: action.from_account.address,
-        to: action.to_account.address,
-        amount: toWholeUnits(action.amount.value)
-      }))
+      status: res.transaction.transaction_status.status
     }
     return TransactionTransformedIO.parse(transformedResponse)
   }
