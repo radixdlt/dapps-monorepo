@@ -23,6 +23,8 @@
   navigating
 </script>
 
+TEST!!!!!!!!!!!!
+
 <!-- enables SSR of css -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 <Toast />
