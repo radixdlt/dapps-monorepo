@@ -37,6 +37,7 @@ COPY .npmrc.docker .npmrc
 COPY .env.sample .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
+RUN rm -f .npmrc
 FROM install-dashboard AS dev-server
 CMD yarn dev
 
