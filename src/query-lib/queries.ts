@@ -14,6 +14,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
+import { getWalletSDK } from '@queries'
 
 const transactionApi = new TransactionApi(
   new Configuration({
@@ -23,10 +24,7 @@ const transactionApi = new TransactionApi(
 
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const sdk = WalletSdk({
-      networkId: networkConfig?.id,
-      dAppId
-    })
+    const sdk = getWalletSDK()
     const res = await sdk.request({
       oneTimeAccountAddresses: {
         requiresProofOfOwnership: false
