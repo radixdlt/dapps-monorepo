@@ -1,6 +1,5 @@
-import WalletSdk from '@radixdlt/wallet-sdk'
 import { makeQueries } from 'svelte-samlat'
-import { dAppId, OLYMPIA_MAINNET_URL, networkConfig } from '@constants'
+import { OLYMPIA_MAINNET_URL, networkConfig } from '@constants'
 import { Gateway } from 'radix-js'
 import {
   Configuration,
@@ -14,6 +13,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
+import { getWalletSDK } from '@queries'
 
 const transactionApi = new TransactionApi(
   new Configuration({
@@ -23,10 +23,7 @@ const transactionApi = new TransactionApi(
 
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const sdk = WalletSdk({
-      networkId: networkConfig?.id,
-      dAppId
-    })
+    const sdk = getWalletSDK()
     const res = await sdk.request({
       oneTimeAccountAddresses: {
         requiresProofOfOwnership: false
