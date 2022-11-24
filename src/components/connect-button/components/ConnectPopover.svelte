@@ -7,8 +7,25 @@
   import Text from '@components/_base/text/Text.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import { icons } from '../../../icon-assets'
+  import { query } from '@queries'
+  import { AlertToast } from '@components/_base/toast/Toasts'
+  import { accounts, selectedAccount } from '@stores'
 
-  export let handleConnect = () => {}
+  const { get, state } = query('requestAddresses', undefined, { manual: true })
+
+  $: if ($state.status === 'error') {
+    AlertToast({
+      title: 'Error',
+      text: $state.error.message,
+      type: 'error'
+    })()
+  }
+
+  $: if ($state.status === 'success') {
+    accounts.set($state.data.oneTimeAccountAddresses)
+    selectedAccount.set($state.data.oneTimeAccountAddresses[0])
+  }
+
   export let forceShow = false
 </script>
 
@@ -41,7 +58,7 @@
     <Button
       cx={{ borderRadius: '$sm', backgroundColor: '$connectButton' }}
       full
-      on:click={handleConnect}
+      on:click={get}
       size="small">Connect now</Button
     >
     <IconTextItem
