@@ -28,7 +28,7 @@ export const requestAddresses = makeQueries({
       dAppId
     })
     const res = await sdk.request({
-      ongoingAccountAddresses: {
+      oneTimeAccountAddresses: {
         requiresProofOfOwnership: false
       }
     })

@@ -5,7 +5,7 @@ export const SendTransactionIO = object({
 })
 
 export const RequestAddressesIO = object({
-  ongoingAccountAddresses: array(
+  oneTimeAccountAddresses: array(
     object({
       address: string(),
       label: string()
