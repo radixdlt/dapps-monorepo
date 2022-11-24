@@ -5,17 +5,19 @@
     PopoverPanel
   } from '@rgossiaux/svelte-headlessui'
   import Box from '../box/Box.svelte'
+
+  export let forceShow = false
 </script>
 
-<div>
+<Box transparent p="none" cx={{ position: 'relative' }}>
   <Popover>
     <PopoverButton as="div">
       <slot name="button" />
     </PopoverButton>
-    <PopoverPanel>
+    <PopoverPanel static={forceShow}>
       <Box p="none" mx="none" transparent>
         <slot name="content" />
       </Box>
     </PopoverPanel>
   </Popover>
-</div>
+</Box>
