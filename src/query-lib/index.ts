@@ -7,7 +7,8 @@ import { networkConfig } from '@constants'
 export const getWalletSDK = () =>
   WalletSdk({
     networkId: networkConfig?.id,
-    dAppId: 'radixdlt.dashboard.com'
+    dAppId: 'radixdlt.dashboard.com',
+    logLevel: 'DEBUG'
   })
 
 export const query = querySvelte(queryFn(queries))
