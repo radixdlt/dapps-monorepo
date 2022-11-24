@@ -1524,10 +1524,10 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/wallet-sdk@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.2.1.tgz#2a9114ae85f31f066af7b04c91f11269ea835fb9"
-  integrity sha512-/cB3DsM59QvIdvSieVQpAOrE9cj55+pzqR5OYrOjLiFtrk2Xmahu/EOK4GdMwJoez7pCBLmwfLt5k40bQh136Q==
+"@radixdlt/wallet-sdk@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.3.0.tgz#36f3dbbfe73c4acbd301f1d18321adfa310b0371"
+  integrity sha512-3eYZH9NDYM0EeGlQt9kKE24NmyI/R3S56wQFMKaWg5ijH4nZT/5+SecijJromRIruE2fd36n8iQmOQgqvLIi7w==
   dependencies:
     "@types/lodash.flow" "^3.5.7"
     lodash.flow "^3.5.0"
