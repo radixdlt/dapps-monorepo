@@ -6,10 +6,6 @@ import {
   TransactionApi,
   TransactionLookupOrigin
 } from '@radixdlt/babylon-gateway-api-sdk'
-import {
-  TransactionTransformedIO,
-  ValidatorTransformedArrayIO
-} from '@io/gateway'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
@@ -64,7 +60,7 @@ export const getValidators = makeQueries({
         .decimalPlaces(2)
         .toNumber()
     }))
-    return ValidatorTransformedArrayIO.parse(transformedValidators)
+    return decoders('ValidatorTransformedArrayIO', transformedValidators)
   }
 })
 
@@ -83,6 +79,6 @@ export const getTransactionStatus = makeQueries({
     const transformedResponse = {
       status: res.transaction.transaction_status.status
     }
-    return TransactionTransformedIO.parse(transformedResponse)
+    return decoders('TransactionTransformedIO', transformedResponse)
   }
 })

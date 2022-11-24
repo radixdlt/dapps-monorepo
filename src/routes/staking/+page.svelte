@@ -16,7 +16,7 @@
       title: 'Error',
       text: $state.error.message,
       type: 'error'
-    })
+    })()
   }
 </script>
 
