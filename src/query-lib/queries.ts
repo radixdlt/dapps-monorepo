@@ -1,6 +1,5 @@
-import WalletSdk from '@radixdlt/wallet-sdk'
 import { makeQueries } from 'svelte-samlat'
-import { dAppId, OLYMPIA_MAINNET_URL, networkConfig } from '@constants'
+import { OLYMPIA_MAINNET_URL, networkConfig } from '@constants'
 import { Gateway } from 'radix-js'
 import {
   Configuration,

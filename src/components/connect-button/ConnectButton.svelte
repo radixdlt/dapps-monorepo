@@ -41,6 +41,6 @@
       /><Text mx="xsmall">Connected</Text>
     </Button>
   {:else}
-    <ConnectPopover />
+    <ConnectPopover onConnect={get} />
   {/if}
 </Box>
