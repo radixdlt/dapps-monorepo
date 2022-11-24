@@ -7,7 +7,7 @@
       true: {
         position: 'absolute',
         mt: '$sm',
-        right: 105,
+        right: 0,
         borderRadius: '$lg',
         backgroundColor: '$background',
         border: '1px solid $borderColor',

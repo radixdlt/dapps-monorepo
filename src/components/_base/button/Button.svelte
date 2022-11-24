@@ -11,6 +11,20 @@
         backgroundColor: '$connectButton'
       }
     },
+    selectedAccountButton: {
+      true: {
+        border: '2px solid $connectButton',
+        background:
+          'linear-gradient(90deg, hsla(221.967, 94%, 38%, 1) 0%, hsla(197.341, 95%, 36%, 1) 49%, hsla(163.434, 96%, 44%, 1) 100%)'
+      }
+    },
+    accountButton: {
+      true: {
+        height: '42px',
+        borderRadius: '$lg',
+        justifyContent: 'space-between'
+      }
+    },
     connectButton: {
       true: {
         width: '$3xl',
@@ -68,6 +82,8 @@
   export let disabled: true | false = false
   export let active: true | false = false
   export let connectButton: true | false = false
+  export let accountButton: true | false = false
+  export let selectedAccountButton: true | false = false
   export let connected: true | false = false
 
   const btn = css({
@@ -98,7 +114,9 @@
     border,
     ghost,
     connectButton,
-    connected
+    connected,
+    accountButton,
+    selectedAccountButton
   })
   const disabledClass = css({
     backgroundColor: '$primaryButtonDisabled',
