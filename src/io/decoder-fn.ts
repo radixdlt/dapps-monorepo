@@ -1,9 +1,9 @@
-import { ZodError, ZodObject, type ZodRawShape } from 'zod'
+import { ZodError, ZodType } from 'zod'
 
 type DecoderObject = Record<string, any>
 
 type Decoders<T extends DecoderObject> = {
-  [K in keyof T]: T[K] extends ZodRawShape ? ZodObject<T[K]> : never
+  [K in keyof T]: ZodType<T[K]>
 }
 
 export const decoderFn =
