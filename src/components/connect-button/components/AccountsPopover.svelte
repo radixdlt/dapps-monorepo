@@ -6,10 +6,11 @@
   import Box from '@components/_base/box/Box.svelte'
   import { icons } from '../../../icon-assets'
   import { shortenAddress } from '@utils'
+  import type { Account } from '@io/wallet'
 
-  export let accounts: any = []
-  export let handleSelect = () => {}
-  export let selected: any = {}
+  export let onSelect: (account: Account) => void
+  export let accounts: Account[] = []
+  export let selected: Account | undefined = undefined
   export let forceShow = false
 </script>
 
@@ -34,12 +35,12 @@
     {#each accounts as account}
       <Button
         full
-        on:click={handleSelect}
+        on:click={() => onSelect(account)}
         size="small"
-        selectedAccountButton={account.address === selected}
+        selectedAccountButton={account.address === selected?.address}
         accountButton
       >
-        <Text bold>{account.name}</Text><Text slightlyMuted
+        <Text bold>{account.label}</Text><Text slightlyMuted
           >{shortenAddress(account.address)}</Text
         ></Button
       >

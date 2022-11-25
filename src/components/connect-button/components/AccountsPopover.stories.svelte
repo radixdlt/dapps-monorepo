@@ -1,19 +1,21 @@
 <script>
+  import { action } from '@storybook/addon-actions'
+
   import { Meta, Story } from '@storybook/addon-svelte-csf'
 
   import AccountsPopover from './AccountsPopover.svelte'
 
   const dummyData = [
     {
-      name: 'Account 1',
+      label: 'Account 1',
       address: '0x123456789'
     },
     {
-      name: 'Account 2',
+      label: 'Account 2',
       address: '0x123456787'
     },
     {
-      name: 'Account 3',
+      label: 'Account 3',
       address: '0x123456788'
     }
   ]
@@ -24,7 +26,8 @@
 <Story name="Primary">
   <AccountsPopover
     forceShow
-    selected={dummyData[0].address}
+    onSelect={action('onSelect')}
+    selected={dummyData[0]}
     accounts={dummyData}
   />
 </Story>
