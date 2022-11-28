@@ -8,6 +8,9 @@ helmDefaults:
 environments:
   dev: {}
   pr: {}
+  enkinet: {}
+  hammunet: {}
+  betanet: {}
 repositories:
   - name: rdx-works
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
