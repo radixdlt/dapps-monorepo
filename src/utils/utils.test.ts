@@ -5,7 +5,8 @@ import {
   isSameRoute,
   getFileExtension,
   bufferFromHex,
-  hash
+  hash,
+  getAddressPrefix
 } from './utils'
 
 describe('#utils', () => {
@@ -58,6 +59,13 @@ describe('#utils', () => {
     const filename = 'test.txt'
     const expected = 'txt'
     const result = getFileExtension(filename)
+    expect(result).toEqual(expected)
+  })
+
+  it('Should return prefix', () => {
+    const address = 'transaction_1234'
+    const expected = 'transaction'
+    const result = getAddressPrefix(address)
     expect(result).toEqual(expected)
   })
 })
