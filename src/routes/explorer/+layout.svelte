@@ -4,27 +4,27 @@
   import { goto } from '$app/navigation'
   import { getAddressPrefix } from '@utils'
 
-  let id = ''
+  let address = ''
 
   const search = () => {
-    switch (getAddressPrefix(id)) {
+    switch (getAddressPrefix(address)) {
       case 'account':
-        goto(`/explorer/accounts/${id}`)
+        goto(`/explorer/accounts/${address}`)
         break
       case 'resource':
-        goto(`/explorer/blocks/${id}`)
+        goto(`/explorer/blocks/${address}`)
         break
       case 'transaction':
-        goto(`/explorer/transaction/${id}`)
+        goto(`/explorer/transaction/${address}`)
         break
       case 'package':
-        goto(`/explorer/package/${id}`)
+        goto(`/explorer/package/${address}`)
         break
       case 'component':
-        goto(`/explorer/component/${id}`)
+        goto(`/explorer/component/${address}`)
         break
       default:
-        goto(`/explorer/transaction/${id}`)
+        goto(`/explorer/transaction/${address}`)
         break
     }
   }
@@ -32,7 +32,7 @@
 
 <Box my="large" justify="center" transparent>
   <form style:width="30%" on:submit|preventDefault={search}>
-    <Search bind:value={id} placeholder="Enter Transaction ID" />
+    <Search bind:value={address} placeholder="Enter Transaction ID" />
   </form>
   <slot />
 </Box>
