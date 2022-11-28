@@ -4,10 +4,10 @@
   import { query } from '@queries'
   import Box from '@components/_base/box/Box.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
-  import LoadingSpinner from './LoadingSpinner.svelte'
   import ConnectPopover from './components/ConnectPopover.svelte'
   import AccountsPopover from './components/AccountsPopover.svelte'
   import type { Account } from '@io/wallet'
+  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   const { get, state } = query('requestAddresses', undefined, { manual: true })
 
