@@ -17,6 +17,12 @@ on:
         options:
           - enkinet
           - hammunet
+          - betanet
+      DOCKER_TAG:
+        description: 'Environment Name'
+        required: false
+        default: enkinet
+        type: string
 
 jobs:
   cancel_running_workflows:
