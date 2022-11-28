@@ -9,7 +9,7 @@ storybook:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: storybook-dashboard-betanet.rdx-works-main.extratools.works
+      - host: storybook-dashboard-betanet.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -19,14 +19,14 @@ dashboard:
       tag: {{$IMAGE_TAG}}
 
   params:
-    NETWORK_GATEWAY_API: "nebunet-gateway.radixdlt.com"
+    NETWORK_GATEWAY_API: "rdx-works-gateway.radixdlt.com"
 
   ingress:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: dashboard-betanet.rdx-works-main.extratools.works
+      - host: dashboard-betanet.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -37,4 +37,4 @@ developerAccess:
       enabled: true
 
 network:
-  name: betanet
+  name: nebunet

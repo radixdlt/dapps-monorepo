@@ -10,7 +10,7 @@ environments:
   pr: {}
   enkinet: {}
   hammunet: {}
-  betanet: {}
+  nebunet: {}
 repositories:
   - name: rdx-works
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
