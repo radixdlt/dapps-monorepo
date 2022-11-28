@@ -15,16 +15,16 @@
 
   const colsAndRows = {
     sm: {
-      cols: 15,
-      rows: 2
-    },
-    md: {
       cols: 30,
       rows: 4
     },
-    lg: {
+    md: {
       cols: 60,
       rows: 8
+    },
+    lg: {
+      cols: 80,
+      rows: 30
     }
   }[size]
 </script>
