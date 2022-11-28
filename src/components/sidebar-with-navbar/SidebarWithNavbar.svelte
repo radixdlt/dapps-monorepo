@@ -11,7 +11,7 @@
     { text: 'Dashboard', icon: 'dashboard', path: '/explorer' },
     { text: 'Package Deployment', icon: 'dashboard', path: '/deploy-package' },
     {
-      text: 'Send Transaction',
+      text: 'Transaction Manifest',
       icon: 'transactions',
       path: '/send-transaction'
     }
