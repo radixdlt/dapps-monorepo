@@ -9,7 +9,12 @@
   const routes = [
     { text: 'Staking/Validators', icon: 'validators', path: '/staking' },
     { text: 'Dashboard', icon: 'dashboard', path: '/explorer' },
-    { text: 'Package Deployment', icon: 'dashboard', path: '/deploy-package' }
+    { text: 'Package Deployment', icon: 'dashboard', path: '/deploy-package' },
+    {
+      text: 'Send Transaction',
+      icon: 'transactions',
+      path: '/send-transaction'
+    }
   ] as const
 </script>
 
