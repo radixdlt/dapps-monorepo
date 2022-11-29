@@ -22,10 +22,6 @@ on:
           - enkinet
           - hammunet
 
-env:
-  HAMMUNET_CYCLE: true
-  ENKINET_CYCLE: false
-
 jobs:
   cancel_running_workflows:
     name: Cancel running workflows
@@ -247,8 +243,7 @@ jobs:
 
   deploy_enkinet:
     if: >
-     ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) ||
-     ( github.ref == 'refs/heads/DO-1006-add-babylon-networks' )
+     ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
