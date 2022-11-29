@@ -38,3 +38,14 @@ export const getFileExtension = (filename: string) => {
   const parts = filename.split('.')
   return parts[parts.length - 1]
 }
+
+type AddressPrefix =
+  | 'package'
+  | 'resource'
+  | 'account'
+  | 'transaction'
+  | 'component'
+export const getAddressPrefix = (address: string): AddressPrefix => {
+  const parts = address.split('_')
+  return (parts[0] as AddressPrefix) ?? 'transaction'
+}
