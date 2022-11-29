@@ -13,6 +13,6 @@ export const networkConfig = {
     id: Network.Enkinet,
     url: 'https://enkinet-gateway.radixdlt.com'
   }
-}[PUBLIC_NETWORK_NAME]
+}[process.env.PUBLIC_NETWORK_NAME ?? PUBLIC_NETWORK_NAME]
 
-export const dAppId = 'radixdlt.dashboard.com'
+export const dAppId = 'radixdlt.dashboard.com' 
