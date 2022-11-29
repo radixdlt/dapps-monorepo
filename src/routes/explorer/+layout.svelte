@@ -9,7 +9,7 @@
   const search = () => {
     switch (getAddressPrefix(address)) {
       case 'account':
-        goto(`/explorer/accounts/${address}`)
+        goto(`/explorer/account/${address}`)
         break
       case 'resource':
         goto(`/explorer/blocks/${address}`)
@@ -30,7 +30,14 @@
   }
 </script>
 
-<Box my="large" justify="center" transparent>
+<Box
+  my="large"
+  flex="col"
+  gap="medium"
+  items="center"
+  justify="center"
+  transparent
+>
   <form style:width="30%" on:submit|preventDefault={search}>
     <Search bind:value={address} placeholder="Enter Transaction ID" />
   </form>

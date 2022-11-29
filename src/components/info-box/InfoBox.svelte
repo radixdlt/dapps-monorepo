@@ -23,7 +23,7 @@
         <Text>
           {#if loading}
             <SkeletonLoader width={loaderWidth} />
-          {:else if value}
+          {:else if data}
             {value}
           {/if}
         </Text>

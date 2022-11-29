@@ -144,21 +144,21 @@ export const EntityResourcesIO = object({
     items: array(
       object({
         address: string(),
-        amount: object({
+        total_count: object({
           value: string(),
           address: string()
-        })
+        }).optional()
       })
-    )
+    ).optional()
   }),
   non_fungible_resources: object({
     total_count: number(),
     items: array(
       object({
         address: string(),
-        amount: number()
+        total_count: number()
       })
-    )
+    ).optional()
   })
 })
 

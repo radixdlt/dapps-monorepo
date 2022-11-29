@@ -204,6 +204,10 @@
         display: 'flex',
         alignItems: 'space-around'
       },
+      baseline: {
+        display: 'flex',
+        alignItems: 'baseline'
+      },
       evenly: {
         display: 'flex',
         alignItems: 'space-evenly'
