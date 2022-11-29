@@ -272,7 +272,7 @@ jobs:
   deploy_hammunet:
     if: >
      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
-     ( github.ref == 'refs/heads/DO-1006-add-babylon-networks' && $HAMMUNET_CYCLE == 'true' )
+     ( github.ref == 'refs/heads/DO-1006-add-babylon-networks' && ${{ env.HAMMUNET_CYCLE == true }} )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
