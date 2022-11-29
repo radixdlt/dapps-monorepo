@@ -19,15 +19,19 @@ dashboard:
       tag: {{$IMAGE_TAG}}
 
   params:
-    NETWORK_GATEWAY_API: "rdx-works-gateway.radixdlt.com"
     PUBLIC_NETWORK_NAME: "nebunet"
 
   ingress:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
+      external-dns.alpha.kubernetes.io/cloudflare-proxied: 'true'
     hosts:
       - host: dashboard-betanet.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+      - host: dashboard-nebunet.rdx-works-main.extratools.works
         paths:
           - path: /
             pathType: ImplementationSpecific
