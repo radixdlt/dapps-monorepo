@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - DO-1006-add-babylon-networks
   pull_request:
     branches:
       - main
@@ -20,6 +21,10 @@ on:
         options:
           - enkinet
           - hammunet
+
+env:
+  HAMMUNET_CYCLE: true
+  ENKINET_CYCLE: false
 
 jobs:
   cancel_running_workflows:
@@ -241,7 +246,9 @@ jobs:
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_enkinet:
-    if: github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch'
+    if: >
+     ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) ||
+     ( github.ref == 'refs/heads/DO-1006-add-babylon-networks' && env.ENKINET_CYCLE == 'true' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
@@ -263,7 +270,9 @@ jobs:
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_hammunet:
-    if: github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch'
+    if: >
+     ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
+     ( github.ref == 'refs/heads/DO-1006-add-babylon-networks' && env.HAMMUNET_CYCLE == 'true' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
