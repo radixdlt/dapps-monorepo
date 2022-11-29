@@ -129,6 +129,81 @@ export const GlobalEntityIdIO = object({
   global_address: string()
 })
 
+export const EntityOverviewIO = object({
+  entities: array(
+    object({
+      address: string()
+    })
+  )
+})
+
+export const EntityResourcesIO = object({
+  address: string(),
+  fungible_resources: object({
+    total_count: number(),
+    items: array(
+      object({
+        address: string(),
+        amount: object({
+          value: string(),
+          address: string()
+        })
+      })
+    )
+  }),
+  non_fungible_resources: object({
+    total_count: number(),
+    items: array(
+      object({
+        address: string(),
+        amount: number()
+      })
+    )
+  })
+})
+
+export const EntityDetailsIO = object({
+  address: string(),
+  metadata: object({
+    total_count: number(),
+    items: array(
+      object({
+        key: string(),
+        value: string()
+      })
+    )
+  }),
+  details: object({
+    discriminator: string(),
+    divisibility: number(),
+    total_supply: object({
+      value: string(),
+      address: string()
+    }),
+    total_minted: object({
+      value: string(),
+      address: string()
+    }),
+    total_burnt: object({
+      value: string(),
+      address: string()
+    })
+  })
+})
+
+export const EntityMetadata = object({
+  address: string(),
+  metadata: object({
+    total_count: number(),
+    items: array(
+      object({
+        key: string(),
+        value: string()
+      })
+    )
+  })
+})
+
 export const TransactionReceiptIO = object({
   committed: object({
     receipt: object({

@@ -4,18 +4,18 @@ import { Gateway } from 'radix-js'
 import {
   Configuration,
   TransactionApi,
-  TransactionLookupOrigin
+  TransactionLookupOrigin,
+  EntityApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
 import { getWalletSDK } from '../wallet-sdk'
 
-const transactionApi = new TransactionApi(
-  new Configuration({
-    basePath: networkConfig?.url
-  })
-)
+const config = new Configuration({ basePath: networkConfig?.url })
+
+const entityApi = new EntityApi(config)
+const transactionApi = new TransactionApi(config)
 
 export const requestAddresses = makeQueries({
   fn: async () => {
@@ -81,4 +81,37 @@ export const getTransactionStatus = makeQueries({
     }
     return decoders('TransactionTransformedIO', transformedResponse)
   }
+})
+
+export const getEntityOverview = makeQueries({
+  fn: async (address: string) =>
+    entityApi.entityOverview({
+      entityOverviewRequest: {
+        addresses: [address]
+      }
+    }),
+  decoder: (res) => decoders('EntityOverviewIO', res),
+  transformationFn: (res) => res.entities.map((entity) => entity.address)
+})
+
+export const getEntityResources = makeQueries({
+  fn: async (address: string) =>
+    entityApi.entityResources({
+      entityResourcesRequest: {
+        address
+      }
+    }),
+  decoder: (res) => decoders('EntityResourcesIO', res),
+  transformationFn: (res) => res
+})
+
+export const getEntityDetails = makeQueries({
+  fn: async (address: string) =>
+    entityApi.entityDetails({
+      entityDetailsRequest: {
+        address
+      }
+    }),
+  decoder: (res) => decoders('EntityDetailsIO', res),
+  transformationFn: (res) => res
 })
