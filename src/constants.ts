@@ -12,10 +12,6 @@ export const networkConfig = {
   enkinet: {
     id: Network.Enkinet,
     url: 'https://enkinet-gateway.radixdlt.com'
-  },
-  nebunet: {
-    id: Network.Nebunet,
-    url: 'https://nebunet-gateway.radixdlt.com'
   }
 }[PUBLIC_NETWORK_NAME]
 
