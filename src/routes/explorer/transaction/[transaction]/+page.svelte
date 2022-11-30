@@ -1,5 +1,5 @@
 <script lang="ts">
-  import TransactionBox from '@components/transaction-box/TransactionBox.svelte'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
   import { query } from '@queries'
   import { page } from '$app/stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
@@ -15,4 +15,4 @@
   }
 </script>
 
-<TransactionBox tx={$state.data} loading={$state.status === 'loading'} />
+<InfoBox data={$state.data} loading={$state.status === 'loading'} />
