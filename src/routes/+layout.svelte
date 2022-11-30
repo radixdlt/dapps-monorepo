@@ -7,12 +7,17 @@
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Toast from '@components/_base/toast/_Toast.svelte'
+  import type { PageData } from './$types'
   import '../fonts.css'
+  import { setNetworkConfig } from '@constants'
 
   let mounted = false
 
+  export let data: PageData
+
   onMount(() => {
     mounted = true
+    setNetworkConfig(data.network)
   })
 
   $: if (mounted) {

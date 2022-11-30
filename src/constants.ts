@@ -1,18 +1,34 @@
-import { PUBLIC_NETWORK_NAME } from '$env/static/public'
-import { Network } from '@radixdlt/wallet-sdk'
+import { Network as NetworkId } from '@radixdlt/wallet-sdk'
 
 // TODO remove once we don't use the olympia network
 export const OLYMPIA_MAINNET_URL = 'https://mainnet-gateway.radixdlt.com'
 
-export const networkConfig = {
+const networkConfig = {
   hammunet: {
-    id: Network.Hammunet,
+    id: NetworkId.Hammunet,
     url: 'https://hammunet-gateway.radixdlt.com:443'
   },
   enkinet: {
-    id: Network.Enkinet,
+    id: NetworkId.Enkinet,
     url: 'https://enkinet-gateway.radixdlt.com'
   }
-}[process.env.PUBLIC_NETWORK_NAME ?? PUBLIC_NETWORK_NAME]
+}
+
+type Network = keyof typeof networkConfig
+
+let network: Network = 'hammunet'
+
+const isSupportedNetwork = (_network: unknown): _network is Network =>
+  Object.keys(networkConfig).some((network) => network === _network)
+
+export const getNetworkConfig = () => networkConfig[network]
+
+export const setNetworkConfig = (_network: unknown) => {
+  if (isSupportedNetwork(_network)) {
+    network = _network
+  } else {
+    alert(`Network ${_network} is not supported.`)
+  }
+}
 
 export const dAppId = 'radixdlt.dashboard.com'
