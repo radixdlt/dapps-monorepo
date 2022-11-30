@@ -1524,16 +1524,17 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/wallet-sdk@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.3.0.tgz#36f3dbbfe73c4acbd301f1d18321adfa310b0371"
-  integrity sha512-3eYZH9NDYM0EeGlQt9kKE24NmyI/R3S56wQFMKaWg5ijH4nZT/5+SecijJromRIruE2fd36n8iQmOQgqvLIi7w==
+"@radixdlt/wallet-sdk@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.3.3.tgz#689fe1a5ee7dec7228cf5b146a8e6166fa678791"
+  integrity sha512-pgRszRai9rurMmgDN2o5TgM5+8enY/6gFNO9YDdpO+Nq3X599xUqGj+jhAtAdQ7M3ua7c32jvklVIGpg8hUAog==
   dependencies:
     "@types/lodash.flow" "^3.5.7"
     lodash.flow "^3.5.0"
     loglevel "^1.8.0"
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
+    zod "^3.19.1"
 
 "@rgossiaux/svelte-headlessui@^1.0.2":
   version "1.0.2"
@@ -12312,7 +12313,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@^3.18.0:
+zod@^3.18.0, zod@^3.19.1:
   version "3.19.1"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.19.1.tgz#112f074a97b50bfc4772d4ad1576814bd8ac4473"
   integrity sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==
