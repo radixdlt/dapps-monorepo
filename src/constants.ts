@@ -1,4 +1,3 @@
-import { PUBLIC_NETWORK_NAME } from '$env/static/public'
 import { Network } from '@radixdlt/wallet-sdk'
 
 // TODO remove once we don't use the olympia network
@@ -13,6 +12,6 @@ export const networkConfig = {
     id: Network.Enkinet,
     url: 'https://enkinet-gateway.radixdlt.com'
   }
-}[PUBLIC_NETWORK_NAME]
+}['hammunet']
 
 export const dAppId = 'radixdlt.dashboard.com'
