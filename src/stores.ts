@@ -4,6 +4,7 @@ import { writable as localStorageStore } from 'svelte-local-storage-store'
 type Account = {
   label: string
   address: string
+  appearanceId: number
 }
 
 export const accounts = writable<Account[]>(undefined)

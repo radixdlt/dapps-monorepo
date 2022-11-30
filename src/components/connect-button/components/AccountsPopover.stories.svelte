@@ -8,15 +8,18 @@
   const dummyData = [
     {
       label: 'Account 1',
-      address: '0x123456789'
+      address: '0x123456789',
+      appearanceId: 0
     },
     {
       label: 'Account 2',
-      address: '0x123456787'
+      address: '0x123456787',
+      appearanceId: 1
     },
     {
       label: 'Account 3',
-      address: '0x123456788'
+      address: '0x123456788',
+      appearanceId: 2
     }
   ]
 </script>
