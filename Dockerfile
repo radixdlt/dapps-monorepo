@@ -43,6 +43,8 @@ RUN rm -f .npmrc
 # Ref: https://vitejs.dev/guide/build.html#building-for-production
 FROM nginx:alpine AS storybook
 COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 FROM nginx:alpine AS dashboard
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
