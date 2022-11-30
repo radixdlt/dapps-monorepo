@@ -38,8 +38,6 @@ spec:
           - name: {{ $key }}
             value: {{ $value | quote }}
           {{- end }}
-          - name: PUBLIC_NETWORK_NAME
-            value: {{ .Values.network.name }}
           ports:
             - name: http
               containerPort: 5173
