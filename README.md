@@ -10,10 +10,10 @@ yarn dev
 or with Docker:
 
 ```bash
-make dev-server
+make dashboard
 ```
 
-then browse to `localhost:5173`.
+then browse to `localhost:8090`.
 
 ### Production
 
