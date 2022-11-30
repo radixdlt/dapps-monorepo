@@ -38,12 +38,13 @@ COPY .env.sample .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
-FROM install-dashboard AS dev-server
-CMD yarn dev
 
-
+# Both the apps can be served as static content.
+# Ref: https://vitejs.dev/guide/build.html#building-for-production
 FROM nginx:alpine AS storybook
 COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
-FROM nginx:alpine AS prod-server
+FROM nginx:alpine AS dashboard
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf

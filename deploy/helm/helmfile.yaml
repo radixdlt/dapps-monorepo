@@ -20,7 +20,7 @@ releases:
 {{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
     namespace: {{ $DASHBOARD_NS }}
-    chart: ./RDXWorks-dashboard
+    chart: ./dashboard
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 

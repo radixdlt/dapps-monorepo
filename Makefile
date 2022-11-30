@@ -7,10 +7,10 @@ all:
     TAG ?= $(GIT_BRANCH)-$(GIT_COMMIT)
     REPO ?= $(REGISTRY)/network-dashboard
 
-.PHONY: dev-server
-dev-server:
-	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --target=dev-server -t $(REPO):$(TAG) .
-	docker run -it -p 5173:5173 $(REPO):$(TAG)
+.PHONY: dashboard
+dashboard:
+	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --target=dashboard -t $(REPO):$(TAG) .
+	docker run -it -p 8090:80 $(REPO):$(TAG)
 
 .PHONY: storybook
 storybook:
