@@ -20,8 +20,8 @@
   }
 
   $: if ($state.status === 'success') {
-    accounts.set($state.data.oneTimeAccountAddresses)
-    selectedAccount.set($state.data.oneTimeAccountAddresses[0])
+    accounts.set($state.data.oneTimeAccounts)
+    selectedAccount.set($state.data.oneTimeAccounts[0])
   }
 
   const handleSelect = (account: Account) => {

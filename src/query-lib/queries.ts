@@ -21,9 +21,7 @@ export const requestAddresses = makeQueries({
   fn: async () => {
     const sdk = getWalletSDK()
     const res = await sdk.request({
-      oneTimeAccountAddresses: {
-        requiresProofOfOwnership: false
-      }
+      oneTimeAccountsWithoutProofOfOwnership: {}
     })
     if (res.isOk()) return res.value
     else throw Error(res.error.message)

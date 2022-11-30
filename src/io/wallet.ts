@@ -1,8 +1,9 @@
-import z, { string, object, array } from 'zod'
+import z, { string, object, array, number } from 'zod'
 
 export const AccountIO = object({
   address: string(),
-  label: string()
+  label: string(),
+  appearanceId: number()
 })
 
 export const SendTransactionIO = object({
@@ -10,7 +11,7 @@ export const SendTransactionIO = object({
 })
 
 export const RequestAddressesIO = object({
-  oneTimeAccountAddresses: array(AccountIO)
+  oneTimeAccounts: array(AccountIO)
 })
 
 export type SendTransaction = z.infer<typeof SendTransactionIO>
