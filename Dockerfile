@@ -39,6 +39,8 @@ RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
 
+# Both the apps can be served as static content.
+# Ref: https://vitejs.dev/guide/build.html#building-for-production
 FROM nginx:alpine AS storybook
 COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
 
