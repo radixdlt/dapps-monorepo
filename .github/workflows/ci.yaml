@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  release:
+    types:
+    - published
   workflow_dispatch:
     inputs:
       ENVIRONMENT_NAME:
@@ -238,25 +241,73 @@ jobs:
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_enkinet:
-    if: github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch'
-
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Unit tests
-        run:  echo "Hello world!"
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: enkinet
+      namespace:  dashboard-enkinet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=enkinet
+      environment: enkinet
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_hammunet:
-    if: github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Unit tests
-        run:  echo "Hello world!"
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
+      ( github.ref == 'refs/heads/main' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: hammunet
+      namespace:  dashboard-hammunet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=hammunet
+      environment: hammunet
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+
+  deploy_nebunet:
+    if: github.event_name == 'release' && github.event.release.prerelease
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: nebunet
+      namespace:  dashboard-nebunet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-nebunet-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=nebunet
+      environment: nebunet
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   run-e2e-tests:
     runs-on: ubuntu-latest
