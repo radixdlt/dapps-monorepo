@@ -74,28 +74,29 @@ jobs:
       - name: define network name
         run: |
           if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
-            VARIBALE="${{ github.event.inputs.ENVIRONMENT_NAME }}"
+            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_OUTPUT
           elif [ ${{ github.event.action }} = "preleased" ]; then
-            VARIBALE="nebunet"
+            VARIABLE="nebunet"
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            VARIBALE="hammunet"
+            echo "VARIABLE=hammunet" >> $GITHUB_OUTPUT
           fi
 
           echo $VARIABLE
-  # elif [ ${{ github.ref }} = "refs/heads/staging" ]; then
-  #   echo "::set-output name=STAGE::staging"
-  #   echo "::set-output name=SSH_KEY::${{ secrets.STAGING_KEY }}"
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #   - define_network
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: ./.github/actions/build
-  #       with: 
-  #         npm_token: ${{ secrets.NPM_TOKEN }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs:
+    - define_network
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: export var
+        run: |
+          env
+      - uses: ./.github/actions/build
+        with: 
+          npm_token: ${{ secrets.NPM_TOKEN }}
   
   # lint:
   #   runs-on: ubuntu-latest
