@@ -77,7 +77,7 @@ jobs:
             echo "${{ github.event.inputs.ENVIRONMENT_NAME }}"
           elif [ ${{ github.event.action }} = "preleased" ]; then
             echo "nebunet"
-          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event }} = "pull_request" ]; then
+          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event_type }} = "pull_request" ]; then
             echo "hammunet"
           fi
   # elif [ ${{ github.ref }} = "refs/heads/staging" ]; then
