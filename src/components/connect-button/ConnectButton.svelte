@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { networkConfig } from '@constants'
   import { accounts, selectedAccount } from '@stores'
   import { configureConnectButton } from '../../wallet-sdk'
 
   const { destroy } = configureConnectButton({
     dAppId: 'dashboard',
     logLevel: 'DEBUG',
+    networkId: networkConfig.id,
     onConnect: async ({ setState, getWalletData }) => {
       setState({ loading: true, connected: false })
 

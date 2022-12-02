@@ -1,15 +1,13 @@
-import { Network } from '@radixdlt/wallet-sdk'
-
 // TODO remove once we don't use the olympia network
 export const OLYMPIA_MAINNET_URL = 'https://mainnet-gateway.radixdlt.com'
 
 export const networkConfig = {
   hammunet: {
-    id: Network.Hammunet,
+    id: 34,
     url: 'https://hammunet-gateway.radixdlt.com:443'
   },
   enkinet: {
-    id: Network.Enkinet,
+    id: 33,
     url: 'https://enkinet-gateway.radixdlt.com'
   }
 }['hammunet']
