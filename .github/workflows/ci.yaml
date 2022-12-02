@@ -77,7 +77,7 @@ jobs:
             VARIBALE="${{ github.event.inputs.ENVIRONMENT_NAME }}"
           elif [ ${{ github.event.action }} = "preleased" ]; then
             VARIBALE="nebunet"
-          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event_name }} = "pull_request" ]; then
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
             VARIBALE="hammunet"
           fi
 
