@@ -75,8 +75,10 @@ jobs:
         run: |
           if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
             echo "${{ github.event.inputs.ENVIRONMENT_NAME }}"
-          else 
-            echo "hello world"
+          elif [ ${{ github.event.action }} = "preleased" ]; then
+            echo "nebunet"
+          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event }} = "pull_request" ]; then
+            echo "hammunet"
           fi
   # elif [ ${{ github.ref }} = "refs/heads/staging" ]; then
   #   echo "::set-output name=STAGE::staging"
