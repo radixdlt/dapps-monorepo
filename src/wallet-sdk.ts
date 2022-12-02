@@ -1,3 +1,2 @@
-import { getMethods } from '@radixdlt/connect-button'
-
-export const getWalletSDK = () => getMethods()
+export { getMethods as getWalletSDK } from '@radixdlt/connect-button'
+export { configure as configureConnectButton } from '@radixdlt/connect-button'

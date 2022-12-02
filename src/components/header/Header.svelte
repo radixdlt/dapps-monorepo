@@ -3,21 +3,7 @@
   import { storage } from '@stores'
   import ThemeSwitch from '@components/_base/switch/theme-switch/ThemeSwitch.svelte'
   import Image from '@components/_base/image/Image.svelte'
-  import { configure, setState } from '@radixdlt/connect-button'
-
-  const { getWalletData, destroy } = configure({
-    dAppId: 'dashboard',
-    logLevel: 'DEBUG',
-    onConnect: async () => {
-      setState({ loading: true, connected: false })
-      await getWalletData({
-        oneTimeAccountsWithoutProofOfOwnership: {}
-      })
-      setState({ loading: false, connected: true })
-    },
-    // clean up dangling subscriptions when HMR is triggered
-    onDestroy: () => destroy()
-  })
+  import ConnectButton from '@components/connect-button/ConnectButton.svelte'
 </script>
 
 <Box
@@ -39,7 +25,8 @@
       : '/images/Radix_Logo_dark_theme.svg'}
   />
   <Box cx={{ gap: '$md' }} p="none" flex="row" items="center">
-    <connect-button />
+    <ConnectButton />
+
     <ThemeSwitch />
   </Box>
 </Box>

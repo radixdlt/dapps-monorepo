@@ -1,6 +1,6 @@
 import { makeQueries } from 'svelte-samlat'
 import { decoders } from '@io'
-import { getMethods } from '@radixdlt/connect-button'
+import { getWalletSDK } from '../wallet-sdk'
 
 export const sendTransaction = makeQueries({
   fn: async ({
@@ -10,7 +10,7 @@ export const sendTransaction = makeQueries({
     transactionManifest: string
     blobs?: string[]
   }) => {
-    const res = await getMethods().sendTransaction({
+    const res = await getWalletSDK().sendTransaction({
       transactionManifest,
       version: 0,
       blobs

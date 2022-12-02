@@ -19,8 +19,7 @@ const transactionApi = new TransactionApi(config)
 
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const sdk = getWalletSDK()
-    const res = await sdk.request({
+    const res = await getWalletSDK().getWalletData({
       oneTimeAccountsWithoutProofOfOwnership: {}
     })
     if (res.isOk()) return res.value
