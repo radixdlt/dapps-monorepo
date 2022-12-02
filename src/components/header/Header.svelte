@@ -26,6 +26,7 @@
   />
   <Box cx={{ gap: '$md' }} p="none" flex="row" items="center">
     <ConnectButton />
+
     <ThemeSwitch />
   </Box>
 </Box>
