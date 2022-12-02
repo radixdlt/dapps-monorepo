@@ -8,16 +8,16 @@ ARG NPM_TOKEN
 # Define the node image
 FROM node:16.17.1-alpine AS build-sdk
 # Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
-ENV mock_sdk_dir=/tmp/mock-sdk
-COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
-RUN cd $mock_sdk_dir && yarn
-RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
+# ENV mock_sdk_dir=/tmp/mock-sdk
+# COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
+# RUN cd $mock_sdk_dir && yarn
+# RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
 
-# Below steps copies actual mock-sdk code
-WORKDIR /usr/app/mock-sdk
-COPY mock-sdk ./
-RUN ls -lR
-RUN yarn && yarn build
+# # Below steps copies actual mock-sdk code
+# WORKDIR /usr/app/mock-sdk
+# COPY mock-sdk ./
+# RUN ls -lR
+# RUN yarn && yarn build
 
 FROM build-sdk AS install-dashboard
 ARG NPM_TOKEN
