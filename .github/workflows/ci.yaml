@@ -79,7 +79,7 @@ jobs:
           elif [ ${{ github.event.action }} = "preleased" ]; then
             VARIABLE="nebunet"
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "VARIABLE=hammunet" >> $GITHUB_ENV
+            echo "VARIABLE=hammunet" >> $GITHUB_OUTPUT
           fi
 
           echo $VARIABLE
