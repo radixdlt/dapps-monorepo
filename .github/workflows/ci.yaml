@@ -75,11 +75,11 @@ jobs:
         id: network_output
         run: |
           if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
-            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_OUTPUT
+            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ ${{ github.event.action }} = "preleased" ]; then
             VARIABLE="nebunet"
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "VARIABLE=hammunet" >> $GITHUB_OUTPUT
+            echo "VARIABLE=hammunet" >> $GITHUB_ENV
           fi
 
           echo $VARIABLE
@@ -95,7 +95,7 @@ jobs:
       - name: export var
         run: |
           env
-          echo "The selected color is ${{ steps.network_output.outputs.VARIABLE }}"
+          echo "The selected color is ${{ env.VARIABLE }}"
       # - uses: ./.github/actions/build
       #   with: 
       #     npm_token: ${{ secrets.NPM_TOKEN }}
