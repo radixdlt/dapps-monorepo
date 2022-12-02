@@ -68,37 +68,29 @@ jobs:
   #     storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
   #     storybook-json: ${{ steps.storybook-tags.outputs.json }}
 
-  define_network:
-    runs-on: ubuntu-latest
-    steps:
-      - name: define network name
-        id: network_output
-        run: |
-          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
-            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ ${{ github.event.action }} = "preleased" ]; then
-            VARIABLE="nebunet"
-          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "VARIABLE=hammunet" >> $GITHUB_OUTPUT
-          fi
-
-          echo $VARIABLE
-
   build:
     runs-on: ubuntu-latest
-    needs:
-    - define_network
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: export var
+      - name: define network name
         run: |
-          env
-          echo "The selected color is ${{ steps.network_output.outputs.VARIABLE }}"
-      # - uses: ./.github/actions/build
-      #   with: 
-      #     npm_token: ${{ secrets.NPM_TOKEN }}
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ ${{ github.event.action }} = "released" ]; then
+            echo "VARIABLE=nebunet" >> $GITHUB_ENV
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "VARIABLE=hammunet" >> $GITHUB_ENV
+          fi
+          echo "${{ env.VARIABLE }}"
+      - name: define network name
+        run: |
+          echo "${{ env.VARIABLE }}"
+      - uses: ./.github/actions/build
+        with: 
+          npm_token: ${{ secrets.NPM_TOKEN }}
+          network_name: ${{ env.VARIABLE }}
   
   # lint:
   #   runs-on: ubuntu-latest
