@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { accounts, selectedAccount } from '@stores'
   import { configureConnectButton } from '../../wallet-sdk'
 
   const { destroy } = configureConnectButton({
@@ -6,10 +7,18 @@
     logLevel: 'DEBUG',
     onConnect: async ({ setState, getWalletData }) => {
       setState({ loading: true, connected: false })
-      await getWalletData({
+
+      const response = await getWalletData({
         oneTimeAccountsWithoutProofOfOwnership: {}
       })
-      setState({ loading: false, connected: true })
+
+      if (response.isOk()) {
+        accounts.set(response.value.oneTimeAccounts)
+        selectedAccount.set(response.value.oneTimeAccounts[0])
+        setState({ loading: false, connected: true })
+      } else {
+        setState({ loading: false, connected: false })
+      }
     },
     // clean up dangling subscriptions when HMR is triggered
     onDestroy: () => destroy()
