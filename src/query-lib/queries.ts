@@ -4,8 +4,7 @@ import { Gateway } from 'radix-js'
 import {
   Configuration,
   TransactionApi,
-  EntityApi,
-  TransactionLookupOrigin
+  EntityApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
@@ -65,10 +64,7 @@ export const getTransactionStatus = makeQueries({
   fn: async (txID: string) =>
     transactionApi.transactionStatus({
       transactionStatusRequest: {
-        transaction_identifier: {
-          origin: TransactionLookupOrigin.Intent,
-          value_hex: txID
-        }
+        intent_hash_hex: txID
       }
     }),
   decoder: (res) => decoders('TransactionIO', res),
@@ -81,15 +77,20 @@ export const getTransactionStatus = makeQueries({
 })
 
 export const getTransactionDetails = makeQueries({
-  fn: async (txID: string) =>
-    transactionApi.transactionDetails({
-      transactionDetailsRequest: {
-        transaction_identifier: {
-          origin: TransactionLookupOrigin.Payload,
-          value_hex: txID
-        }
-      }
-    }),
+  fn: async (txID: string) => {
+    return txID
+  },
+
+  // TODO: fix this
+  // transactionApi.transactionDetails({
+  //   transactionDetailsRequest: {
+  //     transaction_identifier: {
+  //       origin: TransactionLookupOrigin.Payload,
+  //       value_hex: txID
+  //     }
+  //   }
+  // })
+
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: async (res) => {
     return {
