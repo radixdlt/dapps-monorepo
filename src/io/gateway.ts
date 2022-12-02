@@ -99,7 +99,18 @@ export const ActionIO = object({
 
 export const TransactionIO = object({
   transaction: object({
-    transaction_status: object({ status: string() })
+    transaction_status: object({
+      status: string(),
+      confirmed_at: string().optional()
+    }),
+    fee_paid: object({
+      value: string(),
+      address: string().optional()
+    })
+  }),
+  details: object({
+    raw_hex: string(),
+    message_hex: string().optional()
   })
 })
 

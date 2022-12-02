@@ -9,6 +9,10 @@ export const networkConfig = {
   enkinet: {
     id: 33,
     url: 'https://enkinet-gateway.radixdlt.com'
+  },
+  gilganet: {
+    id: 32,
+    url: 'https://gilganet-gateway.radixdlt.com'
   }
 }['hammunet']
 
