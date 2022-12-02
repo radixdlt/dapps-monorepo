@@ -157,9 +157,11 @@ export const stateMachine = createMachine<Context, Events, States>(
           }
         }
       },
-      final: {},
+      final: {
+        on: { LOAD: { target: 'fetching-resources' } }
+      },
       error: {
-        on: { RETRY: { target: 'fetching-resources' } }
+        on: { LOAD: { target: 'fetching-resources' } }
       }
     }
   },

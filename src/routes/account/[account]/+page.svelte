@@ -1,43 +1,58 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import { query } from '@queries'
   import { page } from '$app/stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
+  import { stateMachine } from './account-state-machine'
+  import { useMachine } from '@xstate/svelte'
 
-  const { state } = query('getEntityResources', $page.params.account)
+  const { state, send } = useMachine(stateMachine)
 
-  let accountData = {}
+  $: send('LOAD', { address: $page.params.account })
 
-  $: if ($state.status === 'success') {
-    accountData = {
-      XRD: $state.data.non_fungible_resources.total_count
-    }
+  const skeletonData = {
+    address: '0x0000000000000000000000000000000000000000',
+    balance: '0',
+    code: '0x',
+    nonce: '0',
+    transactionCount: '0'
   }
 
-  $: if ($state.status === 'error') {
+  $: if ($state.matches('error')) {
     AlertToast({
       title: 'Account error',
-      text: $state.error.message,
+      text: $state.context.error.message,
       type: 'error'
     })()
   }
 </script>
 
-<Box full transparent>
+<Box p="large" m="large" transparent>
   <Box p="none" transparent inline items="baseline">
     <Text size="xlarge" mb="large" bold>Account</Text>
     <Text size="small" mx="medium" muted>{$page.params.account}</Text>
   </Box>
-  <Text bold mb="medium">Balance</Text>
-  <Card>
-    <Text bold slot="header">Tokens</Text>
-    <InfoBox
-      slot="body"
-      data={accountData}
-      loading={$state.status === 'loading'}
-    />
-  </Card>
+  {#if $state.matches('error')}
+    No account found
+  {:else}
+    <Text bold mb="medium">Balance</Text>
+    <Card>
+      <Text bold slot="header">Tokens</Text>
+      <InfoBox
+        slot="body"
+        data={$state.context.transformedOverview?.fungible || skeletonData}
+        loading={!$state.matches('final')}
+      />
+    </Card>
+    <Card>
+      <Text bold slot="header">NFT</Text>
+      <InfoBox
+        slot="body"
+        data={$state.context.transformedOverview?.nonFungible || skeletonData}
+        loading={!$state.matches('final')}
+      />
+    </Card>
+  {/if}
 </Box>

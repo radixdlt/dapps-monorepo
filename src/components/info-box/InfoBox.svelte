@@ -19,7 +19,13 @@
       transparent
     >
       {#each Object.entries(data || {}) as [key, value]}
-        <Text bold>{key}</Text>
+        <Text bold>
+          {#if loading}
+            <SkeletonLoader width={loaderWidth} />
+          {:else if data}
+            {key}
+          {/if}
+        </Text>
         <Text>
           {#if loading}
             <SkeletonLoader width={loaderWidth} />
