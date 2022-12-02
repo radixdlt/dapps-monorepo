@@ -79,7 +79,7 @@ jobs:
           elif [ ${{ github.event.action }} = "preleased" ]; then
             VARIABLE="nebunet"
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "VARIABLE=hammunet" >> $GITHUB_ENV
+            echo "VARIABLE=hammunet" >> $GITHUB_OUTPUT
           fi
 
           echo $VARIABLE
@@ -95,7 +95,7 @@ jobs:
       - name: export var
         run: |
           env
-          echo "The selected color is ${{ env.VARIABLE }}"
+          echo "The selected color is ${{ steps.network_output.outputs.VARIABLE }}"
       # - uses: ./.github/actions/build
       #   with: 
       #     npm_token: ${{ secrets.NPM_TOKEN }}
