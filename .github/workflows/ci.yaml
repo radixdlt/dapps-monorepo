@@ -74,12 +74,14 @@ jobs:
       - name: define network name
         run: |
           if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
-            echo "${{ github.event.inputs.ENVIRONMENT_NAME }}"
+            VARIBALE="${{ github.event.inputs.ENVIRONMENT_NAME }}"
           elif [ ${{ github.event.action }} = "preleased" ]; then
-            echo "nebunet"
-          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event_type }} = "pull_request" ]; then
-            echo "hammunet"
+            VARIBALE="nebunet"
+          elif [ ${{ github.ref }} = "refs/heads/main" || ${{ github.event_name }} = "pull_request" ]; then
+            VARIBALE="hammunet"
           fi
+
+          echo $VARIABLE
   # elif [ ${{ github.ref }} = "refs/heads/staging" ]; then
   #   echo "::set-output name=STAGE::staging"
   #   echo "::set-output name=SSH_KEY::${{ secrets.STAGING_KEY }}"
