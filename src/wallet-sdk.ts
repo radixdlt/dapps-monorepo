@@ -1,9 +1,2 @@
-import { networkConfig } from '@constants'
-import WalletSdk from '@radixdlt/wallet-sdk'
-
-export const getWalletSDK = () =>
-  WalletSdk({
-    networkId: networkConfig?.id,
-    dAppId: 'radixdlt.dashboard.com',
-    logLevel: 'DEBUG'
-  })
+export { getMethods as getWalletSDK } from '@radixdlt/connect-button'
+export { configure as configureConnectButton } from '@radixdlt/connect-button'

@@ -77,8 +77,8 @@
   "dependencies": {
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
-    "@radixdlt/wallet-sdk": "^0.3.3",
     "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-alpha.2",
+    "@radixdlt/connect-button": "^0.5.4",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
     "@xstate/svelte": "^2.0.0",

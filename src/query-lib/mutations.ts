@@ -10,8 +10,7 @@ export const sendTransaction = makeQueries({
     transactionManifest: string
     blobs?: string[]
   }) => {
-    const sdk = getWalletSDK()
-    const res = await sdk.sendTransaction({
+    const res = await getWalletSDK().sendTransaction({
       transactionManifest,
       version: 0,
       blobs
