@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: define network name
         run: |
-          if [ ${{ github.event_name == 'workflow_dispatch' }} ]; then
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
             echo "${{ github.event.inputs.ENVIRONMENT_NAME }}"
           else 
             echo "hello world"
