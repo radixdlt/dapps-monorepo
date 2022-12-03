@@ -1,9 +1,13 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-import { configs } from './configs.js'
+import wasmPack from 'vite-plugin-wasm-pack'
+import { configs } from './configs'
 
 /** @type {import('vite').UserConfigFn} */
 const config = ({ command }) => ({
-	plugins: [!configs.flags.isVitebook ? sveltekit() : null],
+	plugins: [
+		!configs.flags.isVitebook ? sveltekit() : null,
+		wasmPack('./radix_engine_toolkit')
+	],
 	...(() => ({
 		serve: {
 			build: {
