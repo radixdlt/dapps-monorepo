@@ -1,6 +1,6 @@
 module.exports = {
   plugins: ['unused-imports'],
-  extends: ['@sveltejs', 'plugin:storybook/recommended'],
+  extends: ['@sveltejs', 'plugin:storybook/recommended', 'prettier'],
   rules: {
     semi: [0, 'never'],
     'unused-imports/no-unused-imports': 'error',
