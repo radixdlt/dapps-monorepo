@@ -22,6 +22,9 @@
         setState({ loading: false, connected: false })
       }
     },
+    onDisconnect: ({ setState }) => {
+      setState({ connected: false })
+    },
     // clean up dangling subscriptions when HMR is triggered
     onDestroy: () => destroy()
   })
