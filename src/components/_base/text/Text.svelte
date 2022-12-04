@@ -193,6 +193,9 @@
       },
       xlarge: {
         fontSize: '$xl'
+      },
+      xxlarge: {
+        fontSize: '$2xl'
       }
     }
   } as const
