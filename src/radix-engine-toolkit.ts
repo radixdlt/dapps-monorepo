@@ -6,9 +6,27 @@ type DecompileUnknownTransactionIntentRequest = {
   compiled_unknown_intent: string
 }
 
+type DecompileUnknownTransactionIntentResponse = {
+  signed_intent: {
+    intent: {
+      manifest: {
+        instructions: {
+          value: string
+        }
+      }
+    }
+  }
+}
+
 type Request = {
   [K in keyof WasmFunction]: WasmFunction[K] extends WasmFunction['decompile_unknown_transaction_intent']
     ? DecompileUnknownTransactionIntentRequest
+    : never
+}
+
+type Response = {
+  [K in keyof WasmFunction]: WasmFunction[K] extends WasmFunction['decompile_unknown_transaction_intent']
+    ? DecompileUnknownTransactionIntentResponse
     : never
 }
 
@@ -58,13 +76,18 @@ const wasmInterface = (module: InitOutput) => {
 
       // Read and parse the returned response
       const returnedString: string = readString(responsePointer)
-      const parsedResponse: Response | Error = JSON.parse(returnedString)
+      const parsedResponse: Response[typeof wasmFunction] | Error =
+        JSON.parse(returnedString)
+
+      if ((parsedResponse as Error).cause) {
+        throw parsedResponse
+      }
 
       // Free up the memory needed in this operation
       module.toolkit_free_c_string(requestStringPointer)
       module.toolkit_free_c_string(responsePointer)
 
-      return parsedResponse
+      return parsedResponse as Response[typeof wasmFunction]
     }
 }
 
