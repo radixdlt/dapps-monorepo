@@ -1529,10 +1529,10 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/connect-button@^0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.5.4.tgz#d657345f661c183be6a7ae1c1d29a179d5bf6b65"
-  integrity sha512-gfiJ0mmOmySAD85J97WbACDrWZuccUhUPbZ9qEcTy7IIuqAhiwn4lt5PFiDoSodM6qCds/tnUNqsxEuf2ufAGQ==
+"@radixdlt/connect-button@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.6.0.tgz#5595c276531637ae0869bbd0e045d228c44f134a"
+  integrity sha512-Br1LLSdZVSVxwKXBdLZpxqYiByqrjvozl9tI6wbM/h4chIvaytfWf7JGmYLopXnJ8P6UJHhnNWPcwxFqwwgo+A==
   dependencies:
     "@radixdlt/wallet-sdk" "^0.3.3"
     lit "^2.4.1"
@@ -9842,9 +9842,6 @@ queue-microtask@^1.2.2:
 
 radix-js@./mock-sdk:
   version "1.0.0"
-
-radix_engine_toolkit@./src/radix_engine_toolkit/pkg:
-  version "0.1.0"
 
 ramda@^0.28.0:
   version "0.28.0"
