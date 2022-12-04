@@ -91,4 +91,6 @@ const wasmInterface = (module: InitOutput) => {
     }
 }
 
-export const toolkit = init().then(wasmInterface)
+export const toolkit = init(
+  `${window.location.origin}/assets/radix_engine_toolkit_bg.wasm`
+).then(wasmInterface)
