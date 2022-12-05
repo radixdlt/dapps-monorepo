@@ -44,16 +44,16 @@ jobs:
       - name: Define network name
         run: |
           if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
-            echo "VARIABLE="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ ${{ github.event.action }} = "published" ]; then
-            echo "VARIABLE=nebunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "VARIABLE=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
           fi
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ secrets.NPM_TOKEN }}
-          network_name: ${{ env.VARIABLE }}
+          network_name: ${{ env.NETWORK_NAME }}
 
   setup-tags:
     runs-on: ubuntu-latest
