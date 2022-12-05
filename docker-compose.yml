@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  dashboard:
+    image: rdxworks/dashboard
+    container_name: dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dashboard
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
+    ports:
+      - "8000:80"
+
+  storybook:
+    image: rdxworks/storybook
+    container_name: storybook
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: storybook
+      args:
+        - NPM_TOKEN=${NPM_TOKEN}
+    ports:
+      - "8001:80"
