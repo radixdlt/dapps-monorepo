@@ -1,0 +1,13 @@
+{
+  "name": "radix-engine-toolkit-wasm",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "radix_engine_toolkit_bg.wasm",
+    "radix_engine_toolkit.js",
+    "radix_engine_toolkit.d.ts"
+  ],
+  "module": "radix_engine_toolkit.js",
+  "types": "radix_engine_toolkit.d.ts",
+  "sideEffects": false
+}

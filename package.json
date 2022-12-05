@@ -78,7 +78,7 @@
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
     "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-alpha.2",
-    "@radixdlt/connect-button": "^0.5.4",
+    "@radixdlt/connect-button": "^0.6.0",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
     "@xstate/svelte": "^2.0.0",
@@ -91,6 +91,9 @@
     "svelte-filepond": "^0.2.0",
     "svelte-local-storage-store": "^0.3.1",
     "svelte-samlat": "^0.2.0",
+    "vite-plugin-top-level-await": "^1.2.2",
+    "vite-plugin-wasm": "^3.1.0",
+    "vite-plugin-wasm-pack": "^0.1.12",
     "xstate": "^4.33.6",
     "zod": "^3.18.0"
   }
