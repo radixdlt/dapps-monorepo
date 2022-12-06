@@ -33,7 +33,8 @@ module.exports = {
       resolve: {
         alias: {
           ...aliasWithSlash((await import('../configs.js')).configs.alias),
-          '$env/static/public': '.storybook/mocks.ts'
+          '$env/static/public': '.storybook/__mocks__/env.ts',
+          '$app/navigation': '.storybook/__mocks__/navigation.ts'
         }
       }
     })
