@@ -1,0 +1,8 @@
+1. Get the storybook application URL by running these commands:
+{{- if .Values.storybook.ingress.enabled }}
+{{- range $host := .Values.storybook.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.storybook.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- end }}

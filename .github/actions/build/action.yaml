@@ -4,6 +4,9 @@ inputs:
   npm_token:
     description: 'NPM token for private package access.'
     required: true
+  network_name:
+    description: 'Network name to use in build.'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -31,7 +34,10 @@ runs:
       run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm_token }}" > ~/.npmrc
     - name: Add env variables
       shell: bash
-      run: echo "PUBLIC_NETWORK_NAME=hammunet" > .env
+      run: echo "PUBLIC_NETWORK_NAME=${{ inputs.network_name }}" > .env
+    - name: Add env variables
+      shell: bash
+      run: cat .env
     - name: Build
       shell: bash
       run: yarn --frozen-lockfile && yarn build
