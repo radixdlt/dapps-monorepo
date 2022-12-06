@@ -18,15 +18,12 @@ type DecompileUnknownTransactionIntentResponse = {
   }
 }
 
-type Request = {
-  [K in keyof WasmFunction]: WasmFunction[K] extends WasmFunction['decompile_unknown_transaction_intent']
-    ? DecompileUnknownTransactionIntentRequest
-    : never
-}
-
-type Response = {
-  [K in keyof WasmFunction]: WasmFunction[K] extends WasmFunction['decompile_unknown_transaction_intent']
-    ? DecompileUnknownTransactionIntentResponse
+type IO = {
+  [K in keyof WasmFunction]: WasmFunction[K] extends WasmFunction['decompile_transaction_intent']
+    ? {
+        request: DecompileUnknownTransactionIntentRequest
+        response: DecompileUnknownTransactionIntentResponse
+      }
     : never
 }
 
@@ -67,7 +64,7 @@ const wasmInterface = (module: InitOutput) => {
   }
 
   return (wasmFunction: keyof WasmFunction) =>
-    (request: Request[typeof wasmFunction]) => {
+    (request: IO[typeof wasmFunction]) => {
       // Serialize the request as JSON and write it to WASM's memory
       const requestStringPointer: number = writeString(JSON.stringify(request))
 
@@ -76,10 +73,14 @@ const wasmInterface = (module: InitOutput) => {
 
       // Read and parse the returned response
       const returnedString: string = readString(responsePointer)
-      const parsedResponse: Response[typeof wasmFunction] | Error =
+      const parsedResponse: IO[typeof wasmFunction]['request'] | Error =
         JSON.parse(returnedString)
 
-      if ((parsedResponse as Error).cause) {
+      if (
+        ((response: unknown): response is Error => !!(response as Error).cause)(
+          parsedResponse
+        )
+      ) {
         throw parsedResponse
       }
 
@@ -87,7 +88,7 @@ const wasmInterface = (module: InitOutput) => {
       module.toolkit_free_c_string(requestStringPointer)
       module.toolkit_free_c_string(responsePointer)
 
-      return parsedResponse as Response[typeof wasmFunction]
+      return parsedResponse
     }
 }
 
