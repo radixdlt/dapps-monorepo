@@ -66,7 +66,7 @@ export const getTransactionStatus = makeQueries({
     transactionApi.transactionStatus({
       transactionStatusRequest: {
         transaction_identifier: {
-          origin: TransactionLookupOrigin.Payload,
+          origin: TransactionLookupOrigin.Intent,
           value_hex: txID
         }
       }
