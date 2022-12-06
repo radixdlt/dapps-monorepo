@@ -3,18 +3,27 @@
   import Sidebar from '@components/_base/sidebar/Sidebar.svelte'
   import type { Page } from '@sveltejs/kit'
   import { isSameRoute } from '@utils'
+  import type { icons } from 'src/icon-assets'
 
   export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
-  const routes = [
-    { text: 'Staking/Validators', icon: 'validators', path: '/staking' },
-    { text: 'Package Deployment', icon: 'dashboard', path: '/deploy-package' },
+  const routes: Array<{
+    text: string
+    icon: keyof typeof icons
+    path: string
+  }> = [
+    { text: 'Deploy Package', icon: 'dashboard', path: '/deploy-package' },
     {
       text: 'Transaction Manifest',
       icon: 'transactions',
-      path: '/send-transaction'
+      path: '/transaction-manifest'
+    },
+    {
+      text: 'Send Tokens',
+      icon: 'tokens',
+      path: '/send-tokens'
     }
-  ] as const
+  ]
 </script>
 
 <Sidebar disableClickOutside show>
