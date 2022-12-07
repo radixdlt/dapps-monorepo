@@ -2,10 +2,6 @@ import Deploypackage from './DeployPackage.svelte'
 import { render } from '@testing-library/svelte'
 import userEvent from '@testing-library/user-event'
 
-vi.mock('$env/static/public', () => ({
-  PUBLIC_NETWORK_NAME: 'hammunet'
-}))
-
 describe('#deploy package', () => {
   it('Should upload both wasm and abi', async () => {
     const file = new File(['(⌐□_□)'], 'chucknorris.wasm', { type: 'wasm' })
