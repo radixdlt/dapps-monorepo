@@ -34,7 +34,7 @@
     height: '100vh',
     overflowY: 'hidden',
     gridTemplateColumns: '250px auto',
-    gridTemplateRows: '70px auto',
+    gridTemplateRows: 'auto',
     gridTemplateAreas: `
       "header header"
       "nav content"`

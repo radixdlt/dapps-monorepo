@@ -8,7 +8,6 @@
 
   const routes = [
     { text: 'Staking/Validators', icon: 'validators', path: '/staking' },
-    { text: 'Dashboard', icon: 'dashboard', path: '/explorer' },
     { text: 'Package Deployment', icon: 'dashboard', path: '/deploy-package' },
     {
       text: 'Transaction Manifest',

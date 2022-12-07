@@ -10,6 +10,7 @@
     borderRadius: '$searchBorder',
     py: '$md',
     px: '$lg',
+    paddingRight: '$4xl',
     background: "url('/images/search_icon.svg') no-repeat", // TODO: use icon component / make it work nicely for dark mode
     backgroundSize: config.theme.sizes.xs,
     backgroundPosition: `right ${config.theme.space.lg} center`,

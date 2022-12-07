@@ -7,7 +7,7 @@
 <Box transparent on:click={() => goto('/')} p="none" m="none">
   <Image
     cx={{ cursor: 'pointer' }}
-    width="$4xl"
+    height="$md"
     alt="logo"
     src={'/images/dashboard_logo.svg'}
   />
