@@ -4,6 +4,7 @@
   import ConnectButton from '@components/connect-button/ConnectButton.svelte'
   import Logo from '@components/logo/Logo.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
+  import { featureFlags } from '../../feature-flags'
 </script>
 
 <Box
@@ -24,6 +25,8 @@
   </Box>
   <Box cx={{ gap: '$md' }} p="none" flex="row" items="center">
     <ConnectButton />
-    <ThemeSwitch />
+    {#if featureFlags().getFlag('dark-mode')?.enabled}
+      <ThemeSwitch />
+    {/if}
   </Box>
 </Box>

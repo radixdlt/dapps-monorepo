@@ -34,7 +34,7 @@ WORKDIR /usr/app/
 COPY . ./
 
 COPY .npmrc.docker .npmrc
-COPY .env.sample .env
+COPY .env.production .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
