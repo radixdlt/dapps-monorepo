@@ -30,5 +30,8 @@
 </script>
 
 <form on:submit|preventDefault={search}>
-  <Search bind:value={address} placeholder="Enter Transaction ID" />
+  <Search
+    bind:value={address}
+    placeholder="Search for an address, transaction/block hash or validator key"
+  />
 </form>
