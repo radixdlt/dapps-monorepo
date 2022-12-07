@@ -21,7 +21,7 @@
   }
 
   onMount(() => {
-    import('../../../../radix-engine-toolkit').then((module) => {
+    import('../../../radix-engine-toolkit').then((module) => {
       decompileTxIntent = module.toolkit.then((fn) =>
         fn('decompile_unknown_transaction_intent')
       )
