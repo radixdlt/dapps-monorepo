@@ -3,8 +3,6 @@
 
 # Get NPM token from github
 ARG NPM_TOKEN
-# Get ENV from github
-ARG ENV
 
 
 # Define the node image
@@ -21,9 +19,9 @@ FROM node:16.17.1-alpine AS build-sdk
 # RUN ls -lR
 # RUN yarn && yarn build
 
-ARG ENV
 FROM build-sdk AS install-dashboard
 ARG NPM_TOKEN
+ARG ENV
 # Below steps installs npm modules of root directory into /usr/app/
 RUN echo $ENV
 ENV DASHBOARD_DIR=/TMP

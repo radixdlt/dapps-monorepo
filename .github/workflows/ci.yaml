@@ -179,6 +179,7 @@ jobs:
           target: "dashboard"
           build-args: |
              NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+             ENV=${{ github.event.inputs.environment }}
       - name: Docker Image output
         run: |
           docker images
@@ -206,6 +207,7 @@ jobs:
           target: "storybook"
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            ENV=${{ github.event.inputs.environment }}
       - name: Docker Image output
         run: |
           docker images
