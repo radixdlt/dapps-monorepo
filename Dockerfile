@@ -3,6 +3,8 @@
 
 # Get NPM token from github
 ARG NPM_TOKEN
+# Get ENV from github
+ARG ENV
 
 
 # Define the node image
@@ -19,18 +21,20 @@ FROM node:16.17.1-alpine AS build-sdk
 # RUN ls -lR
 # RUN yarn && yarn build
 
+ARG ENV
 FROM build-sdk AS install-dashboard
 ARG NPM_TOKEN
 # Below steps installs npm modules of root directory into /usr/app/
-ENV dashboard_dir=/tmp
-COPY package*.json tsconfig.json yarn.lock $sdk $dashboard_dir/
-RUN cd $dashboard_dir
-COPY .npmrc.docker .npmrc
-RUN yarn install
-RUN cp -a node_modules /usr/app/
+RUN echo $ENV
+ENV DASHBOARD_DIR=/TMP
+COPY PACKAGE*.JSON TSCONFIG.JSON YARN.LOCK $SDK $DASHBOARD_DIR/
+RUN CD $DASHBOARD_DIR
+COPY .NPMRC.DOCKER .NPMRC
+RUN YARN INSTALL
+RUN CP -A NODE_MODULES /USR/APP/
 
-# Below steps copies actual dashboard code and runs build steps
-WORKDIR /usr/app/
+# BELOW STEPS COPIES ACTUAL DASHBOARD CODE AND RUNS BUILD STEPS
+WORKDIR /USR/APP/
 COPY . ./
 
 COPY .npmrc.docker .npmrc
