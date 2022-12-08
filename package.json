@@ -78,7 +78,7 @@
   "dependencies": {
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
-    "@radixdlt/connect-button": "^0.6.1",
+    "@radixdlt/connect-button": "^0.7.0",
     "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-beta.1.1",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
