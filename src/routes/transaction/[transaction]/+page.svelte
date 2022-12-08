@@ -5,12 +5,8 @@
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { onMount } from 'svelte'
 
   const { state } = query('getTransactionDetails', $page.params.transaction)
-
-  let decompileTxIntent: any
 
   $: if ($state.status === 'error') {
     AlertToast({
@@ -18,24 +14,6 @@
       text: $state.error.message,
       type: 'error'
     })()
-  }
-
-  onMount(() => {
-    import('../../../radix-engine-toolkit').then((module) => {
-      decompileTxIntent = module.toolkit.then((fn) =>
-        fn('decompile_unknown_transaction_intent')
-      )
-    })
-  })
-
-  let manifest: string
-
-  $: if ($state.data) {
-    ;(async () =>
-      (manifest = (await decompileTxIntent)({
-        manifest_instructions_output_format: 'String',
-        compiled_unknown_intent: $state.data.details
-      }).signed_intent.intent.manifest.instructions.value))()
   }
 </script>
 
@@ -63,14 +41,4 @@
       loading={false}
     />
   {/if}
-  <Text bold>Transaction Manifest</Text>
-  <Box>
-    {#if $state.status === 'loading'}
-      <SkeletonLoader />
-      <SkeletonLoader />
-      <SkeletonLoader />
-    {:else}
-      {manifest}
-    {/if}
-  </Box>
 </Box>
