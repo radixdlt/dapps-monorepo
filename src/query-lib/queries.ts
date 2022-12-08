@@ -74,8 +74,8 @@ export const getTransactionDetails = makeQueries({
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: async (res) => {
     return {
-      status: res.transaction.transaction_status.status,
-      date: res.transaction.transaction_status.confirmed_at,
+      status: res.transaction.transaction_status,
+      date: res.transaction.confirmed_at,
       fee: res.transaction.fee_paid.value,
       message: res.details.message_hex,
       details: res.details.raw_hex
