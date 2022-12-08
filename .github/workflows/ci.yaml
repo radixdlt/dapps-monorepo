@@ -162,6 +162,15 @@ jobs:
     needs: [build, setup-tags]
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Define network name
+        run: |
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ ${{ github.event.action }} = "published" ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+          fi
       - name: Login to GCR
         uses: docker/login-action@v1
         with:
@@ -178,7 +187,8 @@ jobs:
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: "dashboard"
           build-args: |
-             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NETWORK_NAME=${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
           docker images
@@ -189,6 +199,15 @@ jobs:
     - setup-tags
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Define network name
+        run: |
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ ${{ github.event.action }} = "published" ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+          fi
       - name: Login to GCR
         uses: docker/login-action@v1
         with:
@@ -206,6 +225,7 @@ jobs:
           target: "storybook"
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NETWORK_NAME=${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
           docker images

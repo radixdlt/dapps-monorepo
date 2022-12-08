@@ -3,6 +3,7 @@
 
 # Get NPM token from github
 ARG NPM_TOKEN
+ARG NETWORK_NAME
 
 
 # Define the node image
@@ -21,6 +22,7 @@ FROM node:16.17.1-alpine AS build-sdk
 
 FROM build-sdk AS install-dashboard
 ARG NPM_TOKEN
+ARG NETWORK_NAME
 # Below steps installs npm modules of root directory into /usr/app/
 ENV dashboard_dir=/tmp
 COPY package*.json tsconfig.json yarn.lock $sdk $dashboard_dir/
@@ -34,6 +36,8 @@ WORKDIR /usr/app/
 COPY . ./
 
 COPY .npmrc.docker .npmrc
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
+RUN cat .env.production
 COPY .env.production .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook

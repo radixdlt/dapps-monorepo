@@ -6,7 +6,7 @@
   const { destroy } = configureConnectButton({
     dAppId: 'dashboard',
     logLevel: 'DEBUG',
-    networkId: networkConfig.id,
+    networkId: networkConfig?.id,
     onConnect: async ({ setState, getWalletData }) => {
       setState({ loading: true, connected: false })
 
