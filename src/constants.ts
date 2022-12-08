@@ -3,6 +3,10 @@ import { PUBLIC_NETWORK_NAME } from '$env/static/public'
 export const OLYMPIA_MAINNET_URL = 'https://mainnet-gateway.radixdlt.com'
 
 export const networkConfig = {
+  nebunet: {
+    id: 35,
+    url: 'https://nebunet-gateway.radixdlt.com'
+  },
   hammunet: {
     id: 34,
     url: 'https://hammunet-gateway.radixdlt.com:443'

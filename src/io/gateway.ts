@@ -7,7 +7,8 @@ import z, {
   array,
   any,
   literal,
-  union
+  union,
+  date
 } from 'zod'
 
 export const StakesIO = object({
@@ -99,18 +100,23 @@ export const ActionIO = object({
 
 export const TransactionIO = object({
   transaction: object({
-    transaction_status: object({
-      status: string(),
-      confirmed_at: string().optional()
-    }),
+    confirmed_at: date(),
     fee_paid: object({
       value: string(),
       address: string().optional()
-    })
+    }),
+    intent_hash_hex: string(),
+    payload_hash_hex: string(),
+    state_version: number(),
+    transaction_status: string()
   }),
   details: object({
     raw_hex: string(),
-    message_hex: string().optional()
+    message_hex: string().optional(),
+    receipt: object({
+      status: string(),
+      error_message: string().nullable()
+    })
   })
 })
 

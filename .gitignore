@@ -16,3 +16,4 @@ dist/
 storybook-static
 .eslintcache
 .npmrc
+cypress/screenshots

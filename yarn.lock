@@ -1520,10 +1520,10 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/babylon-gateway-api-sdk@^1.0.0-alpha.2":
-  version "1.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-alpha.2.tgz#555e27cff69731140d2d02840ddefd187d094753"
-  integrity sha512-eBawgcEQfbAlVqF1X4w96y1pdx/X0HO6E8VdzMxI2AFwS3mvq/P0I/Hi1ByPO4yMKA7X1TMEpU6BHX5WG0C7qQ==
+"@radixdlt/babylon-gateway-api-sdk@^1.0.0-beta.1.1":
+  version "1.0.0-beta.1.1"
+  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-beta.1.1.tgz#3f4b465d6ec876d06b40441e23293fbbda1eb872"
+  integrity sha512-j/DSHGP+Ga7uAoECjuNnFr/fb4j/acexHXVSm0w/QLnmHHWhRVB+x00Gkq4OGDkHh5lBghZbqYACnigsASGBQQ==
   dependencies:
     loglevel "^1.8.0"
     neverthrow "^5.0.0"

@@ -4,8 +4,7 @@ import { Gateway } from 'radix-js'
 import {
   Configuration,
   TransactionApi,
-  EntityApi,
-  TransactionLookupOrigin
+  EntityApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
@@ -61,40 +60,22 @@ export const getValidators = makeQueries({
   }
 })
 
-export const getTransactionStatus = makeQueries({
-  fn: async (txID: string) =>
-    transactionApi.transactionStatus({
-      transactionStatusRequest: {
-        transaction_identifier: {
-          origin: TransactionLookupOrigin.Intent,
-          value_hex: txID
-        }
-      }
-    }),
-  decoder: (res) => decoders('TransactionIO', res),
-  transformationFn: (res) => {
-    const transformedResponse = {
-      status: res.transaction.transaction_status.status
-    }
-    return decoders('TransactionTransformedIO', transformedResponse)
-  }
-})
-
 export const getTransactionDetails = makeQueries({
   fn: async (txID: string) =>
-    transactionApi.transactionDetails({
-      transactionDetailsRequest: {
+    transactionApi.transactionCommittedDetails({
+      transactionCommittedDetailsRequest: {
         transaction_identifier: {
-          origin: TransactionLookupOrigin.Payload,
+          type: 'intent_hash',
           value_hex: txID
         }
       }
     }),
+
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: async (res) => {
     return {
-      status: res.transaction.transaction_status.status,
-      date: res.transaction.transaction_status.confirmed_at,
+      status: res.transaction.transaction_status,
+      date: res.transaction.confirmed_at,
       fee: res.transaction.fee_paid.value,
       message: res.details.message_hex,
       details: res.details.raw_hex
