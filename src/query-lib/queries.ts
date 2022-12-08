@@ -60,36 +60,16 @@ export const getValidators = makeQueries({
   }
 })
 
-export const getTransactionStatus = makeQueries({
+export const getTransactionDetails = makeQueries({
   fn: async (txID: string) =>
-    transactionApi.transactionStatus({
-      transactionStatusRequest: {
-        intent_hash_hex: txID
+    transactionApi.transactionCommittedDetails({
+      transactionCommittedDetailsRequest: {
+        transaction_identifier: {
+          type: 'intent_hash',
+          value_hex: txID
+        }
       }
     }),
-  decoder: (res) => decoders('TransactionIO', res),
-  transformationFn: (res) => {
-    const transformedResponse = {
-      status: res.transaction.transaction_status.status
-    }
-    return decoders('TransactionTransformedIO', transformedResponse)
-  }
-})
-
-export const getTransactionDetails = makeQueries({
-  fn: async (txID: string) => {
-    return txID
-  },
-
-  // TODO: fix this
-  // transactionApi.transactionDetails({
-  //   transactionDetailsRequest: {
-  //     transaction_identifier: {
-  //       origin: TransactionLookupOrigin.Payload,
-  //       value_hex: txID
-  //     }
-  //   }
-  // })
 
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: async (res) => {
