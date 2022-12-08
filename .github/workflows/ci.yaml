@@ -162,6 +162,15 @@ jobs:
     needs: [build, setup-tags]
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Define network name
+        run: |
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ ${{ github.event.action }} = "published" ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+          fi
       - name: Login to GCR
         uses: docker/login-action@v1
         with:
@@ -190,6 +199,15 @@ jobs:
     - setup-tags
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Define network name
+        run: |
+          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ ${{ github.event.action }} = "published" ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+          fi
       - name: Login to GCR
         uses: docker/login-action@v1
         with:
