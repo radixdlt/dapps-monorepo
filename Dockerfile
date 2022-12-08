@@ -36,7 +36,7 @@ WORKDIR /usr/app/
 COPY . ./
 
 COPY .npmrc.docker .npmrc
-RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" > .env.production
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
 COPY .env.production .env
 RUN yarn add ./mock-sdk
