@@ -47,7 +47,7 @@ jobs:
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ ${{ github.event.action }} = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - uses: ./.github/actions/build
@@ -168,7 +168,7 @@ jobs:
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ ${{ github.event.action }} = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - name: Login to GCR
@@ -205,7 +205,7 @@ jobs:
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ ${{ github.event.action }} = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - name: Login to GCR
@@ -254,7 +254,7 @@ jobs:
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
 
   deploy_dev:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
@@ -370,7 +370,7 @@ jobs:
     if: >
       ( github.event_name == 'release' && github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/main' )
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:
       - push-dashboard
