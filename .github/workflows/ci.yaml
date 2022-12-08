@@ -48,7 +48,7 @@ jobs:
           elif [ ${{ github.event.action }} = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           elif [ ${{ github.ref }} = "refs/heads/main" ] || [ ${{ github.event_name }} = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - uses: ./.github/actions/build
         with: 
