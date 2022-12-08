@@ -178,7 +178,8 @@ jobs:
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: "dashboard"
           build-args: |
-             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NETWORK_NAME: ${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
           docker images
@@ -206,6 +207,7 @@ jobs:
           target: "storybook"
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NETWORK_NAME: ${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
           docker images
