@@ -7,6 +7,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import { stateMachine } from './account-state-machine'
   import { useMachine } from '@xstate/svelte'
+  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -29,11 +30,8 @@
   }
 </script>
 
-<Box p="large" m="large" transparent>
-  <Box p="none" transparent inline items="baseline">
-    <Text size="xlarge" mb="large" bold>Account</Text>
-    <Text size="small" mx="medium" muted>{$page.params.account}</Text>
-  </Box>
+<Box px="none" m="none" transparent>
+  <ResourceViewTitle title="Account" resourceAddress={$page.params.account} />
   {#if $state.matches('error')}
     No account found
   {:else}
