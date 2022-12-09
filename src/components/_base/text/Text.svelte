@@ -8,6 +8,11 @@
   })()
 
   const variants = {
+    inline: {
+      true: {
+        display: 'inline-flex'
+      }
+    },
     cellAlign: {
       right: {
         float: 'right'
@@ -218,6 +223,7 @@
   export let slightlyMuted: true | false = false
   export let cellAlign: keyof typeof variants['cellAlign'] | undefined =
     undefined
+  export let inline: true | false = false
 
   const text = css({
     variants,
@@ -239,7 +245,8 @@
     size,
     muted,
     cellAlign,
-    slightlyMuted
+    slightlyMuted,
+    inline
   })
 </script>
 
