@@ -56,6 +56,9 @@ jobs:
         with: 
           npm_token: ${{ secrets.NPM_TOKEN }}
           network_name: ${{ env.NETWORK_NAME }}
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   setup-tags:
     runs-on: ubuntu-latest
