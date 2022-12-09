@@ -6,12 +6,21 @@ export const transformWithOverview = (
   overview?: EntityOverviewTransformed['withOverviews']
 ) => {
   const transformedOverview = overview?.reduce((acc, overview) => {
-    const symbol =
-      overview.metadata.items?.find((item) => item.key === 'symbol')?.value ||
-      overview.address
+    const symbol = overview.metadata.items?.find(
+      (item) => item.key === 'symbol'
+    )?.value
+    const name = overview.metadata.items?.find(
+      (item) => item.key === 'name'
+    )?.value
+
+    const key =
+      symbol && name
+        ? `${symbol} (${name})`
+        : symbol || name || overview.address
+
     return {
       ...acc,
-      [symbol]: overview.amount
+      [key]: overview.amount
     }
   }, {})
   return transformedOverview
