@@ -43,6 +43,14 @@ RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
 
+FROM install-dashboard AS dev-server
+CMD yarn dev
+
+
+FROM install-dashboard AS node-adapter
+CMD ["pm2-runtime","build/index.js"]
+
+
 # Both the apps can be served as static content.
 # Ref: https://vitejs.dev/guide/build.html#building-for-production
 FROM nginx:alpine AS storybook

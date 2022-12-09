@@ -37,6 +37,7 @@
     "@storybook/svelte": "^6.5.10",
     "@storybook/testing-library": "^0.0.13",
     "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-node": "^1.0.0-next.102",
     "@sveltejs/adapter-static": "^1.0.0-next.39",
     "@sveltejs/eslint-config": "sveltejs/eslint-config",
     "@sveltejs/kit": "^1.0.0-next.442",
@@ -78,8 +79,8 @@
   "dependencies": {
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
-    "@radixdlt/connect-button": "^0.7.0",
     "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-beta.1.1",
+    "@radixdlt/connect-button": "^0.7.0",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
     "@xstate/svelte": "^2.0.0",
