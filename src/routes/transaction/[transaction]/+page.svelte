@@ -4,9 +4,7 @@
   import { page } from '$app/stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { shortenAddress } from '@utils'
-  import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
+  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
 
   const { state } = query('getTransactionDetails', $page.params.transaction)
 
@@ -20,19 +18,10 @@
 </script>
 
 <Box transparent m="none" px="none" full>
-  <Text inline size="xxlarge" bold>Transaction</Text>
-  <Box transparent m="none" p="none" inline>
-    <IconTextItem
-      on:click={() => navigator.clipboard.writeText($page.params.transaction)}
-      icon="copy"
-      interactiveIcon
-      iconPosition="right"
-      iconSize="xs"
-      noPadding
-      textColor="$highlightedText"
-      >{shortenAddress($page.params.transaction)}</IconTextItem
-    >
-  </Box>
+  <ResourceViewTitle
+    title="Transaction"
+    resourceAddress={$page.params.transaction}
+  />
 </Box>
 
 <Box full>
