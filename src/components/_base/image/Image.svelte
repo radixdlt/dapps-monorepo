@@ -18,4 +18,4 @@
   })
 </script>
 
-<img {alt} {src} class={style()} />
+<img on:click {alt} {src} class={style()} />
