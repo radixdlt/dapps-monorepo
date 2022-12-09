@@ -41,6 +41,8 @@ jobs:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
@@ -162,6 +164,8 @@ jobs:
     needs: [build, setup-tags]
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
@@ -199,6 +203,8 @@ jobs:
     - setup-tags
     steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
