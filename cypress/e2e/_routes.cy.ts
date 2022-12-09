@@ -5,10 +5,6 @@ describe('load all routes', () => {
     cy.visit('/', { failOnStatusCode: true })
   })
 
-  it('should load staking page', () => {
-    cy.visit('/staking', { failOnStatusCode: true })
-  })
-
   it('should load deploy package page', () => {
     cy.visit('/deploy-package', { failOnStatusCode: true })
   })
@@ -20,4 +16,3 @@ describe('load all routes', () => {
     )
   })
 })
-
