@@ -44,7 +44,6 @@
     <Header />
     <SidebarWithNavbar page={$page} />
     <Box
-      p="none"
       cx={{
         gridArea: 'content',
         height: '100vh',
