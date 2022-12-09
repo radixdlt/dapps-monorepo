@@ -30,5 +30,9 @@ build:
 run-nginx: build
 	docker run -it -p 8080:80 $(REPO):$(TAG)
 
+.PHONY: yarn-lock
+ yarn-lock:
+	docker build --output type=local,dest=lock  --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME) --target export-yarn-lock -f Dockerfile  .
+
 build-with-remote-cache:
 	#to be added so that building on CI is faster
