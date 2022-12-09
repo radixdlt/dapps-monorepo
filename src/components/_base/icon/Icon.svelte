@@ -25,4 +25,11 @@
   }
 </script>
 
-<Image cx={style} width="$sm" height="$sm" alt="dashboard" src={type} />
+<Image
+  on:click
+  cx={style}
+  width="$sm"
+  height="$sm"
+  alt="dashboard"
+  src={type}
+/>
