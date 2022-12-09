@@ -199,6 +199,9 @@ jobs:
       - name: Docker Image output
         run: |
           docker images
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   push-storybook:
     runs-on: ubuntu-latest
@@ -238,6 +241,9 @@ jobs:
       - name: Docker Image output
         run: |
           docker images
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
