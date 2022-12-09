@@ -1,10 +1,13 @@
 import { makeQueries } from 'svelte-samlat'
-import { networkConfig } from '@constants'
+import { networkConfig, OLYMPIA_MAINNET_URL } from '@constants'
+import { Gateway } from 'radix-js'
 import {
   Configuration,
   TransactionApi,
   EntityApi
 } from '@radixdlt/babylon-gateway-api-sdk'
+import BigNumber from 'bignumber.js'
+import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
 import { getWalletSDK } from '../wallet-sdk'
 import {
@@ -28,6 +31,38 @@ export const requestAddresses = makeQueries({
   },
   decoder: (res) => decoders('RequestAddressesIO', res),
   transformationFn: (res) => res
+})
+
+export const getValidators = makeQueries({
+  fn: async () => Gateway.validators(OLYMPIA_MAINNET_URL),
+  decoder: (res) => decoders('ValidatorArrayIO', res),
+  transformationFn: (res) => {
+    const totalStake = res.validators.reduce(
+      (accumulatedStake, validator) =>
+        accumulatedStake.plus(validator.stake.value),
+      BigNumber(0)
+    )
+    const transformedValidators = res.validators.map((validator) => ({
+      address: validator.validator_identifier.address,
+      name: validator.properties.name,
+      totalStake: toWholeUnits(validator.stake.value),
+      ownerStake: toWholeUnits(validator.info.owner_stake.value),
+      uptimePercentage: validator.info.uptime.uptime_percentage,
+      feePercentage: validator.properties.validator_fee_percentage,
+      stakeAccepted: validator.properties.external_stake_accepted,
+      stakePercentage: BigNumber(validator.stake.value)
+        .div(totalStake)
+        .multipliedBy(100)
+        .decimalPlaces(2)
+        .toNumber(),
+      ownerStakePercentage: BigNumber(validator.info.owner_stake.value)
+        .div(validator.stake.value)
+        .multipliedBy(100)
+        .decimalPlaces(2)
+        .toNumber()
+    }))
+    return decoders('ValidatorTransformedArrayIO', transformedValidators)
+  }
 })
 
 export const getTransactionDetails = makeQueries({
