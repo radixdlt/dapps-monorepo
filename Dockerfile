@@ -9,16 +9,16 @@ ARG NETWORK_NAME
 # Define the node image
 FROM node:16.17.1-alpine AS build-sdk
 # Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
-# ENV mock_sdk_dir=/tmp/mock-sdk
-# COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
-# RUN cd $mock_sdk_dir && yarn
-# RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
+ ENV mock_sdk_dir=/tmp/mock-sdk
+ COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
+ RUN cd $mock_sdk_dir && yarn
+ RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
 
-# # Below steps copies actual mock-sdk code
-# WORKDIR /usr/app/mock-sdk
-# COPY mock-sdk ./
-# RUN ls -lR
-# RUN yarn && yarn build
+ # Below steps copies actual mock-sdk code
+ WORKDIR /usr/app/mock-sdk
+ COPY mock-sdk ./
+ RUN ls -lR
+ RUN yarn && yarn build
 
 FROM build-sdk AS install-dashboard
 ARG NPM_TOKEN
@@ -42,6 +42,19 @@ COPY .env.production .env
 RUN yarn add ./mock-sdk
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
+
+FROM install-dashboard AS dev-server
+CMD yarn dev
+
+
+FROM install-dashboard AS node-adapter
+WORKDIR /usr/app/
+COPY --from=install-dashboard /usr/app/build .
+COPY --from=install-dashboard /usr/app/package.json .
+COPY --from=install-dashboard /usr/app/node_modules  .
+RUN npm install pm2 -g
+CMD ["pm2-runtime","build/index.js"]
+
 
 # Both the apps can be served as static content.
 # Ref: https://vitejs.dev/guide/build.html#building-for-production

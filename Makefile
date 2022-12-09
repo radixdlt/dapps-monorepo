@@ -7,19 +7,24 @@ all:
     TAG ?= $(GIT_BRANCH)-$(GIT_COMMIT)
     REPO ?= $(REGISTRY)/network-dashboard
 
-.PHONY: dashboard
-dashboard:
-	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --target=dashboard -t $(REPO):$(TAG) .
-	docker run -it -p 8090:80 $(REPO):$(TAG)
+.PHONY: node-adapter
+node-adapter:
+	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME)  --target=node-adapter -t $(REPO):$(TAG) .
+	docker run -it -p 3000:3000 $(REPO):$(TAG)
+
+.PHONY: dev-server
+dev-server:
+	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME) --target=dev-server -t $(REPO):$(TAG) .
+	docker run -it -p 5173:5173 $(REPO):$(TAG)
 
 .PHONY: storybook
 storybook:
-	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --target=storybook -t $(REGISTRY)/dashboard-storybook:$(TAG) .
+	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME) --target=storybook -t $(REGISTRY)/dashboard-storybook:$(TAG) .
 	docker run -it -p  8080:80 $(REGISTRY)/dashboard-storybook:$(TAG)
 
 .PHONY: build
 build:
-	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --target=prod-server -t $(REPO):$(TAG) .
+	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME) --target=dashboard -t $(REPO):$(TAG) .
 
 .PHONY: run-nginx
 run-nginx: build
