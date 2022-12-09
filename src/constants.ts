@@ -1,6 +1,4 @@
-// TODO remove once we don't use the olympia network
 import { PUBLIC_NETWORK_NAME } from '$env/static/public'
-export const OLYMPIA_MAINNET_URL = 'https://mainnet-gateway.radixdlt.com'
 
 export const networkConfig = {
   nebunet: {
