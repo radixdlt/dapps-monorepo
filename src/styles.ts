@@ -83,6 +83,7 @@ export const {
       muted: colors.grey2,
       slightlyMuted: colors.grey4,
       text: colors.grey1,
+      highlightedText: colors.blue2,
       transparent: 'transparent',
       connectButton: colors.blue1,
       connectButtonPopover: colors.blue2
@@ -221,6 +222,7 @@ export const darkTheme = createTheme({
     muted: colors.grey2,
     slightlyMuted: colors.grey5,
     text: colors.white,
+    highlightedText: colors.blue2,
     transparent: 'transparent',
     connectButton: colors.blue1,
     connectButtonPopover: colors.blue2
