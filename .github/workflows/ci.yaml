@@ -43,11 +43,11 @@ jobs:
           fetch-depth: 0
       - name: Define network name
         run: |
-          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ ${{ github.event.action }} = "published" ]; then
+          elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - uses: ./.github/actions/build
@@ -164,11 +164,11 @@ jobs:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - name: Define network name
         run: |
-          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ ${{ github.event.action }} = "published" ]; then
+          elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - name: Login to GCR
@@ -201,11 +201,11 @@ jobs:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - name: Define network name
         run: |
-          if [ ${{ github.event_name}} == 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ ${{ github.event.action }} = "published" ]; then
+          elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
-          elif [ ${{ github.ref }} = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/main" && ${{ github.event_name }} = 'push' ] || [ ${{ github.event_name }} = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
       - name: Login to GCR
