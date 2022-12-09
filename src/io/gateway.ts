@@ -149,7 +149,15 @@ export const GlobalEntityIdIO = object({
 export const EntityOverviewIO = object({
   entities: array(
     object({
-      address: string()
+      address: string(),
+      metadata: object({
+        items: array(
+          object({
+            key: string(),
+            value: string()
+          })
+        ).optional()
+      })
     })
   )
 })
@@ -161,7 +169,7 @@ export const EntityResourcesIO = object({
     items: array(
       object({
         address: string(),
-        total_count: object({
+        amount: object({
           value: string(),
           address: string()
         }).optional()
@@ -173,7 +181,7 @@ export const EntityResourcesIO = object({
     items: array(
       object({
         address: string(),
-        total_count: number()
+        amount: number()
       })
     ).optional()
   })
@@ -243,3 +251,5 @@ export type Transaction = z.infer<typeof TransactionIO>
 export type TransactionTransformed = z.infer<typeof TransactionTransformedIO>
 export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
 export type GlobalEntityId = z.infer<typeof GlobalEntityIdIO>
+export type EntityOverview = z.infer<typeof EntityOverviewIO>
+export type EntityResources = z.infer<typeof EntityResourcesIO>
