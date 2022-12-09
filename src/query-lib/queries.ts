@@ -10,6 +10,11 @@ import BigNumber from 'bignumber.js'
 import { toWholeUnits } from '@utils'
 import { decoders } from '@io'
 import { getWalletSDK } from '../wallet-sdk'
+import {
+  transformEntityOverview,
+  transformEntityResources,
+  type EntityResourcesTransformed
+} from './transformations'
 
 const config = new Configuration({ basePath: networkConfig?.url })
 
@@ -84,14 +89,24 @@ export const getTransactionDetails = makeQueries({
 })
 
 export const getEntityOverview = makeQueries({
-  fn: async (address: string) =>
-    entityApi.entityOverview({
+  fn: async (
+    resources:
+      | EntityResourcesTransformed['fungible']
+      | EntityResourcesTransformed['nonFungible']
+  ) => {
+    const entityAddresses = resources?.map((entity) => entity.address)
+    const res = await entityApi.entityOverview({
       entityOverviewRequest: {
-        addresses: [address]
+        addresses: entityAddresses || []
       }
-    }),
-  decoder: (res) => decoders('EntityOverviewIO', res),
-  transformationFn: (res) => res.entities.map((entity) => entity.address)
+    })
+    return { res, resources }
+  },
+  decoder: (res) => {
+    const decodedRes = decoders('EntityOverviewIO', res.res)
+    return { overview: decodedRes, resources: res.resources }
+  },
+  transformationFn: transformEntityOverview
 })
 
 export const getEntityResources = makeQueries({
@@ -102,7 +117,7 @@ export const getEntityResources = makeQueries({
       }
     }),
   decoder: (res) => decoders('EntityResourcesIO', res),
-  transformationFn: (res) => res
+  transformationFn: transformEntityResources
 })
 
 export const getEntityDetails = makeQueries({
