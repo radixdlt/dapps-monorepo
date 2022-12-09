@@ -40,7 +40,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.dashboard.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
