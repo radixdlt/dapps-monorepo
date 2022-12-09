@@ -21,4 +21,6 @@ export const networkConfig = {
   }
 }[PUBLIC_NETWORK_NAME]
 
+console.log(`Using network: ${PUBLIC_NETWORK_NAME}`)
+
 export const dAppId = 'radixdlt.dashboard.com'
