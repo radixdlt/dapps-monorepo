@@ -192,7 +192,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
-          target: "dashboard"
+          target: "node-adapter"
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}

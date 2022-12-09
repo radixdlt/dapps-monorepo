@@ -1,30 +1,30 @@
 Arguments: 
-  /home/aleworm/.nvm/versions/node/v16.17.1/bin/node /usr/share/yarn/bin/yarn.js add vite-wasm-functions
+  /Users/shambu/.nvm/versions/node/v16.17.1/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js --registry=https://registry.yarnpkg.com/
 
 PATH: 
-  /home/aleworm/.nvm/versions/node/v16.17.1/bin:/home/aleworm/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/MicrosoftCorporationII.WindowsSubsystemForLinux_1.0.0.0_x64__8wekyb3d8bbwe:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Users/Alex/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Alex/AppData/Local/Programs/Microsoft VS Code/bin
+  /Users/shambu/.nvm/versions/node/v16.17.1/bin:/Users/shambu/.pyenv/versions/3.7.6/envs/grafana-dashboards/bin:/Users/shambu/.nvm/versions/node/v16.17.0/bin:/usr/local/sbin:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/Users/shambu/.pyenv/shims:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/shambu/.pyenv/versions/3.7.6/bin:/usr/local/Cellar/pyenv/2.3.4/libexec:/usr/local/Cellar/pyenv/2.3.4/plugins/python-build/bin:/Users/shambu/.nvm/versions/node/v16.17.0/bin:/usr/local/sbin:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/Users/shambu/.cargo/bin:/usr/local/go/bin:/usr/local/go/bin
 
 Yarn version: 
-  1.22.19
+  1.22.10
 
 Node version: 
   16.17.1
 
 Platform: 
-  linux x64
+  darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/vite-wasm-functions: Not found
-      at Request.params.callback [as _callback] (/usr/share/yarn/lib/cli.js:66145:18)
-      at Request.self.callback (/usr/share/yarn/lib/cli.js:140890:22)
+  Error: https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.3.3.tgz: Request failed "404 Not Found"
+      at ResponseError.ExtendableBuiltin (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:696:66)
+      at new ResponseError (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:802:124)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:67058:16)
       at Request.emit (node:events:513:28)
-      at Request.<anonymous> (/usr/share/yarn/lib/cli.js:141862:10)
-      at Request.emit (node:events:513:28)
-      at IncomingMessage.<anonymous> (/usr/share/yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:627:28)
-      at IncomingMessage.emit (node:events:525:35)
-      at endReadableNT (node:internal/streams/readable:1358:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+      at Request.module.exports.Request.onRequestResponse (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:141626:10)
+      at ClientRequest.emit (node:events:513:28)
+      at HTTPParser.parserOnIncomingClient (node:_http_client:674:27)
+      at HTTPParser.parserOnHeadersComplete (node:_http_common:128:17)
+      at TLSSocket.socketOnData (node:_http_client:521:22)
+      at TLSSocket.emit (node:events:513:28)
 
 npm manifest: 
   {
@@ -67,6 +67,7 @@ npm manifest:
       "@storybook/testing-library": "^0.0.13",
       "@sveltejs/adapter-auto": "next",
       "@sveltejs/adapter-static": "^1.0.0-next.39",
+      "@sveltejs/adapter-node": "^1.0.0-next.102",
       "@sveltejs/eslint-config": "sveltejs/eslint-config",
       "@sveltejs/kit": "^1.0.0-next.442",
       "@sveltejs/vite-plugin-svelte": "^1.0.1",
@@ -85,6 +86,7 @@ npm manifest:
       "babel-loader": "^8.2.5",
       "cypress": "^10.10.0",
       "eslint": "^8.21.0",
+      "eslint-config-prettier": "^8.5.0",
       "eslint-plugin-import": "^2.26.0",
       "eslint-plugin-storybook": "^0.6.4",
       "eslint-plugin-svelte3": "^4.0.0",
@@ -106,8 +108,8 @@ npm manifest:
     "dependencies": {
       "@aleworm/svelte-skeleton-loader": "^0.0.2",
       "@radixdlt/alphanet-walletextension-sdk": "^0.1.5",
-      "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-alpha.2",
-      "@radixdlt/connect-button": "^0.5.4",
+      "@radixdlt/connect-button": "^0.7.0",
+      "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-beta.1.1",
       "@rgossiaux/svelte-headlessui": "^1.0.2",
       "@tanstack/svelte-table": "^8.5.11",
       "@xstate/svelte": "^2.0.0",
@@ -120,6 +122,9 @@ npm manifest:
       "svelte-filepond": "^0.2.0",
       "svelte-local-storage-store": "^0.3.1",
       "svelte-samlat": "^0.2.0",
+      "vite-plugin-top-level-await": "^1.2.2",
+      "vite-plugin-wasm": "^3.1.0",
+      "vite-plugin-wasm-pack": "^0.1.12",
       "xstate": "^4.33.6",
       "zod": "^3.18.0"
     }
@@ -1651,19 +1656,19 @@ Lockfile:
       neverthrow "^5.0.0"
       rxjs "^7.5.6"
   
-  "@radixdlt/babylon-gateway-api-sdk@^1.0.0-alpha.2":
-    version "1.0.0-alpha.2"
-    resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-alpha.2.tgz#555e27cff69731140d2d02840ddefd187d094753"
-    integrity sha512-eBawgcEQfbAlVqF1X4w96y1pdx/X0HO6E8VdzMxI2AFwS3mvq/P0I/Hi1ByPO4yMKA7X1TMEpU6BHX5WG0C7qQ==
+  "@radixdlt/babylon-gateway-api-sdk@^1.0.0-beta.1.1":
+    version "1.0.0-beta.1.1"
+    resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-beta.1.1.tgz#3f4b465d6ec876d06b40441e23293fbbda1eb872"
+    integrity sha512-j/DSHGP+Ga7uAoECjuNnFr/fb4j/acexHXVSm0w/QLnmHHWhRVB+x00Gkq4OGDkHh5lBghZbqYACnigsASGBQQ==
     dependencies:
       loglevel "^1.8.0"
       neverthrow "^5.0.0"
       rxjs "^7.5.6"
   
-  "@radixdlt/connect-button@^0.5.4":
-    version "0.5.4"
-    resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.5.4.tgz#d657345f661c183be6a7ae1c1d29a179d5bf6b65"
-    integrity sha512-gfiJ0mmOmySAD85J97WbACDrWZuccUhUPbZ9qEcTy7IIuqAhiwn4lt5PFiDoSodM6qCds/tnUNqsxEuf2ufAGQ==
+  "@radixdlt/connect-button@^0.7.0":
+    version "0.7.0"
+    resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.7.0.tgz#020cd32038ce2717e7ee4de191dd5dd68c66dcc0"
+    integrity sha512-eN4ic2VwOQZTKHV+PD+FLkzuA+TcOFoUwuFpRWffuZGcWxow9Fgwkc6k9j66E8HDlL3q6jY3Q8Yq84yZ591zmA==
     dependencies:
       "@radixdlt/wallet-sdk" "^0.3.3"
       lit "^2.4.1"
@@ -2651,6 +2656,72 @@ Lockfile:
       kleur "^4.1.5"
       magic-string "^0.26.5"
       svelte-hmr "^0.15.0"
+  
+  "@swc/core-darwin-arm64@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.3.21.tgz#9fe6d5c4c3ca0854194ab7d3e42ac29cda422abf"
+    integrity sha512-5dBrJyrCzdHOQ9evS9NBJm2geKcXffIuAvSrnwbMHkfTpl+pOM7crry2tolydFXdOE/Jbx8yyahAIXPne1fTHw==
+  
+  "@swc/core-darwin-x64@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.3.21.tgz#6fb005ff27c5521534dd75732973182f45836681"
+    integrity sha512-CAtzfsRoVZr7DLKOOWPua6npFdj06wRuv1us275CY2QS3mg1bPl9BxA3c94q3mMcu5Bf06+dzUOjJSGrsBD7Ig==
+  
+  "@swc/core-linux-arm-gnueabihf@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.3.21.tgz#3c54f62c1718408993b82ae4726c081e3271f002"
+    integrity sha512-oPO7oFr89pjDFlHJ2aZvzGR6hwy5nmQyeiuqpTgfn+RFFLLbipFawJe/2NBWyD35bxuguW6a3/w9I6edKTpLUw==
+  
+  "@swc/core-linux-arm64-gnu@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.3.21.tgz#7a4e17420ad98f35712cd2cbde46b8a78c39beb3"
+    integrity sha512-cgPw35T8HO4gB/tvPJMwjJuNNpydmw6U5hkxZ+7jiE+qA8hN8a71i+BBfXeSzlo60t4c44+zK4t+gK7UacZg2w==
+  
+  "@swc/core-linux-arm64-musl@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.3.21.tgz#2b98140cc6dcd23c28f823a8ab8d61df8f876aed"
+    integrity sha512-kwH+HHtcakSqR3gF5QJ7N7SPs96ilFiXuauB02Ct3UflaGbVYVoeFYj/VEIJ+ZJvlvvOEDByOiLyrk2bw0bG7A==
+  
+  "@swc/core-linux-x64-gnu@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.3.21.tgz#6dc8105f6a6252322010896e79ad8a12269862ed"
+    integrity sha512-/kLQLNxwdX6kO2R751uUrxXZsAhOkA1EeQzAqj+5Y+bzt3hA5asH5evkY0w0Aj1zCofX4p4o/Q35mandUPxMlw==
+  
+  "@swc/core-linux-x64-musl@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.3.21.tgz#e94eeecf389b441f09cf2de712caf5c9d0a0d5da"
+    integrity sha512-s+l3LqUzDli6rbmIPR3IfO23IOLYBVxk97CDdcJWrRTVtCwUKFhFVJVZyErveriqLXSGJhy5+UL+aOuxC4dk8g==
+  
+  "@swc/core-win32-arm64-msvc@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.3.21.tgz#07374179e0422ad7352430e8b8fd7fd0f92e099c"
+    integrity sha512-59gWcdbZxvmyzh+J50yCCodKDYRUnMwNypzzfamF1Vusa4Np+IGMWEaE2KsZUq50OQIRo0PGHpBPMKVYkuGv8g==
+  
+  "@swc/core-win32-ia32-msvc@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.3.21.tgz#abc4aa533a21da7c0812698ba485314797032edf"
+    integrity sha512-3gH86ffVAiCmeRy+xSxR5iWSbKy4nUddo4PIahD1zwGJx6LC5ahC/I6EpL1pvoX3KdJKVioUBn0KDfPDUYfqJw==
+  
+  "@swc/core-win32-x64-msvc@1.3.21":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.3.21.tgz#2d5264370a737e0842434988f9afe9924cc0c4b6"
+    integrity sha512-JKWLJdJ3oFc8fGBk4P6mGKhW8n+FmEjLLbsST+h94bZmelrSTeShBt3rr+pMMatFevlu/c9lM3OW2GHsZeZNkg==
+  
+  "@swc/core@^1.3.10":
+    version "1.3.21"
+    resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.3.21.tgz#5168604c9bcd81740d8aa3a602a2a64dbb9377d1"
+    integrity sha512-RTmqkm5e5sb+Q+YbyqiE52xjvX+kcIVDgaSdSD7mNy2opgDfIdFMhExmB8UQStt3TLrlpAslWaFNWNmvaHP9rg==
+    optionalDependencies:
+      "@swc/core-darwin-arm64" "1.3.21"
+      "@swc/core-darwin-x64" "1.3.21"
+      "@swc/core-linux-arm-gnueabihf" "1.3.21"
+      "@swc/core-linux-arm64-gnu" "1.3.21"
+      "@swc/core-linux-arm64-musl" "1.3.21"
+      "@swc/core-linux-x64-gnu" "1.3.21"
+      "@swc/core-linux-x64-musl" "1.3.21"
+      "@swc/core-win32-arm64-msvc" "1.3.21"
+      "@swc/core-win32-ia32-msvc" "1.3.21"
+      "@swc/core-win32-x64-msvc" "1.3.21"
   
   "@tanstack/svelte-table@^8.5.11":
     version "8.5.15"
@@ -4521,7 +4592,7 @@ Lockfile:
       escape-string-regexp "^1.0.5"
       supports-color "^5.3.0"
   
-  chalk@^4.0.0, chalk@^4.1.0:
+  chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.2:
     version "4.1.2"
     resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
     integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -5817,6 +5888,11 @@ Lockfile:
     optionalDependencies:
       source-map "~0.6.1"
   
+  eslint-config-prettier@^8.5.0:
+    version "8.5.0"
+    resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
+    integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
+  
   eslint-import-resolver-node@^0.3.6:
     version "0.3.6"
     resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.6.tgz#4048b958395da89668252001dbd9eca6b83bacbd"
@@ -6677,7 +6753,7 @@ Lockfile:
       inherits "^2.0.1"
       readable-stream "^2.0.0"
   
-  fs-extra@^10.1.0:
+  fs-extra@^10.0.0, fs-extra@^10.1.0:
     version "10.1.0"
     resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
     integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
@@ -8871,6 +8947,11 @@ Lockfile:
       snapdragon "^0.8.1"
       to-regex "^3.0.1"
   
+  narrowing@^1.4.0:
+    version "1.5.0"
+    resolved "https://registry.yarnpkg.com/narrowing/-/narrowing-1.5.0.tgz#b53c2d1bcec99ae16605ba6b15827f0c7d5d6bbf"
+    integrity sha512-DUu4XdKgkfAPTAL28k79pdnshDE2W5T24QAnidSPo2F/W1TX6CjNzmEeXQfE5O1lxQvC0GYI6ZRDsLcyzugEYA==
+  
   natural-compare@^1.4.0:
     version "1.4.0"
     resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
@@ -9667,6 +9748,15 @@ Lockfile:
       picocolors "^1.0.0"
       source-map-js "^1.0.2"
   
+  postcss@^8.4.18:
+    version "8.4.19"
+    resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.19.tgz#61178e2add236b17351897c8bcc0b4c8ecab56fc"
+    integrity sha512-h+pbPsyhlYj6N2ozBmHhHrs9DzGmbaarbLvWipMRO7RLS+v4onj26MPFXA5OBYFxyqYhUJK456SwDcY9H2/zsA==
+    dependencies:
+      nanoid "^3.3.4"
+      picocolors "^1.0.0"
+      source-map-js "^1.0.2"
+  
   prelude-ls@^1.2.1:
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -10373,6 +10463,13 @@ Lockfile:
     integrity sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==
     dependencies:
       estree-walker "^0.6.1"
+  
+  rollup@^2.79.1:
+    version "2.79.1"
+    resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.79.1.tgz#bedee8faef7c9f93a2647ac0108748f497f081c7"
+    integrity sha512-uKxbd0IhMZOhjAiD5oAFp7BqvkA4Dv47qpOCtaNvng4HBwdbWtdOh8f5nZNuk2rp51PMGk3bzfWu5oayNEuYnw==
+    optionalDependencies:
+      fsevents "~2.3.2"
   
   rollup@~2.78.0:
     version "2.78.1"
@@ -12044,6 +12141,29 @@ Lockfile:
       unist-util-stringify-position "^2.0.0"
       vfile-message "^2.0.0"
   
+  vite-plugin-top-level-await@^1.2.2:
+    version "1.2.2"
+    resolved "https://registry.yarnpkg.com/vite-plugin-top-level-await/-/vite-plugin-top-level-await-1.2.2.tgz#11d33d3423ce9d5aebdedf62a9033cb0c91cfd85"
+    integrity sha512-JBuY9X5KCxZyzwQUOIBpgX0Jbe2BECxwElWPeyrdRC5xaWzDibTG65QBW25COmwqHBeVlV04u8GTlJkuOWhfgw==
+    dependencies:
+      "@swc/core" "^1.3.10"
+  
+  vite-plugin-wasm-pack@^0.1.12:
+    version "0.1.12"
+    resolved "https://registry.yarnpkg.com/vite-plugin-wasm-pack/-/vite-plugin-wasm-pack-0.1.12.tgz#90f6ca8cd9f8e5e7c9ac98475bc0e5b29f947b0f"
+    integrity sha512-WliYvQp9HXluir4OKGbngkcKxtYtifU11cqLurRRJGsl770Sjr1iIkp5RuvU3IC1poT4A57Z2/YgAKI2Skm7ZA==
+    dependencies:
+      chalk "^4.1.2"
+      fs-extra "^10.0.0"
+      narrowing "^1.4.0"
+  
+  vite-plugin-wasm@^3.1.0:
+    version "3.1.0"
+    resolved "https://registry.yarnpkg.com/vite-plugin-wasm/-/vite-plugin-wasm-3.1.0.tgz#44095059f3c7137b7babe6afc2f96eb4d6d6e950"
+    integrity sha512-RzqOR+zMqqNZOhplq7XM9bkFNfW/Cs1VVj7p+aAdOznCBGwxYLqqzLGxuRwTV31HOGtDGjA8nvgcZG3GwmeVZQ==
+    dependencies:
+      vite "^3"
+  
   "vite@^2.9.12 || ^3.0.0-0", vite@^3.0.0:
     version "3.1.8"
     resolved "https://registry.yarnpkg.com/vite/-/vite-3.1.8.tgz#fa29144167d19b773baffd65b3972ea4c12359c9"
@@ -12053,6 +12173,18 @@ Lockfile:
       postcss "^8.4.16"
       resolve "^1.22.1"
       rollup "~2.78.0"
+    optionalDependencies:
+      fsevents "~2.3.2"
+  
+  vite@^3:
+    version "3.2.4"
+    resolved "https://registry.yarnpkg.com/vite/-/vite-3.2.4.tgz#d8c7892dd4268064e04fffbe7d866207dd24166e"
+    integrity sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==
+    dependencies:
+      esbuild "^0.15.9"
+      postcss "^8.4.18"
+      resolve "^1.22.1"
+      rollup "^2.79.1"
     optionalDependencies:
       fsevents "~2.3.2"
   

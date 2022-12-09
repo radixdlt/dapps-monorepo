@@ -6,21 +6,7 @@ ARG NPM_TOKEN
 ARG NETWORK_NAME
 
 
-# Define the node image
-FROM node:16.17.1-alpine AS build-sdk
-# Below steps installs npm modules of mock-sdk into /usr/app/mock-sdk/ directory
-# ENV mock_sdk_dir=/tmp/mock-sdk
-# COPY mock-sdk/package*.json mock-sdk/yarn.lock mock-sdk/tsconfig.json mock-sdk/yarn.lock $mock_sdk_dir/
-# RUN cd $mock_sdk_dir && yarn
-# RUN mkdir -p  /usr/app/mock-sdk && cp -a $mock_sdk_dir/node_modules /usr/app/mock-sdk/
-
-# # Below steps copies actual mock-sdk code
-# WORKDIR /usr/app/mock-sdk
-# COPY mock-sdk ./
-# RUN ls -lR
-# RUN yarn && yarn build
-
-FROM build-sdk AS install-dashboard
+FROM node:16.17.1-alpine AS install-dashboard
 ARG NPM_TOKEN
 ARG NETWORK_NAME
 # Below steps installs npm modules of root directory into /usr/app/
@@ -38,9 +24,22 @@ COPY . ./
 COPY .npmrc.docker .npmrc
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
-RUN yarn add ./mock-sdk
+
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
+
+FROM install-dashboard AS dev-server
+CMD yarn dev
+
+
+FROM install-dashboard AS node-adapter
+WORKDIR /usr/app/
+COPY --from=install-dashboard /usr/app/build .
+COPY --from=install-dashboard /usr/app/package.json .
+COPY --from=install-dashboard /usr/app/node_modules  .
+RUN npm install pm2 -g
+CMD ["pm2-runtime","build/index.js"]
+
 
 # Both the apps can be served as static content.
 # Ref: https://vitejs.dev/guide/build.html#building-for-production
@@ -51,3 +50,6 @@ COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 FROM nginx:alpine AS dashboard
 COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+FROM scratch AS export-yarn-lock
+COPY --from=install-dashboard /usr/app/yarn.lock /
