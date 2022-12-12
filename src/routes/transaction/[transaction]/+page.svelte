@@ -39,7 +39,7 @@
       data={{
         Status: $state.data?.status,
         Date: $state.data?.date,
-        Fee: $state.data?.fee
+        Fee: `${$state.data?.fee} XRD`
       }}
       loading={false}
     />
