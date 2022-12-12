@@ -86,7 +86,7 @@ export const getEntityResources = makeQueries({
 })
 
 export const getEntityDetails = makeQueries({
-  fn: async (address: string) =>
+  fn: (address: string) =>
     entityApi.entityDetails({
       entityDetailsRequest: {
         address
