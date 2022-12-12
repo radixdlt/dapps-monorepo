@@ -11,8 +11,8 @@ import {
 
 describe('#utils', () => {
   it('Should shorten address', () => {
-    const originalAddress = '01234----56789'
-    const expected = '01234...6789'
+    const originalAddress = '01234----456789'
+    const expected = '0123...456789'
     const result = shortenAddress(originalAddress)
     expect(result).toEqual(expected)
   })
