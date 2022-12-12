@@ -23,6 +23,7 @@ on:
           - nebunet
           - gilganet
           - mardunet
+          - betanet
 
 jobs:
 
@@ -45,7 +46,9 @@ jobs:
         uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' -a "${{ github.event.inputs.ENVIRONMENT_NAME }}" = 'betanet' ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
@@ -171,7 +174,9 @@ jobs:
         uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' -a "${{ github.event.inputs.ENVIRONMENT_NAME }}" = 'betanet' ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
@@ -213,7 +218,9 @@ jobs:
         uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
         run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' -a "${{ github.event.inputs.ENVIRONMENT_NAME }}" = 'betanet' ]; then
+            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+          elif [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
@@ -402,6 +409,29 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=nebunet
       environment: nebunet
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+
+  deploy_betanet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: betanet
+      namespace:  dashboard-betanet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-betanet-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=betanet
+      environment: betanet
     secrets:
       HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
