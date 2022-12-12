@@ -11,7 +11,7 @@
         goto(`/account/${address}`)
         break
       case 'resource':
-        goto(`/blocks/${address}`)
+        goto(`/resource/${address}`)
         break
       case 'transaction':
         goto(`/transaction/${address}`)
