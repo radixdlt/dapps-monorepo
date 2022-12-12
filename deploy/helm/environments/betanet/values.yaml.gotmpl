@@ -9,7 +9,7 @@ storybook:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: storybook-dashboard-betanet.radixdlt.com
+      - host: betanet-dashboard-storybook.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -19,7 +19,7 @@ dashboard:
       tag: {{$IMAGE_TAG}}
 
   params:
-    PUBLIC_NETWORK_NAME: "nebunet"
+    PUBLIC_NETWORK_NAME: "betanet"
 
   ingress:
     enabled: true
