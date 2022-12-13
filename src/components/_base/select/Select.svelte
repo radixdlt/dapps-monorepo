@@ -1,3 +1,11 @@
+<script lang="ts" context="module">
+  export type Options = {
+    id: string
+    label: string
+    unavailable?: boolean
+  }
+</script>
+
 <script lang="ts">
   import {
     Listbox,
@@ -7,19 +15,12 @@
   } from '@rgossiaux/svelte-headlessui'
 
   import { css } from '@styles'
+  import Box from '../box/Box.svelte'
   import Text from '../text/Text.svelte'
 
-  export let options: Array<{
-    label: string
-    id: string
-    unavailable: boolean
-  }> = []
+  export let options: Options[] = []
 
-  export let selected: {
-    label: string
-    id: string
-    unavailable: boolean
-  } = options[0]
+  export let selected: Options
 
   export let handleSelect: (option: typeof selected) => void = () => {}
 
@@ -39,6 +40,10 @@
   })
 
   const listboxoptionsStyles = css({
+    position: 'absolute',
+    zIndex: 100,
+    right: 0,
+    left: 0,
     mt: '$xs',
     py: '$xs',
     listStyle: 'none',
@@ -73,16 +78,18 @@
 </script>
 
 <Listbox value={selected} on:change={onSelect}>
-  <ListboxButton class={listboxStyles()}>{selected.label}</ListboxButton>
-  <ListboxOptions class={listboxoptionsStyles}>
-    {#each options as item (item.id)}
-      <ListboxOption
-        class={listboxoptionStyle}
-        value={item}
-        disabled={item.unavailable}
-      >
-        <Text bold={item.label === selected.label}>{item.label}</Text>
-      </ListboxOption>
-    {/each}
-  </ListboxOptions>
+  <Box px="none" py="none" cx={{ position: 'relative' }}>
+    <ListboxButton class={listboxStyles()}>{selected.label}</ListboxButton>
+    <ListboxOptions class={listboxoptionsStyles}>
+      {#each options as item (item.id)}
+        <ListboxOption
+          class={listboxoptionStyle}
+          value={item}
+          disabled={item.unavailable}
+        >
+          <Text bold={item.label === selected.label}>{item.label}</Text>
+        </ListboxOption>
+      {/each}
+    </ListboxOptions>
+  </Box>
 </Listbox>
