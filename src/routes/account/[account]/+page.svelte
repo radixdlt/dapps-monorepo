@@ -13,14 +13,6 @@
 
   $: send('LOAD', { address: $page.params.account })
 
-  const skeletonData = {
-    address: '0x0000000000000000000000000000000000000000',
-    balance: '0',
-    code: '0x',
-    nonce: '0',
-    transactionCount: '0'
-  }
-
   $: if ($state.matches('error')) {
     AlertToast({
       title: 'Account error',
@@ -40,7 +32,7 @@
       <Text bold slot="header">Tokens</Text>
       <InfoBox
         slot="body"
-        data={$state.context.transformedOverview?.fungible || skeletonData}
+        data={$state.context.transformedOverview?.fungible}
         loading={!$state.matches('final')}
       />
     </Card>
@@ -48,7 +40,7 @@
       <Text bold slot="header">NFT</Text>
       <InfoBox
         slot="body"
-        data={$state.context.transformedOverview?.nonFungible || skeletonData}
+        data={$state.context.transformedOverview?.nonFungible}
         loading={!$state.matches('final')}
       />
     </Card>

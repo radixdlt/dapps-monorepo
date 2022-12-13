@@ -5,8 +5,18 @@
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
+  import { getTxManifest } from '../../../to-be-removed/ret'
+  import Text from '@components/_base/text/Text.svelte'
+
+  let manifest: string | undefined
 
   const { state } = query('getTransactionDetails', $page.params.transaction)
+
+  $: if ($state.status === 'success') {
+    getTxManifest($state.data.details).then((res) => {
+      manifest = res
+    })
+  }
 
   $: if ($state.status === 'error') {
     AlertToast({
@@ -43,5 +53,9 @@
       }}
       loading={false}
     />
+    <Box>
+      <Text bold mb="medium">Transaction manifest</Text>
+      {manifest ? manifest : 'No manifest'}
+    </Box>
   {/if}
 </Box>
