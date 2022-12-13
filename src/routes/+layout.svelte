@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { featureFlags } from '../feature-flags'
+  import { featureFlags } from '@featureFlags'
   import Header from '@components/header/Header.svelte'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
