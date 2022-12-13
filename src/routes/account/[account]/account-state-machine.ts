@@ -184,16 +184,17 @@ export const stateMachine = createMachine<Context, Events, States>(
           throw new Error('Unexpected state')
         }
 
-        const fungible = await ((fungibles) =>
-          fungibles && fungibles.length > 0
-            ? queryServer('getEntityOverview', fungibles)
-            : [])(ctx.resources.fungible?.slice(0, 10))
+        const isNonEmpty = <T>(item?: T[]) => item && item.length > 0
+        const smallFungible = ctx.resources.fungible?.slice(0, 10)
+        const smallNonFungible = ctx.resources.nonFungible?.slice(0, 10)
 
-        console.log('resources', ctx.resources)
-        const nonFungible = await ((nonFungibles) =>
-          nonFungibles && nonFungibles.length > 0
-            ? queryServer('getEntityOverview', nonFungibles)
-            : [])(ctx.resources.nonFungible?.slice(0, 10))
+        const fungible = isNonEmpty(smallFungible)
+          ? await queryServer('getEntityOverview', smallFungible)
+          : []
+
+        const nonFungible = isNonEmpty(smallNonFungible)
+          ? await queryServer('getEntityOverview', smallNonFungible)
+          : []
 
         return { fungible, nonFungible }
       },
