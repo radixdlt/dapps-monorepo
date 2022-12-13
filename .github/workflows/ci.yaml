@@ -381,7 +381,6 @@ jobs:
 
   deploy_nebunet:
     if: >
-      ( github.event_name == 'release' && github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
@@ -406,6 +405,7 @@ jobs:
 
   deploy_betanet:
     if: >
+      ( github.event_name == 'release' && github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
     needs:

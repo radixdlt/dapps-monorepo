@@ -96,7 +96,3 @@ dashboard:
   docker_secret: 
       enabled: true
   # Set it to true if you want to secret to be deployed. 
-
-  #Name of the network to connect to (through gateway)
-  network:
-    name: hammunet
