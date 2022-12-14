@@ -49,7 +49,7 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
@@ -174,7 +174,7 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
@@ -216,7 +216,7 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
