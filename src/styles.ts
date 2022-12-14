@@ -205,7 +205,7 @@ export const darkTheme = createTheme({
     primary: colors.green1,
     onPrimary: colors.white,
     action: colors.green1,
-    secondary: colors.grey1,
+    secondary: colors.grey4,
     pickerBackground: colors.white,
     onPickerBackground: colors.grey1,
     primaryTextHover: colors.green2,
