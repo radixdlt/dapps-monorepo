@@ -5,7 +5,9 @@ export type TransformWithOverview = ReturnType<typeof transformWithOverview>
 export const transformWithOverview = (
   overview?: EntityOverviewTransformed['withOverviews']
 ) => {
-  const transformedOverview = overview?.reduce((acc, overview) => {
+  const transformedOverview = overview?.reduce<
+    Record<string, string | undefined>
+  >((acc, overview) => {
     const symbol = overview.metadata.items?.find(
       (item) => item.key === 'symbol'
     )?.value

@@ -25,6 +25,8 @@
       type: 'error'
     })()
   }
+
+  const keys = ['Status', 'Date', 'Fee']
 </script>
 
 <Box transparent m="none" px="none" full>
@@ -36,21 +38,15 @@
 
 <Box full>
   {#if $state.status === 'loading'}
-    <InfoBox
-      data={{
-        Status: undefined,
-        Date: undefined,
-        Fee: undefined
-      }}
-      loading
-    />
+    <InfoBox {keys} loading />
   {:else}
     <InfoBox
-      data={{
-        Status: $state.data?.status,
-        Date: $state.data?.date,
-        Fee: `${$state.data?.fee} XRD`
-      }}
+      {keys}
+      values={[
+        $state.data?.status,
+        $state.data?.date,
+        `${$state.data?.fee} XRD`
+      ]}
       loading={false}
     />
     <Box>

@@ -3,8 +3,15 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Text from '@components/_base/text/Text.svelte'
 
-  export let data: Record<string, unknown> | undefined
+  export let keys: string[]
+  export let values: unknown[] = []
+  export let unknownMetadata: Array<{
+    key: string
+    value: string
+  }> = []
+
   export let loading: boolean
+
   const loaderWidth = 100
 </script>
 
@@ -18,19 +25,39 @@
       }}
       transparent
     >
-      {#each Object.entries(data || {}) as [key, value]}
+      {#each keys as key, i}
         <Text bold>
-          {#if loading}
-            <SkeletonLoader width={loaderWidth} />
-          {:else if data}
-            {key}
-          {/if}
+          {key}
+        </Text>
+
+        {#if loading}
+          <SkeletonLoader width={loaderWidth} />
+        {:else if values[i]}
+          <Text>
+            {values[i]}
+          </Text>
+        {:else}
+          <Text>
+            {`<no value>`}
+          </Text>
+        {/if}
+      {/each}
+
+      {#each unknownMetadata as { key, value }}
+        <Text bold>
+          {key}
         </Text>
         <Text>
           {#if loading}
             <SkeletonLoader width={loaderWidth} />
-          {:else if data}
-            {value}
+          {:else if value}
+            <Text>
+              {value}
+            </Text>
+          {:else}
+            <Text>
+              {`<no value>`}
+            </Text>
           {/if}
         </Text>
       {/each}

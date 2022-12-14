@@ -5,8 +5,8 @@ import CryptoJS from 'crypto-js'
 const XRD_DECIMALS = 18
 
 export const shortenAddress = (address: string) =>
-  `${address.slice(0, 5)}...${address.slice(
-    address.length - 4,
+  `${address.slice(0, 4)}...${address.slice(
+    address.length - 6,
     address.length
   )}`
 

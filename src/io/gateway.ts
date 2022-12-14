@@ -199,20 +199,13 @@ export const EntityDetailsIO = object({
     )
   }),
   details: object({
-    discriminator: string(),
-    divisibility: number(),
-    total_supply: object({
-      value: string(),
-      address: string()
-    }),
-    total_minted: object({
-      value: string(),
-      address: string()
-    }),
-    total_burnt: object({
-      value: string(),
-      address: string()
-    })
+    discriminator: literal('fungible_resource').or(
+      literal('non_fungible_resource')
+    ),
+    divisibility: number().optional(),
+    total_supply: string().optional(),
+    total_minted: string().optional(),
+    total_burnt: string().optional()
   })
 })
 
@@ -253,3 +246,4 @@ export type TransactionReceipt = z.infer<typeof TransactionReceiptIO>
 export type GlobalEntityId = z.infer<typeof GlobalEntityIdIO>
 export type EntityOverview = z.infer<typeof EntityOverviewIO>
 export type EntityResources = z.infer<typeof EntityResourcesIO>
+export type EntityDetails = z.infer<typeof EntityDetailsIO>

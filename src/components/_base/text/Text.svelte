@@ -170,7 +170,10 @@
         color: '$tertiary'
       },
       connect: {
-        color: ' $connectButtonPopover'
+        color: '$connectButtonPopover'
+      },
+      link: {
+        color: '$highlightedText'
       }
     },
     slightlyMuted: {
