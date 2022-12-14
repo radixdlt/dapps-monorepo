@@ -1,13 +1,13 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select, { type Options } from '@components/_base/select/Select.svelte'
   import Tab from '@components/_base/tabs/Tab.svelte'
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { css } from '@styles'
 
   const people = [
     { id: '1', label: 'XRD', unavailable: false },
@@ -25,38 +25,31 @@
 
   let otherAccount = ''
 
-  const divider = css({
-    border: '1px solid $borderColor',
-    mt: '$xl'
-  })()
+  const boxStyle = {
+    width: '70%',
+    display: 'grid',
+    gridTemplateColumns: '80px auto',
+    alignItems: 'baseline',
+    gap: '$2xl'
+  }
 </script>
 
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   <Card>
-    <Text inline slot="header">From/To</Text>
-    <Box
-      mt="medium"
-      slot="body"
-      cx={{
-        gap: '$xl',
-        width: '60%',
-        display: 'grid',
-        gridTemplateColumns: '100px auto',
-        alignItems: 'baseline'
-      }}
-    >
-      <Text>From</Text>
-      <Box p="none">
+    <Text slot="header">From/To</Text>
+    <Box flex="col" gap="medium" slot="body">
+      <Box mt="medium" cx={boxStyle}>
+        <Text align="right">From</Text>
         <Select
           handleSelect={handleSelectFromAccount}
           options={people}
           selected={selectedFromAccount}
         />
-        <div class={divider} />
       </Box>
-      <Text>To</Text>
-      <Box p="none">
+      <Divider color="border" />
+      <Box mt="medium" cx={boxStyle}>
+        <Text align="right">To</Text>
         <Tabs>
           <svelte:fragment slot="tabs">
             <Tab>One of my accounts</Tab>
@@ -78,21 +71,23 @@
             >
           </svelte:fragment>
         </Tabs>
-        <div class={divider} />
       </Box>
-      <Text>Amount</Text>
-      <Box p="none" flex="row" items="baseline">
-        <Box p="none" cx={{ minWidth: '100px' }}>
-          <Select
-            handleSelect={handleSelectFromAccount}
-            options={people}
-            selected={selectedFromAccount}
-          />
-        </Box>
-        <Box>
-          <Input placeholder="Amount" />
-          <Text inline size="small" color="secondary">0.00</Text>
-          <Text inline size="xsmall" muted>(Available balance)</Text>
+      <Divider color="border" />
+      <Box mt="medium" cx={boxStyle}>
+        <Text align="right">Amount</Text>
+        <Box flex="row" items="baseline">
+          <Box p="none" cx={{ minWidth: '100px' }}>
+            <Select
+              handleSelect={handleSelectFromAccount}
+              options={people}
+              selected={selectedFromAccount}
+            />
+          </Box>
+          <Box>
+            <Input placeholder="Amount" />
+            <Text inline size="small" color="secondary">0.00</Text>
+            <Text inline size="xsmall" muted>(Available balance)</Text>
+          </Box>
         </Box>
       </Box>
     </Box>
