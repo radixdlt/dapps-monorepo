@@ -16,6 +16,10 @@ export const networkConfig = {
   gilganet: {
     id: 32,
     url: 'https://gilganet-gateway.radixdlt.com'
+  },
+  betanet: {
+    id: 11,
+    url: 'https://nebunet-gateway.radixdlt.com'
   }
 }[PUBLIC_NETWORK_NAME]
 

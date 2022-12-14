@@ -11,7 +11,7 @@ runs:
   using: "composite"
   steps:
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
       with:
         always-auth: true
         node-version: 16.17.1
@@ -22,7 +22,7 @@ runs:
       run: |
         echo "::set-output name=dir::$(npm config get cache)"
     - name: Cache Node.js modules
-      uses: actions/cache@v2
+      uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
       id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}

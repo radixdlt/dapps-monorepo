@@ -23,6 +23,7 @@ on:
           - nebunet
           - gilganet
           - mardunet
+          - betanet
 
 jobs:
 
@@ -59,7 +60,6 @@ jobs:
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
-
   setup-tags:
     runs-on: ubuntu-latest
     steps:
@@ -383,7 +383,6 @@ jobs:
 
   deploy_nebunet:
     if: >
-      ( github.event_name == 'release' && github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
@@ -402,6 +401,30 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=nebunet
       environment: nebunet
+    secrets:
+      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
+      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+
+  deploy_betanet:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: betanet
+      namespace:  dashboard-betanet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-betanet-deployer"
+      eks_cluster: rdx-works-main-dev
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=betanet
+      environment: betanet
     secrets:
       HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
       HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
