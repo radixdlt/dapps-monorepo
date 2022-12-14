@@ -61,7 +61,7 @@
     px: '$md',
     textAlign: 'left',
     fontWeight: '$600',
-    backgroundColor: '$transparent',
+    backgroundColor: '$background',
     borderRadius: '$lg',
     border: '1px solid $borderColor',
     '&:hover': {
