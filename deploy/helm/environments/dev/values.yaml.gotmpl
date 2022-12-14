@@ -36,6 +36,13 @@ dashboard:
     maxReplicas: 20
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
 
 developerAccess:
   pod:
