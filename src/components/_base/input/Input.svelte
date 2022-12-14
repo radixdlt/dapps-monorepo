@@ -7,7 +7,7 @@
   const style = css({
     width: '100%',
     borderRadius: '$sm',
-    backgroundColor: '$transparent',
+    backgroundColor: '$background',
     padding: '$sm',
     border: 'none',
     borderBottom: '1px solid $borderColor',
