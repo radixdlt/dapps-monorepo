@@ -202,7 +202,6 @@ export const darkTheme = createTheme({
     onBackground: colors.grey3,
     surface: colors.grey01,
     onSurface: colors.grey3,
-    onSurfaceDark: colors.grey2,
     primary: colors.green1,
     onPrimary: colors.white,
     action: colors.green1,
