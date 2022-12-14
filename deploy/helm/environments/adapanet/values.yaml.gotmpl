@@ -30,7 +30,13 @@ dashboard:
         paths:
           - path: /
             pathType: ImplementationSpecific
-
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
 developerAccess:
   pod:
     exec:
