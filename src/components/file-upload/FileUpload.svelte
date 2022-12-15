@@ -18,6 +18,7 @@
     }
   }
 
+  export let maxFiles: number
   export let acceptedFileTypes: string[] | undefined = undefined
   export let onAddFile: (file: FileItem) => void
   export let labelIdle =
@@ -39,10 +40,10 @@
 
 <Box transparent>
   <FileUpload
-    maxFiles={2}
+    {maxFiles}
     {name}
     fileValidateTypeDetectType={validation}
-    allowMultiple
+    allowMultiple={maxFiles > 1 ? true : false}
     {acceptedFileTypes}
     onaddfile={handleAddFile}
     credits={false}

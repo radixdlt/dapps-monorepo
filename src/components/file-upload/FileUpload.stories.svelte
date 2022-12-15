@@ -10,6 +10,7 @@
   <FileUpload
     onRemoveFile={action('onRemoveFile')}
     onAddFile={action('file selected')}
+    maxFiles={2}
   />
 </Template>
 
