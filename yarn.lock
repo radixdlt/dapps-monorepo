@@ -1529,10 +1529,10 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/connect-button@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.7.0.tgz#020cd32038ce2717e7ee4de191dd5dd68c66dcc0"
-  integrity sha512-eN4ic2VwOQZTKHV+PD+FLkzuA+TcOFoUwuFpRWffuZGcWxow9Fgwkc6k9j66E8HDlL3q6jY3Q8Yq84yZ591zmA==
+"@radixdlt/connect-button@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.8.0.tgz#d96105a3aeceac8d852dbd9ddd1d8164b1e36393"
+  integrity sha512-b2qgZKCK599A8w0/0hA/PdPbQ1vOXr7fH1UUQZU9warWgLU/TC8j+pAdieRW/SyYb7cgjW+3JJSHG4hB0vsiMg==
   dependencies:
     "@radixdlt/wallet-sdk" "^0.3.3"
     lit "^2.4.1"
