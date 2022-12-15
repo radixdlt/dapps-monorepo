@@ -12,7 +12,7 @@ export const prodAppFlags = [
   {
     id: 'send-tokens',
     description: 'Send Tokens in the sidebar menu',
-    enabled: false
+    enabled: true
   },
   {
     id: 'dark-mode',
