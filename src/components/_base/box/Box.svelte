@@ -3,6 +3,11 @@
   import { css, config } from '@styles'
 
   const variants = {
+    hidden: {
+      true: {
+        visibility: 'hidden'
+      }
+    },
     connectButtonPopover: {
       true: {
         position: 'absolute',
@@ -314,6 +319,7 @@
   export let justify: keyof typeof variants['justify'] | undefined = undefined
   export let grid: keyof typeof variants['grid'] | undefined = undefined
   export let gap: keyof typeof variants['gap'] | undefined = undefined
+  export let hidden: boolean | undefined = undefined
 
   export let shadow: boolean | undefined = undefined
 </script>
@@ -341,7 +347,8 @@
     justify,
     grid,
     shadow,
-    gap
+    gap,
+    hidden
   })}
 >
   <slot />
