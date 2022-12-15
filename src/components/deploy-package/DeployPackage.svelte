@@ -9,33 +9,35 @@
   } from '@components/file-upload/FileUpload.svelte'
   import { without } from 'ramda'
   import { AlertToast } from '@components/_base/toast/Toasts'
+  import { accounts } from '@stores'
+  import Select from '@components/_base/select/Select.svelte'
+  import { shortenAddress } from '@utils'
+  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   const { state, send } = useMachine(stateMachine)
-  const frozenAllowedExtensions = ['wasm', 'abi']
-  let acceptedFileTypes = ['wasm', 'abi']
 
   let files: FileItem[] = []
 
   const handleRemoveFile = (_: Error, file: FileItem) => {
     files = without([file], files)
-
-    const shouldResetAcceptedFileTypes =
-      files.length > 0 &&
-      files[0].fileExtension !== file.fileExtension &&
-      frozenAllowedExtensions.includes(file.fileExtension)
-
-    if (shouldResetAcceptedFileTypes) {
-      acceptedFileTypes.push(file.fileExtension)
+    if (
+      $state.matches({
+        connected: {
+          'uploading-files': 'uploaded'
+        }
+      })
+    ) {
+      send('REMOVE_FILE')
     }
   }
 
   const handleAddFile = (item: FileItem) => {
     files.push(item)
-    acceptedFileTypes = without([item.fileExtension], acceptedFileTypes)
 
     const wasm = files.find((file) => file.fileExtension === 'wasm')?.file
     const abi = files.find((file) => file.fileExtension === 'abi')?.file
-    if (wasm && abi) send('UPLOAD', { wasm, abi })
+
+    if (wasm && abi) send('UPLOAD_FILES', { wasm, abi })
   }
 
   $: if ($state.matches('error')) {
@@ -45,42 +47,135 @@
       type: 'error'
     })()
   }
+
+  $: if (
+    $state.matches({
+      connected: {
+        'deploying-package': 'success'
+      }
+    })
+  ) {
+    AlertToast({
+      title: 'Package deployment',
+      text: `Package deployment successful! Tx id: ${shortenAddress(
+        $state.context.intentHash!
+      )}`,
+      type: 'success'
+    })()
+  }
+
+  $: deployButtonEnabled = $state.matches({
+    connected: {
+      'selecting-badge': 'selected',
+      'uploading-files': 'uploaded'
+    }
+  })
+
+  $: if ($accounts) send('CONNECT')
 </script>
 
 <Box transparent>
-  {#if $state.matches('not-uploaded')}
-    <FileUpload
-      {acceptedFileTypes}
-      onRemoveFile={handleRemoveFile}
-      onAddFile={handleAddFile}
-    />
-  {:else if $state.matches('uploading')}
-    Uploading...
-  {:else if $state.matches('uploaded')}
-    <Button on:click={() => send({ type: 'PUBLISH' })}>Publish</Button>
-    <Box mt="large" transparent>
-      {$state.context.transaction}
-    </Box>
-  {:else if $state.matches('publishing')}
-    Publishing...
-  {:else if $state.matches('published')}
-    Published!
-  {:else if $state.matches('final')}
-    <Box mt="large" transparent flex="col" items="center">
-      <Box transparent><Text p="large" size="large">Success! 🎉</Text></Box>
-      <Box transparent>
-        <Text>Package Address</Text>
+  <Box transparent>
+    <Text size={'xxlarge'} bold>Deploy package</Text>
+  </Box>
+  <Box transparent>
+    <Text
+      >Deploy a new blueprint package to the Radix Betanet. To control aspects
+      of the package, like setting metadata or claiming royalties, you must
+      specify a badge NFT for authorization.</Text
+    >
+  </Box>
+  <center>
+    {#if $state.matches('not-connected')}
+      <Text bold>Please connect your radix wallet to get started.</Text>
+    {/if}
+
+    {#if $state.matches('connected')}
+      <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
+        <FileUpload
+          acceptedFileTypes={['.wasm', 'wasm']}
+          onRemoveFile={handleRemoveFile}
+          onAddFile={handleAddFile}
+          labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
+          maxFiles={1}
+        />
+        <FileUpload
+          acceptedFileTypes={['.abi', 'abi']}
+          onRemoveFile={handleRemoveFile}
+          onAddFile={handleAddFile}
+          labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+          maxFiles={1}
+        />
       </Box>
-      <pre>
-        {JSON.stringify($state.context.receipt, null, 2)}
-    </pre>
-    </Box>
-  {:else if $state.matches('error')}
-    <Box mt="large" transparent flex="col" items="center">
-      <Box transparent><Text p="large" size="large">Error! 😢</Text></Box>
-      <Button on:click={() => send({ type: 'RETRY' })}
-        >Click here to retry</Button
+      <Box transparent cx={{ width: '30%' }}>
+        <Box transparent>
+          <Select
+            placeholder="Select account"
+            handleSelect={(e) =>
+              send({
+                type: 'SELECT_ACCOUNT',
+                accountAddress: e.id
+              })}
+            options={[
+              ...$accounts.map((resource) => ({
+                id: resource.address,
+                label: shortenAddress(resource.address)
+              }))
+            ]}
+          />
+        </Box>
+        <Box transparent>
+          {#if $state.context.non_fungible_resources.length > 0}
+            <Select
+              placeholder="Select badge"
+              handleSelect={(e) =>
+                send({
+                  type: 'SELECT_BADGE',
+                  badgeAddress: e.id
+                })}
+              options={[
+                ...$state.context.non_fungible_resources.map((resource) => ({
+                  id: resource.address,
+                  label: shortenAddress(resource.address)
+                }))
+              ]}
+            />
+          {:else}
+            <Select placeholder="Select badge" />
+          {/if}
+        </Box>
+      </Box>
+
+      <Box
+        transparent
+        hidden={!$state.matches({
+          connected: { 'selecting-account': 'selected' }
+        })}
       >
-    </Box>
-  {/if}
+        <Text>
+          Don't already have a badge NFT you want to use to control your
+          package?
+          <Text
+            on:click={() => send('CREATE_BADGE')}
+            cx={{ display: 'inline', cursor: 'pointer' }}
+            underlined
+          >
+            Click here
+          </Text>
+          to create one.
+        </Text>
+      </Box>
+
+      <Button
+        disabled={!deployButtonEnabled}
+        on:click={() => send({ type: 'DEPLOY' })}
+      >
+        {#if $state.matches({ connected: { 'deploying-package': 'deploy' } })}
+          <LoadingSpinner />
+        {:else}
+          Deploy package
+        {/if}
+      </Button>
+    {/if}
+  </center>
 </Box>
