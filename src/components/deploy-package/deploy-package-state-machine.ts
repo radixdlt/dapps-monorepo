@@ -11,9 +11,8 @@ const getCreateBadgeManifest = (accountAddress: string) => `
           Enum("U32")
       ) 
       Array<Tuple>(
-          Tuple("name", "MyResource"), 
-          Tuple("symbol", "RSRC"),
-          Tuple("description", "A very innovative and important resource"), 
+          Tuple("name", "My Package Owner Badge"), 
+          Tuple("description", "This NFT was created by the Radix Dashboard as a simple badge to be used for default package control permissions. There is nothing special about it - swap it out, or create your own"), 
       ) 
       Array<Tuple>(
           Tuple(Enum("Withdraw"), Tuple(Enum("AllowAll"), Enum("DenyAll"))),
