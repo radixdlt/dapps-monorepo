@@ -7,6 +7,10 @@
     fontWeight: 'bold'
   })()
 
+  const underlinedClass = css({
+    textDecoration: 'underline'
+  })
+
   const variants = {
     align: {
       center: {
@@ -223,6 +227,7 @@
   export let full: true | false = false
   export let pointer: true | false = false
   export let bold: true | false = false
+  export let underlined: true | false = false
   export let p: keyof typeof variants['p'] | undefined = undefined
   export let m: keyof typeof variants['m'] | undefined = undefined
   export let py: keyof typeof variants['py'] | undefined = undefined
@@ -266,6 +271,11 @@
   })
 </script>
 
-<div class={bold ? textClass + ' ' + boldClass : textClass}>
+<div
+  on:click
+  class={`${textClass} ${bold ? boldClass : ''} ${
+    underlined ? underlinedClass : ''
+  }`}
+>
   <slot />
 </div>
