@@ -42,15 +42,14 @@ export const getTransactionDetails = makeQueries({
     }),
 
   decoder: (res) => decoders('TransactionIO', res),
-  transformationFn: async (res) => {
-    return {
-      status: res.transaction.transaction_status,
-      date: res.transaction.confirmed_at,
-      fee: res.transaction.fee_paid.value,
-      message: res.details.message_hex,
-      details: res.details.raw_hex
-    }
-  }
+  transformationFn: (res) => ({
+    status: res.transaction.transaction_status,
+    date: res.transaction.confirmed_at,
+    fee: res.transaction.fee_paid.value,
+    message: res.details.message_hex,
+    details: res.details.raw_hex,
+    receipt: res.details.receipt
+  })
 })
 
 export const getEntityOverview = makeQueries({
