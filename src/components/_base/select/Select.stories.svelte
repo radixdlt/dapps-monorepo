@@ -10,19 +10,12 @@
     { id: '4', label: 'Benedict Kessler', unavailable: true },
     { id: '5', label: 'Katelyn Rohan', unavailable: false }
   ]
-
-  let selected = people[0]
-
-  // @ts-ignore ts not working well in storybook yet
-  const handleSelect = (nextSelected) => {
-    selected = nextSelected
-  }
 </script>
 
 <Meta title="Select" component={Select} />
 
 <Story name="Primary">
   <Box transparent cx={{ width: '250px' }}>
-    <Select options={people} {selected} {handleSelect} />
+    <Select options={people} />
   </Box>
 </Story>

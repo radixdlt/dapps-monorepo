@@ -20,11 +20,14 @@
 
   export let options: Options[] = []
 
-  export let selected: Options
+  export let placeholder: string | undefined = undefined
 
-  export let handleSelect: (option: typeof selected) => void = () => {}
+  export let handleSelect: (option: Options) => void = () => {}
 
-  const onSelect = (e: CustomEvent<typeof selected>) => {
+  let selected: Options | undefined = placeholder ? undefined : options[0]
+
+  const onSelect = (e: CustomEvent<Options>) => {
+    selected = e.detail
     handleSelect(e.detail)
   }
 
@@ -79,15 +82,17 @@
 
 <Listbox value={selected} on:change={onSelect}>
   <Box px="none" py="none" cx={{ position: 'relative' }}>
-    <ListboxButton class={listboxStyles()}>{selected.label}</ListboxButton>
+    <ListboxButton class={listboxStyles()}
+      >{selected?.label ?? placeholder}</ListboxButton
+    >
     <ListboxOptions class={listboxoptionsStyles}>
-      {#each options as item (item.id)}
+      {#each options as item, i (item.id)}
         <ListboxOption
           class={listboxoptionStyle}
           value={item}
           disabled={item.unavailable}
         >
-          <Text bold={item.label === selected.label}>{item.label}</Text>
+          <Text bold={item.label === selected?.label}>{item.label}</Text>
         </ListboxOption>
       {/each}
     </ListboxOptions>
