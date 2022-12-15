@@ -83,7 +83,7 @@
 <Listbox value={selected} on:change={onSelect}>
   <Box px="none" py="none" cx={{ position: 'relative' }}>
     <ListboxButton class={listboxStyles()}
-      >{selected?.label ?? placeholder}</ListboxButton
+      >{placeholder ?? selected?.label}</ListboxButton
     >
     <ListboxOptions class={listboxoptionsStyles}>
       {#each options as item, i (item.id)}
