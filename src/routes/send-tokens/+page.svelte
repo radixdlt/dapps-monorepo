@@ -41,11 +41,7 @@
     <Box flex="col" gap="medium" slot="body">
       <Box mt="medium" cx={boxStyle}>
         <Text align="right">From</Text>
-        <Select
-          handleSelect={handleSelectFromAccount}
-          options={people}
-          selected={selectedFromAccount}
-        />
+        <Select handleSelect={handleSelectFromAccount} options={people} />
       </Box>
       <Divider color="border" />
       <Box mt="medium" cx={boxStyle}>
@@ -60,7 +56,6 @@
               <Select
                 handleSelect={handleSelectFromAccount}
                 options={people}
-                selected={selectedFromAccount}
               /></TabPanel
             >
             <TabPanel
@@ -77,11 +72,7 @@
         <Text align="right">Amount</Text>
         <Box flex="row" items="baseline">
           <Box p="none" cx={{ minWidth: '100px' }}>
-            <Select
-              handleSelect={handleSelectFromAccount}
-              options={people}
-              selected={selectedFromAccount}
-            />
+            <Select handleSelect={handleSelectFromAccount} options={people} />
           </Box>
           <Box>
             <Input placeholder="Amount" />
