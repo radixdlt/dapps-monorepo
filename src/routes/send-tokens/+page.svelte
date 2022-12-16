@@ -36,12 +36,19 @@
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   {#if $state.matches('not-logged-in')}
     <Text bold>Please connect your radix wallet to get started.</Text>
-  {:else if $state.matches('idle') || $state.matches('final')}
+  {:else if $state.matches('account-data-fetched') || $state.matches('idle')}
     <SendTokenForm
-      onSend={console.log}
+      onSend={(data) => send({ type: 'SENDTOKEN', data })}
       onSelectFromAccount={handleSelectFromAccount}
       balance={$state.context.transformedOverview?.fungible}
     />
+  {:else if $state.matches('sending-token')}
+    <Text bold>Confirm manifest in wallet</Text>
+  {:else if $state.matches('final')}
+    <Text mb="medium">Transaction sent!</Text>
+    <Text pointer underlined on:click={() => send('RETRY')}
+      >Send another one</Text
+    >
   {:else if $state.matches('error')}
     <Text inline size="large" mb="medium" bold
       >Error: {$state.context.error.message}</Text
