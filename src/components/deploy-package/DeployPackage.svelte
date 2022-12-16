@@ -160,9 +160,10 @@
 
         <Box
           transparent
-          hidden={!$state.matches({
-            connected: { 'selecting-account': 'selected' }
-          })}
+          hidden={!$state.matches(
+            // @ts-ignore
+            { connected: { 'selecting-account': 'selected' } }
+          )}
         >
           <Text>
             Don't already have a badge NFT you want to use to control your
@@ -182,7 +183,8 @@
           disabled={!deployButtonEnabled}
           on:click={() => send({ type: 'DEPLOY' })}
         >
-          {#if $state.matches({ connected: { 'deploying-package': 'deploy' } })}
+          {#if $state.matches(// @ts-ignore
+            { connected: { 'deploying-package': 'deploy' } })}
             <LoadingSpinner />
           {:else}
             Deploy package
