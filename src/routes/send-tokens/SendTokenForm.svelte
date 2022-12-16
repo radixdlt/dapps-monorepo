@@ -18,23 +18,43 @@
     unavailable: false
   }))
 
-  $: selectedFromAccount = (accountList && accountList[0]) || {
-    label: 'No accounts available'
-  }
+  export let balance: any = undefined
 
+  $: balanceList =
+    balance &&
+    Object.keys(balance).map((key) => ({
+      id: key,
+      label: key
+    }))
+
+  let selectedBalance: Options = { id: '', label: '' }
+
+  let amountToSend = ''
+
+  let selectedFromAccount = {}
   const handleSelectFromAccount = (nextSelected: Options) => {
     selectedFromAccount = nextSelected
   }
 
-  $: selectedToAccount = (accountList && accountList[0]) || {
-    label: 'No accounts available'
-  }
+  let selectedToAccount = {}
 
   const handleSelectToAccount = (nextSelected: Options) => {
     selectedToAccount = nextSelected
   }
 
+  const handleSelectBalance = (nextSelected: Options) => {
+    selectedBalance = nextSelected
+  }
+
   let otherAccount = ''
+
+  $: getAmount = () => {
+    if (balance) {
+      return balance[selectedBalance?.id] || Object.values(balance)?.[0]
+    } else {
+      return 'No data'
+    }
+  }
 
   const boxStyle = {
     width: '70%',
@@ -50,11 +70,7 @@
   <Box flex="col" gap="medium" slot="body">
     <Box mt="medium" cx={boxStyle}>
       <Text align="right">From</Text>
-      <Select
-        handleSelect={handleSelectFromAccount}
-        options={accountList}
-        selected={selectedFromAccount}
-      />
+      <Select handleSelect={handleSelectFromAccount} options={accountList} />
     </Box>
     <Divider color="border" />
     <Box mt="medium" cx={boxStyle}>
@@ -69,7 +85,6 @@
             <Select
               handleSelect={handleSelectToAccount}
               options={accountList}
-              selected={selectedToAccount}
             /></TabPanel
           >
           <TabPanel
@@ -85,16 +100,12 @@
     <Box mt="medium" cx={boxStyle}>
       <Text align="right">Amount</Text>
       <Box flex="row" items="baseline">
-        <Box p="none" cx={{ minWidth: '100px' }}>
-          <Select
-            handleSelect={handleSelectFromAccount}
-            options={accountList}
-            selected={selectedFromAccount}
-          />
+        <Box p="none" cx={{ minWidth: '140px' }}>
+          <Select handleSelect={handleSelectBalance} options={balanceList} />
         </Box>
         <Box>
-          <Input placeholder="Amount" />
-          <Text inline size="small" color="secondary">0.00</Text>
+          <Input bind:value={amountToSend} placeholder="Amount" />
+          <Text inline size="small" color="secondary">{getAmount()}</Text>
           <Text inline size="xsmall" muted>(Available balance)</Text>
         </Box>
       </Box>
