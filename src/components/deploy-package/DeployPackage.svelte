@@ -13,6 +13,7 @@
   import Select from '@components/_base/select/Select.svelte'
   import { shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import Success from './Success.svelte'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -75,107 +76,119 @@
 </script>
 
 <Box transparent>
-  <Box transparent>
-    <Text size={'xxlarge'} bold>Deploy package</Text>
-  </Box>
-  <Box transparent>
-    <Text
-      >Deploy a new blueprint package to the Radix Betanet. To control aspects
-      of the package, like setting metadata or claiming royalties, you must
-      specify a badge NFT for authorization.</Text
-    >
-  </Box>
-  <center>
-    {#if $state.matches('not-connected')}
-      <Text bold>Please connect your radix wallet to get started.</Text>
-    {/if}
+  {#if $state.matches({ connected: { 'deploying-package': 'success' } })}
+    <Success
+      txID={$state.context.intentHash}
+      packageAddress={$state.context.packageAddress}
+      badgeInfo={{
+        name: $state.context.badgeName,
+        address: $state.context.selectedNftAddress
+      }}
+      badgeMetadata={$state.context.badgeMetadata}
+    />
+  {:else}
+    <Box transparent>
+      <Text size={'xxlarge'} bold>Deploy package</Text>
+    </Box>
+    <Box transparent>
+      <Text
+        >Deploy a new blueprint package to the Radix Betanet. To control aspects
+        of the package, like setting metadata or claiming royalties, you must
+        specify a badge NFT for authorization.</Text
+      >
+    </Box>
+    <center>
+      {#if $state.matches('not-connected')}
+        <Text bold>Please connect your radix wallet to get started.</Text>
+      {/if}
 
-    {#if $state.matches('connected')}
-      <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
-        <FileUpload
-          acceptedFileTypes={['.wasm', 'wasm']}
-          onRemoveFile={handleRemoveFile}
-          onAddFile={handleAddFile}
-          labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
-          maxFiles={1}
-        />
-        <FileUpload
-          acceptedFileTypes={['.abi', 'abi']}
-          onRemoveFile={handleRemoveFile}
-          onAddFile={handleAddFile}
-          labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
-          maxFiles={1}
-        />
-      </Box>
-      <Box transparent cx={{ width: '30%' }}>
-        <Box transparent>
-          <Select
-            placeholder="Select account"
-            handleSelect={(e) =>
-              send({
-                type: 'SELECT_ACCOUNT',
-                accountAddress: e.id
-              })}
-            options={[
-              ...$accounts.map((resource) => ({
-                id: resource.address,
-                label: shortenAddress(resource.address)
-              }))
-            ]}
+      {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
+        <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
+          <FileUpload
+            acceptedFileTypes={['.wasm', 'wasm']}
+            onRemoveFile={handleRemoveFile}
+            onAddFile={handleAddFile}
+            labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
+            maxFiles={1}
+          />
+          <FileUpload
+            acceptedFileTypes={['.abi', 'abi']}
+            onRemoveFile={handleRemoveFile}
+            onAddFile={handleAddFile}
+            labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+            maxFiles={1}
           />
         </Box>
-        <Box transparent>
-          {#if $state.context.non_fungible_resources.length > 0}
+        <Box transparent cx={{ width: '30%' }}>
+          <Box transparent>
             <Select
-              placeholder="Select badge"
+              placeholder="Select account"
               handleSelect={(e) =>
                 send({
-                  type: 'SELECT_BADGE',
-                  badgeAddress: e.id
+                  type: 'SELECT_ACCOUNT',
+                  accountAddress: e.id
                 })}
               options={[
-                ...$state.context.non_fungible_resources.map((resource) => ({
+                ...$accounts.map((resource) => ({
                   id: resource.address,
                   label: shortenAddress(resource.address)
                 }))
               ]}
             />
-          {:else}
-            <Select placeholder="Select badge" />
-          {/if}
+          </Box>
+          <Box transparent>
+            {#if $state.context.non_fungible_resources.length > 0}
+              <Select
+                placeholder="Select badge"
+                handleSelect={(e) =>
+                  send({
+                    type: 'SELECT_BADGE',
+                    badgeAddress: e.id
+                  })}
+                options={[
+                  ...$state.context.non_fungible_resources.map((resource) => ({
+                    id: resource.address,
+                    label: shortenAddress(resource.address)
+                  }))
+                ]}
+              />
+            {:else}
+              <Select placeholder="Select badge" />
+            {/if}
+          </Box>
         </Box>
-      </Box>
 
-      <Box
-        transparent
-        hidden={!$state.matches({
-          connected: { 'selecting-account': 'selected' }
-        })}
-      >
-        <Text>
-          Don't already have a badge NFT you want to use to control your
-          package?
-          <Text
-            on:click={() => send('CREATE_BADGE')}
-            cx={{ display: 'inline', cursor: 'pointer' }}
-            underlined
-          >
-            Click here
+        <Box
+          transparent
+          hidden={!$state.matches({
+            connected: { 'selecting-account': 'selected' }
+          })}
+        >
+          <Text>
+            Don't already have a badge NFT you want to use to control your
+            package?
+            <Text
+              on:click={() => send('CREATE_BADGE')}
+              cx={{ display: 'inline', cursor: 'pointer' }}
+              underlined
+            >
+              Click here
+            </Text>
+            to create one.
           </Text>
-          to create one.
-        </Text>
-      </Box>
+        </Box>
 
-      <Button
-        disabled={!deployButtonEnabled}
-        on:click={() => send({ type: 'DEPLOY' })}
-      >
-        {#if $state.matches({ connected: { 'deploying-package': 'deploy' } })}
-          <LoadingSpinner />
-        {:else}
-          Deploy package
-        {/if}
-      </Button>
-    {/if}
-  </center>
+        <Button
+          disabled={!deployButtonEnabled}
+          on:click={() => send({ type: 'DEPLOY' })}
+        >
+          {#if $state.matches({ connected: { 'deploying-package': 'deploy' } })}
+            <LoadingSpinner />
+          {:else}
+            Deploy package
+          {/if}
+        </Button>
+      {/if}
+    </center>
+  {/if}
 </Box>

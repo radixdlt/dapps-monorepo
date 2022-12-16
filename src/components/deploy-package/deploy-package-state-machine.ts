@@ -66,6 +66,11 @@ type Context = {
     total_count: number
   }>
   intentHash?: string
+  badgeMetadata?: Array<{
+    key: string
+    value: string
+  }>
+  packageAddress?: string
 }
 
 type Events =
@@ -94,7 +99,7 @@ type States =
                 }
               | { 'selecting-badge': 'idle' | 'selected' }
               | { 'uploading-files': 'idle' | 'uploading' | 'uploaded' }
-              | { 'deploying-package': 'success' | 'deploy' }
+              | { 'deploying-package': 'deploy' | 'idle' }
           }
       context: Context
     }
@@ -102,6 +107,27 @@ type States =
       value: 'error'
       context: Context & {
         error: Error
+      }
+    }
+  | {
+      value: {
+        connected: {
+          'deploying-package': 'success'
+        }
+      }
+      context: Context & {
+        selectedNftAddress: string
+        non_fungible_resources: Array<{
+          address: string
+          total_count: number
+        }>
+        intentHash: string
+        badgeMetadata: Array<{
+          key: string
+          value: string
+        }>
+        packageAddress: string
+        badgeName?: string
       }
     }
 
@@ -238,8 +264,30 @@ export const stateMachine = createMachine<Context, Events, States>(
                   onDone: {
                     target: 'success',
                     actions: assign({
-                      intentHash: (_, event: DoneInvokeEvent<string>) =>
-                        event.data
+                      intentHash: (
+                        _,
+                        event: DoneInvokeEvent<{
+                          txID: string
+                          entities: string[]
+                          badgeMetadata: Array<{ key: string; value: string }>
+                        }>
+                      ) => event.data.txID,
+                      packageAddress: (
+                        _,
+                        event: DoneInvokeEvent<{
+                          txID: string
+                          entities: string[]
+                          badgeMetadata: Array<{ key: string; value: string }>
+                        }>
+                      ) => event.data.entities[0],
+                      badgeMetadata: (
+                        _,
+                        event: DoneInvokeEvent<{
+                          txID: string
+                          entities: string[]
+                          badgeMetadata: Array<{ key: string; value: string }>
+                        }>
+                      ) => event.data.badgeMetadata
                     })
                   },
                   onError: {
@@ -281,10 +329,24 @@ export const stateMachine = createMachine<Context, Events, States>(
             ctx.selectedNftAddress
           ),
           blobs: [ctx.wasm, ctx.abi]
-        }).then(({ transactionIntentHash }) => {
-          console.log('TX intent hash: ', transactionIntentHash)
-          return transactionIntentHash
         })
+          .then(async ({ transactionIntentHash }) => ({
+            txID: transactionIntentHash,
+            entities: (
+              await queryServer('getTransactionDetails', transactionIntentHash)
+            ).entities,
+            badgeMetadata: (
+              await queryServer('getEntityDetails', ctx.selectedNftAddress)
+            ).metadata.items
+          }))
+          .then((result) => ({
+            ...result,
+            badgeName: result.badgeMetadata.find(({ key }) => key === 'name')
+              ?.value,
+            badgeMetadata: result.badgeMetadata.filter(
+              ({ key }) => key !== 'name'
+            )
+          }))
       },
       upload: async (_, event) => {
         if (event.type !== 'UPLOAD_FILES') throw new Error('Unexpected event')
