@@ -5,11 +5,11 @@
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { stateMachine } from './account-state-machine'
+  import { accountStateMachine } from '@stateMachines'
   import { useMachine } from '@xstate/svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
 
-  const { state, send } = useMachine(stateMachine)
+  const { state, send } = useMachine(accountStateMachine)
 
   $: send('LOAD', { address: $page.params.account })
 

@@ -9,6 +9,7 @@ import {
   transformWithOverview,
   type TransformWithOverview
 } from './transformers'
+import { escalate, pure } from 'xstate/lib/actions'
 
 type Context = {
   resources?: EntityResourcesTransformed
@@ -21,9 +22,12 @@ type Context = {
     nonFungible: TransformWithOverview
   }
   error?: Error
+  isChild?: boolean
 }
 
-type Events = { type: 'LOAD'; address: string } | { type: 'RETRY' }
+type Events =
+  | { type: 'LOAD'; address: string; isChild?: boolean }
+  | { type: 'RETRY' }
 
 type States =
   | {
@@ -79,11 +83,19 @@ export const stateMachine = createMachine<Context, Events, States>(
     predictableActionArguments: true,
     context: {
       overview: undefined,
-      resources: undefined
+      resources: undefined,
+      isChild: false
     },
     states: {
       idle: {
-        on: { LOAD: { target: 'fetching-resources' } }
+        on: {
+          LOAD: {
+            target: 'fetching-resources',
+            actions: assign({
+              isChild: (_, event) => event?.isChild
+            })
+          }
+        }
       },
       'fetching-resources': {
         invoke: {
@@ -144,7 +156,6 @@ export const stateMachine = createMachine<Context, Events, States>(
                   nonFungible: TransformWithOverview
                 }>
               ) => {
-                console.log(event.data)
                 return event.data
               }
             })
@@ -158,10 +169,17 @@ export const stateMachine = createMachine<Context, Events, States>(
         }
       },
       final: {
+        type: 'final',
+        data: (ctx, _) => ctx.transformedOverview,
         on: { LOAD: { target: 'fetching-resources' } }
       },
       error: {
-        on: { LOAD: { target: 'fetching-resources' } }
+        on: { LOAD: { target: 'fetching-resources' } },
+        entry: pure((ctx: Context, event) => {
+          // if statemachine is a child, escalate the error. typing is a bit weird here
+          // @ts-ignore
+          if (ctx.isChild) return escalate(event.data)
+        })
       }
     }
   },
