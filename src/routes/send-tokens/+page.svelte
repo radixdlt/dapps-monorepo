@@ -25,7 +25,7 @@
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   {#if $state.matches('idle')}
-    <SendTokenForm />
+    <Text bold>Please connect your radix wallet to get started.</Text>
   {:else if $state.matches('final')}
     <SendTokenForm balance={$state.context.transformedOverview?.fungible} />
   {:else if $state.matches('error')}
