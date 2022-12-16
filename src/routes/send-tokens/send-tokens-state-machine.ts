@@ -59,13 +59,6 @@ type States =
       }
     }
   | {
-      value: 'account-data-fetched'
-      context: Context & {
-        sendingAccountId?: unknown
-        transformedOverview?: unknown
-      }
-    }
-  | {
       value: 'sending-token'
       context: Context & {
         sendingAccountId?: unknown
@@ -116,7 +109,7 @@ export const stateMachine = createMachine<Context, Events, States>(
           id: 'child',
           src: accountStateMachine,
           onDone: {
-            target: 'account-data-fetched',
+            target: 'idle',
             actions: assign({
               transformedOverview: (
                 _,
@@ -139,12 +132,7 @@ export const stateMachine = createMachine<Context, Events, States>(
             actions: send((_, event) => ({ ...event, isChild: true }), {
               to: 'child'
             })
-          }
-        }
-      },
-      'account-data-fetched': {
-        id: 'account-data-fetched',
-        on: {
+          },
           SENDTOKEN: {
             target: 'sending-token'
           }
