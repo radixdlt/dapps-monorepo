@@ -116,7 +116,8 @@ export const TransactionIO = object({
     receipt: object({
       status: string(),
       error_message: string().nullable()
-    })
+    }),
+    referenced_global_entities: array(string())
   })
 })
 
