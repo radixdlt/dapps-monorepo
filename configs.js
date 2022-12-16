@@ -16,6 +16,7 @@ export const configs = {
 		'@wallet': 'src/wallet',
 		'@directives': 'src/directives',
 		'@queries': 'src/query-lib',
-		'@featureFlags': 'src/feature-flags'
+		'@featureFlags': 'src/feature-flags',
+		'@stateMachines': 'src/state-machines'
 	}
 }
