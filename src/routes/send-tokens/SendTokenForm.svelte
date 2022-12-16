@@ -11,6 +11,7 @@
   import Input from '@components/_base/input/Input.svelte'
   import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
+  import type { TransformWithOverview } from '@stateMachines/transformers'
 
   $: accountList = $accounts?.map<Options>((account) => ({
     id: account.address,
@@ -18,13 +19,14 @@
     unavailable: false
   }))
 
-  export let balance: any = undefined
+  export let balance: TransformWithOverview
 
   $: balanceList =
     balance &&
-    Object.keys(balance).map((key) => ({
-      id: key,
-      label: key
+    balance.map(({ label, address, value }) => ({
+      id: address,
+      label,
+      value
     }))
 
   let selectedBalance: Options = { id: '', label: '' }
@@ -66,7 +68,10 @@
 
   $: getAmount = () => {
     if (selectedBalance.id !== '') {
-      return balance[selectedBalance?.id] || Object.values(balance)?.[0]
+      return (
+        balance?.find((b) => b.address === selectedBalance.id)?.value ||
+        balance?.[0].value
+      )
     } else {
       return 'No data'
     }

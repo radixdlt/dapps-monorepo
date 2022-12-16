@@ -38,6 +38,7 @@
     <Text bold>Please connect your radix wallet to get started.</Text>
   {:else if $state.matches('idle') || $state.matches('final')}
     <SendTokenForm
+      onSend={console.log}
       onSelectFromAccount={handleSelectFromAccount}
       balance={$state.context.transformedOverview?.fungible}
     />
