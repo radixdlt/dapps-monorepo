@@ -91,11 +91,7 @@
   <Box flex="col" gap="medium" slot="body">
     <Box mt="medium" cx={boxStyle}>
       <Text align="right">From</Text>
-      <Select
-        placeholder="Select personal account"
-        handleSelect={handleSelectFromAccount}
-        options={accountList}
-      />
+      <Select handleSelect={handleSelectFromAccount} options={accountList} />
     </Box>
     <Divider color="border" />
     <Box mt="medium" cx={boxStyle}>
