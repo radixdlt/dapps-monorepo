@@ -1,8 +1,13 @@
-import { assign, createMachine, type DoneInvokeEvent } from 'xstate'
+import { assign, createMachine, send, type DoneInvokeEvent } from 'xstate'
+import { accountStateMachine } from '@stateMachines'
+import type { TransformWithOverview } from '@stateMachines/transformers'
 
 type Context = {
   sendingAccountId?: string
-  tokenBalance?: number
+  transformedOverview?: {
+    fungible: TransformWithOverview
+    nonFungible: TransformWithOverview
+  }
   error?: Error
 }
 
@@ -13,21 +18,14 @@ type States =
       value: 'idle'
       context: Context & {
         sendingAccountId?: unknown
-        tokenBalance?: unknown
+        transformedOverview?: unknown
       }
     }
   | {
-      value: 'fetching-account-balance'
+      value: 'final'
       context: Context & {
-        sendingAccountId?: unknown
-        tokenBalance?: unknown
-      }
-    }
-  | {
-      value: 'fetched-account-balance'
-      context: Context & {
-        sendingAccountId?: unknown
-        tokenBalance?: unknown
+        fungible: TransformWithOverview
+        nonFungible: TransformWithOverview
       }
     }
   | {
@@ -44,21 +42,24 @@ export const stateMachine = createMachine<Context, Events, States>(
     predictableActionArguments: true,
     context: {
       sendingAccountId: undefined,
-      tokenBalance: undefined,
+      transformedOverview: undefined,
       error: undefined
     },
     states: {
       idle: {
-        on: { LOAD: { target: 'fetching-account-balance' } }
-      },
-      'fetching-account-balance': {
         invoke: {
-          id: 'fetching-account-balance',
-          src: 'fetchAccountBalance',
+          id: 'child',
+          src: accountStateMachine,
           onDone: {
-            target: 'fetched-account-balance',
+            target: 'final',
             actions: assign({
-              tokenBalance: (_, event: DoneInvokeEvent<number>) => event.data
+              transformedOverview: (
+                _,
+                event: DoneInvokeEvent<{
+                  fungible: TransformWithOverview
+                  nonFungible: TransformWithOverview
+                }>
+              ) => event.data
             })
           },
           onError: {
@@ -67,23 +68,20 @@ export const stateMachine = createMachine<Context, Events, States>(
               error: (_, event: DoneInvokeEvent<Error>) => event.data
             })
           }
+        },
+        on: {
+          LOAD: {
+            actions: send((_, event) => ({ ...event, isChild: true }), {
+              to: 'child'
+            })
+          }
         }
       },
-      'fetched-account-balance': {},
-      error: {
-        on: { RETRY: { target: 'fetching-account-balance' } }
-      }
+      error: {},
+      final: {}
     }
   },
   {
-    services: {
-      fetchAccountBalance: async (ctx) => {
-        if (!ctx.sendingAccountId) {
-          throw new Error('Unexpected state')
-        }
-
-        return 33
-      }
-    }
+    services: {}
   }
 )
