@@ -48,7 +48,8 @@ export const getTransactionDetails = makeQueries({
     fee: res.transaction.fee_paid.value,
     message: res.details.message_hex,
     details: res.details.raw_hex,
-    receipt: res.details.receipt
+    receipt: res.details.receipt,
+    entities: res.details.referenced_global_entities
   })
 })
 
