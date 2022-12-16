@@ -32,10 +32,12 @@
       <Text bold slot="header">Tokens</Text>
       <InfoBox
         slot="body"
-        keys={Object.keys($state.context.transformedOverview?.fungible || {})}
-        values={Object.values(
-          $state.context.transformedOverview?.fungible || {}
-        )}
+        keys={$state.context.transformedOverview?.fungible?.map(
+          (item) => item.label
+        ) || []}
+        values={$state.context.transformedOverview?.fungible?.map(
+          (item) => item.value
+        ) || []}
         loading={!$state.matches('final')}
       />
     </Card>
@@ -43,9 +45,9 @@
       <Text bold slot="header">NFT</Text>
       <InfoBox
         slot="body"
-        keys={Object.keys(
-          $state.context.transformedOverview?.nonFungible || {}
-        )}
+        keys={$state.context.transformedOverview?.nonFungible?.map(
+          (item) => item.label
+        ) || []}
         loading={!$state.matches('final')}
       />
     </Card>

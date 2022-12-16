@@ -21,7 +21,9 @@ describe('#transform for account fetching', () => {
       }
     ]
     const transformedOverview = transformWithOverview(overview)
-    expect(transformedOverview).toEqual({ 'symbol (name)': '100' })
+    expect(transformedOverview).toEqual([
+      { label: 'symbol (name)', value: '100', address: '0x1' }
+    ])
   })
 
   it('Should transform according to a prioritzed list', () => {
@@ -68,10 +70,10 @@ describe('#transform for account fetching', () => {
       }
     ]
     const transformedOverview = transformWithOverview(overview)
-    expect(transformedOverview).toEqual({
-      'symbol1 (name1)': '100',
-      symbol3: '200',
-      name2: '300'
-    })
+    expect(transformedOverview).toEqual([
+      { label: 'symbol1 (name1)', value: '100', address: '0x1' },
+      { label: 'symbol3', value: '200', address: '0x2' },
+      { label: 'name2', value: '300', address: '0x3' }
+    ])
   })
 })
