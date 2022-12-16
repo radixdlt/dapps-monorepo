@@ -13,7 +13,7 @@
   import Tab from '@components/_base/tabs/Tab.svelte'
 
   $: accountList = $accounts?.map<Options>((account) => ({
-    id: account.appearanceId,
+    id: String(account.appearanceId),
     label: `${account.label} - (${shortenAddress(account.address)})`,
     unavailable: false
   }))
