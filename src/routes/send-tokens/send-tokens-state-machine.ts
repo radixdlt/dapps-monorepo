@@ -11,9 +11,19 @@ type Context = {
   error?: Error
 }
 
-type Events = { type: 'LOAD'; address: string } | { type: 'RETRY' }
+type Events =
+  | { type: 'LOAD'; address: string }
+  | { type: 'RETRY' }
+  | { type: 'LOGGEDIN' }
 
 type States =
+  | {
+      value: 'not-logged-in'
+      context: Context & {
+        sendingAccountId?: unknown
+        transformedOverview?: unknown
+      }
+    }
   | {
       value: 'idle'
       context: Context & {
@@ -38,7 +48,7 @@ type States =
 export const stateMachine = createMachine<Context, Events, States>(
   {
     id: 'send-tokens',
-    initial: 'idle',
+    initial: 'not-logged-in',
     predictableActionArguments: true,
     context: {
       sendingAccountId: undefined,
@@ -46,6 +56,13 @@ export const stateMachine = createMachine<Context, Events, States>(
       error: undefined
     },
     states: {
+      'not-logged-in': {
+        on: {
+          LOGGEDIN: {
+            target: 'idle'
+          }
+        }
+      },
       idle: {
         invoke: {
           id: 'child',
@@ -77,8 +94,20 @@ export const stateMachine = createMachine<Context, Events, States>(
           }
         }
       },
-      error: {},
-      final: {}
+      error: {
+        on: {
+          LOAD: {
+            target: 'idle'
+          }
+        }
+      },
+      final: {
+        on: {
+          LOAD: {
+            target: 'idle'
+          }
+        }
+      }
     }
   },
   {

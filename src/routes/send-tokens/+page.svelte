@@ -9,8 +9,18 @@
 
   const { state, send } = useMachine(stateMachine)
 
-  $: if ($accounts) {
-    $accounts.length > 0 && send('LOAD', { address: $accounts[0].address })
+  $: selectedAccount = $accounts && $accounts.length > 0 && $accounts[0].address
+
+  const handleSelectFromAccount = (account: string) => {
+    selectedAccount = account
+  }
+
+  $: if ($accounts && $accounts.length > 0) {
+    send('LOGGEDIN')
+  }
+
+  $: if (selectedAccount) {
+    send('LOAD', { address: selectedAccount })
   }
 
   $: if ($state.matches('error')) {
@@ -24,10 +34,13 @@
 
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
-  {#if $state.matches('idle')}
+  {#if $state.matches('not-logged-in')}
     <Text bold>Please connect your radix wallet to get started.</Text>
-  {:else if $state.matches('final')}
-    <SendTokenForm balance={$state.context.transformedOverview?.fungible} />
+  {:else if $state.matches('idle') || $state.matches('final')}
+    <SendTokenForm
+      onSelectFromAccount={handleSelectFromAccount}
+      balance={$state.context.transformedOverview?.fungible}
+    />
   {:else if $state.matches('error')}
     <Text inline size="large" mb="medium" bold
       >Error: {$state.context.error.message}</Text
