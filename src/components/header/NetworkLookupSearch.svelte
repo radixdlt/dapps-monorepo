@@ -4,8 +4,9 @@
   import Search from '@components/_base/search/Search.svelte'
   import { getAddressPrefix } from '@utils'
 
-  let address = ''
-  const search = () => {
+  let searchBarText = ''
+  const search = (address: string) => {
+    searchBarText = ''
     switch (getAddressPrefix(address)) {
       case 'account':
         goto(`/account/${address}`)
@@ -29,9 +30,9 @@
   }
 </script>
 
-<form on:submit|preventDefault={search}>
+<form on:submit|preventDefault={() => search(searchBarText)}>
   <Search
-    bind:value={address}
+    bind:value={searchBarText}
     placeholder="Search for an address, transaction/block hash or validator key"
   />
 </form>
