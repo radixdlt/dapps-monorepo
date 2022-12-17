@@ -7,5 +7,6 @@ export const icons = {
   validators: '/icons/validators.svg',
   information: '/icons/information.svg',
   copy: '/icons/copy.svg',
-  listboxChevron: '/icons/listbox-chevron.svg'
-}
+  listboxChevron: '/icons/listbox-chevron.svg',
+  search: '/icons/search_icon.svg'
+} as const
