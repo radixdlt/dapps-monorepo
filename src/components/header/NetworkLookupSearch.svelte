@@ -30,9 +30,7 @@
   }
 </script>
 
-<form on:submit|preventDefault={() => search(searchBarText)}>
-  <Search
-    bind:value={searchBarText}
-    placeholder="Search for an address, transaction/block hash or validator key"
-  />
-</form>
+<Search
+  onSearch={search}
+  placeholder="Search for an address, transaction/block hash or validator key"
+/>

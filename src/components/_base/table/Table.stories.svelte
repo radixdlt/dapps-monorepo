@@ -104,7 +104,7 @@
 <Meta title="Table" />
 
 <Box>
-  <Search bind:value={filtered} />
+  <Search onSearch={() => {}} />
   <Story name="Primary"
     ><Table bind:globalFilter={filtered} {columns} data={validators} /></Story
   >
