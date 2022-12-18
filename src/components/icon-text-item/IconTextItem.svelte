@@ -4,7 +4,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import type { CSS } from '@stitches/core/types/css-util'
   import type { config } from '@styles'
-  import { icons } from '../../icon-assets'
+  import type { icons } from '../../icon-assets'
 
   export let noPadding: boolean = false
   export let icon: keyof typeof icons
@@ -19,7 +19,7 @@
 
   const iconProps = {
     filter: !isIconColor ? 'grayscale(100%)' : 'undefined',
-    type: icons[icon],
+    type: icon,
     height: iconSize,
     width: iconSize,
     interactive: interactiveIcon
