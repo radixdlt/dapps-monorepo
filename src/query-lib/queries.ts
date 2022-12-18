@@ -95,3 +95,15 @@ export const getEntityDetails = makeQueries({
   decoder: (res) => decoders('EntityDetailsIO', res),
   transformationFn: (res) => res
 })
+
+export const getNonFungibleIDs = makeQueries({
+  fn: (params: { accountAddress: string; nftAddress: string }) =>
+    stateApi.entityNonFungibleIds({
+      entityNonFungibleIdsRequest: {
+        address: params.accountAddress,
+        resource_address: params.nftAddress
+      }
+    }),
+  decoder: (res) => decoders('NonFungibleIDsIO', res),
+  transformationFn: (res) => res
+})

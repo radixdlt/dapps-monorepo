@@ -231,6 +231,18 @@ export const TransactionReceiptIO = object({
   })
 })
 
+export const NonFungibleIDsIO = object({
+  address: string(),
+  resource_address: string(),
+  non_fungible_ids: object({
+    items: array(
+      object({
+        non_fungible_id: string()
+      })
+    )
+  })
+})
+
 export const ValidatorArrayIO = object({ validators: array(ValidatorIO) })
 export const ValidatorTransformedArrayIO = array(ValidatorTransformedIO)
 
