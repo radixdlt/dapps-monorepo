@@ -3,6 +3,13 @@
   import { css, config } from '@styles'
 
   const variants = {
+    wrapper: {
+      true: {
+        p: '$0',
+        m: '$0',
+        backgroundColor: 'transparent'
+      }
+    },
     hidden: {
       true: {
         visibility: 'hidden'
@@ -319,6 +326,7 @@
   export let justify: keyof typeof variants['justify'] | undefined = undefined
   export let grid: keyof typeof variants['grid'] | undefined = undefined
   export let gap: keyof typeof variants['gap'] | undefined = undefined
+  export let wrapper: boolean | undefined = undefined
   export let hidden: boolean | undefined = undefined
 
   export let shadow: boolean | undefined = undefined
@@ -348,7 +356,8 @@
     grid,
     shadow,
     gap,
-    hidden
+    hidden,
+    wrapper
   })}
 >
   <slot />
