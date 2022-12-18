@@ -11,7 +11,7 @@
   import { AlertToast } from '@components/_base/toast/Toasts'
   import { accounts } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
-  import { shortenAddress } from '@utils'
+  import { getNFTAddress, shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import Success from './Success.svelte'
 
@@ -80,11 +80,7 @@
     <Success
       txID={$state.context.intentHash}
       packageAddress={$state.context.packageAddress}
-      badgeInfo={{
-        name: $state.context.badgeName,
-        address: $state.context.selectedNftAddress
-      }}
-      badgeMetadata={$state.context.badgeMetadata}
+      badgeInfo={$state.context.selectedNft}
     />
   {:else}
     <Box transparent>
@@ -126,11 +122,11 @@
               handleSelect={(e) =>
                 send({
                   type: 'SELECT_ACCOUNT',
-                  accountAddress: e.id
+                  address: $accounts[e.id].address
                 })}
               options={[
-                ...$accounts.map((resource) => ({
-                  id: resource.address,
+                ...$accounts.map((resource, i) => ({
+                  id: i,
                   label: shortenAddress(resource.address)
                 }))
               ]}
@@ -143,13 +139,19 @@
                 handleSelect={(e) =>
                   send({
                     type: 'SELECT_BADGE',
-                    badgeAddress: e.id
+                    index: e.id
                   })}
                 options={[
-                  ...$state.context.non_fungible_resources.map((resource) => ({
-                    id: resource.address,
-                    label: shortenAddress(resource.address)
-                  }))
+                  ...$state.context.non_fungible_resources.map(
+                    (resource, i) => ({
+                      id: i,
+                      label: `${resource.name ?? ''} ${
+                        resource.name ? '(' : ' '
+                      }${getNFTAddress(resource.address, resource.id)}${
+                        resource.name ? ')' : ' '
+                      }`
+                    })
+                  )
                 ]}
               />
             {:else}

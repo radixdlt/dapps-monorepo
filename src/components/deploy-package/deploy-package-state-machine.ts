@@ -60,10 +60,10 @@ type Context = {
   error?: Error
   transactionData?: SendTransaction
   selectedAccountAddress?: string
-  selectedNftAddress?: string
   non_fungible_resources: Array<{
+    name?: string
     address: string
-    total_count: number
+    id: string
   }>
   intentHash?: string
   badgeMetadata?: Array<{
@@ -71,13 +71,18 @@ type Context = {
     value: string
   }>
   packageAddress?: string
+  selectedNft?: {
+    name?: string
+    address: string
+    id: string
+  }
 }
 
 type Events =
   | { type: 'UPLOAD_FILES'; abi: File; wasm: File }
   | { type: 'REMOVE_FILE' }
-  | { type: 'SELECT_ACCOUNT'; accountAddress: string }
-  | { type: 'SELECT_BADGE'; badgeAddress: string }
+  | { type: 'SELECT_ACCOUNT'; address: string }
+  | { type: 'SELECT_BADGE'; index: number }
   | { type: 'CREATE_BADGE' }
   | { type: 'DEPLOY' }
   | { type: 'RETRY' }
@@ -116,7 +121,11 @@ type States =
         }
       }
       context: Context & {
-        selectedNftAddress: string
+        selectedNft: {
+          name?: string
+          address: string
+          id: string
+        }
         non_fungible_resources: Array<{
           address: string
           total_count: number
@@ -155,15 +164,16 @@ export const stateMachine = createMachine<Context, Events, States>(
           SELECT_ACCOUNT: {
             target: ['.selecting-account.selected', '.selecting-badge.idle'],
             actions: assign({
-              selectedAccountAddress: (_, event) => event.accountAddress,
-              selectedNftAddress: (_, __) => undefined,
+              selectedAccountAddress: (_, event) => event.address,
+              selectedNft: (_, __) => undefined,
               non_fungible_resources: (_, __) => []
             })
           },
           SELECT_BADGE: {
             target: '.selecting-badge.selected',
             actions: assign({
-              selectedNftAddress: (_, event) => event.badgeAddress
+              selectedNft: (ctx, event) =>
+                ctx.non_fungible_resources[event.index]
             })
           },
           DEPLOY: {
@@ -172,7 +182,7 @@ export const stateMachine = createMachine<Context, Events, States>(
               ctx.wasm &&
               ctx.abi &&
               ctx.selectedAccountAddress &&
-              ctx.selectedNftAddress
+              ctx.selectedNft
                 ? true
                 : false
           }
@@ -308,16 +318,53 @@ export const stateMachine = createMachine<Context, Events, States>(
   },
   {
     services: {
-      queryResources: ({ selectedAccountAddress }) =>
-        queryServer('getEntityResources', selectedAccountAddress).then(
-          ({ nonFungible }) => nonFungible
-        ),
+      queryResources: async ({ selectedAccountAddress }) => {
+        const { nonFungible } = await queryServer(
+          'getEntityResources',
+          selectedAccountAddress
+        )
+        if (!nonFungible) return undefined
+
+        const nonFungiblesWithNames = await Promise.all(
+          nonFungible.map(async (nft) => ({
+            ...nft,
+            name: await queryServer('getEntityDetails', nft.address).then(
+              (response) =>
+                response.metadata.items.find((item) => item.key === 'name')
+                  ?.value
+            )
+          }))
+        )
+
+        const nfts = await Promise.all(
+          nonFungiblesWithNames.map(async (nft) => ({
+            name: nft.name,
+            ...(await queryServer('getNonFungibleIDs', {
+              accountAddress: selectedAccountAddress!,
+              nftAddress: nft.address
+            }))
+          }))
+        )
+
+        return nfts.reduce(
+          (prev, cur) => [
+            ...prev,
+            ...cur.non_fungible_ids.items.map(({ non_fungible_id }) => ({
+              address: cur.resource_address,
+              id: non_fungible_id,
+              name: cur.name
+            }))
+          ],
+          [] as Array<{ address: string; id: string; name: string | undefined }>
+        )
+      },
+
       deploy: (ctx) => {
         if (
           !ctx.wasm ||
           !ctx.abi ||
           !ctx.selectedAccountAddress ||
-          !ctx.selectedNftAddress
+          !ctx.selectedNft
         ) {
           throw new Error('Unexpected state')
         }
@@ -326,7 +373,7 @@ export const stateMachine = createMachine<Context, Events, States>(
             ctx.wasm,
             ctx.abi,
             ctx.selectedAccountAddress,
-            ctx.selectedNftAddress
+            ctx.selectedNft.address
           ),
           blobs: [ctx.wasm, ctx.abi]
         })
@@ -336,7 +383,7 @@ export const stateMachine = createMachine<Context, Events, States>(
               await queryServer('getTransactionDetails', transactionIntentHash)
             ).entities,
             badgeMetadata: (
-              await queryServer('getEntityDetails', ctx.selectedNftAddress)
+              await queryServer('getEntityDetails', ctx.selectedNft?.address)
             ).metadata.items
           }))
           .then((result) => ({
