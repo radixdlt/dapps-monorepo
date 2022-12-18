@@ -1,31 +1,15 @@
 <script>
   import { Tab } from '@rgossiaux/svelte-headlessui'
-  import { css } from '@styles'
+  import { onMount } from 'svelte'
 
-  const selectedClass = css({
-    backgroundColor: '$primaryGhostButtonText',
-    color: 'white'
-  })
+  export let _default = false
 
-  const tabClass = css({
-    width: '140px',
-    height: '50px',
-    cursor: 'pointer',
-    color: 'inherit',
-    backgroundColor: '$transparent',
-    border: '1px solid $borderColor',
-    shadow: true,
-    mr: '$md',
-    '&:hover': {
-      backgroundColor: '$primaryButton',
-      color: 'white'
+  onMount(() => {
+    const inputs = document.getElementsByTagName('input')
+    for (const input of inputs) {
+      input.setAttribute('name', 'tag')
     }
   })
 </script>
 
-<Tab
-  class={({ selected }) =>
-    selected ? tabClass() + ' ' + selectedClass() : tabClass()}
->
-  <slot />
-</Tab>
+<Tab as={'input'} type="radio" checked={_default} />

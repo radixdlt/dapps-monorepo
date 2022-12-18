@@ -100,8 +100,14 @@
       <Text align="right">To</Text>
       <Tabs>
         <svelte:fragment slot="tabs">
-          <Tab>One of my accounts</Tab>
-          <Tab>Other account</Tab>
+          <Tab _default />
+          <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
+            >One of my accounts</Box
+          >
+          <Tab />
+          <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
+            >Other account</Box
+          >
         </svelte:fragment>
         <svelte:fragment slot="panels">
           <TabPanel>
