@@ -4,7 +4,7 @@
   import type { Page } from '@sveltejs/kit'
   import { isSameRoute } from '@utils'
   import { featureFlags } from '@featureFlags'
-  import type { icons } from 'src/icon-assets'
+  import type { icons } from '../../../src/icon-assets'
 
   export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
