@@ -17,7 +17,7 @@
 
   $: accountList = $accounts?.map<OptionsType>((account) => ({
     address: account.address,
-    label: `${account.label} - (${shortenAddress(account.address)})`,
+    label: `${account.label} (${shortenAddress(account.address)})`,
     unavailable: false
   }))
 

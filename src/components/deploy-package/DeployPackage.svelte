@@ -125,9 +125,9 @@
                   address: $accounts[e.id].address
                 })}
               options={[
-                ...$accounts.map((resource, i) => ({
+                ...$accounts.map((account, i) => ({
                   id: i,
-                  label: shortenAddress(resource.address)
+                  label: `${account.label} (${shortenAddress(account.address)})`
                 }))
               ]}
             />
