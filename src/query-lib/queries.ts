@@ -2,8 +2,8 @@ import { makeQueries } from 'svelte-samlat'
 import { networkConfig } from '@constants'
 import {
   Configuration,
-  TransactionApi,
-  EntityApi
+  StateApi,
+  TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { decoders } from '@io'
 import { getWalletSDK } from '../wallet-sdk'
@@ -15,7 +15,7 @@ import {
 
 const config = new Configuration({ basePath: networkConfig?.url })
 
-const entityApi = new EntityApi(config)
+const stateApi = new StateApi(config)
 const transactionApi = new TransactionApi(config)
 
 export const requestAddresses = makeQueries({
@@ -60,7 +60,7 @@ export const getEntityOverview = makeQueries({
       | EntityResourcesTransformed['nonFungible']
   ) => {
     const entityAddresses = resources?.map((entity) => entity.address)
-    const res = await entityApi.entityOverview({
+    const res = await stateApi.entityOverview({
       entityOverviewRequest: {
         addresses: entityAddresses || []
       }
@@ -76,7 +76,7 @@ export const getEntityOverview = makeQueries({
 
 export const getEntityResources = makeQueries({
   fn: async (address: string) =>
-    entityApi.entityResources({
+    stateApi.entityResources({
       entityResourcesRequest: {
         address
       }
@@ -87,7 +87,7 @@ export const getEntityResources = makeQueries({
 
 export const getEntityDetails = makeQueries({
   fn: (address: string) =>
-    entityApi.entityDetails({
+    stateApi.entityDetails({
       entityDetailsRequest: {
         address
       }
