@@ -4,11 +4,11 @@
   import Select from './Select.svelte'
 
   const people = [
-    { id: '1', label: 'Durward Reynolds', unavailable: false },
-    { id: '2', label: 'Kenton Towne', unavailable: false },
-    { id: '3', label: 'Therese Wunsch', unavailable: false },
-    { id: '4', label: 'Benedict Kessler', unavailable: true },
-    { id: '5', label: 'Katelyn Rohan', unavailable: false }
+    { id: 1, label: 'Durward Reynolds', unavailable: false },
+    { id: 2, label: 'Kenton Towne', unavailable: false },
+    { id: 3, label: 'Therese Wunsch', unavailable: false },
+    { id: 4, label: 'Benedict Kessler', unavailable: true },
+    { id: 5, label: 'Katelyn Rohan', unavailable: false }
   ]
 </script>
 

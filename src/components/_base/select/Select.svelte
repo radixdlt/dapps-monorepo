@@ -1,9 +1,8 @@
 <script lang="ts" context="module">
-  export type Options = {
-    id: string
+  export type Options<T> = {
     label: string
     unavailable?: boolean
-  }
+  } & T
 </script>
 
 <script lang="ts">
@@ -18,15 +17,16 @@
   import Box from '../box/Box.svelte'
   import Text from '../text/Text.svelte'
 
-  export let options: Options[] = []
+  type T = $$Generic
+  export let options: Array<Options<T>> = []
 
   export let placeholder: string | undefined = undefined
 
-  export let handleSelect: (option: Options) => void = () => {}
+  export let handleSelect: (option: Options<T>) => void = () => {}
 
-  let selected: Options | undefined = placeholder ? undefined : options[0]
+  let selected: Options<T> | undefined = placeholder ? undefined : options[0]
 
-  const onSelect = (e: CustomEvent<Options>) => {
+  const onSelect = (e: CustomEvent<Options<T>>) => {
     selected = e.detail
     handleSelect(e.detail)
   }
@@ -86,7 +86,7 @@
       >{selected?.label ?? placeholder}</ListboxButton
     >
     <ListboxOptions class={listboxoptionsStyles}>
-      {#each options as item, i (item.id)}
+      {#each options as item}
         <ListboxOption
           class={listboxoptionStyle}
           value={item}

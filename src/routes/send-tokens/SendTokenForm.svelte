@@ -13,8 +13,10 @@
   import Button from '@components/_base/button/Button.svelte'
   import type { TransformWithOverview } from '@stateMachines/transformers'
 
-  $: accountList = $accounts?.map<Options>((account) => ({
-    id: account.address,
+  type OptionsType = Options<{ address: string }>
+
+  $: accountList = $accounts?.map<OptionsType>((account) => ({
+    address: account.address,
     label: `${account.label} - (${shortenAddress(account.address)})`,
     unavailable: false
   }))
@@ -24,31 +26,31 @@
   $: balanceList =
     balance &&
     balance.map(({ label, address, value }) => ({
-      id: address,
+      address,
       label,
       value
     }))
 
-  let selectedBalance: Options = { id: '', label: '' }
+  let selectedBalance: OptionsType = { address: '', label: '' }
 
   export let onSelectFromAccount: (account: string) => void = () => {}
 
   let amountToSend = ''
 
-  let selectedFromAccount = { id: '', label: '' }
+  let selectedFromAccount = { address: '', label: '' }
 
-  const handleSelectFromAccount = (nextSelected: Options) => {
+  const handleSelectFromAccount = (nextSelected: OptionsType) => {
     selectedFromAccount = nextSelected
-    onSelectFromAccount(nextSelected.id)
+    onSelectFromAccount(nextSelected.address)
   }
 
-  let selectedToAccount = { id: '', label: '' }
+  let selectedToAccount = { address: '', label: '' }
 
-  const handleSelectToAccount = (nextSelected: Options) => {
+  const handleSelectToAccount = (nextSelected: OptionsType) => {
     selectedToAccount = nextSelected
   }
 
-  const handleSelectBalance = (nextSelected: Options) => {
+  const handleSelectBalance = (nextSelected: OptionsType) => {
     selectedBalance = nextSelected
   }
 
@@ -67,9 +69,9 @@
   }) => void = () => {}
 
   $: getAmount = () => {
-    if (selectedBalance.id !== '') {
+    if (selectedBalance.address !== '') {
       return (
-        balance?.find((b) => b.address === selectedBalance.id)?.value ||
+        balance?.find((b) => b.address === selectedBalance.address)?.value ||
         balance?.[0].value
       )
     } else {
@@ -138,15 +140,15 @@
     </Box>
     <Box justify="end">
       <Button
-        disabled={!selectedFromAccount?.id ||
-          !selectedToAccount?.id ||
+        disabled={!selectedFromAccount?.address ||
+          !selectedToAccount?.address ||
           !amountToSend ||
-          !selectedBalance?.id}
+          !selectedBalance?.address}
         on:click={() =>
           onSend({
-            resource: selectedBalance.id,
-            fromAccount: selectedFromAccount.id,
-            toAccount: selectedToAccount.id || otherAccount,
+            resource: selectedBalance.address,
+            fromAccount: selectedFromAccount.address,
+            toAccount: selectedToAccount.address || otherAccount,
             amount: Number(amountToSend)
           })}>Send</Button
       >
