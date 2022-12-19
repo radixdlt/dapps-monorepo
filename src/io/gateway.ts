@@ -243,6 +243,14 @@ export const NonFungibleIDsIO = object({
   })
 })
 
+export const NonFungibleDataIO = object({
+  address: string(),
+  non_fungible_id_type: string(),
+  non_fungible_id: string(),
+  mutable_data_hex: string(),
+  immutable_data_hex: string()
+})
+
 export const ValidatorArrayIO = object({ validators: array(ValidatorIO) })
 export const ValidatorTransformedArrayIO = array(ValidatorTransformedIO)
 

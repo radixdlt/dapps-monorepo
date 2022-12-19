@@ -107,3 +107,15 @@ export const getNonFungibleIDs = makeQueries({
   decoder: (res) => decoders('NonFungibleIDsIO', res),
   transformationFn: (res) => res
 })
+
+export const getNonFungibleData = makeQueries({
+  fn: (params: { address: string; id: string }) =>
+    stateApi.nonFungibleIdData({
+      nonFungibleDataRequest: {
+        address: params.address,
+        non_fungible_id: params.id
+      }
+    }),
+  decoder: (res) => decoders('NonFungibleDataIO', res),
+  transformationFn: (res) => res
+})
