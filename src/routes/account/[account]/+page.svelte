@@ -32,24 +32,27 @@
       <Text bold slot="header">Tokens</Text>
       <InfoBox
         slot="body"
-        keys={$state.context.transformedOverview?.fungible?.map(
-          (item) => item.label
-        ) || []}
-        values={$state.context.transformedOverview?.fungible?.map(
-          (item) => item.value
-        ) || []}
+        entries={$state.context.transformedOverview?.fungible || []}
         loading={!$state.matches('final')}
-      />
+      >
+        <Text bold slot="key" let:entry>
+          <a href="/resource/{entry.address}">{entry.key}</a>
+        </Text>
+        <Text slot="value" let:entry>{entry.value}</Text>
+      </InfoBox>
     </Card>
     <Card>
       <Text bold slot="header">NFT</Text>
       <InfoBox
         slot="body"
-        keys={$state.context.transformedOverview?.nonFungible?.map(
-          (item) => item.label
-        ) || []}
+        entries={$state.context.transformedOverview?.nonFungible || []}
         loading={!$state.matches('final')}
-      />
+      >
+        <Text bold slot="key" let:entry>
+          <a href="/resource/{entry.address}">{entry.key}</a>
+        </Text>
+        <Text slot="value" />
+      </InfoBox>
     </Card>
   {/if}
 </Box>

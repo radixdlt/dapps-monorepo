@@ -26,7 +26,20 @@
     })()
   }
 
-  const keys = ['Status', 'Date', 'Fee']
+  $: entries = [
+    {
+      key: 'Status',
+      value: $state.data?.status
+    },
+    {
+      key: 'Date',
+      value: $state.data?.date
+    },
+    {
+      key: 'Fee',
+      value: `${$state.data?.fee} XRD`
+    }
+  ]
 </script>
 
 <Box transparent m="none" px="none" full>
@@ -38,17 +51,9 @@
 
 <Box full>
   {#if $state.status === 'loading'}
-    <InfoBox {keys} loading />
+    <InfoBox {entries} loading />
   {:else}
-    <InfoBox
-      {keys}
-      values={[
-        $state.data?.status,
-        $state.data?.date,
-        `${$state.data?.fee} XRD`
-      ]}
-      loading={false}
-    />
+    <InfoBox {entries} loading={false} />
     <Box>
       <Text bold mb="medium">Transaction manifest</Text>
       {manifest ? manifest : 'No manifest'}

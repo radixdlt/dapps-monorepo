@@ -20,22 +20,24 @@
     })()
   }
 
-  const keys = ['Description', 'Total supply']
-
-  $: values = [
-    $state.data?.metadata.items.find(
-      (item) => item.key.toLowerCase() === 'description'
-    )?.value,
-    $state.data?.details.total_supply
-  ]
-
-  $: unknownMetadata =
-    $state.data?.metadata.items.filter(
+  $: entries = [
+    {
+      key: 'Description',
+      value: $state.data?.metadata.items.find(
+        (item) => item.key.toLowerCase() === 'description'
+      )?.value
+    },
+    {
+      key: 'Total supply',
+      value: $state.data?.details.total_supply
+    },
+    ...($state.data?.metadata.items.filter(
       (item) =>
         !['description', 'symbol', 'name', 'url'].some(
           (key) => key === item.key.toLowerCase()
         )
-    ) ?? []
+    ) ?? [])
+  ]
 
   $: symbol = $state.data?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'symbol'
@@ -89,10 +91,5 @@
   <Box px="none" transparent>
     <Divider />
   </Box>
-  <InfoBox
-    {keys}
-    {values}
-    {unknownMetadata}
-    loading={$state.status === 'loading'}
-  />
+  <InfoBox {entries} loading={$state.status === 'loading'} />
 </Box>
