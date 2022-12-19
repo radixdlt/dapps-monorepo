@@ -22,14 +22,15 @@
   }
 </script>
 
-<Box px="none" m="none" transparent>
+<Box px="none" transparent>
   <ResourceViewTitle title="Account" resourceAddress={$page.params.account} />
+</Box>
+<Box px="none" m="none" transparent>
   {#if $state.matches('error')}
     No account found
   {:else}
-    <Text bold mb="medium">Balance</Text>
     <Card>
-      <Text bold slot="header">Tokens</Text>
+      <Text bold slot="header">Tokens (fungible resources)</Text>
       <InfoBox
         slot="body"
         entries={$state.context.transformedOverview?.fungible || []}
@@ -42,7 +43,7 @@
       </InfoBox>
     </Card>
     <Card>
-      <Text bold slot="header">NFT</Text>
+      <Text bold slot="header">NFTs (nonfungible resources)</Text>
       <InfoBox
         slot="body"
         entries={$state.context.transformedOverview?.nonFungible || []}
