@@ -15,7 +15,7 @@
 
 <center>
   <Text bold size="xlarge">Your package was submitted! 🎉</Text>
-  <Box cx={{ width: '70%' }} transparent>
+  <Box transparent>
     <InfoBox
       entries={[
         {
@@ -38,6 +38,13 @@
       ]}
       loading={false}
       transparent
-    />
+    >
+      <Text align="right" bold slot="key" let:entry>
+        {entry.key}
+      </Text>
+      <Text align="left" slot="value" let:entry>
+        {entry.value}
+      </Text>
+    </InfoBox>
   </Box>
 </center>
