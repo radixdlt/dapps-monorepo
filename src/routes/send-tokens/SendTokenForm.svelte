@@ -11,6 +11,7 @@
   import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import type { TransformWithOverview } from '@stateMachines/transformers'
+  import { onMount } from 'svelte'
 
   type OptionsType = Options<{ address: string }>
 
@@ -37,6 +38,10 @@
   let amountToSend = ''
 
   let selectedFromAccount = { address: '', label: '' }
+
+  onMount(() => {
+    selectedFromAccount = accountList[0]
+  })
 
   const handleSelectFromAccount = (nextSelected: OptionsType) => {
     selectedFromAccount = nextSelected
@@ -147,7 +152,7 @@
   </Box>
   <Box justify="end">
     <Button
-      disabled={!selectedFromAccount?.address ||
+      disabled={!selectedFromAccount.address ||
         !selectedToAccount?.address ||
         !amountToSend ||
         !selectedBalance?.address}

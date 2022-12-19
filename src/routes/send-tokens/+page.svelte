@@ -35,7 +35,7 @@
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   {#if $state.matches('not-logged-in')}
-    <Text bold>Please connect your radix wallet to get started.</Text>
+    <Text bold>Please connect your Radix wallet to get started.</Text>
   {:else if $state.matches('idle')}
     <SendTokenForm
       onSend={(data) => send({ type: 'SENDTOKEN', data })}

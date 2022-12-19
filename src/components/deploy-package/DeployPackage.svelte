@@ -95,7 +95,7 @@
     </Box>
     <center>
       {#if $state.matches('not-connected')}
-        <Text bold>Please connect your radix wallet to get started.</Text>
+        <Text bold>Please connect your Radix wallet to get started.</Text>
       {/if}
 
       {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
