@@ -133,7 +133,7 @@
         <Text inline size="small" color="secondary">{getAmount()}</Text>
         <Text inline size="xsmall" muted>(Available balance)</Text>
       </Box>
-      <Box wrapper cx={{ minWidth: '140px' }}>
+      <Box px={'small'} cx={{ minWidth: '140px' }}>
         <Select
           placeholder="Select resource"
           handleSelect={handleSelectBalance}
