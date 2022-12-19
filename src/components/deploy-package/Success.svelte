@@ -17,16 +17,24 @@
   <Text bold size="xlarge">Your package was submitted! 🎉</Text>
   <Box cx={{ width: '70%' }} transparent>
     <InfoBox
-      keys={['Tx ID', 'Package address', 'Owner badge']}
-      values={[
-        txID,
-        packageAddress,
-        badgeInfo.name
-          ? `${badgeInfo.name} (${getNFTAddress(
-              badgeInfo.address,
-              badgeInfo.id
-            )})`
-          : getNFTAddress(badgeInfo.address, badgeInfo.id)
+      entries={[
+        {
+          key: 'Tx ID',
+          value: txID
+        },
+        {
+          key: 'Package address',
+          value: packageAddress
+        },
+        {
+          key: 'Owner badge',
+          value: badgeInfo.name
+            ? `${badgeInfo.name} (${getNFTAddress(
+                badgeInfo.address,
+                badgeInfo.id
+              )})`
+            : getNFTAddress(badgeInfo.address, badgeInfo.id)
+        }
       ]}
       loading={false}
       transparent

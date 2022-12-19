@@ -6,7 +6,7 @@ export const transformWithOverview = (
   overview?: EntityOverviewTransformed['withOverviews']
 ) => {
   const transformedOverview = overview?.reduce<
-    Array<{ label: string; value?: string; address: string }>
+    Array<{ key: string; value?: string; address: string }>
   >((acc, overview) => {
     const symbol = overview.metadata.items?.find(
       (item) => item.key === 'symbol'
@@ -21,7 +21,7 @@ export const transformWithOverview = (
         : symbol || name || overview.address
 
     const next = {
-      label: key,
+      key,
       value: overview.amount,
       address: overview.address
     }

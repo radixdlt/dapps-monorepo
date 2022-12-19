@@ -25,9 +25,9 @@
 
   $: balanceList =
     balance &&
-    balance.map(({ label, address, value }) => ({
+    balance.map(({ key, address, value }) => ({
       address,
-      label,
+      label: key,
       value
     }))
 

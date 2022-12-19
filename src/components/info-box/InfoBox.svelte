@@ -3,12 +3,9 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Text from '@components/_base/text/Text.svelte'
 
-  export let keys: string[] = []
-  export let values: unknown[] = []
-  export let unknownMetadata: Array<{
-    key: string
-    value: string
-  }> = []
+  type T = $$Generic
+
+  export let entries: Array<T & { key: string; value?: unknown }> = []
   export let transparent: boolean = false
   export let loading: boolean
 
@@ -24,41 +21,22 @@
     }}
     transparent
   >
-    {#each keys as key, i}
-      <Text bold>
-        {key}
-      </Text>
+    {#each entries as entry, i}
+      <slot name="key" {entry}>
+        <Text bold>
+          {entry.key}
+        </Text>
+      </slot>
 
       {#if loading}
         <SkeletonLoader width={loaderWidth} />
-      {:else if values[i]}
-        <Text>
-          {values[i]}
-        </Text>
       {:else}
-        <Text>
-          {`<no value>`}
-        </Text>
+        <slot name="value" {entry}>
+          <Text>
+            {entry.value === undefined ? `<no value>` : entry.value}
+          </Text>
+        </slot>
       {/if}
-    {/each}
-
-    {#each unknownMetadata as { key, value }}
-      <Text bold>
-        {key}
-      </Text>
-      <Text>
-        {#if loading}
-          <SkeletonLoader width={loaderWidth} />
-        {:else if value}
-          <Text>
-            {value}
-          </Text>
-        {:else}
-          <Text>
-            {`<no value>`}
-          </Text>
-        {/if}
-      </Text>
     {/each}
   </Box>
 </Box>
