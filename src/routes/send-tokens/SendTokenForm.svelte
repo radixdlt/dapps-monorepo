@@ -4,7 +4,6 @@
   import { accounts } from '@stores'
   import { shortenAddress } from '@utils'
   import Select, { type Options } from '@components/_base/select/Select.svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Input from '@components/_base/input/Input.svelte'
@@ -89,14 +88,13 @@
 
 <Box flex="col" gap="medium">
   <Box mt="medium" cx={boxStyle}>
-    <Text align="right">From</Text>
+    <Text bold align="right">From</Text>
     <Box px="none" cx={{ width: '300px' }}>
       <Select handleSelect={handleSelectFromAccount} options={accountList} />
     </Box>
   </Box>
-  <Divider color="border" />
   <Box mt="medium" cx={boxStyle}>
-    <Text align="right">To</Text>
+    <Text bold align="right">To</Text>
     <Tabs>
       <svelte:fragment slot="tabs">
         <Tab _default />
@@ -127,16 +125,15 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <Divider color="border" />
-  <Box mt="medium" cx={boxStyle}>
-    <Text align="right">Amount</Text>
-    <Box px="none" flex="row" items="baseline">
-      <Box px="none" mx="none">
+  <Box cx={boxStyle}>
+    <Text bold align="right">Amount</Text>
+    <Box wrapper flex="row" items="baseline">
+      <Box wrapper>
         <Input bind:value={amountToSend} placeholder="Amount" />
         <Text inline size="small" color="secondary">{getAmount()}</Text>
         <Text inline size="xsmall" muted>(Available balance)</Text>
       </Box>
-      <Box px="none" cx={{ minWidth: '140px' }}>
+      <Box wrapper cx={{ minWidth: '140px' }}>
         <Select
           placeholder="Select resource"
           handleSelect={handleSelectBalance}
