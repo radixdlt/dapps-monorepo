@@ -65,7 +65,8 @@
         gridArea: 'content',
         height: '100vh',
         overflowY: 'scroll',
-        backgroundColor: '$background'
+        backgroundColor: '$background',
+        paddingBottom: '$6xl'
       }}
     >
       <slot />
