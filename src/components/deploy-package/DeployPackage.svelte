@@ -84,18 +84,17 @@
     />
   {:else}
     <Box transparent>
-      <Text size={'xxlarge'} bold>Deploy package</Text>
+      <Text size={'xxlarge'} bold>Deploy Package</Text>
     </Box>
     <Box transparent>
       <Text
-        >Deploy a new blueprint package to the Radix Betanet. To control aspects
-        of the package, like setting metadata or claiming royalties, you must
-        specify a badge NFT for authorization.</Text
+        >Deploy a new blueprint package to the Radix Betanet by attaching your
+        WASM and ABI files to a deploy transaction.</Text
       >
     </Box>
     <center>
       {#if $state.matches('not-connected')}
-        <Text bold>Please connect your Radix wallet to get started.</Text>
+        <Text bold>Please connect your Radix Wallet to get started.</Text>
       {/if}
 
       {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
@@ -115,10 +114,18 @@
             maxFiles={1}
           />
         </Box>
+        <Box transparent>
+          <Text
+            >To control aspects of the package you deploy, like setting metadata
+            or claiming royalties, you must specify a badge NFT for
+            authorization. Choose one of your accounts where you have a badge,
+            or where you’d like to hold one.</Text
+          >
+        </Box>
         <Box transparent cx={{ width: '30%' }}>
           <Box transparent>
             <Select
-              placeholder="Select account"
+              placeholder="Select Account"
               handleSelect={(e) =>
                 send({
                   type: 'SELECT_ACCOUNT',
@@ -135,7 +142,7 @@
           <Box transparent>
             {#if $state.context.non_fungible_resources.length > 0}
               <Select
-                placeholder="Select badge"
+                placeholder="Select Badge NFT"
                 handleSelect={(e) =>
                   send({
                     type: 'SELECT_BADGE',
@@ -155,7 +162,7 @@
                 ]}
               />
             {:else}
-              <Select placeholder="Select badge" />
+              <Select placeholder="Select Badge NFT" />
             {/if}
           </Box>
         </Box>
@@ -168,8 +175,6 @@
           )}
         >
           <Text>
-            Don't already have a badge NFT you want to use to control your
-            package?
             <Text
               on:click={() => send('CREATE_BADGE')}
               cx={{ display: 'inline', cursor: 'pointer' }}
@@ -177,7 +182,7 @@
             >
               Click here
             </Text>
-            to create one.
+            to create a simple badge NFT.
           </Text>
         </Box>
 
