@@ -2,6 +2,7 @@
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Button from '@components/_base/button/Button.svelte'
+  import Text from '@components/_base/text/Text.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { mutate } from '@queries'
 
@@ -10,10 +11,20 @@
   const { trigger, loading } = mutate('sendTransaction')
 </script>
 
+<Box transparent>
+  <Text size={'xxlarge'} bold>Send Raw Transaction</Text>
+</Box>
+<Box transparent>
+  <Text
+    >Enter raw transaction manifest text to send to your linked Radix Wallet. No
+    method call to “lock_fee” is required – the wallet will add this
+    automatically.</Text
+  >
+</Box>
 <Box justify="center" transparent>
   <Textarea
     bind:value={transactionManifest}
-    placeholder="Enter raw transaction manifest"
+    placeholder="Enter a raw transaction manifest"
     size="lg"
   />
 </Box>
