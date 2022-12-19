@@ -234,12 +234,7 @@ globalCss({
     fontFamily: 'IBM Plex Sans',
     fontWeight: '400',
     margin: 0,
-    padding: 0,
-    scrollbarWidth: 'none',
-    '-ms-overflow-style': 'none'
-  },
-  '*::-webkit-scrollbar': {
-    display: 'none'
+    padding: 0
   },
   body: {
     minWidth: '100vw',
