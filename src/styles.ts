@@ -232,7 +232,7 @@ globalCss({
   '*': {
     boxSizing: 'border-box',
     fontFamily: 'IBM Plex Sans',
-    fontWeight: '400',
+    fontWeight: 'inherit',
     margin: 0,
     padding: 0,
     scrollbarWidth: 'none',
@@ -244,6 +244,7 @@ globalCss({
   body: {
     minWidth: '100vw',
     height: '100vh',
+    fontWeight: '400',
     backgroundColor: '$background',
     color: '$onBackground'
   },
