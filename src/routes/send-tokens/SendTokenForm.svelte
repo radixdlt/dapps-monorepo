@@ -1,6 +1,5 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
-  import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { accounts } from '@stores'
   import { shortenAddress } from '@utils'
@@ -88,80 +87,77 @@
   }
 </script>
 
-<Card>
-  <Text slot="header">From/To</Text>
-  <Box flex="col" gap="medium" slot="body">
-    <Box mt="medium" cx={boxStyle}>
-      <Text align="right">From</Text>
-      <Box px="none" cx={{ width: '300px' }}>
-        <Select handleSelect={handleSelectFromAccount} options={accountList} />
-      </Box>
-    </Box>
-    <Divider color="border" />
-    <Box mt="medium" cx={boxStyle}>
-      <Text align="right">To</Text>
-      <Tabs>
-        <svelte:fragment slot="tabs">
-          <Tab _default />
-          <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
-            >One of my accounts</Box
-          >
-          <Tab />
-          <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
-            >Other account</Box
-          >
-        </svelte:fragment>
-        <svelte:fragment slot="panels">
-          <TabPanel>
-            <Box px="none" cx={{ width: '300px' }}>
-              <Select
-                placeholder="Select personal account"
-                handleSelect={handleSelectToAccount}
-                options={accountList}
-              />
-            </Box>
-          </TabPanel>
-          <TabPanel
-            ><Input
-              bind:value={otherAccount}
-              placeholder="Account address"
-            /></TabPanel
-          >
-        </svelte:fragment>
-      </Tabs>
-    </Box>
-    <Divider color="border" />
-    <Box mt="medium" cx={boxStyle}>
-      <Text align="right">Amount</Text>
-      <Box px="none" flex="row" items="baseline">
-        <Box px="none" mx="none">
-          <Input bind:value={amountToSend} placeholder="Amount" />
-          <Text inline size="small" color="secondary">{getAmount()}</Text>
-          <Text inline size="xsmall" muted>(Available balance)</Text>
-        </Box>
-        <Box px="none" cx={{ minWidth: '140px' }}>
-          <Select
-            placeholder="Select resource"
-            handleSelect={handleSelectBalance}
-            options={balanceList}
-          />
-        </Box>
-      </Box>
-    </Box>
-    <Box justify="end">
-      <Button
-        disabled={!selectedFromAccount?.address ||
-          !selectedToAccount?.address ||
-          !amountToSend ||
-          !selectedBalance?.address}
-        on:click={() =>
-          onSend({
-            resource: selectedBalance.address,
-            fromAccount: selectedFromAccount.address,
-            toAccount: selectedToAccount.address || otherAccount,
-            amount: Number(amountToSend)
-          })}>Send</Button
-      >
+<Box flex="col" gap="medium">
+  <Box mt="medium" cx={boxStyle}>
+    <Text align="right">From</Text>
+    <Box px="none" cx={{ width: '300px' }}>
+      <Select handleSelect={handleSelectFromAccount} options={accountList} />
     </Box>
   </Box>
-</Card>
+  <Divider color="border" />
+  <Box mt="medium" cx={boxStyle}>
+    <Text align="right">To</Text>
+    <Tabs>
+      <svelte:fragment slot="tabs">
+        <Tab _default />
+        <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
+          >One of my accounts</Box
+        >
+        <Tab />
+        <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
+          >Other account</Box
+        >
+      </svelte:fragment>
+      <svelte:fragment slot="panels">
+        <TabPanel>
+          <Box px="none" cx={{ width: '300px' }}>
+            <Select
+              placeholder="Select personal account"
+              handleSelect={handleSelectToAccount}
+              options={accountList}
+            />
+          </Box>
+        </TabPanel>
+        <TabPanel
+          ><Input
+            bind:value={otherAccount}
+            placeholder="Account address"
+          /></TabPanel
+        >
+      </svelte:fragment>
+    </Tabs>
+  </Box>
+  <Divider color="border" />
+  <Box mt="medium" cx={boxStyle}>
+    <Text align="right">Amount</Text>
+    <Box px="none" flex="row" items="baseline">
+      <Box px="none" mx="none">
+        <Input bind:value={amountToSend} placeholder="Amount" />
+        <Text inline size="small" color="secondary">{getAmount()}</Text>
+        <Text inline size="xsmall" muted>(Available balance)</Text>
+      </Box>
+      <Box px="none" cx={{ minWidth: '140px' }}>
+        <Select
+          placeholder="Select resource"
+          handleSelect={handleSelectBalance}
+          options={balanceList}
+        />
+      </Box>
+    </Box>
+  </Box>
+  <Box justify="end">
+    <Button
+      disabled={!selectedFromAccount?.address ||
+        !selectedToAccount?.address ||
+        !amountToSend ||
+        !selectedBalance?.address}
+      on:click={() =>
+        onSend({
+          resource: selectedBalance.address,
+          fromAccount: selectedFromAccount.address,
+          toAccount: selectedToAccount.address || otherAccount,
+          amount: Number(amountToSend)
+        })}>Send</Button
+    >
+  </Box>
+</Box>
