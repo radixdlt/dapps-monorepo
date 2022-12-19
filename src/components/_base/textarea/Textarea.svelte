@@ -6,7 +6,6 @@
   export let size: 'sm' | 'md' | 'lg' = 'md'
 
   const style = css({
-    resize: 'none',
     borderRadius: '$sm',
     outline: 'none',
     border: 'none',
