@@ -104,7 +104,7 @@
       <svelte:fragment slot="tabs">
         <Tab _default />
         <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
-          >One of my accounts</Box
+          >One of My Accounts</Box
         >
         <Tab />
         <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
@@ -124,7 +124,7 @@
         <TabPanel
           ><Input
             bind:value={otherAccount}
-            placeholder="Account address"
+            placeholder="Account Address"
           /></TabPanel
         >
       </svelte:fragment>
