@@ -93,7 +93,9 @@
   <Box flex="col" gap="medium" slot="body">
     <Box mt="medium" cx={boxStyle}>
       <Text align="right">From</Text>
-      <Select handleSelect={handleSelectFromAccount} options={accountList} />
+      <Box px="none" cx={{ width: '300px' }}>
+        <Select handleSelect={handleSelectFromAccount} options={accountList} />
+      </Box>
     </Box>
     <Divider color="border" />
     <Box mt="medium" cx={boxStyle}>
@@ -111,12 +113,14 @@
         </svelte:fragment>
         <svelte:fragment slot="panels">
           <TabPanel>
-            <Select
-              placeholder="Select personal account"
-              handleSelect={handleSelectToAccount}
-              options={accountList}
-            /></TabPanel
-          >
+            <Box px="none" cx={{ width: '300px' }}>
+              <Select
+                placeholder="Select personal account"
+                handleSelect={handleSelectToAccount}
+                options={accountList}
+              />
+            </Box>
+          </TabPanel>
           <TabPanel
             ><Input
               bind:value={otherAccount}
@@ -129,18 +133,18 @@
     <Divider color="border" />
     <Box mt="medium" cx={boxStyle}>
       <Text align="right">Amount</Text>
-      <Box flex="row" items="baseline">
-        <Box p="none" cx={{ minWidth: '140px' }}>
+      <Box px="none" flex="row" items="baseline">
+        <Box px="none" mx="none">
+          <Input bind:value={amountToSend} placeholder="Amount" />
+          <Text inline size="small" color="secondary">{getAmount()}</Text>
+          <Text inline size="xsmall" muted>(Available balance)</Text>
+        </Box>
+        <Box px="none" cx={{ minWidth: '140px' }}>
           <Select
             placeholder="Select resource"
             handleSelect={handleSelectBalance}
             options={balanceList}
           />
-        </Box>
-        <Box>
-          <Input bind:value={amountToSend} placeholder="Amount" />
-          <Text inline size="small" color="secondary">{getAmount()}</Text>
-          <Text inline size="xsmall" muted>(Available balance)</Text>
         </Box>
       </Box>
     </Box>
