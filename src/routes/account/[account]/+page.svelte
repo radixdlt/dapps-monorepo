@@ -35,7 +35,7 @@
         entries={$state.context.transformedOverview?.fungible || []}
         loading={!$state.matches('final')}
       >
-        <Text bold slot="key" let:entry>
+        <Text bold underlined slot="key" let:entry>
           <a href="/resource/{entry.address}">{entry.key}</a>
         </Text>
         <Text slot="value" let:entry>{entry.value}</Text>
@@ -48,7 +48,7 @@
         entries={$state.context.transformedOverview?.nonFungible || []}
         loading={!$state.matches('final')}
       >
-        <Text bold slot="key" let:entry>
+        <Text underlined slot="key" let:entry>
           <a href="/resource/{entry.address}">{entry.key}</a>
         </Text>
         <Text slot="value" />
