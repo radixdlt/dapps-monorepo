@@ -21,7 +21,7 @@
       isVisible: featureFlags().getFlag('deploy-package')?.enabled
     },
     {
-      text: 'Transaction Manifest',
+      text: 'Send Raw Transaction',
       icon: 'transactions',
       path: '/transaction-manifest',
       isVisible: featureFlags().getFlag('transaction-manifest')?.enabled

@@ -32,5 +32,5 @@
 
 <Search
   onSearch={search}
-  placeholder="Search for an address, transaction/block hash or validator key"
+  placeholder="Search for a transaction ID, or an address for an account, or a resource"
 />
