@@ -10,7 +10,11 @@
 
   let manifest: string | undefined
 
-  const { state } = query('getTransactionDetails', $page.params.transaction)
+  let { state } = query('getTransactionDetails', $page.params.transaction)
+  $: {
+    $page.params.transaction
+    ;({ state } = query('getTransactionDetails', $page.params.transaction))
+  }
 
   $: if ($state.status === 'success') {
     getTxManifest($state.data.details).then((res) => {

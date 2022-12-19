@@ -9,9 +9,13 @@
   import { useMachine } from '@xstate/svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
 
-  const { state, send } = useMachine(accountStateMachine)
+  let { state, send } = useMachine(accountStateMachine)
 
-  $: send('LOAD', { address: $page.params.account })
+  $: {
+    $page.params.account
+    ;({ state, send } = useMachine(accountStateMachine))
+    send('LOAD', { address: $page.params.account })
+  }
 
   $: if ($state.matches('error')) {
     AlertToast({
