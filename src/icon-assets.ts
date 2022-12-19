@@ -4,6 +4,7 @@ export const icons = {
   tokens: '/icons/tokens.svg',
   transactions: '/icons/transactions.svg',
   accounts: '/icons/accounts.svg',
+  layers: '/icons/layers.svg',
   validators: '/icons/validators.svg',
   information: '/icons/information.svg',
   copy: '/icons/copy.svg',

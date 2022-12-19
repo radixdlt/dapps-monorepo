@@ -16,7 +16,7 @@
   }> = [
     {
       text: 'Deploy Package',
-      icon: 'dashboard',
+      icon: 'layers',
       path: '/deploy-package',
       isVisible: featureFlags().getFlag('deploy-package')?.enabled
     },
