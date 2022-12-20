@@ -93,9 +93,11 @@
 
   {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
     <Box transparent>
-      <Text>Deploy a new blueprint package to the Radix Betanet by attaching your
-        WASM and ABI files to a deploy transaction.</Text>
-    </Box>    
+      <Text
+        >Deploy a new blueprint package to the Radix Betanet by attaching your
+        WASM and ABI files to a deploy transaction.</Text
+      >
+    </Box>
     <center>
       <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
         <FileUpload
