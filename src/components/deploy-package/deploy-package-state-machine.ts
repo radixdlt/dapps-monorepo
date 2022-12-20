@@ -339,7 +339,7 @@ export const stateMachine = createMachine<Context, Events, States>(
         const nfts = await Promise.all(
           nonFungiblesWithNames.map(async (nft) => ({
             name: nft.name,
-            ...(await queryServer('getNonFungibleIDs', {
+            ...(await queryServer('getEntityNonFungibleIDs', {
               accountAddress: selectedAccountAddress!,
               nftAddress: nft.address
             }))

@@ -6,6 +6,7 @@ import type {
   EntityResourcesTransformed
 } from '@queries/transformations'
 import {
+  transformNFTWithOverview,
   transformWithOverview,
   type TransformWithOverview
 } from './transformers'
@@ -15,7 +16,15 @@ type Context = {
   resources?: EntityResourcesTransformed
   overview?: {
     fungible: EntityOverviewTransformed
-    nonFungible: EntityOverviewTransformed
+    nonFungible: Array<
+      EntityOverviewTransformed['withOverviews'][0] & {
+        non_fungible_ids: {
+          items: Array<{
+            non_fungible_id: string
+          }>
+        }
+      }
+    >
   }
   transformedOverview?: {
     fungible: TransformWithOverview
@@ -23,6 +32,7 @@ type Context = {
   }
   error?: Error
   isChild?: boolean
+  accountAddress?: string
 }
 
 type Events =
@@ -84,7 +94,8 @@ export const stateMachine = createMachine<Context, Events, States>(
     context: {
       overview: undefined,
       resources: undefined,
-      isChild: false
+      isChild: false,
+      accountAddress: undefined
     },
     states: {
       idle: {
@@ -104,10 +115,8 @@ export const stateMachine = createMachine<Context, Events, States>(
           onDone: {
             target: 'fetched-resources',
             actions: assign({
-              resources: (
-                _,
-                event: DoneInvokeEvent<EntityResourcesTransformed>
-              ) => event.data
+              resources: (_, event) => event.data.resources,
+              accountAddress: (_, event) => event.data.address
             })
           },
           onError: {
@@ -129,7 +138,15 @@ export const stateMachine = createMachine<Context, Events, States>(
                 _,
                 event: DoneInvokeEvent<{
                   fungible: EntityOverviewTransformed
-                  nonFungible: EntityOverviewTransformed
+                  nonFungible: Array<
+                    EntityOverviewTransformed['withOverviews'][0] & {
+                      non_fungible_ids: {
+                        items: Array<{
+                          non_fungible_id: string
+                        }>
+                      }
+                    }
+                  >
                 }>
               ) => event.data
             })
@@ -189,29 +206,39 @@ export const stateMachine = createMachine<Context, Events, States>(
         const transformedOverviewsFungible = transformWithOverview(
           ctx.overview?.fungible.withOverviews
         )
-        const transformedOverviewsNonFungible = transformWithOverview(
-          ctx.overview?.nonFungible.withOverviews
+        const transformedOverviewsNonFungible = transformNFTWithOverview(
+          ctx.overview?.nonFungible
         )
         return {
           nonFungible: transformedOverviewsNonFungible,
           fungible: transformedOverviewsFungible
         }
       },
-      fetchingOverview: async (ctx) => {
-        if (!ctx.resources) {
+      fetchingOverview: async ({ resources, accountAddress }) => {
+        if (!resources || !accountAddress) {
           throw new Error('Unexpected state')
         }
 
         const isNonEmpty = <T>(item?: T[]) => item && item.length > 0
-        const smallFungible = ctx.resources.fungible?.slice(0, 10)
-        const smallNonFungible = ctx.resources.nonFungible?.slice(0, 10)
+        const smallFungible = resources.fungible?.slice(0, 10)
+        const smallNonFungible = resources.nonFungible?.slice(0, 10)
 
         const fungible = isNonEmpty(smallFungible)
           ? await queryServer('getEntityOverview', smallFungible)
           : []
 
         const nonFungible = isNonEmpty(smallNonFungible)
-          ? await queryServer('getEntityOverview', smallNonFungible)
+          ? await Promise.all(
+              (
+                await queryServer('getEntityOverview', smallNonFungible)
+              ).withOverviews.map(async (nft) => ({
+                ...(await queryServer('getEntityNonFungibleIDs', {
+                  accountAddress,
+                  nftAddress: nft.address
+                })),
+                ...nft
+              }))
+            )
           : []
 
         return { fungible, nonFungible }
@@ -220,7 +247,10 @@ export const stateMachine = createMachine<Context, Events, States>(
         if (event.type !== 'LOAD') {
           throw new Error('Unexpected event')
         }
-        return queryServer('getEntityResources', event.address)
+        return {
+          resources: await queryServer('getEntityResources', event.address),
+          address: event.address
+        }
       }
     }
   }

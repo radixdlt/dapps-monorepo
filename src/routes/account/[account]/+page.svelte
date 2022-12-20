@@ -54,7 +54,7 @@
         loading={!$state.matches('final')}
       >
         <Text underlined slot="key" let:entry>
-          <a href="/resource/{entry.address}">{entry.key}</a>
+          <a href="/nft/{entry.address}">{entry.key}</a>
         </Text>
         <Text slot="value" />
       </InfoBox>

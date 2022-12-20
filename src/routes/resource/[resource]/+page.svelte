@@ -10,12 +10,12 @@
   import type { PageData } from './$types'
 
   export let data: PageData
-  $: state = data.state
+  $: entityDetailsState = data.entityDetailsState
 
-  $: if ($state.status === 'error') {
+  $: if ($entityDetailsState.status === 'error') {
     AlertToast({
       title: 'Error',
-      text: $state.error.message,
+      text: $entityDetailsState.error.message,
       type: 'error'
     })()
   }
@@ -23,15 +23,15 @@
   $: entries = [
     {
       key: 'Description',
-      value: $state.data?.metadata.items.find(
+      value: $entityDetailsState.data?.metadata.items.find(
         (item) => item.key.toLowerCase() === 'description'
       )?.value
     },
     {
       key: 'Total supply',
-      value: $state.data?.details.total_supply
+      value: $entityDetailsState.data?.details.total_supply
     },
-    ...($state.data?.metadata.items.filter(
+    ...($entityDetailsState.data?.metadata.items.filter(
       (item) =>
         !['description', 'symbol', 'name', 'url'].some(
           (key) => key === item.key.toLowerCase()
@@ -39,28 +39,28 @@
     ) ?? [])
   ]
 
-  $: symbol = $state.data?.metadata.items.find(
+  $: symbol = $entityDetailsState.data?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'symbol'
   )?.value
 
-  $: name = $state.data?.metadata.items.find(
+  $: name = $entityDetailsState.data?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'name'
   )?.value
 
-  $: url = $state.data?.metadata.items.find(
+  $: url = $entityDetailsState.data?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'url'
   )?.value
 
-  $: resourceType = $state.data?.details.discriminator
+  $: resourceType = $entityDetailsState.data?.details.discriminator
     ? {
         fungible_resource: 'Fungible Resource',
         non_fungible_resource: 'Non Fungible Resource'
-      }[$state.data?.details.discriminator]
+      }[$entityDetailsState.data?.details.discriminator]
     : ''
 </script>
 
 <Box transparent m="none" px="none" full>
-  {#if $state.status === 'loading'}
+  {#if $entityDetailsState.status === 'loading'}
     <SkeletonLoader />
   {:else}
     <ResourceViewTitle
@@ -73,7 +73,7 @@
 <Box p="large" full>
   <Box transparent flex="row" items="center" justify="between">
     <Text size="xlarge" bold>
-      {#if $state.status === 'loading'}
+      {#if $entityDetailsState.status === 'loading'}
         <SkeletonLoader />
       {:else if !name}
         [NO-NAME]
@@ -91,5 +91,5 @@
   <Box px="none" transparent>
     <Divider />
   </Box>
-  <InfoBox {entries} loading={$state.status === 'loading'} />
+  <InfoBox {entries} loading={$entityDetailsState.status === 'loading'} />
 </Box>
