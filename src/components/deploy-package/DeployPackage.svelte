@@ -86,18 +86,18 @@
     <Text size={'xxlarge'} bold>Deploy Package</Text>
   </Box>
   {#if $state.matches('not-connected')}
-    <Box transparent>
-      <Text
-        >Deploy a new blueprint package to the Radix Betanet by attaching your
-        WASM and ABI files to a deploy transaction.</Text
-      >
-    </Box>
     <center>
       <Text bold>Please connect your Radix Wallet to get started.</Text>
     </center>
   {/if}
 
   {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
+    <Box transparent>
+      <Text
+        >Deploy a new blueprint package to the Radix Betanet by attaching your
+        WASM and ABI files to a deploy transaction.</Text
+      >
+    </Box>
     <center>
       <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
         <FileUpload
