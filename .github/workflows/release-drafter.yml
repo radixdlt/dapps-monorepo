@@ -5,4 +5,4 @@ on:
      - main
 jobs:
   release-drafter:
-    uses: ./.github/workflows/release-drafter-reusable.yml
+    uses: ./.github/workflows/release-drafter.yml
