@@ -52,6 +52,22 @@
   $: if (
     $state.matches({
       connected: {
+        'selecting-account': {
+          'creating-badge': 'badge-created'
+        }
+      }
+    })
+  ) {
+    AlertToast({
+      title: 'Badge created!',
+      text: ``,
+      type: 'success'
+    })()
+  }
+
+  $: if (
+    $state.matches({
+      connected: {
         'deploying-package': 'success'
       }
     })

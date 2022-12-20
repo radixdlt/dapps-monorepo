@@ -76,6 +76,7 @@ type Context = {
     address: string
     id: string
   }
+  createdBadgeTxID?: string
 }
 
 type Events =
@@ -99,7 +100,7 @@ type States =
                   'selecting-account':
                     | 'idle'
                     | 'selected'
-                    | 'creating-badge'
+                    | { 'creating-badge': 'idle' | 'badge-created' }
                     | { selected: 'idle' | 'fetching-resources' }
                 }
               | { 'selecting-badge': 'idle' | 'selected' }
@@ -223,12 +224,28 @@ export const stateMachine = createMachine<Context, Events, States>(
               'creating-badge': {
                 invoke: {
                   src: 'createBadge',
-                  onDone: 'selected',
+                  onDone: {
+                    target: '.badge-created',
+                    actions: assign({
+                      createdBadgeTxID: (_, event) =>
+                        event.data.transactionIntentHash
+                    })
+                  },
                   onError: {
                     target: '..error',
                     actions: assign({
                       error: (_, event: DoneInvokeEvent<Error>) => event.data
                     })
+                  }
+                },
+                initial: 'idle',
+                states: {
+                  idle: {},
+                  'badge-created': {
+                    invoke: {
+                      src: async (_, __) => {},
+                      onDone: '..selected'
+                    }
                   }
                 }
               }
