@@ -35,6 +35,7 @@
     px: '$md',
     py: '$sm',
     fontSize: '$xs',
+    backgroundColor: '$surface',
     '&:hover': {
       backgroundColor: '$primaryButtonHover',
       color: 'white',
@@ -51,8 +52,7 @@
     py: '$xs',
     listStyle: 'none',
     borderRadius: '$md',
-    shadow: true,
-    backgroundColor: '$surface'
+    shadow: true
   })
 
   const listboxStyles = css({
