@@ -6,6 +6,7 @@
   import { stateMachine } from './send-tokens-state-machine'
   import { accounts } from '@stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
+  import Success from './Success.svelte'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -34,22 +35,21 @@
 
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
-  {#if $state.matches('not-logged-in')}
+  {#if $state.matches('not-logged-in') && !$state.matches('final')}
     <Text bold>Please connect your Radix wallet to get started.</Text>
-  {:else if $state.matches('idle')}
+  {/if}
+  {#if $state.matches('idle') || $state.matches('sending-token')}
     <SendTokenForm
       onSend={(data) => send({ type: 'SENDTOKEN', data })}
       onSelectFromAccount={handleSelectFromAccount}
       balance={$state.context.transformedOverview?.fungible}
+      pending={$state.matches('sending-token')}
     />
-  {:else if $state.matches('sending-token')}
-    <Text bold>Confirm manifest in wallet</Text>
-  {:else if $state.matches('final')}
-    <Text mb="medium">Transaction sent!</Text>
-    <Text pointer underlined on:click={() => send('RETRY')}
-      >Send another one</Text
-    >
-  {:else if $state.matches('error')}
+  {/if}
+  {#if $state.matches('final')}
+    <Success txID={$state.context.txID} />
+  {/if}
+  {#if $state.matches('error')}
     <Text inline size="large" mb="medium" bold
       >Error: {$state.context.error.message}</Text
     >
