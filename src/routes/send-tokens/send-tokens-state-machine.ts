@@ -33,6 +33,7 @@ type Context = {
     fungible: TransformWithOverview
     nonFungible: TransformWithOverview
   }
+  txID?: string
   error?: Error
 }
 
@@ -77,6 +78,7 @@ type States =
       context: Context & {
         fungible: TransformWithOverview
         nonFungible: TransformWithOverview
+        txID: string
       }
     }
   | {
@@ -141,12 +143,25 @@ export const stateMachine = createMachine<Context, Events, States>(
       'sending-token': {
         invoke: {
           src: 'sendToken',
-          onDone: 'final',
+          onDone: {
+            target: 'sent-token',
+            actions: assign({
+              txID: (_, event) => event.data.transactionIntentHash
+            })
+          },
           onError: {
             target: 'error',
             actions: assign({
               error: (_, event: DoneInvokeEvent<Error>) => event.data
             })
+          }
+        }
+      },
+      'sent-token': {
+        invoke: {
+          src: async (_, __) => {},
+          onDone: {
+            target: 'final'
           }
         }
       },

@@ -11,6 +11,7 @@
   import Button from '@components/_base/button/Button.svelte'
   import type { TransformWithOverview } from '@stateMachines/transformers'
   import { onMount } from 'svelte'
+  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   type OptionsType = Options<{ address: string }>
 
@@ -33,6 +34,8 @@
   let selectedBalance: OptionsType = { address: '', label: '' }
 
   export let onSelectFromAccount: (account: string) => void = () => {}
+
+  export let pending = false
 
   let amountToSend = ''
 
@@ -161,7 +164,13 @@
           fromAccount: selectedFromAccount.address,
           toAccount: otherAccount || selectedToAccount.address,
           amount: Number(amountToSend)
-        })}>Send</Button
+        })}
     >
+      {#if pending}
+        <LoadingSpinner />
+      {:else}
+        Send
+      {/if}
+    </Button>
   </Box>
 </Box>
