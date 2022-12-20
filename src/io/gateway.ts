@@ -231,7 +231,7 @@ export const TransactionReceiptIO = object({
   })
 })
 
-export const NonFungibleIDsIO = object({
+export const EntityNonFungibleIDsIO = object({
   address: string(),
   resource_address: string(),
   non_fungible_ids: object({
@@ -241,6 +241,14 @@ export const NonFungibleIDsIO = object({
       })
     )
   })
+})
+
+export const NonFungibleIDsIO = object({
+  items: array(
+    object({
+      non_fungible_id: string()
+    })
+  )
 })
 
 export const NonFungibleDataIO = object({
