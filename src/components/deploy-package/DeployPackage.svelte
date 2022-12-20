@@ -75,129 +75,125 @@
   $: if ($accounts) send('CONNECT')
 </script>
 
-<Box transparent>
-  {#if $state.matches({ connected: { 'deploying-package': 'success' } })}
-    <Success
-      txID={$state.context.intentHash}
-      packageAddress={$state.context.packageAddress}
-      badgeInfo={$state.context.selectedNft}
-    />
-  {:else}
-    <Box transparent>
-      <Text size={'xxlarge'} bold>Deploy Package</Text>
-    </Box>
-    <Box transparent>
-      <Text
-        >Deploy a new blueprint package to the Radix Betanet by attaching your
-        WASM and ABI files to a deploy transaction.</Text
-      >
-    </Box>
-    <center>
-      {#if $state.matches('not-connected')}
-        <Text bold>Please connect your Radix Wallet to get started.</Text>
-      {/if}
+{#if $state.matches({ connected: { 'deploying-package': 'success' } })}
+  <Success
+    txID={$state.context.intentHash}
+    packageAddress={$state.context.packageAddress}
+    badgeInfo={$state.context.selectedNft}
+  />
+{:else}
+  <Box transparent>
+    <Text size={'xxlarge'} bold>Deploy Package</Text>
+  </Box>
+  <Box transparent>
+    <Text
+      >Deploy a new blueprint package to the Radix Betanet by attaching your
+      WASM and ABI files to a deploy transaction.</Text
+    >
+  </Box>
+  <center>
+    {#if $state.matches('not-connected')}
+      <Text bold>Please connect your Radix Wallet to get started.</Text>
+    {/if}
 
-      {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
-        <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
-          <FileUpload
-            acceptedFileTypes={['.wasm', 'wasm']}
-            onRemoveFile={handleRemoveFile}
-            onAddFile={handleAddFile}
-            labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
-            maxFiles={1}
-          />
-          <FileUpload
-            acceptedFileTypes={['.abi', 'abi']}
-            onRemoveFile={handleRemoveFile}
-            onAddFile={handleAddFile}
-            labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
-            maxFiles={1}
+    {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
+      <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
+        <FileUpload
+          acceptedFileTypes={['.wasm', 'wasm']}
+          onRemoveFile={handleRemoveFile}
+          onAddFile={handleAddFile}
+          labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
+          maxFiles={1}
+        />
+        <FileUpload
+          acceptedFileTypes={['.abi', 'abi']}
+          onRemoveFile={handleRemoveFile}
+          onAddFile={handleAddFile}
+          labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+          maxFiles={1}
+        />
+      </Box>
+      <Box transparent>
+        <Text
+          >To control aspects of the package you deploy, like setting metadata
+          or claiming royalties, you must specify a badge NFT for authorization.
+          Choose one of your accounts where you have a badge, or where you’d
+          like to hold one.</Text
+        >
+      </Box>
+      <Box transparent cx={{ width: '30%' }}>
+        <Box transparent>
+          <Select
+            placeholder="Select Account"
+            handleSelect={(e) =>
+              send({
+                type: 'SELECT_ACCOUNT',
+                address: $accounts[e.id].address
+              })}
+            options={[
+              ...$accounts.map((account, i) => ({
+                id: i,
+                label: `${account.label} (${shortenAddress(account.address)})`
+              }))
+            ]}
           />
         </Box>
         <Box transparent>
-          <Text
-            >To control aspects of the package you deploy, like setting metadata
-            or claiming royalties, you must specify a badge NFT for
-            authorization. Choose one of your accounts where you have a badge,
-            or where you’d like to hold one.</Text
-          >
-        </Box>
-        <Box transparent cx={{ width: '30%' }}>
-          <Box transparent>
+          {#if $state.context.non_fungible_resources.length > 0}
             <Select
-              placeholder="Select Account"
+              placeholder="Select Badge NFT"
               handleSelect={(e) =>
                 send({
-                  type: 'SELECT_ACCOUNT',
-                  address: $accounts[e.id].address
+                  type: 'SELECT_BADGE',
+                  index: e.id
                 })}
               options={[
-                ...$accounts.map((account, i) => ({
+                ...$state.context.non_fungible_resources.map((resource, i) => ({
                   id: i,
-                  label: `${account.label} (${shortenAddress(account.address)})`
+                  label: `${resource.name ?? ''} ${
+                    resource.name ? '(' : ' '
+                  }${getNFTAddress(resource.address, resource.id)}${
+                    resource.name ? ')' : ' '
+                  }`
                 }))
               ]}
             />
-          </Box>
-          <Box transparent>
-            {#if $state.context.non_fungible_resources.length > 0}
-              <Select
-                placeholder="Select Badge NFT"
-                handleSelect={(e) =>
-                  send({
-                    type: 'SELECT_BADGE',
-                    index: e.id
-                  })}
-                options={[
-                  ...$state.context.non_fungible_resources.map(
-                    (resource, i) => ({
-                      id: i,
-                      label: `${resource.name ?? ''} ${
-                        resource.name ? '(' : ' '
-                      }${getNFTAddress(resource.address, resource.id)}${
-                        resource.name ? ')' : ' '
-                      }`
-                    })
-                  )
-                ]}
-              />
-            {:else}
-              <Select placeholder="Select Badge NFT" />
-            {/if}
-          </Box>
-        </Box>
-
-        <Box
-          transparent
-          hidden={!$state.matches(
-            // @ts-ignore
-            { connected: { 'selecting-account': 'selected' } }
-          )}
-        >
-          <Text>
-            <Text
-              on:click={() => send('CREATE_BADGE')}
-              cx={{ display: 'inline', cursor: 'pointer' }}
-              underlined
-            >
-              Click here
-            </Text>
-            to create a simple badge NFT.
-          </Text>
-        </Box>
-
-        <Button
-          disabled={!deployButtonEnabled}
-          on:click={() => send({ type: 'DEPLOY' })}
-        >
-          {#if $state.matches(// @ts-ignore
-            { connected: { 'deploying-package': 'deploy' } })}
-            <LoadingSpinner />
           {:else}
-            Deploy package
+            <Select placeholder="Select Badge NFT" />
           {/if}
-        </Button>
-      {/if}
-    </center>
-  {/if}
-</Box>
+        </Box>
+      </Box>
+
+      <Box
+        transparent
+        hidden={!$state.matches(
+          // @ts-ignore
+          { connected: { 'selecting-account': 'selected' } }
+        )}
+      >
+        <Text>
+          <Text
+            on:click={() => send('CREATE_BADGE')}
+            cx={{ display: 'inline', cursor: 'pointer' }}
+            underlined
+          >
+            Click here
+          </Text>
+          to create a simple badge NFT.
+        </Text>
+      </Box>
+
+      <Button
+        disabled={!deployButtonEnabled}
+        on:click={() => send({ type: 'DEPLOY' })}
+      >
+        {#if $state.matches(// @ts-ignore
+          { connected: { 'deploying-package': 'deploy' } })}
+          <LoadingSpinner />
+        {:else}
+          Deploy package
+        {/if}
+      </Button>
+    {/if}
+  </center>
+{/if}
