@@ -183,17 +183,19 @@
         </Text>
       </Box>
 
-      <Button
-        disabled={!deployButtonEnabled}
-        on:click={() => send({ type: 'DEPLOY' })}
-      >
-        {#if $state.matches(// @ts-ignore
-          { connected: { 'deploying-package': 'deploy' } })}
-          <LoadingSpinner />
-        {:else}
-          Deploy package
-        {/if}
-      </Button>
+      <Box transparent px="none" mx="none">
+        <Button
+          disabled={!deployButtonEnabled}
+          on:click={() => send({ type: 'DEPLOY' })}
+        >
+          {#if $state.matches(// @ts-ignore
+            { connected: { 'deploying-package': 'deploy' } })}
+            <LoadingSpinner />
+          {:else}
+            Deploy package
+          {/if}
+        </Button>
+      </Box>
     {/if}
   </center>
 {/if}
