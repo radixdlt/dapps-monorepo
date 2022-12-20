@@ -10,7 +10,12 @@
 
   const iconHeight: keyof typeof config['theme']['sizes'] = 'sm'
 
-  const search = css({
+  const search = () => {
+    onSearch(value)
+    value = ''
+  }
+
+  const style = css({
     color: '$onSurface',
     border: 'none',
     borderRadius: '$searchBorder',
@@ -22,9 +27,9 @@
   })()
 </script>
 
-<form on:submit|preventDefault={() => onSearch(value)}>
+<form on:submit|preventDefault={search}>
   <Box full cx={{ position: 'relative' }} wrapper inline>
-    <input bind:value class={search} {placeholder} type="text" />
+    <input bind:value class={style} {placeholder} type="text" />
     <Box
       wrapper
       cx={{
