@@ -12,16 +12,20 @@
     borderStyle: 'solid',
     borderWidth: '0',
     borderLeftWidth: '$md',
-    borderColor: '$secondary',
+    borderLeftColor: 'transparent',
     borderRadius: '0',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    '&.isHovered': {
+      borderLeftWidth: '$md',
+      borderLeftColor: '$secondary'
+    }
   })
 </script>
 
 <div
   on:mouseenter={() => (isHovered = true)}
   on:mouseleave={() => (isHovered = false)}
-  class={isHovered || isActive ? styles() + ' ' + 'isHovered' : ''}
+  class={styles() + (isHovered || isActive ? ' isHovered' : '')}
 >
   <a href={link}
     ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem
