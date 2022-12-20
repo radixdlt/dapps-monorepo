@@ -4,6 +4,7 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import { query } from '@queries'
@@ -52,7 +53,7 @@
   ]
 </script>
 
-<Box transparent m="none" px="none" full>
+<Box transparent>
   {#if $state.status === 'loading'}
     <SkeletonLoader />
   {:else}
@@ -62,10 +63,18 @@
     />
   {/if}
 </Box>
+<Box transparent>
+  <Card>
+    <Text slot="header" bold>NFT Info</Text>
 
-<Box p="large" full>
-  <Text bold>NFT Info</Text>
-  <InfoBox {entries} loading={$dataState.status === 'loading'} />
-  <Text bold>Resource Info</Text>
-  <InfoBox entries={resourceEntries} loading={$state.status === 'loading'} />
+    <InfoBox slot="body" {entries} loading={$dataState.status === 'loading'} />
+  </Card>
+  <Card>
+    <Text slot="header" bold>Resource Info</Text>
+    <InfoBox
+      slot="body"
+      entries={resourceEntries}
+      loading={$state.status === 'loading'}
+    />
+  </Card>
 </Box>

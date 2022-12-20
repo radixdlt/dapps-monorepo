@@ -26,10 +26,10 @@
   }
 </script>
 
-<Box px="none" transparent>
+<Box transparent>
   <ResourceViewTitle title="Account" resourceAddress={$page.params.account} />
 </Box>
-<Box px="none" m="none" transparent>
+<Box transparent>
   {#if $state.matches('error')}
     No account found
   {:else}

@@ -4,6 +4,7 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import Card from '@components/_base/card/Card.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
@@ -59,7 +60,7 @@
     : ''
 </script>
 
-<Box transparent m="none" px="none" full>
+<Box transparent>
   {#if $entityDetailsState.status === 'loading'}
     <SkeletonLoader />
   {:else}
@@ -70,26 +71,29 @@
   {/if}
 </Box>
 
-<Box p="large" full>
-  <Box transparent flex="row" items="center" justify="between">
-    <Text size="xlarge" bold>
-      {#if $entityDetailsState.status === 'loading'}
-        <SkeletonLoader />
-      {:else if !name}
-        [NO-NAME]
-      {:else}
-        {symbol ? symbol : ''}
-        {name}
-      {/if}
-    </Text>
-    {#if url}
-      <Text color="link" pointer>
-        <a href={url}>{url}</a>
+<Box transparent>
+  <Card>
+    <Box wrapper slot="header">
+      <Text size="large" bold>
+        {#if $entityDetailsState.status === 'loading'}
+          <SkeletonLoader />
+        {:else if !name}
+          [NO-NAME]
+        {:else}
+          {symbol ? symbol : ''}
+          {name}
+        {/if}
       </Text>
-    {/if}
-  </Box>
-  <Box px="none" transparent>
-    <Divider />
-  </Box>
-  <InfoBox {entries} loading={$entityDetailsState.status === 'loading'} />
+      {#if url}
+        <Text color="link" pointer>
+          <a href={url}>{url}</a>
+        </Text>
+      {/if}
+    </Box>
+    <InfoBox
+      slot="body"
+      {entries}
+      loading={$entityDetailsState.status === 'loading'}
+    />
+  </Card>
 </Box>
