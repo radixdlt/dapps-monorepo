@@ -15,25 +15,6 @@ describe('#deploy state machine', () => {
           .matches({ connected: { 'selecting-account': 'selected' } })
       ).toBeTruthy()
     })
-
-    it('should transition from selected to creating badge', () => {
-      expect(
-        stateMachine
-          .transition(
-            {
-              connected: {
-                'selecting-account': 'selected'
-              }
-            },
-            'CREATE_BADGE'
-          )
-          .matches({
-            connected: {
-              'selecting-account': 'creating-badge'
-            }
-          })
-      ).toBeTruthy()
-    })
   })
 
   describe('uploading files', () => {
