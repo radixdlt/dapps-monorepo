@@ -82,10 +82,10 @@
     badgeInfo={$state.context.selectedNft}
   />
 {:else}
+  <Box transparent>
+    <Text size={'xxlarge'} bold>Deploy Package</Text>
+  </Box>
   {#if $state.matches('not-connected')}
-    <Box transparent>
-      <Text size={'xxlarge'} bold>Deploy Package</Text>
-    </Box>
     <Box transparent>
       <Text
         >Deploy a new blueprint package to the Radix Betanet by attaching your
