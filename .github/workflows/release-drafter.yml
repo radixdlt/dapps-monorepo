@@ -3,7 +3,11 @@ on:
  push:
    branches:
      - main
-     - DO-000-fix-drafter
+
 jobs:
   release-drafter:
-    uses: ./.github/workflows/release-drafter.yml
+    runs-on: ubuntu-latest
+    steps:
+    - uses: release-drafter/release-drafter@6df64e4ba4842c203c604c1f45246c5863410adb
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
