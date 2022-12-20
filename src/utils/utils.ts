@@ -52,3 +52,6 @@ export const getAddressPrefix = (address: string): AddressPrefix => {
 
 export const getNFTAddress = (resourceAddress: string, nftID: string) =>
   `${shortenAddress(resourceAddress)}:${nftID}`
+
+export const isNFTAddress = (address: string) =>
+  getAddressPrefix(address) === 'resource' && address.split(':').length > 1

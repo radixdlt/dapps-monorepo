@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation'
 
   import Search from '@components/_base/search/Search.svelte'
-  import { getAddressPrefix } from '@utils'
+  import { getAddressPrefix, isNFTAddress } from '@utils'
 
   let searchBarText = ''
   const search = (address: string) => {
@@ -12,7 +12,9 @@
         goto(`/account/${address}`)
         break
       case 'resource':
-        goto(`/resource/${address}`)
+        isNFTAddress(address)
+          ? goto(`/nft/${address}`)
+          : goto(`/resource/${address}`)
         break
       case 'transaction':
         goto(`/transaction/${address}`)
