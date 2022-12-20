@@ -50,6 +50,7 @@
   let selectedToAccount = { address: '', label: '' }
 
   const handleSelectToAccount = (nextSelected: OptionsType) => {
+    otherAccount = ''
     selectedToAccount = nextSelected
   }
 
@@ -150,14 +151,14 @@
   <Box justify="end">
     <Button
       disabled={!selectedFromAccount.address ||
-        !selectedToAccount?.address ||
+        !(selectedToAccount?.address || otherAccount.length > 0) ||
         !amountToSend ||
         !selectedBalance?.address}
       on:click={() =>
         onSend({
           resource: selectedBalance.address,
           fromAccount: selectedFromAccount.address,
-          toAccount: selectedToAccount.address || otherAccount,
+          toAccount: otherAccount || selectedToAccount.address,
           amount: Number(amountToSend)
         })}>Send</Button
     >
