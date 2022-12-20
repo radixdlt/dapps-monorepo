@@ -76,7 +76,8 @@
     if (selectedBalance.address !== '') {
       return (
         balance?.find((b) => b.address === selectedBalance.address)?.value ||
-        balance?.[0].value
+        balance?.[0].value ||
+        0
       )
     } else {
       return 'No data'
