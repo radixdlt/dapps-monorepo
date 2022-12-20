@@ -5,7 +5,6 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import type { PageData } from './$types'
