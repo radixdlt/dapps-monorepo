@@ -21,7 +21,7 @@
     }}
     transparent
   >
-    {#each entries as entry, i}
+    {#each entries as entry}
       <slot name="key" {entry}>
         <Text bold>
           {entry.key}
