@@ -82,7 +82,7 @@ type Context = {
 type Events =
   | { type: 'UPLOAD_FILES'; abi: File; wasm: File }
   | { type: 'REMOVE_FILE' }
-  | { type: 'SELECT_ACCOUNT'; address: string }
+  | { type: 'SELECT_ACCOUNT'; address?: string }
   | { type: 'SELECT_BADGE'; index: number }
   | { type: 'CREATE_BADGE' }
   | { type: 'DEPLOY' }
@@ -165,7 +165,13 @@ export const stateMachine = createMachine<Context, Events, States>(
           SELECT_ACCOUNT: {
             target: ['.selecting-account.selected', '.selecting-badge.idle'],
             actions: assign({
-              selectedAccountAddress: (_, event) => event.address,
+              selectedAccountAddress: (context, event) => {
+                if (!event.address) {
+                  return context.selectedAccountAddress
+                }
+
+                return event.address
+              },
               selectedNft: (_, __) => undefined,
               non_fungible_resources: (_, __) => []
             })
