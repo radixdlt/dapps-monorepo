@@ -7,6 +7,7 @@
   import { mutate } from '@queries'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Success from './Success.svelte'
+  import { getTxIdFromMessage } from '@utils'
 
   let transactionManifest = ''
 
@@ -15,16 +16,25 @@
   $: if ($data?.transactionIntentHash) {
     AlertToast({
       title: 'Success!',
-      text: `TxHash: ${$data.transactionIntentHash}`,
+      text: `Transaction has been sent succesfully`,
+      txId: $data.transactionIntentHash,
       type: 'success'
     })()
   }
 
   $: if ($error) {
+    const txId = getTxIdFromMessage($error.message)
     AlertToast({
+      type: 'error',
       title: $error.name,
-      text: $error.message,
-      type: 'error'
+      ...(txId
+        ? {
+            txId,
+            text: 'The transaction did not happen'
+          }
+        : {
+            text: `The transaction did not happen. ${$error.message}`
+          })
     })()
   }
 </script>

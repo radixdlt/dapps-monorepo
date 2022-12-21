@@ -61,7 +61,7 @@
     },
     mt: {
       auto: {
-        mt: 'auto'
+        mt: '$auto'
       },
       xsmall: {
         mt: '$xs'

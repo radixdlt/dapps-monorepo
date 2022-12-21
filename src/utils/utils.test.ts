@@ -17,10 +17,10 @@ describe('#utils', () => {
     expect(result).toBe('abc')
   })
 
-  it('should default to message if something goes wrong', () => {
-    const message = 'TxID:abc'
+  it('should return undefined if message is different', () => {
+    const message = 'any message '
     const result = getTxIdFromMessage(message)
-    expect(result).toBe('TxID:abc')
+    expect(result).toBeUndefined()
   })
 
   it('Should shorten address', () => {

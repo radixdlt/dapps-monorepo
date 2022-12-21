@@ -26,6 +26,7 @@ const colors = {
 
 export const space = {
   0: '0px',
+  auto: 'auto',
   '2xs': '2px',
   xs: '4px',
   sm: '8px',
