@@ -11,7 +11,7 @@
   import { AlertToast } from '@components/_base/toast/Toasts'
   import { accounts } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
-  import { getNFTAddress, shortenAddress } from '@utils'
+  import { getNFTAddress, getTxIdFromMessage, shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import Success from './Success.svelte'
 
@@ -44,7 +44,8 @@
   $: if ($state.matches('error')) {
     AlertToast({
       title: 'Package deployment',
-      text: $state.context.error.message,
+      text: 'The transaction did not happen',
+      txId: getTxIdFromMessage($state.context.error.message),
       type: 'error'
     })()
   }
@@ -74,9 +75,8 @@
   ) {
     AlertToast({
       title: 'Package deployment',
-      text: `Package deployment successful! Tx id: ${shortenAddress(
-        $state.context.intentHash!
-      )}`,
+      text: `Package deployment successful!`,
+      txId: $state.context.intentHash,
       type: 'success'
     })()
   }
