@@ -102,14 +102,11 @@
   />
 {:else}
   <Box transparent>
-    <Text size={'xxlarge'} bold>Deploy Package</Text>
-  </Box>
-  {#if $state.matches('not-connected')}
-    <center>
+    <Text size={'xxlarge'} mb="medium" bold>Deploy Package</Text>
+    {#if $state.matches('not-connected')}
       <Text bold>Please connect your Radix Wallet to get started.</Text>
-    </center>
-  {/if}
-
+    {/if}
+  </Box>
   {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
     <Box transparent>
       <Text
