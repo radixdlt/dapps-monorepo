@@ -33,6 +33,8 @@
       type: 'error'
     })()
   }
+
+  $: isSendingToken = $state.matches('sending-token')
 </script>
 
 <Box transparent>
@@ -40,12 +42,12 @@
   {#if $state.matches('not-logged-in') && !$state.matches('final')}
     <Text bold>Please connect your Radix wallet to get started.</Text>
   {/if}
-  {#if $state.matches('idle') || $state.matches('sending-token')}
+  {#if $state.matches('idle') || isSendingToken}
     <SendTokenForm
       onSend={(data) => send({ type: 'SENDTOKEN', data })}
       onSelectFromAccount={handleSelectFromAccount}
       balance={$state.context.transformedOverview?.fungible}
-      pending={$state.matches('sending-token')}
+      pending={isSendingToken}
     />
   {/if}
   {#if $state.matches('final')}
