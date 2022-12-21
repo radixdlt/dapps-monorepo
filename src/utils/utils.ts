@@ -4,6 +4,11 @@ import CryptoJS from 'crypto-js'
 
 const XRD_DECIMALS = 18
 
+export const getTxIdFromMessage = (message: string): string => {
+  const [, txId] = message.split(' ')
+  return txId ? txId : message
+}
+
 export const shortenAddress = (address: string) =>
   `${address.slice(0, 4)}...${address.slice(
     address.length - 6,

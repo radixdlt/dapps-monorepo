@@ -1,9 +1,12 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
+  import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import Text from '../text/Text.svelte'
+  import { shortenAddress } from '@utils'
 
   export let title: string
   export let text: string
+  export let txId: string
   export let type: 'success' | 'error' | 'warning' | 'info' = 'info'
 
   const borderColors = {
@@ -23,5 +26,20 @@
   }}
 >
   <Text bold>{title}</Text>
-  {text}
+  <Text>{text}</Text>
+  {#if txId}
+    <Box mx="none" px="none" transparent>
+      <Text inline bold>TxID:</Text>
+      <IconTextItem
+        on:click={() => navigator.clipboard.writeText(txId)}
+        icon="copy"
+        interactiveIcon
+        iconPosition="right"
+        iconSize="xs"
+        noPadding
+        noMargin
+        textColor="$highlightedText">{shortenAddress(txId)}</IconTextItem
+      >
+    </Box>
+  {/if}
 </Box>

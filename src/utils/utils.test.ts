@@ -6,10 +6,23 @@ import {
   getFileExtension,
   bufferFromHex,
   hash,
-  getAddressPrefix
+  getAddressPrefix,
+  getTxIdFromMessage
 } from './utils'
 
 describe('#utils', () => {
+  it('should extract txId from error', () => {
+    const message = 'TxID: abc'
+    const result = getTxIdFromMessage(message)
+    expect(result).toBe('abc')
+  })
+
+  it('should default to message if something goes wrong', () => {
+    const message = 'TxID:abc'
+    const result = getTxIdFromMessage(message)
+    expect(result).toBe('TxID:abc')
+  })
+
   it('Should shorten address', () => {
     const originalAddress = '01234----456789'
     const expected = '0123...456789'
