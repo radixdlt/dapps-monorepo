@@ -40,7 +40,7 @@
 <Box transparent>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   {#if $state.matches('not-logged-in') && !$state.matches('final')}
-    <Text bold>Please connect your Radix wallet to get started.</Text>
+    <Text bold>Please connect your Radix Wallet to get started.</Text>
   {/if}
   {#if $state.matches('idle') || isSendingToken}
     <SendTokenForm
