@@ -7,6 +7,7 @@
   import { storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import Text from '@components/_base/text/Text.svelte'
   import Toast from '@components/_base/toast/_Toast.svelte'
   import '../fonts.css'
 
@@ -66,10 +67,19 @@
         height: '100vh',
         overflowY: 'scroll',
         backgroundColor: '$background',
+        display: 'flex',
+        flexDirection: 'column',
         paddingBottom: '$6xl'
       }}
     >
       <slot />
+      <Box transparent border="top" mt="auto" p="large">
+        <Text bold
+          ><a href="https://www.radixdlt.com/privacy-policy" target="_blank"
+            >Privacy Notice</a
+          ></Text
+        >
+      </Box>
     </Box>
     <center />
   {/if}

@@ -60,6 +60,9 @@
       }
     },
     mt: {
+      auto: {
+        mt: 'auto'
+      },
       xsmall: {
         mt: '$xs'
       },
@@ -179,6 +182,11 @@
       }
     },
     border: {
+      top: {
+        borderRadius: '$0',
+        borderTopColor: '$borderColor',
+        borderTopStyle: 'solid'
+      },
       true: {
         borderColor: '$borderColor',
         borderStyle: 'solid',
