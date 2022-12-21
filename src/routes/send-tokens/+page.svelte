@@ -7,6 +7,7 @@
   import { accounts } from '@stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Success from './Success.svelte'
+  import { getTxIdFromMessage } from '@utils'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -27,7 +28,8 @@
   $: if ($state.matches('error')) {
     AlertToast({
       title: 'Send tokens',
-      text: $state.context.error.message,
+      text: 'The transaction did not happen',
+      txId: getTxIdFromMessage($state.context.error.message),
       type: 'error'
     })()
   }
@@ -50,8 +52,8 @@
     <Success txID={$state.context.txID} />
   {/if}
   {#if $state.matches('error')}
-    <Text inline size="large" mb="medium" bold
-      >Error: {$state.context.error.message}</Text
-    >
+    <Text inline size="large" mb="medium" bold>
+      Error: {$state.context.error.message}
+    </Text>
   {/if}
 </Box>

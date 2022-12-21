@@ -7,6 +7,7 @@
   import type { icons } from '../../icon-assets'
 
   export let noPadding: boolean = false
+  export let noMargin: boolean = false
   export let icon: keyof typeof icons
   export let interactiveIcon: boolean = false
   export let iconSize: 'xs' | 'sm' | 'md' | 'lg' = 'sm'
@@ -31,6 +32,7 @@
   transparent
   items="center"
   p={noPadding ? 'none' : 'medium'}
+  m={noMargin ? 'none' : 'medium'}
   {cx}
 >
   {#if iconPosition === 'left'}
