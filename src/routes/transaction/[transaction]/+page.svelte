@@ -60,7 +60,9 @@
     <InfoBox {entries} loading={false} />
     <Box>
       <Text bold mb="medium">Transaction manifest</Text>
-      {manifest ? manifest : 'No manifest'}
+      <pre style="white-space: pre-wrap; word-break: break-word;">{manifest
+          ? manifest
+          : 'No manifest'}</pre>
     </Box>
   {/if}
 </Box>
