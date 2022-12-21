@@ -64,6 +64,9 @@
       text: ``,
       type: 'success'
     })()
+    send({
+      type: 'SELECT_ACCOUNT'
+    })
   }
 
   $: if (
