@@ -22,8 +22,8 @@
       <Text align="right" bold slot="key" let:entry>
         {entry.key}
       </Text>
-      <Text align="left" slot="value" let:entry>
-        {entry.value}
+      <Text align="left" color="link" underlined slot="value" let:entry>
+        <a href="/transaction/{entry.value}">{entry.value}</a>
       </Text>
     </InfoBox>
   </Box>
