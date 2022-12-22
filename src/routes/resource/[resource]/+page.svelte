@@ -97,6 +97,10 @@
       slot="body"
       {entries}
       loading={$entityDetailsState.status === 'loading'}
-    />
+    >
+      <Text align="right" bold slot="key" let:entry>
+        {entry.key}
+      </Text>
+    </InfoBox>
   </Card>
 </Box>
