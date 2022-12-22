@@ -22,7 +22,7 @@ describe('#transform for account fetching', () => {
     ]
     const transformedOverview = transformWithOverview(overview)
     expect(transformedOverview).toEqual([
-      { key: 'symbol (name)', value: '100', address: '0x1' }
+      { key: 'name (symbol)', value: '100', address: '0x1' }
     ])
   })
 
@@ -71,7 +71,7 @@ describe('#transform for account fetching', () => {
     ]
     const transformedOverview = transformWithOverview(overview)
     expect(transformedOverview).toEqual([
-      { key: 'symbol1 (name1)', value: '100', address: '0x1' },
+      { key: 'name1 (symbol1)', value: '100', address: '0x1' },
       { key: 'symbol3', value: '200', address: '0x2' },
       { key: 'name2', value: '300', address: '0x3' }
     ])

@@ -55,6 +55,20 @@
         mb: '$0'
       }
     },
+    items: {
+      center: {
+        display: 'flex',
+        alignItems: 'center'
+      }
+    },
+    ml: {
+      auto: {
+        ml: '$auto'
+      },
+      small: {
+        ml: '$sm'
+      }
+    },
     mt: {
       xsmall: {
         mt: '$xs'
@@ -235,6 +249,8 @@
   export let my: keyof typeof variants['my'] | undefined = undefined
   export let mx: keyof typeof variants['mx'] | undefined = undefined
   export let mt: keyof typeof variants['mt'] | undefined = undefined
+  export let ml: keyof typeof variants['ml'] | undefined = undefined
+  export let items: keyof typeof variants['items'] | undefined = undefined
   export let mb: keyof typeof variants['mb'] | undefined = undefined
   export let color: keyof typeof variants['color'] | undefined = undefined
   export let size: keyof typeof variants['size'] | undefined = undefined
@@ -258,6 +274,8 @@
     py,
     m,
     mt,
+    ml,
+    items,
     mb,
     mx,
     my,

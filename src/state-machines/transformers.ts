@@ -18,7 +18,7 @@ export const transformWithOverview = (
 
     const key =
       symbol && name
-        ? `${symbol} (${name})`
+        ? `${name} (${symbol})`
         : symbol || name || overview.address
 
     const next = {
