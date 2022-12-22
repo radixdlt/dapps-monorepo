@@ -4,6 +4,7 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
+  import Icon from '@components/_base/icon/Icon.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
@@ -72,20 +73,23 @@
 
 <Box transparent>
   <Card>
-    <Box wrapper slot="header">
+    <Box wrapper slot="header" flex="row" items="center">
       <Text size="large" bold>
         {#if $entityDetailsState.status === 'loading'}
           <SkeletonLoader />
         {:else if !name}
           [NO-NAME]
         {:else}
-          {symbol ? symbol : ''}
           {name}
+          {symbol ? `(${symbol})` : ''}
         {/if}
       </Text>
       {#if url}
-        <Text color="link" pointer>
-          <a href={url}>{url}</a>
+        <Text color="link" ml="auto" pointer items="center">
+          <Icon type="external" width="xs" height="xs" />
+          <Text ml="small">
+            <a href={url} target="_blank">{url}</a>
+          </Text>
         </Text>
       {/if}
     </Box>
