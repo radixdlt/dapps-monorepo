@@ -35,29 +35,44 @@
   {:else}
     <Card>
       <Text bold slot="header">Tokens (fungible resources)</Text>
-      <InfoBox
-        slot="body"
-        entries={$state.context.transformedOverview?.fungible || []}
-        loading={!$state.matches('final')}
-      >
-        <Text bold underlined slot="key" let:entry>
-          <a href="/resource/{entry.address}">{entry.key}</a>
-        </Text>
-        <Text slot="value" let:entry>{entry.value}</Text>
-      </InfoBox>
+      <Box p="none" slot="body">
+        {#if $state.matches('final') && $state.context.transformedOverview?.fungible.length === 0}
+          <Box>
+            <Text>No tokens found</Text>
+          </Box>
+        {:else}
+          <InfoBox
+            entries={$state.context.transformedOverview?.fungible || []}
+            loading={!$state.matches('final')}
+          >
+            <Text bold underlined slot="key" let:entry>
+              <a href="/resource/{entry.address}">{entry.key}</a>
+            </Text>
+            <Text slot="value" let:entry>{entry.value}</Text>
+          </InfoBox>
+        {/if}
+      </Box>
     </Card>
+
     <Card>
       <Text bold slot="header">NFTs (nonfungible resources)</Text>
-      <InfoBox
-        slot="body"
-        entries={$state.context.transformedOverview?.nonFungible || []}
-        loading={!$state.matches('final')}
-      >
-        <Text underlined slot="key" let:entry>
-          <a href="/nft/{entry.address}">{entry.key}</a>
-        </Text>
-        <Text slot="value" />
-      </InfoBox>
+      <Box slot="body" p="none">
+        {#if $state.matches('final') && $state.context.transformedOverview?.nonFungible.length === 0}
+          <Box>
+            <Text>No NFTs found</Text>
+          </Box>
+        {:else}
+          <InfoBox
+            entries={$state.context.transformedOverview?.nonFungible || []}
+            loading={!$state.matches('final')}
+          >
+            <Text underlined slot="key" let:entry>
+              <a href="/nft/{entry.address}">{entry.key}</a>
+            </Text>
+            <Text slot="value" />
+          </InfoBox>
+        {/if}
+      </Box>
     </Card>
   {/if}
 </Box>
