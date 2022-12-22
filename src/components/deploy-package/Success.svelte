@@ -11,6 +11,8 @@
     address: string
     id: string
   }
+
+  const NFTAddress = getNFTAddress(badgeInfo.address, badgeInfo.id)
 </script>
 
 <center>
@@ -20,7 +22,8 @@
       entries={[
         {
           key: 'Tx ID',
-          value: txID
+          value: txID,
+          href: `/transaction/${txID}`
         },
         {
           key: 'Package address',
@@ -29,11 +32,9 @@
         {
           key: 'Owner badge',
           value: badgeInfo.name
-            ? `${badgeInfo.name} (${getNFTAddress(
-                badgeInfo.address,
-                badgeInfo.id
-              )})`
-            : getNFTAddress(badgeInfo.address, badgeInfo.id)
+            ? `${badgeInfo.name} (${NFTAddress})`
+            : NFTAddress,
+          href: `resource/${badgeInfo.address}`
         }
       ]}
       loading={false}
@@ -43,7 +44,13 @@
         {entry.key}
       </Text>
       <Text align="left" slot="value" let:entry>
-        {entry.value}
+        {#if entry.href}
+          <Text color="link">
+            <a href={entry.href}>{entry.value}</a>
+          </Text>
+        {:else}
+          {entry.value}
+        {/if}
       </Text>
     </InfoBox>
   </Box>
