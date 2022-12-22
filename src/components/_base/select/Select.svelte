@@ -81,7 +81,7 @@
 </script>
 
 <Listbox value={selected} on:change={onSelect}>
-  <Box px="none" py="none" cx={{ position: 'relative' }}>
+  <Box transparent px="none" py="none" cx={{ position: 'relative' }}>
     <ListboxButton class={listboxStyles()}
       >{selected?.label ?? placeholder}</ListboxButton
     >
