@@ -2,7 +2,6 @@
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { shortenAddress } from '@utils'
 
   export let title: string
   export let resourceAddress: string
@@ -17,6 +16,6 @@
     iconPosition="right"
     iconSize="xs"
     noPadding
-    textColor="$highlightedText">{shortenAddress(resourceAddress)}</IconTextItem
+    textColor="$highlightedText">{resourceAddress}</IconTextItem
   >
 </Box>
