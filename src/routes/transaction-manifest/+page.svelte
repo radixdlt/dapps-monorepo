@@ -5,6 +5,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { mutate } from '@queries'
+  import { accounts } from '@stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Success from './Success.svelte'
   import { getTxIdFromMessage } from '@utils'
@@ -43,35 +44,40 @@
   <Success txID={$data?.transactionIntentHash} />
 {:else}
   <Box transparent>
-    <Text size={'xxlarge'} bold>Send Raw Transaction</Text>
-  </Box>
-  <Box transparent>
-    <Text
-      >Enter raw transaction manifest text to send to your linked Radix Wallet.
-      No method call to “lock_fee” is required – the wallet will add this
-      automatically.</Text
-    >
-  </Box>
-  <Box justify="center" transparent>
-    <Textarea
-      bind:value={transactionManifest}
-      placeholder="Enter a raw transaction manifest"
-      size="lg"
-    />
-  </Box>
-
-  <Box justify="center" transparent>
-    {#if $loading}
-      <Button>
-        <LoadingSpinner />
-      </Button>
-    {:else}
-      <Button
-        on:click={() =>
-          trigger({
-            transactionManifest
-          })}>Submit</Button
-      >
+    <Text size={'xxlarge'} mb="medium" bold>Send Raw Transaction</Text>
+    {#if !$accounts}
+      <Text bold>Please connect your Radix Wallet to get started.</Text>
     {/if}
   </Box>
+  {#if $accounts}
+    <Box transparent>
+      <Text
+        >Enter raw transaction manifest text to send to your linked Radix
+        Wallet. No method call to “lock_fee” is required – the wallet will add
+        this automatically.</Text
+      >
+    </Box>
+    <Box justify="center" transparent>
+      <Textarea
+        bind:value={transactionManifest}
+        placeholder="Enter a raw transaction manifest"
+        size="lg"
+      />
+    </Box>
+
+    <Box justify="center" transparent>
+      {#if $loading}
+        <Button>
+          <LoadingSpinner />
+        </Button>
+      {:else}
+        <Button
+          on:click={() =>
+            trigger({
+              transactionManifest
+            })}>Submit</Button
+        >
+      {/if}
+    </Box>
+  {/if}
 {/if}
