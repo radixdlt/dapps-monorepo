@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { derived, writable } from 'svelte/store'
 import { writable as localStorageStore } from 'svelte-local-storage-store'
 
 type Account = {
@@ -7,8 +7,13 @@ type Account = {
   appearanceId: number
 }
 
-export const accounts = writable<Account[] | undefined>(undefined)
+export const accounts = writable<Account[]>([])
 
 export const selectedAccount = writable<Account | undefined>(undefined)
+
+export const connected = derived(
+  [accounts],
+  ([accounts]) => accounts.length > 0
+)
 
 export const storage = localStorageStore('storage', { theme: 'light' })
