@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dashboard
+      target: node-adapter
       args:
         - NPM_TOKEN=${NPM_TOKEN}
     ports:

@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,3 +14,20 @@ spec:
       name: http
   selector:
     {{- include "rdxworks-dashboard.selectorLabels" . | nindent 4 }}
+{{- if .Values.dashboard.metrics.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rdxworks-dashboard.fullname" . }}-metrics
+  labels:
+    {{- include "rdxworks-dashboard.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.dashboard.metrics.port }}
+    name: metrics
+    targetPort: {{ .Values.dashboard.metrics.port }}
+  selector:
+    {{- include "rdxworks-dashboard.selectorLabels" . | nindent 4 }}
+{{- end }}
