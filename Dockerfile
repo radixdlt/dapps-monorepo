@@ -28,27 +28,18 @@ RUN cat .env.production
 RUN yarn install && yarn build && yarn build-storybook
 RUN rm -f .npmrc
 
-FROM install-dashboard AS dev-server
-CMD yarn dev
-
-
 FROM install-dashboard AS node-adapter
 WORKDIR /usr/app/
 COPY --from=install-dashboard /usr/app/build .
 COPY --from=install-dashboard /usr/app/package.json .
 COPY --from=install-dashboard /usr/app/node_modules  .
-RUN npm install pm2 -g
+RUN npm install pm2 -g && \
+    pm2 install pm2-metrics
 CMD ["pm2-runtime","build/index.js"]
 
 
-# Both the apps can be served as static content.
-# Ref: https://vitejs.dev/guide/build.html#building-for-production
 FROM nginx:alpine AS storybook
 COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-
-FROM nginx:alpine AS dashboard
-COPY --from=install-dashboard /usr/app/build /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 FROM scratch AS export-yarn-lock

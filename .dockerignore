@@ -2,3 +2,4 @@ Dockerfile
 Makefile
 cypress
 .env
+docker-compose.yml

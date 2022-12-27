@@ -10,12 +10,7 @@ all:
 .PHONY: node-adapter
 node-adapter:
 	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME)  --target=node-adapter -t $(REPO):$(TAG) .
-	docker run -it -p 3000:3000 $(REPO):$(TAG)
-
-.PHONY: dev-server
-dev-server:
-	docker build -f Dockerfile --build-arg NPM_TOKEN=$(NPM_TOKEN) --build-arg NETWORK_NAME=$(NETWORK_NAME) --target=dev-server -t $(REPO):$(TAG) .
-	docker run -it -p 5173:5173 $(REPO):$(TAG)
+	docker run -it -p 9209:9209 -p 3000:3000 $(REPO):$(TAG)
 
 .PHONY: storybook
 storybook:
