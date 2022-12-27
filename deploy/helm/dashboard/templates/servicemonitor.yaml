@@ -1,0 +1,19 @@
+{{- if .Values.dashboard.metrics.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "rdxworks-dashboard.serviceAccountName" . }}
+  labels:
+    release: prometheus-operator
+    {{- include "rdxworks-dashboard.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - port: metrics
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace | quote }}
+  selector:
+    matchLabels:
+      {{- include "rdxworks-dashboard.selectorLabels" . | nindent 6 }}
+{{- end }}
