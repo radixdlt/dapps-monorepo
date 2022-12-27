@@ -20,7 +20,7 @@ runs:
       shell: bash
       id: npm-cache-dir
       run: |
-        echo "::set-output name=dir::$(npm config get cache)"
+        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
     - name: Cache Node.js modules
       uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
       id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
