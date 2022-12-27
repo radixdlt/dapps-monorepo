@@ -1,6 +1,10 @@
 dashboard:
   replicaCount: 1
 
+  metrics:
+    enabled: true
+    port: 9209
+
   image:
     repository: eu.gcr.io/dev-container-repo/dashboard
     pullPolicy: IfNotPresent
@@ -16,10 +20,6 @@ dashboard:
 
   params:
     NETWORK_GATEWAY_API: ""
-
-  metrics:
-    enabled: true
-    port: 9209
 
   serviceAccount:
     create: true
@@ -38,7 +38,7 @@ dashboard:
 
   ingress:
     enabled: false
-    className: "nginx"
+    className: ""
     hosts:
       - host: chart-example.local
         paths:

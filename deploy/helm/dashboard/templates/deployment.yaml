@@ -43,9 +43,9 @@ spec:
               containerPort: 3000
               protocol: TCP
           {{- if .Values.dashboard.metrics.enabled }}
-           - name: metrics
-             containerPort: {{ .Values.dashboard.metrics.port }}
-             protocol: TCP
+            - name: metrics
+              containerPort: {{ .Values.dashboard.metrics.port }}
+              protocol: TCP
           {{- end }}
           livenessProbe:
             httpGet:
