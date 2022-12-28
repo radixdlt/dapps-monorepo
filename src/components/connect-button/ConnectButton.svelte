@@ -24,6 +24,8 @@
     },
     onDisconnect: ({ setState }) => {
       setState({ connected: false })
+      accounts.set(undefined)
+      selectedAccount.set(undefined)
     },
     // clean up dangling subscriptions when HMR is triggered
     onDestroy: () => destroy()

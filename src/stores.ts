@@ -7,8 +7,8 @@ type Account = {
   appearanceId: number
 }
 
-export const accounts = writable<Account[]>(undefined)
+export const accounts = writable<Account[] | undefined>(undefined)
 
-export const selectedAccount = writable<Account>(undefined)
+export const selectedAccount = writable<Account | undefined>(undefined)
 
 export const storage = localStorageStore('storage', { theme: 'light' })
