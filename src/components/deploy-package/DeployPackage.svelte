@@ -146,10 +146,11 @@
             handleSelect={(e) =>
               send({
                 type: 'SELECT_ACCOUNT',
-                address: $accounts[e.id].address
+                address: e.account.address
               })}
             options={[
-              ...$accounts.map((account, i) => ({
+              ...($accounts || []).map((account, i) => ({
+                account,
                 id: i,
                 label: `${account.label} (${shortenAddress(account.address)})`
               }))

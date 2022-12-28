@@ -42,7 +42,9 @@
   let selectedFromAccount = { address: '', label: '' }
 
   onMount(() => {
-    selectedFromAccount = accountList[0]
+    if (accountList && accountList.length) {
+      selectedFromAccount = accountList[0]
+    }
   })
 
   const handleSelectFromAccount = (nextSelected: OptionsType) => {
