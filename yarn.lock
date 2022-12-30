@@ -1529,25 +1529,24 @@
     neverthrow "^5.0.0"
     rxjs "^7.5.6"
 
-"@radixdlt/connect-button@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.8.0.tgz#d96105a3aeceac8d852dbd9ddd1d8164b1e36393"
-  integrity sha512-b2qgZKCK599A8w0/0hA/PdPbQ1vOXr7fH1UUQZU9warWgLU/TC8j+pAdieRW/SyYb7cgjW+3JJSHG4hB0vsiMg==
+"@radixdlt/connect-button@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@radixdlt/connect-button/-/connect-button-0.10.0.tgz#3cf3a371fe6dd0f5c15e26b19e387df3f5c5c430"
+  integrity sha512-Tek+JusmrOSf1SkhOlrYft2nDF0hVyne3lTxIUXvjBywuVzinYEdvc7QiG/0wpnFXbBkpsDwz2ZEG/xAxkEiQQ==
   dependencies:
-    "@radixdlt/wallet-sdk" "^0.3.3"
+    "@radixdlt/wallet-sdk" "0.5.1"
     lit "^2.4.1"
     rxjs "^7.5.7"
 
-"@radixdlt/wallet-sdk@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.3.3.tgz#689fe1a5ee7dec7228cf5b146a8e6166fa678791"
-  integrity sha512-pgRszRai9rurMmgDN2o5TgM5+8enY/6gFNO9YDdpO+Nq3X599xUqGj+jhAtAdQ7M3ua7c32jvklVIGpg8hUAog==
+"@radixdlt/wallet-sdk@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.5.1.tgz#390912c04ebef3bfc42200d4be46ce77fc07ddf3"
+  integrity sha512-DXHtg7kqaO0EsaGyIMipAt0HWw1ehbjAylWLz8WcOnACKh87ZHXZUiUv/a3z46co/pwp/c2sSLTX8HlqLCrc0Q==
   dependencies:
-    "@types/lodash.flow" "^3.5.7"
     lodash.flow "^3.5.0"
-    loglevel "^1.8.0"
-    neverthrow "^5.0.0"
-    rxjs "^7.5.6"
+    loglevel "^1.8.1"
+    neverthrow "^6.0.0"
+    rxjs "^7.6.0"
     zod "^3.19.1"
 
 "@rgossiaux/svelte-headlessui@^1.0.2":
@@ -2756,18 +2755,6 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
-
-"@types/lodash.flow@^3.5.7":
-  version "3.5.7"
-  resolved "https://registry.yarnpkg.com/@types/lodash.flow/-/lodash.flow-3.5.7.tgz#fabf602692fe77e1b0ba3231b5b7095afbeae9de"
-  integrity sha512-F3avAQHJPiewhugySHZ8CUgnYRiJwauOU5/PQdxWs8VU3WDbPnyea1XQ8rC8VT+08J43Ycz9fH1QD+isJukAxA==
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*":
-  version "4.14.188"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
-  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
 
 "@types/lodash@^4.14.167":
   version "4.14.186"
@@ -8366,6 +8353,11 @@ loglevel@^1.8.0:
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.0.tgz#e7ec73a57e1e7b419cb6c6ac06bf050b67356114"
   integrity sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA==
 
+loglevel@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.1.tgz#5c621f83d5b48c54ae93b6156353f555963377b4"
+  integrity sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==
+
 loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -8873,6 +8865,11 @@ neverthrow@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/neverthrow/-/neverthrow-5.0.1.tgz#b3afa0b3b3401db432a82b1352adf8eb8e213633"
   integrity sha512-oibO4xhEP3bqnTTLZ+c8eOaavP4T3HUZuCuWyw+OcwThXD9fOgf7XwkEc5mpvrVhIrhH87JU30CmWzUfBYIUMg==
+
+neverthrow@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/neverthrow/-/neverthrow-6.0.0.tgz#bacd7661cade296ccc5c35760bb3b679214155b6"
+  integrity sha512-kPZKRs4VkdloCGQXPoP84q4sT/1Z+lYM61AXyV8wWa2hnuo5KpPBF2S3crSFnMrOgUISmEBP8Vo/ngGZX60NhA==
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -10386,6 +10383,13 @@ rxjs@^7.5.1, rxjs@^7.5.6, rxjs@^7.5.7:
   version "7.5.7"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.7.tgz#2ec0d57fdc89ece220d2e702730ae8f1e49def39"
   integrity sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==
+  dependencies:
+    tslib "^2.1.0"
+
+rxjs@^7.6.0:
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
+  integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
   dependencies:
     tslib "^2.1.0"
 
