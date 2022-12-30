@@ -7,6 +7,7 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import { getTxManifest } from '../../../to-be-removed/ret'
   import Text from '@components/_base/text/Text.svelte'
+  import { goto } from '$app/navigation'
 
   let manifest: string | undefined
 
@@ -28,6 +29,7 @@
       text: $state.error.message,
       type: 'error'
     })()
+    goto('/not-found')
   }
 
   $: entries = [
