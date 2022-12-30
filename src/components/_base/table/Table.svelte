@@ -105,7 +105,7 @@
   })
 </script>
 
-<Box p="none">
+<Box bgColor="surface" p="none">
   <table class={tableStyle()}>
     <thead>
       {#each $table.getHeaderGroups() as headerGroup}
@@ -125,7 +125,7 @@
                       header.getContext()
                     )}
                   />
-                  <Box p="none" inline mx="small">
+                  <Box p="none" inline bgColor="surface" mx="small">
                     {{
                       asc: ' 🔼',
                       desc: ' 🔽'

@@ -8,6 +8,7 @@
 </script>
 
 <Box
+  bgColor="surface"
   cx={{
     gridArea: 'header',
     borderBottom: 'solid',
@@ -20,10 +21,10 @@
   justify="between"
 >
   <Logo />
-  <Box cx={{ flex: 0.8 }} p="none">
+  <Box bgColor="surface" cx={{ flex: 0.8 }} p="none">
     <NetworkLookupSearch />
   </Box>
-  <Box cx={{ gap: '$md' }} p="none" flex="row" items="center">
+  <Box bgColor="surface" cx={{ gap: '$md' }} p="none" flex="row" items="center">
     <ConnectButton />
     {#if featureFlags().getFlag('dark-mode')?.enabled}
       <ThemeSwitch />

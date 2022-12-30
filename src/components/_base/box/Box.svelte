@@ -59,6 +59,11 @@
         }
       }
     },
+    bgColor: {
+      surface: {
+        backgroundColor: '$surface'
+      }
+    },
     mt: {
       auto: {
         mt: '$auto'
@@ -300,12 +305,9 @@
     }
   } as const
 
-  export let transparent: boolean = false
-
   export let cx: CSS<typeof config> = {}
 
   const box = css({
-    backgroundColor: `${transparent ? 'transparent' : '$surface'}`,
     borderRadius: '$sm',
     p: '$md',
     color: '$onSurface',
@@ -334,6 +336,7 @@
   export let justify: keyof typeof variants['justify'] | undefined = undefined
   export let grid: keyof typeof variants['grid'] | undefined = undefined
   export let gap: keyof typeof variants['gap'] | undefined = undefined
+  export let bgColor: keyof typeof variants['bgColor'] | undefined = undefined
   export let wrapper: boolean | undefined = undefined
   export let hidden: boolean | undefined = undefined
 
@@ -342,6 +345,7 @@
 
 <div
   on:click
+  on:keypress
   on:outroend
   class={box({
     full,
@@ -357,6 +361,7 @@
     mt,
     mx,
     my,
+    bgColor,
     border,
     flex,
     items,

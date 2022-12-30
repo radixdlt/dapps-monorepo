@@ -60,7 +60,7 @@
     : ''
 </script>
 
-<Box transparent>
+<Box>
   {#if $entityDetailsState.status === 'loading'}
     <SkeletonLoader />
   {:else}
@@ -71,9 +71,9 @@
   {/if}
 </Box>
 
-<Box transparent>
+<Box>
   <Card>
-    <Box wrapper slot="header" flex="row" items="center">
+    <Box bgColor="surface" wrapper slot="header" flex="row" items="center">
       <Text size="large" bold>
         {#if $entityDetailsState.status === 'loading'}
           <SkeletonLoader />

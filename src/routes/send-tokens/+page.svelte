@@ -37,7 +37,7 @@
   $: isSendingToken = $state.matches('sending-token')
 </script>
 
-<Box transparent>
+<Box>
   <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
   {#if $state.matches('not-logged-in') && !$state.matches('final')}
     <Text bold>Please connect your Radix Wallet to get started.</Text>

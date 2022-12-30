@@ -73,7 +73,7 @@
       }}
     >
       <slot />
-      <Box transparent border="top" mt="auto" p="large">
+      <Box border="top" mt="auto" p="large">
         <Text bold
           ><a href="https://www.radixdlt.com/privacy-policy" target="_blank"
             >Privacy Notice</a

@@ -28,9 +28,10 @@
 </script>
 
 <form on:submit|preventDefault={search}>
-  <Box full cx={{ position: 'relative' }} wrapper inline>
+  <Box bgColor="surface" full cx={{ position: 'relative' }} wrapper inline>
     <input bind:value class={style} {placeholder} type="text" />
     <Box
+      bgColor="surface"
       wrapper
       cx={{
         position: 'absolute',

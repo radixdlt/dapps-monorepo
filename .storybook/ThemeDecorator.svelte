@@ -10,7 +10,7 @@
 
 <div>
   <Toast />
-  <Box transparent items="center" flex="row">
+  <Box items="center" flex="row">
     <Switch enabled={darkMode} onToggle={() => (darkMode = !darkMode)} />
     <Text mx="large">Dark mode</Text>
   </Box>

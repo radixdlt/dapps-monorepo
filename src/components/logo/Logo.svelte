@@ -4,7 +4,7 @@
   import Image from '@components/_base/image/Image.svelte'
 </script>
 
-<Box transparent on:click={() => goto('/')} p="none" m="none">
+<Box on:click={() => goto('/')} p="none" m="none">
   <Image
     cx={{ cursor: 'pointer' }}
     height="$md"

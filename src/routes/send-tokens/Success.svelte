@@ -8,7 +8,7 @@
 
 <center>
   <Text bold size="xlarge">Transfer successful! 🎉</Text>
-  <Box transparent>
+  <Box>
     <InfoBox
       entries={[
         {

@@ -101,21 +101,21 @@
     badgeInfo={$state.context.selectedNft}
   />
 {:else}
-  <Box transparent>
+  <Box>
     <Text size={'xxlarge'} mb="medium" bold>Deploy Package</Text>
     {#if $state.matches('not-connected')}
       <Text bold>Please connect your Radix Wallet to get started.</Text>
     {/if}
   </Box>
   {#if $state.matches( { connected: { 'deploying-package': 'idle' } } ) || $state.matches( { connected: { 'deploying-package': 'deploy' } } )}
-    <Box transparent>
+    <Box>
       <Text
         >Deploy a new blueprint package to the Radix Betanet by attaching your
         WASM and ABI files to a deploy transaction.</Text
       >
     </Box>
     <center>
-      <Box transparent cx={{ maxWidth: '50%', minWidth: '450px' }}>
+      <Box cx={{ maxWidth: '50%', minWidth: '450px' }}>
         <FileUpload
           acceptedFileTypes={['.wasm', 'wasm']}
           onRemoveFile={handleRemoveFile}
@@ -131,7 +131,7 @@
           maxFiles={1}
         />
       </Box>
-      <Box transparent>
+      <Box>
         <Text
           >To control aspects of the package you deploy, like setting metadata
           or claiming royalties, you must specify a badge NFT for authorization.
@@ -139,8 +139,8 @@
           like to hold one.</Text
         >
       </Box>
-      <Box transparent cx={{ width: '30%' }}>
-        <Box transparent>
+      <Box cx={{ width: '30%' }}>
+        <Box>
           <Select
             placeholder="Select Account"
             handleSelect={(e) =>
@@ -157,7 +157,7 @@
             ]}
           />
         </Box>
-        <Box transparent>
+        <Box>
           {#if $state.context.non_fungible_resources.length > 0}
             <Select
               placeholder="Select Badge NFT"
@@ -184,7 +184,6 @@
       </Box>
 
       <Box
-        transparent
         hidden={!$state.matches(
           // @ts-ignore
           { connected: { 'selecting-account': 'selected' } }
@@ -202,7 +201,7 @@
         </Text>
       </Box>
 
-      <Box transparent px="none" mx="none">
+      <Box px="none" mx="none">
         <Button
           disabled={!deployButtonEnabled}
           on:click={() => send({ type: 'DEPLOY' })}

@@ -12,14 +12,14 @@
   const loaderWidth = 100
 </script>
 
-<Box {transparent}>
+<Box bgColor={transparent ? undefined : 'surface'}>
   <Box
     gap="medium"
     cx={{
       display: 'grid',
       gridTemplateColumns: '2fr 5fr'
     }}
-    transparent
+    bgColor={transparent ? undefined : 'surface'}
   >
     {#each entries as entry}
       <slot name="key" {entry}>

@@ -9,13 +9,13 @@
   export let forceShow = false
 </script>
 
-<Box transparent p="none" cx={{ position: 'relative' }}>
+<Box p="none" cx={{ position: 'relative' }}>
   <Popover>
     <PopoverButton as="div">
       <slot name="button" />
     </PopoverButton>
     <PopoverPanel static={forceShow}>
-      <Box p="none" mx="none" transparent>
+      <Box p="none" mx="none">
         <slot name="content" />
       </Box>
     </PopoverPanel>

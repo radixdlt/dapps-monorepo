@@ -29,8 +29,8 @@
       ? '$5xl'
       : '$6xl'}
   >
-    <Box slot="title" transparent>Title</Box>
-    <Box slot="description" transparent>Description</Box>
+    <Box slot="title">Title</Box>
+    <Box slot="description">Description</Box>
   </Dialog>
   <Button on:click={() => (open = true)}>Open Dialog</Button>
 </Template>

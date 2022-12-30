@@ -28,7 +28,7 @@
   <Text bold>{title}</Text>
   <Text>{text}</Text>
   {#if txId}
-    <Box mx="none" px="none" transparent>
+    <Box mx="none" px="none">
       <Text inline bold>TxID:</Text>
       <IconTextItem
         on:click={() => navigator.clipboard.writeText(txId)}

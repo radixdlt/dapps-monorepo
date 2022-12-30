@@ -8,7 +8,7 @@
   })()
 </script>
 
-<Box p="large" shadow>
+<Box bgColor="surface" p="large" shadow>
   <slot name="header" />
   <hr class={divider} />
   <slot name="body" />

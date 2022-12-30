@@ -4,7 +4,7 @@
 </script>
 
 <center>
-  <Box transparent mt="large">
+  <Box mt="large">
     <Text bold size="xxlarge" mt="large">No results found</Text>
 
     <Text mt="medium">Search again</Text>
