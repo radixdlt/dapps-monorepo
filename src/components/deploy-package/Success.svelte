@@ -17,7 +17,7 @@
 
 <center>
   <Text bold size="xlarge">Your package was submitted! 🎉</Text>
-  <Box transparent>
+  <Box>
     <InfoBox
       entries={[
         {
@@ -38,7 +38,6 @@
         }
       ]}
       loading={false}
-      transparent
     >
       <Text align="right" bold slot="key" let:entry>
         {entry.key}

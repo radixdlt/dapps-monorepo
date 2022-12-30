@@ -8,7 +8,7 @@
 </script>
 
 <Text inline size="xxlarge" bold>{title}</Text>
-<Box transparent m="none" p="none" inline>
+<Box m="none" p="none" inline>
   <IconTextItem
     on:click={() => navigator.clipboard.writeText(resourceAddress)}
     icon="copy"

@@ -8,7 +8,7 @@
 
 <center>
   <Text bold size="xlarge">Your transaction was submitted! 🎉</Text>
-  <Box transparent>
+  <Box>
     <InfoBox
       entries={[
         {

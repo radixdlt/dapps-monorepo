@@ -29,7 +29,6 @@
 
 <Box
   flex="row"
-  transparent
   items="center"
   p={noPadding ? 'none' : 'medium'}
   m={noMargin ? 'none' : 'medium'}

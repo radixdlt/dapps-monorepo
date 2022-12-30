@@ -98,29 +98,35 @@
   }
 </script>
 
-<Box flex="col" gap="medium">
-  <Box mt="medium" cx={boxStyle}>
+<Box bgColor="surface" flex="col" gap="medium">
+  <Box bgColor="surface" mt="medium" cx={boxStyle}>
     <Text bold align="right">From</Text>
-    <Box px="none" cx={{ width: '300px' }}>
+    <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
       <Select handleSelect={handleSelectFromAccount} options={accountList} />
     </Box>
   </Box>
-  <Box mt="medium" cx={boxStyle}>
+  <Box bgColor="surface" mt="medium" cx={boxStyle}>
     <Text bold align="right">To</Text>
     <Tabs>
       <svelte:fragment slot="tabs">
         <Tab _default />
-        <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
-          >One of My Accounts</Box
+        <Box
+          bgColor="surface"
+          inline
+          p="none"
+          cx={{ marginRight: '$lg', marginLeft: '$sm' }}>One of My Accounts</Box
         >
         <Tab />
-        <Box inline p="none" cx={{ marginRight: '$lg', marginLeft: '$sm' }}
-          >Other account</Box
+        <Box
+          bgColor="surface"
+          inline
+          p="none"
+          cx={{ marginRight: '$lg', marginLeft: '$sm' }}>Other account</Box
         >
       </svelte:fragment>
       <svelte:fragment slot="panels">
         <TabPanel>
-          <Box px="none" cx={{ width: '300px' }}>
+          <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
             <Select
               placeholder="Select personal account"
               handleSelect={handleSelectToAccount}
@@ -137,15 +143,15 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <Box cx={boxStyle}>
+  <Box bgColor="surface" cx={boxStyle}>
     <Text bold align="right">Amount</Text>
-    <Box wrapper flex="row" items="baseline">
-      <Box wrapper>
+    <Box bgColor="surface" wrapper flex="row" items="baseline">
+      <Box bgColor="surface" wrapper>
         <Input bind:value={amountToSend} placeholder="Amount" />
         <Text inline size="small" color="secondary">{getAmount()}</Text>
         <Text inline size="xsmall" muted>(Available balance)</Text>
       </Box>
-      <Box px={'small'} cx={{ minWidth: '160px' }}>
+      <Box bgColor="surface" px={'small'} cx={{ minWidth: '160px' }}>
         <Select
           placeholder="Select resource"
           handleSelect={handleSelectBalance}
@@ -154,7 +160,7 @@
       </Box>
     </Box>
   </Box>
-  <Box justify="end">
+  <Box bgColor="surface" justify="end">
     <Button
       disabled={!selectedFromAccount.address ||
         !(selectedToAccount?.address || otherAccount.length > 0) ||

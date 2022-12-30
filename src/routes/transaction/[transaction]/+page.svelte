@@ -48,14 +48,14 @@
   ]
 </script>
 
-<Box transparent m="none" px="none" full>
+<Box m="none" px="none" full>
   <ResourceViewTitle
     title="Transaction"
     resourceAddress={$page.params.transaction}
   />
 </Box>
 
-<Box full>
+<Box bgColor="surface" full>
   {#if $state.status === 'loading'}
     <InfoBox {entries} loading />
   {:else}

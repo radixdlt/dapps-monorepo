@@ -15,7 +15,7 @@
 />
 
 <Template let:args>
-  <Box transparent justify="center" cx={{ width: '$4xl' }}>
+  <Box justify="center" cx={{ width: '$4xl' }}>
     <Search onSearch={() => {}} placeholder={args.placeholderText} />
   </Box>
 </Template>

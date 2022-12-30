@@ -38,7 +38,7 @@
   }
 </script>
 
-<Box transparent>
+<Box>
   <FileUpload
     {maxFiles}
     {name}

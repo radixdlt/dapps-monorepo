@@ -15,7 +15,7 @@
 <Meta title="Select" component={Select} />
 
 <Story name="Primary">
-  <Box transparent cx={{ width: '250px' }}>
+  <Box cx={{ width: '250px' }}>
     <Select options={people} />
   </Box>
 </Story>

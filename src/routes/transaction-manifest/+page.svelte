@@ -43,21 +43,21 @@
 {#if $data?.transactionIntentHash}
   <Success txID={$data?.transactionIntentHash} />
 {:else}
-  <Box transparent>
+  <Box>
     <Text size={'xxlarge'} mb="medium" bold>Send Raw Transaction</Text>
     {#if !$accounts}
       <Text bold>Please connect your Radix Wallet to get started.</Text>
     {/if}
   </Box>
   {#if $accounts}
-    <Box transparent>
+    <Box>
       <Text
         >Enter raw transaction manifest text to send to your linked Radix
         Wallet. No method call to “lock_fee” is required – the wallet will add
         this automatically.</Text
       >
     </Box>
-    <Box justify="center" transparent>
+    <Box justify="center">
       <Textarea
         bind:value={transactionManifest}
         placeholder="Enter a raw transaction manifest"
@@ -65,7 +65,7 @@
       />
     </Box>
 
-    <Box justify="center" transparent>
+    <Box justify="center">
       {#if $loading}
         <Button>
           <LoadingSpinner />

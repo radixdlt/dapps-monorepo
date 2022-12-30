@@ -53,7 +53,7 @@
   ]
 </script>
 
-<Box transparent>
+<Box>
   {#if $state.status === 'loading'}
     <SkeletonLoader />
   {:else}
@@ -63,7 +63,7 @@
     />
   {/if}
 </Box>
-<Box transparent>
+<Box>
   <Card>
     <Text slot="header" bold>NFT Info</Text>
 
