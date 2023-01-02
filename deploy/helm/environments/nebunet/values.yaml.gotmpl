@@ -48,3 +48,12 @@ developerAccess:
   pod:
     exec:
       enabled: true
+
+alertmanager:
+  env: "non-prod"
+  nameOverride: "dashboard-amcfg"
+  slackConfig:
+    channel: "feed--alerts-dev-dashboard"
+  secrets:
+    region: eu-west-2
+    name: "rdx-works-main-dev/eks/dashboard/dev/alertmanager-integration-keys"

@@ -41,3 +41,11 @@ releases:
     values:
       - project: dashboard
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: alertmanager
+    namespace: {{ $DASHBOARD_NS }}
+    chart: rdx-works/alertmanager-configs
+    version: 1.0.0
+    installed: {{ ne .Environment.Name "pr" }}
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
