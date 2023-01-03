@@ -17,16 +17,18 @@
     gap="medium"
     cx={{
       display: 'grid',
-      gridTemplateColumns: '2fr 5fr'
+      gridTemplateColumns: 'auto 5fr'
     }}
     bgColor={transparent ? undefined : 'surface'}
   >
     {#each entries as entry}
-      <slot name="key" {entry}>
-        <Text bold>
-          {entry.key}
-        </Text>
-      </slot>
+      <Box justify="end" wrapper>
+        <slot name="key" {entry}>
+          <Text bold>
+            {entry.key}
+          </Text>
+        </slot>
+      </Box>
 
       {#if loading}
         <SkeletonLoader width={loaderWidth} />
