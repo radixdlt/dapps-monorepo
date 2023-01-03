@@ -339,7 +339,6 @@
   export let bgColor: keyof typeof variants['bgColor'] | undefined = undefined
   export let wrapper: boolean | undefined = undefined
   export let hidden: boolean | undefined = undefined
-
   export let shadow: boolean | undefined = undefined
 </script>
 
@@ -348,29 +347,7 @@
   on:keypress
   on:outroend
   class={box({
-    full,
-    pointer,
-    interactive,
-    interactiveText,
-    inline,
-    connectButtonPopover,
-    p,
-    px,
-    py,
-    m,
-    mt,
-    mx,
-    my,
-    bgColor,
-    border,
-    flex,
-    items,
-    justify,
-    grid,
-    shadow,
-    gap,
-    hidden,
-    wrapper
+    ...$$props
   })}
 >
   <slot />
