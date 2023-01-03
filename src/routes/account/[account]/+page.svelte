@@ -32,15 +32,13 @@
 <Box>
   {#if $state.matches('error')}
     No account found
+  {:else if $state.matches('final') && $state.context.transformedOverview?.fungible?.length === 0 && $state.context.transformedOverview?.nonFungible?.length === 0}
+    This account doesn’t hold any tokens or NFTs
   {:else}
-    <Card>
-      <Text bold slot="header">Tokens (fungible resources)</Text>
-      <Box bgColor="surface" p="none" slot="body">
-        {#if $state.matches('final') && $state.context.transformedOverview?.fungible.length === 0}
-          <Box bgColor="surface">
-            <Text>No tokens found</Text>
-          </Box>
-        {:else}
+    {#if $state.context.transformedOverview?.fungible?.length}
+      <Card>
+        <Text bold slot="header">Tokens (fungible resources)</Text>
+        <Box bgColor="surface" p="none" slot="body">
           <InfoBox
             entries={$state.context.transformedOverview?.fungible || []}
             loading={!$state.matches('final')}
@@ -50,18 +48,13 @@
             </Text>
             <Text slot="value" let:entry>{entry.value}</Text>
           </InfoBox>
-        {/if}
-      </Box>
-    </Card>
-
-    <Card>
-      <Text bold slot="header">NFTs (nonfungible resources)</Text>
-      <Box bgColor="surface" slot="body" p="none">
-        {#if $state.matches('final') && $state.context.transformedOverview?.nonFungible.length === 0}
-          <Box>
-            <Text>No NFTs found</Text>
-          </Box>
-        {:else}
+        </Box>
+      </Card>
+    {/if}
+    {#if $state.context.transformedOverview?.nonFungible?.length}
+      <Card>
+        <Text bold slot="header">NFTs (nonfungible resources)</Text>
+        <Box bgColor="surface" slot="body" p="none">
           <InfoBox
             entries={$state.context.transformedOverview?.nonFungible || []}
             loading={!$state.matches('final')}
@@ -71,8 +64,8 @@
             </Text>
             <Text slot="value" />
           </InfoBox>
-        {/if}
-      </Box>
-    </Card>
+        </Box>
+      </Card>
+    {/if}
   {/if}
 </Box>
