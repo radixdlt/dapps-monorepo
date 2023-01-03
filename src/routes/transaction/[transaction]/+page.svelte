@@ -2,7 +2,6 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import { query } from '@queries'
   import { page } from '$app/stores'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import { getTxManifest } from '../../../to-be-removed/ret'
@@ -29,11 +28,6 @@
   }
 
   $: if ($state.status === 'error') {
-    AlertToast({
-      title: 'Error',
-      text: $state.error.message,
-      type: 'error'
-    })()
     goto('/not-found')
   }
 

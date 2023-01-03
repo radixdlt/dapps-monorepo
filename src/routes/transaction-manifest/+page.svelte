@@ -6,38 +6,11 @@
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { mutate } from '@queries'
   import { accounts } from '@stores'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import Success from './Success.svelte'
-  import { getTxIdFromMessage } from '@utils'
 
   let transactionManifest = ''
 
-  const { trigger, loading, data, error } = mutate('sendTransaction')
-
-  $: if ($data?.transactionIntentHash) {
-    AlertToast({
-      title: 'Success!',
-      text: `Transaction has been sent succesfully`,
-      txId: $data.transactionIntentHash,
-      type: 'success'
-    })()
-  }
-
-  $: if ($error) {
-    const txId = getTxIdFromMessage($error.message)
-    AlertToast({
-      type: 'error',
-      title: $error.name,
-      ...(txId
-        ? {
-            txId,
-            text: 'The transaction did not happen'
-          }
-        : {
-            text: `The transaction did not happen. ${$error.message}`
-          })
-    })()
-  }
+  const { trigger, loading, data } = mutate('sendTransaction')
 </script>
 
 {#if $data?.transactionIntentHash}

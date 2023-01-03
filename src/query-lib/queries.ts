@@ -6,7 +6,7 @@ import {
   TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { decoders } from '@io'
-import { getWalletSDK } from '../wallet-sdk'
+import { getWalletData } from '../wallet-sdk'
 import {
   transformEntityOverview,
   transformEntityResources,
@@ -20,7 +20,7 @@ const transactionApi = new TransactionApi(config)
 
 export const requestAddresses = makeQueries({
   fn: async () => {
-    const res = await getWalletSDK().getWalletData({
+    const res = await getWalletData()({
       oneTimeAccountsWithoutProofOfOwnership: {}
     })
     if (res.isOk()) return res.value

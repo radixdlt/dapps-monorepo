@@ -9,8 +9,6 @@ export const getTxIdFromMessage = (message: string): string | undefined => {
     const [, txId] = message.split(' ')
     return txId
   }
-
-  return undefined
 }
 
 export const shortenAddress = (address: string) =>

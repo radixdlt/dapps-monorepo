@@ -1,6 +1,5 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
@@ -19,14 +18,6 @@
     accountAddress
     ;({ state, send } = useMachine(accountStateMachine))
     send('LOAD', { address: accountAddress })
-  }
-
-  $: if ($state.matches('error')) {
-    AlertToast({
-      title: 'Account error',
-      text: $state.context.error.message,
-      type: 'error'
-    })()
   }
 </script>
 
