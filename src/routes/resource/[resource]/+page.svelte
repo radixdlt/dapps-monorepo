@@ -7,7 +7,6 @@
   import Icon from '@components/_base/icon/Icon.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import type { PageData } from './$types'
   import { query } from '@queries'
 
@@ -22,14 +21,6 @@
       manual: false
     }
   ))
-
-  $: if ($entityDetailsState.status === 'error') {
-    AlertToast({
-      title: 'Error',
-      text: $entityDetailsState.error.message,
-      type: 'error'
-    })()
-  }
 
   $: entries = [
     {

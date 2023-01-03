@@ -5,9 +5,7 @@
   import { useMachine } from '@xstate/svelte'
   import { stateMachine } from './send-tokens-state-machine'
   import { accounts } from '@stores'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import Success from './Success.svelte'
-  import { getTxIdFromMessage } from '@utils'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -23,15 +21,6 @@
 
   $: if (selectedAccount) {
     send('LOAD', { address: selectedAccount })
-  }
-
-  $: if ($state.matches('error')) {
-    AlertToast({
-      title: 'Send tokens',
-      text: 'The transaction did not happen',
-      txId: getTxIdFromMessage($state.context.error.message),
-      type: 'error'
-    })()
   }
 
   $: isSendingToken = $state.matches('sending-token')

@@ -1,22 +1,23 @@
 import { makeQueries } from 'svelte-samlat'
 import { decoders } from '@io'
-import { getWalletSDK } from '../wallet-sdk'
+import { sendTransaction as _sendTransaction } from '../wallet-sdk'
 
 export const sendTransaction = makeQueries({
   fn: async ({
     transactionManifest,
-    blobs
+    blobs,
+    toastOptions
   }: {
     transactionManifest: string
     blobs?: string[]
+    toastOptions?: Parameters<typeof _sendTransaction>[0]
   }) => {
-    const res = await getWalletSDK().sendTransaction({
+    const res = await _sendTransaction(toastOptions)({
       transactionManifest,
       version: 0,
       blobs
     })
     if (res.isOk()) return res.value
-    else throw Error(res.error.message)
   },
   decoder: (res) => decoders('SendTransactionIO', res),
   transformationFn: (res) => res

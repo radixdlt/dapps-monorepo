@@ -8,10 +8,9 @@
     type FileItem
   } from '@components/file-upload/FileUpload.svelte'
   import { without } from 'ramda'
-  import { AlertToast } from '@components/_base/toast/Toasts'
   import { accounts } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
-  import { getNFTAddress, getTxIdFromMessage, shortenAddress } from '@utils'
+  import { getNFTAddress, shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import Success from './Success.svelte'
 
@@ -41,15 +40,6 @@
     if (wasm && abi) send('UPLOAD_FILES', { wasm, abi })
   }
 
-  $: if ($state.matches('error')) {
-    AlertToast({
-      title: 'Package deployment',
-      text: 'The transaction did not happen',
-      txId: getTxIdFromMessage($state.context.error.message),
-      type: 'error'
-    })()
-  }
-
   $: if (
     $state.matches({
       connected: {
@@ -59,29 +49,9 @@
       }
     })
   ) {
-    AlertToast({
-      title: 'Badge created!',
-      text: ``,
-      type: 'success'
-    })()
     send({
       type: 'SELECT_ACCOUNT'
     })
-  }
-
-  $: if (
-    $state.matches({
-      connected: {
-        'deploying-package': 'success'
-      }
-    })
-  ) {
-    AlertToast({
-      title: 'Package deployment',
-      text: `Package deployment successful!`,
-      txId: $state.context.intentHash,
-      type: 'success'
-    })()
   }
 
   $: deployButtonEnabled = $state.matches({
