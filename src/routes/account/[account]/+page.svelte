@@ -1,6 +1,5 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import { page } from '$app/stores'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
@@ -8,13 +7,18 @@
   import { accountStateMachine } from '@stateMachines'
   import { useMachine } from '@xstate/svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
+  import type { PageData } from './$types'
+
+  export let data: PageData
+
+  $: accountAddress = data.accountAddress
 
   let { state, send } = useMachine(accountStateMachine)
 
   $: {
-    $page.params.account
+    accountAddress
     ;({ state, send } = useMachine(accountStateMachine))
-    send('LOAD', { address: $page.params.account })
+    send('LOAD', { address: accountAddress })
   }
 
   $: if ($state.matches('error')) {
@@ -27,7 +31,7 @@
 </script>
 
 <Box>
-  <ResourceViewTitle title="Account" resourceAddress={$page.params.account} />
+  <ResourceViewTitle title="Account" resourceAddress={accountAddress} />
 </Box>
 <Box>
   {#if $state.matches('error')}

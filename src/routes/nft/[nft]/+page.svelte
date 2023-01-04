@@ -12,16 +12,25 @@
 
   export let data: PageData
 
-  $: dataState = data.state
+  $: nftAddress = data.nftAddress
 
-  $: ({ state } = query('getEntityDetails', data.nftAddress.split(':')[0], {
-    manual: true
+  $: ({ state: nftData } = query('getNonFungibleData', {
+    address: nftAddress.split(':')[0],
+    id: nftAddress.split(':')[1]
   }))
 
-  $: if ($state.status === 'error') {
+  $: ({ state: entityDetails } = query(
+    'getEntityDetails',
+    nftAddress.split(':')[0],
+    {
+      manual: true
+    }
+  ))
+
+  $: if ($entityDetails.status === 'error') {
     AlertToast({
       title: 'Error',
-      text: $state.error.message,
+      text: $entityDetails.error.message,
       type: 'error'
     })()
   }
@@ -29,7 +38,7 @@
   $: entries = [
     {
       key: 'ID',
-      value: $dataState.data?.non_fungible_id
+      value: $nftData.data?.non_fungible_id
     }
   ]
 
@@ -40,13 +49,13 @@
     },
     {
       key: 'Name',
-      value: $state.data?.metadata.items.find(
+      value: $entityDetails.data?.metadata.items.find(
         (entry) => entry.key.toLowerCase() === 'name'
       )?.value
     },
     {
       key: 'Description',
-      value: $state.data?.metadata.items.find(
+      value: $entityDetails.data?.metadata.items.find(
         (entry) => entry.key.toLowerCase() === 'description'
       )?.value
     }
@@ -54,7 +63,7 @@
 </script>
 
 <Box>
-  {#if $state.status === 'loading'}
+  {#if $entityDetails.status === 'loading'}
     <SkeletonLoader />
   {:else}
     <ResourceViewTitle
@@ -67,14 +76,14 @@
   <Card>
     <Text slot="header" bold>NFT Info</Text>
 
-    <InfoBox slot="body" {entries} loading={$dataState.status === 'loading'} />
+    <InfoBox slot="body" {entries} loading={$nftData.status === 'loading'} />
   </Card>
   <Card>
     <Text slot="header" bold>Resource Info</Text>
     <InfoBox
       slot="body"
       entries={resourceEntries}
-      loading={$state.status === 'loading'}
+      loading={$entityDetails.status === 'loading'}
     />
   </Card>
 </Box>
