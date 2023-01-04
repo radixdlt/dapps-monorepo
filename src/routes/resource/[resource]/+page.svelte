@@ -9,9 +9,19 @@
   import Text from '@components/_base/text/Text.svelte'
   import { AlertToast } from '@components/_base/toast/Toasts'
   import type { PageData } from './$types'
+  import { query } from '@queries'
 
   export let data: PageData
-  $: entityDetailsState = data.entityDetailsState
+
+  $: resourceAddress = data.resourceAddress
+
+  $: ({ state: entityDetailsState } = query(
+    'getEntityDetails',
+    resourceAddress,
+    {
+      manual: false
+    }
+  ))
 
   $: if ($entityDetailsState.status === 'error') {
     AlertToast({

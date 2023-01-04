@@ -8,13 +8,18 @@
   import { getTxManifest } from '../../../to-be-removed/ret'
   import Text from '@components/_base/text/Text.svelte'
   import { goto } from '$app/navigation'
+  import type { PageData } from './$types'
+
+  export let data: PageData
+
+  $: transactionAddress = data.transactionAddress
 
   let manifest: string | undefined
 
-  let { state } = query('getTransactionDetails', $page.params.transaction)
+  let { state } = query('getTransactionDetails', transactionAddress)
   $: {
     $page.params.transaction
-    ;({ state } = query('getTransactionDetails', $page.params.transaction))
+    ;({ state } = query('getTransactionDetails', transactionAddress))
   }
 
   $: if ($state.status === 'success') {
