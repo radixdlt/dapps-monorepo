@@ -194,7 +194,10 @@ export const {
   }
 })
 
-export const darkTheme = createTheme({
+export const darkTheme = createTheme<
+  Pick<typeof config['theme'], 'filters' | 'colors'>,
+  string
+>({
   filters: {
     iconHover: 'brightness(1.5)'
   },
