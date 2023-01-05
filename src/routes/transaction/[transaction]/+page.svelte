@@ -8,6 +8,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import { goto } from '$app/navigation'
   import type { PageData } from './$types'
+  import Card from '@components/_base/card/Card.svelte'
 
   export let data: PageData
 
@@ -47,23 +48,27 @@
   ]
 </script>
 
-<Box m="none" px="none" full>
+<Box>
   <ResourceViewTitle
     title="Transaction"
     resourceAddress={$page.params.transaction}
   />
 </Box>
 
-<Box bgColor="surface" full>
-  {#if $state.status === 'loading'}
-    <InfoBox {entries} loading />
-  {:else}
-    <InfoBox {entries} loading={false} />
-    <Box>
-      <Text bold mb="medium">Transaction manifest</Text>
-      <pre style="white-space: pre-wrap; word-break: break-word;">{manifest
-          ? manifest
-          : 'No manifest'}</pre>
+<Box>
+  <Card>
+    <Box wrapper slot="body">
+      {#if $state.status === 'loading'}
+        <InfoBox {entries} loading />
+      {:else}
+        <InfoBox {entries} loading={false} />
+        <Box>
+          <Text bold mb="medium">Transaction manifest</Text>
+          <pre style="white-space: pre-wrap; word-break: break-word;">{manifest
+              ? manifest
+              : 'No manifest'}</pre>
+        </Box>
+      {/if}
     </Box>
-  {/if}
+  </Card>
 </Box>
