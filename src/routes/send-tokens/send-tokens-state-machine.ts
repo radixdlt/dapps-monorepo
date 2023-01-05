@@ -29,7 +29,7 @@ const getSendtokenManifest = ({
 
 type Context = {
   sendingAccountId?: string
-  transformedOverview?: {
+  transformedOverview: {
     fungible: TransformWithOverview
     nonFungible: TransformWithOverview
   }
@@ -95,7 +95,10 @@ export const stateMachine = createMachine<Context, Events, States>(
     predictableActionArguments: true,
     context: {
       sendingAccountId: undefined,
-      transformedOverview: undefined,
+      transformedOverview: {
+        fungible: [],
+        nonFungible: []
+      },
       error: undefined
     },
     states: {

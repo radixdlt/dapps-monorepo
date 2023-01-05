@@ -31,7 +31,7 @@ export const transformWithOverview = (
 
     return acc
   }, [])
-  return transformedOverview
+  return transformedOverview || []
 }
 
 export const transformNFTWithOverview = (
@@ -63,5 +63,5 @@ export const transformNFTWithOverview = (
 
     return acc
   }, [])
-  return transformedOverview
+  return transformedOverview || []
 }
