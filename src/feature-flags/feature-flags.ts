@@ -10,9 +10,9 @@ type TFeatureFlag = {
 const getFlagsFromAppEnvironment = () => {
   switch (PUBLIC_APP_ENV) {
     case 'development':
-      return appFlags('PROD')
-    default:
       return appFlags('DEV')
+    default:
+      return appFlags('PROD')
   }
 }
 
