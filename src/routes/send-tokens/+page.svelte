@@ -46,7 +46,7 @@
     <SendTokenForm
       onSend={(data) => send({ type: 'SENDTOKEN', data })}
       onSelectFromAccount={handleSelectFromAccount}
-      balance={$state.context.transformedOverview?.fungible}
+      balance={$state.context.transformedOverview.fungible}
       pending={isSendingToken}
     />
   {/if}
