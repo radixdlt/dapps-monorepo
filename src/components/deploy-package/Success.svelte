@@ -17,8 +17,9 @@
 
 <center>
   <Text bold size="xlarge">Your package was submitted! 🎉</Text>
-  <Box>
+  <Box cx={{ width: '900px' }}>
     <InfoBox
+      transparent
       entries={[
         {
           key: 'Tx ID',

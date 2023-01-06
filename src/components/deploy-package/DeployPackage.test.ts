@@ -2,6 +2,8 @@ import Deploypackage from './DeployPackage.svelte'
 import { render } from '@testing-library/svelte'
 import userEvent from '@testing-library/user-event'
 
+vi.mock('$app/navigation', () => ({}))
+
 describe.skip('#deploy package', () => {
   it('Should upload file', async () => {
     const file = new File(['(⌐□_□)'], 'chucknorris.wasm', { type: 'wasm' })

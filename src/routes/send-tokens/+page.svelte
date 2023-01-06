@@ -5,7 +5,7 @@
   import { useMachine } from '@xstate/svelte'
   import { stateMachine } from './send-tokens-state-machine'
   import { accounts } from '@stores'
-  import Success from './Success.svelte'
+  import { goto } from '$app/navigation'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -24,6 +24,9 @@
   }
 
   $: isSendingToken = $state.matches('sending-token')
+
+  $: if ($state.matches('final'))
+    goto(`/send-tokens/success?txID=${$state.context.txID}`)
 </script>
 
 <Box>
@@ -38,9 +41,6 @@
       balance={$state.context.transformedOverview.fungible}
       pending={isSendingToken}
     />
-  {/if}
-  {#if $state.matches('final')}
-    <Success txID={$state.context.txID} />
   {/if}
   {#if $state.matches('error')}
     <Text inline size="large" mb="medium" bold>
