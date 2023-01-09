@@ -1,4 +1,4 @@
-import { appFlags } from './app-flags'
+import { devAppFlags, prodAppFlags } from './app-flags'
 import { PUBLIC_APP_ENV } from '$env/static/public'
 
 type TFeatureFlag = {
@@ -10,17 +10,17 @@ type TFeatureFlag = {
 const getFlagsFromAppEnvironment = () => {
   switch (PUBLIC_APP_ENV) {
     case 'development':
-      return appFlags('DEV')
+      return devAppFlags
     default:
-      return appFlags('PROD')
+      return prodAppFlags
   }
 }
 
-const flags = getFlagsFromAppEnvironment()
+const appFlags = getFlagsFromAppEnvironment()
 
-type ListType<T> = T extends Readonly<TFeatureFlag[]> ? T : typeof flags
+type ListType<T> = T extends Readonly<TFeatureFlag[]> ? T : typeof appFlags
 
-const featureFlags = <T>(list = flags as ListType<T>) => ({
+const featureFlags = <T>(list = appFlags as ListType<T>) => ({
   get: () => list,
   getFlag: (id: typeof list[number]['id']) => list.find((f) => f.id === id)
 })
