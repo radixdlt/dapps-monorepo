@@ -289,6 +289,7 @@
   })
 </script>
 
+<!-- eslint-disable-next-line -->
 <div
   on:click
   class={`${textClass} ${bold ? boldClass : ''} ${

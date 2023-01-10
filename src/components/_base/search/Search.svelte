@@ -42,7 +42,7 @@
       <Icon
         on:click={() => onSearch(value)}
         interactive
-        type={'search'}
+        type="search"
         height={iconHeight}
       />
     </Box>

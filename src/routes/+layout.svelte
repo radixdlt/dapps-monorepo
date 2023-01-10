@@ -42,6 +42,7 @@
 </svelte:head>
 
 <!-- enables SSR of css -->
+<!-- eslint-disable-next-line -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 <Toast />
 
