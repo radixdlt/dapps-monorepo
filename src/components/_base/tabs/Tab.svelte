@@ -12,4 +12,4 @@
   })
 </script>
 
-<Tab as={'input'} type="radio" checked={_default} />
+<Tab as="input" type="radio" checked={_default} />

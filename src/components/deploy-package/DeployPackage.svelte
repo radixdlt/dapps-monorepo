@@ -75,7 +75,7 @@
 </script>
 
 <Box>
-  <Text size={'xxlarge'} mb="medium" bold>Deploy Package</Text>
+  <Text size="medium" mb="medium" bold>Deploy Package</Text>
   {#if $state.matches('not-connected')}
     <Text bold>Please connect your Radix Wallet to get started.</Text>
   {/if}

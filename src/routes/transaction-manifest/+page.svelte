@@ -17,7 +17,7 @@
   <Success txID={$data?.transactionIntentHash} />
 {:else}
   <Box>
-    <Text size={'xxlarge'} mb="medium" bold>Send Raw Transaction</Text>
+    <Text size="xxlarge" mb="medium" bold>Send Raw Transaction</Text>
     {#if !$accounts}
       <Text bold>Please connect your Radix Wallet to get started.</Text>
     {/if}

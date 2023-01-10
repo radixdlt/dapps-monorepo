@@ -58,7 +58,7 @@
     <SkeletonLoader />
   {:else}
     <ResourceViewTitle
-      title={'Non-fungible'}
+      title="Non-fungible"
       resourceAddress={$page.params.nft}
     />
   {/if}

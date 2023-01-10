@@ -347,7 +347,29 @@
   on:keypress
   on:outroend
   class={box({
-    ...$$props
+    full,
+    pointer,
+    interactive,
+    interactiveText,
+    inline,
+    connectButtonPopover,
+    p,
+    m,
+    py,
+    px,
+    my,
+    mx,
+    mt,
+    border,
+    flex,
+    items,
+    justify,
+    grid,
+    gap,
+    bgColor,
+    wrapper,
+    hidden,
+    shadow
   })}
 >
   <slot />
