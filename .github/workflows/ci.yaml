@@ -59,7 +59,7 @@ jobs:
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "build"
           secret_prefix: "GH"
@@ -119,7 +119,7 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "lint"
           secret_prefix: "GH"
@@ -143,7 +143,7 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "prettier"
           secret_prefix: "GH"
@@ -167,7 +167,7 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "sonar"
           secret_prefix: "GH"
@@ -193,7 +193,7 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "svelte"
           secret_prefix: "GH"
@@ -223,7 +223,7 @@ jobs:
           cache: yarn
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "unit-tests"
           secret_prefix: "GH"
@@ -257,7 +257,7 @@ jobs:
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
           app_name: "dashboard"
           step_name: "push-dash"
           secret_prefix: "GH_GCR_JSON_KEY"
@@ -311,7 +311,7 @@ jobs:
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
           app_name: "dashboard"
           step_name: "push-story"
           secret_prefix: "GH_GCR_JSON_KEY"
@@ -361,6 +361,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
+      app_name: "dashboard"
+      step_name: "deploy-pr"
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -379,6 +381,8 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
+      app_name: "dashboard"
+      step_name: "deploy-dev"
 
   deploy_enkinet:
     if: >
@@ -399,6 +403,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=enkinet
       environment: enkinet
+      app_name: "dashboard"
+      step_name: "deploy-enkinet"
 
   deploy_hammunet:
     if: >
@@ -419,6 +425,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=hammunet
       environment: hammunet
+      app_name: "dashboard"
+      step_name: "deploy-hammunet"
 
   deploy_gilganet:
     if: >
@@ -439,6 +447,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=gilganet
       environment: gilganet
+      app_name: "dashboard"
+      step_name: "deploy-gilganet"
 
   deploy_mardunet:
     if: >
@@ -460,6 +470,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=mardunet
       environment: mardunet
+      app_name: "dashboard"
+      step_name: "deploy-mardunet"
 
   deploy_nebunet:
     if: >
@@ -481,6 +493,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=nebunet
       environment: nebunet
+      app_name: "dashboard"
+      step_name: "deploy-nebunet"
 
   deploy_betanet:
     if: >
@@ -502,6 +516,8 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=betanet
       environment: betanet
+      app_name: "dashboard"
+      step_name: "deploy-betanet"
 
   run-e2e-tests:
     runs-on: ubuntu-latest
@@ -520,7 +536,7 @@ jobs:
       - name: Fetch AWS secrets
         uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
           step_name: "e2e-tests"
           secret_prefix: "GH"
