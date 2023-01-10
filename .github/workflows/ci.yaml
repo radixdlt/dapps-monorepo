@@ -57,7 +57,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -117,7 +117,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -141,7 +141,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -165,7 +165,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -191,7 +191,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -221,7 +221,7 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
@@ -255,7 +255,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
           app_name: "dashboard"
@@ -309,7 +309,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
           app_name: "dashboard"
@@ -344,7 +344,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1090-secrets-migration
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -454,7 +454,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.event.pull_request )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1090-secrets-migration
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -534,7 +534,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Fetch AWS secrets
-        uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+        uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
           app_name: "dashboard"
