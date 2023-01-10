@@ -7,7 +7,7 @@
 
   export let entries: Array<T & { key: string; value?: unknown }> = []
   export let transparent: boolean = false
-  export let loading: boolean
+  export let loading: boolean = false
 
   const loaderWidth = 100
 </script>
