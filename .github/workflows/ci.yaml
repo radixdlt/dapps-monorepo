@@ -59,7 +59,11 @@ jobs:
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "build"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - uses: ./.github/actions/build
         with: 
@@ -68,7 +72,6 @@ jobs:
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
-
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -116,7 +119,11 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "lint"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - uses: ./.github/actions/build
         with: 
@@ -136,7 +143,11 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "prettier"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - uses: ./.github/actions/build
         with: 
@@ -156,7 +167,11 @@ jobs:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "sonar"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
           parse_json: true
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -177,8 +192,12 @@ jobs:
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
-        with:
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "svelte"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - uses: ./.github/actions/build
         with: 
@@ -204,7 +223,11 @@ jobs:
           cache: yarn
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/duje-test/global-ZvU0GL"
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "unit-tests"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - uses: ./.github/actions/build
         with: 
@@ -232,9 +255,12 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
-      - name: Fetch secrets
-        uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-dash"
+          secret_prefix: "GH_GCR_JSON_KEY"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
           parse_json: false
       - name: Login to GCR
@@ -242,7 +268,7 @@ jobs:
         with:
           registry: eu.gcr.io
           username: _json_key
-          password: ${{ env.GH }}
+          password: ${{ env.GH_GCR_JSON_KEY }}
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -285,6 +311,10 @@ jobs:
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-story"
+          secret_prefix: "GH_GCR_JSON_KEY"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
           parse_json: false
       - name: Login to GCR
@@ -292,7 +322,7 @@ jobs:
         with:
           registry: eu.gcr.io
           username: _json_key
-          password: ${{ env.GH }}
+          password: ${{ env.GH_GCR_JSON_KEY }}
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -487,11 +517,15 @@ jobs:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
-      - name: Fetch secrets
+      - name: Fetch AWS secrets
         uses: radixdlt/iac-resuable-artifacts/fetch-secrets@DO-1090-secrets-migration
         with: 
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
-          parse_json: false
+          role_name: "arn:aws:iam::308190735829:role/github-secrets-rdxworks-dashboard-read-access"
+          app_name: "dashboard"
+          step_name: "e2e-tests"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
