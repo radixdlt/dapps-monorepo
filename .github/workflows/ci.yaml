@@ -38,6 +38,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
@@ -53,13 +57,22 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "build"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
           network_name: ${{ env.NETWORK_NAME }}
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+
   setup-tags:
     runs-on: ubuntu-latest
     steps:
@@ -96,56 +109,108 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "lint"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Lint
         run:  yarn lint
 
   prettier:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "prettier"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Prettier
         run:  yarn prettier
 
   sonar:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "sonar"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
+          parse_json: true
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
 
   svelte-check:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
           fetch-depth: 0
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "svelte"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Svelte check
         run:  yarn svelte:check
 
   unit-tests:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
         with:
@@ -156,14 +221,26 @@ jobs:
           always-auth: true
           node-version: 16.17.1
           cache: yarn
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "unit-tests"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Unit tests
         run:  yarn coverage
 
   push-dashboard:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     needs: [build, setup-tags]
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
@@ -178,12 +255,20 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-dash"
+          secret_prefix: "GH_GCR_JSON_KEY"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
+          parse_json: false
       - name: Login to GCR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           registry: eu.gcr.io
           username: _json_key
-          password: ${{ secrets.GCR_EU_DEV_JSON_KEY }}
+          password: ${{ env.GH_GCR_JSON_KEY }}
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -194,7 +279,7 @@ jobs:
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: "node-adapter"
           build-args: |
-            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
@@ -205,6 +290,10 @@ jobs:
 
   push-storybook:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     needs: 
     - setup-tags
     steps:
@@ -220,12 +309,20 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=nebunet" >> $GITHUB_ENV
           fi
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-story"
+          secret_prefix: "GH_GCR_JSON_KEY"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
+          parse_json: false
       - name: Login to GCR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           registry: eu.gcr.io
           username: _json_key
-          password: ${{ secrets.GCR_EU_DEV_JSON_KEY }}
+          password: ${{ env.GH_GCR_JSON_KEY }}
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -236,7 +333,7 @@ jobs:
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: "storybook"
           build-args: |
-            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
       - name: Docker Image output
         run: |
@@ -247,7 +344,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -264,13 +361,12 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-pr"
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -285,14 +381,13 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-dev"
 
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -308,14 +403,13 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=enkinet
       environment: enkinet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-enkinet"
 
   deploy_hammunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -331,14 +425,13 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=hammunet
       environment: hammunet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-hammunet"
 
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -354,14 +447,13 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=gilganet
       environment: gilganet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-gilganet"
 
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -377,15 +469,14 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=mardunet
       environment: mardunet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-mardunet"
 
   deploy_nebunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -401,15 +492,14 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=nebunet
       environment: nebunet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-nebunet"
 
   deploy_betanet:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.7.1
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
     needs:
       - push-dashboard
       - push-storybook
@@ -425,14 +515,15 @@ jobs:
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=betanet
       environment: betanet
-    secrets:
-      HELM_GH_USER: ${{ secrets.HELM_GH_USER }}
-      HELM_GH_PASS: ${{ secrets.HELM_GH_PASS }}
+      app_name: "dashboard"
+      step_name: "deploy-betanet"
 
   run-e2e-tests:
     runs-on: ubuntu-latest
-    # needs:
-    # - deploy_pull_request
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     steps:
       - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
@@ -441,9 +532,18 @@ jobs:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
+      - name: Fetch AWS secrets
+        uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with: 
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "e2e-tests"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - uses: ./.github/actions/build
         with: 
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:
