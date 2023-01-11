@@ -28,7 +28,8 @@
         },
         {
           key: 'Package address',
-          value: packageAddress
+          value: packageAddress,
+          href: `/package/${packageAddress}`
         },
         {
           key: 'Owner badge',
