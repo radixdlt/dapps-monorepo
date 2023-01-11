@@ -35,7 +35,7 @@
           value: badgeInfo.name
             ? `${badgeInfo.name} (${NFTAddress})`
             : NFTAddress,
-          href: `resource/${badgeInfo.address}`
+          href: `/resource/${badgeInfo.address}`
         }
       ]}
       loading={false}
