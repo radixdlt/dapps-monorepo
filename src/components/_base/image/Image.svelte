@@ -18,4 +18,5 @@
   })
 </script>
 
+<!-- eslint-disable-next-line -->
 <img on:click {alt} {src} class={style()} />

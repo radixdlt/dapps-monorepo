@@ -9,6 +9,6 @@
     cx={{ cursor: 'pointer' }}
     height="$md"
     alt="logo"
-    src={'/images/dashboard_logo.svg'}
+    src="/images/dashboard_logo.svg"
   />
 </Box>
