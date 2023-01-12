@@ -23,8 +23,9 @@
   export let placeholder: string | undefined = undefined
 
   export let handleSelect: (option: Options<T>) => void = () => {}
+  let selected: Options<T> | undefined
 
-  let selected: Options<T> | undefined = placeholder ? undefined : options[0]
+  $: selected = placeholder ? undefined : options[0]
 
   const onSelect = (e: CustomEvent<Options<T>>) => {
     selected = e.detail
