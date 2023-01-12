@@ -19,10 +19,10 @@
 
   type T = $$Generic
   export let options: Array<Options<T>> = []
-
   export let placeholder: string | undefined = undefined
-
+  export let placeholderWhenEmpty: string = ''
   export let handleSelect: (option: Options<T>) => void = () => {}
+
   let selected: Options<T> | undefined
 
   $: selected = placeholder ? undefined : options[0]
@@ -84,7 +84,7 @@
 <Listbox value={selected} on:change={onSelect}>
   <Box px="none" py="none" cx={{ position: 'relative' }}>
     <ListboxButton class={listboxStyles()}
-      >{selected?.label ?? placeholder}</ListboxButton
+      >{selected?.label ?? placeholder ?? placeholderWhenEmpty}</ListboxButton
     >
     <ListboxOptions class={listboxoptionsStyles}>
       {#each options as item}

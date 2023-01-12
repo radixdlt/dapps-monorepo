@@ -10,7 +10,6 @@
   import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import type { TransformWithOverview } from '@stateMachines/transformers'
-  import { onMount } from 'svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   type OptionsType = Options<{ address: string }>
@@ -21,17 +20,17 @@
     unavailable: false
   }))
 
-  export let balance: TransformWithOverview
+  export let resources: TransformWithOverview
 
-  $: balanceList =
-    balance &&
-    balance.map(({ key, address, value }) => ({
+  $: resourceList =
+    resources &&
+    resources.map(({ key, address, value }) => ({
       address,
       label: key,
       value
     }))
 
-  let selectedBalance: OptionsType = { address: '', label: '' }
+  let selectedResource: OptionsType = { address: '', label: '' }
 
   export let onSelectFromAccount: (account: string) => void = () => {}
 
@@ -39,13 +38,7 @@
 
   let amountToSend: number = 0
 
-  let selectedFromAccount = { address: '', label: '' }
-
-  onMount(() => {
-    if (accountList?.[0]) {
-      selectedFromAccount = accountList[0]
-    }
-  })
+  $: selectedFromAccount = accountList?.[0] || { address: '', label: '' }
 
   const handleSelectFromAccount = (nextSelected: OptionsType) => {
     selectedFromAccount = nextSelected
@@ -59,18 +52,18 @@
     selectedToAccount = nextSelected
   }
 
-  const handleSelectBalance = (nextSelected: OptionsType) => {
-    selectedBalance = nextSelected
+  const handleSelectResource = (nextSelected: OptionsType) => {
+    selectedResource = nextSelected
   }
 
   let otherAccount = ''
 
   $: amountAvailable =
-    selectedBalance.address !== ''
-      ? balance?.find((b) => b.address === selectedBalance.address)?.value ||
-        balance?.[0]?.value ||
+    selectedResource.address !== ''
+      ? resources?.find((b) => b.address === selectedResource.address)?.value ||
+        resources?.[0]?.value ||
         0
-      : 'No data'
+      : 0
 
   $: hasEnoughTokens = Number(amountAvailable) > amountToSend
 
@@ -141,10 +134,16 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <Box bgColor="surface" cx={{ ...boxStyle, width: '50%' }}>
+  <Box bgColor="surface" cx={{ ...boxStyle }}>
     <Text bold align="right">Amount</Text>
-    <Box bgColor="surface" wrapper flex="row" items="baseline">
-      <Box bgColor="surface" cx={{ flexBasis: '70%' }} wrapper>
+    <Box
+      bgColor="surface"
+      wrapper
+      flex="row"
+      items="baseline"
+      cx={{ width: '500px' }}
+    >
+      <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
         <Input type="number" bind:value={amountToSend} placeholder="Amount" />
         {#if hasEnoughTokens}
           <Text inline size="small" color="secondary">{amountAvailable}</Text>
@@ -153,11 +152,15 @@
           <Text inline size="small">Not enough tokens in this account</Text>
         {/if}
       </Box>
-      <Box bgColor="surface" px="small" cx={{ flexBasis: '30%' }}>
+      <Box
+        bgColor="surface"
+        px="small"
+        cx={{ minWidth: '150px', flexBasis: '40%' }}
+      >
         <Select
-          placeholder="Select resource"
-          handleSelect={handleSelectBalance}
-          options={balanceList}
+          handleSelect={handleSelectResource}
+          options={resourceList}
+          placeholderWhenEmpty="No tokens found"
         />
       </Box>
     </Box>
@@ -167,11 +170,11 @@
       disabled={!selectedFromAccount.address ||
         !(selectedToAccount?.address || otherAccount.length > 0) ||
         !amountToSend ||
-        !selectedBalance?.address ||
+        !selectedResource?.address ||
         !hasEnoughTokens}
       on:click={() =>
         onSend({
-          resource: selectedBalance.address,
+          resource: selectedResource.address,
           fromAccount: selectedFromAccount.address,
           toAccount: otherAccount || selectedToAccount.address,
           amount: Number(amountToSend)
