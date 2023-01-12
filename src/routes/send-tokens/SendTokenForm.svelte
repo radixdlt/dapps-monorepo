@@ -65,6 +65,15 @@
 
   let otherAccount = ''
 
+  $: amountAvailable =
+    selectedBalance.address !== ''
+      ? balance?.find((b) => b.address === selectedBalance.address)?.value ||
+        balance?.[0].value ||
+        0
+      : 'No data'
+
+  $: hasEnoughTokens = Number(amountAvailable) > amountToSend
+
   export let onSend: ({
     resource,
     fromAccount,
@@ -76,18 +85,6 @@
     toAccount: string
     amount: number
   }) => void = () => {}
-
-  $: getAmount = () => {
-    if (selectedBalance.address !== '') {
-      return (
-        balance?.find((b) => b.address === selectedBalance.address)?.value ||
-        balance?.[0].value ||
-        0
-      )
-    } else {
-      return 'No data'
-    }
-  }
 
   const boxStyle = {
     width: '70%',
@@ -143,15 +140,19 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <Box bgColor="surface" cx={boxStyle}>
+  <Box bgColor="surface" cx={{ ...boxStyle, width: '50%' }}>
     <Text bold align="right">Amount</Text>
     <Box bgColor="surface" wrapper flex="row" items="baseline">
-      <Box bgColor="surface" wrapper>
+      <Box bgColor="surface" cx={{ flexBasis: '70%' }} wrapper>
         <Input bind:value={amountToSend} placeholder="Amount" />
-        <Text inline size="small" color="secondary">{getAmount()}</Text>
-        <Text inline size="xsmall" muted>(Available balance)</Text>
+        {#if hasEnoughTokens}
+          <Text inline size="small" color="secondary">{amountAvailable}</Text>
+          <Text inline size="xsmall" muted>(Available balance)</Text>
+        {:else}
+          <Text inline size="small">Not enough tokens in this account</Text>
+        {/if}
       </Box>
-      <Box bgColor="surface" px="small" cx={{ minWidth: '160px' }}>
+      <Box bgColor="surface" px="small" cx={{ flexBasis: '30%' }}>
         <Select
           placeholder="Select resource"
           handleSelect={handleSelectBalance}
@@ -165,7 +166,8 @@
       disabled={!selectedFromAccount.address ||
         !(selectedToAccount?.address || otherAccount.length > 0) ||
         !amountToSend ||
-        !selectedBalance?.address}
+        !selectedBalance?.address ||
+        !hasEnoughTokens}
       on:click={() =>
         onSend({
           resource: selectedBalance.address,
