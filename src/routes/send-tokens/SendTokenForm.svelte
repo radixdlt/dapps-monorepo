@@ -37,7 +37,7 @@
 
   export let pending = false
 
-  let amountToSend = ''
+  let amountToSend: number = 0
 
   let selectedFromAccount = { address: '', label: '' }
 
@@ -133,6 +133,7 @@
         </TabPanel>
         <TabPanel
           ><Input
+            type="text"
             bind:value={otherAccount}
             placeholder="Account Address"
           /></TabPanel
@@ -144,7 +145,7 @@
     <Text bold align="right">Amount</Text>
     <Box bgColor="surface" wrapper flex="row" items="baseline">
       <Box bgColor="surface" cx={{ flexBasis: '70%' }} wrapper>
-        <Input bind:value={amountToSend} placeholder="Amount" />
+        <Input type="number" bind:value={amountToSend} placeholder="Amount" />
         {#if hasEnoughTokens}
           <Text inline size="small" color="secondary">{amountAvailable}</Text>
           <Text inline size="xsmall" muted>(Available balance)</Text>

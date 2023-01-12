@@ -6,7 +6,7 @@
 <Meta title="Input" component={Input} />
 
 <Template>
-  <Input placeholder="Placeholder" />
+  <Input type="text" placeholder="Placeholder" />
 </Template>
 
 <Story name="Primary" />

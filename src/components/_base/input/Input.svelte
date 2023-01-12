@@ -1,8 +1,22 @@
 <script lang="ts">
   import { css } from '@styles'
 
-  export let value: string | undefined = undefined
+  type T = $$Generic<'number' | 'text'>
+
+  export let type: T
+
+  export let value:
+    | {
+        number: number
+        text: string
+      }[typeof type]
+    | undefined = undefined
+
   export let placeholder: string | undefined = undefined
+
+  const typeAction = (node: HTMLInputElement) => {
+    node.type = type
+  }
 
   const style = css({
     width: '100%',
@@ -15,4 +29,4 @@
   })()
 </script>
 
-<input bind:value class={style} {placeholder} />
+<input use:typeAction bind:value class={style} {placeholder} />
