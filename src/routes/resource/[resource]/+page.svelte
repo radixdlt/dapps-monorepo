@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
@@ -65,10 +64,7 @@
   {#if $entityDetailsState.status === 'loading'}
     <SkeletonLoader />
   {:else}
-    <ResourceViewTitle
-      title={resourceType}
-      resourceAddress={$page.params.resource}
-    />
+    <ResourceViewTitle title={resourceType} {resourceAddress} />
   {/if}
 </Box>
 
