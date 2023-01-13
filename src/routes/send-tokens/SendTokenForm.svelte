@@ -42,7 +42,7 @@
   let selectedFromAccount = { address: '', label: '' }
 
   onMount(() => {
-    if (accountList && accountList.length) {
+    if (accountList?.[0]) {
       selectedFromAccount = accountList[0]
     }
   })
@@ -68,7 +68,7 @@
   $: amountAvailable =
     selectedBalance.address !== ''
       ? balance?.find((b) => b.address === selectedBalance.address)?.value ||
-        balance?.[0].value ||
+        balance?.[0]?.value ||
         0
       : 'No data'
 

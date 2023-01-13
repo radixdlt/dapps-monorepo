@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
@@ -14,8 +13,8 @@
   $: nftAddress = data.nftAddress
 
   $: ({ state: nftData } = query('getNonFungibleData', {
-    address: nftAddress.split(':')[0],
-    id: nftAddress.split(':')[1]
+    address: nftAddress.split(':')[0] as string,
+    id: nftAddress.split(':')[1] as string
   }))
 
   $: ({ state: entityDetails } = query(
@@ -57,10 +56,7 @@
   {#if $entityDetails.status === 'loading'}
     <SkeletonLoader />
   {:else}
-    <ResourceViewTitle
-      title="Non-fungible"
-      resourceAddress={$page.params.nft}
-    />
+    <ResourceViewTitle title="Non-fungible" resourceAddress={nftAddress} />
   {/if}
 </Box>
 <Box>

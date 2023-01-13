@@ -9,7 +9,7 @@
 
   const { state, send } = useMachine(stateMachine)
 
-  $: selectedAccount = $accounts && $accounts.length > 0 && $accounts[0].address
+  $: selectedAccount = $accounts && $accounts?.[0]?.address
 
   const handleSelectFromAccount = (account: string) => {
     selectedAccount = account

@@ -24,7 +24,7 @@ export const toWholeUnits = (tokenValue: string) =>
     .toNumber()
 
 export const capitalize = (text: string) =>
-  text[0].toUpperCase() + text.slice(1).toLowerCase()
+  text[0]?.toUpperCase() + text.slice(1).toLowerCase()
 
 export const isSameRoute = (route: string, routeName: string) => {
   const routeArray = route.split('/')
@@ -43,7 +43,7 @@ export function hash(message: string): Buffer {
 
 export const getFileExtension = (filename: string) => {
   const parts = filename.split('.')
-  return parts[parts.length - 1]
+  return parts[parts.length - 1] as string
 }
 
 type AddressPrefix =
