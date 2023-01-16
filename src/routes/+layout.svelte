@@ -10,6 +10,16 @@
   import Toast from '@components/_base/toast/_Toast.svelte'
   import '../fonts.css'
 
+  import { inspect } from '@xstate/inspect'
+
+  onMount(() => {
+    if (window) {
+      inspect({
+        iframe: false // open in new window
+      })
+    }
+  })
+
   let mounted = false
 
   onMount(() => {

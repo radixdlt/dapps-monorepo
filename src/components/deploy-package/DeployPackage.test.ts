@@ -2,9 +2,21 @@ import Deploypackage from './DeployPackage.svelte'
 import { render } from '@testing-library/svelte'
 import userEvent from '@testing-library/user-event'
 
-vi.mock('$app/navigation', () => ({}))
+vi.mock('@stores', async () => {
+  const { readable } = await import('svelte/store')
 
-describe.skip('#deploy package', () => {
+  const accountStore = readable([])
+
+  const accounts = {
+    subscribe(fn: any) {
+      return accountStore.subscribe(fn)
+    }
+  }
+
+  return { accounts }
+})
+
+describe('#deploy package', () => {
   it('Should upload file', async () => {
     const file = new File(['(⌐□_□)'], 'chucknorris.wasm', { type: 'wasm' })
     const { container } = render(Deploypackage)
