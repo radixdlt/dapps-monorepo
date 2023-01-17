@@ -5,6 +5,8 @@
   import { isSameRoute } from '@utils'
   import { featureFlags } from '@featureFlags'
   import type { icons } from '../../../src/icon-assets'
+  import Box from '@components/_base/box/Box.svelte'
+  import Text from '@components/_base/text/Text.svelte'
 
   export let page: Page<Record<string, string>> = {} as any // TODO: fix this after storybook gets typesupport
 
@@ -36,14 +38,26 @@
 </script>
 
 <Sidebar disableClickOutside show>
-  {#each routes as route (route.path)}
-    {#if route.isVisible}
-      <SidebarItem
-        icon={route.icon}
-        isActive={isSameRoute(route.path, page.routeId ?? '')}
-        link={route.path}
-        on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
+  <Box p="none" justify="between" flex="col" cx={{ height: '100%' }}>
+    <Box px="none" py="medium">
+      {#each routes as route (route.path)}
+        {#if route.isVisible}
+          <SidebarItem
+            icon={route.icon}
+            isActive={isSameRoute(route.path, page.routeId ?? '')}
+            link={route.path}
+            on:click={() => (page.routeId = route.path)}
+            >{route.text}</SidebarItem
+          >
+        {/if}
+      {/each}
+    </Box>
+    <Box border="top" p="medium">
+      <Text bold size="small" align="center"
+        ><a href="https://www.radixdlt.com/privacy-policy" target="_blank"
+          >Privacy Notice</a
+        ></Text
       >
-    {/if}
-  {/each}
+    </Box>
+  </Box>
 </Sidebar>

@@ -8,11 +8,12 @@
 
   const navStyle = css({
     gridArea: 'nav',
-    py: '$lg',
+    position: 'sticky',
+    height: 'calc(100vh - 100px)',
+    top: '100px',
     borderColor: '$borderColor',
     borderWidth: '$sm',
     backgroundColor: '$surface',
-    overflowY: 'auto',
     width: '$4xl'
   })
 

@@ -10,10 +10,13 @@
 <Box
   bgColor="surface"
   cx={{
+    position: 'sticky',
+    top: 0,
     gridArea: 'header',
     borderBottom: 'solid',
     borderWidth: '$sm',
-    borderColor: '$borderColor'
+    borderColor: '$borderColor',
+    zIndex: 1000 // some elements in content area are positioned relative to this
   }}
   px="large"
   py="large"
