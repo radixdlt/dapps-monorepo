@@ -48,7 +48,7 @@
   <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
     <Input type="number" bind:value={inputValue} placeholder="Amount" />
     {#if hasEnoughTokens}
-      <Text inline size="small" color="secondary">{amountAvailable}</Text>
+      <Text inline size="small" color="grey">{amountAvailable}</Text>
       <Text inline size="xsmall" muted>(Available balance)</Text>
     {:else}
       <Text inline size="small">Not enough tokens in this account</Text>

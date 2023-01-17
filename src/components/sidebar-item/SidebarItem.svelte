@@ -17,7 +17,7 @@
     cursor: 'pointer',
     '&.isHovered': {
       borderLeftWidth: '$md',
-      borderLeftColor: '$secondary'
+      borderLeftColor: '$grey'
     }
   })
 </script>

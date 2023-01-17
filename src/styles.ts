@@ -68,7 +68,7 @@ export const {
       primary: colors.green1,
       onPrimary: colors.white,
       action: colors.green1,
-      secondary: colors.grey1,
+      secondary: colors.blue1,
       pickerBackground: colors.white,
       onPickerBackground: colors.grey1,
       primaryTextHover: colors.green2,
