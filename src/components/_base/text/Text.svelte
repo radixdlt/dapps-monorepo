@@ -203,6 +203,9 @@
       },
       link: {
         color: '$highlightedText'
+      },
+      grey: {
+        color: '$grey'
       }
     },
     slightlyMuted: {
