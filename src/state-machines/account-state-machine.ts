@@ -164,7 +164,7 @@ export const stateMachine = createMachine<Context, Events, States>(
           id: 'fetched-overview',
           src: 'transformOverview',
           onDone: {
-            target: 'final',
+            target: 'idle',
             actions: assign({
               transformedOverview: (
                 _,
@@ -184,11 +184,6 @@ export const stateMachine = createMachine<Context, Events, States>(
             })
           }
         }
-      },
-      final: {
-        type: 'final',
-        data: (ctx, _) => ctx.transformedOverview,
-        on: { LOAD: { target: 'fetching-resources' } }
       },
       error: {
         on: { LOAD: { target: 'fetching-resources' } },

@@ -4,32 +4,15 @@
   import { useMachine } from '@xstate/svelte'
   import { stateMachine } from './navbar-page-state-machine'
   import { accounts } from '@stores'
-  import { goto } from '$app/navigation'
   import { shortenAddress } from '@utils'
 
-  $: selectedAccount = $accounts && $accounts?.[0]?.address
+  export let title: string
 
   const { state, send } = useMachine(stateMachine)
 
   $: if ($accounts && $accounts.length > 0) {
     send('LOGGEDIN')
   }
-
-  $: if (selectedAccount) {
-    send('LOAD', { address: selectedAccount })
-  }
-
-  $: isSendingToken = $state.matches('sending-token')
-
-  $: if ($state.matches('final'))
-    goto(`/send-tokens/success?txID=${$state.context.txID}`)
-
-  const onSend = (data: {
-    resource: string
-    fromAccount: string
-    toAccount: string
-    amount: number
-  }) => send({ type: 'SENDTOKEN', data })
 
   $: accountsList = $accounts?.map((account) => ({
     address: account.address,
@@ -39,17 +22,12 @@
 </script>
 
 <Box>
-  <Text inline size="xxlarge" mb="medium" bold>Send Tokens</Text>
-  {#if $state.matches('not-logged-in') && !$state.matches('final')}
+  <Text inline size="xxlarge" mb="medium" bold>{title}</Text>
+  {#if $state.matches('not-logged-in')}
     <Text bold>Please connect your Radix Wallet to get started.</Text>
   {/if}
-  {#if $state.matches('idle') || isSendingToken}
-    <slot
-      {isSendingToken}
-      {onSend}
-      fungibleResources={$state.context.transformedOverview.fungible}
-      accounts={accountsList}
-    />
+  {#if $state.matches('idle')}
+    <slot accounts={accountsList} />
   {/if}
   {#if $state.matches('error')}
     <Text inline size="large" mb="medium" bold>
