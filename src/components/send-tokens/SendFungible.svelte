@@ -6,12 +6,13 @@
   import Text from '@components/_base/text/Text.svelte'
   import { mutate } from '@queries'
   import type { TransformWithOverview } from '@stateMachines/transformers'
-  import { getContext } from 'svelte'
-  import { boxStyle, Context } from './SendTokenForm.svelte'
+  import { boxStyle } from './SendTokenForm.svelte'
 
   export let resources: TransformWithOverview
   export let selectedFromAccount: string
   export let selectedToAccount: string
+  export let setTransactionManifest: (manifest: string) => void
+  export let setResourceSelected: (selected: boolean) => void
 
   const getSendTokenManifest = (
     resource: string,
@@ -56,21 +57,18 @@
 
   $: hasEnoughTokens = Number(amountAvailable) > amountToSend
 
-  $: getContext<(bool: boolean) => void>('setResourceSelected')(
+  $: setResourceSelected(
     selectedResource && amountToSend > 0 && hasEnoughTokens
   )
 
-  const send = () =>
-    trigger({
-      transactionManifest: getSendTokenManifest(
-        selectedResource.address,
-        selectedFromAccount,
-        selectedToAccount,
-        amountToSend
-      )
-    })
-
-  getContext<Context['onSend']>(Context.ON_SEND)(send)
+  $: setTransactionManifest(
+    getSendTokenManifest(
+      selectedResource.address,
+      selectedFromAccount,
+      selectedToAccount,
+      amountToSend
+    )
+  )
 
   $: if ($data) goto(`/send-tokens/success?txID=${$data.transactionIntentHash}`)
 </script>

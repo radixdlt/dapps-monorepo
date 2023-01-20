@@ -6,16 +6,6 @@
     alignItems: 'baseline',
     gap: '$2xl'
   }
-
-  export const Context = {
-    SET_RESOURCE_SELECTED: 'setResourceSelected',
-    ON_SEND: 'onSend'
-  } as const
-
-  export type Context = {
-    [Context.SET_RESOURCE_SELECTED]: (bool: boolean) => void
-    [Context.ON_SEND]: (sendFn: () => Promise<void>) => void
-  }
 </script>
 
 <script lang="ts">
@@ -28,15 +18,21 @@
   import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import { setContext } from 'svelte'
   import { stateMachine } from '@stateMachines/account-state-machine'
   import { useMachine } from '@xstate/svelte'
+  import SendFungible from './SendFungible.svelte'
+  import SendNonFungible from './SendNonFungible.svelte'
+  import { mutate } from '@queries'
+  import { goto } from '$app/navigation'
 
   const { state, send } = useMachine(stateMachine)
 
   type OptionsType = Options<{ address: string }>
 
   export let accounts: OptionsType[] | undefined = undefined
+  export let tokenType: 'fungible' | 'nonFungible'
+
+  const { trigger, data, loading } = mutate('sendTransaction')
 
   $: selectedFromAccount = accounts?.[0] || { address: '', label: '' }
 
@@ -48,27 +44,16 @@
 
   let otherAccount = ''
 
-  let pending = false
-
   let resourceSelected = false
 
-  const sendTokens = () => {
-    pending = true
-    sendFn()
-      .then((_) => (pending = false))
-      .catch((_) => (pending = false))
-  }
+  let transactionManifest: string
 
-  let sendFn: () => Promise<unknown>
+  let setTransactionManifest = (manifest: string) =>
+    (transactionManifest = manifest)
+  const setResourceSelected = (selected: boolean) =>
+    (resourceSelected = selected)
 
-  setContext<Context['setResourceSelected']>(
-    Context.SET_RESOURCE_SELECTED,
-    (bool: boolean) => (resourceSelected = bool)
-  )
-  setContext<Context['onSend']>(
-    Context.ON_SEND,
-    (_sendFn: () => Promise<void>) => (sendFn = _sendFn)
-  )
+  $: if ($data) goto(`/send-nft/success?txID=${$data.transactionIntentHash}`)
 </script>
 
 <Box bgColor="surface" flex="col" gap="medium">
@@ -120,12 +105,24 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <slot
-    selectedFromAccount={selectedFromAccount.address}
-    selectedToAccount={selectedToAccount.address}
-    fungibleResources={$state.context.transformedOverview?.fungible}
-    nonFungibleResources={$state.context.transformedOverview?.nonFungible}
-  />
+  {#if tokenType === 'fungible'}
+    <SendFungible
+      selectedFromAccount={selectedFromAccount.address}
+      selectedToAccount={selectedToAccount.address}
+      resources={$state.context.transformedOverview?.fungible || []}
+      {setTransactionManifest}
+      {setResourceSelected}
+    />
+  {/if}
+  {#if tokenType === 'nonFungible'}
+    <SendNonFungible
+      selectedFromAccount={selectedFromAccount.address}
+      selectedToAccount={selectedToAccount.address}
+      resources={$state.context.transformedOverview?.nonFungible}
+      {setTransactionManifest}
+      {setResourceSelected}
+    />
+  {/if}
   <Box bgColor="surface" justify="end">
     <Button
       disabled={!(
@@ -133,9 +130,9 @@
         (selectedToAccount?.address || otherAccount.length > 0) &&
         resourceSelected
       )}
-      on:click={() => sendTokens()}
+      on:click={() => trigger({ transactionManifest })}
     >
-      {#if pending}
+      {#if loading}
         <LoadingSpinner />
       {:else}
         Send
