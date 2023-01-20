@@ -13,6 +13,7 @@
     | `$${typeof config['theme']['sizes']['4xl']}`
     | `$${typeof config['theme']['sizes']['5xl']}`
     | `$${typeof config['theme']['sizes']['6xl']}`
+  export let open = true
 
   const overlay = css({
     position: 'fixed',
@@ -23,8 +24,6 @@
     width: '100%',
     height: '100%'
   })()
-
-  export let open = true
 </script>
 
 <Dialog {open} on:close={() => (open = false)}>
