@@ -1,3 +1,23 @@
+<script lang="ts" context="module">
+  export const boxStyle = {
+    width: '70%',
+    display: 'grid',
+    gridTemplateColumns: '80px auto',
+    alignItems: 'baseline',
+    gap: '$2xl'
+  }
+
+  export const Context = {
+    SET_RESOURCE_SELECTED: 'setResourceSelected',
+    ON_SEND: 'onSend'
+  } as const
+
+  export type Context = {
+    [Context.SET_RESOURCE_SELECTED]: (bool: boolean) => void
+    [Context.ON_SEND]: (sendFn: () => Promise<void>) => void
+  }
+</script>
+
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
@@ -8,41 +28,47 @@
   import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import { writable } from 'svelte/store'
+  import { setContext } from 'svelte'
+  import { stateMachine } from '@stateMachines/account-state-machine'
+  import { useMachine } from '@xstate/svelte'
+
+  const { state, send } = useMachine(stateMachine)
 
   type OptionsType = Options<{ address: string }>
 
-  export let pending: boolean = false
-  export let onSend: ({
-    resource,
-    fromAccount,
-    toAccount,
-    amount
-  }: {
-    resource: string
-    fromAccount: string
-    toAccount: string
-    amount: number
-  }) => void = () => {}
   export let accounts: OptionsType[] | undefined = undefined
 
   $: selectedFromAccount = accounts?.[0] || { address: '', label: '' }
+
+  $: send('LOAD', {
+    address: selectedFromAccount.address
+  })
 
   let selectedToAccount = { address: '', label: '' }
 
   let otherAccount = ''
 
-  let amountToSend = writable(0)
-  let selectedResourceAddress = writable<string>()
-  let hasEnoughTokens = writable(false)
+  let pending = false
 
-  const boxStyle = {
-    width: '70%',
-    display: 'grid',
-    gridTemplateColumns: '80px auto',
-    alignItems: 'baseline',
-    gap: '$2xl'
+  let resourceSelected = false
+
+  const sendTokens = () => {
+    pending = true
+    sendFn()
+      .then((_) => (pending = false))
+      .catch((_) => (pending = false))
   }
+
+  let sendFn: () => Promise<unknown>
+
+  setContext<Context['setResourceSelected']>(
+    Context.SET_RESOURCE_SELECTED,
+    (bool: boolean) => (resourceSelected = bool)
+  )
+  setContext<Context['onSend']>(
+    Context.ON_SEND,
+    (_sendFn: () => Promise<void>) => (sendFn = _sendFn)
+  )
 </script>
 
 <Box bgColor="surface" flex="col" gap="medium">
@@ -94,25 +120,20 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  <Box bgColor="surface" cx={{ ...boxStyle }}>
-    <slot {selectedResourceAddress} {hasEnoughTokens} {amountToSend} />
-  </Box>
+  <slot
+    selectedFromAccount={selectedFromAccount.address}
+    selectedToAccount={selectedToAccount.address}
+    fungibleResources={$state.context.transformedOverview?.fungible}
+    nonFungibleResources={$state.context.transformedOverview?.nonFungible}
+  />
   <Box bgColor="surface" justify="end">
     <Button
       disabled={!(
         selectedFromAccount.address &&
         (selectedToAccount?.address || otherAccount.length > 0) &&
-        $amountToSend > 0 &&
-        $selectedResourceAddress &&
-        $hasEnoughTokens
+        resourceSelected
       )}
-      on:click={() =>
-        onSend({
-          resource: $selectedResourceAddress,
-          fromAccount: selectedFromAccount.address,
-          toAccount: otherAccount || selectedToAccount.address,
-          amount: $amountToSend
-        })}
+      on:click={() => sendTokens()}
     >
       {#if pending}
         <LoadingSpinner />

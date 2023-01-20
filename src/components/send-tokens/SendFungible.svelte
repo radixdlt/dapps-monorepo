@@ -1,15 +1,38 @@
 <script lang="ts">
+  import { goto } from '$app/navigation'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
+  import { mutate } from '@queries'
   import type { TransformWithOverview } from '@stateMachines/transformers'
-  import type { Writable } from 'svelte/store'
+  import { getContext } from 'svelte'
+  import { boxStyle, Context } from './SendTokenForm.svelte'
 
   export let resources: TransformWithOverview
-  export let hasEnoughTokens: Writable<boolean>
-  export let selectedResourceAddress: Writable<string>
-  export let amountToSend: Writable<number>
+  export let selectedFromAccount: string
+  export let selectedToAccount: string
+
+  const getSendTokenManifest = (
+    resource: string,
+    fromAccount: string,
+    toAccount: string,
+    amount: number
+  ) =>
+    `
+    CALL_METHOD 
+      ComponentAddress("${fromAccount}") 
+      "withdraw_by_amount"
+      Decimal("${amount}")             
+      ResourceAddress("${resource}");
+  
+    CALL_METHOD
+      ComponentAddress("${toAccount}") 
+      "deposit_batch"
+      Expression("ENTIRE_WORKTOP");
+    `
+
+  const { trigger, data } = mutate('sendTransaction')
 
   $: resourceList =
     resources &&
@@ -20,7 +43,6 @@
     }))
 
   $: selectedResource = resourceList?.[0] || { address: '', label: '' }
-  $: selectedResourceAddress.set(selectedResource.address)
 
   $: amountAvailable =
     selectedResource?.address !== ''
@@ -30,39 +52,57 @@
         0
       : 0
 
-  let inputValue: number
+  let amountToSend: number = 0
 
-  $: amountToSend.set(inputValue)
+  $: hasEnoughTokens = Number(amountAvailable) > amountToSend
 
-  $: hasEnoughTokens.set(Number(amountAvailable) > $amountToSend)
+  $: getContext<(bool: boolean) => void>('setResourceSelected')(
+    selectedResource && amountToSend > 0 && hasEnoughTokens
+  )
+
+  const send = () =>
+    trigger({
+      transactionManifest: getSendTokenManifest(
+        selectedResource.address,
+        selectedFromAccount,
+        selectedToAccount,
+        amountToSend
+      )
+    })
+
+  getContext<Context['onSend']>(Context.ON_SEND)(send)
+
+  $: if ($data) goto(`/send-tokens/success?txID=${$data.transactionIntentHash}`)
 </script>
 
-<Text bold align="right">Amount</Text>
-<Box
-  bgColor="surface"
-  wrapper
-  flex="row"
-  items="baseline"
-  cx={{ width: '500px' }}
->
-  <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
-    <Input type="number" bind:value={inputValue} placeholder="Amount" />
-    {#if hasEnoughTokens}
-      <Text inline size="small" color="grey">{amountAvailable}</Text>
-      <Text inline size="xsmall" muted>(Available balance)</Text>
-    {:else}
-      <Text inline size="small">Not enough tokens in this account</Text>
-    {/if}
-  </Box>
+<Box cx={boxStyle}>
+  <Text bold align="right">Amount</Text>
   <Box
     bgColor="surface"
-    px="small"
-    cx={{ minWidth: '150px', flexBasis: '40%' }}
+    wrapper
+    flex="row"
+    items="baseline"
+    cx={{ width: '500px' }}
   >
-    <Select
-      handleSelect={(resource) => (selectedResource = resource)}
-      options={resourceList}
-      placeholderWhenEmpty="No tokens found"
-    />
+    <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
+      <Input type="number" bind:value={amountToSend} placeholder="Amount" />
+      {#if hasEnoughTokens}
+        <Text inline size="small" color="grey">{amountAvailable}</Text>
+        <Text inline size="xsmall" muted>(Available balance)</Text>
+      {:else}
+        <Text inline size="small">Not enough tokens in this account</Text>
+      {/if}
+    </Box>
+    <Box
+      bgColor="surface"
+      px="small"
+      cx={{ minWidth: '150px', flexBasis: '40%' }}
+    >
+      <Select
+        handleSelect={(resource) => (selectedResource = resource)}
+        options={resourceList}
+        placeholderWhenEmpty="No tokens found"
+      />
+    </Box>
   </Box>
 </Box>
