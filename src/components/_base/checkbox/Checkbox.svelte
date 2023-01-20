@@ -15,6 +15,7 @@
     height: '$xs',
     border: '0.1em solid $muted',
     marginRight: '$sm',
+    marginTop: '$md',
     transform: 'translateY(0.15em)',
     '&:checked': {
       backgroundColor: '$secondary'
@@ -31,7 +32,9 @@
         bind:group={selected}
         value={option}
       />
-      {option.label}
+      <slot label={option.label}>
+        {option.label}
+      </slot>
     </label>
   {/each}
 </Box>
