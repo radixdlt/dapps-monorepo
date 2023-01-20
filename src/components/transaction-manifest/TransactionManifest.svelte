@@ -6,11 +6,47 @@
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { mutate } from '@queries'
   import Success from './Success.svelte'
+  import Dialog from '@components/_base/dialog/Dialog.svelte'
 
   let transactionManifest = ''
 
+  let showDialog = false
+
   const { trigger, loading, data } = mutate('sendTransaction')
+
+  const send = () =>
+    trigger({
+      transactionManifest
+    })
+
+  const onSendButton = () => {
+    if (transactionManifest.includes('lock_fee')) {
+      showDialog = true
+    } else {
+      send()
+    }
+  }
 </script>
+
+<Dialog bind:open={showDialog} size="$6xl">
+  <Box bgColor="surface" slot="description">
+    <Text bold
+      >This transaction manifest appears to include a "lock_fee" command. The
+      Radix Wallet normally handles adding the required lock_fee from a user's
+      account. Continue anyway?</Text
+    >
+    <Box justify="center" gap="medium">
+      <Button size="small" on:click={() => (showDialog = false)}>Cancel</Button>
+      <Button
+        size="small"
+        on:click={() => {
+          send()
+          showDialog = false
+        }}>Continue</Button
+      >
+    </Box>
+  </Box>
+</Dialog>
 
 {#if $data?.transactionIntentHash}
   <Success txID={$data?.transactionIntentHash} />
@@ -36,12 +72,7 @@
         <LoadingSpinner />
       </Button>
     {:else}
-      <Button
-        on:click={() =>
-          trigger({
-            transactionManifest
-          })}>Submit</Button
-      >
+      <Button on:click={onSendButton}>Submit</Button>
     {/if}
   </Box>
 {/if}
