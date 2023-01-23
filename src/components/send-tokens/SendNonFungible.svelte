@@ -11,6 +11,8 @@
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
 
+  $: console.log(resources)
+
   const getSendNFTManifest = (
     nfts: {
       resourceAddress: string
