@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { css } from '@styles'
   import Box from '../box/Box.svelte'
 
@@ -8,6 +9,7 @@
 
   export let options: T[]
   export let selected: G[] = []
+  export let loading = false
 
   const inputStyle = css({
     appearance: 'none',
@@ -24,6 +26,9 @@
 </script>
 
 <Box wrapper flex="col">
+  {#if loading}
+    <SkeletonLoader count={5} />
+  {/if}
   {#each options as option}
     <label>
       <input
