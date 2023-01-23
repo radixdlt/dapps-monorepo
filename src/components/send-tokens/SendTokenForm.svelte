@@ -132,7 +132,7 @@
       )}
       on:click={() => trigger({ transactionManifest })}
     >
-      {#if loading}
+      {#if $loading}
         <LoadingSpinner />
       {:else}
         Send

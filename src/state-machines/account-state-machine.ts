@@ -215,17 +215,15 @@ export const stateMachine = createMachine<Context, Events, States>(
         }
 
         const isNonEmpty = <T>(item?: T[]) => item && item.length > 0
-        const smallFungible = resources.fungible?.slice(0, 10)
-        const smallNonFungible = resources.nonFungible?.slice(0, 10)
 
-        const fungible = isNonEmpty(smallFungible)
-          ? await queryServer('getEntityOverview', smallFungible)
+        const fungible = isNonEmpty(resources.fungible)
+          ? await queryServer('getEntityOverview', resources.fungible)
           : []
 
-        const nonFungible = isNonEmpty(smallNonFungible)
+        const nonFungible = isNonEmpty(resources.nonFungible)
           ? await Promise.all(
               (
-                await queryServer('getEntityOverview', smallNonFungible)
+                await queryServer('getEntityOverview', resources.nonFungible)
               ).withOverviews.map(async (nft) => ({
                 ...(await queryServer('getEntityNonFungibleIDs', {
                   accountAddress,
