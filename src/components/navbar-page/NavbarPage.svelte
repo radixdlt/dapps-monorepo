@@ -8,7 +8,7 @@
 
   let loggedIn = false
 
-  $: if ($accounts && $accounts.length > 0) loggedIn = true
+  $: loggedIn = $accounts && $accounts.length > 0 ? true : false
 
   $: accountsList = $accounts?.map((account) => ({
     address: account.address,
