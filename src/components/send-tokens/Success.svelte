@@ -8,7 +8,7 @@
 
 <center>
   <Text bold size="xlarge">Transfer successful! 🎉</Text>
-  <Box cx={{ width: '900px' }}>
+  <Box justify="center" cx={{ width: '900px' }}>
     <InfoBox
       entries={[
         {
