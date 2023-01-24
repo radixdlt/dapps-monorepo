@@ -15,6 +15,11 @@ export const devAppFlags = [
     enabled: true
   },
   {
+    id: 'send-nft',
+    description: 'Send NFTs in the sidebar menu',
+    enabled: true
+  },
+  {
     id: 'dark-mode',
     description: 'Display the toggle for dark mode',
     enabled: true
