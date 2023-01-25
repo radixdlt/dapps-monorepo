@@ -19,7 +19,7 @@ const getDeployPackageManifest = (
   wasm: string,
   abi: string,
   account: string,
-  badge: badgeType
+  address: string
 ) => {
   const codeHash: string = hash(wasm).toString('hex')
   const abiHash: string = hash(abi).toString('hex')
@@ -27,7 +27,7 @@ const getDeployPackageManifest = (
       PUBLISH_PACKAGE_WITH_OWNER 
         Blob("${codeHash}") 
         Blob("${abiHash}")
-        NonFungibleAddress("${badge}", 1u32);
+        NonFungibleAddress("${address}", 1u32);
 
       CALL_METHOD 
         ComponentAddress("${account}") 
@@ -44,6 +44,7 @@ type Context = {
     value: string
   }>
   packageAddress?: string
+  badge?: badgeType
 }
 
 type Events =
@@ -68,7 +69,7 @@ type States =
   | { value: 'deploy.idle'; context: Context }
   | { value: 'deploy.pending'; context: Context }
   | {
-      value: 'uploaded' | 'deploy.success'
+      value: 'deploy.success'
       context: Context & {
         selectedNft: {
           name?: string
@@ -85,7 +86,7 @@ type States =
           value: string
         }>
         packageAddress: string
-        badgeName?: string
+        badge: badgeType
       }
     }
 
@@ -97,7 +98,8 @@ export const stateMachine = createMachine<Context, Events, States>(
       error: undefined,
       intentHash: undefined,
       packageAddress: undefined,
-      badgeMetadata: undefined
+      badgeMetadata: undefined,
+      badge: undefined
     },
     type: 'parallel',
     states: {
@@ -157,16 +159,18 @@ export const stateMachine = createMachine<Context, Events, States>(
           success: {
             type: 'final'
           }
-        },
-        onDone: 'uploaded'
+        }
       },
-      uploaded: {},
       error: {}
     },
     on: {
       CONNECT: { target: 'connect.success' },
       DEPLOY: {
         target: 'deploy.pending',
+        actions: assign({
+          badge: (_, event: { type: 'DEPLOY'; payload: DeployPayload }) =>
+            event.payload.badge
+        }),
         cond: (_, event) =>
           !!event.payload.account &&
           !!event.payload.abi &&
@@ -183,10 +187,10 @@ export const stateMachine = createMachine<Context, Events, States>(
         }
         return mutateServer('sendTransaction', {
           transactionManifest: getDeployPackageManifest(
-            e.payload.abi,
             e.payload.wasm,
+            e.payload.abi,
             e.payload.account,
-            e.payload.badge
+            e.payload.badge.address
           ),
           blobs: [e.payload.wasm, e.payload.abi]
         })
@@ -201,8 +205,6 @@ export const stateMachine = createMachine<Context, Events, States>(
           }))
           .then((result) => ({
             ...result,
-            badgeName: result.badgeMetadata.find(({ key }) => key === 'name')
-              ?.value,
             badgeMetadata: result.badgeMetadata.filter(
               ({ key }) => key !== 'name'
             )
