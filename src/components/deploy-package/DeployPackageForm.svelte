@@ -48,6 +48,16 @@
 
   export let isDeploying = false
   export let onDeploy: (payload: DeployPayload) => void
+
+  const selectBadgeOptions = () =>
+    $state.context.non_fungible_resources.map((resource, i) => ({
+      id: i,
+      label: `${resource.name ?? ''} ${
+        resource.name ? '(' : ' '
+      }${getNFTAddress(resource.address, resource.id)}${
+        resource.name ? ')' : ' '
+      }`
+    }))
 </script>
 
 <Box>
@@ -90,13 +100,11 @@
             type: 'SELECT_ACCOUNT',
             address: e.account.address
           })}
-        options={[
-          ...($accounts || []).map((account, i) => ({
-            account,
-            id: i,
-            label: `${account.label} (${shortenAddress(account.address)})`
-          }))
-        ]}
+        options={($accounts || []).map((account, i) => ({
+          account,
+          id: i,
+          label: `${account.label} (${shortenAddress(account.address)})`
+        }))}
       />
     </Box>
     <Box>
@@ -108,16 +116,7 @@
               type: 'SELECT_BADGE',
               index: e.id
             })}
-          options={[
-            ...$state.context.non_fungible_resources.map((resource, i) => ({
-              id: i,
-              label: `${resource.name ?? ''} ${
-                resource.name ? '(' : ' '
-              }${getNFTAddress(resource.address, resource.id)}${
-                resource.name ? ')' : ' '
-              }`
-            }))
-          ]}
+          options={selectBadgeOptions()}
         />
       {:else}
         <Select placeholder="Select Badge NFT" />
