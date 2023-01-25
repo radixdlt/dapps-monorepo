@@ -28,5 +28,10 @@ export const devAppFlags = [
     id: 'cookie-banner',
     description: 'Display cookie banner from one trust',
     enabled: false
+  },
+  {
+    id: 'xstate-inspect',
+    description: 'Turn on xstate inspect',
+    enabled: false
   }
 ] as const

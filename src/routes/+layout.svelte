@@ -13,7 +13,7 @@
   import { inspect } from '@xstate/inspect'
 
   onMount(() => {
-    if (window) {
+    if (window && featureFlags().getFlag('xstate-inspect')?.enabled) {
       inspect({
         iframe: false // open in new window
       })
