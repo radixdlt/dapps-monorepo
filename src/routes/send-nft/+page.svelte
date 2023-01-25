@@ -3,6 +3,6 @@
   import SendTokenForm from '@components/send-tokens/SendTokenForm.svelte'
 </script>
 
-<NavbarPage title="Send Tokens" let:accounts>
-  <SendTokenForm tokenType="fungible" {accounts} />
+<NavbarPage title="Send NFTs" let:accounts>
+  <SendTokenForm tokenType="nonFungible" {accounts} />
 </NavbarPage>

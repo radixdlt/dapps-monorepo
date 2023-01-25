@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { css } from '@styles'
   import Box from '../box/Box.svelte'
 
@@ -8,6 +9,7 @@
 
   export let options: T[]
   export let selected: G[] = []
+  export let loading = false
 
   const inputStyle = css({
     appearance: 'none',
@@ -15,6 +17,7 @@
     height: '$xs',
     border: '0.1em solid $muted',
     marginRight: '$sm',
+    marginTop: '$md',
     transform: 'translateY(0.15em)',
     '&:checked': {
       backgroundColor: '$secondary'
@@ -23,6 +26,9 @@
 </script>
 
 <Box wrapper flex="col">
+  {#if loading}
+    <SkeletonLoader count={5} />
+  {/if}
   {#each options as option}
     <label>
       <input
@@ -31,7 +37,9 @@
         bind:group={selected}
         value={option}
       />
-      {option.label}
+      <slot label={option.label}>
+        {option.label}
+      </slot>
     </label>
   {/each}
 </Box>

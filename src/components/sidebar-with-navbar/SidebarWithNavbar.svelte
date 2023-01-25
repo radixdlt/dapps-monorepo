@@ -33,6 +33,12 @@
       icon: 'tokens',
       path: '/send-tokens',
       isVisible: featureFlags().getFlag('send-tokens')?.enabled
+    },
+    {
+      text: 'Send NFTs',
+      icon: 'nfts',
+      path: '/send-nft',
+      isVisible: featureFlags().getFlag('send-nft')?.enabled
     }
   ]
 </script>
