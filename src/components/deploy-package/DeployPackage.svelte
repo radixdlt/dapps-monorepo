@@ -10,7 +10,7 @@
   import { goto } from '$app/navigation'
   import DeployPackageForm from './DeployPackageForm.svelte'
 
-  const { state, send } = useMachine(stateMachine)
+  const { state, send } = useMachine(stateMachine, { devTools: true })
 
   $: if ($accounts) send('CONNECT')
 
@@ -19,13 +19,14 @@
       `deploy-package/success?` +
         `txID=${$state.context.intentHash}&` +
         `packageAddress=${$state.context.packageAddress}&` +
-        `badgeName=${$state.context.selectedNft.name}&` +
-        `badgeAddress=${$state.context.selectedNft.address}&` +
-        `badgeId=${$state.context.selectedNft.id}`
+        `badgeName=${$state.context.badge.name}&` +
+        `badgeAddress=${$state.context.badge.address}&` +
+        `badgeId=${$state.context.badge.id}`
     )
 
-  const handleSend = (payload: DeployPayload) =>
+  const handleSend = (payload: DeployPayload) => {
     send({ type: 'DEPLOY', payload })
+  }
 </script>
 
 <Box>
