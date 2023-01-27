@@ -36,7 +36,7 @@
         <Box bgColor="surface" p="none" slot="body">
           <InfoBox
             entries={$state.context.transformedOverview?.fungible || []}
-            loading={!$state.matches('final')}
+            loading={$state.matches('fetching-resources')}
           >
             <Text bold underlined slot="key" let:entry>
               <a href="/resource/{entry.address}">{entry.key}</a>
@@ -52,7 +52,7 @@
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox
             entries={$state.context.transformedOverview?.nonFungible || []}
-            loading={!$state.matches('final')}
+            loading={$state.matches('fetching-resources')}
           >
             <Text underlined slot="key" let:entry>
               <a href="/nft/{entry.address}">{entry.key}</a>
