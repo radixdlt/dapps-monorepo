@@ -1,35 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-
   import Search from '@components/_base/search/Search.svelte'
-  import { getAddressPrefix, isNFTAddress } from '@utils'
+  import { addressToRoute } from '@utils'
 
-  let searchBarText = ''
-  const search = (address: string) => {
-    searchBarText = ''
-    switch (getAddressPrefix(address)) {
-      case 'account':
-        goto(`/account/${address}`)
-        break
-      case 'resource':
-        isNFTAddress(address)
-          ? goto(`/nft/${address}`)
-          : goto(`/resource/${address}`)
-        break
-      case 'transaction':
-        goto(`/transaction/${address}`)
-        break
-      case 'package':
-        goto(`/package/${address}`)
-        break
-      case 'component':
-        goto(`/component/${address}`)
-        break
-      default:
-        goto(`/transaction/${address}`)
-        break
-    }
-  }
+  const search = (address: string) => goto(addressToRoute(address))
 </script>
 
 <Search

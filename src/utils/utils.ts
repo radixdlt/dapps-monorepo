@@ -52,6 +52,7 @@ type AddressPrefix =
   | 'account'
   | 'transaction'
   | 'component'
+
 export const getAddressPrefix = (address: string): AddressPrefix => {
   const parts = address.split('_')
   return (parts[0] as AddressPrefix) ?? 'transaction'
@@ -62,3 +63,14 @@ export const getNFTAddress = (resourceAddress: string, nftID: string) =>
 
 export const isNFTAddress = (address: string) =>
   getAddressPrefix(address) === 'resource' && address.split(':').length > 1
+
+export const addressToRoute = (address: string) =>
+  ({
+    account: `/account/${address}`,
+    resource: isNFTAddress(address)
+      ? `/nft/${address}`
+      : `/resource/${address}`,
+    package: `/package/${address}`,
+    component: `/component/${address}`,
+    transaction: `/transaction/${address}`
+  }[getAddressPrefix(address)])
