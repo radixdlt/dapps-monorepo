@@ -15,7 +15,6 @@
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Input from '@components/_base/input/Input.svelte'
-  import Tab from '@components/_base/tabs/Tab.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { stateMachine } from '@stateMachines/account-state-machine'
@@ -24,6 +23,7 @@
   import SendNonFungible from './SendNonFungible.svelte'
   import { mutate } from '@queries'
   import { goto } from '$app/navigation'
+  import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
 
   const { state, send } = useMachine(stateMachine)
 
@@ -70,14 +70,14 @@
     <Text bold align="right">To</Text>
     <Tabs>
       <svelte:fragment slot="tabs">
-        <Tab _default />
+        <RadioTab />
         <Box
           bgColor="surface"
           inline
           p="none"
           cx={{ marginRight: '$lg', marginLeft: '$sm' }}>One of My Accounts</Box
         >
-        <Tab />
+        <RadioTab />
         <Box
           bgColor="surface"
           inline

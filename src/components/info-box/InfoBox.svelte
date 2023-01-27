@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+  export const EMPTY_VALUE = `<no value>`
+</script>
+
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
@@ -5,7 +9,9 @@
 
   type T = $$Generic
 
-  export let entries: Array<T & { key: string; value?: unknown }> = []
+  export let entries: Readonly<
+    Array<T & Readonly<{ key: string; value?: unknown }>>
+  > = []
   export let transparent: boolean = false
   export let loading: boolean = false
 
@@ -35,7 +41,7 @@
       {:else}
         <slot name="value" {entry}>
           <Text>
-            {entry.value === undefined ? `<no value>` : entry.value}
+            {entry.value === undefined ? EMPTY_VALUE : entry.value}
           </Text>
         </slot>
       {/if}
