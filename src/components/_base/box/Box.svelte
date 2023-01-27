@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
   import { css, config } from '@styles'
+  import { TAB_HEIGHT } from '../tabs/types/BoxTab.svelte'
 
   const variants = {
     wrapper: {
@@ -302,6 +303,12 @@
       true: {
         shadow: true
       }
+    },
+    useTabs: {
+      true: {
+        position: 'relative',
+        paddingTop: TAB_HEIGHT
+      }
     }
   } as const
 
@@ -340,6 +347,8 @@
   export let wrapper: boolean | undefined = undefined
   export let hidden: boolean | undefined = undefined
   export let shadow: boolean | undefined = undefined
+  export let position: keyof typeof variants['position'] | undefined = undefined
+  export let useTabs: boolean | undefined = undefined
 </script>
 
 <div
@@ -369,7 +378,9 @@
     bgColor,
     wrapper,
     hidden,
-    shadow
+    shadow,
+    position,
+    useTabs
   })}
 >
   <slot />
