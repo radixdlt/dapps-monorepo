@@ -99,6 +99,13 @@ export const ActionIO = object({
 })
 
 export const TransactionIO = object({
+  ledger_state: object({
+    network: string(),
+    state_version: number(),
+    proposer_round_timestamp: string(),
+    epoch: number(),
+    round: number()
+  }),
   transaction: object({
     confirmed_at: date(),
     fee_paid: object({
@@ -115,8 +122,15 @@ export const TransactionIO = object({
     message_hex: string().optional(),
     receipt: object({
       status: string(),
-      error_message: string().nullable()
-    }),
+      error_message: string().nullable(),
+      state_updates: object({
+        new_global_entities: array(
+          object({
+            global_address: string()
+          })
+        )
+      })
+    }).passthrough(),
     referenced_global_entities: array(string())
   })
 })

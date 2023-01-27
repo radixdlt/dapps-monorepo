@@ -197,8 +197,10 @@ export const stateMachine = createMachine<Context, Events, States>(
           .then(async ({ transactionIntentHash }) => ({
             txID: transactionIntentHash,
             entities: (
-              await queryServer('getTransactionDetails', transactionIntentHash)
-            ).entities,
+              await queryServer('getTransactionDetails', {
+                txID: transactionIntentHash
+              })
+            ).referencedEntities,
             badgeMetadata: (
               await queryServer('getEntityDetails', e.payload.badge?.address)
             ).metadata.items

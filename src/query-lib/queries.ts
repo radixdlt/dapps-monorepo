@@ -31,25 +31,35 @@ export const requestAddresses = makeQueries({
 })
 
 export const getTransactionDetails = makeQueries({
-  fn: async (txID: string) =>
+  fn: async (params: { txID: string; stateVersion?: number }) =>
     transactionApi.transactionCommittedDetails({
       transactionCommittedDetailsRequest: {
         transaction_identifier: {
           type: 'intent_hash',
-          value_hex: txID
-        }
+          value_hex: params.txID
+        },
+        ...(params.stateVersion
+          ? {
+              at_ledger_state: {
+                state_version: params.stateVersion
+              }
+            }
+          : {})
       }
     }),
 
   decoder: (res) => decoders('TransactionIO', res),
   transformationFn: (res) => ({
+    ledgerState: res.ledger_state,
     status: res.transaction.transaction_status,
     date: res.transaction.confirmed_at,
     fee: res.transaction.fee_paid.value,
     message: res.details.message_hex,
     details: res.details.raw_hex,
     receipt: res.details.receipt,
-    entities: res.details.referenced_global_entities
+    referencedEntities: res.details.referenced_global_entities,
+    createdEntities: res.details.receipt.state_updates.new_global_entities,
+    stateVersion: res.transaction.state_version
   })
 })
 

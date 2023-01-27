@@ -1,5 +1,8 @@
 <script lang="ts" context="module">
   export const EMPTY_VALUE = `<no value>`
+  export type Entries<T> = Readonly<
+    Array<Readonly<{ key: string; value?: unknown }> & T>
+  >
 </script>
 
 <script lang="ts">
@@ -9,9 +12,7 @@
 
   type T = $$Generic
 
-  export let entries: Readonly<
-    Array<T & Readonly<{ key: string; value?: unknown }>>
-  > = []
+  export let entries: Entries<T> = []
   export let transparent: boolean = false
   export let loading: boolean = false
 

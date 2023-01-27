@@ -55,7 +55,7 @@ type AddressPrefix =
 
 export const getAddressPrefix = (address: string): AddressPrefix => {
   const parts = address.split('_')
-  return (parts[0] as AddressPrefix) ?? 'transaction'
+  return parts.length > 1 ? (parts[0] as AddressPrefix) : 'transaction'
 }
 
 export const getNFTAddress = (resourceAddress: string, nftID: string) =>
