@@ -3,15 +3,6 @@ vi.mock('$env/static/public', () => ({
   PUBLIC_APP_ENV: 'development'
 }))
 
-vi.mock('$env/static/public', () => ({
-  PUBLIC_NETWORK_NAME: 'hammunet',
-  PUBLIC_APP_ENV: 'development'
-}))
-
-vi.mock('$app/navigation', () => ({
-  goto: vi.fn()
-}))
-
 vi.mock('$app/stores', async () => {
   const { readable, writable } = await import('svelte/store')
   /**

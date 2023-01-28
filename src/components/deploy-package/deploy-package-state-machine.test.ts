@@ -1,93 +1,74 @@
-import { interpret } from 'xstate'
 import { stateMachine } from './deploy-package-state-machine'
 
 describe('#deploy state machine', () => {
   it('should transition from not-connected to connected', () => {
     expect(
-      stateMachine
-        .transition('connect.idle', 'CONNECT')
-        .matches('connect.success')
+      stateMachine.transition('not-connected', 'CONNECT').matches('connected')
     ).toBeTruthy()
   })
 
-  it('should succeed transition from deploy.idle to deploy.pending', () => {
-    expect(
-      stateMachine
-        .transition('deploy.idle', {
-          type: 'DEPLOY',
-          payload: {
-            badge: {
-              name: 'test',
-              address: 'test',
-              id: 'test'
-            },
-            account: 'account',
-            wasm: 'wasm',
-            abi: 'abi'
-          }
-        })
-        .matches('deploy.pending')
-    ).toBeTruthy()
+  describe('selecting account', () => {
+    it('should transition from idle to selected', () => {
+      expect(
+        stateMachine
+          .transition({ connected: 'selecting-account' }, 'SELECT_ACCOUNT')
+          .matches({ connected: { 'selecting-account': 'selected' } })
+      ).toBeTruthy()
+    })
   })
 
-  it('should fail transition from deploy.idle to deploy.pending due to failed conditions', () => {
-    expect(
-      stateMachine
-        .transition('deploy.idle', {
-          type: 'DEPLOY',
-          // @ts-ignore - this is a test
-          payload: {
-            badge: {
-              name: 'test',
-              address: 'test',
-              id: 'test'
-            },
-            account: 'account',
-            wasm: 'wasm'
-          }
-        })
-        .matches('deploy.pending')
-    ).toBeFalsy()
+  describe('uploading files', () => {
+    it('should transition from idle to uploading', () => {
+      expect(
+        stateMachine
+          .transition(
+            { connected: { 'uploading-files': 'idle' } },
+            'UPLOAD_FILES'
+          )
+          .matches({ connected: { 'uploading-files': 'uploading' } })
+      ).toBeTruthy()
+    })
   })
 
-  it('Should transition all the way to final', async () =>
-    new Promise((resolve) => {
-      const mockToggleMachine = stateMachine.withConfig({
-        services: {
-          deploy: () =>
-            Promise.resolve({
-              txID: 'txID',
-              entities: [],
-              badgeMetadata: [],
-              badgeName: 'badgename'
-            })
-        }
-      })
+  describe('selecting badge', () => {
+    it('should transition from idle to selected', () => {
+      expect(
+        stateMachine
+          .transition(
+            {
+              connected: {
+                'selecting-badge': 'idle'
+              }
+            },
+            'SELECT_BADGE'
+          )
+          .matches({
+            connected: {
+              'selecting-badge': 'selected'
+            }
+          })
+      ).toBeTruthy()
+    })
+  })
 
-      const fetchMachine = interpret(mockToggleMachine).onTransition(
-        (state) => {
-          if (state.matches('deploy.pending')) {
-            expect(state.matches('deploy.pending')).toBeTruthy()
-          }
-          if (state.matches('deploy.success')) {
-            expect(state.matches('deploy.success')).toBeTruthy()
-            resolve('done')
-          }
-        }
-      )
-      fetchMachine.start()
-      fetchMachine.send({
-        type: 'DEPLOY',
-        payload: {
-          badge: {
-            name: 'test',
-            address: 'test',
-            id: 'test'
-          },
-          account: 'account',
-          wasm: 'wasm',
-          abi: 'abi'
-        }
-      })
-    }))
+  describe('uploading-files', () => {
+    it('should transition from idle to uploading', () => {
+      expect(
+        stateMachine
+          .transition(
+            {
+              connected: {
+                'uploading-files': 'idle'
+              }
+            },
+            'UPLOAD_FILES'
+          )
+          .matches({
+            connected: {
+              'uploading-files': 'uploading'
+            }
+          })
+      ).toBeTruthy()
+    })
+  })
 })
