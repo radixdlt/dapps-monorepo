@@ -137,7 +137,7 @@ type States =
           value: string
         }>
         packageAddress: string
-        badge: badgeType
+        badgeName?: string
       }
     }
 
