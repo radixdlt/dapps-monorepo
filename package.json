@@ -53,7 +53,6 @@
     "@vitebook/core": "^0.100.5",
     "@vitebook/theme-default": "^0.100.5",
     "@vitest/coverage-c8": "^0.23.2",
-    "@xstate/inspect": "^0.7.0",
     "@zerodevx/svelte-toast": "^0.8.0",
     "babel-loader": "^8.2.5",
     "cypress": "^10.10.0",
@@ -84,7 +83,6 @@
     "@radixdlt/connect-button": "^0.10.0",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",
-    "@xstate/svelte": "^2.0.0",
     "bignumber.js": "^9.1.0",
     "crypto-js": "^4.1.1",
     "filepond": "^4.30.4",
@@ -93,7 +91,6 @@
     "svelte-filepond": "^0.2.0",
     "svelte-local-storage-store": "^0.3.1",
     "svelte-samlat": "^0.2.0",
-    "xstate": "^4.33.6",
     "zod": "^3.18.0"
   }
 }
