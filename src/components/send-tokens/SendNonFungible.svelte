@@ -2,16 +2,14 @@
   import Box from '@components/_base/box/Box.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import type { TransformWithOverview } from '@stateMachines/transformers'
   import { boxStyle } from './SendTokenForm.svelte'
+  import type { TransformWithOverview } from './side-effects'
 
   export let resources: TransformWithOverview | undefined
   export let selectedFromAccount: string
   export let selectedToAccount: string
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
-
-  $: console.log(resources)
 
   const getSendNFTManifest = (
     nfts: {

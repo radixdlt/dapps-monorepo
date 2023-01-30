@@ -5,8 +5,8 @@
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { mutate } from '@queries'
-  import type { TransformWithOverview } from '@stateMachines/transformers'
   import { boxStyle } from './SendTokenForm.svelte'
+  import type { TransformWithOverview } from './side-effects'
 
   export let resources: TransformWithOverview
   export let selectedFromAccount: string

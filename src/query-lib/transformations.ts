@@ -1,15 +1,17 @@
 import type { EntityOverview, EntityResources } from '@io/gateway'
 
 export const transformEntityResources = (res: EntityResources) => {
-  const fungible = res.fungible_resources?.items?.map((item) => ({
-    address: item.address,
-    amount: item.amount?.value
-  }))
+  const fungible =
+    res.fungible_resources?.items?.map((item) => ({
+      address: item.address,
+      amount: item.amount?.value
+    })) ?? []
 
-  const nonFungible = res.non_fungible_resources?.items?.map((item) => ({
-    address: item.address,
-    amount: String(item.amount)
-  }))
+  const nonFungible =
+    res.non_fungible_resources?.items?.map((item) => ({
+      address: item.address,
+      amount: String(item.amount)
+    })) ?? []
 
   return { fungible, nonFungible }
 }
