@@ -17,15 +17,13 @@
   import Input from '@components/_base/input/Input.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import { stateMachine } from '@stateMachines/account-state-machine'
-  import { useMachine } from '@xstate/svelte'
   import SendFungible from './SendFungible.svelte'
   import SendNonFungible from './SendNonFungible.svelte'
   import { mutate } from '@queries'
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
-
-  const { state, send } = useMachine(stateMachine)
+  import { getResources } from './side-effects'
+  import { writable } from 'svelte/store'
 
   type OptionsType = Options<{ address: string }>
 
@@ -36,9 +34,10 @@
 
   $: selectedFromAccount = accounts?.[0] || { address: '', label: '' }
 
-  $: send('LOAD', {
-    address: selectedFromAccount.address
-  })
+  const transformedOverview =
+    writable<Awaited<ReturnType<typeof getResources>>>(undefined)
+
+  $: getResources(selectedFromAccount.address).then(transformedOverview.set)
 
   let selectedToAccount = { address: '', label: '' }
 
@@ -50,6 +49,7 @@
 
   let setTransactionManifest = (manifest: string) =>
     (transactionManifest = manifest)
+
   const setResourceSelected = (selected: boolean) =>
     (resourceSelected = selected)
 
@@ -108,8 +108,8 @@
   {#if tokenType === 'fungible'}
     <SendFungible
       selectedFromAccount={selectedFromAccount.address}
-      selectedToAccount={selectedToAccount.address}
-      resources={$state.context.transformedOverview?.fungible || []}
+      selectedToAccount={selectedToAccount.address || otherAccount}
+      resources={$transformedOverview?.fungible || []}
       {setTransactionManifest}
       {setResourceSelected}
     />
@@ -117,8 +117,8 @@
   {#if tokenType === 'nonFungible'}
     <SendNonFungible
       selectedFromAccount={selectedFromAccount.address}
-      selectedToAccount={selectedToAccount.address}
-      resources={$state.context.transformedOverview?.nonFungible}
+      selectedToAccount={selectedToAccount.address || otherAccount}
+      resources={$transformedOverview?.nonFungible}
       {setTransactionManifest}
       {setResourceSelected}
     />

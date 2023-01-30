@@ -1,3 +1,7 @@
+import { queryServer } from '@queries'
+import type { EntityResourcesTransformed } from '@queries/transformations'
+import { andThen, pipe } from 'ramda'
+
 import type { EntityOverviewTransformed } from '@queries/transformations'
 import { getNFTAddress } from '@utils'
 
@@ -65,3 +69,53 @@ export const transformNFTWithOverview = (
   }, [])
   return transformedOverview || []
 }
+
+const transformOverview = async (
+  overview: Awaited<ReturnType<ReturnType<typeof getOverview>>>
+) => {
+  const transformedOverviewsFungible = transformWithOverview(
+    overview.fungible.withOverviews
+  )
+  const transformedOverviewsNonFungible = transformNFTWithOverview(
+    overview.nonFungible
+  )
+  return {
+    nonFungible: transformedOverviewsNonFungible,
+    fungible: transformedOverviewsFungible
+  }
+}
+
+const getOverview =
+  (accountAddress: string) => async (resources: EntityResourcesTransformed) => {
+    const fungible =
+      resources.fungible.length > 0
+        ? await queryServer('getEntityOverview', resources.fungible)
+        : {
+            withOverviews: [],
+            withoutOverviews: []
+          }
+
+    const nonFungible =
+      resources.fungible.length > 0
+        ? await Promise.all(
+            (
+              await queryServer('getEntityOverview', resources.nonFungible)
+            ).withOverviews.map(async (nft) => ({
+              ...(await queryServer('getEntityNonFungibleIDs', {
+                accountAddress,
+                nftAddress: nft.address
+              })),
+              ...nft
+            }))
+          )
+        : []
+
+    return { fungible, nonFungible }
+  }
+
+export const getResources = (accountAddress: string) =>
+  pipe(
+    () => queryServer('getEntityResources', accountAddress),
+    andThen(getOverview(accountAddress)),
+    andThen(transformOverview)
+  )()
