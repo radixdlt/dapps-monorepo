@@ -9,7 +9,6 @@
   })()
 
   const tabClass = css({
-    backgroundColor: 'transparent',
     border: '1px solid $grey',
     borderRadius: '50%',
     boxShadow: 'inset 0 0 0 0 white',
@@ -21,7 +20,7 @@
 </script>
 
 <label>
-  <Box inline items="center" gap="xsmall">
+  <Box wrapper inline items="center">
     <Tab
       class={({ selected }) => `${tabClass} ${selected ? selectedClass : ''}`}
     />
