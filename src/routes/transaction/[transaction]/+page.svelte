@@ -20,6 +20,7 @@
   import Raw from './Raw.svelte'
   import Epoch from './values/Epoch.svelte'
   import Round from './values/Round.svelte'
+  import { goto } from '$app/navigation'
 
   export let data: PageData
 
@@ -39,11 +40,7 @@
     })
   }
 
-  $: console.log($state.error)
-
-  $: if ($state.status === 'error') {
-    // goto('/not-found')
-  }
+  $: if ($state.status === 'error') goto('/not-found')
 
   const entry = <
     C extends typeof SvelteComponent,
