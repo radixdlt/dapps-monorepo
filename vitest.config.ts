@@ -20,9 +20,6 @@ export default defineConfig({
     }
   },
   test: {
-    deps: {
-      inline: ['xstate']
-    },
     setupFiles: ['./setup-tests.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     globals: true,
