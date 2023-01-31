@@ -269,6 +269,14 @@ jobs:
           registry: eu.gcr.io
           username: _json_key
           password: ${{ env.GH_GCR_JSON_KEY }}
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with:
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-dashboard"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -317,6 +325,14 @@ jobs:
           secret_prefix: "GH_GCR_JSON_KEY"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
           parse_json: false
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with:
+          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+          app_name: "dashboard"
+          step_name: "push-story"
+          secret_prefix: "GH"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          parse_json: true
       - name: Login to GCR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:

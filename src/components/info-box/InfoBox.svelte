@@ -1,8 +1,24 @@
 <script lang="ts" context="module">
+  import type { SvelteComponent } from 'svelte'
+
   export const EMPTY_VALUE = `<no value>`
+
   export type Entries<T> = Readonly<
     Array<Readonly<{ key: string; value?: unknown }> & T>
   >
+
+  export const infoboxEntry = <
+    C extends typeof SvelteComponent,
+    V extends InstanceType<C>['$$prop_def']['value']
+  >(
+    component: C,
+    key: string,
+    value: V
+  ) => ({
+    key,
+    value,
+    component
+  })
 </script>
 
 <script lang="ts">
