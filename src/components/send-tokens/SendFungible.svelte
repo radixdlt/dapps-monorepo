@@ -55,7 +55,7 @@
 
   let amountToSend: number = 0
 
-  $: hasEnoughTokens = Number(amountAvailable) > amountToSend
+  $: hasEnoughTokens = Number(amountAvailable) >= amountToSend
 
   $: setResourceSelected(
     selectedResource && amountToSend > 0 && hasEnoughTokens
