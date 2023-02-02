@@ -1,15 +1,14 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "09:30"
-      timezone: "UTC"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-      time: "09:30"
+      time: "05:00"
       timezone: "UTC"
-      
+    reviewers:
+      - "RDXWorks/devops-maintainers"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    open-pull-requests-limit: 0
