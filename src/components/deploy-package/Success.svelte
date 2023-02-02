@@ -1,6 +1,6 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Box from '@components/_base/box/Box.svelte'
+  import Success from '@components/success/Success.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { getNFTAddress } from '@utils'
 
@@ -15,44 +15,41 @@
   const NFTAddress = getNFTAddress(badgeInfo.address, badgeInfo.id)
 </script>
 
-<center>
-  <Text bold size="xlarge">Your package was submitted! 🎉</Text>
-  <Box cx={{ width: '900px' }}>
-    <InfoBox
-      transparent
-      entries={[
-        {
-          key: 'Tx ID',
-          value: txID,
-          href: `/transaction/${txID}`
-        },
-        {
-          key: 'Package address',
-          value: packageAddress,
-          href: `/package/${packageAddress}`
-        },
-        {
-          key: 'Owner badge',
-          value: badgeInfo.name
-            ? `${badgeInfo.name} (${NFTAddress})`
-            : NFTAddress,
-          href: `/resource/${badgeInfo.address}`
-        }
-      ]}
-      loading={false}
-    >
-      <Text align="right" bold slot="key" let:entry>
-        {entry.key}
-      </Text>
-      <Text align="left" slot="value" let:entry>
-        {#if entry.href}
-          <Text color="link">
-            <a href={entry.href}>{entry.value}</a>
-          </Text>
-        {:else}
-          {entry.value}
-        {/if}
-      </Text>
-    </InfoBox>
-  </Box>
-</center>
+<Success title="Your package was submitted! 🎉">
+  <InfoBox
+    transparent
+    entries={[
+      {
+        key: 'Tx ID',
+        value: txID,
+        href: `/transaction/${txID}`
+      },
+      {
+        key: 'Package address',
+        value: packageAddress,
+        href: `/package/${packageAddress}`
+      },
+      {
+        key: 'Owner badge',
+        value: badgeInfo.name
+          ? `${badgeInfo.name} (${NFTAddress})`
+          : NFTAddress,
+        href: `/resource/${badgeInfo.address}`
+      }
+    ]}
+    loading={false}
+  >
+    <Text align="right" bold slot="key" let:entry>
+      {entry.key}
+    </Text>
+    <Text align="left" slot="value" let:entry>
+      {#if entry.href}
+        <Text color="link">
+          <a href={entry.href}>{entry.value}</a>
+        </Text>
+      {:else}
+        {entry.value}
+      {/if}
+    </Text>
+  </InfoBox>
+</Success>
