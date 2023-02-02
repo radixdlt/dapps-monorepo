@@ -11,5 +11,6 @@ export const icons = {
   copy: '/icons/copy.svg',
   listboxChevron: '/icons/listbox-chevron.svg',
   search: '/icons/search_icon.svg',
-  nfts: '/icons/nfts.svg'
+  nfts: '/icons/nfts.svg',
+  dappMetadata: '/icons/dapp-metadata.svg'
 } as const

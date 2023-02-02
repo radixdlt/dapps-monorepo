@@ -12,6 +12,11 @@
   })
 
   const variants = {
+    nowrap: {
+      true: {
+        whiteSpace: 'nowrap'
+      }
+    },
     align: {
       center: {
         textAlign: 'center'
@@ -263,13 +268,14 @@
     undefined
   export let inline: true | false = false
   export let align: keyof typeof variants['align'] | undefined = undefined
+  export let nowrap: boolean = false
 
   const text = css({
     variants,
     ...cx
   })
 
-  const textClass = text({
+  $: textClass = text({
     full,
     pointer,
     p,
@@ -288,7 +294,8 @@
     cellAlign,
     slightlyMuted,
     inline,
-    align
+    align,
+    nowrap
   })
 </script>
 

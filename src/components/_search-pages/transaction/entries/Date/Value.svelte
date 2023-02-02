@@ -1,7 +1,7 @@
 <script lang="ts">
   import { EMPTY_VALUE } from '@components/info-box/InfoBox.svelte'
 
-  export let value: string | undefined
+  export let data: Date | undefined
 </script>
 
-{value ?? EMPTY_VALUE}
+{data ?? EMPTY_VALUE}

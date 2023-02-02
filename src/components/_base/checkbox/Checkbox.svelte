@@ -5,11 +5,13 @@
 
   type G = $$Generic
 
-  type T = G & { label: string }
+  type T = G & { label: string; checked?: boolean }
 
   export let options: T[]
   export let selected: G[] = []
   export let loading = false
+
+  $: selected = options.filter((o) => o.checked)
 
   const inputStyle = css({
     appearance: 'none',
@@ -34,7 +36,7 @@
       <input
         class={inputStyle}
         type="checkbox"
-        bind:group={selected}
+        bind:checked={option.checked}
         value={option}
       />
       <slot label={option.label}>
