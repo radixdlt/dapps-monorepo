@@ -1,9 +1,11 @@
+import type { Flag } from './feature-flags'
+
 const environment = {
   PROD: 'prod',
   DEV: 'dev'
 }
 
-export const appFlags = (env: keyof typeof environment) =>
+export const appFlags = (env: keyof typeof environment): Readonly<Flag[]> =>
   [
     {
       id: 'deploy-package',
@@ -31,7 +33,7 @@ export const appFlags = (env: keyof typeof environment) =>
       enabled: {
         [environment.DEV]: true,
         [environment.PROD]: false
-      }[environment[env]]
+      }[environment[env]]!
     },
     {
       id: 'cookie-banner',
@@ -39,6 +41,6 @@ export const appFlags = (env: keyof typeof environment) =>
       enabled: {
         [environment.DEV]: false,
         [environment.PROD]: true
-      }[environment[env]]
+      }[environment[env]]!
     }
   ] as const
