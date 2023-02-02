@@ -5,8 +5,8 @@
   import Text from '@components/_base/text/Text.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { mutate } from '@queries'
-  import Success from './Success.svelte'
   import Dialog from '@components/_base/dialog/Dialog.svelte'
+  import { goto } from '$app/navigation'
 
   let transactionManifest = ''
 
@@ -26,6 +26,9 @@
       send()
     }
   }
+
+  if ($data?.transactionIntentHash)
+    goto(`/transaction-manifest/success?txID=${$data.transactionIntentHash}`)
 </script>
 
 <Dialog bind:open={showDialog} size="$6xl">
@@ -48,31 +51,27 @@
   </Box>
 </Dialog>
 
-{#if $data?.transactionIntentHash}
-  <Success txID={$data?.transactionIntentHash} />
-{:else}
-  <Box>
-    <Text
-      >Enter raw transaction manifest text to send to your linked Radix Wallet.
-      No method call to “lock_fee” is required – the wallet will add this
-      automatically.</Text
-    >
-  </Box>
-  <Box justify="center">
-    <Textarea
-      bind:value={transactionManifest}
-      placeholder="Enter a raw transaction manifest"
-      size="lg"
-    />
-  </Box>
+<Box>
+  <Text
+    >Enter raw transaction manifest text to send to your linked Radix Wallet. No
+    method call to “lock_fee” is required – the wallet will add this
+    automatically.</Text
+  >
+</Box>
+<Box justify="center">
+  <Textarea
+    bind:value={transactionManifest}
+    placeholder="Enter a raw transaction manifest"
+    size="lg"
+  />
+</Box>
 
-  <Box justify="center">
-    {#if $loading}
-      <Button>
-        <LoadingSpinner />
-      </Button>
-    {:else}
-      <Button on:click={onSendButton}>Submit</Button>
-    {/if}
-  </Box>
-{/if}
+<Box justify="center">
+  {#if $loading}
+    <Button>
+      <LoadingSpinner />
+    </Button>
+  {:else}
+    <Button on:click={onSendButton}>Submit</Button>
+  {/if}
+</Box>

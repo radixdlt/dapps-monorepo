@@ -4,6 +4,11 @@
   import { TAB_HEIGHT } from '../tabs/types/BoxTab.svelte'
 
   const variants = {
+    center: {
+      true: {
+        textAlign: 'center'
+      }
+    },
     wrapper: {
       true: {
         p: '$0',
@@ -349,6 +354,7 @@
   export let shadow: boolean | undefined = undefined
   export let position: keyof typeof variants['position'] | undefined = undefined
   export let useTabs: boolean | undefined = undefined
+  export let center: boolean = false
 </script>
 
 <div
@@ -380,7 +386,8 @@
     hidden,
     shadow,
     position,
-    useTabs
+    useTabs,
+    center
   })}
 >
   <slot />
