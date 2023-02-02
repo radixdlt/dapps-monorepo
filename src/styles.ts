@@ -42,6 +42,7 @@ export const space = {
 }
 
 export type SpaceKeys = `$${keyof typeof space}`
+export type Size = `$${keyof typeof config['theme']['sizes']}`
 
 export const {
   css,

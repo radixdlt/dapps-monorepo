@@ -37,7 +37,10 @@
   const transformedOverview =
     writable<Awaited<ReturnType<typeof getResources>>>(undefined)
 
-  $: getResources(selectedFromAccount.address).then(transformedOverview.set)
+  $: {
+    console.log(selectedFromAccount.address)
+    getResources(selectedFromAccount.address).then(transformedOverview.set)
+  }
 
   let selectedToAccount = { address: '', label: '' }
 

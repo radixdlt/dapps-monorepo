@@ -4,29 +4,29 @@
   type T = $$Generic<'number' | 'text'>
 
   export let type: T
-
   export let value:
     | {
         number: number
         text: string
       }[typeof type]
     | undefined = undefined
-
   export let placeholder: string | undefined = undefined
+  export let disabled = false
 
   const typeAction = (node: HTMLInputElement) => {
     node.type = type
   }
 
-  const style = css({
+  $: style = css({
     width: '100%',
     borderRadius: '$sm',
     backgroundColor: '$background',
     padding: '$sm',
     border: 'none',
     borderBottom: '1px solid $borderColor',
-    color: '$textColor'
+    color: '$textColor',
+    opacity: `${disabled ? '50%' : '100%'}`
   })()
 </script>
 
-<input use:typeAction bind:value class={style} {placeholder} />
+<input {disabled} use:typeAction bind:value class={style} {placeholder} />

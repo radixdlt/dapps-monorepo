@@ -1,7 +1,8 @@
-import { accounts } from '@stores'
+import type { Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { Buffer } from 'buffer'
 import CryptoJS from 'crypto-js'
+import { getContext, setContext, type SvelteComponent } from 'svelte'
 
 const XRD_DECIMALS = 18
 
@@ -75,3 +76,16 @@ export const addressToRoute = (address: string) =>
     component: `/component/${address}`,
     transaction: `/transaction/${address}`
   }[getAddressPrefix(address)])
+
+export const useContext = <
+  Contexts extends Record<string, Values>,
+  Values = Contexts[keyof Contexts]
+>() => ({
+  set: <Name extends keyof Contexts>(name: Name, value: Contexts[Name]) =>
+    setContext<Contexts[typeof name]>(name, value),
+  get: <Name extends keyof Contexts>(name: Name) =>
+    getContext<Contexts[typeof name]>(name)
+})
+
+export const accountLabel = (account: Account) =>
+  `${account.label} (${shortenAddress(account.address)})`

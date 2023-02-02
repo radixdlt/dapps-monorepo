@@ -4,6 +4,7 @@ import {
   StateApi,
   TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
+import type { Account } from '@stores'
 import { andThen, pipe } from 'ramda'
 import {
   transformEntityOverview,
@@ -56,7 +57,7 @@ export const getEntityOverview = pipe(
   ) => {
     const res = await stateApi.entityOverview({
       entityOverviewRequest: {
-        addresses: resources.map((r) => r.address) || []
+        addresses: resources.map((r) => r.address)
       }
     })
     return { overview: res, resources }
@@ -104,5 +105,12 @@ export const getNonFungibleIDs = (address: string) =>
   stateApi.nonFungibleIds({
     nonFungibleIdsRequest: {
       address
+    }
+  })
+
+export const getOverview = (addresses: string[]) =>
+  stateApi.entityOverview({
+    entityOverviewRequest: {
+      addresses
     }
   })

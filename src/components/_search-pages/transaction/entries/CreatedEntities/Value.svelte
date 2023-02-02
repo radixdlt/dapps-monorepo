@@ -3,14 +3,14 @@
   import Text from '@components/_base/text/Text.svelte'
   import { addressToRoute } from '@utils'
 
-  export let value: string[]
+  export let data: { global_address: string }[]
 </script>
 
 <Box wrapper>
-  {#each value as entity}
+  {#each data as entity}
     <Text color="link">
-      <a href={addressToRoute(entity)}>
-        {entity}
+      <a href={addressToRoute(entity.global_address)}>
+        {entity.global_address}
       </a>
     </Text>
   {/each}

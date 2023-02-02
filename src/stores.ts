@@ -1,10 +1,10 @@
 import { derived, writable } from 'svelte/store'
 import { writable as localStorageStore } from 'svelte-local-storage-store'
 
-type Account = {
+export type Account = {
   label: string
   address: string
-  appearanceId: number
+  appearanceId?: number
 }
 
 export const accounts = writable<Account[]>([])

@@ -4,12 +4,17 @@
   export let value: string | undefined = undefined
   export let placeholder: string | undefined = undefined
   export let size: 'sm' | 'md' | 'lg' = 'md'
+  export let transparent = true
+  export let disabled = false
+  export let maxlength: number = Number.MAX_VALUE
 
-  const style = css({
+  $: style = css({
     borderRadius: '$sm',
     outline: 'none',
     border: 'none',
-    padding: '$md'
+    padding: '$sm',
+    backgroundColor: `${transparent ? '' : '$background'}`,
+    opacity: `${disabled ? '50%' : '100%'}`
   })()
 
   const colsAndRows = {
@@ -28,4 +33,12 @@
   }[size]
 </script>
 
-<textarea bind:value class={style} {placeholder} {...colsAndRows} />
+<textarea
+  {disabled}
+  style="resize:none"
+  bind:value
+  class={style}
+  {placeholder}
+  {maxlength}
+  {...colsAndRows}
+/>

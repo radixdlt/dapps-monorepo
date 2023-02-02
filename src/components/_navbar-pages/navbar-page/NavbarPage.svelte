@@ -2,14 +2,13 @@
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { accounts, connected } from '@stores'
-  import { shortenAddress } from '@utils'
+  import { accountLabel } from '@utils'
 
   export let title: string
 
   $: accountsList = $accounts?.map((account) => ({
-    address: account.address,
-    label: `${account.label} (${shortenAddress(account.address)})`,
-    unavailable: false
+    ...account,
+    label: accountLabel(account)
   }))
 </script>
 
