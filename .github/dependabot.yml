@@ -4,4 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+      time: "08:57"
+      timezone: "UTC"
     target-branch: DO-1059-poc-dependabot
