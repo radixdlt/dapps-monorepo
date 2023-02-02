@@ -43,7 +43,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - name: Dump context
@@ -76,7 +76,7 @@ jobs:
   setup-tags:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - name: Docker tags for dashboard
@@ -114,7 +114,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
@@ -138,7 +138,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
@@ -162,7 +162,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
@@ -188,7 +188,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
@@ -212,7 +212,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - name: Use Node.js
@@ -243,7 +243,7 @@ jobs:
       contents: read
     needs: [build, setup-tags]
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
@@ -297,7 +297,7 @@ jobs:
     needs: 
     - setup-tags
     steps:
-      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@516dbb0c760f39b4cdd750ae095f1688780f68f4
       - name: Define network name
@@ -529,7 +529,7 @@ jobs:
         with:
           always-auth: true
           node-version: 16.17.1
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - name: Fetch AWS secrets
