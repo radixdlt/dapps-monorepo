@@ -216,7 +216,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Use Node.js
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
         with:
           always-auth: true
           node-version: 16.17.1
@@ -525,7 +525,7 @@ jobs:
       pull-requests: read
       contents: read
     steps:
-      - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
         with:
           always-auth: true
           node-version: 16.17.1
