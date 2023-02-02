@@ -58,7 +58,7 @@
     "cypress": "^10.10.0",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-storybook": "^0.6.4",
     "eslint-plugin-svelte": "^2.14.1",
     "eslint-plugin-unused-imports": "^2.0.0",
