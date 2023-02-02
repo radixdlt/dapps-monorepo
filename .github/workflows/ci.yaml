@@ -545,7 +545,7 @@ jobs:
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
       - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           start: yarn dev
           wait-on: http://localhost:5173
