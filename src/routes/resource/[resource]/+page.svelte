@@ -28,10 +28,6 @@
         (item) => item.key.toLowerCase() === 'description'
       )?.value
     },
-    {
-      key: 'Total supply',
-      value: $entityDetailsState.data?.details.total_supply
-    },
     ...($entityDetailsState.data?.metadata.items.filter(
       (item) =>
         !['description', 'symbol', 'name', 'url'].some(
@@ -52,10 +48,12 @@
     (item) => item.key.toLowerCase() === 'url'
   )?.value
 
-  $: resourceType = $entityDetailsState.data?.details.discriminator
+  $: resourceType = $entityDetailsState.data?.details?.discriminator
     ? {
         fungible_resource: 'Fungible Resource',
-        non_fungible_resource: 'Non Fungible Resource'
+        non_fungible_resource: 'Non Fungible Resource',
+        package: 'Package',
+        component: 'Component'
       }[$entityDetailsState.data?.details.discriminator]
     : ''
 </script>

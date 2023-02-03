@@ -1,6 +1,9 @@
-import type { EntityOverview, EntityResources } from '@io/gateway'
+import type {
+  EntityOverviewResponse,
+  EntityResourcesResponse
+} from '@radixdlt/babylon-gateway-api-sdk'
 
-export const transformEntityResources = (res: EntityResources) => {
+export const transformEntityResources = (res: EntityResourcesResponse) => {
   const fungible =
     res.fungible_resources?.items?.map((item) => ({
       address: item.address,
@@ -25,7 +28,7 @@ export const transformEntityOverview = ({
   overview
 }: {
   resources: EntityResourcesTransformed['fungible']
-  overview: EntityOverview
+  overview: EntityOverviewResponse
 }) => {
   const withOverviews = overview.entities.map((entity) => {
     const amount = resources?.find(
