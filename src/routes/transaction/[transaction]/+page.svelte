@@ -31,7 +31,7 @@
   $: ({ state } = query('getTransactionDetails', { txID: transactionAddress }))
   $: ({ state: networkState } = query('getTransactionDetails', {
     txID: transactionAddress,
-    stateVersion: $state.data?.stateVersion
+    stateVersion: $state.data?.stateVersion!
   }))
 
   $: if ($state.status === 'success') {
@@ -57,10 +57,10 @@
 
   $: entries = [
     entry(Status, 'Status', $state.data?.status),
-    entry(StateVersion, 'State version', $state.data?.stateVersion),
+    entry(StateVersion, 'State version', $state.data?.stateVersion!),
     entry(Epoch, 'Epoch', $networkState.data?.ledgerState.epoch),
     entry(Round, 'Round', $networkState.data?.ledgerState.round),
-    entry(Date, 'Date', $state.data?.date),
+    entry(Date, 'Date', $state.data?.date!),
     entry(Fee, 'Fee', `${$state.data?.fee} XRD`),
     entry(Message, 'Message', $state.data?.message),
     entry(

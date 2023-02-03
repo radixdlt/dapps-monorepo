@@ -1,5 +1,4 @@
 import { makeQueries } from 'svelte-samlat'
-import { decoders } from '@io'
 import { sendTransaction as _sendTransaction } from '../wallet-sdk'
 
 export const sendTransaction = makeQueries({
@@ -18,7 +17,8 @@ export const sendTransaction = makeQueries({
       blobs
     })
     if (res.isOk()) return res.value
+    throw res.error
   },
-  decoder: (res) => decoders('SendTransactionIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })

@@ -5,7 +5,6 @@ import {
   StateApi,
   TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { decoders } from '@io'
 import { getWalletData } from '../wallet-sdk'
 import {
   transformEntityOverview,
@@ -26,7 +25,7 @@ export const requestAddresses = makeQueries({
     if (res.isOk()) return res.value
     else throw Error(res.error.message)
   },
-  decoder: (res) => decoders('RequestAddressesIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })
 
@@ -48,17 +47,18 @@ export const getTransactionDetails = makeQueries({
       }
     }),
 
-  decoder: (res) => decoders('TransactionIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => ({
     ledgerState: res.ledger_state,
     status: res.transaction.transaction_status,
     date: res.transaction.confirmed_at,
-    fee: res.transaction.fee_paid.value,
+    fee: res.transaction.fee_paid?.value,
     message: res.details.message_hex,
     details: res.details.raw_hex,
     receipt: res.details.receipt,
     referencedEntities: res.details.referenced_global_entities,
-    createdEntities: res.details.receipt.state_updates.new_global_entities,
+    createdEntities: (res.details.receipt as any).state_updates
+      .new_global_entities as { global_address: string }[],
     stateVersion: res.transaction.state_version
   })
 })
@@ -77,10 +77,7 @@ export const getEntityOverview = makeQueries({
     })
     return { res, resources }
   },
-  decoder: (res) => {
-    const decodedRes = decoders('EntityOverviewIO', res.res)
-    return { overview: decodedRes, resources: res.resources }
-  },
+  decoder: (res) => ({ overview: res.res, resources: res.resources }),
   transformationFn: transformEntityOverview
 })
 
@@ -91,7 +88,7 @@ export const getEntityResources = makeQueries({
         address
       }
     }),
-  decoder: (res) => decoders('EntityResourcesIO', res),
+  decoder: (res) => res,
   transformationFn: transformEntityResources
 })
 
@@ -102,7 +99,7 @@ export const getEntityDetails = makeQueries({
         address
       }
     }),
-  decoder: (res) => decoders('EntityDetailsIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })
 
@@ -114,7 +111,7 @@ export const getEntityNonFungibleIDs = makeQueries({
         resource_address: params.nftAddress
       }
     }),
-  decoder: (res) => decoders('EntityNonFungibleIDsIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })
 
@@ -126,7 +123,7 @@ export const getNonFungibleData = makeQueries({
         non_fungible_id: params.id
       }
     }),
-  decoder: (res) => decoders('NonFungibleDataIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })
 
@@ -137,6 +134,6 @@ export const getNonFungibleIDs = makeQueries({
         address
       }
     }),
-  decoder: (res) => decoders('NonFungibleIDsIO', res),
+  decoder: (res) => res,
   transformationFn: (res) => res
 })

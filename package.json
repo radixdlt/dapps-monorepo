@@ -90,7 +90,6 @@
     "ramda": "^0.28.0",
     "svelte-filepond": "^0.2.0",
     "svelte-local-storage-store": "^0.3.1",
-    "svelte-samlat": "^0.2.0",
-    "zod": "^3.18.0"
+    "svelte-samlat": "^0.2.0"
   }
 }
