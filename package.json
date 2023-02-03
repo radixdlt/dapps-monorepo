@@ -29,7 +29,7 @@
     "@babel/core": "^7.18.10",
     "@stitches/core": "^1.2.8",
     "@storybook/addon-actions": "^6.5.10",
-    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-interactions": "^6.5.10",
     "@storybook/addon-links": "^6.5.10",
     "@storybook/addon-svelte-csf": "^2.0.7",
