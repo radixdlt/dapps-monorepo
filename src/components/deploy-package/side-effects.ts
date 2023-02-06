@@ -1,4 +1,10 @@
-import { mutateServer, queryServer } from '@queries'
+import {
+  getEntityDetails,
+  getEntityNonFungibleIDs,
+  getEntityResources,
+  getTransactionDetails
+} from '@api/gateway'
+import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
 
 export const getCreateBadgeManifest = (accountAddress: string) => `
@@ -51,16 +57,13 @@ export const getDeployPackageManifest = (
 }
 
 export const queryResources = async (selectedAccountAddress: string) => {
-  const { nonFungible } = await queryServer(
-    'getEntityResources',
-    selectedAccountAddress
-  )
+  const { nonFungible } = await getEntityResources(selectedAccountAddress)
   if (!nonFungible) return []
 
   const nonFungiblesWithNames = await Promise.all(
     nonFungible.map(async (nft) => ({
       ...nft,
-      name: await queryServer('getEntityDetails', nft.address).then(
+      name: await getEntityDetails(nft.address).then(
         (response) =>
           response.metadata.items.find((item) => item.key === 'name')?.value
       )
@@ -70,10 +73,7 @@ export const queryResources = async (selectedAccountAddress: string) => {
   const nfts = await Promise.all(
     nonFungiblesWithNames.map(async (nft) => ({
       name: nft.name,
-      ...(await queryServer('getEntityNonFungibleIDs', {
-        accountAddress: selectedAccountAddress!,
-        nftAddress: nft.address
-      }))
+      ...(await getEntityNonFungibleIDs(selectedAccountAddress!, nft.address))
     }))
   )
 
@@ -96,24 +96,20 @@ export const deploy = async (
   selectedAccountAddress: string,
   selectedNftAddress: string
 ) => {
-  return mutateServer('sendTransaction', {
-    transactionManifest: getDeployPackageManifest(
+  return sendTransaction(
+    getDeployPackageManifest(
       wasm,
       abi,
       selectedAccountAddress,
       selectedNftAddress
     ),
-    blobs: [wasm, abi]
-  })
+    [wasm, abi]
+  )
     .then(async ({ transactionIntentHash }) => ({
       txID: transactionIntentHash,
-      entities: (
-        await queryServer('getTransactionDetails', {
-          txID: transactionIntentHash
-        })
-      ).createdEntities,
-      badgeMetadata: (await queryServer('getEntityDetails', selectedNftAddress))
-        .metadata.items
+      entities: (await getTransactionDetails(transactionIntentHash))
+        .createdEntities,
+      badgeMetadata: (await getEntityDetails(selectedNftAddress)).metadata.items
     }))
     .then((result) => ({
       ...result,
@@ -123,6 +119,4 @@ export const deploy = async (
 }
 
 export const createBadge = (accountAddress: string) =>
-  mutateServer('sendTransaction', {
-    transactionManifest: getCreateBadgeManifest(accountAddress)
-  })
+  sendTransaction(getCreateBadgeManifest(accountAddress))

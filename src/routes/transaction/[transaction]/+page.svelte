@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { query } from '@queries'
   import Box from '@components/_base/box/Box.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import { getTxManifest } from '../../../to-be-removed/ret'
@@ -21,26 +20,31 @@
   import Epoch from './values/Epoch.svelte'
   import Round from './values/Round.svelte'
   import { goto } from '$app/navigation'
+  import { query } from '@api/query'
 
   export let data: PageData
 
-  $: transactionAddress = data.transactionAddress
+  $: transactionHash = data.transactionHash
 
   let manifest: string | undefined
 
-  $: ({ state } = query('getTransactionDetails', { txID: transactionAddress }))
-  $: ({ state: networkState } = query('getTransactionDetails', {
-    txID: transactionAddress,
-    stateVersion: $state.data?.stateVersion!
-  }))
+  $: ({
+    send,
+    response: txDetails,
+    loading,
+    error
+  } = query('getTransactionDetails'))
+  $: send(transactionHash)
 
-  $: if ($state.status === 'success') {
-    getTxManifest($state.data.details).then((res) => {
+  $: ({ send: _send, response: networkState } = query('getTransactionDetails'))
+  $: _send(transactionHash, $networkState?.stateVersion!)
+
+  $: if ($txDetails)
+    getTxManifest($txDetails.details).then((res) => {
       manifest = res
     })
-  }
 
-  $: if ($state.status === 'error') goto('/not-found')
+  $: if ($error) goto('/not-found')
 
   const entry = <
     C extends typeof SvelteComponent,
@@ -56,28 +60,28 @@
   })
 
   $: entries = [
-    entry(Status, 'Status', $state.data?.status),
-    entry(StateVersion, 'State version', $state.data?.stateVersion!),
-    entry(Epoch, 'Epoch', $networkState.data?.ledgerState.epoch),
-    entry(Round, 'Round', $networkState.data?.ledgerState.round),
-    entry(Date, 'Date', $state.data?.date!),
-    entry(Fee, 'Fee', `${$state.data?.fee} XRD`),
-    entry(Message, 'Message', $state.data?.message),
+    entry(Status, 'Status', $txDetails?.status),
+    entry(StateVersion, 'State version', $txDetails?.stateVersion!),
+    entry(Epoch, 'Epoch', $networkState?.ledgerState.epoch),
+    entry(Round, 'Round', $networkState?.ledgerState.round),
+    entry(Date, 'Date', $txDetails?.date!),
+    entry(Fee, 'Fee', `${$txDetails?.fee} XRD`),
+    entry(Message, 'Message', $txDetails?.message),
     entry(
       CreatedEntities,
       'Created entities',
-      $state.data?.createdEntities ?? []
+      $txDetails?.createdEntities ?? []
     ),
     entry(
       ReferencedEntities,
       'Referenced entities',
-      $state.data?.referencedEntities ?? []
+      $txDetails?.referencedEntities ?? []
     )
   ] as const
 </script>
 
 <Box>
-  <ResourceViewTitle title="Transaction" resourceAddress={transactionAddress} />
+  <ResourceViewTitle title="Transaction" resourceAddress={transactionHash} />
 </Box>
 
 <Box bgColor="surface" useTabs>
@@ -88,10 +92,10 @@
     </svelte:fragment>
     <svelte:fragment slot="panels">
       <TabPanel>
-        <Overview {entries} {manifest} loading={$state.status === 'loading'} />
+        <Overview {entries} {manifest} loading={$loading} />
       </TabPanel>
       <TabPanel>
-        <Raw receipt={$state.data?.receipt} />
+        <Raw receipt={$txDetails?.receipt} />
       </TabPanel>
     </svelte:fragment>
   </Tabs>

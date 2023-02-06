@@ -19,18 +19,18 @@
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import SendFungible from './SendFungible.svelte'
   import SendNonFungible from './SendNonFungible.svelte'
-  import { mutate } from '@queries'
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
   import { getResources } from './side-effects'
   import { writable } from 'svelte/store'
+  import { query } from '@api/query'
 
   type OptionsType = Options<{ address: string }>
 
   export let accounts: OptionsType[] | undefined = undefined
   export let tokenType: 'fungible' | 'nonFungible'
 
-  const { trigger, data, loading } = mutate('sendTransaction')
+  const { send, loading, response } = query('sendTransaction')
 
   $: selectedFromAccount = accounts?.[0] || { address: '', label: '' }
 
@@ -53,7 +53,8 @@
   const setResourceSelected = (selected: boolean) =>
     (resourceSelected = selected)
 
-  $: if ($data) goto(`/send-nft/success?txID=${$data.transactionIntentHash}`)
+  $: if ($response)
+    goto(`/send-nft/success?txID=${$response.transactionIntentHash}`)
 </script>
 
 <Box bgColor="surface" flex="col" gap="medium">
@@ -130,7 +131,7 @@
         (selectedToAccount?.address || otherAccount.length > 0) &&
         resourceSelected
       )}
-      on:click={() => trigger({ transactionManifest })}
+      on:click={() => send(transactionManifest)}
     >
       {#if $loading}
         <LoadingSpinner />
