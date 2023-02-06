@@ -89,7 +89,6 @@
     "filepond-plugin-file-validate-type": "^1.2.8",
     "ramda": "^0.28.0",
     "svelte-filepond": "^0.2.0",
-    "svelte-local-storage-store": "^0.3.1",
-    "svelte-samlat": "^0.2.0"
+    "svelte-local-storage-store": "^0.3.1"
   }
 }

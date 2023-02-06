@@ -4,31 +4,30 @@
   import Button from '@components/_base/button/Button.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
-  import { mutate } from '@queries'
   import Dialog from '@components/_base/dialog/Dialog.svelte'
+  import { query } from '@api/query'
   import { goto } from '$app/navigation'
 
   let transactionManifest = ''
 
   let showDialog = false
 
-  const { trigger, loading, data } = mutate('sendTransaction')
+  const { send, response, loading } = query('sendTransaction')
 
-  const send = () =>
-    trigger({
-      transactionManifest
-    })
+  const sendTx = () => send(transactionManifest)
 
   const onSendButton = () => {
     if (transactionManifest.includes('lock_fee')) {
       showDialog = true
     } else {
-      send()
+      sendTx()
     }
   }
 
-  if ($data?.transactionIntentHash)
-    goto(`/transaction-manifest/success?txID=${$data.transactionIntentHash}`)
+  if ($response?.transactionIntentHash)
+    goto(
+      `/transaction-manifest/success?txID=${$response.transactionIntentHash}`
+    )
 </script>
 
 <Dialog bind:open={showDialog} size="$6xl">
@@ -43,7 +42,7 @@
       <Button
         size="small"
         on:click={() => {
-          send()
+          sendTx()
           showDialog = false
         }}>Continue</Button
       >

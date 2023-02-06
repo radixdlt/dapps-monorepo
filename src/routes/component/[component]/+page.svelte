@@ -3,30 +3,26 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
-  import { query } from '@queries'
+  import { getEntityDetails } from '@api/gateway'
   import type { PageData } from './$types'
 
   export let data: PageData
 
-  $: componentAddress = data.componentAddress
-
-  $: ({ state } = query('getEntityDetails', componentAddress, {
-    manual: false
-  }))
+  $: response = getEntityDetails(data.componentAddress)
 </script>
 
 <Box>
-  <ResourceViewTitle title="Package" resourceAddress={componentAddress} />
+  <ResourceViewTitle title="Package" resourceAddress={data.componentAddress} />
 </Box>
 
 <Box>
   <Card>
     <Box wrapper slot="body">
-      {#if $state.status === 'loading'}
+      {#await response}
         <InfoBox loading />
-      {:else}
-        <InfoBox entries={$state.data?.metadata.items} />
-      {/if}
+      {:then details}
+        <InfoBox entries={details.metadata.items} />
+      {/await}
     </Box>
   </Card>
 </Box>

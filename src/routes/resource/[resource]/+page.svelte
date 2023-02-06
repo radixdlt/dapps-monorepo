@@ -7,28 +7,24 @@
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import type { PageData } from './$types'
-  import { query } from '@queries'
+  import { query } from '@api/query'
 
   export let data: PageData
 
   $: resourceAddress = data.resourceAddress
 
-  $: ({ state: entityDetailsState } = query(
-    'getEntityDetails',
-    resourceAddress,
-    {
-      manual: false
-    }
-  ))
+  $: ({ send, response, loading } = query('getEntityDetails'))
+
+  $: send(resourceAddress)
 
   $: entries = [
     {
       key: 'Description',
-      value: $entityDetailsState.data?.metadata.items.find(
+      value: $response?.metadata.items.find(
         (item) => item.key.toLowerCase() === 'description'
       )?.value
     },
-    ...($entityDetailsState.data?.metadata.items.filter(
+    ...($response?.metadata.items.filter(
       (item) =>
         !['description', 'symbol', 'name', 'url'].some(
           (key) => key === item.key.toLowerCase()
@@ -36,30 +32,30 @@
     ) ?? [])
   ]
 
-  $: symbol = $entityDetailsState.data?.metadata.items.find(
+  $: symbol = $response?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'symbol'
   )?.value
 
-  $: name = $entityDetailsState.data?.metadata.items.find(
+  $: name = $response?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'name'
   )?.value
 
-  $: url = $entityDetailsState.data?.metadata.items.find(
+  $: url = $response?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'url'
   )?.value
 
-  $: resourceType = $entityDetailsState.data?.details?.discriminator
+  $: resourceType = $response?.details?.discriminator
     ? {
         fungible_resource: 'Fungible Resource',
         non_fungible_resource: 'Non Fungible Resource',
         package: 'Package',
         component: 'Component'
-      }[$entityDetailsState.data?.details.discriminator]
+      }[$response?.details.discriminator]
     : ''
 </script>
 
 <Box>
-  {#if $entityDetailsState.status === 'loading'}
+  {#if $loading}
     <SkeletonLoader />
   {:else}
     <ResourceViewTitle title={resourceType} {resourceAddress} />
@@ -70,7 +66,7 @@
   <Card>
     <Box bgColor="surface" wrapper slot="header" flex="row" items="center">
       <Text size="large" bold>
-        {#if $entityDetailsState.status === 'loading'}
+        {#if $loading}
           <SkeletonLoader />
         {:else if !name}
           [NO-NAME]
@@ -88,11 +84,7 @@
         </Text>
       {/if}
     </Box>
-    <InfoBox
-      slot="body"
-      {entries}
-      loading={$entityDetailsState.status === 'loading'}
-    >
+    <InfoBox slot="body" {entries} loading={$loading}>
       <Text align="right" bold slot="key" let:entry>
         {entry.key}
       </Text>

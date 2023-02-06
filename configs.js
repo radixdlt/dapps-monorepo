@@ -12,11 +12,9 @@ export const configs = {
 		'@constants': 'src/constants.ts',
 		'@gateway': 'src/gateway.ts',
 		'@configs': 'configs.js',
-		'@io': 'src/io',
 		'@wallet': 'src/wallet',
 		'@directives': 'src/directives',
-		'@queries': 'src/query-lib',
 		'@featureFlags': 'src/feature-flags',
-		'@stateMachines': 'src/state-machines'
+		'@api': 'src/api'
 	}
 }
