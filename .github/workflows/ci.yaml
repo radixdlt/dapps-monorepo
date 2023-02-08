@@ -350,6 +350,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_pull_request
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
@@ -372,6 +374,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_dev
       env_name: dev
       namespace:  dashboard-dev
       create_subns: false
@@ -393,6 +397,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_enkinet
       env_name: enkinet
       namespace:  dashboard-enkinet
       create_subns: false
@@ -416,6 +422,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_hammunet
       env_name: hammunet
       namespace:  dashboard-hammunet
       create_subns: false
@@ -438,6 +446,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_gilganet
       env_name: gilganet
       namespace:  dashboard-gilganet
       create_subns: false
@@ -460,6 +470,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_mardunet
       env_name: mardunet
       namespace:  dashboard-mardunet
       create_subns: false
@@ -482,6 +494,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_nebunet
       env_name: nebunet
       namespace:  dashboard-nebunet
       create_subns: false
@@ -505,6 +519,8 @@ jobs:
       - push-storybook
       - setup-tags
     with:
+      app_name: dashboard
+      step_name: deploy_betanet
       env_name: betanet
       namespace:  dashboard-betanet
       create_subns: false
