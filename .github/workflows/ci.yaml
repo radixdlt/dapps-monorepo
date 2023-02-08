@@ -344,7 +344,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -366,7 +366,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -387,7 +387,7 @@ jobs:
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -410,7 +410,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -432,7 +432,7 @@ jobs:
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -454,7 +454,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -476,7 +476,7 @@ jobs:
   deploy_nebunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
@@ -499,7 +499,7 @@ jobs:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
       - push-storybook
