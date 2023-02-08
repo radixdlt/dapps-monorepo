@@ -4,16 +4,46 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
-  import { storage } from '@stores'
+  import { accounts, selectedAccount, storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Toast from '@components/_base/toast/_Toast.svelte'
+  import { resolveRDT } from '../radix'
   import '../fonts.css'
+  import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+  import { dAppId, networkConfig } from '@constants'
 
   let mounted = false
 
   onMount(() => {
     mounted = true
+
+    const rdt = RadixDappToolkit(
+      { dAppDefinitionAddress: dAppId, dAppName: 'Dashboard' },
+      (requestData) => {
+        requestData({
+          accounts: { quantifier: 'atLeast', quantity: 1 }
+        }).map(({ data }) => {
+          accounts.set(data.accounts)
+          selectedAccount.set(data.accounts[0])
+        })
+      },
+      {
+        networkId: networkConfig?.id,
+        onInit: (state) => {
+          if (state.accounts) {
+            accounts.set(state.accounts)
+            selectedAccount.set(state.accounts[0])
+          }
+        },
+        onDisconnect: () => {
+          accounts.set([])
+          selectedAccount.set(undefined)
+        }
+      }
+    )
+
+    resolveRDT(rdt)
   })
 
   $: if (mounted) {
@@ -21,6 +51,7 @@
       darkTheme
     )
   }
+
   navigating
 </script>
 
