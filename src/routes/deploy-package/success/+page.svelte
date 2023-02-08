@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Success from '@components/deploy-package/Success.svelte'
+  import Success from '@components/_navbar-pages/deploy-package/Success.svelte'
   import type { PageData } from './$types'
 
   export let data: PageData

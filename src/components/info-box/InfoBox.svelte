@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type { SvelteComponent } from 'svelte'
-
+  
   export const EMPTY_VALUE = `<no value>`
 
   export type Entries<T> = Readonly<
