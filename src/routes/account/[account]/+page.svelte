@@ -6,7 +6,7 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import type { PageData } from './$types'
   import { writable } from 'svelte/store'
-  import { getResources } from '@components/send-tokens/side-effects'
+  import { getResources } from '@components/_navbar-pages/send-tokens/side-effects'
   import { goto } from '$app/navigation'
   import { query } from '@api/query'
 
