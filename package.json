@@ -29,7 +29,7 @@
     "@babel/core": "^7.18.10",
     "@stitches/core": "^1.2.8",
     "@storybook/addon-actions": "^6.5.10",
-    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-interactions": "^6.5.10",
     "@storybook/addon-links": "^6.5.10",
     "@storybook/addon-svelte-csf": "^2.0.7",
@@ -47,8 +47,8 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/crypto-js": "^4.1.1",
     "@types/ramda": "^0.28.15",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@vitebook/client": "^0.100.5",
     "@vitebook/core": "^0.100.5",
     "@vitebook/theme-default": "^0.100.5",
@@ -62,7 +62,7 @@
     "eslint-plugin-storybook": "^0.6.4",
     "eslint-plugin-svelte": "^2.14.1",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.3",
     "jsdom": "^20.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
@@ -89,7 +89,6 @@
     "filepond-plugin-file-validate-type": "^1.2.8",
     "ramda": "^0.28.0",
     "svelte-filepond": "^0.2.0",
-    "svelte-local-storage-store": "^0.3.1",
-    "svelte-samlat": "^0.2.0"
+    "svelte-local-storage-store": "^0.3.1"
   }
 }

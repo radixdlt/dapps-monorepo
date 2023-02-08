@@ -1,10 +1,10 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { query } from '@api/query'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { mutate } from '@queries'
   import { boxStyle } from './SendTokenForm.svelte'
   import type { TransformWithOverview } from './side-effects'
 
@@ -33,7 +33,7 @@
       Expression("ENTIRE_WORKTOP");
     `
 
-  const { trigger, data } = mutate('sendTransaction')
+  const { response } = query('sendTransaction')
 
   $: resourceList =
     resources &&
@@ -55,7 +55,7 @@
 
   let amountToSend: number = 0
 
-  $: hasEnoughTokens = Number(amountAvailable) > amountToSend
+  $: hasEnoughTokens = Number(amountAvailable) >= amountToSend
 
   $: setResourceSelected(
     selectedResource && amountToSend > 0 && hasEnoughTokens
@@ -70,7 +70,8 @@
     )
   )
 
-  $: if ($data) goto(`/send-tokens/success?txID=${$data.transactionIntentHash}`)
+  $: if ($response)
+    goto(`/send-tokens/success?txID=${$response.transactionIntentHash}`)
 </script>
 
 <Box cx={boxStyle}>
