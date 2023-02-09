@@ -29,6 +29,11 @@
         })
       },
       {
+        explorer: {
+          baseUrl: '/',
+          accountsPath: 'account/',
+          transactionPath: 'transaction/'
+        },
         networkId: networkConfig?.id,
         onInit: (state) => {
           if (state.accounts) {
