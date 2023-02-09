@@ -101,7 +101,7 @@ const getOverview =
           }
 
     const nonFungible =
-      resources.fungible.length > 0
+      resources.nonFungible.length > 0
         ? await Promise.all(
             (
               await getEntityOverview(resources.nonFungible)
