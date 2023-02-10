@@ -1,23 +1,31 @@
 import { PUBLIC_NETWORK_NAME } from '$env/static/public'
 
+export const Network = {
+  NEBUNET: 'nebunet',
+  HAMMUNET: 'hammunet',
+  ENKINET: 'enkinet',
+  GILGANET: 'gilganet',
+  BETANET: 'betanet'
+}
+
 export const networkConfig = {
-  nebunet: {
+  [Network.NEBUNET]: {
     id: 11,
     url: 'https://nebunet-gateway.radixdlt.com'
   },
-  hammunet: {
+  [Network.HAMMUNET]: {
     id: 34,
     url: 'https://hammunet-gateway.radixdlt.com:443'
   },
-  enkinet: {
+  [Network.ENKINET]: {
     id: 33,
     url: 'https://enkinet-gateway.radixdlt.com'
   },
-  gilganet: {
+  [Network.GILGANET]: {
     id: 32,
     url: 'https://gilganet-gateway.radixdlt.com'
   },
-  betanet: {
+  [Network.BETANET]: {
     id: 11,
     url: 'https://nebunet-gateway.radixdlt.com'
   }
