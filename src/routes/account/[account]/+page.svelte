@@ -8,6 +8,7 @@
   import { writable } from 'svelte/store'
   import { getResources } from '@components/send-tokens/side-effects'
   import { goto } from '$app/navigation'
+  import { query } from '@api/query'
 
   export let data: PageData
 
@@ -32,6 +33,10 @@
       loading = false
       goto('/not-found')
     })
+
+  $: ({ send, response } = query('getEntityDetails'))
+
+  $: send(accountAddress)
 </script>
 
 <Box>
@@ -67,5 +72,11 @@
         </Box>
       </Card>
     {/if}
+    <Card>
+      <Text bold slot="header">Metadata</Text>
+      <Box bgColor="surface" slot="body" p="none">
+        <InfoBox entries={$response?.metadata.items} />
+      </Box>
+    </Card>
   {/if}
 </Box>
