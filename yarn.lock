@@ -1549,21 +1549,21 @@
     lit "^2.6.1"
     rxjs "^7.8.0"
 
-"@radixdlt/radix-dapp-toolkit@0.1.0-alpha.6":
-  version "0.1.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.1.0-alpha.6.tgz#cbe19184c021f9b6e6c26dc9029b81d51418cdbd"
-  integrity sha512-Hw0U98jo0qPx9SdQ/6MUx55odDiqRMiF7uDFdNrcgia2ZoGlZGdImNYVM12QP8Sg1eAz8KOa9MFzVj/i6eWRHQ==
+"@radixdlt/radix-dapp-toolkit@0.1.0-alpha.7":
+  version "0.1.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.1.0-alpha.7.tgz#8c114299d2c55627c91e2a1f72746ca5eec24cf9"
+  integrity sha512-M2AVWKdLYuoDjGP28tw0218/v1kcvA7k/kBpMVpm5PJQ8ahQRGKzrZ7pua1dYeduGPPO3nCU0rLPO8E20biudw==
   dependencies:
     "@radixdlt/connect-button" "0.11.0-alpha.8"
-    "@radixdlt/wallet-sdk" "0.6.0-beta.10"
+    "@radixdlt/wallet-sdk" "0.6.0-beta.11"
     neverthrow "^6.0.0"
     rxjs "^7.8.0"
     tslog "^4.7.2"
 
-"@radixdlt/wallet-sdk@0.6.0-beta.10":
-  version "0.6.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.6.0-beta.10.tgz#15371a1ec91b2acce3b6320d34178ea3731a143f"
-  integrity sha512-dpmyGgZxEmhQ7wb/mj9qCRjBe3zgaREtujWgkiJU+IWUYfHPjKQ/3NNpGU8MaXn0Zis67xtjWZkecgQHgDuDTQ==
+"@radixdlt/wallet-sdk@0.6.0-beta.11":
+  version "0.6.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.6.0-beta.11.tgz#8504371eed6b96ac68bf97039d4840780c8ba131"
+  integrity sha512-vmLifx1UXnjNw+NHnUuSk0b6Fqjgcm/vzSI75uRD0LSVEeJwHCie2TrmOnopkiKSwGwpbVM6tb4rK+XE5RMNrg==
   dependencies:
     lodash.flow "^3.5.0"
     loglevel "^1.8.1"
