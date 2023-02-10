@@ -8,27 +8,25 @@ import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
 
 export const getCreateBadgeManifest = (accountAddress: string) => `
-  CREATE_RESOURCE 
-      Enum(
-          "NonFungible", 
-          Enum("U32")
+  CREATE_NON_FUNGIBLE_RESOURCE 
+      Enum("NonFungibleIdType::Integer") 
+      Map<String, String>(
+          "name", "My Package Owner Badge", 
+          "description", "This NFT was created by the Radix Dashboard as a simple badge to be used for default package control permissions. There is nothing special about it - swap it out, or create your own"
       ) 
-      Array<Tuple>(
-          Tuple("name", "My Package Owner Badge"), 
-          Tuple("description", "This NFT was created by the Radix Dashboard as a simple badge to be used for default package control permissions. There is nothing special about it - swap it out, or create your own"), 
-      ) 
-      Array<Tuple>(
-          Tuple(Enum("Withdraw"), Tuple(Enum("AllowAll"), Enum("DenyAll"))),
-          Tuple(Enum("Deposit"), Tuple(Enum("AllowAll"), Enum("DenyAll")))
+      Map<Enum, Tuple>(
+          Enum("ResourceMethodAuthKey::Withdraw"), Tuple(Enum("AccessRule::AllowAll"), Enum("AccessRule::DenyAll")),
+          Enum("ResourceMethodAuthKey::Deposit"), Tuple(Enum("AccessRule::AllowAll"), Enum("AccessRule::DenyAll"))
       )
       Some(
-          Enum(
-              "NonFungible", 
-              Array<Tuple>(
-                  Tuple(NonFungibleId(1u32), Tuple(Bytes("5c2100"), Bytes("5c2100")))
-              )
-          )
-      );
+        Map<NonFungibleLocalId, Tuple>(
+            NonFungibleLocalId("#1#"), 
+            Tuple(
+                Tuple("Hello World", Decimal("12")),        
+                Tuple(12u8, 19u128)                         
+            )
+        )
+    );
   CALL_METHOD
       ComponentAddress("${accountAddress}") 
       "deposit_batch"
