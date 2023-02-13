@@ -37,7 +37,8 @@ export const getDeployPackageManifest = (
   wasm: string,
   abi: string,
   accountAddress: string,
-  nftAddress: string
+  nftAddress: string,
+  nftId: string
 ) => {
   const codeHash: string = hash(wasm).toString('hex')
   const abiHash: string = hash(abi).toString('hex')
@@ -45,7 +46,7 @@ export const getDeployPackageManifest = (
       PUBLISH_PACKAGE_WITH_OWNER 
         Blob("${codeHash}") 
         Blob("${abiHash}")
-        NonFungibleAddress("${nftAddress}", 1u32);
+        NonFungibleGlobalId("${nftAddress}:${nftId}");
 
       CALL_METHOD 
         ComponentAddress("${accountAddress}") 
@@ -92,22 +93,17 @@ export const deploy = async (
   wasm: string,
   abi: string,
   selectedAccountAddress: string,
-  selectedNftAddress: string
+  { address, id }: { address: string; id: string }
 ) => {
   return sendTransaction(
-    getDeployPackageManifest(
-      wasm,
-      abi,
-      selectedAccountAddress,
-      selectedNftAddress
-    ),
+    getDeployPackageManifest(wasm, abi, selectedAccountAddress, address, id),
     [wasm, abi]
   )
     .then(async ({ transactionIntentHash }) => ({
       txID: transactionIntentHash,
       entities: (await getTransactionDetails(transactionIntentHash))
         .createdEntities,
-      badgeMetadata: (await getEntityDetails(selectedNftAddress)).metadata.items
+      badgeMetadata: (await getEntityDetails(address)).metadata.items
     }))
     .then((result) => ({
       ...result,
