@@ -52,7 +52,7 @@
   {#each entries as entry}
     <Box justify="end" wrapper>
       <slot name="key" {entry}>
-        <Text nowrap bold cx={{ paddingTop: '6px' }}>
+        <Text nowrap bold>
           {entry.key}
         </Text>
       </slot>
