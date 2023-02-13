@@ -6,7 +6,7 @@
   export let size: 'sm' | 'md' | 'lg' = 'md'
   export let transparent = true
   export let disabled = false
-  export let maxlength: number = Number.MAX_VALUE
+  export let maxlength: number | undefined = undefined
 
   $: style = css({
     borderRadius: '$sm',
