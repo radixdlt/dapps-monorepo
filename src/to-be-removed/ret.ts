@@ -54,17 +54,25 @@ export default class RadixEngineToolkit {
   public manifestStringFromCompiledIntent(
     compiledIntent: Uint8Array
   ): string | undefined {
-    const request: object = {
+    let request: object = {
       compiled_unknown_intent: Buffer.from(compiledIntent).toString('hex'),
-      manifest_instructions_output_format: 'String'
+      instructions_output_kind: 'String'
     }
-    const response: any = this.callWasmFunction(
+    let response: any = this.callWasmFunction(
       request,
       this.internalFFI.decompile_unknown_transaction_intent
     )
-    return response['signed_intent']?.['intent']?.['manifest']?.[
-      'instructions'
-    ]?.['value']
+
+    console.log(response)
+    return (
+      response?.['value']?.['signed_intent']?.['intent']?.['manifest']?.[
+        'instructions'
+      ]?.['value'] ||
+      response?.['value']?.['intent']?.['manifest']?.['instructions']?.[
+        'value'
+      ] ||
+      response?.['value']?.['manifest']?.['instructions']?.['value']
+    )
   }
 
   /**
