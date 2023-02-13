@@ -79,7 +79,7 @@
       await $requiredUploadedFiles.wasm,
       await $requiredUploadedFiles.abi,
       $selectedAccount,
-      $selectedBadgeInfo?.address as string
+      $selectedBadgeInfo as { address: string; id: string }
     )
       .then((result) => {
         deployingPackage.set(false)
