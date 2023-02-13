@@ -24,7 +24,7 @@
     }
   }
 
-  if ($response?.transactionIntentHash)
+  $: if ($response?.transactionIntentHash)
     goto(
       `/transaction-manifest/success?txID=${$response.transactionIntentHash}`
     )

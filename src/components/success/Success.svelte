@@ -7,7 +7,7 @@
 
 <Box center>
   <Text bold size="xlarge">{title}</Text>
-  <Box cx={{ width: '900px' }}>
+  <Box justify="center" full>
     <slot />
   </Box>
 </Box>
