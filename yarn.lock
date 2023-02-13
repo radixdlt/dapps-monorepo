@@ -1549,10 +1549,10 @@
     lit "^2.6.1"
     rxjs "^7.8.0"
 
-"@radixdlt/radix-dapp-toolkit@0.1.0-alpha.7":
-  version "0.1.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.1.0-alpha.7.tgz#8c114299d2c55627c91e2a1f72746ca5eec24cf9"
-  integrity sha512-M2AVWKdLYuoDjGP28tw0218/v1kcvA7k/kBpMVpm5PJQ8ahQRGKzrZ7pua1dYeduGPPO3nCU0rLPO8E20biudw==
+"@radixdlt/radix-dapp-toolkit@0.1.0-alpha.10":
+  version "0.1.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.1.0-alpha.10.tgz#ed4489a7c1159723f204b15fe90363009c1e731c"
+  integrity sha512-UYGtwfwuIn0l0EKJIwJ4GuMRezfCloFAlcV/xf1N3dwOYtT3sKAnC08O7GsrJ9S+V3XyC1OyHJe8QNydjywBZw==
   dependencies:
     "@radixdlt/connect-button" "0.11.0-alpha.8"
     "@radixdlt/wallet-sdk" "0.6.0-beta.11"
