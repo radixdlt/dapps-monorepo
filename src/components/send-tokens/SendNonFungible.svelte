@@ -18,19 +18,17 @@
     }[],
     fromAccount: string,
     toAccount: string
-  ) => {
-    const x = `
+  ) => `
     ${nfts.reduce(
       (prev, cur, i) =>
         `
       CALL_METHOD 
         ComponentAddress("${fromAccount}") 
         "withdraw_by_ids"
-        Array<NonFungibleId>(NonFungibleId(${cur.id}u32))
+        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
         ResourceAddress("${cur.resourceAddress}");
       
-      TAKE_FROM_WORKTOP_BY_IDS
-        Array<NonFungibleId>(NonFungibleId(${cur.id}u32))
+      TAKE_FROM_WORKTOP
         ResourceAddress("${cur.resourceAddress}")
         Bucket("${i}");
 
@@ -43,8 +41,6 @@
       ``
     )}
   `
-    return x
-  }
 
   let selected: TransformWithOverview = []
 
