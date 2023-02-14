@@ -1,7 +1,8 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import Select from '@components/_base/select/Select.svelte'
-  import { context, type FormattedAccount } from '../../DappMetadata.svelte'
+  import { context } from '../../DappMetadata.svelte'
+  import type { FormattedAccount } from '../../side-effects'
 
   export let data: FormattedAccount[] | undefined
 
