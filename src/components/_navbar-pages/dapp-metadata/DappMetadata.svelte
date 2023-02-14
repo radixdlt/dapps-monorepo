@@ -61,7 +61,7 @@
               SET_METADATA
                 ComponentAddress("${address}")
                 "${entry.key}"
-                "${entry.value}";
+                "${setAsDAppDefinition ? entry.value : ''}";
               `
     }
     return manifest
@@ -142,7 +142,7 @@
   }
 
   $: isDappDefinition.set(!!selectedAccount?.dappDefinition)
-  $: greyedOut.set(!$isDappDefinition && !setAsDAppDefinition)
+  $: greyedOut.set(!setAsDAppDefinition)
 
   context.set('selectedAccount', (acc) => (selectedAccount = acc))
   context.set('asDAppDefinition', (bool) => (setAsDAppDefinition = bool))
