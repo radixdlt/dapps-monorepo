@@ -54,20 +54,18 @@
   const transactionManifest = (
     address: string,
     metadata: { key: string; value: unknown }[]
-  ) =>
-    metadata.reduce(
-      (prev, cur) =>
-        cur.value
-          ? prev +
-            `
-            SET_METADATA
-              ComponentAddress("${address}")
-              "${cur.key}"
-              "${cur.value}";      
-            `
-          : '',
-      ``
-    )
+  ) => {
+    let manifest = ''
+    for (const entry of metadata) {
+      manifest += `
+              SET_METADATA
+                ComponentAddress("${address}")
+                "${entry.key}"
+                "${entry.value}";
+              `
+    }
+    return manifest
+  }
 
   const { send, response, loading } = query('sendTransaction')
 
