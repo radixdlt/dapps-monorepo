@@ -47,7 +47,8 @@
   $: options =
     resources?.map((resource) => ({
       ...resource,
-      label: resource.key
+      label: resource.key,
+      checked: false
     })) ?? []
 
   $: setResourceSelected(selected.length > 0)
@@ -73,7 +74,7 @@
 </Box>
 <Box cx={boxStyle}>
   <div />
-  <Checkbox bind:options bind:selected let:label loading={!resources}>
+  <Checkbox {options} bind:selected let:label loading={!resources}>
     <Text inline bold underlined>{label}</Text>
   </Checkbox>
 </Box>

@@ -5,7 +5,7 @@
 
   type G = $$Generic
 
-  type T = G & { label: string; checked?: boolean }
+  type T = G & { label: string; checked: boolean }
 
   export let options: T[]
   export let selected: G[] = []
