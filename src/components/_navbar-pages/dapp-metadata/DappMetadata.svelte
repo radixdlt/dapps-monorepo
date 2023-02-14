@@ -46,6 +46,7 @@
   import DomainKey from './entries/domain/Key.svelte'
   import DomainValue from './entries/domain/Value.svelte'
   import Text from '@components/_base/text/Text.svelte'
+  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   export let accounts: Account[]
 
@@ -224,7 +225,11 @@
       />
     </InfoBox>
     <Box justify="end">
-      <Button on:click={update}>Update</Button>
+      {#if $loading}
+        <Button><LoadingSpinner /></Button>
+      {:else}
+        <Button on:click={update}>Update</Button>
+      {/if}
     </Box>
   </Box>
 </Box>
