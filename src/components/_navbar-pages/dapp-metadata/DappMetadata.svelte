@@ -27,10 +27,7 @@
   import type { Account } from '@stores'
   import { query } from '@api/query'
   import { getOverview } from '@api/gateway'
-  import type {
-    EntityOverviewResponse,
-    EntityOverviewResponseEntityItem
-  } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { EntityOverviewResponse } from '@radixdlt/babylon-gateway-api-sdk'
   import NameEntryKey from './entries/name/Key.svelte'
   import NameEntryValue from './entries/name/Value.svelte'
   import SelectAccountKey from './entries/select_account/Key.svelte'
@@ -47,6 +44,7 @@
   import DomainValue from './entries/domain/Value.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import { getFormattedAccounts } from './side-effects'
 
   export let accounts: Account[]
 
@@ -70,13 +68,6 @@
 
   const { send, response, loading } = query('sendTransaction')
 
-  const hasDAppDefinitionMetadata = (
-    entity?: EntityOverviewResponseEntityItem
-  ) =>
-    !!entity?.metadata.items.find(
-      (item) => item.key === 'account_type' && item.value === 'dapp definition'
-    )
-
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
   let accountOverviews: EntityOverviewResponse
@@ -85,32 +76,8 @@
     (overview) => (accountOverviews = overview)
   )
 
-  $: if (accountOverviews) {
-    const overviews = accountOverviews.entities.reduce((prev, next) => {
-      prev[next.address] = next
-      return prev
-    }, {} as Record<string, EntityOverviewResponseEntityItem>)
-
-    formattedAccounts.set(
-      accounts.map(({ address, label }) => {
-        const isDApp = hasDAppDefinitionMetadata(overviews[address])
-        return {
-          label: `${label}${isDApp ? ' - dApp definition' : ''}`,
-          address,
-          dappDefinition: isDApp,
-          name: overviews[address]?.metadata.items.find(
-            (item) => item.key === 'name'
-          )?.value,
-          description: overviews[address]?.metadata.items.find(
-            (item) => item.key === 'description'
-          )?.value,
-          domain: overviews[address]?.metadata.items.find(
-            (item) => item.key === 'domain'
-          )?.value
-        }
-      })
-    )
-  }
+  $: if (accountOverviews)
+    formattedAccounts.set(getFormattedAccounts(accounts, accountOverviews))
 
   const update = () => {
     if (selectedAccount)

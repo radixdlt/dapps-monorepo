@@ -3,7 +3,6 @@ import { andThen, pipe } from 'ramda'
 
 import type { EntityOverviewTransformed } from 'src/api/transformations'
 import { getNFTAddress } from '@utils'
-import { query } from '@api/query'
 import {
   getEntityNonFungibleIDs,
   getEntityOverview,
