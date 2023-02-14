@@ -10,9 +10,9 @@ export const Network = {
 
 export const DAPP_DEF_ADDRESS = {
   [Network.NEBUNET]:
-    'account_tdx_b_1qlcxt0fvwujp6rnatd7qysufw744vmeyr0j0v7me5y7swl5epu',
+    'account_tdx_b_1prfj0lp3hd2dhjkk2v7apr4vwtrcnn9y67393de7r5gqgpm83a',
   [Network.HAMMUNET]:
-    'account_tdx_22_1pryua594ne5wcjcyvefa87qrzuw9vs76s9pfpn7ldhjsl3r82l'
+    'account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6'
 }[PUBLIC_NETWORK_NAME] as string
 
 export const networkConfig = {
