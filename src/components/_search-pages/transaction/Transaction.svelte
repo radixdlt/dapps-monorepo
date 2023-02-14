@@ -43,7 +43,8 @@
   $: send(transactionHash)
 
   $: ({ send: _send, response: networkState } = query('getTransactionDetails'))
-  $: _send(transactionHash, $networkState?.stateVersion!)
+
+  $: if ($txDetails) _send(transactionHash, $txDetails.stateVersion!)
 
   $: if ($txDetails)
     getTxManifest($txDetails.details).then((res) => {
