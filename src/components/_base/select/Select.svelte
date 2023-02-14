@@ -25,7 +25,9 @@
 
   let selected: Options<T> | undefined
 
-  $: selected = placeholder ? undefined : options[0]
+  $: selected = placeholder
+    ? undefined
+    : options.find((option) => !option.unavailable)
 
   const onSelect = (e: CustomEvent<Options<T>>) => {
     selected = e.detail
