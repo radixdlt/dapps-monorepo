@@ -5,11 +5,13 @@
   const options = [
     {
       name: 'Bob',
-      label: 'Bob'
+      label: 'Bob',
+      checked: false
     },
     {
       name: 'Kirby',
-      label: 'Kirby'
+      label: 'Kirby',
+      checked: false
     }
   ]
 </script>
