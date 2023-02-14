@@ -39,7 +39,7 @@
         bind:checked={option.checked}
         value={option}
       />
-      <slot label={option.label}>
+      <slot {option}>
         {option.label}
       </slot>
     </label>
