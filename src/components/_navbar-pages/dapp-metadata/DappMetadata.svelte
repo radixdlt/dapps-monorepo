@@ -71,9 +71,9 @@
   const { send, response, loading } = query('sendTransaction')
 
   const hasDAppDefinitionMetadata = (
-    entity: EntityOverviewResponseEntityItem
+    entity?: EntityOverviewResponseEntityItem
   ) =>
-    !!entity.metadata.items.find(
+    !!entity?.metadata.items.find(
       (item) => item.key === 'account_type' && item.value === 'dapp definition'
     )
 
@@ -85,22 +85,32 @@
     (overview) => (accountOverviews = overview)
   )
 
-  $: if (accountOverviews)
+  $: if (accountOverviews) {
+    const overviews = accountOverviews.entities.reduce((prev, next) => {
+      prev[next.address] = next
+      return prev
+    }, {} as Record<string, EntityOverviewResponseEntityItem>)
+
     formattedAccounts.set(
-      accountOverviews.entities.map((entity) => ({
-        label: `${
-          accounts.find((acc) => acc.address === entity.address)?.label
-        }${hasDAppDefinitionMetadata(entity) ? ' - dApp definition' : ''}`,
-        address: entity.address,
-        dappDefinition: hasDAppDefinitionMetadata(entity),
-        name: entity.metadata.items.find((item) => item.key === 'name')?.value,
-        description: entity.metadata.items.find(
-          (item) => item.key === 'description'
-        )?.value,
-        domain: entity.metadata.items.find((item) => item.key === 'domain')
-          ?.value
-      }))
+      accounts.map(({ address, label }) => {
+        const isDApp = hasDAppDefinitionMetadata(overviews[address])
+        return {
+          label: `${label}${isDApp ? ' - dApp definition' : ''}`,
+          address,
+          dappDefinition: isDApp,
+          name: overviews[address]?.metadata.items.find(
+            (item) => item.key === 'name'
+          )?.value,
+          description: overviews[address]?.metadata.items.find(
+            (item) => item.key === 'description'
+          )?.value,
+          domain: overviews[address]?.metadata.items.find(
+            (item) => item.key === 'domain'
+          )?.value
+        }
+      })
     )
+  }
 
   const update = () => {
     if (selectedAccount)
