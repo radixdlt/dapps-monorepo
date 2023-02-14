@@ -17,6 +17,7 @@
     response: nftsResponse,
     loading: nftsLoading
   } = query('getNonFungibleData'))
+
   $: getNfts(
     nftAddress.split(':')[0] as string,
     nftAddress.split(':')[1] as string

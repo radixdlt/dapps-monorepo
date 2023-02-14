@@ -74,7 +74,9 @@
 </Box>
 <Box cx={boxStyle}>
   <div />
-  <Checkbox {options} bind:selected let:label loading={!resources}>
-    <Text inline bold underlined>{label}</Text>
+  <Checkbox {options} bind:selected let:option loading={!resources}>
+    <Text inline bold underlined>
+      <a href="/nft/{option.address}">{option.label}</a>
+    </Text>
   </Checkbox>
 </Box>
