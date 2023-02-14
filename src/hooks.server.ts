@@ -1,10 +1,10 @@
-import { DAPP_DEF_ADDRESS } from '@constants'
+import { networkConfig } from '@constants'
 import type { Handle } from '@sveltejs/kit'
 
 const json = {
   dApps: [
     {
-      dAppDefinitionAddress: `${DAPP_DEF_ADDRESS}`
+      dAppDefinitionAddress: networkConfig.dappDefAddress
     }
   ]
 }
