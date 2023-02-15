@@ -21,16 +21,16 @@
     amount: number
   ) =>
     `
-    CALL_METHOD 
-      ComponentAddress("${fromAccount}") 
-      "withdraw_by_amount"
-      Decimal("${amount}")             
-      ResourceAddress("${resource}");
-  
-    CALL_METHOD
-      ComponentAddress("${toAccount}") 
-      "deposit_batch"
-      Expression("ENTIRE_WORKTOP");
+      CALL_METHOD 
+        ComponentAddress("${fromAccount}") 
+        "withdraw_by_amount"
+        Decimal("${amount}")             
+        ResourceAddress("${resource}");
+    
+      CALL_METHOD
+        ComponentAddress("${toAccount}") 
+        "deposit_batch"
+        Expression("ENTIRE_WORKTOP");
     `
 
   const { response } = query('sendTransaction')
@@ -98,7 +98,7 @@
       cx={{ minWidth: '150px', flexBasis: '40%' }}
     >
       <Select
-        handleSelect={(resource) => (selectedResource = resource)}
+        bind:selected={selectedResource}
         options={resourceList}
         placeholderWhenEmpty="No tokens found"
       />

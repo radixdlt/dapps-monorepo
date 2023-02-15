@@ -11,7 +11,7 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import Select, { type Options } from '@components/_base/select/Select.svelte'
+  import Select, { type Option } from '@components/_base/select/Select.svelte'
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Input from '@components/_base/input/Input.svelte'
@@ -25,7 +25,7 @@
   import { writable } from 'svelte/store'
   import { query } from '@api/query'
 
-  type OptionsType = Options<{ address: string }>
+  type OptionsType = Option<{ address: string }>
 
   export let accounts: OptionsType[] | undefined = undefined
   export let tokenType: 'fungible' | 'nonFungible'
@@ -37,10 +37,7 @@
   const transformedOverview =
     writable<Awaited<ReturnType<typeof getResources>>>(undefined)
 
-  $: {
-    console.log(selectedFromAccount.address)
-    getResources(selectedFromAccount.address).then(transformedOverview.set)
-  }
+  $: getResources(selectedFromAccount.address).then(transformedOverview.set)
 
   let selectedToAccount = { address: '', label: '' }
 
@@ -64,10 +61,7 @@
   <Box bgColor="surface" mt="medium" cx={boxStyle}>
     <Text bold align="right">From</Text>
     <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
-      <Select
-        handleSelect={(account) => (selectedFromAccount = account)}
-        options={accounts}
-      />
+      <Select bind:selected={selectedFromAccount} options={accounts} />
     </Box>
   </Box>
   <Box bgColor="surface" mt="medium" cx={boxStyle}>
@@ -94,7 +88,7 @@
           <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
             <Select
               placeholder="Select personal account"
-              handleSelect={(account) => (selectedToAccount = account)}
+              bind:selected={selectedToAccount}
               options={accounts}
             />
           </Box>

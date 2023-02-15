@@ -6,11 +6,11 @@
     type FileItem
   } from '@components/file-upload/FileUpload.svelte'
   import { pipe } from 'ramda'
-  import { accounts, connected } from '@stores'
+  import { accounts, connected, type Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { getNFTAddress, shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import { derived, writable, type Writable } from 'svelte/store'
+  import { derived, writable } from 'svelte/store'
   import { createBadge, deploy, queryResources } from './side-effects'
   import Button from '@components/_base/button/Button.svelte'
   import { goto } from '$app/navigation'
@@ -39,8 +39,18 @@
     }
   })
 
-  const selectedAccount = writable<string>()
-  const selectedBadgeIndex = writable<number>()
+  const selectedAccount = writable<(Account & { label: string }) | undefined>(
+    undefined
+  )
+  const selectedBadge = writable<
+    | {
+        address: string
+        id: string
+        name: string
+        label: string
+      }
+    | undefined
+  >(undefined)
   const badgeCreated = writable<string>()
   const deployingPackage = writable<boolean>()
 
@@ -49,27 +59,16 @@
     address: string
   }>()
 
-  let setFungibleResources: (
-    value: Awaited<ReturnType<typeof queryResources>>
-  ) => void
   const nonFungibleResources = derived<
-    Writable<string>,
+    typeof selectedAccount,
     Awaited<ReturnType<typeof queryResources>>
   >(selectedAccount, ($selectedAccount, set) => {
-    setFungibleResources = set
-    if ($selectedAccount) queryResources($selectedAccount).then(set)
+    if ($selectedAccount) queryResources($selectedAccount.address).then(set)
   })
 
-  const selectedBadgeInfo = derived(
-    [selectedBadgeIndex, nonFungibleResources],
-    ([$selectedBadgeIndex, $nonFungibleResources]) =>
-      $nonFungibleResources?.[$selectedBadgeIndex]
-  )
-
   const deployButtonEnabled = derived(
-    [requiredUploadedFiles, selectedBadgeIndex],
-    ([{ wasm, abi }, $selectedBadgeIndex]) =>
-      !!abi && !!wasm && $selectedBadgeIndex !== undefined,
+    [requiredUploadedFiles],
+    ([{ wasm, abi }]) => !!abi && !!wasm && selectedBadge !== undefined,
     false
   )
 
@@ -78,8 +77,8 @@
     deploy(
       await $requiredUploadedFiles.wasm,
       await $requiredUploadedFiles.abi,
-      $selectedAccount,
-      $selectedBadgeInfo as { address: string; id: string }
+      $selectedAccount!.address,
+      $selectedBadge!
     )
       .then((result) => {
         deployingPackage.set(false)
@@ -93,17 +92,14 @@
       })
   }
 
-  const setSelectedAccount = (index: number) =>
-    selectedAccount.set($accounts[index]?.address as string)
-
-  $: if ($packageDeployed && $selectedBadgeInfo)
+  $: if ($packageDeployed && $selectedBadge)
     goto(
       `deploy-package/success?` +
         `txID=${$packageDeployed.txID}&` +
         `packageAddress=${$packageDeployed.address}&` +
-        `badgeName=${$selectedBadgeInfo.name}&` +
-        `badgeAddress=${$selectedBadgeInfo.address}&` +
-        `badgeId=${$selectedBadgeInfo.id}`
+        `badgeName=${$selectedBadge.name}&` +
+        `badgeAddress=${$selectedBadge.address}&` +
+        `badgeId=${$selectedBadge.id}`
     )
 </script>
 
@@ -149,10 +145,10 @@
       <Box>
         <Select
           placeholder="Select Account"
-          handleSelect={(e) => setSelectedAccount(e.id)}
+          bind:selected={$selectedAccount}
           options={[
             ...$accounts.map((account, i) => ({
-              id: i,
+              ...account,
               label: `${account.label} (${shortenAddress(account.address)})`
             }))
           ]}
@@ -162,10 +158,10 @@
         {#if $nonFungibleResources && $nonFungibleResources.length > 0}
           <Select
             placeholder="Select Badge NFT"
-            handleSelect={(e) => selectedBadgeIndex.set(e.id)}
+            bind:selected={$selectedBadge}
             options={[
               ...$nonFungibleResources.map((resource, i) => ({
-                id: i,
+                ...resource,
                 label: `${resource.name ?? ''} ${
                   resource.name ? '(' : ' '
                 }${getNFTAddress(resource.address, resource.id)}${
@@ -180,14 +176,17 @@
       </Box>
     </Box>
 
-    <Box hidden={!$selectedAccount}>
+    <Box hidden={!selectedAccount}>
       <Text>
         <Text
-          on:click={() =>
-            createBadge($selectedAccount).then((result) => {
+          on:click={() => {
+            if (!$selectedAccount) return
+            createBadge($selectedAccount.address).then((result) => {
               badgeCreated.set(result.transactionIntentHash)
-              queryResources($selectedAccount).then(setFungibleResources)
-            })}
+              selectedAccount.set($selectedAccount)
+              return
+            })
+          }}
           cx={{ display: 'inline', cursor: 'pointer' }}
           underlined
         >
