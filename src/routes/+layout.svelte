@@ -11,7 +11,7 @@
   import { resolveRDT } from '../radix'
   import '../fonts.css'
   import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
-  import { DAPP_DEF_ADDRESS, networkConfig } from '@constants'
+  import { networkConfig } from '@constants'
 
   let mounted = false
 
@@ -19,7 +19,10 @@
     mounted = true
 
     const rdt = RadixDappToolkit(
-      { dAppDefinitionAddress: DAPP_DEF_ADDRESS, dAppName: 'Dashboard' },
+      {
+        dAppDefinitionAddress: networkConfig.dappDefAddress!,
+        dAppName: 'Dashboard'
+      },
       (requestData) => {
         requestData({
           accounts: { quantifier: 'atLeast', quantity: 1 }
