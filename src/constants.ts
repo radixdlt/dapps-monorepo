@@ -37,7 +37,10 @@ export const networkConfig = (
         'account_tdx_b_1prfj0lp3hd2dhjkk2v7apr4vwtrcnn9y67393de7r5gqgpm83a'
     }
   } as const
-)[PUBLIC_NETWORK_NAME as typeof Network[keyof typeof Network]]!
+)[
+  (PUBLIC_NETWORK_NAME as typeof Network[keyof typeof Network]) ||
+    Network.BETANET
+]!
 
 console.log(
   `Using network ${PUBLIC_NETWORK_NAME}, with config: ${JSON.stringify(
