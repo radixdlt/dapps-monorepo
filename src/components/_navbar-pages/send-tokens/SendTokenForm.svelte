@@ -32,14 +32,14 @@
 
   const { send, loading, response } = query('sendTransaction')
 
-  $: selectedFromAccount = accounts?.[0] || { address: '', label: '' }
-
   const transformedOverview =
     writable<Awaited<ReturnType<typeof getResources>>>(undefined)
 
-  $: getResources(selectedFromAccount.address).then(transformedOverview.set)
+  $: if (selectedFromAccount)
+    getResources(selectedFromAccount.address).then(transformedOverview.set)
 
-  let selectedToAccount = { address: '', label: '' }
+  let selectedFromAccount: { address: string; label: string } | undefined
+  let selectedToAccount: { address: string; label: string } | undefined
 
   let otherAccount = ''
 
@@ -105,8 +105,8 @@
   </Box>
   {#if tokenType === 'fungible'}
     <SendFungible
-      selectedFromAccount={selectedFromAccount.address}
-      selectedToAccount={selectedToAccount.address || otherAccount}
+      selectedFromAccount={selectedFromAccount?.address}
+      selectedToAccount={selectedToAccount?.address || otherAccount}
       resources={$transformedOverview?.fungible || []}
       {setTransactionManifest}
       {setResourceSelected}
@@ -114,8 +114,8 @@
   {/if}
   {#if tokenType === 'nonFungible'}
     <SendNonFungible
-      selectedFromAccount={selectedFromAccount.address}
-      selectedToAccount={selectedToAccount.address || otherAccount}
+      selectedFromAccount={selectedFromAccount?.address}
+      selectedToAccount={selectedToAccount?.address || otherAccount}
       resources={$transformedOverview?.nonFungible}
       {setTransactionManifest}
       {setResourceSelected}
@@ -124,7 +124,7 @@
   <Box bgColor="surface" justify="end">
     <Button
       disabled={!(
-        selectedFromAccount.address &&
+        selectedFromAccount?.address &&
         (selectedToAccount?.address || otherAccount.length > 0) &&
         resourceSelected
       )}

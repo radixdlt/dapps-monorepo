@@ -211,7 +211,11 @@
       },
       grey: {
         color: '$grey'
-      }
+      },
+      error: {
+        color: '$error'
+      },
+      success: { color: '$success' }
     },
     slightlyMuted: {
       true: {

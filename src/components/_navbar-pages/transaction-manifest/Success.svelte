@@ -1,5 +1,6 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
+  import Row from '@components/info-box/Row.svelte'
   import Success from '@components/success/Success.svelte'
   import Text from '@components/_base/text/Text.svelte'
 
@@ -7,21 +8,12 @@
 </script>
 
 <Success title="Your transaction was submitted! 🎉">
-  <InfoBox
-    entries={[
-      {
-        key: 'Tx ID',
-        value: txID
-      }
-    ]}
-    loading={false}
-    transparent
-  >
-    <Text align="right" bold slot="key" let:entry>
-      {entry.key}
-    </Text>
-    <Text align="left" color="link" underlined slot="value" let:entry>
-      <a href="/transaction/{entry.value}">{entry.value}</a>
-    </Text>
+  <InfoBox>
+    <Row>
+      <Text align="right" bold slot="left">Tx ID</Text>
+      <Text align="left" color="link" underlined slot="right">
+        <a href="/transaction/{txID}">{txID}</a>
+      </Text>
+    </Row>
   </InfoBox>
 </Success>

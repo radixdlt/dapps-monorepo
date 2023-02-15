@@ -4,7 +4,6 @@ import {
   StateApi,
   TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
-import type { Account } from '@stores'
 import { andThen, pipe } from 'ramda'
 import {
   transformEntityOverview,

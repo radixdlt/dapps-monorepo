@@ -8,6 +8,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import type { PageData } from './$types'
   import { query } from '@api/query'
+  import Row from '@components/info-box/Row.svelte'
 
   export let data: PageData
 
@@ -16,21 +17,6 @@
   $: ({ send, response, loading } = query('getEntityDetails'))
 
   $: send(resourceAddress)
-
-  $: entries = [
-    {
-      key: 'Description',
-      value: $response?.metadata.items.find(
-        (item) => item.key.toLowerCase() === 'description'
-      )?.value
-    },
-    ...($response?.metadata.items.filter(
-      (item) =>
-        !['description', 'symbol', 'name', 'url'].some(
-          (key) => key === item.key.toLowerCase()
-        )
-    ) ?? [])
-  ]
 
   $: symbol = $response?.metadata.items.find(
     (item) => item.key.toLowerCase() === 'symbol'
@@ -84,10 +70,26 @@
         </Text>
       {/if}
     </Box>
-    <InfoBox slot="body" {entries} loading={$loading}>
-      <Text align="right" bold slot="key" let:entry>
-        {entry.key}
-      </Text>
+    <InfoBox slot="body">
+      <Row>
+        <Text slot="left" align="right" bold>Description</Text>
+        <Box slot="right" wrapper>
+          {#if $response}
+            {$response.metadata.items.find(
+              (item) => item.key.toLowerCase() === 'description'
+            )?.value}
+          {:else}
+            <SkeletonLoader />
+          {/if}
+        </Box>
+      </Row>
+
+      {#each $response?.metadata.items.filter((item) => !['description', 'symbol', 'name', 'url'].some((key) => key === item.key.toLowerCase())) ?? [] as metadata}
+        <Row>
+          <Text slot="left" align="right" bold>{metadata.key}</Text>
+          <Text slot="right" align="right" bold>{metadata.value}</Text>
+        </Row>
+      {/each}
     </InfoBox>
   </Card>
 </Box>

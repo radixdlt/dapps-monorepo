@@ -3,12 +3,16 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
-  import { getEntityDetails } from '@api/gateway'
   import type { PageData } from './$types'
+  import { query } from '@api/query'
+  import Row from '@components/info-box/Row.svelte'
+  import Text from '@components/_base/text/Text.svelte'
+  import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
 
   export let data: PageData
 
-  $: response = getEntityDetails(data.componentAddress)
+  $: ({ send, loading, response } = query('getEntityDetails'))
+  $: send(data.componentAddress)
 </script>
 
 <Box>
@@ -18,11 +22,18 @@
 <Box>
   <Card>
     <Box wrapper slot="body">
-      {#await response}
-        <InfoBox loading />
-      {:then details}
-        <InfoBox entries={details.metadata.items} />
-      {/await}
+      {#if !$loading && $response}
+        <InfoBox>
+          {#each $response.metadata.items as metadata}
+            <Row>
+              <Text slot="left" bold align="right">{metadata.key}</Text>
+              <Text slot="right" bold align="right">{metadata.value}</Text>
+            </Row>
+          {/each}
+        </InfoBox>
+      {:else}
+        <LoadingInfoBox />
+      {/if}
     </Box>
   </Card>
 </Box>

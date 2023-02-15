@@ -63,7 +63,6 @@ export default class RadixEngineToolkit {
       this.internalFFI.decompile_unknown_transaction_intent
     )
 
-    console.log(response)
     return (
       response?.['value']?.['signed_intent']?.['intent']?.['manifest']?.[
         'instructions'
