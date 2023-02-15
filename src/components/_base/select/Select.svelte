@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  export type Options<T> = {
+  export type Option<T> = {
     label: string
     unavailable?: boolean
   } & T
@@ -18,20 +18,17 @@
   import Text from '../text/Text.svelte'
 
   type T = $$Generic
-  export let options: Array<Options<T>> = []
+  export let options: Array<Option<T>> = []
   export let placeholder: string | undefined = undefined
   export let placeholderWhenEmpty: string = ''
-  export let handleSelect: (option: Options<T>) => void = () => {}
-
-  let selected: Options<T> | undefined
+  export let selected: Option<T> | undefined = undefined
 
   $: selected = placeholder
     ? undefined
     : options.find((option) => !option.unavailable)
 
-  const onSelect = (e: CustomEvent<Options<T>>) => {
+  const onSelect = (e: CustomEvent<Option<T>>) => {
     selected = e.detail
-    handleSelect(e.detail)
   }
 
   const listboxoptionStyle = css({
