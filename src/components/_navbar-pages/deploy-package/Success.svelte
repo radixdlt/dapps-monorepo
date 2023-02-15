@@ -1,5 +1,6 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
+  import Row from '@components/info-box/Row.svelte'
   import Success from '@components/success/Success.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { getNFTAddress } from '@utils'
@@ -16,40 +17,32 @@
 </script>
 
 <Success title="Your package was submitted! 🎉">
-  <InfoBox
-    transparent
-    entries={[
-      {
-        key: 'Tx ID',
-        value: txID,
-        href: `/transaction/${txID}`
-      },
-      {
-        key: 'Package address',
-        value: packageAddress,
-        href: `/package/${packageAddress}`
-      },
-      {
-        key: 'Owner badge',
-        value: badgeInfo.name
-          ? `${badgeInfo.name} (${NFTAddress})`
-          : NFTAddress,
-        href: `/resource/${badgeInfo.address}`
-      }
-    ]}
-    loading={false}
-  >
-    <Text align="right" bold slot="key" let:entry>
-      {entry.key}
-    </Text>
-    <Text align="left" slot="value" let:entry>
-      {#if entry.href}
+  <InfoBox>
+    <Row>
+      <Text slot="left" align="right" bold>Tx ID</Text>
+      <Text slot="right" align="left">
         <Text color="link">
-          <a href={entry.href}>{entry.value}</a>
+          <a href={`/transaction/${txID}`}>{txID}</a>
         </Text>
-      {:else}
-        {entry.value}
-      {/if}
-    </Text>
+      </Text>
+    </Row>
+    <Row>
+      <Text slot="left" align="right" bold>Package address</Text>
+      <Text slot="right" align="left">
+        <Text color="link">
+          <a href={`/package/${packageAddress}`}>{packageAddress}</a>
+        </Text>
+      </Text>
+    </Row>
+    <Row>
+      <Text slot="left" align="right" bold>Owner badge</Text>
+      <Text slot="right" align="left">
+        <Text color="link">
+          <a href={`/resource/${badgeInfo.address}`}>
+            {badgeInfo.name ? `${badgeInfo.name} (${NFTAddress})` : NFTAddress}
+          </a>
+        </Text>
+      </Text>
+    </Row>
   </InfoBox>
 </Success>

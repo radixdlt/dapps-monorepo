@@ -9,6 +9,7 @@
   import { getResources } from '@components/_navbar-pages/send-tokens/side-effects'
   import { goto } from '$app/navigation'
   import { query } from '@api/query'
+  import Row from '@components/info-box/Row.svelte'
 
   export let data: PageData
 
@@ -50,11 +51,17 @@
       <Card>
         <Text bold slot="header">Tokens (fungible resources)</Text>
         <Box bgColor="surface" p="none" slot="body">
-          <InfoBox entries={$transformedOverview.fungible || []} {loading}>
-            <Text bold underlined slot="key" let:entry>
-              <a href="/resource/{entry.address}">{entry.key}</a>
-            </Text>
-            <Text slot="value" let:entry>{entry.value}</Text>
+          <InfoBox>
+            {#each $transformedOverview.fungible as fungible}
+              <Row>
+                <Text slot="left" bold underlined align="right">
+                  <a href="/resource/{fungible.address}">{fungible.key}</a>
+                </Text>
+                <Text slot="right">
+                  {fungible.value}
+                </Text>
+              </Row>
+            {/each}
           </InfoBox>
         </Box>
       </Card>
@@ -63,11 +70,15 @@
       <Card>
         <Text bold slot="header">NFTs (nonfungible resources)</Text>
         <Box bgColor="surface" slot="body" p="none">
-          <InfoBox entries={$transformedOverview?.nonFungible || []} {loading}>
-            <Text underlined slot="key" let:entry>
-              <a href="/nft/{entry.address}">{entry.key}</a>
-            </Text>
-            <Text slot="value" />
+          <InfoBox>
+            {#each $transformedOverview.nonFungible as nft}
+              <Row>
+                <Text slot="left" bold underlined>
+                  <a href="/nft/{nft.address}">{nft.key}</a>
+                </Text>
+                <div />
+              </Row>
+            {/each}
           </InfoBox>
         </Box>
       </Card>
@@ -75,7 +86,16 @@
     <Card>
       <Text bold slot="header">Metadata</Text>
       <Box bgColor="surface" slot="body" p="none">
-        <InfoBox entries={$response?.metadata.items} />
+        <InfoBox>
+          {#if $response}
+            {#each $response.metadata.items as metadata}
+              <Row>
+                <Text slot="left" bold>{metadata.key}</Text>
+                <Text slot="right">{metadata.value}</Text>
+              </Row>
+            {/each}
+          {/if}
+        </InfoBox>
       </Box>
     </Card>
   {/if}

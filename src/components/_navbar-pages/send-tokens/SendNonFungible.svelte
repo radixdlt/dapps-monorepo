@@ -6,8 +6,8 @@
   import type { TransformWithOverview } from './side-effects'
 
   export let resources: TransformWithOverview | undefined
-  export let selectedFromAccount: string
-  export let selectedToAccount: string
+  export let selectedFromAccount: string = ''
+  export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
 
@@ -74,6 +74,7 @@
 </Box>
 <Box cx={boxStyle}>
   <div />
+
   <Checkbox {options} bind:selected let:option loading={!resources}>
     <Text inline bold underlined>
       <a href="/nft/{option.address}">{option.label}</a>

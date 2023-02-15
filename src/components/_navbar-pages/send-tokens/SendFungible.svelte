@@ -9,8 +9,8 @@
   import type { TransformWithOverview } from './side-effects'
 
   export let resources: TransformWithOverview
-  export let selectedFromAccount: string
-  export let selectedToAccount: string
+  export let selectedFromAccount: string = ''
+  export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
 
@@ -43,7 +43,7 @@
       value
     }))
 
-  $: selectedResource = resourceList?.[0] || { address: '', label: '' }
+  let selectedResource: { address: string; label: string } | undefined
 
   $: amountAvailable =
     selectedResource?.address !== ''
@@ -57,18 +57,18 @@
 
   $: hasEnoughTokens = Number(amountAvailable) >= amountToSend
 
-  $: setResourceSelected(
-    selectedResource && amountToSend > 0 && hasEnoughTokens
-  )
+  $: if (selectedResource)
+    setResourceSelected(amountToSend > 0 && hasEnoughTokens)
 
-  $: setTransactionManifest(
-    getSendTokenManifest(
-      selectedResource.address,
-      selectedFromAccount,
-      selectedToAccount,
-      amountToSend
+  $: if (selectedResource)
+    setTransactionManifest(
+      getSendTokenManifest(
+        selectedResource.address,
+        selectedFromAccount,
+        selectedToAccount,
+        amountToSend
+      )
     )
-  )
 
   $: if ($response)
     goto(`/send-tokens/success?txID=${$response.transactionIntentHash}`)
