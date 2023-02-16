@@ -5,8 +5,6 @@
   import Text from '@components/_base/text/Text.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import type { PageData } from './$types'
-  import { writable } from 'svelte/store'
-  import { getResources } from '@components/_navbar-pages/send-tokens/side-effects'
   import { goto } from '$app/navigation'
   import { query } from '@api/query'
   import Row from '@components/info-box/Row.svelte'
@@ -15,44 +13,35 @@
 
   $: accountAddress = data.accountAddress
 
-  const transformedOverview = writable<
-    Awaited<ReturnType<typeof getResources>> | undefined
-  >(undefined)
+  $: ({ send: getEntityDetails, response: entityDetailsResponse } =
+    query('getEntityDetails'))
 
-  let loading = false
-  $: {
-    accountAddress
-    loading = true
-  }
+  $: ({
+    send: getResources,
+    response: resourcesResponse,
+    error
+  } = query('getResources'))
+
+  $: getEntityDetails(accountAddress)
 
   $: getResources(accountAddress)
-    .then((resources) => {
-      transformedOverview.set(resources)
-      loading = false
-    })
-    .catch((e) => {
-      loading = false
-      goto('/not-found')
-    })
 
-  $: ({ send, response } = query('getEntityDetails'))
-
-  $: send(accountAddress)
+  $: if ($error) goto('/not-found')
 </script>
 
 <Box>
   <ResourceViewTitle title="Account" resourceAddress={accountAddress} />
 </Box>
 <Box>
-  {#if $transformedOverview?.fungible.length === 0 && $transformedOverview.nonFungible.length === 0}
+  {#if $resourcesResponse?.fungible.length === 0 && $resourcesResponse.nonFungible.length === 0}
     This account doesn’t hold any tokens or NFTs
   {:else}
-    {#if $transformedOverview?.fungible.length}
+    {#if $resourcesResponse?.fungible.length}
       <Card>
         <Text bold slot="header">Tokens (fungible resources)</Text>
         <Box bgColor="surface" p="none" slot="body">
           <InfoBox>
-            {#each $transformedOverview.fungible as fungible}
+            {#each $resourcesResponse.fungible as fungible}
               <Row>
                 <Text slot="left" bold underlined align="right">
                   <a href="/resource/{fungible.address}">{fungible.key}</a>
@@ -66,12 +55,12 @@
         </Box>
       </Card>
     {/if}
-    {#if $transformedOverview?.nonFungible.length}
+    {#if $resourcesResponse?.nonFungible.length}
       <Card>
         <Text bold slot="header">NFTs (nonfungible resources)</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
-            {#each $transformedOverview.nonFungible as nft}
+            {#each $resourcesResponse.nonFungible as nft}
               <Row>
                 <Text slot="left" bold underlined>
                   <a href="/nft/{nft.address}">{nft.key}</a>
@@ -87,10 +76,10 @@
       <Text bold slot="header">Metadata</Text>
       <Box bgColor="surface" slot="body" p="none">
         <InfoBox>
-          {#if $response}
-            {#each $response.metadata.items as metadata}
+          {#if $entityDetailsResponse}
+            {#each $entityDetailsResponse.metadata.items as metadata}
               <Row>
-                <Text slot="left" bold>{metadata.key}</Text>
+                <Text slot="left" bold align="right">{metadata.key}</Text>
                 <Text slot="right">{metadata.value}</Text>
               </Row>
             {/each}

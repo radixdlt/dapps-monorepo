@@ -1,10 +1,12 @@
+import { getResources } from '@components/_navbar-pages/send-tokens/side-effects'
 import { writable } from 'svelte/store'
 import * as gatewayApi from './gateway'
 import * as walletApi from './wallet'
 
 const API = {
   ...gatewayApi,
-  ...walletApi
+  ...walletApi,
+  getResources
 }
 
 export const query = <
