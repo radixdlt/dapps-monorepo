@@ -11,6 +11,7 @@ const colors = {
   green1: '#00AB84',
   green2: '#00C389',
   green3: '#21FFBE',
+  red: '#ED254E',
   // Neutral colors
   white: '#ffffff',
   charcoal1: '#414141',
@@ -88,7 +89,9 @@ export const {
       highlightedText: colors.blue2,
       transparent: 'transparent',
       connectButton: colors.blue1,
-      connectButtonPopover: colors.blue2
+      connectButtonPopover: colors.blue2,
+      error: colors.red,
+      success: colors.green2
     },
     fontSizes: {
       xs: '12px',
@@ -229,7 +232,9 @@ export const darkTheme = createTheme<
     highlightedText: colors.blue2,
     transparent: 'transparent',
     connectButton: colors.blue1,
-    connectButtonPopover: colors.blue2
+    connectButtonPopover: colors.blue2,
+    error: colors.red,
+    success: colors.green3
   }
 })
 
