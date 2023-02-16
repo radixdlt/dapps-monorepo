@@ -2,7 +2,7 @@
   import { getEntityDetails, getNonFungibleData } from '@api/gateway'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import SimpleRow from '@components/info-box/SimpleRow.svelte'
+  import Row from '@components/info-box/Row.svelte'
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
@@ -30,19 +30,19 @@
     <Text slot="header" bold>NFT Info</Text>
     <InfoBox>
       <AwaitedRow
-        key="ID"
-        value={nftData.then(({ non_fungible_id }) => non_fungible_id)}
+        text="ID"
+        promise={nftData.then(({ non_fungible_id }) => non_fungible_id)}
       />
     </InfoBox>
   </Card>
   <Card>
     <Text slot="header" bold>Resource Info</Text>
     <InfoBox>
-      <SimpleRow key="Address">
+      <Row text="Address">
         <Text>{data.nftAddress.split(':')[0]}</Text>
-      </SimpleRow>
+      </Row>
 
-      <AwaitedRow key="Name" value={entities} let:data>
+      <AwaitedRow text="Name" promise={entities} let:data>
         <Text
           >{data.metadata.items.find(
             (entry) => entry.key.toLowerCase() === 'name'
@@ -50,7 +50,7 @@
         >
       </AwaitedRow>
 
-      <AwaitedRow key="Description" value={entities} let:data>
+      <AwaitedRow text="Description" promise={entities} let:data>
         <Text
           >{data.metadata.items.find(
             (entry) => entry.key.toLowerCase() === 'description'

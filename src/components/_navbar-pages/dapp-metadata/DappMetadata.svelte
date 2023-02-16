@@ -110,8 +110,7 @@
 
 <Box bgColor="surface">
   <InfoBox>
-    <Row>
-      <Text slot="left" cx={{ paddingTop: '6px' }} bold>Select account</Text>
+    <Row text="Select Account">
       <SelectAccount
         slot="right"
         accounts={$formattedAccounts}
@@ -119,9 +118,7 @@
       />
     </Row>
 
-    <Row>
-      <Text slot="left" cx={{ paddingTop: '15px' }} bold>dApp setup</Text>
-
+    <Row text="dApp Setup" paddingTop="15px">
       <SetAsDApp
         slot="right"
         isDappDefinition={$isDappDefinition}
@@ -131,17 +128,11 @@
 
     <HeaderRow header="Informational Metadata" faded={$faded} />
 
-    <Row>
-      <Text slot="left" cx={{ paddingTop: '6px' }} bold muted={$faded}
-        >Name</Text
-      >
+    <Row text="Name" faded={$faded}>
       <Name slot="right" faded={$faded} bind:name={$dAppName} />
     </Row>
 
-    <Row>
-      <Text slot="left" cx={{ paddingTop: '6px' }} bold muted={$faded}
-        >Description</Text
-      >
+    <Row text="Description" faded={$faded}>
       <Description
         slot="right"
         faded={$faded}
@@ -151,10 +142,7 @@
 
     <HeaderRow header="Linking Metadata" faded={$faded} />
 
-    <Row>
-      <Text slot="left" cx={{ paddingTop: '6px' }} bold muted={$faded}
-        >Domain</Text
-      >
+    <Row text="Domain" faded={$faded}>
       <Domain slot="right" faded={$faded} bind:domain={$domain} />
     </Row>
   </InfoBox>

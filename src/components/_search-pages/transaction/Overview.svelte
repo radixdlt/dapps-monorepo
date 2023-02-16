@@ -13,7 +13,11 @@
 
 <Box wrapper>
   <InfoBox>
-    <AwaitedRow key="Status" value={tx.then(({ status }) => status)} let:data>
+    <AwaitedRow
+      text="Status"
+      promise={tx.then(({ status }) => status)}
+      let:data
+    >
       {#if data === 'committed_success'}
         <Text color="success">{data}</Text>
       {/if}
@@ -24,23 +28,23 @@
     </AwaitedRow>
 
     <AwaitedRow
-      key="State Version"
-      value={tx.then(({ stateVersion }) => stateVersion)}
+      text="State Version"
+      promise={tx.then(({ stateVersion }) => stateVersion)}
     />
     <AwaitedRow
-      key="Epoch"
-      value={tx.then(({ ledgerState: { epoch } }) => epoch)}
+      text="Epoch"
+      promise={tx.then(({ ledgerState: { epoch } }) => epoch)}
     />
     <AwaitedRow
-      key="Round"
-      value={tx.then(({ ledgerState: { round } }) => round)}
+      text="Round"
+      promise={tx.then(({ ledgerState: { round } }) => round)}
     />
-    <AwaitedRow key="Date" value={tx.then(({ date }) => date)} />
-    <AwaitedRow key="Fee" value={tx.then(({ fee }) => fee)} />
+    <AwaitedRow text="Date" promise={tx.then(({ date }) => date)} />
+    <AwaitedRow text="Fee" promise={tx.then(({ fee }) => fee)} />
 
     <AwaitedRow
-      key="Message"
-      value={tx.then(({ message }) => message)}
+      text="Message"
+      promise={tx.then(({ message }) => message)}
       let:data
     >
       <Box wrapper>
@@ -49,8 +53,8 @@
     </AwaitedRow>
 
     <AwaitedRow
-      key="Created Entities"
-      value={tx.then(({ createdEntities }) => createdEntities)}
+      text="Created Entities"
+      promise={tx.then(({ createdEntities }) => createdEntities)}
       let:data
     >
       <Box wrapper>
@@ -65,8 +69,8 @@
     </AwaitedRow>
 
     <AwaitedRow
-      key="Referenced Entities"
-      value={tx.then(({ referencedEntities }) => referencedEntities)}
+      text="Referenced Entities"
+      promise={tx.then(({ referencedEntities }) => referencedEntities)}
       let:data
     >
       <Box wrapper>

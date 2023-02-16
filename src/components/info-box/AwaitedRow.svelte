@@ -1,20 +1,20 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Text from '@components/_base/text/Text.svelte'
-  import SimpleRow from './SimpleRow.svelte'
+  import Row from './Row.svelte'
 
   type T = $$Generic
 
-  export let key: string
-  export let value: Promise<T>
+  export let text: string
+  export let promise: Promise<T>
 </script>
 
-<SimpleRow {key}>
-  {#await value}
+<Row {text}>
+  {#await promise}
     <SkeletonLoader />
   {:then data}
     <slot {data}>
       <Text>{data}</Text>
     </slot>
   {/await}
-</SimpleRow>
+</Row>
