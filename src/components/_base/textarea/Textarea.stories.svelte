@@ -12,6 +12,10 @@
       control: {
         type: 'select'
       }
+    },
+    type: {
+      options: ['static', 'dynamic'],
+      control: { type: 'radio' }
     }
   }}
 />
@@ -19,12 +23,14 @@
 <Template let:args>
   <Textarea
     size={args.size === 'small' ? 'sm' : args.size === 'medium' ? 'md' : 'lg'}
+    dynamic={args.type === 'dynamic'}
   />
 </Template>
 
 <Story
   name="Primary"
   args={{
-    size: 'Size'
+    size: 'Size',
+    type: 'Type'
   }}
 />
