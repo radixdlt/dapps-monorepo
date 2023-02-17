@@ -8,6 +8,7 @@
   import { goto } from '$app/navigation'
   import { query } from '@api/query'
   import Row from '@components/info-box/Row.svelte'
+  import Textarea from '@components/_base/textarea/Textarea.svelte'
 
   export let data: PageData
 
@@ -80,7 +81,15 @@
             {#each $entityDetailsResponse.metadata.items as metadata}
               <Row>
                 <Text slot="left" bold align="right">{metadata.key}</Text>
-                <Text slot="right">{metadata.value}</Text>
+                <Textarea
+                  slot="right"
+                  editable={false}
+                  dynamic
+                  size="single-line"
+                  value={metadata.value}
+                  padding="$0"
+                  fontSize="$md"
+                />
               </Row>
             {/each}
           {/if}
