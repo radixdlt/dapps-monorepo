@@ -6,7 +6,7 @@
     type FileItem
   } from '@components/file-upload/FileUpload.svelte'
   import { pipe } from 'ramda'
-  import { accounts, connected, type Account } from '@stores'
+  import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { getNFTAddress, shortenAddress } from '@utils'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
@@ -14,6 +14,8 @@
   import { createBadge, deploy, queryResources } from './side-effects'
   import Button from '@components/_base/button/Button.svelte'
   import { goto } from '$app/navigation'
+
+  export let accounts: Account[]
 
   const files = pipe(
     () => writable<FileItem[]>([]),
@@ -104,106 +106,98 @@
 </script>
 
 <Box>
-  <Text size="xxlarge" mb="medium" bold>Deploy Package</Text>
-  {#if !$connected}
-    <Text bold>Please connect your Radix Wallet to get started.</Text>
-  {/if}
+  <Text
+    >Deploy a new blueprint package to the Radix Betanet by attaching your WASM
+    and ABI files to a deploy transaction.</Text
+  >
 </Box>
-{#if $connected}
+<center>
+  <Box cx={{ maxWidth: '50%', minWidth: '450px' }}>
+    <FileUpload
+      acceptedFileTypes={['.wasm', 'wasm']}
+      onRemoveFile={(_, file) => files.removeFile(file)}
+      onAddFile={files.addFile}
+      labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
+      maxFiles={1}
+    />
+    <FileUpload
+      acceptedFileTypes={['.abi', 'abi']}
+      onRemoveFile={(_, file) => files.removeFile(file)}
+      onAddFile={files.addFile}
+      labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+      maxFiles={1}
+    />
+  </Box>
   <Box>
     <Text
-      >Deploy a new blueprint package to the Radix Betanet by attaching your
-      WASM and ABI files to a deploy transaction.</Text
+      >To control aspects of the package you deploy, like setting metadata or
+      claiming royalties, you must specify a badge NFT for authorization. Choose
+      one of your accounts where you have a badge, or where you’d like to hold
+      one.</Text
     >
   </Box>
-  <center>
-    <Box cx={{ maxWidth: '50%', minWidth: '450px' }}>
-      <FileUpload
-        acceptedFileTypes={['.wasm', 'wasm']}
-        onRemoveFile={(_, file) => files.removeFile(file)}
-        onAddFile={files.addFile}
-        labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
-        maxFiles={1}
-      />
-      <FileUpload
-        acceptedFileTypes={['.abi', 'abi']}
-        onRemoveFile={(_, file) => files.removeFile(file)}
-        onAddFile={files.addFile}
-        labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
-        maxFiles={1}
+  <Box cx={{ width: '30%' }}>
+    <Box>
+      <Select
+        placeholder="Select Account"
+        bind:selected={$selectedAccount}
+        options={[
+          ...accounts.map((account, i) => ({
+            ...account,
+            label: `${account.label} (${shortenAddress(account.address)})`
+          }))
+        ]}
       />
     </Box>
     <Box>
-      <Text
-        >To control aspects of the package you deploy, like setting metadata or
-        claiming royalties, you must specify a badge NFT for authorization.
-        Choose one of your accounts where you have a badge, or where you’d like
-        to hold one.</Text
-      >
-    </Box>
-    <Box cx={{ width: '30%' }}>
-      <Box>
+      {#if $nonFungibleResources && $nonFungibleResources.length > 0}
         <Select
-          placeholder="Select Account"
-          bind:selected={$selectedAccount}
+          placeholder="Select Badge NFT"
+          bind:selected={$selectedBadge}
           options={[
-            ...$accounts.map((account, i) => ({
-              ...account,
-              label: `${account.label} (${shortenAddress(account.address)})`
+            ...$nonFungibleResources.map((resource, i) => ({
+              ...resource,
+              label: `${resource.name ?? ''} ${
+                resource.name ? '(' : ' '
+              }${getNFTAddress(resource.address, resource.id)}${
+                resource.name ? ')' : ' '
+              }`
             }))
           ]}
         />
-      </Box>
-      <Box>
-        {#if $nonFungibleResources && $nonFungibleResources.length > 0}
-          <Select
-            placeholder="Select Badge NFT"
-            bind:selected={$selectedBadge}
-            options={[
-              ...$nonFungibleResources.map((resource, i) => ({
-                ...resource,
-                label: `${resource.name ?? ''} ${
-                  resource.name ? '(' : ' '
-                }${getNFTAddress(resource.address, resource.id)}${
-                  resource.name ? ')' : ' '
-                }`
-              }))
-            ]}
-          />
-        {:else}
-          <Select placeholder="Select Badge NFT" />
-        {/if}
-      </Box>
+      {:else}
+        <Select placeholder="Select Badge NFT" />
+      {/if}
     </Box>
+  </Box>
 
-    <Box hidden={!selectedAccount}>
-      <Text>
-        <Text
-          on:click={() => {
-            if (!$selectedAccount) return
-            createBadge($selectedAccount.address).then((result) => {
-              badgeCreated.set(result.transactionIntentHash)
-              selectedAccount.set($selectedAccount)
-              return
-            })
-          }}
-          cx={{ display: 'inline', cursor: 'pointer' }}
-          underlined
-        >
-          Click here
-        </Text>
-        to create a simple badge NFT.
+  <Box hidden={!selectedAccount}>
+    <Text>
+      <Text
+        on:click={() => {
+          if (!$selectedAccount) return
+          createBadge($selectedAccount.address).then((result) => {
+            badgeCreated.set(result.transactionIntentHash)
+            selectedAccount.set($selectedAccount)
+            return
+          })
+        }}
+        cx={{ display: 'inline', cursor: 'pointer' }}
+        underlined
+      >
+        Click here
       </Text>
-    </Box>
+      to create a simple badge NFT.
+    </Text>
+  </Box>
 
-    <Box px="none" mx="none">
-      <Button disabled={!$deployButtonEnabled} on:click={deployPackage}>
-        {#if $deployingPackage}
-          <LoadingSpinner />
-        {:else}
-          Deploy package
-        {/if}
-      </Button>
-    </Box>
-  </center>
-{/if}
+  <Box px="none" mx="none">
+    <Button disabled={!$deployButtonEnabled} on:click={deployPackage}>
+      {#if $deployingPackage}
+        <LoadingSpinner />
+      {:else}
+        Deploy package
+      {/if}
+    </Button>
+  </Box>
+</center>
