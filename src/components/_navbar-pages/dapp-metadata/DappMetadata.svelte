@@ -28,6 +28,8 @@
 
   export let accounts: Account[]
 
+  const infoBoxPadding = '6px'
+
   const transactionManifest = (
     address: string,
     metadata: { key: string; value: unknown }[]
@@ -110,7 +112,7 @@
 
 <Box bgColor="surface">
   <InfoBox>
-    <Row text="Select Account">
+    <Row text="Select Account" paddingTop={infoBoxPadding}>
       <SelectAccount
         slot="right"
         accounts={$formattedAccounts}
@@ -128,7 +130,7 @@
 
     <HeaderRow header="Informational Metadata" faded={$faded} />
 
-    <Row text="Name" faded={$faded}>
+    <Row text="Name" faded={$faded} paddingTop={infoBoxPadding}>
       <Name slot="right" faded={$faded} bind:name={$dAppName} />
     </Row>
 
@@ -142,7 +144,7 @@
 
     <HeaderRow header="Linking Metadata" faded={$faded} />
 
-    <Row text="Domain" faded={$faded}>
+    <Row text="Domain" faded={$faded} paddingTop={infoBoxPadding}>
       <Domain slot="right" faded={$faded} bind:domain={$domain} />
     </Row>
   </InfoBox>

@@ -4,7 +4,7 @@
   export let text: string = ''
   export let underlined: boolean = false
   export let faded: boolean = false
-  export let paddingTop: string = '6px'
+  export let paddingTop: string = '0px'
 </script>
 
 <slot name="left">
