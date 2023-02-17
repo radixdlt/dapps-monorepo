@@ -28,7 +28,7 @@
 <Box>
   <Card>
     <Text slot="header" bold>NFT Info</Text>
-    <InfoBox>
+    <InfoBox slot="body">
       <AwaitedRow
         text="ID"
         promise={nftData.then(({ non_fungible_id }) => non_fungible_id)}
@@ -37,9 +37,9 @@
   </Card>
   <Card>
     <Text slot="header" bold>Resource Info</Text>
-    <InfoBox>
+    <InfoBox slot="body">
       <Row text="Address">
-        <Text>{data.nftAddress.split(':')[0]}</Text>
+        <Text slot="right">{data.nftAddress.split(':')[0]}</Text>
       </Row>
 
       <AwaitedRow text="Name" promise={entities} let:data>
