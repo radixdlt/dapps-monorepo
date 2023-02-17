@@ -17,8 +17,6 @@
   import Input from '@components/_base/input/Input.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import SendFungible from './SendFungible.svelte'
-  import SendNonFungible from './SendNonFungible.svelte'
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
   import { getResources } from './side-effects'
@@ -28,7 +26,6 @@
   type OptionsType = Option<{ address: string }>
 
   export let accounts: OptionsType[] | undefined = undefined
-  export let tokenType: 'fungible' | 'nonFungible'
 
   const { send, loading, response } = query('sendTransaction')
 
@@ -103,24 +100,13 @@
       </svelte:fragment>
     </Tabs>
   </Box>
-  {#if tokenType === 'fungible'}
-    <SendFungible
-      selectedFromAccount={selectedFromAccount?.address}
-      selectedToAccount={selectedToAccount?.address || otherAccount}
-      resources={$transformedOverview?.fungible || []}
-      {setTransactionManifest}
-      {setResourceSelected}
-    />
-  {/if}
-  {#if tokenType === 'nonFungible'}
-    <SendNonFungible
-      selectedFromAccount={selectedFromAccount?.address}
-      selectedToAccount={selectedToAccount?.address || otherAccount}
-      resources={$transformedOverview?.nonFungible}
-      {setTransactionManifest}
-      {setResourceSelected}
-    />
-  {/if}
+  <slot
+    selectedFromAccount={selectedFromAccount?.address}
+    selectedToAccount={selectedToAccount?.address || otherAccount}
+    resources={$transformedOverview}
+    {setTransactionManifest}
+    {setResourceSelected}
+  />
   <Box bgColor="surface" justify="end">
     <Button
       disabled={!(
