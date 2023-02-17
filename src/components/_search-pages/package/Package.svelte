@@ -1,0 +1,38 @@
+<script lang="ts">
+  import { query } from '@api/query'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
+  import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
+  import Row from '@components/info-box/Row.svelte'
+  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
+  import Box from '@components/_base/box/Box.svelte'
+  import Card from '@components/_base/card/Card.svelte'
+  import Text from '@components/_base/text/Text.svelte'
+
+  export let address: string
+
+  $: ({ send, loading, response } = query('getEntityDetails'))
+  $: send(address)
+</script>
+
+<Box>
+  <ResourceViewTitle title="Package" resourceAddress={address} />
+</Box>
+
+<Box>
+  <Card>
+    <Box wrapper slot="body">
+      {#if !$loading && $response}
+        <InfoBox>
+          {#each $response.metadata.items as metadata}
+            <Row>
+              <Text slot="left" bold align="right">{metadata.key}</Text>
+              <Text slot="right" bold align="right">{metadata.value}</Text>
+            </Row>
+          {/each}
+        </InfoBox>
+      {:else}
+        <LoadingInfoBox />
+      {/if}
+    </Box>
+  </Card>
+</Box>
