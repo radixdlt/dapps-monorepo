@@ -67,8 +67,8 @@
             value: setAsDAppDefinition ? $dAppDescription : ''
           },
           {
-            key: 'domain',
-            value: setAsDAppDefinition ? $domain : ''
+            key: 'related_websites',
+            value: setAsDAppDefinition ? $relatedWebsites : ''
           },
           {
             key: 'account_type',
@@ -82,7 +82,7 @@
   const setAsDAppDefinition = writable(false)
   const dAppName = writable('')
   const dAppDescription = writable('')
-  const domain = writable('')
+  const relatedWebsites = writable('')
   let faded = writable(false)
   let isDappDefinition = writable(false)
 
@@ -90,7 +90,7 @@
     if ($selectedAccount) {
       dAppName.set($selectedAccount.name || '')
       dAppDescription.set($selectedAccount.description || '')
-      domain.set($selectedAccount.domain || '')
+      relatedWebsites.set($selectedAccount.domain || '')
     }
   }
 
@@ -144,8 +144,8 @@
 
     <HeaderRow header="Linking Metadata" faded={$faded} />
 
-    <Row text="Domain" faded={$faded} paddingTop={infoBoxPadding}>
-      <Domain slot="right" faded={$faded} bind:domain={$domain} />
+    <Row text="Related Websites" faded={$faded} paddingTop={infoBoxPadding}>
+      <Domain slot="right" faded={$faded} bind:domain={$relatedWebsites} />
     </Row>
   </InfoBox>
   <Box justify="end">
