@@ -11,7 +11,7 @@
   import { resolveRDT } from '../radix'
   import '../fonts.css'
   import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
-  import { networkConfig } from '@constants'
+  import { CURRENT_NETWORK } from '../../src/network'
 
   let mounted = false
 
@@ -20,7 +20,7 @@
 
     const rdt = RadixDappToolkit(
       {
-        dAppDefinitionAddress: networkConfig.dappDefAddress!,
+        dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress!,
         dAppName: 'Dashboard'
       },
       (requestData) => {
@@ -37,7 +37,7 @@
           accountsPath: 'account/',
           transactionPath: 'transaction/'
         },
-        networkId: networkConfig?.id,
+        networkId: CURRENT_NETWORK?.id,
         onInit: (state) => {
           if (state.accounts) {
             accounts.set(state.accounts)
