@@ -1,17 +1,17 @@
-import { networkConfig } from '@constants'
 import {
   Configuration,
   StateApi,
   TransactionApi
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
+import { CURRENT_NETWORK } from '../../src/network'
 import {
   transformEntityOverview,
   transformEntityResources,
   type EntityResourcesTransformed
 } from './transformations'
 
-const config = new Configuration({ basePath: networkConfig?.url })
+const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
 
 const stateApi = new StateApi(config)
 const transactionApi = new TransactionApi(config)
