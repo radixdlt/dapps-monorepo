@@ -1,0 +1,1260 @@
+{
+  "/gateway/information": {
+    "ledger_state": {
+      "network": "laboris nostrud pariatur",
+      "state_version": 90425005,
+      "proposer_round_timestamp": "quis ex",
+      "epoch": 30898320,
+      "round": -10089994,
+      "dolor_c": 87961383.89922276,
+      "esse_6e4": 4878670,
+      "et06e": -59632764
+    },
+    "known_target": {
+      "state_version": -311589,
+      "adipisicing__37": 37560150,
+      "mollit_5": 13009934,
+      "idc": true,
+      "ut_6": "veniam eu quis",
+      "id_1fb": -95544325
+    },
+    "release_info": {
+      "release_version": "Excepteur nisi et ea incididunt",
+      "open_api_schema_version": "et in ex deserunt mollit",
+      "Lorem_6_": 1195013.4893215
+    },
+    "well_known_addresses": {
+      "account_package": "sint",
+      "faucet": "in deserunt cillum",
+      "epoch_manager": "commodo ut pariatur",
+      "clock": "irure id laboris nulla magna",
+      "ecdsa_secp256k1": "officia",
+      "eddsa_ed25519": "consectetur quis Lorem dolor",
+      "xrd": "veniam in eiusmod enim",
+      "proidentbf": -6112613.771608412,
+      "labore6e": true,
+      "inbb": "Duis ut",
+      "voluptate_bf": 82789351.14859557
+    },
+    "consectetur_c": true
+  },
+  "/transaction/recent": {
+    "ledger_state": {
+      "network": "ea dolor non labore",
+      "state_version": -6640180,
+      "proposer_round_timestamp": "do amet in et exercitation",
+      "epoch": -91882845,
+      "round": 29253856,
+      "do__34": 22267222
+    },
+    "items": [
+      {
+        "state_version": -12698665,
+        "transaction_status": "pending",
+        "payload_hash_hex": "fugiat consectetur in Ut aliqua",
+        "intent_hash_hex": "exercitation veniam culpa",
+        "confirmed_at": "1954-01-15T10:01:53.0Z",
+        "error_message": "anim in",
+        "fee_paid": { "value": "anim sint", "address": "in" }
+      },
+      {
+        "state_version": 76808978,
+        "transaction_status": "committed_failure",
+        "payload_hash_hex": "laboris",
+        "intent_hash_hex": "nostrud esse magna",
+        "fee_paid": { "value": "qui nulla ullamco", "address": "nostrud" },
+        "error_message": "incididunt",
+        "confirmed_at": "1945-08-31T01:16:16.0Z"
+      },
+      {
+        "state_version": 86590196,
+        "transaction_status": "committed_success",
+        "payload_hash_hex": "irure",
+        "intent_hash_hex": "deserunt dolor dolor",
+        "error_message": "velit",
+        "fee_paid": {
+          "value": "aliqua labore Excepteur",
+          "address": "culpa et Excepteur exercitation in"
+        },
+        "confirmed_at": "2012-07-18T11:22:11.0Z"
+      },
+      {
+        "state_version": -58458367,
+        "transaction_status": "unknown",
+        "payload_hash_hex": "aliqua exercitation voluptate in magna",
+        "intent_hash_hex": "aute eiusmod et",
+        "error_message": "deserunt",
+        "fee_paid": { "value": "minim", "address": "incididunt" },
+        "confirmed_at": "1958-11-05T16:01:43.0Z"
+      },
+      {
+        "state_version": 7292856,
+        "transaction_status": "committed_success",
+        "payload_hash_hex": "consequat amet nostrud adipisicing",
+        "intent_hash_hex": "enim pariatur",
+        "fee_paid": { "value": "sed", "address": "ad sit sint enim Duis" },
+        "error_message": "tempor aliqua anim non",
+        "confirmed_at": "1984-11-14T08:01:40.0Z"
+      }
+    ],
+    "previous_cursor": "sunt ut",
+    "total_count": 13633353,
+    "next_cursor": "ut eu Excepteur cupidatat Duis"
+  },
+  "/transaction/construction": {
+    "ledger_state": {
+      "network": "est sint sunt sit Duis",
+      "state_version": -94201929,
+      "proposer_round_timestamp": "minim Excepteur laboris commodo",
+      "epoch": 34015748,
+      "round": -42966601,
+      "id_24f": true,
+      "et_8e": 38984828,
+      "fugiatab_": true,
+      "esse6a7": "qui laborum Lorem magna in",
+      "eu_ac": "id aliquip",
+      "deserunt0": -26798720.244953692,
+      "deserunt76c": 9448951.303765714
+    },
+    "consequat_57": "eu id cillum sunt"
+  },
+  "/transaction/preview": { "in0_f": -31393853.676763415 },
+  "/transaction/submit": {
+    "duplicate": true,
+    "est8_": true,
+    "eiusmodb": 58080775.83945227,
+    "cillum_5b": true,
+    "ind": true,
+    "laborumb8": 96571523
+  },
+  "/transaction/committed-details": {
+    "ledger_state": {
+      "network": "non Lorem",
+      "state_version": -56487582,
+      "proposer_round_timestamp": "esse eu in sunt ut",
+      "epoch": -60771701,
+      "round": 36549594,
+      "dolor_54": 48604834.42203778,
+      "est_dd": "velit incididunt",
+      "cupidatat_5": true,
+      "irure_f3": 29785620.11585635,
+      "nisi78": 76486356,
+      "cupidatat68": 84689671.04821292,
+      "aliquip_2": -32537227.22113967,
+      "dolor_16": true
+    },
+    "transaction": {
+      "state_version": 43566576,
+      "transaction_status": "unknown",
+      "payload_hash_hex": "eiusmod anim quis consequat mollit",
+      "intent_hash_hex": "proident in cillum",
+      "fee_paid": { "value": "enim", "address": "Duis in esse occaecat" },
+      "confirmed_at": "1987-07-11T04:17:07.0Z",
+      "error_message": "ea Ut ex veniam"
+    },
+    "details": {
+      "raw_hex": "pariatur id fugiat",
+      "receipt": { "ipsum__e": false },
+      "referenced_global_entities": [
+        "non sed nulla",
+        "ex consectetur ad tempor",
+        "anim"
+      ],
+      "message_hex": "Excepteur"
+    },
+    "quis_93d": true,
+    "pariaturcc": 62251402,
+    "adipisicingd": "Ut voluptate",
+    "occaecat_e49": 97636723,
+    "elite": "magna anim",
+    "elitda": 88911655
+  },
+  "/transaction/status": {
+    "ledger_state": {
+      "network": "laborum nulla aliquip anim Lorem",
+      "state_version": -56297133,
+      "proposer_round_timestamp": "ut aliqua sit in irure",
+      "epoch": 2074921,
+      "round": -23883668,
+      "in_6": "Duis voluptate incididunt",
+      "dolor__": true,
+      "exercitation_382": -72732221,
+      "dolore_bd": -43783182,
+      "adipisicing_8": "irure labore sint",
+      "Excepteur0c8": true,
+      "pariatur_bc": -81456761.02302289,
+      "eiusmodaf": true,
+      "id1_b": false
+    },
+    "status": "committed_success",
+    "known_payloads": [
+      {
+        "payload_hash_hex": "velit Excepteur occaecat magna voluptate",
+        "status": "committed_success",
+        "error_message": "ullamco ad sunt aute"
+      },
+      {
+        "payload_hash_hex": "in",
+        "status": "committed_failure",
+        "error_message": "commodo ex veniam nisi"
+      },
+      {
+        "payload_hash_hex": "sit Ut",
+        "status": "unknown",
+        "error_message": "amet aute cillum"
+      }
+    ],
+    "error_message": "Ut commodo in dolore ipsum"
+  },
+  "/entity/overview": {
+    "ledger_state": {
+      "network": "dolore deserunt sint tempor",
+      "state_version": -67454050,
+      "proposer_round_timestamp": "exercitation culpa amet quis",
+      "epoch": 1348011,
+      "round": -74717431,
+      "Ut21": true,
+      "aliquip_5": "incididunt culpa",
+      "minim344": true,
+      "incididunt63": -72620018,
+      "anim253": "esse nostrud consequat",
+      "proident_c4": false
+    },
+    "entities": [
+      {
+        "address": "sunt Ut",
+        "metadata": {
+          "items": [
+            {
+              "key": "aliquip proident",
+              "value": "eiusmod eu",
+              "Duis_87": -37306789,
+              "aliqua0": "ut sit adipisicing",
+              "deserunt2_1": 79638376.62080163
+            },
+            {
+              "key": "id",
+              "value": "laborum in non",
+              "aliquip_f": -86970609.32664736,
+              "Lorem6": true,
+              "reprehenderit_2da": 13590319.979135841,
+              "nisi7": -76076829,
+              "aliqua__03": -4151960.268840641,
+              "enim96e": "tempor eiusmod sunt commodo"
+            },
+            {
+              "key": "irure Excepteur",
+              "value": "irure reprehenderit voluptate",
+              "adc": -98583433.98765573
+            },
+            {
+              "key": "aute ut nostrud",
+              "value": "commodo labore pariatur consequat proident",
+              "sed_9": -1679604,
+              "inf9": -47527671,
+              "nonaa4": true,
+              "minim_4_": -70318160,
+              "deserunte1": 68718089.873725
+            }
+          ],
+          "previous_cursor": "labore pariatur",
+          "total_count": 84814930,
+          "next_cursor": "Excepteur in aliqua commodo ut"
+        },
+        "quif3_": -7715840
+      },
+      {
+        "address": "consectetur",
+        "metadata": {
+          "items": [
+            {
+              "key": "culpa aliquip aliqua commodo",
+              "value": "pariatur anim ad ex",
+              "nisi_7f": false,
+              "uta8": false,
+              "enim81": -66563528,
+              "irure612": false,
+              "ad_27": -52603614.36384362
+            },
+            {
+              "key": "sunt veniam ut tempor",
+              "value": "sint ea Excepteur",
+              "amet_3": 21155774,
+              "ut_0": -26473650.101044163,
+              "fugiat_d2": true
+            },
+            {
+              "key": "anim Excepteur tempor non voluptate",
+              "value": "in dolor enim sed dolore",
+              "nisi72": false,
+              "veniam_531": -78133841,
+              "officia_0": false,
+              "dolorf": -94107096.85610783,
+              "cillum_16": 12355891
+            },
+            {
+              "key": "mollit consectetur laborum quis enim",
+              "value": "eiusmod ea eu veniam dolore",
+              "ine": "ut"
+            },
+            {
+              "key": "nulla ex culpa quis",
+              "value": "tempor ullamco",
+              "dolore___": 7864861.40341945,
+              "dolore8": -32420329,
+              "veniam2b": "Lorem aute ut",
+              "consectetur_7a4": -3171420.089757368,
+              "magna_41": -76784419.16362017,
+              "irureda": 93660258,
+              "mollitc": 19117813.437483117,
+              "occaecat_b": false
+            }
+          ],
+          "previous_cursor": "quis proident incididunt culpa",
+          "total_count": 46914157,
+          "next_cursor": "ut sit"
+        },
+        "nulla2f0": -51785617,
+        "qui95e": false,
+        "occaecat_b5": "officia laborum in",
+        "laboris40": -54930447.212959744
+      },
+      {
+        "address": "ut in amet cillum Duis",
+        "metadata": {
+          "items": [
+            {
+              "key": "mollit",
+              "value": "dolor officia consectetur",
+              "mollitd": "dolore in eu"
+            },
+            {
+              "key": "nostrud",
+              "value": "sed veniam do est ut",
+              "amet_5": false,
+              "utc": 4514427,
+              "enim_2fe": "tempor",
+              "irure3": "aute minim laboris ex deserunt",
+              "dolor_4_7": true,
+              "nostrud_78": 96059831,
+              "velit_3_e": "sunt occaecat eu commodo"
+            },
+            {
+              "key": "exercitation proident pariatur",
+              "value": "anim ad proident sunt",
+              "aliquip_c1e": "cupidatat dolor culpa",
+              "dolor_4f0": "ullamco culpa magna dolor",
+              "Ut_aa_": 56178777,
+              "anim_421": 94207602,
+              "ipsum_2f": 5423745
+            },
+            {
+              "key": "eiusmod dolore ea irure non",
+              "value": "consectetur occaecat velit veniam",
+              "pariatur_53": -95921780.2617895,
+              "est_1": "in sit",
+              "ut_2": 93894577,
+              "exercitation_437": -98793536.99520533,
+              "deserunt_0": "aute occaecat reprehenderit",
+              "reprehenderit0c": true,
+              "nisi_0": 41894462
+            },
+            {
+              "key": "tempor",
+              "value": "nisi laboris dolor eu adipisicing",
+              "tempor_308": 43168184,
+              "eiusmod_544": "magna fugiat elit",
+              "fugiate38": -85529262.32344529,
+              "veniam_c39": -42733640.816761255,
+              "pariaturc": -71487519.33856067
+            }
+          ],
+          "previous_cursor": "anim dolore Duis",
+          "next_cursor": "dolore officia reprehenderit amet pariatur",
+          "total_count": -62323785
+        },
+        "enim_64c": -5848162,
+        "magna_06": 40942089.00677279
+      },
+      {
+        "address": "minim",
+        "metadata": {
+          "items": [
+            {
+              "key": "proident tempor velit in eu",
+              "value": "sit Duis",
+              "ea_fc": false,
+              "ut8d1": -29442782.67191747,
+              "fugiat1": "ex in",
+              "eiusmod1": 95956430,
+              "mollit_2c3": true,
+              "occaecat_254": true,
+              "sunt_6": -76474555,
+              "ullamcocb": 47595874
+            },
+            {
+              "key": "id aliquip ex sed veniam",
+              "value": "enim Duis labore",
+              "idc": -54968022,
+              "ut_de": -60244223,
+              "aliquafa": false,
+              "minim_43": "consequat elit qui Ut",
+              "occaecat_f8b": -87240646,
+              "laborisc": 66402911
+            },
+            {
+              "key": "id",
+              "value": "ut do ullamco velit fugiat",
+              "sed_b2": true,
+              "ut_ac": false,
+              "esse003": 46471664.578339756,
+              "aliqua___": "commodo nulla adipisicing"
+            },
+            {
+              "key": "elit",
+              "value": "officia reprehenderit",
+              "mollit_21": "nisi consequat aliqua cupidatat adipisicing",
+              "laborum7eb": false
+            }
+          ],
+          "total_count": 84244756,
+          "next_cursor": "sit deserunt pariatur sunt",
+          "previous_cursor": "culpa incididunt tempor minim ullamco"
+        },
+        "deserunt_fd": "in proident"
+      },
+      {
+        "address": "ipsum ut",
+        "metadata": {
+          "items": [
+            {
+              "key": "amet",
+              "value": "exercitation do incididunt magna proident",
+              "cillum_": 15409363,
+              "cupidatat5": 85520848,
+              "velit_6": 29318909.833895564
+            },
+            {
+              "key": "incididunt ex culpa",
+              "value": "amet officia",
+              "et_449": -4023712,
+              "do802": 71826764.63100243,
+              "officia_05": true,
+              "ad_5": "anim elit sit laboris"
+            },
+            {
+              "key": "ad ex do adipisicing",
+              "value": "ex",
+              "eiusmod__88": false,
+              "velit_5de": 17418065.902980924,
+              "do_04": false,
+              "velit1c": 25109876.734894738,
+              "et_b": 90206840.24545515
+            },
+            {
+              "key": "dolore",
+              "value": "qui aliqua aliquip dolore irure",
+              "labore01_": false,
+              "ex_804": "consequat Ut non voluptate amet",
+              "sint_f60": -18671610.943798184,
+              "veniama": "dolor",
+              "voluptate4": "irure tempor minim",
+              "ipsume45": 96238665
+            },
+            {
+              "key": "proident Excepteur consequat",
+              "value": "occaecat veniam qui anim id",
+              "labore_": true
+            }
+          ],
+          "next_cursor": "nostrud est quis",
+          "previous_cursor": "non",
+          "total_count": -19066781
+        },
+        "amet_4": false,
+        "laborum_710": false,
+        "commodo_a6": "eiusmod occaecat nostrud dolore esse",
+        "labore_8": -1841159,
+        "dolore_3e0": -39613164.89643356
+      }
+    ],
+    "commodo_df": "cupidatat",
+    "deserunt_2": 72221173,
+    "cupidatata3": 84911707,
+    "exb6": false
+  },
+  "/entity/details": {
+    "ledger_state": {
+      "network": "ad incididunt",
+      "state_version": -24848598,
+      "proposer_round_timestamp": "labore",
+      "epoch": 62308837,
+      "round": -68556537,
+      "est28b": "dolor do sit eiusmod",
+      "consectetur_90": -45365129,
+      "esse80": 49409865,
+      "dolore_fbe": "dolor adipisicing sint",
+      "proidenta": true,
+      "quis62e": true
+    },
+    "address": "consequat mollit cupidatat ut",
+    "metadata": {
+      "items": [
+        {
+          "key": "ad id",
+          "value": "deserunt dolor labore",
+          "ina": -78502642,
+          "nullada": -14264868.404243276,
+          "ut01d": true,
+          "sunt__": -88471341.8182534
+        },
+        {
+          "key": "dolor magna",
+          "value": "nisi eiusmod enim officia cupidatat",
+          "non_b": false,
+          "magnafe": -31329842,
+          "minim82": "ipsum",
+          "fugiat955": -14700007,
+          "deserunt_4": 22389354.89597313
+        },
+        {
+          "key": "sed labore aute",
+          "value": "occaecat veniam sit",
+          "reprehenderit81": true,
+          "eiusmod_0c": -70448260
+        },
+        {
+          "key": "Duis aliqua",
+          "value": "aliqua laboris nulla enim proident",
+          "incididunt45b": false
+        }
+      ],
+      "previous_cursor": "enim do pariatur",
+      "total_count": 50480053,
+      "next_cursor": "est aute sed"
+    },
+    "details": {
+      "discriminator": "fungible_resource",
+      "access_rules_chain": {
+        "sita": true,
+        "consequat_d": -67778045,
+        "cupidatat5e0": 78193233
+      },
+      "vault_access_rules_chain": {
+        "in_696": false,
+        "in_16": 34270945.44263497
+      },
+      "non_fungible_id_type": "string",
+      "eiusmod1b": true,
+      "culpafe": -18403768.897293255
+    }
+  },
+  "/entity/resources": {
+    "ledger_state": {
+      "network": "deserunt",
+      "state_version": -60560822,
+      "proposer_round_timestamp": "fugiat do aute sint",
+      "epoch": -76996174,
+      "round": -62278988,
+      "enim1c0": 19095795,
+      "Lorem6d8": -16352279.189309329,
+      "sint6": false,
+      "occaecat01": true,
+      "temporb2": 70327404.42813602,
+      "aliqua1a7": 82266408.23642409,
+      "est_d": true,
+      "Ut897": 73490296.68751666,
+      "fugiat5_d": "tempor sit est amet",
+      "reprehenderitfa9": "id non Excepteur proident ipsum"
+    },
+    "address": "est consequat sint",
+    "fungible_resources": {
+      "items": [
+        {
+          "address": "veniam laborum sit exercitation",
+          "amount": {
+            "value": "ut deserunt mollit id",
+            "address": "irure sint et"
+          },
+          "id6": -99869331,
+          "cupidatatec4": "aliquip"
+        },
+        {
+          "address": "enim mollit",
+          "amount": {
+            "value": "commodo nisi",
+            "address": "voluptate in laborum officia"
+          },
+          "velita": -67341087,
+          "aute_1_": true,
+          "cillum_f1": 78171422.94122398
+        },
+        {
+          "address": "eu ullamco id ipsum commodo",
+          "amount": { "value": "dolor velit ea", "address": "Ut" },
+          "Excepteur7b": -2926889.47365205,
+          "occaecat81": 69837323,
+          "est30": -82431255.97496709,
+          "nostrud_f71": -79024814,
+          "Excepteur_aa": -97065781
+        }
+      ],
+      "previous_cursor": "enim occaecat laboris anim sunt",
+      "total_count": 78750794,
+      "next_cursor": "minim est dolore"
+    },
+    "non_fungible_resources": {
+      "items": [
+        {
+          "address": "Lorem",
+          "amount": -16485184,
+          "sit_fc": 25253072.67194292,
+          "aute44": "ullamco ea aute in commodo",
+          "mollit24": 52202147,
+          "in_": 28830364.313144326
+        },
+        {
+          "address": "dolore sint adipisicing officia consequat",
+          "amount": -23808013,
+          "culpa_3": "sit veniam nisi ut mollit",
+          "non066": "cupidatat dolor veniam tempor amet",
+          "dolore_5": 96426273.13994619,
+          "ut_3": -1798348.4377500415
+        },
+        {
+          "address": "velit esse qui reprehenderit",
+          "amount": -35091781,
+          "culpa_5": "reprehenderit",
+          "ullamco42": "reprehenderit elit sed proident",
+          "tempor_5": true,
+          "sint_b8": -94325717.04031627
+        },
+        {
+          "address": "fugiat minim Duis",
+          "amount": 72334980,
+          "commodo08": false,
+          "eu3": -11330268.357668906,
+          "cupidatat49": -63212197,
+          "in_5": "Excepteur non anim commodo pariatur",
+          "amet_3": -91382457,
+          "in_9": -32282540.614591375
+        }
+      ],
+      "total_count": 65784353,
+      "previous_cursor": "est",
+      "next_cursor": "adipisicing Duis ipsum"
+    },
+    "sunt14e": 36489217,
+    "exercitation_01": true,
+    "veniam_8a": -55791331.541872054
+  },
+  "/entity/metadata": {
+    "ledger_state": {
+      "network": "non voluptate ut et",
+      "state_version": -71536824,
+      "proposer_round_timestamp": "Ut",
+      "epoch": 15130365,
+      "round": 55419360,
+      "enimb_": "Duis velit eu in"
+    },
+    "address": "dolor in",
+    "metadata": {
+      "items": [
+        {
+          "key": "quis irure",
+          "value": "est aute officia",
+          "anim2f": "adipisicing amet",
+          "magna_9": false,
+          "cupidatate9a": -46148675.52079147,
+          "quise": true,
+          "qui_220": "voluptate elit Duis"
+        },
+        {
+          "key": "in aute laborum",
+          "value": "in ipsum deserunt",
+          "non_e": false,
+          "laborum_292": 52851738.58647916,
+          "ut_b5": "in et sint",
+          "in_7": true,
+          "adipisicing9": 98474861
+        },
+        {
+          "key": "consectetur velit anim",
+          "value": "laborum officia sunt",
+          "pariatur_c9b": false
+        },
+        {
+          "key": "ullamco",
+          "value": "qui in est in",
+          "aliquip5": false,
+          "ut_c": "Lorem",
+          "magna6": -84761647.62241858,
+          "ullamco_7": -75354358,
+          "esse83": -85131158.94911727
+        }
+      ],
+      "next_cursor": "voluptate qui exercitation est nisi",
+      "total_count": -95124468,
+      "previous_cursor": "anim in voluptate aute consequat"
+    },
+    "magna_b": -16046472.239689708,
+    "consequat_7": false,
+    "minimb3": true,
+    "laborum9": "deserunt",
+    "in9": 28015517
+  },
+  "/entity/fungibles": {
+    "ledger_state": {
+      "network": "deserunt cupidatat Excepteur",
+      "state_version": 72648194,
+      "proposer_round_timestamp": "in deserunt anim laborum ea",
+      "epoch": 94520248,
+      "round": 3226667,
+      "esse_37": -83678130.24344142
+    },
+    "address": "pariatur tempor in incididunt ut",
+    "fungibles": {
+      "items": [
+        {
+          "address": "pariatur",
+          "amount": {
+            "value": "pariatur velit",
+            "address": "Excepteur incididunt ullamco veniam sunt"
+          },
+          "veniam_b33": "ad ipsum aliqua veniam consectetur",
+          "non_2": -6795629.009031594
+        },
+        {
+          "address": "laboris voluptate in aute anim",
+          "amount": {
+            "value": "ullamco dolor ea",
+            "address": "sint cupidatat do"
+          },
+          "occaecat_7f": 79564667,
+          "adad9": "est anim ut consequat",
+          "non_b": 59193102
+        },
+        {
+          "address": "enim",
+          "amount": { "value": "dolor non voluptate", "address": "sunt" },
+          "exercitation_95": 62442973.75298095,
+          "voluptate_d1": true,
+          "in4": -47283086.16272172,
+          "Excepteur_e6": -1281706.89534311,
+          "incididunte": 60618746
+        }
+      ],
+      "previous_cursor": "id ex",
+      "total_count": 52914066,
+      "next_cursor": "aliqua dolore esse nisi quis"
+    },
+    "consequate0": true,
+    "nostrud_921": 30467278,
+    "nulla8e": "eiusmod Ut",
+    "adipisicing_f4": 44569670.73431879,
+    "ut_c2b": "labore Duis eu non",
+    "aute04": 9803548.758634672
+  },
+  "/entity/non-fungibles": {
+    "ledger_state": {
+      "network": "in officia",
+      "state_version": -84913339,
+      "proposer_round_timestamp": "sint magna id est",
+      "epoch": 56008804,
+      "round": -67783848,
+      "dolore_518": -92349016.97105116,
+      "dolor_5": 48076339.52033195,
+      "quis_4b5": 9215363.131627277,
+      "Utb": -24702296.593311995,
+      "ut698": "ea sed cupidatat in proident",
+      "laboris_e": "sint pariatur",
+      "officia_33c": false,
+      "Duisf0": true
+    },
+    "address": "veniam reprehenderit voluptate",
+    "non_fungibles": {
+      "items": [
+        {
+          "address": "cillum anim",
+          "amount": -94311564,
+          "fugiat44": "ut aliquip",
+          "laborea93": "culpa non dolore in",
+          "voluptatef88": 37306685.373235375,
+          "quis_06": "nisi veniam"
+        },
+        {
+          "address": "Lorem esse reprehenderit minim quis",
+          "amount": -72143726,
+          "consectetur_22": 66649019.82008505,
+          "dolor_3": -10251771,
+          "anim30": -60106205.27590742,
+          "veniam778": -15880980,
+          "velit_bc": "laborum fugiat occaecat ea",
+          "adipisicing_b": 86000530.10450178,
+          "Duis_e": -5714785
+        },
+        {
+          "address": "Excepteur esse do cillum",
+          "amount": 29047984,
+          "labore5": 88893465.95129704
+        }
+      ],
+      "total_count": -66786344,
+      "previous_cursor": "laboris ipsum id",
+      "next_cursor": "irure reprehenderit do in commodo"
+    },
+    "aute_91": true
+  },
+  "/entity/non-fungible/ids": {
+    "ledger_state": {
+      "network": "dolore incididunt ut",
+      "state_version": 50041732,
+      "proposer_round_timestamp": "consequat tempor",
+      "epoch": 70562844,
+      "round": 9827955,
+      "voluptate961": false,
+      "voluptate__": false,
+      "in_3": "consectetur",
+      "ullamco_b_": -3623079,
+      "exercitationef6": "ut",
+      "ex74": 3208434
+    },
+    "address": "aute anim",
+    "resource_address": "irure sint nisi sunt",
+    "non_fungible_ids": {
+      "items": [
+        {
+          "non_fungible_id": "adipisicing pariatur consectetur laborum velit",
+          "ex_a": true,
+          "sunt7_": 83750780,
+          "pariatur_07": -5769547,
+          "voluptatef6": false
+        },
+        { "non_fungible_id": "ut", "in_0": false, "sunt3c1": 74408551 },
+        {
+          "non_fungible_id": "eu",
+          "elit65": true,
+          "occaecat62": true,
+          "fugiat53": true,
+          "Uta": -42227850.57970451
+        },
+        {
+          "non_fungible_id": "ullamco",
+          "Excepteur_782": true,
+          "sint318": 94180187.03411013,
+          "reprehenderitd5": 81048545.85281366
+        },
+        {
+          "non_fungible_id": "tempor id est eu et",
+          "deserunt0": 40679171.0408127,
+          "magna_b0": 10521897.231931552
+        }
+      ],
+      "previous_cursor": "do est amet",
+      "next_cursor": "magna consectetur ex",
+      "total_count": -67318746
+    },
+    "non46e": "cupidatat"
+  },
+  "/non-fungible/ids": {
+    "ledger_state": {
+      "network": "ex sed Excepteur aute",
+      "state_version": 74790967,
+      "proposer_round_timestamp": "sit anim et ea esse",
+      "epoch": 17243583,
+      "round": -31541941,
+      "cupidatat34": "velit officia occaecat exercitation",
+      "laboree": 67797264,
+      "Duis__8": "Duis",
+      "eiusmod9": 84912293.44814691,
+      "qui2": 53158239,
+      "magnaa": 77004720
+    },
+    "address": "fugiat velit sint",
+    "non_fungible_ids": {
+      "items": [
+        {
+          "non_fungible_id": "anim incididunt dolore irure",
+          "tempor_b55": -45902709
+        },
+        {
+          "non_fungible_id": "consequat",
+          "ide24": 83259327.92001742,
+          "non4": false,
+          "deserunt_014": true,
+          "eiusmod_2c": 98674546.13645753
+        },
+        {
+          "non_fungible_id": "qui",
+          "ine": -37880530,
+          "veniam251": "est",
+          "exbf": true,
+          "quis1": "veniam velit in"
+        }
+      ],
+      "next_cursor": "eiusmod",
+      "total_count": -58955252,
+      "previous_cursor": "velit reprehenderit Duis sed"
+    },
+    "voluptate_f": "adipisicing veniam exercitation aute ad",
+    "id683": 62412994.82933429,
+    "amet_c79": 80061660.12846428,
+    "nostrud7": -33859809,
+    "anim74a": -5077281.1190458685,
+    "officia_3e4": -93332542,
+    "etb": -48896254,
+    "enim35": 70684517,
+    "velit_c": false
+  },
+  "/non-fungible/data": {
+    "ledger_state": {
+      "network": "aliquip nulla cupidatat ut",
+      "state_version": 43291988,
+      "proposer_round_timestamp": "magna reprehenderit mollit irure quis",
+      "epoch": 18678196,
+      "round": 45765521,
+      "nulla11d": "veniam",
+      "nulla0": false,
+      "exercitation4": false,
+      "est_a87": -39814585.42682086,
+      "veniam60b": 16822095,
+      "in_472": -53404502.316568434,
+      "occaecat79f": false,
+      "dolore_8": "amet",
+      "enim_a": "Duis amet Ut"
+    },
+    "address": "voluptate in qui",
+    "non_fungible_id_type": "uuid",
+    "non_fungible_id": "ad aliquip",
+    "mutable_data_hex": "quis enim in",
+    "immutable_data_hex": "in adipisicing minim et",
+    "Duisd": true,
+    "et_e1b": -90305791.92521472,
+    "proident_": true,
+    "quis8d8": -50283680,
+    "aliquip_6": -9571050.41800563,
+    "eiusmod6f": -19479342,
+    "do52": false
+  },
+  "/state/validators/list": {
+    "ledger_state": {
+      "network": "nostrud enim irure anim Excepteur",
+      "state_version": 85469031,
+      "proposer_round_timestamp": "labore anim Duis",
+      "epoch": 27024131,
+      "round": 69729687,
+      "minim4": 12967753.666489258
+    },
+    "validators": {
+      "items": [
+        {
+          "address": "id voluptate est",
+          "metadata": {
+            "items": [
+              {
+                "key": "quis dolore aliquip cillum",
+                "value": "minim reprehenderit nostrud ad",
+                "commodo_8c9": -7400817,
+                "id_ec": 87005080
+              },
+              {
+                "key": "veniam amet",
+                "value": "dolore labore officia non",
+                "Loremd": false,
+                "velitd": -82955525.8183376,
+                "ametb": "amet ut"
+              },
+              {
+                "key": "ipsum elit non officia",
+                "value": "minim enim reprehenderit",
+                "dolor85": 95684107
+              },
+              {
+                "key": "dolore",
+                "value": "aliqua exercitation ut",
+                "dolore_43": false,
+                "minim85a": 49408598,
+                "enim9_": false,
+                "ipsum_2": -13019647.08639884
+              }
+            ],
+            "previous_cursor": "laboris non ex deserunt quis",
+            "total_count": 86588424,
+            "next_cursor": "eiusmod esse Lorem"
+          },
+          "active_in_epoch": {
+            "stake": {
+              "stake": { "value": "veniam tempor", "address": "minim dolore" },
+              "stake_percentage": 55389175.01546335,
+              "incididunt_8c": 87888081.74488506,
+              "Excepteur3b": -85241083,
+              "pariatur64": "ad",
+              "velit_1": -66225782,
+              "consectetur1d_": -24957436.740317315
+            },
+            "key": {
+              "key_type": "EcdsaSecp256k1",
+              "elit_ce": true,
+              "estd7_": -43721945.23209787,
+              "dolord1": 35309576,
+              "voluptate_bed": true,
+              "magnaa3": "non incididunt",
+              "etc_": 58663675,
+              "tempor_eea": 45264959.76257676
+            },
+            "metadata": {
+              "items": [
+                {
+                  "key": "deserunt qui exercitation consequat pariatur",
+                  "value": "sint magna in",
+                  "minim_fe": 30596410.98519185,
+                  "incididunt42_": 64018252.34742713,
+                  "dolore_78e": -78409510,
+                  "nisi_a": -56381405.798770644
+                },
+                {
+                  "key": "ut nulla sit",
+                  "value": "sit laboris laborum in",
+                  "inb": -597857
+                },
+                {
+                  "key": "occaecat sit",
+                  "value": "fugiat",
+                  "cupidatatc5": 63056420.137529045
+                },
+                {
+                  "key": "minim nisi proident",
+                  "value": "magna dolor sint sunt amet",
+                  "adipisicing__": -21947177.75076236,
+                  "consequat_a43": "ipsum est cupidatat exercitation ex",
+                  "etcd": 94361440,
+                  "sed_95_": -8112193.912782922,
+                  "cupidatat_cbf": "proident laborum cillum mollit",
+                  "aute_c": -40069996.995048255
+                }
+              ],
+              "total_count": -68668079,
+              "previous_cursor": "anim tempor cupidatat",
+              "next_cursor": "quis nulla fugiat"
+            }
+          },
+          "state": {
+            "nulla7": 66264768.20612407,
+            "id_b": "dolor aliqua aute",
+            "consequat_f": false
+          }
+        },
+        {
+          "address": "adipisicing reprehenderit ad nulla sunt",
+          "metadata": {
+            "items": [
+              {
+                "key": "ipsum",
+                "value": "tempor eu veniam",
+                "Duis_6": -74026763.84936711,
+                "ad_d21": -51143878.50321922,
+                "ut_c9": false,
+                "culpa_631": 58521528,
+                "eu8a7": true
+              },
+              {
+                "key": "mollit anim et",
+                "value": "occaecat sint in laboris",
+                "culpa_8": "voluptate",
+                "doed": "adipisicing consequat reprehenderit Ut non",
+                "labore_dd9": "aute dolore",
+                "consequat__7e": "ut",
+                "magna1": -31921495
+              },
+              {
+                "key": "consequat et commodo Excepteur aliqua",
+                "value": "id",
+                "consequat_545": 45577829
+              },
+              {
+                "key": "sunt adipisicing enim",
+                "value": "ut consequat proident id",
+                "sunt_1": "voluptate nulla est aute quis",
+                "dolore_f6": true,
+                "sitce1": "id Excepteur Duis esse",
+                "officia_c5": "magna",
+                "veniam9ff": "et dolor sint in reprehenderit",
+                "Ut_9c3": true,
+                "sed31": 3662376.610046938
+              },
+              {
+                "key": "eu",
+                "value": "Lorem amet adipisicing Ut",
+                "irure_37e": 50522976,
+                "pariatur__f": 11644349,
+                "est5": "Lorem",
+                "commodo__": -73043882.9245915,
+                "sunt_a": -23363704.19314751,
+                "labore_6": -73055901,
+                "Lorema": -53963313.18079315
+              }
+            ],
+            "next_cursor": "Lorem dolor nostrud",
+            "total_count": -69867274,
+            "previous_cursor": "tempor sit dolore veniam exercitation"
+          },
+          "state": {
+            "reprehenderit_b": 15482333,
+            "laboris3f2": 14649565.267752603
+          },
+          "active_in_epoch": {
+            "stake": {
+              "stake": {
+                "value": "nulla",
+                "address": "enim eiusmod reprehenderit nisi cillum"
+              },
+              "stake_percentage": 13304878.270240158,
+              "dolore40": false,
+              "non5db": "ad sint dolor sed enim",
+              "Duis_954": 39065960
+            },
+            "key": {
+              "key_type": "EcdsaSecp256k1",
+              "quisf6": "consequat",
+              "labore_67_": 10220968.14328228
+            },
+            "metadata": {
+              "items": [
+                {
+                  "key": "culpa consequat",
+                  "value": "consequat",
+                  "voluptate_a": "irure magna et quis ut",
+                  "dolore_aa": 88618325.59004697,
+                  "sunt_6": 10343156,
+                  "eiusmod_a": -29780250
+                },
+                {
+                  "key": "proident aute nisi",
+                  "value": "aute elit mollit ea Excepteur",
+                  "essed6": -5072876,
+                  "amet_2": -83373826,
+                  "labore_6a7": -50773284,
+                  "elit_ec9": 86829706,
+                  "Duis7": true,
+                  "ea_3b": 55640871,
+                  "cupidatat_951": -44483709.681410134,
+                  "eiusmod_8": true
+                },
+                {
+                  "key": "elit eu qui",
+                  "value": "velit labore cupidatat deserunt",
+                  "voluptate5": -51800672.92632508
+                },
+                {
+                  "key": "magna sed consectetur",
+                  "value": "aliquip Duis ex voluptate quis",
+                  "labore5": -92847338.76343165
+                },
+                {
+                  "key": "officia nostrud",
+                  "value": "officia reprehenderit dolor esse sit",
+                  "proident_e": false
+                }
+              ],
+              "total_count": 20084535,
+              "previous_cursor": "exercitation cupidatat irure ex anim",
+              "next_cursor": "officia quis ut esse magna"
+            }
+          }
+        },
+        {
+          "address": "ut proident in reprehenderit tempor",
+          "metadata": {
+            "items": [
+              {
+                "key": "deserunt consequat",
+                "value": "ipsum",
+                "laboree76": false
+              },
+              { "key": "fugiat ad", "value": "Ut non", "nullabe": 84580158 },
+              {
+                "key": "pariatur in",
+                "value": "officia",
+                "commodo_0": 56117256.42765924,
+                "in_5": -75635700,
+                "eae2f": "quis sed ex"
+              },
+              {
+                "key": "ipsum ut",
+                "value": "eu",
+                "est9dd": "cupidatat irure",
+                "sed_931": -86258509,
+                "eu__": -39124621,
+                "do_6": true,
+                "dolore__9": -48187743,
+                "nostrud48": -53514259
+              }
+            ],
+            "next_cursor": "esse deserunt",
+            "total_count": 51197767,
+            "previous_cursor": "aliqua"
+          },
+          "state": {
+            "voluptate_3": -75194945,
+            "consectetur7": -42236801.92217394,
+            "deseruntef": true
+          },
+          "active_in_epoch": {
+            "stake": {
+              "stake": {
+                "value": "sed eiusmod ullamco do Ut",
+                "address": "Excepteur"
+              },
+              "stake_percentage": -86742758.54102285,
+              "id2": true,
+              "officia_4": "eiusmod"
+            },
+            "key": { "key_type": "EcdsaSecp256k1", "in_4": 10390414.076010272 },
+            "metadata": {
+              "items": [
+                {
+                  "key": "consequat laborum irure",
+                  "value": "culpa elit ad dolore",
+                  "dolore_0": "deserunt sint",
+                  "Loremb7": -41351303.36686745,
+                  "reprehenderitd5d": -11836378.554719567,
+                  "deserunteb9": 52845420
+                },
+                {
+                  "key": "in",
+                  "value": "commodo ex",
+                  "sunt_4": "fugiat",
+                  "enim_2": false
+                },
+                {
+                  "key": "fugiat dolor sint in ut",
+                  "value": "proident Excepteur irure",
+                  "ea_e3c": -28802812,
+                  "nulla4": "exercitation do ut qui commodo",
+                  "consecteturcc": true,
+                  "reprehenderit_cea": 78729497.28077972
+                },
+                {
+                  "key": "ut quis dolore mollit voluptate",
+                  "value": "ipsum Lorem dolor deserunt",
+                  "fugiat9b": -66510592,
+                  "ad2b9": -9132689.80472508,
+                  "dolore_1": -51126069.64949577,
+                  "fugiat_b0": 81212638,
+                  "adipisicing81": false
+                }
+              ],
+              "total_count": 33392792,
+              "next_cursor": "deserunt in incididunt",
+              "previous_cursor": "dolor quis laboris eiusmod nisi"
+            }
+          }
+        }
+      ],
+      "next_cursor": "elit",
+      "total_count": -45771505,
+      "previous_cursor": "culpa"
+    },
+    "laborece": "in cupidatat esse"
+  }
+}
