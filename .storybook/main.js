@@ -15,6 +15,7 @@ module.exports = {
     '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)'
   ],
   addons: [
+    'storybook-addon-mock',
     '@storybook/addon-links',
     '@storybook/addon-svelte-csf',
     '@storybook/addon-essentials',
