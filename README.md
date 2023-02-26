@@ -46,6 +46,18 @@ integration tests are written using [svelte-testing-library](https://github.com/
 yarn storybook
 ```
 
+### Gateway SDK
+There's a specific command for updating the gateway sdk dependency:
+
+```
+PUBLIC_NETWORK_NAME=<network> yarn update:gateway
+```
+
+where `<network>` is the network (hammunet, nebunet, etc) to use.
+
+This updates the gateway sdk, and generates mocks for all the api responses.
+
+In order for the UI tests to work, this command should be used when updating the gateway sdk.
 ### Code structure
 
 ## Components
