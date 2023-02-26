@@ -47,7 +47,7 @@
         onDisconnect: () => {
           accounts.set([])
           selectedAccount.set(undefined)
-        }
+      
       }
     )
 
