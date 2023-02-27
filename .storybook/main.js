@@ -21,6 +21,7 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-actions',
     '@storybook/addon-interactions',
+    '@storybook/addon-coverage'
   ],
   framework: '@storybook/svelte',
   core: {
