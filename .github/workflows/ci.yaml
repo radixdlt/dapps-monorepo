@@ -588,7 +588,8 @@ jobs:
       - uses: ./.github/actions/build
         with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
-      - name: Integration tests
+      - name: Integration tests (PR)
+        if: github.event.pull_request
         run: |
           # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
           # job will also be skipped.
@@ -596,14 +597,17 @@ jobs:
           echo "Waiting for the Kubernetes deployments to complete"
           sleep 90
 
-          if [[ "$PR_ID" != "" ]]; then
-            export TARGET_URL="https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
-          else
-            export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
-          fi
+          echo "Running storybook tests against PR environment"
+          yarn test:storybook --url "https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
 
-          echo "Running storybook tests againt $TARGET_URL"
+      - name: Integration tests (Hammunet)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
+          # job will also be skipped.
+          #
+          echo "Waiting for the Kubernetes deployments to complete"
+          sleep 90
 
-          yarn test:storybook --url $TARGET_URL
-        env:
-          PR_ID: ${{ github.event.pull_request }}
+          echo "Running storybook tests against hammunet"
+          yarn test:storybook --url https://hammunet-dashboard-storybook.rdx-works-main.extratools.works
