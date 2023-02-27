@@ -598,7 +598,8 @@ jobs:
           sleep 90
 
           echo "Running storybook tests against PR environment"
-          yarn test:storybook --url "https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
+          export TARGET_URL="https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
+          yarn test:storybook
 
       - name: Integration tests (Hammunet)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -610,4 +611,5 @@ jobs:
           sleep 90
 
           echo "Running storybook tests against hammunet"
-          yarn test:storybook --url https://hammunet-dashboard-storybook.rdx-works-main.extratools.works
+          export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
+          yarn test:storybook
