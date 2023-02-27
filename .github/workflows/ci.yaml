@@ -172,8 +172,9 @@ jobs:
       - name: Run story book tests
         run: |
             yarn
-            yarn storybook &
+            yarn storybook > output.log &
             STORYBOOK_PID=$!
+            watch -e "! tail output.log | grep -m 1 \"Svelte started \""
             yarn test:storybook
             kill $STORYBOOK_PID
       - name: SonarCloud Scan
