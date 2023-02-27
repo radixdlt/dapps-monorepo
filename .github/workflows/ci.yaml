@@ -164,6 +164,9 @@ jobs:
           secret_prefix: "GH"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
           parse_json: true
+      - name: Run story book tests
+        run: |
+            yarn test:storybook
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
