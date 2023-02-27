@@ -21,7 +21,7 @@
     "e2etest": "cypress run",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
-    "test:storybook": "test-storybook --no-index-json --coverage",
+    "test:storybook": "test-storybook --no-index-json --coverage && nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "coverage": "vitest run --coverage",
