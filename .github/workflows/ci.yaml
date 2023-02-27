@@ -596,7 +596,7 @@ jobs:
           echo "Waiting for the Kubernetes deployments to complete"
           sleep 90
 
-          if [[ ${{ github.event.pull_request }} ]]; then
+          if [[ "$PR_ID" != "" ]]; then
             export TARGET_URL="https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
           else
             export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
@@ -605,3 +605,5 @@ jobs:
           echo "Running storybook tests againt $TARGET_URL"
 
           yarn test:storybook --url $TARGET_URL
+        env:
+          PR_ID: ${{ github.event.pull_request }}
