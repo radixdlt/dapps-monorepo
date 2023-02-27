@@ -171,6 +171,7 @@ jobs:
           parse_json: true
       - name: Run story book tests
         run: |
+            yarn
             yarn storybook &
             STORYBOOK_PID=$!
             yarn test:storybook
