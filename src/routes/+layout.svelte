@@ -30,7 +30,7 @@
           accounts.set(data.accounts)
           selectedAccount.set(data.accounts[0])
         })
-      },
+      }
       {
         explorer: {
           baseUrl: '/',
