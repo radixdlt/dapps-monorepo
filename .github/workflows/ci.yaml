@@ -166,7 +166,10 @@ jobs:
           parse_json: true
       - name: Run story book tests
         run: |
+            yarn storybook &
+            STORYBOOK_PID=$!
             yarn test:storybook
+            kill $STORYBOOK_PID
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
