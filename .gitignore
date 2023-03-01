@@ -17,3 +17,4 @@ storybook-static
 .eslintcache
 .npmrc
 cypress/screenshots
+yarn-error.log
