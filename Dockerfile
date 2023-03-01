@@ -25,7 +25,7 @@ COPY .npmrc.docker .npmrc
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
 
-RUN yarn install && yarn build && yarn build-storybook
+RUN yarn install && yarn build && NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook
 RUN rm -f .npmrc
 
 FROM install-dashboard AS node-adapter
