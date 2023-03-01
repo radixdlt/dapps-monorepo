@@ -7,7 +7,8 @@ import {
   bufferFromHex,
   hash,
   getAddressPrefix,
-  getTxIdFromMessage
+  getTxIdFromMessage,
+  accountLabel
 } from './utils'
 
 describe('#utils', () => {
@@ -80,5 +81,16 @@ describe('#utils', () => {
     const expected = 'transaction'
     const result = getAddressPrefix(address)
     expect(result).toEqual(expected)
+  })
+
+  describe('accountLabel', () => {
+    it('should format account label', () => {
+      const account = {
+        label: 'Main Account',
+        address:
+          'account_tdx_b_1pqdy2mvxrkyycaj0c8c2g8xekf3me27f3hvl9q52cqcs7x2w96'
+      }
+      expect(accountLabel(account)).toBe('Main Account (acco...7x2w96)')
+    })
   })
 })
