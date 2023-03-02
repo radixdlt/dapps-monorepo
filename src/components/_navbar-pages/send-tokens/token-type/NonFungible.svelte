@@ -2,8 +2,8 @@
   import Box from '@components/_base/box/Box.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { boxStyle } from './SendTokens.svelte'
-  import type { TransformWithOverview } from './side-effects'
+  import { boxStyle } from '../SendTokens.svelte'
+  import type { TransformWithOverview } from '../side-effects'
 
   export let resources: TransformWithOverview | undefined
   export let selectedFromAccount: string = ''
