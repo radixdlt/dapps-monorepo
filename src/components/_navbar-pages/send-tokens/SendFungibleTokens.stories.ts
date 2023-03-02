@@ -2,6 +2,7 @@ import { expect } from '@storybook/jest'
 import { fakeGatewayCall } from '../../../../.storybook/utils'
 import { within, userEvent } from '@storybook/testing-library'
 import SendFungibleTokens from './SendFungibleTokens.svelte'
+import mocks from '@api/mocks.json'
 
 export default {
   title: 'Navbar Pages/Send Tokens',
@@ -51,23 +52,26 @@ WithoutAccounts.play = async ({ canvasElement }) => {
 WithAccounts.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
   const { findByText, findByPlaceholderText } = canvas
-  const targetAcount = await findByText('Select personal account')
+  const targetAccount = await findByText('Select account')
   const amountInput = await findByPlaceholderText('Amount')
   const sendButton = await findByText('Send')
 
-  userEvent.click(targetAcount)
+  userEvent.click(targetAccount)
   userEvent.click(await findByText('Secondary Account (acco...r2ccqa)'))
 
   userEvent.clear(amountInput)
   userEvent.type(amountInput, '9999999')
 
-  findByText('Not enough tokens in this account')
+  await findByText('Not enough tokens in this account')
   expect(sendButton.hasAttribute('disabled')).toBe(true)
 
   userEvent.clear(amountInput)
   userEvent.type(amountInput, '100')
 
-  await findByText('10000')
+  await findByText(
+    mocks['/entity/resources']['fungible_resources']['items'][0]?.amount
+      .value as string
+  )
   await findByText('(Available balance)')
 
   expect(sendButton.hasAttribute('disabled')).toBe(false)
