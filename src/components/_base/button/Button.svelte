@@ -39,12 +39,19 @@
       }
     },
     size: {
+      medium: {
+        height: '$lg',
+        width: '$3xl',
+        fontSize: '$md'
+      },
       small: {
-        padding: '$sm $lg',
+        height: '$md',
+        width: '$2xl',
         fontSize: '$sm'
       },
       iconSmall: {
-        padding: '$xs',
+        height: '$sm',
+        width: '$xl',
         fontSize: '0'
       }
     },
@@ -76,7 +83,7 @@
 
   export let cx: CSS<typeof config> = {}
   export let full: true | false = false
-  export let size: keyof typeof variants['size'] | undefined = undefined
+  export let size: keyof typeof variants['size'] | undefined = 'medium'
   export let border: keyof typeof variants['border'] | undefined = undefined
   export let ghost: true | false = false
   export let disabled: true | false = false
@@ -98,7 +105,6 @@
     borderRadius: '$sm',
     fontSize: '$md',
     color: '$primaryButtonText',
-    padding: '$md $2xl',
     transition: 'color .2s,border-color .2s,background-color .2s',
     '&:hover': {
       backgroundColor: '$primaryButtonHover'
