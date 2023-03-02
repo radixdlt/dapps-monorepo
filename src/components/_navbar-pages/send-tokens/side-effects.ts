@@ -2,7 +2,7 @@ import type { EntityResourcesTransformed } from 'src/api/transformations'
 import { andThen, pipe } from 'ramda'
 
 import type { EntityOverviewTransformed } from 'src/api/transformations'
-import { getNFTAddress } from '@utils'
+import { accountLabel, getNFTAddress } from '@utils'
 import {
   getEntityNonFungibleIDs,
   getEntityOverview,
@@ -63,7 +63,10 @@ export const transformNFTWithOverview = (
     overview.non_fungible_ids.items.forEach(({ non_fungible_id }) =>
       acc.push({
         key: name
-          ? `(${name}) ${getNFTAddress(overview.address, non_fungible_id)}`
+          ? `${accountLabel({
+              address: getNFTAddress(overview.address, non_fungible_id),
+              label: name
+            })}`
           : `${getNFTAddress(overview.address, non_fungible_id)}`,
         address: `${overview.address}:${non_fungible_id}`
       })
