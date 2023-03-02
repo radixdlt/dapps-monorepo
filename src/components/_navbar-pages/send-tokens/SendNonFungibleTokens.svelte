@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Option } from '@components/_base/select/Select.svelte'
-  import Fungible from './token-type/Fungible.svelte'
   import SendTokens from './SendTokens.svelte'
+  import type { Option } from '@components/_base/select/Select.svelte'
+  import NonFungible from './token-type/NonFungible.svelte'
 
   type OptionsType = Option<{ address: string }>
 
@@ -16,10 +16,10 @@
   let:setResourceSelected
   let:setTransactionManifest
 >
-  <Fungible
+  <NonFungible
     {selectedFromAccount}
     {selectedToAccount}
-    resources={resources?.fungible || []}
+    resources={resources?.nonFungible || []}
     {setTransactionManifest}
     {setResourceSelected}
   />
