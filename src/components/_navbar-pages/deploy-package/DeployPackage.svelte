@@ -9,11 +9,16 @@
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { getNFTAddress, shortenAddress } from '@utils'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { derived, writable } from 'svelte/store'
-  import { createBadge, deploy, queryResources } from './side-effects'
-  import Button from '@components/_base/button/Button.svelte'
+  import {
+    createBadge,
+    getDeployPackageManifest,
+    queryResources
+  } from './side-effects'
   import { goto } from '$app/navigation'
+  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import type { sendTransaction } from '@api/wallet'
+  import { getTransactionDetails } from '@api/gateway'
 
   export let accounts: Account[]
 
@@ -54,7 +59,6 @@
     | undefined
   >(undefined)
   const badgeCreated = writable<string>()
-  const deployingPackage = writable<boolean>()
 
   const packageDeployed = writable<{
     txID: string
@@ -74,24 +78,30 @@
     false
   )
 
-  const deployPackage = async () => {
-    deployingPackage.set(true)
-    deploy(
-      await $requiredUploadedFiles.wasm,
-      await $requiredUploadedFiles.abi,
-      $selectedAccount!.address,
-      $selectedBadge!
+  const deployPackage = async (
+    send: (...args: Parameters<typeof sendTransaction>) => void
+  ) => {
+    const wasm = await $requiredUploadedFiles.wasm
+    const abi = await $requiredUploadedFiles.abi
+    const address = $selectedAccount!.address
+    const badge = $selectedBadge!
+
+    send(
+      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id),
+      [wasm, abi]
     )
-      .then((result) => {
-        deployingPackage.set(false)
-        packageDeployed.set({
-          address: result.entities[0]?.global_address as string,
-          txID: result.txID
-        })
-      })
-      .catch((e: Error) => {
-        deployingPackage.set(false)
-      })
+  }
+
+  const handleResponse = async ({
+    transactionIntentHash
+  }: Awaited<ReturnType<typeof sendTransaction>>) => {
+    const entities = (await getTransactionDetails(transactionIntentHash))
+      .createdEntities
+
+    packageDeployed.set({
+      address: entities[0]?.global_address as string,
+      txID: transactionIntentHash
+    })
   }
 
   $: if ($packageDeployed && $selectedBadge)
@@ -103,6 +113,25 @@
         `badgeAddress=${$selectedBadge.address}&` +
         `badgeId=${$selectedBadge.id}`
     )
+
+  let transactionManifest: string
+
+  $: {
+    $selectedAccount
+    ;(async () => {
+      const wasm = await $requiredUploadedFiles.wasm
+      const abi = await $requiredUploadedFiles.abi
+      if (wasm && abi && $selectedAccount && $selectedBadge) {
+        transactionManifest = getDeployPackageManifest(
+          wasm,
+          abi,
+          $selectedAccount.address,
+          $selectedBadge.address,
+          $selectedBadge.id
+        )
+      }
+    })()
+  }
 </script>
 
 <Box>
@@ -192,12 +221,10 @@
   </Box>
 
   <Box px="none" mx="none">
-    <Button disabled={!$deployButtonEnabled} on:click={deployPackage}>
-      {#if $deployingPackage}
-        <LoadingSpinner />
-      {:else}
-        Deploy package
-      {/if}
-    </Button>
+    <SendTxButton
+      disabled={!$deployButtonEnabled}
+      onClick={deployPackage}
+      onResponse={handleResponse}
+    />
   </Box>
 </center>

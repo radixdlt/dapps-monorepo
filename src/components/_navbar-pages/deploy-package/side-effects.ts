@@ -89,28 +89,5 @@ export const queryResources = async (selectedAccountAddress: string) => {
   )
 }
 
-export const deploy = async (
-  wasm: string,
-  abi: string,
-  selectedAccountAddress: string,
-  { address, id }: { address: string; id: string }
-) => {
-  return sendTransaction(
-    getDeployPackageManifest(wasm, abi, selectedAccountAddress, address, id),
-    [wasm, abi]
-  )
-    .then(async ({ transactionIntentHash }) => ({
-      txID: transactionIntentHash,
-      entities: (await getTransactionDetails(transactionIntentHash))
-        .createdEntities,
-      badgeMetadata: (await getEntityDetails(address)).metadata.items
-    }))
-    .then((result) => ({
-      ...result,
-      badgeName: result.badgeMetadata.find(({ key }) => key === 'name')?.value,
-      badgeMetadata: result.badgeMetadata.filter(({ key }) => key !== 'name')
-    }))
-}
-
 export const createBadge = (accountAddress: string) =>
   sendTransaction(getCreateBadgeManifest(accountAddress))

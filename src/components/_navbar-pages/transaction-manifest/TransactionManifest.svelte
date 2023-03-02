@@ -1,33 +1,18 @@
 <script lang="ts">
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import Dialog from '@components/_base/dialog/Dialog.svelte'
-  import { query } from '@api/query'
   import { goto } from '$app/navigation'
+  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
 
   let transactionManifest = ''
 
   let showDialog = false
 
-  const { send, response, loading } = query('sendTransaction')
-
-  const sendTx = () => send(transactionManifest)
-
-  const onSendButton = () => {
-    if (transactionManifest.includes('lock_fee')) {
-      showDialog = true
-    } else {
-      sendTx()
-    }
-  }
-
-  $: if ($response?.transactionIntentHash)
-    goto(
-      `/transaction-manifest/success?txID=${$response.transactionIntentHash}`
-    )
+  let confirm: () => void
+  let waitForConfirm = new Promise((resolve: any) => (confirm = resolve))
 </script>
 
 <Dialog bind:open={showDialog} size="$6xl">
@@ -42,8 +27,8 @@
       <Button
         size="small"
         on:click={() => {
-          sendTx()
           showDialog = false
+          confirm()
         }}>Continue</Button
       >
     </Box>
@@ -66,11 +51,20 @@
 </Box>
 
 <Box justify="center">
-  {#if $loading}
-    <Button>
-      <LoadingSpinner />
-    </Button>
-  {:else}
-    <Button on:click={onSendButton}>Submit</Button>
-  {/if}
+  <SendTxButton
+    onClick={async (send) => {
+      if (transactionManifest.includes('lock_fee')) {
+        showDialog = true
+        waitForConfirm.then((_) => send(transactionManifest))
+        waitForConfirm = new Promise((_) => {})
+      } else {
+        send(transactionManifest)
+      }
+    }}
+    onResponse={(response) => {
+      goto(
+        `/transaction-manifest/success?txID=${response.transactionIntentHash}`
+      )
+    }}
+  />
 </Box>

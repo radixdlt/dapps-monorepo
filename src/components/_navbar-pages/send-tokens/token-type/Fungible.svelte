@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { query } from '@api/query'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
@@ -8,7 +9,7 @@
   import { boxStyle } from '../SendTokens.svelte'
   import type { TransformWithOverview } from '../side-effects'
 
-  export let resources: TransformWithOverview
+  export let resources: Promise<TransformWithOverview>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
@@ -35,30 +36,35 @@
 
   const { response } = query('sendTransaction')
 
-  $: resourceList =
-    resources &&
-    resources.map(({ key, address, value }) => ({
+  $: resourceList = resources.then((r) =>
+    r.map(({ key, address, value }) => ({
       address,
       label: key,
       value
     }))
+  )
 
   let selectedResource: { address: string; label: string } | undefined
 
   $: amountAvailable =
     selectedResource?.address !== ''
-      ? resources?.find((b) => b.address === selectedResource?.address)
-          ?.value ||
-        resources?.[0]?.value ||
+      ? resources.then(
+          (r) => r.find((b) => b.address === selectedResource?.address)?.value
+        ) ||
+        resources.then((r) => r[0]?.value) ||
         0
-      : 0
+      : Promise.resolve(0)
 
   let amountToSend: number = 0
 
-  $: hasEnoughTokens = Number(amountAvailable) >= amountToSend
+  $: hasEnoughTokens = amountAvailable.then(
+    (amount) => Number(amount) >= amountToSend
+  )
 
   $: if (selectedResource)
-    setResourceSelected(amountToSend > 0 && hasEnoughTokens)
+    hasEnoughTokens.then((hasEnoughTokens) =>
+      setResourceSelected(amountToSend > 0 && hasEnoughTokens)
+    )
 
   $: if (selectedResource)
     setTransactionManifest(
@@ -76,32 +82,35 @@
 
 <Box cx={boxStyle}>
   <Text bold align="right">Amount</Text>
-  <Box
-    bgColor="surface"
-    wrapper
-    flex="row"
-    items="baseline"
-    cx={{ width: '500px' }}
-  >
+  <Box bgColor="surface" wrapper flex="row" cx={{ width: '500px' }}>
     <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
       <Input type="number" bind:value={amountToSend} placeholder="Amount" />
-      {#if hasEnoughTokens}
-        <Text inline size="small" color="grey">{amountAvailable}</Text>
-        <Text inline size="xsmall" muted>(Available balance)</Text>
-      {:else}
-        <Text inline size="small">Not enough tokens in this account</Text>
-      {/if}
+      {#await Promise.all([amountAvailable, hasEnoughTokens])}
+        <SkeletonLoader />
+      {:then [amountAvailable, hasEnoughTokens]}
+        {#if hasEnoughTokens}
+          <Text inline size="small" color="grey">{amountAvailable}</Text>
+          <Text inline size="xsmall" muted>(Available balance)</Text>
+        {:else}
+          <Text inline size="small">Not enough tokens in this account</Text>
+        {/if}
+      {/await}
     </Box>
     <Box
       bgColor="surface"
       px="small"
+      py="none"
       cx={{ minWidth: '150px', flexBasis: '40%' }}
     >
-      <Select
-        bind:selected={selectedResource}
-        options={resourceList}
-        placeholderWhenEmpty="No tokens found"
-      />
+      {#await resourceList}
+        <Select loading={true} />
+      {:then resourceList}
+        <Select
+          bind:selected={selectedResource}
+          options={resourceList}
+          placeholderWhenEmpty="No tokens found"
+        />
+      {/await}
     </Box>
   </Box>
 </Box>

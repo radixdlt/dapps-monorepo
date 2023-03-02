@@ -19,7 +19,7 @@
   <Fungible
     {selectedFromAccount}
     {selectedToAccount}
-    resources={resources?.fungible || []}
+    resources={resources.then((r) => r.fungible || [])}
     {setTransactionManifest}
     {setResourceSelected}
   />
