@@ -14,14 +14,15 @@
   } from '@rgossiaux/svelte-headlessui'
 
   import { css } from '@styles'
-  import Box from '../box/Box.svelte'
   import Text from '../text/Text.svelte'
+  import LoadingSpinner from '../button/loading-spinner/LoadingSpinner.svelte'
 
   type T = $$Generic
   export let options: Array<Option<T>> = []
   export let placeholder: string | undefined = undefined
   export let placeholderWhenEmpty: string = ''
   export let selected: Option<T> | undefined = undefined
+  export let loading = false
 
   $: selected = placeholder
     ? undefined
@@ -56,11 +57,15 @@
   })
 
   const listboxStyles = css({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
     cursor: 'pointer',
     position: 'relative',
     color: 'inherit',
-    py: '$sm',
+    height: '36px',
+    py: '$xs',
     px: '$md',
     textAlign: 'left',
     fontWeight: '$600',
@@ -81,10 +86,27 @@
 </script>
 
 <Listbox value={selected} on:change={onSelect}>
-  <Box px="none" py="none" cx={{ position: 'relative' }}>
-    <ListboxButton class={listboxStyles()}
-      >{selected?.label ?? placeholder ?? placeholderWhenEmpty}</ListboxButton
-    >
+  <div style:position="relative">
+    <ListboxButton class={listboxStyles()}>
+      {#if loading}
+        <div
+          style:display="inline-block"
+          style:width="100%"
+          style:height="100%"
+          style:text-align="center"
+        >
+          <div
+            style:height="100%"
+            style:aspect-ratio="1 / 1"
+            style:display="inline-block"
+          >
+            <LoadingSpinner />
+          </div>
+        </div>
+      {:else}
+        {selected?.label ?? placeholder ?? placeholderWhenEmpty}
+      {/if}
+    </ListboxButton>
     <ListboxOptions class={listboxoptionsStyles}>
       {#each options as item}
         <ListboxOption
@@ -96,5 +118,5 @@
         </ListboxOption>
       {/each}
     </ListboxOptions>
-  </Box>
+  </div>
 </Listbox>
