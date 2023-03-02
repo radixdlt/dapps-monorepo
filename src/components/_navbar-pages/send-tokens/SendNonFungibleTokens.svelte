@@ -19,7 +19,7 @@
   <NonFungible
     {selectedFromAccount}
     {selectedToAccount}
-    resources={resources?.nonFungible || []}
+    resources={resources.then((r) => r.nonFungible || [])}
     {setTransactionManifest}
     {setResourceSelected}
   />

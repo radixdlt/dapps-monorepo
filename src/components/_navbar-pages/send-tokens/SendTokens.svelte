@@ -15,25 +15,20 @@
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Input from '@components/_base/input/Input.svelte'
-  import Button from '@components/_base/button/Button.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
   import { getResources } from './side-effects'
-  import { writable } from 'svelte/store'
-  import { query } from '@api/query'
+  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
 
   type OptionsType = Option<{ address: string }>
 
   export let accounts: OptionsType[] | undefined = undefined
 
-  const { send, loading, response } = query('sendTransaction')
-
-  const transformedOverview =
-    writable<Awaited<ReturnType<typeof getResources>>>(undefined)
+  let transformedOverview: Promise<Awaited<ReturnType<typeof getResources>>> =
+    new Promise((resolve) => {})
 
   $: if (selectedFromAccount)
-    getResources(selectedFromAccount.address).then(transformedOverview.set)
+    transformedOverview = getResources(selectedFromAccount.address)
 
   let selectedFromAccount: { address: string; label: string } | undefined
   let selectedToAccount: { address: string; label: string } | undefined
@@ -49,9 +44,6 @@
 
   const setResourceSelected = (selected: boolean) =>
     (resourceSelected = selected)
-
-  $: if ($response)
-    goto(`/send-nft/success?txID=${$response.transactionIntentHash}`)
 </script>
 
 <Box bgColor="surface" flex="col" gap="medium">
@@ -103,24 +95,20 @@
   <slot
     selectedFromAccount={selectedFromAccount?.address}
     selectedToAccount={selectedToAccount?.address || otherAccount}
-    resources={$transformedOverview}
+    resources={transformedOverview}
     {setTransactionManifest}
     {setResourceSelected}
   />
   <Box bgColor="surface" justify="end">
-    <Button
+    <SendTxButton
       disabled={!(
         selectedFromAccount?.address &&
         (selectedToAccount?.address || otherAccount.length > 0) &&
         resourceSelected
       )}
-      on:click={() => send(transactionManifest)}
-    >
-      {#if $loading}
-        <LoadingSpinner />
-      {:else}
-        Send
-      {/if}
-    </Button>
+      onClick={(send) => send(transactionManifest)}
+      onResponse={(response) =>
+        goto(`/send-nft/success?txID=${response.transactionIntentHash}`)}
+    />
   </Box>
 </Box>
