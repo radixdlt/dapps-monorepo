@@ -45,7 +45,7 @@ WithoutAccounts.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
   const { findByText } = canvas
   await findByText('No tokens found')
-  await findByText('Select personal account')
+  await findByText('Select account')
 }
 
 // @ts-ignore

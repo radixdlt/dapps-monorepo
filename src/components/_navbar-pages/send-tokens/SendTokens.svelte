@@ -76,7 +76,7 @@
         <TabPanel>
           <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
             <Select
-              placeholder="Select personal account"
+              placeholder="Select account"
               bind:selected={selectedToAccount}
               options={accounts}
             />
