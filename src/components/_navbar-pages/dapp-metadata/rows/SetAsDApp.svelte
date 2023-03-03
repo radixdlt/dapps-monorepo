@@ -4,7 +4,7 @@
   export let isDappDefinition: boolean
   export let isChecked: boolean
 
-  const options = [
+  let options = [
     {
       label: 'Select this checkbox to configure your account as a dApp',
       checked: false
@@ -15,7 +15,14 @@
 
   $: options[0]!.checked = isDappDefinition
 
+  $: options[0]!.checked = isChecked
+
+  $: {
+    options[0]!.checked
+    options = [...options]
+  }
+
   $: isChecked = selected.length > 0
 </script>
 
-<Checkbox {options} bind:selected />
+<Checkbox bind:options bind:selected />
