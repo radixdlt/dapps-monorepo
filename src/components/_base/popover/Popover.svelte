@@ -40,7 +40,7 @@
   })()
 </script>
 
-<div style:display="inline-block" use:popperRef>
+<div style:width="max-content" style:display="inline-block" use:popperRef>
   <slot />
 </div>
 
