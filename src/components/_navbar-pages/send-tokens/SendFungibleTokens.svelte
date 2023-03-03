@@ -5,7 +5,7 @@
 
   type OptionsType = Option<{ address: string }>
 
-  export let accounts: OptionsType[] | undefined = undefined
+  export let accounts: OptionsType[]
 </script>
 
 <SendTokens
