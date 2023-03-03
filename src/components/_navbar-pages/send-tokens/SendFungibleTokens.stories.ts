@@ -32,24 +32,12 @@ const accounts = [
   }
 ]
 
-export const WithAccounts = Template.bind(null, {
+export const Primary = Template.bind(null, {
   accounts
 })
 
-export const WithoutAccounts = Template.bind(null, {
-  accounts: []
-})
-
 // @ts-ignore
-WithoutAccounts.play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement)
-  const { findByText } = canvas
-  await findByText('No tokens found')
-  await findByText('Select account')
-}
-
-// @ts-ignore
-WithAccounts.play = async ({ canvasElement }) => {
+Primary.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
   const { findByText, findByPlaceholderText } = canvas
   const targetAccount = await findByText('Select account')

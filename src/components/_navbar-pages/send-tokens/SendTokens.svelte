@@ -22,7 +22,7 @@
 
   type OptionsType = Option<{ address: string }>
 
-  export let accounts: OptionsType[] | undefined = undefined
+  export let accounts: OptionsType[]
 
   let transformedOverview: Promise<Awaited<ReturnType<typeof getResources>>> =
     new Promise((resolve) => {})
