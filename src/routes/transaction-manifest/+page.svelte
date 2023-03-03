@@ -3,6 +3,6 @@
   import TransactionManifest from '@components/_navbar-pages/transaction-manifest/TransactionManifest.svelte'
 </script>
 
-<NavbarPage title="Transaction Manifest">
+<NavbarPage title="Send Raw Transaction">
   <TransactionManifest />
 </NavbarPage>
