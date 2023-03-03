@@ -22,11 +22,10 @@
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
   import Domain from './rows/Domain.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { getFormattedAccounts } from './side-effects'
   import HeaderRow from '../../info-box/HeaderRow.svelte'
-
-  export let accounts: Account[]
+  
+export let accounts: Account[]
 
   const infoBoxPadding = '6px'
 
@@ -157,10 +156,8 @@
     </Row>
   </InfoBox>
   <Box justify="end">
-    {#if $loading}
-      <Button><LoadingSpinner /></Button>
-    {:else}
-      <Button on:click={update}>Update</Button>
-    {/if}
+    <Button disabled={$loading} on:click={update} loading={$loading}
+      >Update</Button
+    >
   </Box>
 </Box>
