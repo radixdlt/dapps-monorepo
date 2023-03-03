@@ -24,8 +24,8 @@
   import Domain from './rows/Domain.svelte'
   import { getFormattedAccounts } from './side-effects'
   import HeaderRow from '../../info-box/HeaderRow.svelte'
-  
-export let accounts: Account[]
+
+  export let accounts: Account[]
 
   const infoBoxPadding = '6px'
 

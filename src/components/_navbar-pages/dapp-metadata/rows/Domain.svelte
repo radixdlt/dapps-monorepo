@@ -10,14 +10,14 @@
   $: showError = (domain !== '')! && !faded && !domain.startsWith('https://')
 </script>
 
-<Box wrapper cx={{ width: '$5xl' }}>
-  <Popover type="error" placement="right" bind:show={showError}>
+<Popover type="error" placement="right" bind:show={showError}>
+  <Box wrapper cx={{ width: '$5xl' }}>
     <Input
       disabled={faded}
       type="text"
       bind:value={domain}
       placeholder="Example: https://www.radixdlt.com"
     />
-    <Text slot="content">url has to begin with https://</Text>
-  </Popover>
-</Box>
+  </Box>
+  <Text slot="content">url has to begin with https://</Text>
+</Popover>
