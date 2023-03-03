@@ -7,7 +7,7 @@
   export let faded: boolean
   export let domain: string
 
-  $: showError = !domain.startsWith('https://')
+  $: showError = (domain !== '')! && !faded && !domain.startsWith('https://')
 </script>
 
 <Box wrapper cx={{ width: '$5xl' }}>
