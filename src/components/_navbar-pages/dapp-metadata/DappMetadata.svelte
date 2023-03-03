@@ -50,9 +50,15 @@
 
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
-  $: getOverview(accounts.map((acc) => acc.address)).then((overview) => {
-    formattedAccounts.set(getFormattedAccounts(accounts, overview))
-  })
+  const refreshAccounts = () => {
+    getOverview(accounts.map((acc) => acc.address)).then((overview) => {
+      $formattedAccounts = getFormattedAccounts(accounts, overview)
+    })
+  }
+
+  $: if (accounts) refreshAccounts()
+
+  $: if ($response) refreshAccounts()
 
   const update = () => {
     if ($selectedAccount)
@@ -60,19 +66,19 @@
         transactionManifest($selectedAccount.address, [
           {
             key: 'name',
-            value: setAsDAppDefinition ? $dAppName : ''
+            value: $setAsDAppDefinition ? $dAppName : ''
           },
           {
             key: 'description',
-            value: setAsDAppDefinition ? $dAppDescription : ''
+            value: $setAsDAppDefinition ? $dAppDescription : ''
           },
           {
             key: 'related_websites',
-            value: setAsDAppDefinition ? $relatedWebsites : ''
+            value: $setAsDAppDefinition ? $relatedWebsites : ''
           },
           {
             key: 'account_type',
-            value: setAsDAppDefinition ? 'dapp definition' : 'account'
+            value: $setAsDAppDefinition ? 'dapp definition' : 'account'
           }
         ])
       )
@@ -94,8 +100,10 @@
     }
   }
 
-  $: isDappDefinition.set(!!$selectedAccount?.dappDefinition)
+  $: if ($selectedAccount)
+    isDappDefinition.set(!!$selectedAccount.dappDefinition)
 
+  $: if ($selectedAccount) $setAsDAppDefinition = $isDappDefinition
   $: faded.set(!$setAsDAppDefinition)
 </script>
 
