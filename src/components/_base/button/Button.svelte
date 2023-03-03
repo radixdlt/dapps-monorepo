@@ -2,6 +2,7 @@
   import type { CSS } from '@stitches/core'
 
   import { css, config } from '@styles'
+  import LoadingSpinner from './loading-spinner/LoadingSpinner.svelte'
 
   const variants = {
     connected: {
@@ -92,6 +93,7 @@
   export let accountButton: true | false = false
   export let selectedAccountButton: true | false = false
   export let connected: true | false = false
+  export let loading = false
 
   const btn = css({
     display: 'inline-flex',
@@ -141,5 +143,11 @@
   on:click
   class={disabled ? disabledBtnClass : btnClass}
 >
-  <slot />
+  {#if loading}
+    <div style:height="60%" style:aspect-ratio="1/1">
+      <LoadingSpinner />
+    </div>
+  {:else}
+    <slot />
+  {/if}
 </button>
