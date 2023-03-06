@@ -1,5 +1,5 @@
 <script lang="ts">
-  import NavbarPage from '@components/_navbar-pages/navbar-page/NavbarPage.svelte'
+  import NavbarPage from '@components/_navbar-pages/NavbarPage.svelte'
   import SendFungibleTokens from '@components/_navbar-pages/send-tokens/SendFungibleTokens.svelte'
 </script>
 
