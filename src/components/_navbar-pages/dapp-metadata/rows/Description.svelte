@@ -13,6 +13,6 @@
     bind:value={description}
     size="md"
     placeholder="A brief description for this dApp (maxiumum 128 characters)"
-    maxlength={128}
+    maxlength={258}
   />
 </Box>
