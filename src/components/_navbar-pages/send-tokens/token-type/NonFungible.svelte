@@ -4,9 +4,11 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
-  import type { TransformWithOverview } from '../side-effects'
+  import type { getResources } from '../side-effects'
 
-  export let resources: Promise<TransformWithOverview>
+  export let resources: Promise<
+    Awaited<ReturnType<typeof getResources>>['nonFungible']
+  >
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
@@ -43,12 +45,12 @@
     )}
   `
 
-  let selected: TransformWithOverview = []
+  let selected: Array<Awaited<typeof resources>[number]> = []
 
   $: options = resources.then((resources) =>
     resources.map((resource) => ({
       ...resource,
-      label: resource.key,
+      label: resource.label,
       checked: false
     }))
   )

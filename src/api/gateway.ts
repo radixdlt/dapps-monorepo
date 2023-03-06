@@ -5,11 +5,6 @@ import {
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
 import { CURRENT_NETWORK } from '../../src/network'
-import {
-  transformEntityOverview,
-  transformEntityResources,
-  type EntityResourcesTransformed
-} from './transformations'
 
 const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
 
@@ -48,38 +43,14 @@ export const getTransactionDetails = pipe(
   }))
 )
 
-export const getEntityOverview = pipe(
-  async (
-    resources:
-      | EntityResourcesTransformed['fungible']
-      | EntityResourcesTransformed['nonFungible']
-  ) => {
-    const res = await stateApi.entityOverview({
-      entityOverviewRequest: {
-        addresses: resources.map((r) => r.address)
-      }
-    })
-    return { overview: res, resources }
-  },
-  andThen(transformEntityOverview)
-)
+export const getEntityOverview = async (addresses: string[]) =>
+  stateApi.entityOverview({ entityOverviewRequest: { addresses } })
 
-export const getEntityResources = pipe(
-  async (address: string) =>
-    stateApi.entityResources({
-      entityResourcesRequest: {
-        address
-      }
-    }),
-  andThen(transformEntityResources)
-)
+export const getEntityResources = async (address: string) =>
+  stateApi.entityResources({ entityResourcesRequest: { address } })
 
 export const getEntityDetails = (address: string) =>
-  stateApi.entityDetails({
-    entityDetailsRequest: {
-      address
-    }
-  })
+  stateApi.entityDetails({ entityDetailsRequest: { address } })
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
