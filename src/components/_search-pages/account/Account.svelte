@@ -34,7 +34,7 @@
               {#each resources.fungible as fungible}
                 <Row>
                   <Text slot="left" bold underlined align="right">
-                    <a href="/resource/{fungible.address}">{fungible.key}</a>
+                    <a href="/resource/{fungible.address}">{fungible.label}</a>
                   </Text>
                   <Text slot="right">
                     {fungible.value}
@@ -53,7 +53,7 @@
               {#each resources.nonFungible as nft}
                 <Row>
                   <Text slot="left" bold underlined>
-                    <a href="/nft/{nft.address}">{nft.key}</a>
+                    <a href="/nft/{nft.address}">{nft.label}</a>
                   </Text>
                   <div />
                 </Row>

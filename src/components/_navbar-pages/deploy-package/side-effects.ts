@@ -1,8 +1,7 @@
 import {
   getEntityDetails,
   getEntityNonFungibleIDs,
-  getEntityResources,
-  getTransactionDetails
+  getEntityResources
 } from '@api/gateway'
 import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
@@ -56,11 +55,12 @@ export const getDeployPackageManifest = (
 }
 
 export const queryResources = async (selectedAccountAddress: string) => {
-  const { nonFungible } = await getEntityResources(selectedAccountAddress)
-  if (!nonFungible) return []
+  const { non_fungible_resources } = await getEntityResources(
+    selectedAccountAddress
+  )
 
   const nonFungiblesWithNames = await Promise.all(
-    nonFungible.map(async (nft) => ({
+    non_fungible_resources.items.map(async (nft) => ({
       ...nft,
       name: await getEntityDetails(nft.address).then(
         (response) =>
