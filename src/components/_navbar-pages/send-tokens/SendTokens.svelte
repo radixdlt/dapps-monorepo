@@ -17,18 +17,17 @@
   import Input from '@components/_base/input/Input.svelte'
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
-  import { getResources } from './side-effects'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import { getPopulatedResources, type Resources } from '@api/utils/resources'
 
   type OptionsType = Option<{ address: string }>
 
   export let accounts: OptionsType[]
 
-  let transformedOverview: Promise<Awaited<ReturnType<typeof getResources>>> =
-    new Promise((resolve) => {})
+  let transformedOverview: Promise<Resources> = new Promise((resolve) => {})
 
   $: if (selectedFromAccount)
-    transformedOverview = getResources(selectedFromAccount.address)
+    transformedOverview = getPopulatedResources(selectedFromAccount.address)
 
   let selectedFromAccount: { address: string; label: string } | undefined
   let selectedToAccount: { address: string; label: string } | undefined

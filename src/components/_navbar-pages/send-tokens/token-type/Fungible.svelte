@@ -2,16 +2,14 @@
   import { goto } from '$app/navigation'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { query } from '@api/query'
+  import type { Resources } from '@api/utils/resources'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
-  import type { getResources } from '../side-effects'
 
-  export let resources: Promise<
-    Awaited<ReturnType<typeof getResources>>['fungible']
-  >
+  export let resources: Promise<Resources['fungible']>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void

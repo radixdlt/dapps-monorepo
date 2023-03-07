@@ -6,12 +6,12 @@
   import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Row from '@components/info-box/Row.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
-  import type { getResources } from '@components/_navbar-pages/send-tokens/side-effects'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { EntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { getPopulatedResources } from '@api/utils/resources'
 
   export let address: string
-  export let resources: ReturnType<typeof getResources>
+  export let resources: ReturnType<typeof getPopulatedResources>
   export let details: Promise<Pick<EntityDetailsResponse, 'metadata'>>
 
   const values = Promise.all([resources, details])

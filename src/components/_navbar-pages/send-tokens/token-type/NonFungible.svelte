@@ -1,14 +1,12 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import type { Resources } from '@api/utils/resources'
   import Box from '@components/_base/box/Box.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
-  import type { getResources } from '../side-effects'
 
-  export let resources: Promise<
-    Awaited<ReturnType<typeof getResources>>['nonFungible']
-  >
+  export let resources: Promise<Resources['nonFungible']>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
