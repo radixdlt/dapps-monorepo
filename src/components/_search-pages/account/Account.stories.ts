@@ -48,27 +48,27 @@ export const WithResources = Template.bind(null, {
       fungible: [
         {
           address: 'rdx_10000000000',
-          key: 'XRD',
+          label: 'XRD',
           value: '100'
         },
         {
           address: 'rdx_10000000000',
-          key: 'BTC',
+          label: 'BTC',
           value: '190000000'
         }
       ],
       nonFungible: [
         {
           address: 'rdx_10000000000',
-          key: 'FLOOP (Test) 0x0000000:#1#'
+          label: 'FLOOP (Test) 0x0000000:#1#'
         },
         {
           address: 'rdx_10000000000',
-          key: 'SMARF (Test) 0x0000000:#1#'
+          label: 'SMARF (Test) 0x0000000:#1#'
         },
         {
           address: 'rdx_10000000000',
-          key: 'PERP (Test) 0x0000000:#12#'
+          label: 'PERP (Test) 0x0000000:#12#'
         }
       ]
     })
