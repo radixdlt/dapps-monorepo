@@ -1,11 +1,11 @@
 import Component from './Component.svelte'
-import { fakeGatewayCall } from '../../../../.storybook/utils'
+import { mockGatewayCall } from '../../../../.storybook/test-utils'
 
 export default {
   title: 'Search Pages/Component',
   component: Component,
   parameters: {
-    mockData: [fakeGatewayCall('/entity/details')]
+    mockData: [mockGatewayCall('/entity/details')]
   }
 }
 
