@@ -77,10 +77,3 @@ export const getNonFungibleIDs = (address: string) =>
       address
     }
   })
-
-export const getOverview = (addresses: string[]) =>
-  stateApi.entityOverview({
-    entityOverviewRequest: {
-      addresses
-    }
-  })

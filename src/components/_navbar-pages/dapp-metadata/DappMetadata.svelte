@@ -65,7 +65,7 @@
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
   const refreshAccounts = () => {
-    getOverview(accounts.map((acc) => acc.address)).then((overview) => {
+    getEntityOverview(accounts.map((acc) => acc.address)).then((overview) => {
       $formattedAccounts = getFormattedAccounts(accounts, overview)
     })
   }
