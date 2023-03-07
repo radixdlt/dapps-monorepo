@@ -1,19 +1,12 @@
 import { expect } from '@storybook/jest'
-import { fakeGatewayCall } from '../../../../.storybook/utils'
+import { MOCK_ACCOUNTS } from '../../../../.storybook/test-utils'
 import { within, userEvent } from '@storybook/testing-library'
 import SendFungibleTokens from './SendFungibleTokens.svelte'
 import mocks from '@api/mocks.json'
 
 export default {
   title: 'Navbar Pages/Send Tokens',
-  component: SendFungibleTokens,
-  parameters: {
-    mockData: [
-      fakeGatewayCall('/entity/resources'),
-      fakeGatewayCall('/entity/overview'),
-      fakeGatewayCall('/entity/non-fungible/ids')
-    ]
-  }
+  component: SendFungibleTokens
 }
 
 const Template = (args: any) => ({
@@ -21,19 +14,8 @@ const Template = (args: any) => ({
   props: args
 })
 
-const accounts = [
-  {
-    label: 'Main Account (acco...7x2w96)',
-    address: 'account_tdx_b_1pqdy2mvxrkyycaj0c8c2g8xekf3me27f3hvl9q52cqcs7x2w96'
-  },
-  {
-    label: 'Secondary Account (acco...r2ccqa)',
-    address: 'account_tdx_b_1pz92kpp5xrqhh09xff6xulwxkluspscqj0etre3tjc5sr2ccqa'
-  }
-]
-
 export const Primary = Template.bind(null, {
-  accounts
+  accounts: MOCK_ACCOUNTS
 })
 
 // @ts-ignore
