@@ -2,7 +2,6 @@ import { expect } from '@storybook/jest'
 import { MOCK_ACCOUNTS } from '../../../../.storybook/test-utils'
 import { within, userEvent } from '@storybook/testing-library'
 import SendFungibleTokens from './SendFungibleTokens.svelte'
-import mocks from '@api/mocks.json'
 
 export default {
   title: 'Navbar Pages/Send Tokens',
@@ -27,7 +26,7 @@ Primary.play = async ({ canvasElement }) => {
   const sendButton = await findByText('Send')
 
   userEvent.click(targetAccount)
-  userEvent.click(await findByText('Secondary Account (acco...r2ccqa)'))
+  userEvent.click(await findByText(MOCK_ACCOUNTS[1].label, { exact: false }))
 
   userEvent.clear(amountInput)
   userEvent.type(amountInput, '9999999')
@@ -38,10 +37,7 @@ Primary.play = async ({ canvasElement }) => {
   userEvent.clear(amountInput)
   userEvent.type(amountInput, '100')
 
-  await findByText(
-    mocks['/entity/resources']['fungible_resources']['items'][0]?.amount
-      .value as string
-  )
+  await findByText('1000')
   await findByText('(Available balance)')
 
   expect(sendButton.hasAttribute('disabled')).toBe(false)
