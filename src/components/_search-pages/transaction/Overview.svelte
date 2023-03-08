@@ -1,6 +1,7 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { getTransactionDetails } from '@api/gateway'
+  import CodeBox from '@components/code-box/CodeBox.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
@@ -90,9 +91,9 @@
     {#await manifest}
       <SkeletonLoader />
     {:then manifest}
-      <pre style="white-space: pre-wrap; word-break: break-word;">{manifest
-          ? manifest
-          : 'Failed to decode manifest'}</pre>
+      <div style:width="30%" style:height="300px">
+        <CodeBox text={manifest ?? 'Failed to decode manifest'} />
+      </div>
     {/await}
   </Box>
 </Box>
