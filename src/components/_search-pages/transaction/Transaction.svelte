@@ -32,9 +32,7 @@
     })
 </script>
 
-<Box>
-  <ResourceViewTitle title="Transaction" resourceAddress={transactionHash} />
-</Box>
+<ResourceViewTitle title="Transaction" resourceAddress={transactionHash} />
 
 <Box bgColor="surface" useTabs>
   <Tabs box>

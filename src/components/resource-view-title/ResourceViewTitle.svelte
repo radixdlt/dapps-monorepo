@@ -7,15 +7,17 @@
   export let resourceAddress: string
 </script>
 
-<Text inline size="xxlarge" bold>{title}</Text>
-<Box m="none" p="none" inline>
-  <IconTextItem
-    on:click={() => navigator.clipboard.writeText(resourceAddress)}
-    icon="copy"
-    interactiveIcon
-    iconPosition="right"
-    iconSize="xs"
-    noPadding
-    textColor="$highlightedText">{resourceAddress}</IconTextItem
-  >
+<Box>
+  <Text inline size="xxlarge" bold>{title}</Text>
+  <Box m="none" p="none" inline>
+    <IconTextItem
+      on:click={() => navigator.clipboard.writeText(resourceAddress)}
+      icon="copy"
+      interactiveIcon
+      iconPosition="right"
+      iconSize="xs"
+      noPadding
+      textColor="$highlightedText">{resourceAddress}</IconTextItem
+    >
+  </Box>
 </Box>

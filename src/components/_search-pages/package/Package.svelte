@@ -14,9 +14,7 @@
   $: send(address)
 </script>
 
-<Box>
-  <ResourceViewTitle title="Package" resourceAddress={address} />
-</Box>
+<ResourceViewTitle title="Package" resourceAddress={address} />
 
 <Box>
   <Card>

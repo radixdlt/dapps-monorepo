@@ -37,13 +37,11 @@
     : ''
 </script>
 
-<Box>
-  {#if $loading}
-    <SkeletonLoader />
-  {:else}
-    <ResourceViewTitle title={resourceType} resourceAddress={address} />
-  {/if}
-</Box>
+{#if $loading}
+  <SkeletonLoader />
+{:else}
+  <ResourceViewTitle title={resourceType} resourceAddress={address} />
+{/if}
 
 <Box>
   <Card>

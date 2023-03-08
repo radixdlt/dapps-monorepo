@@ -18,9 +18,7 @@
   $: entities = getEntityDetails(address.split(':')[0] as string)
 </script>
 
-<Box>
-  <ResourceViewTitle title="Non-fungible" resourceAddress={address} />
-</Box>
+<ResourceViewTitle title="Non-fungible" resourceAddress={address} />
 
 <Box>
   <Card>
