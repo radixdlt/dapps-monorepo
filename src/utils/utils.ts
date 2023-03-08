@@ -52,10 +52,12 @@ type AddressPrefix =
   | 'package'
   | 'resource'
   | 'account'
-  | 'transaction'
   | 'component'
+  | 'identity'
 
-export const getAddressPrefix = (address: string): AddressPrefix => {
+export const getAddressType = (
+  address: string
+): AddressPrefix | 'transaction' => {
   const parts = address.split('_')
   return parts.length > 1 ? (parts[0] as AddressPrefix) : 'transaction'
 }
@@ -64,7 +66,7 @@ export const getNFTAddress = (resourceAddress: string, nftID: string) =>
   `${shortenAddress(resourceAddress)}:${nftID}`
 
 export const isNFTAddress = (address: string) =>
-  getAddressPrefix(address) === 'resource' && address.split(':').length > 1
+  getAddressType(address) === 'resource' && address.split(':').length > 1
 
 export const addressToRoute = (address: string) =>
   ({
@@ -74,8 +76,9 @@ export const addressToRoute = (address: string) =>
       : `/resource/${address}`,
     package: `/package/${address}`,
     component: `/component/${address}`,
-    transaction: `/transaction/${address}`
-  }[getAddressPrefix(address)])
+    transaction: `/transaction/${address}`,
+    identity: `/identity/${address}`
+  }[getAddressType(address)])
 
 export const useContext = <
   Contexts extends Record<string, Values>,

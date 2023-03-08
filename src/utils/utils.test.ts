@@ -6,7 +6,7 @@ import {
   getFileExtension,
   bufferFromHex,
   hash,
-  getAddressPrefix,
+  getAddressType,
   getTxIdFromMessage,
   accountLabel
 } from './utils'
@@ -79,7 +79,7 @@ describe('#utils', () => {
   it('Should return prefix', () => {
     const address = 'transaction_1234'
     const expected = 'transaction'
-    const result = getAddressPrefix(address)
+    const result = getAddressType(address)
     expect(result).toEqual(expected)
   })
 
