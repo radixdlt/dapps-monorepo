@@ -34,7 +34,10 @@
     <Text slot="header" bold>Resource Info</Text>
     <InfoBox slot="body">
       <Row text="Address">
-        <Text slot="right">{address.split(':')[0]}</Text>
+        <Text color="link" inline slot="right">
+          <a href="/resource/{address.split(':')[0]}">{address.split(':')[0]}</a
+          >
+        </Text>
       </Row>
 
       <AwaitedRow text="Name" promise={entities} let:data>
