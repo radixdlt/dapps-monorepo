@@ -14,5 +14,5 @@
   <Box wrapper cx={{ width: '300px' }}>
     <Select bind:selected={selectedAccount} options={accounts} />
   </Box>
-  <Text slot="content">Please deposit some XRD to this account</Text>
+  <Text slot="content">Please deposit some XRD to this account.</Text>
 </Popover>

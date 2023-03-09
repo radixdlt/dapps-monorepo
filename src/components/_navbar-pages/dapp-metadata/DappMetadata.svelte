@@ -120,18 +120,18 @@
   $: if ($selectedAccount) $setAsDAppDefinition = $isDappDefinition
   $: faded.set(!$setAsDAppDefinition)
 
-  let XRDAmount: Promise<string> = new Promise((_) => {})
+  let XRDAmount: Promise<string | undefined> = new Promise((_) => {})
 
   let showNotEnoughXRDError = false
 
   $: XRDAmount.then((amount) => {
-    showNotEnoughXRDError = Number(amount) < 10
+    showNotEnoughXRDError = !amount || Number(amount) < 10
   })
 
   $: if ($selectedAccount)
     XRDAmount = resources
       .then((resources) => resources[$selectedAccount!.address]!)
-      .then((resources) => getFungibleResource('XRD')(resources)!.value)
+      .then((resources) => getFungibleResource('Radix')(resources)?.value)
 </script>
 
 <Box my="medium" cx={{ width: '80%' }} wrapper>
@@ -155,15 +155,6 @@
         bind:showError={showNotEnoughXRDError}
       />
     </Row>
-
-    {#await XRDAmount then amount}
-      {#if parseInt(amount) < 10}
-        <HeaderRow
-          header="Please deposit some XRD to this account. On betanet, the account to be set as a dApp Definition must have XRD to pay the network fees for that metadata update. On mainnet, the Radix Wallet will allow payment of these fees from other accounts."
-          faded={$faded}
-        />
-      {/if}
-    {/await}
 
     <Row text="dApp Setup" paddingTop="15px">
       <SetAsDApp
