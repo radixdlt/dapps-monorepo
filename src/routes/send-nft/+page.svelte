@@ -3,6 +3,6 @@
   import SendNonFungibleTokens from '@components/_navbar-pages/send-tokens/SendNonFungibleTokens.svelte'
 </script>
 
-<NavbarPage title="Send Tokens" let:accounts>
+<NavbarPage title="Send NFTs" let:accounts>
   <SendNonFungibleTokens {accounts} />
 </NavbarPage>
