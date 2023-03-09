@@ -29,6 +29,7 @@
     type Resources
   } from '@api/utils/resources'
   import { getEntityOverview } from '@api/gateway'
+  import { XRD_NAME } from '@constants'
 
   export let accounts: Account[]
 
@@ -131,7 +132,7 @@
   $: if ($selectedAccount)
     XRDAmount = resources
       .then((resources) => resources[$selectedAccount!.address]!)
-      .then((resources) => getFungibleResource('Radix')(resources)?.value)
+      .then((resources) => getFungibleResource(XRD_NAME)(resources)?.value)
 </script>
 
 <Box my="medium" cx={{ width: '80%' }} wrapper>

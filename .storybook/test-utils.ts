@@ -1,4 +1,5 @@
 import mocks from '@api/mocks.json'
+import { XRD_NAME } from '@constants'
 import { CURRENT_NETWORK } from '../src/network'
 
 const XRD_ADDRESS = 'resource_tdx_24_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxrd'
@@ -6,7 +7,7 @@ const XRD_ADDRESS = 'resource_tdx_24_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 const MOCK_TOKENS = [
     {
         address: XRD_ADDRESS,
-        name: 'XRD'
+        name: XRD_NAME
     },
     {
         address: 'resource_tdx_24_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqtest',

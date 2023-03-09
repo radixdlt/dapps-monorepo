@@ -34,3 +34,5 @@ export const NETWORK_CONFIG = {
       'account_tdx_b_1prfj0lp3hd2dhjkk2v7apr4vwtrcnn9y67393de7r5gqgpm83a'
   }
 } as const
+
+export const XRD_NAME = 'Radix'
