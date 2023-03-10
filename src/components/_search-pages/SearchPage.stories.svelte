@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
-  import ResourceViewTitle from './ResourceViewTitle.svelte'
+  import SearchPage from './SearchPage.svelte'
 </script>
 
 <Meta
-  title="ResourceViewTitle"
+  title="SearchPage"
   argTypes={{
     title: {
       control: 'text'
@@ -16,7 +16,7 @@
 />
 
 <Template let:args>
-  <ResourceViewTitle {...args} />
+  <SearchPage {...args} />
 </Template>
 
 <Story

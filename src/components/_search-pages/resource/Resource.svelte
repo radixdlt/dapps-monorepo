@@ -1,13 +1,13 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Icon from '@components/_base/icon/Icon.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { query } from '@api/query'
   import Row from '@components/info-box/Row.svelte'
+  import SearchPage from '../SearchPage.svelte'
 
   export let address: string
 
@@ -40,7 +40,7 @@
 {#if $loading}
   <SkeletonLoader />
 {:else}
-  <ResourceViewTitle title={resourceType} resourceAddress={address} />
+  <SearchPage title={resourceType} {address} />
 {/if}
 
 <Box>

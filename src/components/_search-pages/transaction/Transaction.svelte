@@ -1,6 +1,5 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Tabs from '@components/_base/tabs/Tabs.svelte'
   import BoxTab from '@components/_base/tabs/types/BoxTab.svelte'
@@ -31,8 +30,6 @@
       >
     })
 </script>
-
-<ResourceViewTitle title="Transaction" resourceAddress={transactionHash} />
 
 <Box bgColor="surface" useTabs>
   <Tabs box>

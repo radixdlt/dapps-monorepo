@@ -3,21 +3,17 @@
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Row from '@components/info-box/Row.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { EntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
   import type { getPopulatedResources } from '@api/utils/resources'
 
-  export let address: string
   export let resources: ReturnType<typeof getPopulatedResources>
   export let details: Promise<Pick<EntityDetailsResponse, 'metadata'>>
 
   const values = Promise.all([resources, details])
 </script>
-
-<ResourceViewTitle title="Account" resourceAddress={address} />
 
 <Box>
   {#await values}

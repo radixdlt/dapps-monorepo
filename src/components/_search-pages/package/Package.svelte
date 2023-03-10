@@ -3,7 +3,6 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
   import Row from '@components/info-box/Row.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
@@ -13,8 +12,6 @@
   $: ({ send, loading, response } = query('getEntityDetails'))
   $: send(address)
 </script>
-
-<ResourceViewTitle title="Package" resourceAddress={address} />
 
 <Box>
   <Card>
