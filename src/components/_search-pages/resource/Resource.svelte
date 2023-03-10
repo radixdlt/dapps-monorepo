@@ -8,10 +8,8 @@
   import Row from '@components/info-box/Row.svelte'
   import { getMetadata } from '@api/utils/resources'
   import type { getEntityDetails } from '@api/gateway'
-  import SearchPage from '../SearchPage.svelte'
 
   export let details: ReturnType<typeof getEntityDetails>
-  export let address: string
 
   $: metadata = details.then(({ metadata }) => metadata)
 
@@ -19,24 +17,7 @@
   $: symbol = metadata.then(getMetadata('symbol'))
   $: url = metadata.then(getMetadata('url'))
   $: description = metadata.then(getMetadata('description'))
-
-  $: resourceType = details.then(({ details }) =>
-    details!.discriminator
-      ? {
-          fungible_resource: 'Fungible Resource',
-          non_fungible_resource: 'Non Fungible Resource',
-          package: 'Package',
-          component: 'Component'
-        }[details!.discriminator]
-      : ''
-  )
 </script>
-
-{#await resourceType}
-  <SkeletonLoader />
-{:then resourceType}
-  <SearchPage title={resourceType} {address} />
-{/await}
 
 <Box>
   <Card>
@@ -88,4 +69,5 @@
       {/await}
     </InfoBox>
   </Card>
+  <slot />
 </Box>
