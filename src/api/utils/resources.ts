@@ -16,8 +16,8 @@ const fungibleResourceDisplayLabel = (
 ) =>
   pipe(
     () => [
-      getMetadata(resource.metadata)('symbol'),
-      getMetadata(resource.metadata)('name')
+      getMetadata('symbol')(resource.metadata),
+      getMetadata('name')(resource.metadata)
     ],
     ([symbol, name]) =>
       symbol && name
@@ -30,7 +30,7 @@ const nonFungibleResourceDisplayLabel = (
   id: string
 ) =>
   pipe(
-    () => getMetadata(resource.metadata)('name'),
+    () => getMetadata('name')(resource.metadata),
     (name) =>
       name
         ? `${accountLabel({
@@ -40,8 +40,9 @@ const nonFungibleResourceDisplayLabel = (
         : `${getNFTAddress(resource.address, id)}`
   )()
 
-const getMetadata = (metadata: EntityMetadataCollection) => (key: string) =>
-  metadata.items.find((item) => item.key === key)?.value
+export const getMetadata =
+  (key: string) => (metadata: EntityMetadataCollection) =>
+    metadata.items.find((item) => item.key === key)?.value
 
 const transformNonFungible = async (
   nonFungible: EntityResourcesResponse['non_fungible_resources'],
@@ -61,7 +62,7 @@ const transformNonFungible = async (
         label: nonFungibleResourceDisplayLabel(entity, non_fungible_id),
         value: non_fungible_id,
         address: `${entity.address}:${non_fungible_id}`,
-        name: getMetadata(entity.metadata)('name')
+        name: getMetadata('name')(entity.metadata)
       }))
     })
   )
@@ -81,7 +82,7 @@ const transformFungible = async (
     value: fungible.items.find(({ address }) => address === entity.address)!
       .amount.value,
     address: entity.address,
-    name: getMetadata(entity.metadata)('name')
+    name: getMetadata('name')(entity.metadata)
   }))
 }
 
