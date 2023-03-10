@@ -29,7 +29,9 @@
 
   {#if type === 'non-fungible'}
     <SearchPage title="Non-Fungible Resource" address={data.address}>
-      <Resource {details} />
+      <Resource {details}>
+        <NonFungible address={data.address} />
+      </Resource>
     </SearchPage>
   {/if}
 {/await}
