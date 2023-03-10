@@ -4,20 +4,22 @@
   import Text from '@components/_base/text/Text.svelte'
 
   export let title: string
-  export let resourceAddress: string
+  export let address: string
 </script>
 
 <Box>
   <Text inline size="xxlarge" bold>{title}</Text>
   <Box m="none" p="none" inline>
     <IconTextItem
-      on:click={() => navigator.clipboard.writeText(resourceAddress)}
+      on:click={() => navigator.clipboard.writeText(address)}
       icon="copy"
       interactiveIcon
       iconPosition="right"
       iconSize="xs"
       noPadding
-      textColor="$highlightedText">{resourceAddress}</IconTextItem
+      textColor="$highlightedText">{address}</IconTextItem
     >
   </Box>
 </Box>
+
+<slot />

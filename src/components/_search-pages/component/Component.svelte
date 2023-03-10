@@ -1,6 +1,5 @@
 <script lang="ts">
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import { query } from '@api/query'
@@ -13,8 +12,6 @@
   $: ({ send, loading, response } = query('getEntityDetails'))
   $: send(address)
 </script>
-
-<ResourceViewTitle title="Package" resourceAddress={address} />
 
 <Box>
   <Card>

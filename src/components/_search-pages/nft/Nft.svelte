@@ -3,7 +3,6 @@
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Row from '@components/info-box/Row.svelte'
-  import ResourceViewTitle from '@components/resource-view-title/ResourceViewTitle.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
@@ -17,8 +16,6 @@
 
   $: entities = getEntityDetails(address.split(':')[0] as string)
 </script>
-
-<ResourceViewTitle title="Non-fungible" resourceAddress={address} />
 
 <Box>
   <Card>

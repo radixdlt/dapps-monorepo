@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SearchPage from '@components/_search-pages/SearchPage.svelte'
   import Transaction from '@components/_search-pages/transaction/Transaction.svelte'
   import type { PageData } from './$types'
 
@@ -7,4 +8,6 @@
   $: transactionHash = data.transactionHash
 </script>
 
-<Transaction {transactionHash} />
+<SearchPage title="Transaction" address={transactionHash}>
+  <Transaction {transactionHash} />
+</SearchPage>
