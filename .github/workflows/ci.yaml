@@ -579,7 +579,6 @@ jobs:
     if: ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) || github.event.pull_request
     needs:
       - push-storybook
-      - push-dashboard
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
