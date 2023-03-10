@@ -5,86 +5,87 @@
   import Icon from '@components/_base/icon/Icon.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { query } from '@api/query'
   import Row from '@components/info-box/Row.svelte'
+  import { getMetadata } from '@api/utils/resources'
+  import type { getEntityDetails } from '@api/gateway'
   import SearchPage from '../SearchPage.svelte'
 
+  export let details: ReturnType<typeof getEntityDetails>
   export let address: string
 
-  $: ({ send, response, loading } = query('getEntityDetails'))
+  $: metadata = details.then(({ metadata }) => metadata)
 
-  $: send(address)
+  $: name = metadata.then(getMetadata('name'))
+  $: symbol = metadata.then(getMetadata('symbol'))
+  $: url = metadata.then(getMetadata('url'))
+  $: description = metadata.then(getMetadata('description'))
 
-  $: symbol = $response?.metadata.items.find(
-    (item) => item.key.toLowerCase() === 'symbol'
-  )?.value
-
-  $: name = $response?.metadata.items.find(
-    (item) => item.key.toLowerCase() === 'name'
-  )?.value
-
-  $: url = $response?.metadata.items.find(
-    (item) => item.key.toLowerCase() === 'url'
-  )?.value
-
-  $: resourceType = $response?.details?.discriminator
-    ? {
-        fungible_resource: 'Fungible Resource',
-        non_fungible_resource: 'Non Fungible Resource',
-        package: 'Package',
-        component: 'Component'
-      }[$response?.details.discriminator]
-    : ''
+  $: resourceType = details.then(({ details }) =>
+    details!.discriminator
+      ? {
+          fungible_resource: 'Fungible Resource',
+          non_fungible_resource: 'Non Fungible Resource',
+          package: 'Package',
+          component: 'Component'
+        }[details!.discriminator]
+      : ''
+  )
 </script>
 
-{#if $loading}
+{#await resourceType}
   <SkeletonLoader />
-{:else}
+{:then resourceType}
   <SearchPage title={resourceType} {address} />
-{/if}
+{/await}
 
 <Box>
   <Card>
     <Box bgColor="surface" wrapper slot="header" flex="row" items="center">
       <Text size="large" bold>
-        {#if $loading}
+        {#await Promise.all([name, symbol])}
           <SkeletonLoader />
-        {:else if !name}
-          [NO-NAME]
-        {:else}
-          {name}
-          {symbol ? `(${symbol})` : ''}
-        {/if}
+        {:then [name, symbol]}
+          {#if !name}
+            [NO-NAME]
+          {:else}
+            {name}
+            {symbol ? `(${symbol})` : ''}
+          {/if}
+        {/await}
       </Text>
-      {#if url}
-        <Text color="link" ml="auto" pointer items="center">
-          <Icon type="external" width="xs" height="xs" />
-          <Text ml="small">
-            <a href={url} target="_blank">{url}</a>
+      {#await url then url}
+        {#if url}
+          <Text color="link" ml="auto" pointer items="center">
+            <Icon type="external" width="xs" height="xs" />
+            <Text ml="small">
+              <a href={url} target="_blank">{url}</a>
+            </Text>
           </Text>
-        </Text>
-      {/if}
+        {/if}
+      {/await}
     </Box>
     <InfoBox slot="body">
       <Row>
         <Text slot="left" align="right" bold>Description</Text>
         <Box slot="right" wrapper>
-          {#if $response}
-            {$response.metadata.items.find(
-              (item) => item.key.toLowerCase() === 'description'
-            )?.value}
-          {:else}
+          {#await description}
             <SkeletonLoader />
-          {/if}
+          {:then description}
+            {description}
+          {/await}
         </Box>
       </Row>
 
-      {#each $response?.metadata.items.filter((item) => !['description', 'symbol', 'name', 'url'].some((key) => key === item.key.toLowerCase())) ?? [] as metadata}
-        <Row>
-          <Text slot="left" align="right" bold>{metadata.key}</Text>
-          <Text slot="right" align="right" bold>{metadata.value}</Text>
-        </Row>
-      {/each}
+      {#await metadata}
+        <SkeletonLoader />
+      {:then _metadata}
+        {#each _metadata.items.filter((item) => !['description', 'symbol', 'name', 'url'].some((key) => key === item.key)) ?? [] as metadata}
+          <Row>
+            <Text slot="left" align="right" bold>{metadata.key}</Text>
+            <Text slot="right" align="right" bold>{metadata.value}</Text>
+          </Row>
+        {/each}
+      {/await}
     </InfoBox>
   </Card>
 </Box>
