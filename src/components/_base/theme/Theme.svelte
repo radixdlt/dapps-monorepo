@@ -2,48 +2,50 @@
   export let theme: 'light' | 'dark'
 </script>
 
-<div class={`${theme}`}>
+<div class={`${theme} common`}>
   <slot />
 </div>
 
 <style>
   /* transitions */
-  :global(body *) {
+  :global(body) {
     transition: background-color 0.3s;
   }
 
   /* Radix colors */
-  :global(body *) {
+  :global(body) {
     /* Core colors */
-    --color-primary-dark: '#00AB84';
-    --color-primary-light: '#00C389';
-    --color-secondary-dark: '#060F8F';
-    --color-secondary-light: '#052CC0';
-    --color-tertiary-dark: '#003057';
-    --color-tertiary-light: '#FFFFFF';
+    --color-primary-dark: #00ab84;
+    --color-primary-light: #00c389;
+    --color-secondary-dark: #060f8f;
+    --color-secondary-light: #052cc0;
+    --color-tertiary-dark: #003057;
+    --color-tertiary-light: #ffffff;
 
-    /*color- Accent colors */
-    --color-accent-red: '#EF4136';
-    --color-accent-blue: '#00AEEF';
-    --color-accent-yellow: '#FFF200';
+    /* Accent colors */
+    --color-accent-red: #ef4136;
+    --color-accent-blue: #00aeef;
+    --color-accent-yellow: #fff200;
 
-    /*color- Neutral colors */
-    --color-grey-0: '#425563';
-    --color-grey-1: '#4F758B';
-    --color-grey-2: '#7A99AC';
-    --color-grey-3: '#DDE5ED';
-    --color-grey-4: '#F2F2FC';
+    /* Neutral colors */
+    --color-grey-0: #425563;
+    --color-grey-1: #4f758b;
+    --color-grey-2: #7a99ac;
+    --color-grey-3: #dde5ed;
+    --color-grey-4: #f2f2fc;
+  }
+  
+  /* spacing */
+  :global(body) {
+    --padding-small: 10px;
   }
 
-  :global(.light) {
+  /* themes */
+  .light {
     --background: var(--color-secondary-light);
   }
 
-  :global(.dark) {
+  .dark {
     --background: var(--color-tertiary-dark);
-  }
-
-  :global(body *) {
-    --padding-small: 10px;
   }
 </style>
