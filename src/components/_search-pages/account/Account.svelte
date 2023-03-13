@@ -22,42 +22,40 @@
     {#if resources.fungible.length === 0 && resources.nonFungible.length === 0}
       This account doesn't hold any tokens or NFTs
     {:else}
-      {#if resources.fungible.length}
-        <Card>
-          <Text bold slot="header">Tokens (fungible resources)</Text>
-          <Box bgColor="surface" p="none" slot="body">
-            <InfoBox>
-              {#each resources.fungible as fungible}
-                <Row>
-                  <Text slot="left" bold underlined align="right">
-                    <a href="/resource/{fungible.address}">{fungible.label}</a>
-                  </Text>
-                  <Text slot="right">
-                    {fungible.value}
-                  </Text>
-                </Row>
-              {/each}
-            </InfoBox>
-          </Box>
-        </Card>
-      {/if}
-      {#if resources.nonFungible.length}
-        <Card>
-          <Text bold slot="header">NFTs (nonfungible resources)</Text>
-          <Box bgColor="surface" slot="body" p="none">
-            <InfoBox>
-              {#each resources.nonFungible as nft}
-                <Row>
-                  <Text slot="left" bold underlined>
-                    <a href="/nft/{nft.address}">{nft.label}</a>
-                  </Text>
-                  <div />
-                </Row>
-              {/each}
-            </InfoBox>
-          </Box>
-        </Card>
-      {/if}
+      <Card>
+        <Text bold slot="header">Tokens (fungible resources)</Text>
+        <Box bgColor="surface" p="none" slot="body">
+          <InfoBox>
+            {#each resources.fungible as fungible}
+              <Row>
+                <Text slot="left" bold underlined align="right">
+                  <a href="/resource/{fungible.address}">{fungible.label}</a>
+                </Text>
+                <Text slot="right">
+                  {fungible.value}
+                </Text>
+              </Row>
+            {/each}
+          </InfoBox>
+        </Box>
+      </Card>
+
+      <Card>
+        <Text bold slot="header">NFTs (nonfungible resources)</Text>
+        <Box bgColor="surface" slot="body" p="none">
+          <InfoBox>
+            {#each resources.nonFungible as nft}
+              <Row>
+                <Text slot="left" bold underlined>
+                  <a href="/nft/{nft.address}">{nft.label}</a>
+                </Text>
+                <div />
+              </Row>
+            {/each}
+          </InfoBox>
+        </Box>
+      </Card>
+
       <Card>
         <Text bold slot="header">Metadata</Text>
         <Box bgColor="surface" slot="body" p="none">
