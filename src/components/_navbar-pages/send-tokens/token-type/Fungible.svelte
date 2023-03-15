@@ -3,11 +3,9 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { query } from '@api/query'
   import type { Resources } from '@api/utils/resources'
-  import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { boxStyle } from '../SendTokens.svelte'
 
   export let resources: Promise<Resources['fungible']>
   export let selectedFromAccount: string = ''
@@ -80,37 +78,54 @@
     goto(`/send-tokens/success?txID=${$response.transactionIntentHash}`)
 </script>
 
-<Box cx={boxStyle}>
+<div class="title">
   <Text bold align="right">Amount</Text>
-  <Box bgColor="surface" wrapper flex="row" cx={{ width: '500px' }}>
-    <Box bgColor="surface" cx={{ flexBasis: '60%' }} wrapper>
-      <Input type="number" bind:value={amountToSend} placeholder="Amount" />
-      {#await Promise.all([amountAvailable, hasEnoughTokens])}
-        <SkeletonLoader />
-      {:then [amountAvailable, hasEnoughTokens]}
-        {#if hasEnoughTokens}
-          <Text inline size="small" color="grey">{amountAvailable}</Text>
-          <Text inline size="xsmall" muted>(Available balance)</Text>
-        {:else}
-          <Text inline size="small">Not enough tokens in this account</Text>
-        {/if}
-      {/await}
-    </Box>
-    <Box
-      bgColor="surface"
-      px="small"
-      py="none"
-      cx={{ minWidth: '150px', flexBasis: '40%' }}
-    >
-      {#await resourceList}
-        <Select loading={true} />
-      {:then resourceList}
-        <Select
-          bind:selected={selectedResource}
-          options={resourceList}
-          placeholderWhenEmpty="No tokens found"
-        />
-      {/await}
-    </Box>
-  </Box>
-</Box>
+</div>
+<div class="amount">
+  <div class="input">
+    <Input type="number" bind:value={amountToSend} placeholder="Amount" />
+    {#await Promise.all([amountAvailable, hasEnoughTokens])}
+      <SkeletonLoader />
+    {:then [amountAvailable, hasEnoughTokens]}
+      {#if hasEnoughTokens}
+        <Text inline size="small" color="grey">{amountAvailable}</Text>
+        <Text inline size="xsmall" muted>(Available balance)</Text>
+      {:else}
+        <Text inline size="small">Not enough tokens in this account</Text>
+      {/if}
+    {/await}
+  </div>
+  <div class="token-picker">
+    {#await resourceList}
+      <Select loading={true} />
+    {:then resourceList}
+      <Select
+        bind:selected={selectedResource}
+        options={resourceList}
+        placeholderWhenEmpty="No tokens found"
+      />
+    {/await}
+  </div>
+</div>
+
+<style>
+  .title {
+    grid-area: amount-title;
+  }
+
+  .amount {
+    grid-area: amount;
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-lg);
+  }
+
+  .input {
+    width: 300px;
+  }
+
+  .token-picker {
+    padding: 0 var(--spacing-sm);
+    width: 200px;
+  }
+</style>

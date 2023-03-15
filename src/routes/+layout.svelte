@@ -12,6 +12,7 @@
   import '../fonts.css'
   import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '../../src/network'
+  import Theme from '@components/_base/theme/Theme.svelte'
 
   let mounted = false
 
@@ -84,31 +85,33 @@
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 <Toast />
 
-<Box
-  p="none"
-  cx={{
-    display: 'grid',
-    gridTemplateColumns: '250px auto',
-    gridTemplateRows: '100px auto',
-    gridTemplateAreas: `
-      "header header"
-      "nav content"`
-  }}
->
-  {#if mounted}
-    <Header />
-    <SidebarWithNavbar page={$page} />
-    <Box
-      cx={{
-        gridArea: 'content',
-        backgroundColor: '$background',
-        display: 'flex',
-        flexDirection: 'column',
-        paddingBottom: '$6xl'
-      }}
-    >
-      <slot />
-    </Box>
-    <center />
-  {/if}
-</Box>
+<Theme theme="light">
+  <Box
+    p="none"
+    cx={{
+      display: 'grid',
+      gridTemplateColumns: '250px auto',
+      gridTemplateRows: '100px auto',
+      gridTemplateAreas: `
+        "header header"
+        "nav content"`
+    }}
+  >
+    {#if mounted}
+      <Header />
+      <SidebarWithNavbar page={$page} />
+      <Box
+        cx={{
+          gridArea: 'content',
+          backgroundColor: '$background',
+          display: 'flex',
+          flexDirection: 'column',
+          paddingBottom: '$6xl'
+        }}
+      >
+        <slot />
+      </Box>
+      <center />
+    {/if}
+  </Box>
+</Theme>

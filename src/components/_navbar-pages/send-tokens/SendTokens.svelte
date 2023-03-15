@@ -1,15 +1,4 @@
-<script lang="ts" context="module">
-  export const boxStyle = {
-    width: '70%',
-    display: 'grid',
-    gridTemplateColumns: '80px auto',
-    alignItems: 'baseline',
-    gap: '$2xl'
-  }
-</script>
-
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Select, { type Option } from '@components/_base/select/Select.svelte'
   import Tabs from '@components/_base/tabs/Tabs.svelte'
@@ -45,52 +34,48 @@
     (resourceSelected = selected)
 </script>
 
-<Box bgColor="surface" flex="col" gap="medium">
-  <Box bgColor="surface" mt="medium" cx={boxStyle}>
+<div class="grid">
+  <div class="from-title">
     <Text bold align="right">From</Text>
-    <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
-      <Select bind:selected={selectedFromAccount} options={accounts} />
-    </Box>
-  </Box>
-  <Box bgColor="surface" mt="medium" cx={boxStyle}>
+  </div>
+  <div class="dropdown">
+    <Select bind:selected={selectedFromAccount} options={accounts} />
+  </div>
+
+  <div class="to-title">
     <Text bold align="right">To</Text>
+  </div>
+  <div class="to">
     <Tabs>
       <svelte:fragment slot="tabs">
         <RadioTab />
-        <Box
-          bgColor="surface"
-          inline
-          p="none"
-          cx={{ marginRight: '$lg', marginLeft: '$sm' }}>One of My Accounts</Box
-        >
+        <div class="to-account-option">One of My Accounts</div>
         <RadioTab />
-        <Box
-          bgColor="surface"
-          inline
-          p="none"
-          cx={{ marginRight: '$lg', marginLeft: '$sm' }}>Other account</Box
-        >
+        <div class="to-account-option">Other account</div>
       </svelte:fragment>
       <svelte:fragment slot="panels">
         <TabPanel>
-          <Box bgColor="surface" px="none" cx={{ width: '300px' }}>
+          <div class="dropdown">
             <Select
               placeholder="Select account"
               bind:selected={selectedToAccount}
               options={accounts}
             />
-          </Box>
+          </div>
         </TabPanel>
-        <TabPanel
-          ><Input
-            type="text"
-            bind:value={otherAccount}
-            placeholder="Account Address"
-          /></TabPanel
-        >
+        <TabPanel>
+          <div class="account-input">
+            <Input
+              type="text"
+              bind:value={otherAccount}
+              placeholder="Account Address"
+            />
+          </div>
+        </TabPanel>
       </svelte:fragment>
     </Tabs>
-  </Box>
+  </div>
+
   <slot
     selectedFromAccount={selectedFromAccount?.address}
     selectedToAccount={selectedToAccount?.address || otherAccount}
@@ -98,7 +83,8 @@
     {setTransactionManifest}
     {setResourceSelected}
   />
-  <Box bgColor="surface" justify="end">
+
+  <div style:grid-area="send" class="send-btn">
     <SendTxButton
       disabled={!(
         selectedFromAccount?.address &&
@@ -109,5 +95,51 @@
       onResponse={(response) =>
         goto(`/send-nft/success?txID=${response.transactionIntentHash}`)}
     />
-  </Box>
-</Box>
+  </div>
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    grid:
+      'from-title   from'
+      'to-title     to'
+      'amount-title amount'
+      '.            send'
+      / 5em auto;
+    gap: var(--space-lg);
+    background-color: var(--surface);
+  }
+
+  .from-title {
+    grid-area: from-title;
+    align-self: center;
+  }
+
+  .to-title {
+    grid-area: to-title;
+  }
+
+  .to {
+    grid-area: to;
+  }
+
+  .to-account-option {
+    display: inline-flex;
+    margin: 0 0 var(--space-lg) var(--space-sm);
+  }
+
+  .account-input {
+    width: 300px;
+  }
+
+  .dropdown {
+    grid-area: from;
+    width: 300px;
+  }
+
+  .send-btn {
+    display: flex;
+    justify-content: end;
+  }
+</style>

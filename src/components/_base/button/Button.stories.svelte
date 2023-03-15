@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
+  import Theme from '../theme/Theme.svelte'
   import Button from './Button.svelte'
 </script>
 
@@ -19,12 +20,14 @@
   }}
 />
 
-<Template let:args>
-  <Button>{args.text}</Button>
-  <Button size="small">{args.text}</Button>
-  <Button ghost>{args.text}</Button>
-  <Button disabled={args.disabled} on:click={console.log}>Disabled</Button>
-</Template>
+<Theme theme="light">
+  <Template let:args>
+    <Button size="small">{args.text}</Button>
+    <Button size="large">{args.text}</Button>
+    <Button size="large" loading>{args.text}</Button>
+    <Button disabled>Disabled</Button>
+  </Template>
+</Theme>
 
 <Story
   name="Primary"

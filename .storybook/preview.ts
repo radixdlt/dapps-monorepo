@@ -1,4 +1,5 @@
 import { mockGatewayCall } from './test-utils'
+import ThemeDecorator from './ThemeDecorator.svelte'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -10,5 +11,7 @@ export const parameters = {
   },
   mockAddonConfigs: {
     globalMockData: [mockGatewayCall('/entity/resources'), mockGatewayCall('/entity/overview'), mockGatewayCall('/entity/non-fungible/ids')]
-  }
+  },
 }
+
+export const decorators = [() => ThemeDecorator]

@@ -77,6 +77,7 @@
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
     "request": "^2.88.2",
+    "sass": "^1.59.2",
     "storybook-addon-mock": "^3.2.0",
     "svelte": "^3.49.0",
     "svelte-check": "^2.7.1",

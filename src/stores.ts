@@ -17,3 +17,5 @@ export const connected = derived(
 )
 
 export const storage = localStorageStore('storage', { theme: 'light' })
+
+export const theme = writable<'light'>('light')
