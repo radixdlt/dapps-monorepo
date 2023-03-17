@@ -15,18 +15,22 @@ RUN cat .env.production
 # The .dockerignore file can be adjusted to remove unnecessary files.
 RUN ls /usr/src/app
 
-RUN yarn install --frozen-lockfile && \
+RUN yarn --frozen-lockfile && \
     yarn build && \
     NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook
 RUN rm -f .npmrc
 
-FROM base AS dashboard
+FROM node:16.17.1-alpine AS dashboard
 
 WORKDIR /usr/src/app/
 
 COPY --from=base /usr/src/app/build .
 COPY --from=base /usr/src/app/package.json .
 COPY --from=base /usr/src/app/node_modules  .
+
+RUN ls -lha && \
+    du -hs node_modules && \
+    du -hs build
 
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics

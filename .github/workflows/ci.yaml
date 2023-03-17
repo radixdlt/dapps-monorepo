@@ -284,9 +284,8 @@ jobs:
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
       - name: Restore yarn cache
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          always-auth: true
           node-version: 16.17.1
           cache: yarn
       - name: Docker build and push
@@ -352,9 +351,8 @@ jobs:
           username: _json_key
           password: ${{ env.GH_GCR_JSON_KEY }}
       - name: Restore yarn cache
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          always-auth: true
           node-version: 16.17.1
           cache: yarn
       - name: Docker build and push
