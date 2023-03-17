@@ -283,7 +283,7 @@ jobs:
       # build information
       restore_artifact: "false"
       context: "."
-      dockerfile: "./Dockerfile.alpine"
+      dockerfile: "./Dockerfile"
       platforms: "linux/amd64"
       target: "node-adapter"
       build-args: |
