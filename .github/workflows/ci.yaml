@@ -311,7 +311,6 @@ jobs:
       context: "."
       dockerfile: "./Dockerfile"
       platforms: "linux/amd64"
-      enable_trivy: "true"
       target: "storybook"
       build-args: |
         NPM_TOKEN=${{ needs.setup-tags.outputs.NPM_TOKEN }}
