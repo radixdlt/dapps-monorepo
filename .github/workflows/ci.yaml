@@ -246,7 +246,8 @@ jobs:
       id-token: write
       pull-requests: read
       contents: read
-    needs: [build, setup-tags]
+    needs:
+      - setup-tags
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Dump context
@@ -282,6 +283,12 @@ jobs:
           secret_prefix: "GH"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
+      - name: Restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          always-auth: true
+          node-version: 16.17.1
+          cache: yarn
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -290,7 +297,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
-          target: "node-adapter"
+          target: "dashboard"
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
@@ -308,7 +315,7 @@ jobs:
       pull-requests: read
       contents: read
     needs: 
-    - setup-tags
+      - setup-tags
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Dump context
@@ -344,6 +351,12 @@ jobs:
           registry: eu.gcr.io
           username: _json_key
           password: ${{ env.GH_GCR_JSON_KEY }}
+      - name: Restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          always-auth: true
+          node-version: 16.17.1
+          cache: yarn
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
