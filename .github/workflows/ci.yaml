@@ -268,7 +268,7 @@ jobs:
         run:  yarn coverage
 
   push-dashboard:
-    name: Dashboard
+    name: Dashboard Docker
     needs: [build, setup-tags]
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
@@ -294,7 +294,7 @@ jobs:
       service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
   push-storybook:
-    name: Storybook
+    name: Storybook Docker
     needs: [build, setup-tags]
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
