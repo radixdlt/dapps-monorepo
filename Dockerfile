@@ -12,6 +12,7 @@ COPY ${NPM_LOCAL_CACHE} /root/.npm
 
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
+RUN ls -l /root/.npm && du -hs /root/.npm
 
 # Verify what contents where copied.
 # The .dockerignore file can be adjusted to remove unnecessary files.
