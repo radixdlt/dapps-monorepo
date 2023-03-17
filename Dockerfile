@@ -20,8 +20,7 @@ RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production && cat .env.prod
 
 RUN yarn install && \
     yarn build && \
-    NODE_OPTIONS=--max_old_space_size=4096 \
-    yarn build-storybook && \
+    NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook && \
     yarn cache clean && \
     rm -f .npmrc
 

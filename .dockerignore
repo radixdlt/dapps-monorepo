@@ -5,10 +5,8 @@ cypress
 docker-compose.yml
 .github
 .husky
-.storybook
 deploy
 .gitignore
 .dockerignore
 .git
-sonar-project.properties
 README.md
