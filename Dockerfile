@@ -4,7 +4,7 @@
 FROM node:16.17.1-alpine AS install-dashboard
 # Below steps installs npm modules of root directory into /usr/app/
 RUN mkdir -p /app
-COPY package*.json tsconfig.json yarn.lock $sdk /app/
+COPY package.json tsconfig.json yarn.lock /app/
 WORKDIR /app
 COPY .npmrc.docker .npmrc
 ARG NPM_TOKEN
