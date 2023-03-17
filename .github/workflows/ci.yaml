@@ -311,9 +311,6 @@ jobs:
       context: "."
       dockerfile: "./Dockerfile"
       platforms: "linux/amd64"
-      # optimizations
-      cache_tag_suffix: "release"
-      enable_dockerhub: "true"
       enable_trivy: "true"
       target: "storybook"
       build-args: |
