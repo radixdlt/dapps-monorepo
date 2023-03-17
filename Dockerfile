@@ -2,13 +2,13 @@ FROM node:16.17.1-alpine AS base
 
 ARG NPM_TOKEN
 ARG NETWORK_NAME
-ARG NPM_LOCAL_CACHE=.npm
+ARG NPM_LOCAL_CACHE=.cache
 
 WORKDIR /usr/src/app/
 
 COPY .                  /usr/src/app/
 COPY .npmrc.docker      /usr/src/app/.npmrc
-COPY ${NPM_LOCAL_CACHE} /root/.npm
+COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
 
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production

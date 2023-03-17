@@ -289,7 +289,7 @@ jobs:
           node-version: 16.17.1
           cache: yarn
       - name: Copy cache locally
-        run: cp -R $(npm config get cache) .
+        run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -302,10 +302,9 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
-            NPM_LOCAL_CACHE=.npm
+            NPM_LOCAL_CACHE=.cache/
       - name: Docker Image output
-        run: |
-          docker images
+        run: docker images
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
@@ -359,7 +358,7 @@ jobs:
           node-version: 16.17.1
           cache: yarn
       - name: Copy cache locally
-        run: cp -R $(npm config get cache) .
+        run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -372,10 +371,9 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
-            NPM_LOCAL_CACHE=.npm
+            NPM_LOCAL_CACHE=.cache/
       - name: Docker Image output
-        run: |
-          docker images
+        run: docker images
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
