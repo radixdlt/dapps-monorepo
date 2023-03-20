@@ -8,7 +8,7 @@ COPY package.json tsconfig.json yarn.lock /app/
 WORKDIR /app
 COPY .npmrc.docker .npmrc
 ARG NPM_TOKEN
-RUN yarn install && yarn cache clean && cp -a node_modules /usr/app/
+RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn install && yarn cache clean && cp -a node_modules /usr/app/
 
 # Below steps copies actual dashboard code and runs build steps
 WORKDIR /usr/app/
@@ -18,7 +18,7 @@ COPY .npmrc.docker .npmrc
 ARG NETWORK_NAME
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production && cat .env.production
 
-RUN yarn install && \
+RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn install && \
     yarn build && \
     NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook && \
     yarn cache clean && \
