@@ -165,7 +165,7 @@
       />
     </Row>
 
-    <HeaderRow header="Informational Metadata" />
+    <HeaderRow header="Informational Metadata" faded={$faded} />
 
     <Row text="Name" faded={$faded} paddingTop={infoBoxPadding}>
       <Name slot="right" faded={$faded} bind:name={$dAppName} />
