@@ -21,8 +21,8 @@
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
   import Domain from './rows/Domain.svelte'
-  import { getFormattedAccounts } from './side-effects'
-  import HeaderRow from '../../info-box/HeaderRow.svelte'
+  import { getFormattedAccounts } from '../side-effects'
+  import HeaderRow from '../../../info-box/HeaderRow.svelte'
   import {
     getFungibleResource,
     getPopulatedResources,
@@ -30,6 +30,7 @@
   } from '@api/utils/resources'
   import { getEntitiesDetails } from '@api/gateway'
   import { XRD_NAME } from '@constants'
+  import { createEventDispatcher } from 'svelte'
 
   export let accounts: Account[]
 
@@ -133,6 +134,9 @@
     XRDAmount = resources
       .then((resources) => resources[$selectedAccount!.address]!)
       .then((resources) => getFungibleResource(XRD_NAME)(resources)?.value)
+
+  const dispatch = createEventDispatcher()
+  $: if ($isDappDefinition) dispatch('dappDefinition', $selectedAccount)
 </script>
 
 <Box my="medium" cx={{ width: '80%' }} wrapper>
