@@ -86,9 +86,6 @@
     const address = $selectedAccount!.address
     const badge = $selectedBadge!
 
-    console.log(
-      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id)
-    )
     send(
       getDeployPackageManifest(wasm, abi, address, badge.address, badge.id),
       [wasm, abi]
