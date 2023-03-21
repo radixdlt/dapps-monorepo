@@ -12,7 +12,6 @@ COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
 
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
-RUN ls -l /root/.npm && du -hs /root/.npm
 
 # Verify what contents where copied.
 # The .dockerignore file can be adjusted to remove unnecessary files.
@@ -33,6 +32,8 @@ COPY --from=base /usr/src/app/build .
 COPY --from=base /usr/src/app/package.json .
 COPY --from=base /usr/src/app/node_modules  .
 
+RUN ls -lah .
+
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
 
@@ -42,6 +43,3 @@ FROM nginx:alpine AS storybook
 
 COPY --from=base /usr/src/app/storybook-static /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-
-FROM scratch AS export-yarn-lock
-COPY --from=base /usr/src/app/yarn.lock /
