@@ -1,5 +1,5 @@
 <script>
-  import DappMetadata from '@components/_navbar-pages/dapp-metadata/DappMetadata.svelte'
+  import DappMetadata from '@components/_navbar-pages/dapp-definition/DappMetadata.svelte'
   import NavbarPage from '@components/_navbar-pages/NavbarPage.svelte'
 </script>
 
