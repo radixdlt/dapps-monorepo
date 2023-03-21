@@ -6,7 +6,7 @@
 
   let options = [
     {
-      label: 'Select this checkbox to configure your account as a dApp',
+      label: 'This account is a DApp definition',
       checked: false
     }
   ]

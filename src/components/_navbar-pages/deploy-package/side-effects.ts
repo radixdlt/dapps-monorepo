@@ -4,7 +4,7 @@ import {
   getEntityNonFungibleIDs,
   getEntityNonFungibleVaults
 } from '@api/gateway'
-import { getMetadata } from '@api/utils/resources'
+import { getStringMetadata } from '@api/utils/resources'
 import { sendTransaction } from '@api/wallet'
 import type { StateEntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
 import { hash } from '@utils'
@@ -211,7 +211,7 @@ export const queryResources = async (selectedAccountAddress: string) => {
   const addName = (entity: StateEntityDetailsResponse) =>
     entity.items.map((item) => ({
       address: item.address,
-      name: getMetadata('name')(item.metadata)
+      name: getStringMetadata('name')(item.metadata)
     }))
 
   const nonFungiblesWithNames = await getEntitiesDetails(addresses).then(

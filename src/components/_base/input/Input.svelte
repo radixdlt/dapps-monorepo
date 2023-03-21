@@ -29,4 +29,11 @@
   })()
 </script>
 
-<input {disabled} use:typeAction bind:value class={style} {placeholder} />
+<input
+  {disabled}
+  on:input
+  use:typeAction
+  bind:value
+  class={style}
+  {placeholder}
+/>

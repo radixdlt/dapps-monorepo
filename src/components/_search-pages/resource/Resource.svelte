@@ -6,17 +6,17 @@
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Row from '@components/info-box/Row.svelte'
-  import { getMetadata } from '@api/utils/resources'
+  import { getStringMetadata } from '@api/utils/resources'
   import type { getEntityDetails } from '@api/gateway'
 
   export let details: ReturnType<typeof getEntityDetails>
 
   $: metadata = details.then(({ metadata }) => metadata)
 
-  $: name = metadata.then(getMetadata('name'))
-  $: symbol = metadata.then(getMetadata('symbol'))
-  $: url = metadata.then(getMetadata('url'))
-  $: description = metadata.then(getMetadata('description'))
+  $: name = metadata.then(getStringMetadata('name'))
+  $: symbol = metadata.then(getStringMetadata('symbol'))
+  $: url = metadata.then(getStringMetadata('url'))
+  $: description = metadata.then(getStringMetadata('description'))
 </script>
 
 <Box>
@@ -63,7 +63,9 @@
         {#each _metadata.items.filter((item) => !['description', 'symbol', 'name', 'url'].some((key) => key === item.key)) ?? [] as metadata}
           <Row>
             <Text slot="left" align="right" bold>{metadata.key}</Text>
-            <Text slot="right">{metadata.value.as_string}</Text>
+            <Text slot="right" align="right" bold
+              >{metadata.value.as_string}</Text
+            >
           </Row>
         {/each}
       {/await}

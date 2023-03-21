@@ -5,7 +5,7 @@
 
   type PlacementVariation = 'end' | 'start'
 
-  export let type: 'info' | 'error' = 'info'
+  export let type: 'info' | 'error' | 'success' = 'info'
   export let show: boolean = false
   export let placement:
     | 'right'
@@ -16,21 +16,24 @@
     | `top-${PlacementVariation}`
     | 'bottom'
     | `bottom-${PlacementVariation}`
+  export let margin: number = 10
 
   $: [popperRef, popperContent] = createPopperActions({
     placement,
     strategy: 'fixed',
-    modifiers: [{ name: 'offset', options: { offset: [0, 10] } }]
+    modifiers: [{ name: 'offset', options: { offset: [0, margin] } }]
   })
 
   $: contentStyle = css({
     backgroundColor: {
       info: '$background',
-      error: '$error'
+      error: '$error',
+      success: '$transparent'
     }[type],
     color: {
       info: '$text',
-      error: 'white'
+      error: 'white',
+      success: '$success'
     }[type],
     borderRadius: '$sm',
     boxShadow: '$sm',
@@ -40,7 +43,7 @@
   })()
 </script>
 
-<div style:width="max-content" style:display="inline-block" use:popperRef>
+<div use:popperRef>
   <slot />
 </div>
 

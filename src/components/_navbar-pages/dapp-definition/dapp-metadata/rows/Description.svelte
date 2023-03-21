@@ -4,6 +4,8 @@
 
   export let faded: boolean
   export let description: string
+
+  $: show = description!!
 </script>
 
 <Box wrapper cx={{ width: '$6xl' }}>
@@ -12,7 +14,7 @@
     transparent={false}
     bind:value={description}
     size="md"
-    placeholder="A brief description for this dApp (maxiumum 258 characters)"
+    placeholder="A brief description for this dApp (maximum 258 characters)"
     maxlength={258}
   />
 </Box>

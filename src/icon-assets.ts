@@ -12,5 +12,9 @@ export const icons = {
   listboxChevron: '/icons/listbox-chevron.svg',
   search: '/icons/search_icon.svg',
   nfts: '/icons/nfts.svg',
-  dappMetadata: '/icons/dapp-metadata.svg'
+  dappMetadata: '/icons/dapp-metadata.svg',
+  plusButton: '/icons/plus-button.svg',
+  removeButton: 'icons/remove-button.svg',
+  trash: '/icons/trash.svg',
+  greenCheck: '/icons/green-check.svg'
 } as const

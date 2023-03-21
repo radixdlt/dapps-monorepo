@@ -1,96 +1,157 @@
 <script lang="ts" context="module">
-  export type FormattedAccount = Account & {
-    dappDefinition: boolean
-    name?: string
-    description?: string
-    domain?: string
+  export enum ValidationResult {
+    LINKED,
+    CANT_LINK,
+    WILL_BE_LINKED,
+    INVALID_INPUT
   }
 </script>
 
 <script lang="ts">
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Box from '@components/_base/box/Box.svelte'
   import Button from '@components/_base/button/Button.svelte'
   import { writable } from 'svelte/store'
   import type { Account } from '@stores'
   import { query } from '@api/query'
-  import Text from '@components/_base/text/Text.svelte'
-  import Row from '@components/info-box/Row.svelte'
   import SelectAccount from './rows/SelectAccount.svelte'
   import SetAsDApp from './rows/SetAsDApp.svelte'
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
-  import Domain from './rows/Domain.svelte'
-  import { getFormattedAccounts } from '../side-effects'
-  import HeaderRow from '../../../info-box/HeaderRow.svelte'
-  import {
-    getFungibleResource,
-    getPopulatedResources,
-    type Resources
-  } from '@api/utils/resources'
-  import { getEntitiesDetails } from '@api/gateway'
+  import { getFormattedAccounts, type FormattedAccount } from '../side-effects'
+  import { getFungibleResource } from '@api/utils/resources'
   import { XRD_NAME } from '@constants'
-  import { createEventDispatcher } from 'svelte'
+  import Text from '@components/_base/text/Text.svelte'
+  import StackList from '@components/stack-list/StackList.svelte'
+  import Entity, {
+    type EntityT
+  } from './rows/linking-metadata-list/Entity.svelte'
+  import Website, {
+    type WebsiteT
+  } from './rows/linking-metadata-list/Website.svelte'
+  import Icon from '@components/_base/icon/Icon.svelte'
+  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   export let accounts: Account[]
-
-  $: resources = accounts.reduce((prev, cur) => {
-    return new Promise((resolve, _) =>
-      prev.then(async (obj) => {
-        const resources = await getPopulatedResources(cur.address)
-        obj[cur.address] = resources
-        resolve(obj)
-      })
-    )
-  }, Promise.resolve({}) as Promise<Record<string, Resources>>)
-
-  const infoBoxPadding = '6px'
 
   const transactionManifest = (
     address: string,
     metadata: { key: string; value: unknown }[]
-  ) =>
-    metadata.reduce(
-      (prev, cur) =>
-        prev +
+  ) => {
+    let manifest = ''
+
+    for (const entity of $entities) {
+      if (entity.requiredProof && entity.requiredProof !== 'AllowAll') {
+        manifest += `CALL_METHOD
+          Address("${$selectedAccount!.address}")
+          "create_proof_by_ids"
+          Address("${entity.requiredProof.split(':')[0]}")
+          Array<NonFungibleLocalId>(NonFungibleLocalId("${
+            entity.requiredProof.split(':')[1]
+          }"));`
+      }
+    }
+
+    for (const { key, value } of metadata) {
+      if (value === undefined) {
+        manifest += `
+        REMOVE_METADATA
+        Address("${address}")
+        "${key}";
         `
-            SET_METADATA
-              Address("${address}")
-              "${cur.key}"
-              Enum(0u8, Enum(0u8, "${cur.value}"));   
-            `,
-      ``
-    )
+      } else {
+        let manifestValue: string = ''
+
+        if (Array.isArray(value)) {
+          manifestValue = `Enum(1u8, Array<Enum>(${value.map(
+            (v) => `Enum(0u8, "${v.address}")`
+          )}));`
+        }
+
+        if (typeof value === 'string') {
+          manifestValue = `Enum(0u8, Enum(0u8, "${value}"));`
+          try {
+            new URL(value)
+            manifestValue = `Enum(0u8, Enum(13u8, ${value}));`
+          } catch {}
+        }
+
+        manifest += `
+          SET_METADATA
+            Address("${address}")
+            "${key}"
+            ${manifestValue}
+          `
+      }
+    }
+
+    for (const entity of $entities) {
+      manifest += `
+        SET_METADATA
+          Address("${entity.address}")
+          "dapp_definition"
+          Enum(0u8, Enum(8u8, Address("${$selectedAccount!.address}")));
+      `
+    }
+    return manifest
+  }
 
   const { send, response, loading } = query('sendTransaction')
 
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
-  const refreshAccounts = () => {
-    getEntitiesDetails(accounts.map((acc) => acc.address)).then((overview) => {
-      $formattedAccounts = getFormattedAccounts(accounts, overview)
-    })
+  const refreshAccounts = async () => {
+    $formattedAccounts = await getFormattedAccounts(accounts)
   }
 
   $: if (accounts) refreshAccounts()
 
   $: if ($response) refreshAccounts()
 
-  const update = () => {
+  const update = async () => {
+    let validationResults: ValidationResult[] = []
+
+    for (const entity of $entities) {
+      validationResults.push(
+        await entity.validation!(
+          $selectedAccount!.address,
+          entityLinkedFromDapp(entity.address)!,
+          $selectedAccount!.resources.nonFungible
+        )
+      )
+    }
+
+    for (const website of $websites) {
+      validationResults.push(
+        await website.validation!(
+          $selectedAccount!.address,
+          websiteLinkedFromDapp(website.url)!
+        )
+      )
+    }
+
+    if (
+      validationResults.some((result) => result === ValidationResult.CANT_LINK)
+    ) {
+      return
+    }
+
     if ($selectedAccount)
       send(
         transactionManifest($selectedAccount.address, [
           {
             key: 'name',
-            value: $setAsDAppDefinition ? $dAppName : ''
+            value: $setAsDAppDefinition ? $dAppName : undefined
           },
           {
             key: 'description',
-            value: $setAsDAppDefinition ? $dAppDescription : ''
+            value: $setAsDAppDefinition ? $dAppDescription : undefined
           },
           {
-            key: 'related_websites',
-            value: $setAsDAppDefinition ? $relatedWebsites : ''
+            key: 'claimed_websites',
+            value: $setAsDAppDefinition ? $websites : undefined
+          },
+          {
+            key: 'claimed_entities',
+            value: $setAsDAppDefinition ? $entities : undefined
           },
           {
             key: 'account_type',
@@ -104,17 +165,36 @@
   const setAsDAppDefinition = writable(false)
   const dAppName = writable('')
   const dAppDescription = writable('')
-  const relatedWebsites = writable('')
+
+  const claimedWebsites = writable<string[]>([])
+  const websitesToBeClaimed = writable<string[]>([])
+  const claimedEntities = writable<string[]>([])
+  const entitiesToBeClaimed = writable<string[]>([])
+
+  const websites = writable<WebsiteT[]>([])
+  const entities = writable<EntityT[]>([])
+
+  const requiredProofs = writable<string[]>([])
+
   let faded = writable(false)
   let isDappDefinition = writable(false)
 
   $: {
     if ($selectedAccount) {
-      dAppName.set($selectedAccount.name || '')
-      dAppDescription.set($selectedAccount.description || '')
-      relatedWebsites.set($selectedAccount.domain || '')
+      $dAppName = $selectedAccount.name || ''
+      $dAppDescription = $selectedAccount.description || ''
+      $claimedWebsites = $selectedAccount.claimedWebsites || []
+      $claimedEntities = $selectedAccount.claimedEntities || []
     }
   }
+
+  $: $websites = $claimedWebsites.map((website) => ({
+    url: website
+  }))
+
+  $: $entities = $claimedEntities.map((entity) => ({
+    address: entity
+  }))
 
   $: if ($selectedAccount)
     isDappDefinition.set(!!$selectedAccount.dappDefinition)
@@ -126,72 +206,180 @@
 
   let showNotEnoughXRDError = false
 
-  $: XRDAmount.then((amount) => {
-    showNotEnoughXRDError = !amount || Number(amount) < 10
-  })
+  $: if (XRDAmount?.then)
+    XRDAmount.then((amount) => {
+      showNotEnoughXRDError = !amount || Number(amount) < 10
+    })
 
   $: if ($selectedAccount)
-    XRDAmount = resources
-      .then((resources) => resources[$selectedAccount!.address]!)
-      .then((resources) => getFungibleResource(XRD_NAME)(resources)?.value)
+    XRDAmount = getFungibleResource(XRD_NAME)($selectedAccount.resources)?.value
 
-  const dispatch = createEventDispatcher()
-  $: if ($isDappDefinition) dispatch('dappDefinition', $selectedAccount)
+  const entityLinkedFromDapp = (entity: string) =>
+    $selectedAccount?.claimedEntities?.includes(entity)
+
+  const websiteLinkedFromDapp = (website: string) =>
+    $selectedAccount?.claimedWebsites?.includes(website)
+
+  const validateWebsite = async (i: number) => {
+    // desparate hack, need to refactor
+    await setTimeout(() => {}, 1000)
+
+    $websites[i]!.validation?.(
+      $selectedAccount!.address,
+      websiteLinkedFromDapp($websites[i]!.url)!
+    )
+  }
+
+  $claimedWebsites.forEach((_, i) => {
+    validateWebsite(i)
+  })
+
+  const validateEntity = async (i: number) => {
+    // desparate hack, need to refactor
+    await setTimeout(() => {}, 1000)
+
+    $entities[i]!.validation?.(
+      $selectedAccount!.address,
+      entityLinkedFromDapp($entities[i]!.address)!,
+      $selectedAccount!.resources.nonFungible
+    )
+  }
+
+  $: $claimedEntities.forEach((_, i) => {
+    validateEntity(i)
+  })
 </script>
 
-<Box my="medium" cx={{ width: '80%' }} wrapper>
-  <Text size="small">
-    A dApp Definition is a Radix account that acts as a unique registration for
-    everything associated with your dApp. This account has special metadata that
-    declares it as a dApp Definition and allows apps like the Radix Wallet to
-    verify its association to domains, components, and resources. After you
-    create an account in the Radix Wallet, here you can set it as a dApp
-    Definition and configure it.
-  </Text>
-</Box>
+<div class="grid">
+  <div style:padding-top="0.5rem" class="left-column-text">
+    Select an Account
+  </div>
 
-<Box bgColor="surface">
-  <InfoBox>
-    <Row text="Select Account" paddingTop={infoBoxPadding}>
-      <SelectAccount
-        slot="right"
-        accounts={$formattedAccounts}
-        bind:selectedAccount={$selectedAccount}
-        bind:showError={showNotEnoughXRDError}
-      />
-    </Row>
+  <div>
+    <SelectAccount
+      accounts={$formattedAccounts}
+      bind:selectedAccount={$selectedAccount}
+      bind:showError={showNotEnoughXRDError}
+    />
 
-    <Row text="dApp Setup" paddingTop="15px">
-      <SetAsDApp
-        slot="right"
-        isDappDefinition={$isDappDefinition}
-        bind:isChecked={$setAsDAppDefinition}
-      />
-    </Row>
+    <SetAsDApp
+      isDappDefinition={$isDappDefinition}
+      bind:isChecked={$setAsDAppDefinition}
+    />
 
-    <HeaderRow header="Informational Metadata" faded={$faded} />
-
-    <Row text="Name" faded={$faded} paddingTop={infoBoxPadding}>
-      <Name slot="right" faded={$faded} bind:name={$dAppName} />
-    </Row>
-
-    <Row text="Description" faded={$faded}>
-      <Description
-        slot="right"
-        faded={$faded}
-        bind:description={$dAppDescription}
-      />
-    </Row>
-
-    <HeaderRow header="Linking Metadata" faded={$faded} />
-
-    <Row text="Related Websites" faded={$faded} paddingTop={infoBoxPadding}>
-      <Domain slot="right" faded={$faded} bind:domain={$relatedWebsites} />
-    </Row>
-  </InfoBox>
-  <Box justify="end">
-    <Button disabled={$loading} on:click={update} loading={$loading}
-      >Update</Button
+    <div
+      style:margin-top="var(--space-xl)"
+      style:margin-bottom="var(--space-sm)"
+      style:font-weight="bold"
+      class:faded={$faded}
     >
-  </Box>
-</Box>
+      dApp Definition Information
+    </div>
+    <Text size="small" muted={$faded}>
+      This provides metadata that the Radix Wallet can use to tell the user
+      about your dApp.
+    </Text>
+  </div>
+
+  <div style:padding-top="0.5rem" class:faded={$faded} class="left-column-text">
+    Name
+  </div>
+
+  <Name bind:name={$dAppName} faded={$faded} />
+
+  <div style:padding-top="0.5rem" class:faded={$faded} class="left-column-text">
+    Description
+  </div>
+
+  <Description bind:description={$dAppDescription} faded={$faded} />
+
+  <div class="left-column-text" class:faded={$faded}>Linked Websites</div>
+
+  <div class:faded={$faded}>
+    <Text size="small" cx={{ marginBottom: '1rem' }}>
+      Configuring your dApp Definition with the websites your dApp uses is a
+      requirement of the Radix Wallet so that it it can catch “fake” websites
+      claiming to be part of your dApp.
+    </Text>
+
+    <StackList
+      let:i
+      on:add={() => ($websites = [...$websites, { url: '' }])}
+      bind:inputs={$websites}
+    >
+      <Website
+        bind:website={$websites[i]}
+        disabled={i < $claimedWebsites.length}
+        faded={$faded}
+      />
+      <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
+        <Text pointer color="link">+ Add a Linked Website</Text>
+      </div>
+
+      <div slot="remove-button">
+        {#if !$faded}
+          <Icon type="trash" width="xs" height="xs" interactive filter="" />
+        {/if}
+      </div>
+    </StackList>
+  </div>
+
+  <div class="left-column-text" class:faded={$faded}>Linked Entities</div>
+
+  <div>
+    <StackList
+      let:i
+      on:add={() => ($entities = [...$entities, { address: '' }])}
+      bind:inputs={$entities}
+    >
+      <Entity
+        bind:entity={$entities[i]}
+        disabled={i < $claimedEntities.length}
+        faded={$faded}
+      />
+      <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
+        <Text pointer color="link">+ Add a Linked Entity</Text>
+      </div>
+      <div slot="remove-button">
+        {#if !$faded}
+          <Icon type="trash" width="xs" height="xs" interactive filter="" />
+        {/if}
+      </div>
+    </StackList>
+  </div>
+</div>
+<div class="update-button">
+  <Button on:click={update}>
+    {#if $loading}
+      <div style:height="60%" style:aspect-ratio="1/1">
+        <LoadingSpinner />
+      </div>
+    {:else}
+      Update Account
+    {/if}
+  </Button>
+</div>
+
+<style>
+  .faded {
+    color: var(--colors-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 10rem 4fr;
+    gap: var(--space-md);
+    height: 100%;
+  }
+
+  .left-column-text {
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .update-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-xl);
+  }
+</style>

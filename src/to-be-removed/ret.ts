@@ -271,7 +271,6 @@ interface RadixEngineToolkitFFI {
 }
 
 export const getTxManifest = async (rawHex: string) => {
-  console.log(rawHex)
   const toolkit: RadixEngineToolkit = await RadixEngineToolkit.fromPath(
     '/ret/radix_engine_toolkit.wasm'
   )
@@ -280,6 +279,5 @@ export const getTxManifest = async (rawHex: string) => {
     Buffer.from(rawHex, 'hex')
   )
 
-  console.log(manifest)
   return manifest
 }
