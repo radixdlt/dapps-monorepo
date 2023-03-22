@@ -1,0 +1,60 @@
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+storybook:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: kisharnet-dashboard-storybook.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+dashboard:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  params:
+    PUBLIC_NETWORK_NAME: "kisharnet"
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: kisharnet-dashboard.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true
+
+alertmanager:
+  env: "prod"
+  nameOverride: "dashboard-amcfg"
+  slackConfig:
+    channel: "feed--alerts-kisharnet-dashboard"
+  secrets:
+    region: eu-west-2
+    name: "rtlj-prod/eks/dashboard/kisharnet/alertmanager-integration-keys"
