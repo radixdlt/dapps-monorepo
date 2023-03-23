@@ -3,7 +3,8 @@ export const Network = {
   HAMMUNET: 'hammunet',
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
-  BETANET: 'betanet'
+  BETANET: 'betanet',
+  KISHARNET: 'kisharnet'
 }
 
 export const NETWORK_CONFIG = {
@@ -32,6 +33,12 @@ export const NETWORK_CONFIG = {
     url: 'https://nebunet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_b_1prfj0lp3hd2dhjkk2v7apr4vwtrcnn9y67393de7r5gqgpm83a'
+  },
+  [Network.KISHARNET]: {
+    id: 12,
+    url: 'https://kisharnet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_c_1prfj0lp3hd2dhjkk2v7apr4vwtrcnn9y67393de7r5gqgpm83a'
   }
 } as const
 
