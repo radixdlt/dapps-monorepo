@@ -1,8 +1,9 @@
 import {
+  getEntitiesDetails,
   getEntityDetails,
-  getEntityNonFungibleIDs,
-  getEntityResources
+  getEntityNonFungibleIDs
 } from '@api/gateway'
+import { getMetadata } from '@api/utils/resources'
 import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
 
@@ -55,19 +56,21 @@ export const getDeployPackageManifest = (
 }
 
 export const queryResources = async (selectedAccountAddress: string) => {
-  const { non_fungible_resources } = await getEntityResources(
-    selectedAccountAddress
-  )
+  const details = await getEntityDetails(selectedAccountAddress)
+  const non_fungible_resources = details.non_fungible_resources || { items: [] }
 
-  const nonFungiblesWithNames = await Promise.all(
-    non_fungible_resources.items.map(async (nft) => ({
-      ...nft,
-      name: await getEntityDetails(nft.address).then(
-        (response) =>
-          response.metadata.items.find((item) => item.key === 'name')?.value
-      )
+  if (non_fungible_resources.items.length === 0) {
+    return []
+  }
+
+  const nonFungiblesWithNames = await getEntitiesDetails(
+    non_fungible_resources.items.map((nft) => nft.resource_address)
+  ).then((response) => {
+    return response.items.map((item) => ({
+      ...item,
+      name: getMetadata('name')(item.metadata)
     }))
-  )
+  })
 
   const nfts = await Promise.all(
     nonFungiblesWithNames.map(async (nft) => ({

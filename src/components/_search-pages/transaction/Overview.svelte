@@ -19,11 +19,11 @@
       promise={tx.then(({ status }) => status)}
       let:data
     >
-      {#if data === 'committed_success'}
+      {#if data === 'CommittedSuccess'}
         <Text color="success">{data}</Text>
       {/if}
 
-      {#if data === 'committed_failure' || data === 'rejected'}
+      {#if data === 'CommittedFailure' || data === 'Rejected'}
         <Text color="error">{data}</Text>
       {/if}
     </AwaitedRow>

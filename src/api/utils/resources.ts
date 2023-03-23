@@ -1,18 +1,17 @@
-import {
-  getEntityNonFungibleIDs,
-  getEntityOverview,
-  getEntityResources
-} from '@api/gateway'
+import { getEntitiesDetails, getEntityDetails } from '@api/gateway'
 import type {
   EntityMetadataCollection,
-  EntityOverviewResponseEntityItem,
-  EntityResourcesResponse
+  FungibleResourcesCollection,
+  FungibleResourcesCollectionItemGloballyAggregated,
+  NonFungibleResourcesCollection,
+  NonFungibleResourcesCollectionItemGloballyAggregated,
+  StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
 
 const fungibleResourceDisplayLabel = (
-  resource: EntityOverviewResponseEntityItem
+  resource: StateEntityDetailsResponseItem
 ) =>
   pipe(
     () => [
@@ -26,7 +25,7 @@ const fungibleResourceDisplayLabel = (
   )()
 
 const nonFungibleResourceDisplayLabel = (
-  resource: EntityOverviewResponseEntityItem,
+  resource: StateEntityDetailsResponseItem,
   id: string
 ) =>
   pipe(
@@ -35,63 +34,68 @@ const nonFungibleResourceDisplayLabel = (
       name
         ? `${accountLabel({
             address: getNFTAddress(resource.address, id),
-            label: name
+            label: name || ''
           })}`
         : `${getNFTAddress(resource.address, id)}`
   )()
 
 export const getMetadata =
-  (key: string) => (metadata: EntityMetadataCollection) =>
-    metadata.items.find((item) => item.key === key)?.value
+  (key: string) => (metadata?: EntityMetadataCollection) =>
+    metadata?.items.find((item) => item.key === key)?.value?.as_string
 
 const transformNonFungible = async (
-  nonFungible: EntityResourcesResponse['non_fungible_resources'],
-  accountAddress: string
+  nonFungible: NonFungibleResourcesCollection
 ) => {
-  const nonFungibleEntities = await getEntityOverview(
-    nonFungible.items.map(({ address }) => address)
-  ).then(({ entities }) => entities)
-
-  const nonFungibleIds = await Promise.all(
-    nonFungibleEntities.map(async (entity) => {
-      const { non_fungible_ids } = await getEntityNonFungibleIDs(
-        accountAddress,
-        entity.address
-      )
-      return non_fungible_ids.items.map(({ non_fungible_id }) => ({
-        label: nonFungibleResourceDisplayLabel(entity, non_fungible_id),
-        value: non_fungible_id,
-        address: `${entity.address}:${non_fungible_id}`,
-        name: getMetadata('name')(entity.metadata)
-      }))
-    })
+  const nonFungibleEntities = await getEntitiesDetails(
+    nonFungible.items.map(({ resource_address }) => resource_address)
   )
 
-  return nonFungibleIds.flat()
+  const nonFungiblesMap = nonFungibleEntities.items.reduce(
+    (prev, next: StateEntityDetailsResponseItem) => {
+      prev[next.address] = next
+      return prev
+    },
+    {} as Record<string, StateEntityDetailsResponseItem>
+  )
+
+  return (
+    nonFungible.items as NonFungibleResourcesCollectionItemGloballyAggregated[]
+  ).map(({ resource_address, non_fungible_id }) => {
+    const entity = nonFungiblesMap[
+      resource_address
+    ] as StateEntityDetailsResponseItem
+    return {
+      label: nonFungibleResourceDisplayLabel(entity, non_fungible_id),
+      value: non_fungible_id,
+      address: `${entity.address}:${non_fungible_id}`,
+      name: getMetadata('name')(entity.metadata)
+    }
+  })
 }
 
-const transformFungible = async (
-  fungible: EntityResourcesResponse['fungible_resources']
-) => {
-  const fungibleEntities = await getEntityOverview(
-    fungible.items.map(({ address }) => address)
-  ).then(({ entities }) => entities)
+const transformFungible = async (fungible: FungibleResourcesCollection) => {
+  const fungibleEntities = await getEntitiesDetails(
+    fungible.items.map(({ resource_address }) => resource_address)
+  )
 
-  return fungibleEntities.map((entity) => ({
+  return fungibleEntities.items.map((entity) => ({
     label: fungibleResourceDisplayLabel(entity),
-    value: fungible.items.find(({ address }) => address === entity.address)!
-      .amount.value,
+    value: (
+      fungible.items.find(
+        ({ resource_address }) => resource_address === entity.address
+      ) as FungibleResourcesCollectionItemGloballyAggregated
+    )?.amount,
     address: entity.address,
     name: getMetadata('name')(entity.metadata)
   }))
 }
 
 const getOverview =
-  (accountAddress: string) =>
-  async ({
-    non_fungible_resources,
-    fungible_resources
-  }: EntityResourcesResponse) => {
+  (accountAddress: string) => async (item: StateEntityDetailsResponseItem) => {
+    const {
+      non_fungible_resources = { items: [] },
+      fungible_resources = { items: [] }
+    } = item
     const fungible =
       fungible_resources.items.length > 0
         ? await transformFungible(fungible_resources)
@@ -99,17 +103,17 @@ const getOverview =
 
     const nonFungible =
       non_fungible_resources.items.length > 0
-        ? await transformNonFungible(non_fungible_resources, accountAddress)
+        ? await transformNonFungible(non_fungible_resources)
         : []
 
-    return { fungible, nonFungible }
+    return { accountAddress, item, fungible, nonFungible }
   }
 
 const getResource =
   (type: 'fungible' | 'nonFungible') =>
   (name: string) =>
   (resources: Resources) =>
-    resources[type].find((resource) => resource.name === name)
+    resources[type].find((resource: any) => resource.name === name)
 
 export type Resources = Awaited<ReturnType<typeof getPopulatedResources>>
 
@@ -118,6 +122,6 @@ export const getNonFungibleResource = getResource('nonFungible')
 
 export const getPopulatedResources = (accountAddress: string) =>
   pipe(
-    () => getEntityResources(accountAddress),
+    () => getEntityDetails(accountAddress),
     andThen(getOverview(accountAddress))
   )()

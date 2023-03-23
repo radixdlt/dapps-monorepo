@@ -1,7 +1,8 @@
 import {
   Configuration,
   StateApi,
-  TransactionApi
+  TransactionApi,
+  type StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
 import { CURRENT_NETWORK } from '../../src/network'
@@ -12,13 +13,10 @@ const stateApi = new StateApi(config)
 const transactionApi = new TransactionApi(config)
 
 export const getTransactionDetails = pipe(
-  (txID: string, stateVersion?: number) =>
+  (intent_hash_hex: string, stateVersion?: number) =>
     transactionApi.transactionCommittedDetails({
       transactionCommittedDetailsRequest: {
-        transaction_identifier: {
-          type: 'intent_hash',
-          value_hex: txID
-        },
+        intent_hash_hex,
         ...(stateVersion
           ? {
               at_ledger_state: {
@@ -43,37 +41,41 @@ export const getTransactionDetails = pipe(
   }))
 )
 
-export const getEntityOverview = async (addresses: string[]) =>
-  stateApi.entityOverview({ entityOverviewRequest: { addresses } })
-
-export const getEntityResources = async (address: string) =>
-  stateApi.entityResources({ entityResourcesRequest: { address } })
+export const getEntitiesDetails = async (addresses: string[]) =>
+  stateApi.stateEntityDetails({
+    stateEntityDetailsRequest: { addresses }
+  })
 
 export const getEntityDetails = (address: string) =>
-  stateApi.entityDetails({ entityDetailsRequest: { address } })
+  stateApi
+    .stateEntityDetails({
+      stateEntityDetailsRequest: { addresses: [address] }
+    })
+    .then(({ items }) => items[0] as StateEntityDetailsResponseItem)
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
   nftAddress: string
 ) =>
-  stateApi.entityNonFungibleIds({
-    entityNonFungibleIdsRequest: {
+  stateApi.entityNonFungibleIdsPage({
+    stateEntityNonFungibleIdsPageRequest: {
       address: accountAddress,
+      vault_address: accountAddress,
       resource_address: nftAddress
     }
   })
 
 export const getNonFungibleData = (address: string, id: string) =>
-  stateApi.nonFungibleIdData({
-    nonFungibleDataRequest: {
-      address: address,
-      non_fungible_id: id
+  stateApi.nonFungibleDetails({
+    stateNonFungibleDetailsRequest: {
+      resource_address: address,
+      non_fungible_ids: [id]
     }
   })
 
 export const getNonFungibleIDs = (address: string) =>
   stateApi.nonFungibleIds({
-    nonFungibleIdsRequest: {
-      address
+    stateNonFungibleIdsRequest: {
+      resource_address: address
     }
   })

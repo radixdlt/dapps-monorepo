@@ -5,16 +5,22 @@ const metadata = {
   items: [
     {
       key: 'name',
-      value: 'Test'
+      value: {
+        as_string: 'Test'
+      }
     },
     {
       key: 'description',
-      value: `this is a description
-with multiple lines`
+      value: {
+        as_string: `this is a description
+        with multiple lines`
+      }
     },
     {
       key: 'other',
-      value: 'thing'
+      value: {
+        as_string: 'other value'
+      }
     }
   ]
 }
@@ -33,51 +39,46 @@ const Template = (args: any) => ({
 })
 
 export const WithoutResources = Template.bind(null, {
-  resources: new Promise((resolve) =>
-    resolve({
-      fungible: [],
-      nonFungible: []
-    })
-  ),
-  details: new Promise((resolve) => resolve({ metadata }))
+  details: Promise.resolve({
+    item: { metadata },
+    fungible: [],
+    nonFungible: []
+  })
 })
 
 export const WithResources = Template.bind(null, {
-  resources: new Promise((resolve) =>
-    resolve({
-      fungible: [
-        {
-          address: 'rdx_10000000000',
-          label: 'XRD',
-          value: '100'
-        },
-        {
-          address: 'rdx_10000000000',
-          label: 'BTC',
-          value: '190000000'
-        }
-      ],
-      nonFungible: [
-        {
-          address: 'rdx_10000000000',
-          label: 'FLOOP (Test) 0x0000000:#1#'
-        },
-        {
-          address: 'rdx_10000000000',
-          label: 'SMARF (Test) 0x0000000:#1#'
-        },
-        {
-          address: 'rdx_10000000000',
-          label: 'PERP (Test) 0x0000000:#12#'
-        }
-      ]
-    })
-  ),
-  details: new Promise((resolve) => resolve({ metadata }))
+  details: Promise.resolve({
+    item: { metadata },
+    fungible: [
+      {
+        address: 'rdx_10000000000',
+        label: 'XRD',
+        value: '100'
+      },
+      {
+        address: 'rdx_10000000000',
+        label: 'BTC',
+        value: '190000000'
+      }
+    ],
+    nonFungible: [
+      {
+        address: 'rdx_10000000000',
+        label: 'FLOOP (Test) 0x0000000:#1#'
+      },
+      {
+        address: 'rdx_10000000000',
+        label: 'SMARF (Test) 0x0000000:#1#'
+      },
+      {
+        address: 'rdx_10000000000',
+        label: 'PERP (Test) 0x0000000:#12#'
+      }
+    ]
+  })
 })
 
 export const Loading = Template.bind(null, {
-  resources: new Promise(() => {}),
   details: new Promise(() => {})
 })
 

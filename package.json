@@ -92,7 +92,7 @@
   "type": "module",
   "dependencies": {
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
-    "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-beta.1.3",
+    "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-rc.1.1",
     "@radixdlt/radix-dapp-toolkit": "0.1.0-alpha.10",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@tanstack/svelte-table": "^8.5.11",

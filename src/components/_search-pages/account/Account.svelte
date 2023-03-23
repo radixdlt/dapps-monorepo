@@ -6,27 +6,23 @@
   import Row from '@components/info-box/Row.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { EntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
   import type { getPopulatedResources } from '@api/utils/resources'
 
-  export let resources: ReturnType<typeof getPopulatedResources>
-  export let details: Promise<Pick<EntityDetailsResponse, 'metadata'>>
-
-  const values = Promise.all([resources, details])
+  export let details: ReturnType<typeof getPopulatedResources>
 </script>
 
 <Box>
-  {#await values}
+  {#await details}
     <SkeletonLoader />
-  {:then [resources, details]}
-    {#if resources.fungible.length === 0 && resources.nonFungible.length === 0}
+  {:then details}
+    {#if details.fungible.length === 0 && details.nonFungible.length === 0}
       This account doesn't hold any tokens or NFTs
     {:else}
       <Card>
         <Text bold slot="header">Tokens (fungible resources)</Text>
         <Box bgColor="surface" p="none" slot="body">
           <InfoBox>
-            {#each resources.fungible as fungible}
+            {#each details.fungible as fungible}
               <Row>
                 <Text slot="left" bold underlined align="right">
                   <a href="/resource/{fungible.address}">{fungible.label}</a>
@@ -44,7 +40,7 @@
         <Text bold slot="header">NFTs (nonfungible resources)</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
-            {#each resources.nonFungible as nft}
+            {#each details.nonFungible as nft}
               <Row>
                 <Text slot="left" bold underlined>
                   <a href="/nft/{nft.address}">{nft.label}</a>
@@ -60,7 +56,7 @@
         <Text bold slot="header">Metadata</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
-            {#each details.metadata.items as metadata}
+            {#each details.item.metadata.items as metadata}
               <Row>
                 <Text slot="left" bold align="right">{metadata.key}</Text>
                 <Textarea
@@ -68,7 +64,7 @@
                   editable={false}
                   dynamic
                   size="single-line"
-                  value={metadata.value}
+                  value={metadata.value.as_string}
                   padding="$0"
                   fontSize="$md"
                 />

@@ -9,6 +9,6 @@ export const parameters = {
     }
   },
   mockAddonConfigs: {
-    globalMockData: [mockGatewayCall('/entity/resources'), mockGatewayCall('/entity/overview'), mockGatewayCall('/entity/non-fungible/ids')]
+    globalMockData: [mockGatewayCall('/state/entity/details'), mockGatewayCall('/state/non-fungible/ids')]
   }
 }
