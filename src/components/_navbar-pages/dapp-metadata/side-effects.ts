@@ -1,3 +1,4 @@
+import { getMetadata } from '@api/utils/resources'
 import type {
   EntityOverviewResponse,
   EntityOverviewResponseEntityItem
@@ -31,15 +32,9 @@ export const getFormattedAccounts = (
       label: `${label}${isDApp ? ' - dApp definition' : ''}`,
       address,
       dappDefinition: isDApp,
-      name: overviews[address]?.metadata.items.find(
-        (item) => item.key === 'name'
-      )?.value,
-      description: overviews[address]?.metadata.items.find(
-        (item) => item.key === 'description'
-      )?.value,
-      domain: overviews[address]?.metadata.items.find(
-        (item) => item.key === 'domain'
-      )?.value
+      name: getMetadata('name')(metadata),
+      description: getMetadata('description')(metadata),
+      domain: getMetadata('domain')(metadata)
     }
   })
 }
