@@ -54,9 +54,9 @@
         prev +
         `
             SET_METADATA
-              ComponentAddress("${address}")
+              Address("${address}")
               "${cur.key}"
-              "${cur.value}";      
+              Enum(0u8, Enum(0u8, "${cur.value}"));   
             `,
       ``
     )
