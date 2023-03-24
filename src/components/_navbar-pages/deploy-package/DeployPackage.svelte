@@ -171,7 +171,7 @@
         placeholder="Select Account"
         bind:selected={$selectedAccount}
         options={[
-          ...accounts.map((account, i) => ({
+          ...accounts.map((account) => ({
             ...account,
             label: `${account.label} (${shortenAddress(account.address)})`
           }))
@@ -184,7 +184,7 @@
           placeholder="Select Badge NFT"
           bind:selected={$selectedBadge}
           options={[
-            ...$nonFungibleResources.map((resource, i) => ({
+            ...$nonFungibleResources.map((resource) => ({
               ...resource,
               label: `${resource.name ?? ''} ${
                 resource.name ? '(' : ' '
