@@ -47,7 +47,7 @@ jobs:
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -258,7 +258,7 @@ jobs:
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -320,7 +320,7 @@ jobs:
           elif [ "${{ github.event.action }}" = "published" ]; then
             echo "NETWORK_NAME=betanet" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -429,8 +429,7 @@ jobs:
 
   deploy_hammunet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
@@ -541,7 +540,8 @@ jobs:
 
   deploy_kisharnet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' ) ||
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
