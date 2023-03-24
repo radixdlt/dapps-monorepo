@@ -1,7 +1,7 @@
 import type { Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { Buffer } from 'buffer'
-import CryptoJS from 'crypto-js'
+import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
 
 const XRD_DECIMALS = 18
@@ -39,7 +39,7 @@ export function bufferFromHex(hex: string): Buffer {
 
 export function hash(message: string): Buffer {
   return bufferFromHex(
-    CryptoJS.SHA256(CryptoJS.enc.Hex.parse(message)).toString()
+    blake.blake2bHex(bufferFromHex(message), undefined, 32).toString()
   )
 }
 
