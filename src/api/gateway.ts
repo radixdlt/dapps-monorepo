@@ -49,19 +49,34 @@ export const getEntitiesDetails = async (addresses: string[]) =>
 export const getEntityDetails = (address: string) =>
   stateApi
     .stateEntityDetails({
-      stateEntityDetailsRequest: { addresses: [address] }
+      stateEntityDetailsRequest: {
+        addresses: [address],
+        aggregation_level: 'Vault'
+      }
     })
     .then(({ items }) => items[0] as StateEntityDetailsResponseItem)
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
-  nftAddress: string
+  nftAddress: string,
+  vaultAddress: string
 ) =>
   stateApi.entityNonFungibleIdsPage({
     stateEntityNonFungibleIdsPageRequest: {
       address: accountAddress,
-      vault_address: accountAddress,
+      vault_address: vaultAddress,
       resource_address: nftAddress
+    }
+  })
+
+export const getEntityNonFungibleVaults = (
+  accountAddress: string,
+  resourceAddress: string
+) =>
+  stateApi.entityNonFungibleResourceVaultPage({
+    stateEntityNonFungibleResourceVaultsPageRequest: {
+      address: accountAddress,
+      resource_address: resourceAddress
     }
   })
 

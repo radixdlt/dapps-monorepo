@@ -1,10 +1,12 @@
 import {
   getEntitiesDetails,
   getEntityDetails,
-  getEntityNonFungibleIDs
+  getEntityNonFungibleIDs,
+  getEntityNonFungibleVaults
 } from '@api/gateway'
 import { getMetadata } from '@api/utils/resources'
 import { sendTransaction } from '@api/wallet'
+import type { StateEntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
 import { hash } from '@utils'
 
 export const getCreateBadgeManifest = (accountAddress: string) => `
@@ -60,26 +62,44 @@ export const queryResources = async (selectedAccountAddress: string) => {
     return []
   }
 
-  const nonFungiblesWithNames = await getEntitiesDetails(
-    non_fungible_resources.items.map((nft) => nft.resource_address)
-  ).then((response) => {
-    return response.items.map((item) => ({
-      ...item,
+  const addresses = non_fungible_resources.items.map(
+    (nft) => nft.resource_address
+  )
+
+  const addName = (entity: StateEntityDetailsResponse) =>
+    entity.items.map((item) => ({
+      address: item.address,
       name: getMetadata('name')(item.metadata)
     }))
-  })
+
+  const nonFungiblesWithNames = await getEntitiesDetails(addresses).then(
+    addName
+  )
+
+  const vaults = await Promise.all(
+    nonFungiblesWithNames.map(async ({ address }) => ({
+      resource: address,
+      vault: await (
+        await getEntityNonFungibleVaults(selectedAccountAddress, address)
+      ).items[0]!.vault_address
+    }))
+  )
 
   const nfts = await Promise.all(
     nonFungiblesWithNames.map(async (nft) => ({
       name: nft.name,
-      ...(await getEntityNonFungibleIDs(selectedAccountAddress!, nft.address))
+      ...(await getEntityNonFungibleIDs(
+        selectedAccountAddress!,
+        nft.address,
+        vaults.find((vault) => vault.resource === nft.address)!.vault
+      ))
     }))
   )
 
   return nfts.reduce(
     (prev, cur) => [
       ...prev,
-      ...cur.non_fungible_ids.items.map(({ non_fungible_id }) => ({
+      ...cur.items.map(({ non_fungible_id }) => ({
         address: cur.resource_address,
         id: non_fungible_id,
         name: cur.name
