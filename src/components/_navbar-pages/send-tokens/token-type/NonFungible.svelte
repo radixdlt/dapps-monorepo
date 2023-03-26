@@ -25,19 +25,14 @@
         `
       CALL_METHOD 
         Address("${fromAccount}") 
-        "withdraw_by_ids"
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
-        Address("${cur.resourceAddress}");
-      
-      TAKE_FROM_WORKTOP
+        "withdraw_non_fungibles"
         Address("${cur.resourceAddress}")
-        Bucket("${i}");
+        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
 
       CALL_METHOD
         Address("${toAccount}")
-        "deposit"
-        Bucket("${i}");
-        
+        "deposit_batch"
+        Expression("ENTIRE_WORKTOP");
         ` + prev,
       ``
     )}

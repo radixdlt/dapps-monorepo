@@ -30,7 +30,7 @@ export default class RadixEngineToolkit {
   static async fromWasmModuleBuffer(
     buffer: Uint8Array
   ): Promise<RadixEngineToolkit> {
-    const wasmInstance: WebAssembly.WebAssemblyInstantiatedSource =
+    let wasmInstance: WebAssembly.WebAssemblyInstantiatedSource =
       await WebAssembly.instantiate(buffer)
     return new RadixEngineToolkit(wasmInstance.instance)
   }
@@ -43,7 +43,7 @@ export default class RadixEngineToolkit {
   static async fromPath(path: string): Promise<RadixEngineToolkit> {
     const contents: any = await fetch(path)
     const buffer: Uint8Array = await contents.arrayBuffer()
-    return this.fromWasmModuleBuffer(buffer)
+    return await this.fromWasmModuleBuffer(buffer)
   }
 
   /**
@@ -62,7 +62,6 @@ export default class RadixEngineToolkit {
       request,
       this.internalFFI.decompile_unknown_transaction_intent
     )
-
     return (
       response?.['value']?.['signed_intent']?.['intent']?.['manifest']?.[
         'instructions'
@@ -90,15 +89,15 @@ export default class RadixEngineToolkit {
     wasmFunction: (pointer: number) => number
   ): O {
     // Write the request object to memory and get a pointer to where it was written
-    const requestPointer: number = this.writeObjectToMemory(
+    let requestPointer: number = this.writeObjectToMemory(
       request as unknown as object
     )
 
     // Call the WASM function with the request pointer
-    const responsePointer: number = wasmFunction(requestPointer)
+    let responsePointer: number = wasmFunction(requestPointer)
 
     // Read and deserialize the response
-    const response: O = this.readObjectFromMemory(responsePointer)
+    let response: O = this.readObjectFromMemory(responsePointer)
 
     // Deallocate the request and response pointers
     this.deallocateMemory(requestPointer)
@@ -164,13 +163,13 @@ export default class RadixEngineToolkit {
    */
   private writeStringToMemory(str: string): number {
     // UTF-8 encode the string and add the null terminator to it.
-    const nullTerminatedUtf8EncodedString: Uint8Array = new Uint8Array([
+    let nullTerminatedUtf8EncodedString: Uint8Array = new Uint8Array([
       ...new TextEncoder().encode(str),
       0
     ])
 
     // Allocate memory for the string
-    const memoryPointer: number = this.allocateMemory(
+    let memoryPointer: number = this.allocateMemory(
       nullTerminatedUtf8EncodedString.length
     )
 
@@ -200,7 +199,7 @@ export default class RadixEngineToolkit {
     const length: number = view.findIndex((byte) => byte === 0)
 
     // Read the UTF-8 encoded string from memory
-    const nullTerminatedUtf8EncodedString: Uint8Array = new Uint8Array(
+    let nullTerminatedUtf8EncodedString: Uint8Array = new Uint8Array(
       this.internalFFI.memory.buffer,
       pointer,
       length
@@ -218,7 +217,7 @@ export default class RadixEngineToolkit {
    */
   private writeObjectToMemory(obj: object): number {
     // Serialize the object to json
-    const serializedObject: string = this.serializeObject(obj)
+    let serializedObject: string = this.serializeObject(obj)
 
     // Write the string to memory and return the pointer
     return this.writeStringToMemory(serializedObject)
@@ -232,7 +231,7 @@ export default class RadixEngineToolkit {
    */
   private readObjectFromMemory<T>(pointer: number): T {
     // Read the UTF-8 encoded null-terminated string from memory
-    const serializedObject: string = this.readStringFromMemory(pointer)
+    let serializedObject: string = this.readStringFromMemory(pointer)
 
     // Deserialize and return to the caller
     return this.deserializeString(serializedObject)
@@ -275,8 +274,11 @@ export const getTxManifest = async (rawHex: string) => {
   const toolkit: RadixEngineToolkit = await RadixEngineToolkit.fromPath(
     '/ret/radix_engine_toolkit.wasm'
   )
+
   const manifest = toolkit.manifestStringFromCompiledIntent(
     Buffer.from(rawHex, 'hex')
   )
+
+  console.log(manifest)
   return manifest
 }
