@@ -59,11 +59,11 @@ describe('#utils', () => {
     expect(result).toEqual(expected)
   })
 
-  it('Should return a sha256 hash from byte array', () => {
+  it('Should return a blake hash from byte array', () => {
     const hex = '01020304'
     const expected = Buffer.from([
-      159, 100, 167, 71, 225, 185, 127, 19, 31, 171, 182, 180, 71, 41, 108, 155,
-      111, 2, 1, 231, 159, 179, 197, 53, 110, 108, 119, 232, 155, 106, 128, 106
+      40, 81, 126, 76, 223, 108, 144, 121, 140, 26, 152, 59, 3, 114, 124, 167,
+      116, 60, 33, 163, 136, 6, 114, 66, 156, 207, 197, 189, 21, 234, 95, 114
     ])
     const result = hash(hex)
     expect(result).toEqual(expected)
