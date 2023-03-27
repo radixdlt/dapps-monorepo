@@ -2,10 +2,35 @@ import {
   Configuration,
   StateApi,
   TransactionApi,
+  type FungibleResourcesCollection,
+  type FungibleResourcesCollectionItemVaultAggregated,
+  type NonFungibleResourcesCollection,
+  type NonFungibleResourcesCollectionItemVaultAggregated,
+  type StateEntityDetailsResponse,
   type StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
 import { CURRENT_NETWORK } from '../../src/network'
+
+export type FungibleResourcesVaultCollection = Omit<
+  FungibleResourcesCollection,
+  'items'
+> & {
+  items: FungibleResourcesCollectionItemVaultAggregated[]
+}
+
+export type NonFungibleResourcesVaultCollection = Omit<
+  NonFungibleResourcesCollection,
+  'items'
+> & {
+  items: NonFungibleResourcesCollectionItemVaultAggregated[]
+}
+
+export type StateEntityDetailsVaultResponseItem =
+  StateEntityDetailsResponseItem & {
+    fungible_resources: FungibleResourcesVaultCollection
+    non_fungible_resources: NonFungibleResourcesVaultCollection
+  }
 
 const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
 
@@ -43,8 +68,12 @@ export const getTransactionDetails = pipe(
 
 export const getEntitiesDetails = async (addresses: string[]) =>
   stateApi.stateEntityDetails({
-    stateEntityDetailsRequest: { addresses }
-  })
+    stateEntityDetailsRequest: { addresses, aggregation_level: 'Vault' }
+  }) as Promise<
+    StateEntityDetailsResponse & {
+      items: StateEntityDetailsVaultResponseItem[]
+    }
+  >
 
 export const getEntityDetails = (address: string) =>
   stateApi
@@ -54,7 +83,7 @@ export const getEntityDetails = (address: string) =>
         aggregation_level: 'Vault'
       }
     })
-    .then(({ items }) => items[0] as StateEntityDetailsResponseItem)
+    .then(({ items }) => items[0] as StateEntityDetailsVaultResponseItem)
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
@@ -81,8 +110,8 @@ export const getEntityNonFungibleVaults = (
   })
 
 export const getNonFungibleData = (address: string, id: string) =>
-  stateApi.nonFungibleDetails({
-    stateNonFungibleDetailsRequest: {
+  stateApi.nonFungibleData({
+    stateNonFungibleDataRequest: {
       resource_address: address,
       non_fungible_ids: [id]
     }

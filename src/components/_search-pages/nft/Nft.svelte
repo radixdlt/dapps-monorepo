@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getEntityDetails, getNonFungibleData } from '@api/gateway'
+  import { getMetadata } from '@api/utils/resources'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Row from '@components/info-box/Row.svelte'
@@ -41,19 +42,11 @@
       </Row>
 
       <AwaitedRow text="Name" promise={entities} let:data>
-        <Text
-          >{data.metadata.items.find(
-            (entry) => entry.key.toLowerCase() === 'name'
-          )?.value}</Text
-        >
+        <Text>{getMetadata('name')(data.metadata)}</Text>
       </AwaitedRow>
 
       <AwaitedRow text="Description" promise={entities} let:data>
-        <Text
-          >{data.metadata.items.find(
-            (entry) => entry.key.toLowerCase() === 'description'
-          )?.value}</Text
-        >
+        <Text>{getMetadata('description')(data.metadata)}</Text>
       </AwaitedRow>
     </InfoBox>
   </Card>
