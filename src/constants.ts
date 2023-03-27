@@ -36,7 +36,9 @@ export const NETWORK_CONFIG = {
   },
   [Network.KISHARNET]: {
     id: 12,
-    url: 'https://kisharnet-gateway.radixdlt.com'
+    url: 'https://kisharnet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_c_1pxj2kh299t3ytntw4y47dd85d8lk6u8k0gmvh9fngejs2mv4jr'
   }
 } as const
 

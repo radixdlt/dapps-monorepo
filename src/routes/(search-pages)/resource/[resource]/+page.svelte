@@ -13,10 +13,10 @@
     ({ details }) =>
       ((
         {
-          fungible_resource: 'fungible',
-          non_fungible_resource: 'non-fungible'
+          FungibleResource: 'fungible',
+          NonFungibleResource: 'non-fungible'
         } as const
-      )[details!.discriminator as string]!)
+      )[details!.type as string]!)
   )
 </script>
 

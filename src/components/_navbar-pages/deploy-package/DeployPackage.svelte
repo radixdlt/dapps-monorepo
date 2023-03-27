@@ -33,7 +33,7 @@
   )()
 
   const requiredUploadedFiles = derived(files, ($files) => {
-    const fileData = ['wasm', 'abi'].map((extension) =>
+    const fileData = ['wasm', 'schema'].map((extension) =>
       $files
         .find((file) => file.fileExtension === extension)
         ?.file.arrayBuffer()
@@ -73,8 +73,8 @@
   })
 
   const deployButtonEnabled = derived(
-    [requiredUploadedFiles],
-    ([{ wasm, abi }]) => !!abi && !!wasm && selectedBadge !== undefined,
+    [requiredUploadedFiles, selectedBadge],
+    ([{ wasm, abi }, badge]) => !!abi && !!wasm && badge !== undefined,
     false
   )
 
@@ -86,6 +86,9 @@
     const address = $selectedAccount!.address
     const badge = $selectedBadge!
 
+    console.log(
+      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id)
+    )
     send(
       getDeployPackageManifest(wasm, abi, address, badge.address, badge.id),
       [wasm, abi]
@@ -113,25 +116,6 @@
         `badgeAddress=${$selectedBadge.address}&` +
         `badgeId=${$selectedBadge.id}`
     )
-
-  let transactionManifest: string
-
-  $: {
-    $selectedAccount
-    ;(async () => {
-      const wasm = await $requiredUploadedFiles.wasm
-      const abi = await $requiredUploadedFiles.abi
-      if (wasm && abi && $selectedAccount && $selectedBadge) {
-        transactionManifest = getDeployPackageManifest(
-          wasm,
-          abi,
-          $selectedAccount.address,
-          $selectedBadge.address,
-          $selectedBadge.id
-        )
-      }
-    })()
-  }
 </script>
 
 <Box>
@@ -150,10 +134,10 @@
       maxFiles={1}
     />
     <FileUpload
-      acceptedFileTypes={['.abi', 'abi']}
+      acceptedFileTypes={['.schema', 'schema']}
       onRemoveFile={(_, file) => files.removeFile(file)}
       onAddFile={files.addFile}
-      labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+      labelIdle="Drop the package schema file here, <span class='filepond--label-action'>Browse</span>"
       maxFiles={1}
     />
   </Box>
@@ -171,7 +155,7 @@
         placeholder="Select Account"
         bind:selected={$selectedAccount}
         options={[
-          ...accounts.map((account, i) => ({
+          ...accounts.map((account) => ({
             ...account,
             label: `${account.label} (${shortenAddress(account.address)})`
           }))
@@ -184,7 +168,7 @@
           placeholder="Select Badge NFT"
           bind:selected={$selectedBadge}
           options={[
-            ...$nonFungibleResources.map((resource, i) => ({
+            ...$nonFungibleResources.map((resource) => ({
               ...resource,
               label: `${resource.name ?? ''} ${
                 resource.name ? '(' : ' '

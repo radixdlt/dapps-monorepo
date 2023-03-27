@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getEntityDetails, getNonFungibleData } from '@api/gateway'
+  import { getMetadata } from '@api/utils/resources'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Row from '@components/info-box/Row.svelte'
@@ -9,12 +10,13 @@
 
   export let address: string
 
-  $: nftData = getNonFungibleData(
-    address.split(':')[0] as string,
-    address.split(':')[1] as string
-  )
+  const [resourceAddress = '', nftId = ''] = address.includes(':')
+    ? address.split(':')
+    : [address, '']
 
-  $: entities = getEntityDetails(address.split(':')[0] as string)
+  $: nftData = getNonFungibleData(resourceAddress, nftId)
+
+  $: entities = getEntityDetails(resourceAddress)
 </script>
 
 <Box>
@@ -23,7 +25,9 @@
     <InfoBox slot="body">
       <AwaitedRow
         text="ID"
-        promise={nftData.then(({ non_fungible_id }) => non_fungible_id)}
+        promise={nftData.then(
+          ({ non_fungible_ids }) => non_fungible_ids[0]?.non_fungible_id
+        )}
       />
     </InfoBox>
   </Card>
@@ -38,19 +42,11 @@
       </Row>
 
       <AwaitedRow text="Name" promise={entities} let:data>
-        <Text
-          >{data.metadata.items.find(
-            (entry) => entry.key.toLowerCase() === 'name'
-          )?.value}</Text
-        >
+        <Text>{getMetadata('name')(data.metadata)}</Text>
       </AwaitedRow>
 
       <AwaitedRow text="Description" promise={entities} let:data>
-        <Text
-          >{data.metadata.items.find(
-            (entry) => entry.key.toLowerCase() === 'description'
-          )?.value}</Text
-        >
+        <Text>{getMetadata('description')(data.metadata)}</Text>
       </AwaitedRow>
     </InfoBox>
   </Card>

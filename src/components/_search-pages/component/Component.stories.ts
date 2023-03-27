@@ -5,7 +5,7 @@ export default {
   title: 'Search Pages/Component',
   component: Component,
   parameters: {
-    mockData: [mockGatewayCall('/entity/details')]
+    mockData: [mockGatewayCall('/state/entity/details')]
   }
 }
 

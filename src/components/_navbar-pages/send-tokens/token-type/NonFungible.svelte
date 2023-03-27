@@ -24,20 +24,15 @@
       (prev, cur, i) =>
         `
       CALL_METHOD 
-        ComponentAddress("${fromAccount}") 
-        "withdraw_by_ids"
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
-        ResourceAddress("${cur.resourceAddress}");
-      
-      TAKE_FROM_WORKTOP
-        ResourceAddress("${cur.resourceAddress}")
-        Bucket("${i}");
+        Address("${fromAccount}") 
+        "withdraw_non_fungibles"
+        Address("${cur.resourceAddress}")
+        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
 
       CALL_METHOD
-        ComponentAddress("${toAccount}")
-        "deposit"
-        Bucket("${i}");
-        
+        Address("${toAccount}")
+        "deposit_batch"
+        Expression("ENTIRE_WORKTOP");
         ` + prev,
       ``
     )}

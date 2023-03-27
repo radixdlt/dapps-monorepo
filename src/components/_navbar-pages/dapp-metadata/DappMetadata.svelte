@@ -28,7 +28,7 @@
     getPopulatedResources,
     type Resources
   } from '@api/utils/resources'
-  import { getEntityOverview } from '@api/gateway'
+  import { getEntitiesDetails } from '@api/gateway'
   import { XRD_NAME } from '@constants'
 
   export let accounts: Account[]
@@ -54,9 +54,9 @@
         prev +
         `
             SET_METADATA
-              ComponentAddress("${address}")
+              Address("${address}")
               "${cur.key}"
-              "${cur.value}";      
+              Enum(0u8, Enum(0u8, "${cur.value}"));   
             `,
       ``
     )
@@ -66,7 +66,7 @@
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
   const refreshAccounts = () => {
-    getEntityOverview(accounts.map((acc) => acc.address)).then((overview) => {
+    getEntitiesDetails(accounts.map((acc) => acc.address)).then((overview) => {
       $formattedAccounts = getFormattedAccounts(accounts, overview)
     })
   }
