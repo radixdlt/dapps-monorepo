@@ -50,9 +50,15 @@ const mockResourcesWithXRDValue = (value: string): any => ({
     {
       fungible_resources: {
         items: MOCK_TOKENS.map((token) => ({
-          aggregation_level: 'Global',
+          aggregation_level: 'Vault',
           resource_address: token.address,
-          amount: token.address === XRD_ADDRESS ? value : '100'
+          vaults: {
+            items: [
+              {
+                amount: token.address === XRD_ADDRESS ? value : '100'
+              }
+            ]
+          }
         }))
       }
     }

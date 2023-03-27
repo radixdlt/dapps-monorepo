@@ -3,6 +3,7 @@ import type {
   EntityMetadataCollection,
   FungibleResourcesCollection,
   FungibleResourcesCollectionItemGloballyAggregated,
+  FungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesCollection,
   NonFungibleResourcesCollectionItemGloballyAggregated,
   StateEntityDetailsResponseItem
@@ -83,8 +84,11 @@ const transformFungible = async (fungible: FungibleResourcesCollection) => {
     value: (
       fungible.items.find(
         ({ resource_address }) => resource_address === entity.address
-      ) as FungibleResourcesCollectionItemGloballyAggregated
-    )?.amount,
+      ) as FungibleResourcesCollectionItemVaultAggregated
+    ).vaults.items.reduce(
+      (prev, next) => (prev + Number(next.amount)) as number,
+      0
+    ),
     address: entity.address,
     name: getMetadata('name')(entity.metadata)
   }))
