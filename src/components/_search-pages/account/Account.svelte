@@ -45,7 +45,7 @@
                 <Text slot="left" bold underlined>
                   <a href="/nft/{nft.address}">{nft.label}</a>
                 </Text>
-                <div />
+                <div slot="right" />
               </Row>
             {/each}
           </InfoBox>
