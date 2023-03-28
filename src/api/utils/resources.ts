@@ -13,6 +13,13 @@ import type {
 import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
 
+type ParsedResource = {
+  address: string
+  label: string
+  value: string
+  name: string
+}
+
 const fungibleResourceDisplayLabel = (
   resource: StateEntityDetailsResponseItem
 ) =>
@@ -62,34 +69,39 @@ const transformNonFungible = async (
     {} as Record<string, StateEntityDetailsResponseItem>
   )
 
-  return await Promise.all(
-    (
-      nonFungible.items as NonFungibleResourcesCollectionItemVaultAggregated[]
-    ).map(async ({ resource_address, vaults }) => {
-      const vaultsValues = await Promise.all(
-        vaults.items.map((vault) =>
-          getEntityNonFungibleIDs(
-            accountAddress,
-            resource_address,
-            vault.vault_address
+  return (
+    await Promise.all(
+      (
+        nonFungible.items as NonFungibleResourcesCollectionItemVaultAggregated[]
+      ).map(async ({ resource_address, vaults }) => {
+        const vaultsValues = await Promise.all(
+          vaults.items.map((vault) =>
+            getEntityNonFungibleIDs(
+              accountAddress,
+              resource_address,
+              vault.vault_address
+            )
           )
         )
-      )
 
-      const non_fungible_id =
-        vaultsValues?.[0]?.items?.[0]?.non_fungible_id || ''
+        const non_fungible_id = vaultsValues?.[0]?.items?.[0]?.non_fungible_id
 
-      const entity = nonFungiblesMap[
-        resource_address
-      ] as StateEntityDetailsResponseItem
-      return {
-        label: nonFungibleResourceDisplayLabel(entity, non_fungible_id),
-        value: non_fungible_id,
-        address: `${entity.address}:${non_fungible_id}`,
-        name: getMetadata('name')(entity.metadata)
-      }
-    })
-  )
+        if (!non_fungible_id) {
+          return undefined
+        }
+
+        const entity = nonFungiblesMap[
+          resource_address
+        ] as StateEntityDetailsResponseItem
+        return {
+          label: nonFungibleResourceDisplayLabel(entity, non_fungible_id),
+          value: non_fungible_id,
+          address: `${entity.address}:${non_fungible_id}`,
+          name: getMetadata('name')(entity.metadata)
+        }
+      })
+    )
+  ).filter((nft): nft is ParsedResource => !!nft)
 }
 
 const transformFungible = async (
