@@ -2,4 +2,7 @@ Dockerfile
 Makefile
 cypress
 .env
+.git
+.github
 docker-compose.yml
+deploy
