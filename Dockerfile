@@ -1,45 +1,46 @@
-FROM node:16.17.1-alpine AS base
+# To make use of docker layers, the npm install or yarn install is done first using temprorary directory
+# This speeds up the docker build process and will use docker cached layers if the package.json doesn't change.
 
+# Get NPM token from github
 ARG NPM_TOKEN
 ARG NETWORK_NAME
-ARG NPM_LOCAL_CACHE=.cache
 
-WORKDIR /usr/src/app/
 
-COPY .                  /usr/src/app/
-COPY .npmrc.docker      /usr/src/app/.npmrc
-COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
+FROM node:16.17.1-alpine AS install-dashboard
+ARG NPM_TOKEN
+ARG NETWORK_NAME
+# Below steps installs npm modules of root directory into /usr/app/
+ENV dashboard_dir=/tmp
+COPY package*.json tsconfig.json yarn.lock $sdk $dashboard_dir/
+RUN cd $dashboard_dir
+COPY .npmrc.docker .npmrc
+RUN yarn install
+RUN cp -a node_modules /usr/app/
 
+# Below steps copies actual dashboard code and runs build steps
+WORKDIR /usr/app/
+COPY . ./
+
+COPY .npmrc.docker .npmrc
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
 
-# Verify what contents where copied.
-# The .dockerignore file can be adjusted to remove unnecessary files.
-RUN ls /usr/src/app/
-
-RUN yarn --frozen-lockfile && \
-    yarn build && \
-    NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook
+RUN yarn install && yarn build && NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook
 RUN rm -f .npmrc
 
-RUN ls /usr/src/app/
-
-FROM node:16.17.1-alpine AS dashboard
-
-WORKDIR /usr/src/app/
-
-COPY --from=base /usr/src/app/build .
-COPY --from=base /usr/src/app/package.json .
-COPY --from=base /usr/src/app/node_modules  .
-
-RUN ls -lah .
-
+FROM install-dashboard AS node-adapter
+WORKDIR /usr/app/
+COPY --from=install-dashboard /usr/app/build .
+COPY --from=install-dashboard /usr/app/package.json .
+COPY --from=install-dashboard /usr/app/node_modules  .
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
+CMD ["pm2-runtime","build/index.js"]
 
-CMD ["pm2-runtime","index.js"]
 
 FROM nginx:alpine AS storybook
-
-COPY --from=base /usr/src/app/storybook-static /usr/share/nginx/html
+COPY --from=install-dashboard /usr/app/storybook-static /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+FROM scratch AS export-yarn-lock
+COPY --from=install-dashboard /usr/app/yarn.lock /
