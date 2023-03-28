@@ -37,7 +37,7 @@ RUN ls -lah .
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
 
-CMD ["pm2-runtime","build/index.js"]
+CMD ["pm2-runtime","index.js"]
 
 FROM nginx:alpine AS storybook
 
