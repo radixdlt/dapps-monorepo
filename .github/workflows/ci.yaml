@@ -246,11 +246,10 @@ jobs:
       id-token: write
       pull-requests: read
       contents: read
-    needs: [build, setup-tags]
+    needs:
+      - setup-tags
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
@@ -282,6 +281,13 @@ jobs:
           secret_prefix: "GH"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
           parse_json: true
+      - name: Restore yarn cache
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        with:
+          node-version: 16.17.1
+          cache: yarn
+      - name: Copy cache locally
+        run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -290,13 +296,13 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
-          target: "node-adapter"
+          target: "dashboard"
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NPM_LOCAL_CACHE=.cache/
       - name: Docker Image output
-        run: |
-          docker images
+        run: docker images
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
@@ -308,11 +314,9 @@ jobs:
       pull-requests: read
       contents: read
     needs: 
-    - setup-tags
+      - setup-tags
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
@@ -344,6 +348,13 @@ jobs:
           registry: eu.gcr.io
           username: _json_key
           password: ${{ env.GH_GCR_JSON_KEY }}
+      - name: Restore yarn cache
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        with:
+          node-version: 16.17.1
+          cache: yarn
+      - name: Copy cache locally
+        run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -356,9 +367,9 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NPM_LOCAL_CACHE=.cache/
       - name: Docker Image output
-        run: |
-          docker images
+        run: docker images
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
@@ -601,6 +612,7 @@ jobs:
       contents: read
     if: ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) || github.event.pull_request
     needs:
+      - push-dashboard
       - push-storybook
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
