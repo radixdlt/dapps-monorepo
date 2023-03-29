@@ -13,7 +13,8 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (event.url.pathname.endsWith('/.well-known/radix.json')) {
     return new Response(JSON.stringify(json), {
       headers: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     })
   }
