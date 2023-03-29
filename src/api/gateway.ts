@@ -1,29 +1,47 @@
-import { networkConfig } from '@constants'
 import {
   Configuration,
   StateApi,
-  TransactionApi
+  TransactionApi,
+  type FungibleResourcesCollection,
+  type FungibleResourcesCollectionItemVaultAggregated,
+  type NonFungibleResourcesCollection,
+  type NonFungibleResourcesCollectionItemVaultAggregated,
+  type StateEntityDetailsResponse,
+  type StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
-import {
-  transformEntityOverview,
-  transformEntityResources,
-  type EntityResourcesTransformed
-} from './transformations'
+import { CURRENT_NETWORK } from '../../src/network'
 
-const config = new Configuration({ basePath: networkConfig?.url })
+export type FungibleResourcesVaultCollection = Omit<
+  FungibleResourcesCollection,
+  'items'
+> & {
+  items: FungibleResourcesCollectionItemVaultAggregated[]
+}
+
+export type NonFungibleResourcesVaultCollection = Omit<
+  NonFungibleResourcesCollection,
+  'items'
+> & {
+  items: NonFungibleResourcesCollectionItemVaultAggregated[]
+}
+
+export type StateEntityDetailsVaultResponseItem =
+  StateEntityDetailsResponseItem & {
+    fungible_resources: FungibleResourcesVaultCollection
+    non_fungible_resources: NonFungibleResourcesVaultCollection
+  }
+
+const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
 
 const stateApi = new StateApi(config)
 const transactionApi = new TransactionApi(config)
 
 export const getTransactionDetails = pipe(
-  (txID: string, stateVersion?: number) =>
+  (intent_hash_hex: string, stateVersion?: number) =>
     transactionApi.transactionCommittedDetails({
       transactionCommittedDetailsRequest: {
-        transaction_identifier: {
-          type: 'intent_hash',
-          value_hex: txID
-        },
+        intent_hash_hex,
         ...(stateVersion
           ? {
               at_ledger_state: {
@@ -48,68 +66,60 @@ export const getTransactionDetails = pipe(
   }))
 )
 
-export const getEntityOverview = pipe(
-  async (
-    resources:
-      | EntityResourcesTransformed['fungible']
-      | EntityResourcesTransformed['nonFungible']
-  ) => {
-    const res = await stateApi.entityOverview({
-      entityOverviewRequest: {
-        addresses: resources.map((r) => r.address)
-      }
-    })
-    return { overview: res, resources }
-  },
-  andThen(transformEntityOverview)
-)
-
-export const getEntityResources = pipe(
-  async (address: string) =>
-    stateApi.entityResources({
-      entityResourcesRequest: {
-        address
-      }
-    }),
-  andThen(transformEntityResources)
-)
+export const getEntitiesDetails = async (addresses: string[]) =>
+  stateApi.stateEntityDetails({
+    stateEntityDetailsRequest: { addresses, aggregation_level: 'Vault' }
+  }) as Promise<
+    StateEntityDetailsResponse & {
+      items: StateEntityDetailsVaultResponseItem[]
+    }
+  >
 
 export const getEntityDetails = (address: string) =>
-  stateApi.entityDetails({
-    entityDetailsRequest: {
-      address
-    }
-  })
+  stateApi
+    .stateEntityDetails({
+      stateEntityDetailsRequest: {
+        addresses: [address],
+        aggregation_level: 'Vault'
+      }
+    })
+    .then(({ items }) => items[0] as StateEntityDetailsVaultResponseItem)
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
-  nftAddress: string
+  nftAddress: string,
+  vaultAddress: string
 ) =>
-  stateApi.entityNonFungibleIds({
-    entityNonFungibleIdsRequest: {
+  stateApi.entityNonFungibleIdsPage({
+    stateEntityNonFungibleIdsPageRequest: {
       address: accountAddress,
+      vault_address: vaultAddress,
       resource_address: nftAddress
     }
   })
 
+export const getEntityNonFungibleVaults = (
+  accountAddress: string,
+  resourceAddress: string
+) =>
+  stateApi.entityNonFungibleResourceVaultPage({
+    stateEntityNonFungibleResourceVaultsPageRequest: {
+      address: accountAddress,
+      resource_address: resourceAddress
+    }
+  })
+
 export const getNonFungibleData = (address: string, id: string) =>
-  stateApi.nonFungibleIdData({
-    nonFungibleDataRequest: {
-      address: address,
-      non_fungible_id: id
+  stateApi.nonFungibleData({
+    stateNonFungibleDataRequest: {
+      resource_address: address,
+      non_fungible_ids: [id]
     }
   })
 
 export const getNonFungibleIDs = (address: string) =>
   stateApi.nonFungibleIds({
-    nonFungibleIdsRequest: {
-      address
-    }
-  })
-
-export const getOverview = (addresses: string[]) =>
-  stateApi.entityOverview({
-    entityOverviewRequest: {
-      addresses
+    stateNonFungibleIdsRequest: {
+      resource_address: address
     }
   })

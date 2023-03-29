@@ -4,7 +4,7 @@
   import Text from '@components/_base/text/Text.svelte'
 
   export let header: string
-  export let faded: boolean
+  export let faded: boolean = false
 </script>
 
 <Row>

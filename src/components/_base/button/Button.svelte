@@ -2,6 +2,7 @@
   import type { CSS } from '@stitches/core'
 
   import { css, config } from '@styles'
+  import LoadingSpinner from './loading-spinner/LoadingSpinner.svelte'
 
   const variants = {
     connected: {
@@ -39,12 +40,19 @@
       }
     },
     size: {
+      medium: {
+        height: '$lg',
+        width: '$3xl',
+        fontSize: '$md'
+      },
       small: {
-        padding: '$sm $lg',
+        height: '$md',
+        width: '$2xl',
         fontSize: '$sm'
       },
       iconSmall: {
-        padding: '$xs',
+        height: '$sm',
+        width: '$xl',
         fontSize: '0'
       }
     },
@@ -76,7 +84,7 @@
 
   export let cx: CSS<typeof config> = {}
   export let full: true | false = false
-  export let size: keyof typeof variants['size'] | undefined = undefined
+  export let size: keyof typeof variants['size'] | undefined = 'medium'
   export let border: keyof typeof variants['border'] | undefined = undefined
   export let ghost: true | false = false
   export let disabled: true | false = false
@@ -85,6 +93,7 @@
   export let accountButton: true | false = false
   export let selectedAccountButton: true | false = false
   export let connected: true | false = false
+  export let loading = false
 
   const btn = css({
     display: 'inline-flex',
@@ -98,7 +107,6 @@
     borderRadius: '$sm',
     fontSize: '$md',
     color: '$primaryButtonText',
-    padding: '$md $2xl',
     transition: 'color .2s,border-color .2s,background-color .2s',
     '&:hover': {
       backgroundColor: '$primaryButtonHover'
@@ -135,5 +143,11 @@
   on:click
   class={disabled ? disabledBtnClass : btnClass}
 >
-  <slot />
+  {#if loading}
+    <div style:height="60%" style:aspect-ratio="1/1">
+      <LoadingSpinner />
+    </div>
+  {:else}
+    <slot />
+  {/if}
 </button>

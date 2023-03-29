@@ -9,11 +9,16 @@
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { getNFTAddress, shortenAddress } from '@utils'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { derived, writable } from 'svelte/store'
-  import { createBadge, deploy, queryResources } from './side-effects'
-  import Button from '@components/_base/button/Button.svelte'
+  import {
+    createBadge,
+    getDeployPackageManifest,
+    queryResources
+  } from './side-effects'
   import { goto } from '$app/navigation'
+  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import type { sendTransaction } from '@api/wallet'
+  import { getTransactionDetails } from '@api/gateway'
 
   export let accounts: Account[]
 
@@ -28,7 +33,7 @@
   )()
 
   const requiredUploadedFiles = derived(files, ($files) => {
-    const fileData = ['wasm', 'abi'].map((extension) =>
+    const fileData = ['wasm', 'schema'].map((extension) =>
       $files
         .find((file) => file.fileExtension === extension)
         ?.file.arrayBuffer()
@@ -54,7 +59,6 @@
     | undefined
   >(undefined)
   const badgeCreated = writable<string>()
-  const deployingPackage = writable<boolean>()
 
   const packageDeployed = writable<{
     txID: string
@@ -69,29 +73,38 @@
   })
 
   const deployButtonEnabled = derived(
-    [requiredUploadedFiles],
-    ([{ wasm, abi }]) => !!abi && !!wasm && selectedBadge !== undefined,
+    [requiredUploadedFiles, selectedBadge],
+    ([{ wasm, abi }, badge]) => !!abi && !!wasm && badge !== undefined,
     false
   )
 
-  const deployPackage = async () => {
-    deployingPackage.set(true)
-    deploy(
-      await $requiredUploadedFiles.wasm,
-      await $requiredUploadedFiles.abi,
-      $selectedAccount!.address,
-      $selectedBadge!
+  const deployPackage = async (
+    send: (...args: Parameters<typeof sendTransaction>) => void
+  ) => {
+    const wasm = await $requiredUploadedFiles.wasm
+    const abi = await $requiredUploadedFiles.abi
+    const address = $selectedAccount!.address
+    const badge = $selectedBadge!
+
+    console.log(
+      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id)
     )
-      .then((result) => {
-        deployingPackage.set(false)
-        packageDeployed.set({
-          address: result.entities[0]?.global_address as string,
-          txID: result.txID
-        })
-      })
-      .catch((e: Error) => {
-        deployingPackage.set(false)
-      })
+    send(
+      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id),
+      [wasm, abi]
+    )
+  }
+
+  const handleResponse = async ({
+    transactionIntentHash
+  }: Awaited<ReturnType<typeof sendTransaction>>) => {
+    const entities = (await getTransactionDetails(transactionIntentHash))
+      .createdEntities
+
+    packageDeployed.set({
+      address: entities[0]?.global_address as string,
+      txID: transactionIntentHash
+    })
   }
 
   $: if ($packageDeployed && $selectedBadge)
@@ -121,10 +134,10 @@
       maxFiles={1}
     />
     <FileUpload
-      acceptedFileTypes={['.abi', 'abi']}
+      acceptedFileTypes={['.schema', 'schema']}
       onRemoveFile={(_, file) => files.removeFile(file)}
       onAddFile={files.addFile}
-      labelIdle="Drop the package ABI file here, <span class='filepond--label-action'>Browse</span>"
+      labelIdle="Drop the package schema file here, <span class='filepond--label-action'>Browse</span>"
       maxFiles={1}
     />
   </Box>
@@ -142,7 +155,7 @@
         placeholder="Select Account"
         bind:selected={$selectedAccount}
         options={[
-          ...accounts.map((account, i) => ({
+          ...accounts.map((account) => ({
             ...account,
             label: `${account.label} (${shortenAddress(account.address)})`
           }))
@@ -155,7 +168,7 @@
           placeholder="Select Badge NFT"
           bind:selected={$selectedBadge}
           options={[
-            ...$nonFungibleResources.map((resource, i) => ({
+            ...$nonFungibleResources.map((resource) => ({
               ...resource,
               label: `${resource.name ?? ''} ${
                 resource.name ? '(' : ' '
@@ -192,12 +205,10 @@
   </Box>
 
   <Box px="none" mx="none">
-    <Button disabled={!$deployButtonEnabled} on:click={deployPackage}>
-      {#if $deployingPackage}
-        <LoadingSpinner />
-      {:else}
-        Deploy package
-      {/if}
-    </Button>
+    <SendTxButton
+      disabled={!$deployButtonEnabled}
+      onClick={deployPackage}
+      onResponse={handleResponse}
+    />
   </Box>
 </center>

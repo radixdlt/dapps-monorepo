@@ -14,7 +14,6 @@
   import { writable } from 'svelte/store'
   import type { Account } from '@stores'
   import { query } from '@api/query'
-  import { getOverview } from '@api/gateway'
   import Text from '@components/_base/text/Text.svelte'
   import Row from '@components/info-box/Row.svelte'
   import SelectAccount from './rows/SelectAccount.svelte'
@@ -22,11 +21,27 @@
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
   import Domain from './rows/Domain.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { getFormattedAccounts } from './side-effects'
   import HeaderRow from '../../info-box/HeaderRow.svelte'
+  import {
+    getFungibleResource,
+    getPopulatedResources,
+    type Resources
+  } from '@api/utils/resources'
+  import { getEntitiesDetails } from '@api/gateway'
+  import { XRD_NAME } from '@constants'
 
   export let accounts: Account[]
+
+  $: resources = accounts.reduce((prev, cur) => {
+    return new Promise((resolve, _) =>
+      prev.then(async (obj) => {
+        const resources = await getPopulatedResources(cur.address)
+        obj[cur.address] = resources
+        resolve(obj)
+      })
+    )
+  }, Promise.resolve({}) as Promise<Record<string, Resources>>)
 
   const infoBoxPadding = '6px'
 
@@ -39,9 +54,9 @@
         prev +
         `
             SET_METADATA
-              ComponentAddress("${address}")
+              Address("${address}")
               "${cur.key}"
-              "${cur.value}";      
+              Enum(0u8, Enum(0u8, "${cur.value}"));   
             `,
       ``
     )
@@ -50,9 +65,15 @@
 
   let formattedAccounts = writable<FormattedAccount[] | undefined>(undefined)
 
-  $: getOverview(accounts.map((acc) => acc.address)).then((overview) => {
-    formattedAccounts.set(getFormattedAccounts(accounts, overview))
-  })
+  const refreshAccounts = () => {
+    getEntitiesDetails(accounts.map((acc) => acc.address)).then((overview) => {
+      $formattedAccounts = getFormattedAccounts(accounts, overview)
+    })
+  }
+
+  $: if (accounts) refreshAccounts()
+
+  $: if ($response) refreshAccounts()
 
   const update = () => {
     if ($selectedAccount)
@@ -60,19 +81,19 @@
         transactionManifest($selectedAccount.address, [
           {
             key: 'name',
-            value: setAsDAppDefinition ? $dAppName : ''
+            value: $setAsDAppDefinition ? $dAppName : ''
           },
           {
             key: 'description',
-            value: setAsDAppDefinition ? $dAppDescription : ''
+            value: $setAsDAppDefinition ? $dAppDescription : ''
           },
           {
             key: 'related_websites',
-            value: setAsDAppDefinition ? $relatedWebsites : ''
+            value: $setAsDAppDefinition ? $relatedWebsites : ''
           },
           {
             key: 'account_type',
-            value: setAsDAppDefinition ? 'dapp definition' : 'account'
+            value: $setAsDAppDefinition ? 'dapp definition' : 'account'
           }
         ])
       )
@@ -94,9 +115,24 @@
     }
   }
 
-  $: isDappDefinition.set(!!$selectedAccount?.dappDefinition)
+  $: if ($selectedAccount)
+    isDappDefinition.set(!!$selectedAccount.dappDefinition)
 
+  $: if ($selectedAccount) $setAsDAppDefinition = $isDappDefinition
   $: faded.set(!$setAsDAppDefinition)
+
+  let XRDAmount: Promise<string | undefined> = new Promise((_) => {})
+
+  let showNotEnoughXRDError = false
+
+  $: XRDAmount.then((amount) => {
+    showNotEnoughXRDError = !amount || Number(amount) < 10
+  })
+
+  $: if ($selectedAccount)
+    XRDAmount = resources
+      .then((resources) => resources[$selectedAccount!.address]!)
+      .then((resources) => getFungibleResource(XRD_NAME)(resources)?.value)
 </script>
 
 <Box my="medium" cx={{ width: '80%' }} wrapper>
@@ -117,6 +153,7 @@
         slot="right"
         accounts={$formattedAccounts}
         bind:selectedAccount={$selectedAccount}
+        bind:showError={showNotEnoughXRDError}
       />
     </Row>
 
@@ -149,10 +186,8 @@
     </Row>
   </InfoBox>
   <Box justify="end">
-    {#if $loading}
-      <Button><LoadingSpinner /></Button>
-    {:else}
-      <Button on:click={update}>Update</Button>
-    {/if}
+    <Button disabled={$loading} on:click={update} loading={$loading}
+      >Update</Button
+    >
   </Box>
 </Box>

@@ -1,4 +1,4 @@
-import type { EntityOverviewResponse } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
 import { getFormattedAccounts } from './side-effects'
 
 describe('DappMetadata side effects', () => {
@@ -15,32 +15,40 @@ describe('DappMetadata side effects', () => {
     ]
     const overviewResponse = {
       ledger_state: {},
-      entities: [
+      items: [
         {
           address: 'xxx',
           metadata: {
             items: [
               {
                 key: 'name',
-                value: 'name'
+                value: {
+                  as_string: 'name'
+                }
               },
               {
                 key: 'description',
-                value: 'description'
+                value: {
+                  as_string: 'description'
+                }
               },
               {
                 key: 'domain',
-                value: 'domain'
+                value: {
+                  as_string: 'domain'
+                }
               },
               {
                 key: 'account_type',
-                value: 'dapp definition'
+                value: {
+                  as_string: 'dapp definition'
+                }
               }
             ]
           }
         }
       ]
-    } as EntityOverviewResponse
+    } as StateEntityDetailsResponse
     const expected = [
       {
         address: 'xxx',
