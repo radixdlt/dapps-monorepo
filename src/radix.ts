@@ -1,8 +1,3 @@
-import {
-  showErrorToast,
-  showSuccessToast,
-  type ToastOptions
-} from '@components/_base/toast/Toasts'
 import type { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
 import { andThen, pipe } from 'ramda'
 
@@ -18,22 +13,8 @@ export const getWalletData = (data: Parameters<RDT['requestData']>[0]) =>
     andThen((rdt) => rdt.requestData(data))
   )()
 
-export const sendTransaction = (
-  input: Parameters<RDT['sendTransaction']>[0],
-  toastOptions?: ToastOptions
-) =>
+export const sendTransaction = (input: Parameters<RDT['sendTransaction']>[0]) =>
   pipe(
     () => rdt,
-    andThen((rdt) => rdt.sendTransaction(input)),
-    andThen((result) =>
-      result
-        .map(({ transactionIntentHash }) => {
-          showSuccessToast(transactionIntentHash, toastOptions)
-          return { transactionIntentHash }
-        })
-        .mapErr((err) => {
-          showErrorToast(err, toastOptions)
-          return err
-        })
-    )
+    andThen((rdt) => rdt.sendTransaction(input))
   )()
