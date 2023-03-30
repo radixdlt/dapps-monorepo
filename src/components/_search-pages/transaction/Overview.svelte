@@ -91,7 +91,7 @@
     {#await manifest}
       <SkeletonLoader />
     {:then manifest}
-      <div style:width="30%" style:height="300px">
+      <div style:height="300px">
         <CodeBox text={manifest ?? 'Failed to decode manifest'} />
       </div>
     {/await}
