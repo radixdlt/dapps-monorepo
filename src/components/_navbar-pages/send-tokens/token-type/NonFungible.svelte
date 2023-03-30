@@ -29,10 +29,15 @@
         Address("${cur.resourceAddress}")
         Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
 
+      TAKE_FROM_WORKTOP_BY_IDS 
+        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
+        Address("${cur.resourceAddress}")
+        Bucket("nfts");
+
       CALL_METHOD
         Address("${toAccount}")
-        "deposit_batch"
-        Expression("ENTIRE_WORKTOP");
+        "deposit"
+        Bucket("nfts");
         ` + prev,
       ``
     )}

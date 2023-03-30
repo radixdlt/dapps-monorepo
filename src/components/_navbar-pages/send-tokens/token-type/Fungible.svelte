@@ -26,12 +26,17 @@
         Address("${fromAccount}") 
         "withdraw"
         Address("${resource}")
-        Decimal("${amount}");   
+        Decimal("${amount}");  
+        
+      TAKE_FROM_WORKTOP_BY_AMOUNT
+        Decimal("${amount}")
+        Address("${resource}")
+        Bucket("bucket");
     
       CALL_METHOD
         Address("${toAccount}") 
-        "deposit_batch"
-        Expression("ENTIRE_WORKTOP");
+        "deposit"
+        Bucket("bucket");
     `
 
   const { response } = query('sendTransaction')
