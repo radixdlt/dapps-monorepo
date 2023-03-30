@@ -8,7 +8,7 @@
   import { pipe } from 'ramda'
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
-  import { getNFTAddress, shortenAddress } from '@utils'
+  import { getNFTAddress } from '@utils'
   import { derived, writable } from 'svelte/store'
   import {
     createBadge,
@@ -154,12 +154,7 @@
       <Select
         placeholder="Select Account"
         bind:selected={$selectedAccount}
-        options={[
-          ...accounts.map((account) => ({
-            ...account,
-            label: `${account.label} (${shortenAddress(account.address)})`
-          }))
-        ]}
+        options={accounts}
       />
     </Box>
     <Box>
