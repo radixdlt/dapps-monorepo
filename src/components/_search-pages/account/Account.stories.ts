@@ -40,7 +40,7 @@ const Template = (args: any) => ({
 
 export const WithoutResources = Template.bind(null, {
   details: Promise.resolve({
-    item: { metadata },
+    item: { metadata: { items: [] } },
     fungible: [],
     nonFungible: []
   })
