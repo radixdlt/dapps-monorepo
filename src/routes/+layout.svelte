@@ -7,7 +7,6 @@
   import { accounts, selectedAccount, storage } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
-  import Toast from '@components/_base/toast/_Toast.svelte'
   import { resolveRDT } from '../radix'
   import '../fonts.css'
   import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
@@ -82,7 +81,6 @@
 <!-- enables SSR of css -->
 <!-- eslint-disable-next-line -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
-<Toast />
 
 <Box
   p="none"

@@ -14,17 +14,13 @@ export const requestAddresses = async () => {
 
 export const sendTransaction = async (
   transactionManifest: string,
-  blobs?: string[],
-  toastOptions?: Parameters<typeof _sendTransaction>[1]
+  blobs?: string[]
 ) => {
-  const res = await _sendTransaction(
-    {
-      transactionManifest,
-      version: 0,
-      blobs
-    },
-    toastOptions
-  )
+  const res = await _sendTransaction({
+    transactionManifest,
+    version: 0,
+    blobs
+  })
   if (res.isOk()) return res.value
   throw res.error
 }
