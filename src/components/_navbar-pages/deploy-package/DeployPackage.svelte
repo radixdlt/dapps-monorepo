@@ -179,7 +179,7 @@
     </Box>
   </Box>
 
-  <Box hidden={!selectedAccount}>
+  <Box hidden={!$selectedAccount}>
     <Text>
       <Text
         on:click={() => {
