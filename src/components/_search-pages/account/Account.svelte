@@ -22,6 +22,9 @@
         <Text bold slot="header">Tokens (fungible resources)</Text>
         <Box bgColor="surface" p="none" slot="body">
           <InfoBox>
+            {#if details.fungible.length === 0}
+              <Row><Text muted slot="left">None</Text></Row>
+            {/if}
             {#each details.fungible as fungible}
               <Row>
                 <Text slot="left" bold underlined align="right">
@@ -40,6 +43,9 @@
         <Text bold slot="header">NFTs (nonfungible resources)</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
+            {#if details.nonFungible.length === 0}
+              <Row><Text muted slot="left">None</Text></Row>
+            {/if}
             {#each details.nonFungible as nft}
               <Row>
                 <Text slot="left" bold underlined>
@@ -56,6 +62,9 @@
         <Text bold slot="header">Metadata</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
+            {#if details.item.metadata.items.length === 0}
+              <Row><Text muted slot="left">None</Text></Row>
+            {/if}
             {#each details.item.metadata.items as metadata}
               <Row>
                 <Text slot="left" bold align="right">{metadata.key}</Text>
