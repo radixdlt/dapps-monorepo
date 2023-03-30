@@ -64,7 +64,7 @@
                   editable={false}
                   dynamic
                   size="single-line"
-                  value={metadata.value.as_string}
+                  value={metadata.value.as_string_collection ? metadata.value.as_string_collection.join('\n') : metadata.value.as_string}
                   padding="$0"
                   fontSize="$md"
                 />

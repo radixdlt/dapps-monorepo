@@ -21,6 +21,16 @@ const metadata = {
       value: {
         as_string: 'other value'
       }
+    },
+    {
+      key: 'related_entities',
+      value: {
+        as_string_collection: [
+          'account_tdx_c_1pxqng3rlph0xkau3rf79gyxhzyy9tesxr7znj3jjyqgqjpc4xd',
+          'account_tdx_c_1pxqng3rlph0xkau3rf79gyxhzyy9tesxr7znj3jjyqgqjpc422',
+          'account_tdx_c_1pxqng3rlph0xkau3rf79gyxhzyy9tesxsadnj3jjyqgqjpc4xd'
+        ]
+      }
     }
   ]
 }
