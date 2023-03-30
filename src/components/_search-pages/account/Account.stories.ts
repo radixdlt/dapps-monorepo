@@ -23,7 +23,7 @@ const metadata = {
       }
     },
     {
-      key: 'related_entities',
+      key: 'claimed_entities',
       value: {
         as_string_collection: [
           'account_tdx_c_1pxqng3rlph0xkau3rf79gyxhzyy9tesxr7znj3jjyqgqjpc4xd',

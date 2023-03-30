@@ -7,8 +7,25 @@
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { getPopulatedResources } from '@api/utils/resources'
+  import LinkList from '@components/_base/link-list/LinkList.svelte'
+  import type { EntityMetadataItemValue } from '@radixdlt/babylon-gateway-api-sdk'
+  import { addressToRoute } from '@utils'
 
   export let details: ReturnType<typeof getPopulatedResources>
+  const claimedEntitiesDefinition = {
+    key: 'claimed entities',
+    valueComponent: LinkList,
+    valuePropsTransform: (value: EntityMetadataItemValue) => ({
+      links: (value.as_string_collection || []).map((entity: string) => ({
+        label: entity,
+        href: addressToRoute(entity)
+      }))
+    })
+  }
+
+  const knownMetadata: Record<string, typeof claimedEntitiesDefinition> = {
+    claimed_entities: claimedEntitiesDefinition
+  }
 </script>
 
 <Box>
@@ -66,20 +83,35 @@
               <Row><Text muted slot="left">None</Text></Row>
             {/if}
             {#each details.item.metadata.items as metadata}
-              <Row>
-                <Text slot="left" bold align="right">{metadata.key}</Text>
-                <Textarea
-                  slot="right"
-                  editable={false}
-                  dynamic
-                  size="single-line"
-                  value={metadata.value.as_string_collection
-                    ? metadata.value.as_string_collection.join('\n')
-                    : metadata.value.as_string}
-                  padding="$0"
-                  fontSize="$md"
-                />
-              </Row>
+              {#if knownMetadata[metadata.key]}
+                <Row>
+                  <Text slot="left" bold align="right">
+                    {knownMetadata[metadata.key]?.key}
+                  </Text>
+                  <svelte:component
+                    this={knownMetadata[metadata.key]?.valueComponent}
+                    {...knownMetadata[metadata.key]?.valuePropsTransform(
+                      metadata.value
+                    )}
+                    slot="right"
+                  />
+                </Row>
+              {:else}
+                <Row>
+                  <Text slot="left" bold align="right">{metadata.key}</Text>
+                  <Textarea
+                    slot="right"
+                    editable={false}
+                    dynamic
+                    size="single-line"
+                    value={metadata.value.as_string_collection
+                      ? metadata.value.as_string_collection.join('\n')
+                      : metadata.value.as_string}
+                    padding="$0"
+                    fontSize="$md"
+                  />
+                </Row>
+              {/if}
             {/each}
           </InfoBox>
         </Box>
