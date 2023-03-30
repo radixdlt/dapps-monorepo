@@ -15,7 +15,7 @@
   {#await details}
     <SkeletonLoader />
   {:then details}
-    {#if details.fungible.length === 0 && details.nonFungible.length === 0}
+    {#if details.fungible.length === 0 && details.nonFungible.length === 0 && details.item.metadata.items.length === 0}
       This account doesn't hold any tokens or NFTs
     {:else}
       <Card>
