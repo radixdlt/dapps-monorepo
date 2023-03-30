@@ -63,7 +63,7 @@
         {#each _metadata.items.filter((item) => !['description', 'symbol', 'name', 'url'].some((key) => key === item.key)) ?? [] as metadata}
           <Row>
             <Text slot="left" align="right" bold>{metadata.key}</Text>
-            <Text slot="right" >{metadata.value.as_string}</Text>
+            <Text slot="right">{metadata.value.as_string}</Text>
           </Row>
         {/each}
       {/await}
