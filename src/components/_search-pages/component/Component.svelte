@@ -21,7 +21,9 @@
           {#each $response.metadata.items as metadata}
             <Row>
               <Text slot="left" bold align="right">{metadata.key}</Text>
-              <Text slot="right" bold align="right">{metadata.value}</Text>
+              <Text slot="right" bold align="right">
+                {metadata.value.as_string}
+              </Text>
             </Row>
           {/each}
         </InfoBox>
