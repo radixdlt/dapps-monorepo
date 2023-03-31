@@ -12,6 +12,7 @@
     <div class="input-row">
       <slot {input} {i} />
 
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="remove-button"
         on:click={() => (inputs = inputs.filter((_, j) => j !== i))}
@@ -20,6 +21,7 @@
       </div>
     </div>
   {/each}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div on:click={() => dispatch('add')}>
     <slot name="add-button" />
   </div>
