@@ -9,12 +9,18 @@
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
   import '../fonts.css'
-  import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+  import { RadixDappToolkit, type State } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '../../src/network'
 
   let mounted = false
 
   onMount(() => {
+    const updateAccounts = (value: State['accounts']) => {
+      if (value) {
+        accounts.set(value)
+        selectedAccount.set(value[0])
+      }
+    }
     mounted = true
 
     const rdt = RadixDappToolkit(
@@ -26,8 +32,7 @@
         requestData({
           accounts: { quantifier: 'atLeast', quantity: 1 }
         }).map(({ data }) => {
-          accounts.set(data.accounts)
-          selectedAccount.set(data.accounts[0])
+          updateAccounts(data.accounts)
         })
       },
       {
@@ -37,16 +42,9 @@
           transactionPath: 'transaction/'
         },
         networkId: CURRENT_NETWORK?.id,
-        onInit: (state) => {
-          if (state.accounts) {
-            accounts.set(state.accounts)
-            selectedAccount.set(state.accounts[0])
-          }
-        },
-        onDisconnect: () => {
-          accounts.set([])
-          selectedAccount.set(undefined)
-        }
+        onInit: ({ accounts }) => updateAccounts(accounts),
+        onStateChange: ({ accounts }) => updateAccounts(accounts),
+        onDisconnect: () => updateAccounts([])
       }
     )
 
