@@ -32,12 +32,12 @@
       TAKE_FROM_WORKTOP_BY_IDS 
         Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
         Address("${cur.resourceAddress}")
-        Bucket("nfts");
+        Bucket("nft${i}");
 
       CALL_METHOD
         Address("${toAccount}")
         "deposit"
-        Bucket("nfts");
+        Bucket("nft${i}");
         ` + prev,
       ``
     )}
