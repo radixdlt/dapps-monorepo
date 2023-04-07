@@ -335,7 +335,6 @@
       <Entity
         bind:entity={$entities[i]}
         disabled={i < $claimedEntities.length}
-        faded={$faded}
       />
       <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
         <Text pointer color="link">+ Add a Linked Entity</Text>

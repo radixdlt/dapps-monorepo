@@ -20,7 +20,7 @@
   $: tx = getTransactionDetails(transactionHash)
     .then((res) => getTransactionDetails(transactionHash, res.stateVersion!))
     .then((tx) => {
-      getTxManifest(tx.details).then(resolveManifest)
+      getTxManifest(tx.encodedManifest).then(resolveManifest)
       return tx
     })
     .catch((_) => {

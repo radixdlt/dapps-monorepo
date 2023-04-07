@@ -1,5 +1,3 @@
-import { ManifestBuilder } from '@radixdlt/radix-dapp-toolkit'
-
 export const setMetadataAuth = (
   entity: string,
   resourceAddress: string,
