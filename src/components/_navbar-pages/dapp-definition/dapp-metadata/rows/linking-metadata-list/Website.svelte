@@ -94,6 +94,7 @@
 
 <LinkingMetadataList
   bind:input={website.url}
+  on:input
   {disabled}
   placeholder="Example: https://www.radixdlt.com"
   {showPopover}

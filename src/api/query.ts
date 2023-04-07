@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store'
 import * as gatewayApi from './gateway'
 import * as walletApi from './wallet'
-import { getPopulatedResources } from './utils/resources'
+import { getAccountData } from './utils/resources'
 
 const API = {
   ...gatewayApi,
   ...walletApi,
-  getPopulatedResources
+  getAccountData
 }
 
 export const query = <
