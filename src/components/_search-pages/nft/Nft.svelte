@@ -16,7 +16,7 @@
 
   $: nftData = getNonFungibleData(resourceAddress, nftId)
 
-  $: entities = getEntityDetails(resourceAddress)
+  $: details = getEntityDetails([address]).then((details) => details[0]!)
 </script>
 
 <Box>
@@ -41,11 +41,11 @@
         </Text>
       </Row>
 
-      <AwaitedRow text="Name" promise={entities} let:data>
+      <AwaitedRow text="Name" promise={details} let:data>
         <Text>{getStringMetadata('name')(data.metadata)}</Text>
       </AwaitedRow>
 
-      <AwaitedRow text="Description" promise={entities} let:data>
+      <AwaitedRow text="Description" promise={details} let:data>
         <Text>{getStringMetadata('description')(data.metadata)}</Text>
       </AwaitedRow>
     </InfoBox>

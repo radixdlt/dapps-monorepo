@@ -7,7 +7,7 @@
 
   export let data: PageData
 
-  $: details = getEntityDetails(data.address)
+  $: details = getEntityDetails([data.address]).then((details) => details[0]!)
 
   $: type = details.then(
     ({ details }) =>

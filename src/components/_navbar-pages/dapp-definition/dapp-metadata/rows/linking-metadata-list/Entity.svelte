@@ -42,7 +42,9 @@
     let details: StateEntityDetailsResponseItem
 
     try {
-      details = await getEntityDetails(entity.address)
+      details = await getEntityDetails([entity.address]).then(
+        (details) => details[0]!
+      )
     } catch {
       validationResult = ValidationResult.INVALID_INPUT
       return ValidationResult.INVALID_INPUT
