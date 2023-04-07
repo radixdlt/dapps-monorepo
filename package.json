@@ -10,7 +10,7 @@
     "package": "svelte-kit package",
     "preview": "vite preview",
     "prepare": "husky install",
-    "svelte:check": "svelte-check --tsconfig ./tsconfig.json",
+    "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "cypress": "cypress open",
     "prettier": "prettier --cache --check src ",
