@@ -9,7 +9,9 @@
   import { getStringMetadata } from '@api/utils/resources'
   import type { getEntityDetails } from '@api/gateway'
 
-  export let details: ReturnType<typeof getEntityDetails>
+  export let details: Promise<
+    Awaited<ReturnType<typeof getEntityDetails>>[number]
+  >
 
   $: metadata = details.then(({ metadata }) => metadata)
 

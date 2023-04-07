@@ -6,7 +6,6 @@ import {
   type FungibleResourcesCollectionItemVaultAggregated,
   type NonFungibleResourcesCollection,
   type NonFungibleResourcesCollectionItemVaultAggregated,
-  type StateEntityDetailsResponse,
   type StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
@@ -66,24 +65,15 @@ export const getTransactionDetails = pipe(
   }))
 )
 
-export const getEntitiesDetails = async (addresses: string[]) =>
-  stateApi.stateEntityDetails({
-    stateEntityDetailsRequest: { addresses, aggregation_level: 'Vault' }
-  }) as Promise<
-    StateEntityDetailsResponse & {
-      items: StateEntityDetailsVaultResponseItem[]
-    }
-  >
-
-export const getEntityDetails = (address: string) =>
+export const getEntityDetails = (addresses: string[]) =>
   stateApi
     .stateEntityDetails({
       stateEntityDetailsRequest: {
-        addresses: [address],
+        addresses,
         aggregation_level: 'Vault'
       }
     })
-    .then(({ items }) => items[0] as StateEntityDetailsVaultResponseItem)
+    .then(({ items }) => items as StateEntityDetailsVaultResponseItem[])
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
