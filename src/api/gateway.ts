@@ -57,7 +57,7 @@ export const getTransactionDetails = pipe(
     date: res.transaction.confirmed_at,
     fee: res.transaction.fee_paid?.value,
     message: res.details.message_hex,
-    details: res.details.raw_hex,
+    encodedManifest: res.details.raw_hex,
     receipt: res.details.receipt,
     referencedEntities: res.details.referenced_global_entities,
     createdEntities: (res.details.receipt as any).state_updates
