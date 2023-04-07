@@ -6,12 +6,15 @@
   import Row from '@components/info-box/Row.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { getPopulatedResources } from '@api/utils/resources'
+  import type { getAccountData } from '@api/utils/resources'
   import LinkList from '@components/_base/link-list/LinkList.svelte'
   import type { EntityMetadataItemValue } from '@radixdlt/babylon-gateway-api-sdk'
   import { addressToRoute } from '@utils'
 
-  export let details: ReturnType<typeof getPopulatedResources>
+  export let account: Promise<
+    Awaited<ReturnType<typeof getAccountData>>[number]
+  >
+
   const claimedEntitiesDefinition = {
     key: 'claimed entities',
     valueComponent: LinkList,
@@ -29,20 +32,20 @@
 </script>
 
 <Box>
-  {#await details}
+  {#await account}
     <SkeletonLoader />
-  {:then details}
-    {#if details.fungible.length === 0 && details.nonFungible.length === 0 && details.item.metadata.items.length === 0}
+  {:then account}
+    {#if account.fungible.length === 0 && account.nonFungible.length === 0 && account.details.metadata.items.length === 0}
       This account doesn't hold any tokens or NFTs
     {:else}
       <Card>
         <Text bold slot="header">Tokens (fungible resources)</Text>
         <Box bgColor="surface" p="none" slot="body">
           <InfoBox>
-            {#if details.fungible.length === 0}
+            {#if account.fungible.length === 0}
               <Row><Text muted slot="left">None</Text></Row>
             {/if}
-            {#each details.fungible as fungible}
+            {#each account.fungible as fungible}
               <Row>
                 <Text slot="left" bold underlined align="right">
                   <a href="/resource/{fungible.address}">{fungible.label}</a>
@@ -60,10 +63,10 @@
         <Text bold slot="header">NFTs (nonfungible resources)</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
-            {#if details.nonFungible.length === 0}
+            {#if account.nonFungible.length === 0}
               <Row><Text muted slot="left">None</Text></Row>
             {/if}
-            {#each details.nonFungible as nft}
+            {#each account.nonFungible as nft}
               <Row>
                 <Text slot="left" bold underlined>
                   <a href="/nft/{nft.address}">{nft.label}</a>
@@ -79,10 +82,10 @@
         <Text bold slot="header">Metadata</Text>
         <Box bgColor="surface" slot="body" p="none">
           <InfoBox>
-            {#if details.item.metadata.items.length === 0}
+            {#if account.details.metadata.items.length === 0}
               <Row><Text muted slot="left">None</Text></Row>
             {/if}
-            {#each details.item.metadata.items as metadata}
+            {#each account.details.metadata.items as metadata}
               {#if knownMetadata[metadata.key]}
                 <Row>
                   <Text slot="left" bold align="right">

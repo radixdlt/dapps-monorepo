@@ -6,7 +6,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
 
-  export let resources: Promise<Resources['nonFungible']>
+  export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void

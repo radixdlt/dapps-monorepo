@@ -67,8 +67,6 @@ describe('DappMetadata side effects', () => {
         description: undefined
       }
     ]
-    expect(getFormattedAccounts(accounts, overviewResponse)).toStrictEqual(
-      expected
-    )
+    expect(getFormattedAccounts(accounts)).toStrictEqual(expected)
   })
 })

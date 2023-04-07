@@ -1,12 +1,4 @@
-import {
-  getEntitiesDetails,
-  getEntityDetails,
-  getEntityNonFungibleIDs,
-  getEntityNonFungibleVaults
-} from '@api/gateway'
-import { getStringMetadata } from '@api/utils/resources'
 import { sendTransaction } from '@api/wallet'
-import type { StateEntityDetailsResponse } from '@radixdlt/babylon-gateway-api-sdk'
 import { hash } from '@utils'
 
 export const getCreateBadgeManifest = (accountAddress: string) => `
@@ -35,7 +27,6 @@ CALL_METHOD
 export const getDeployPackageManifest = (
   wasm: string,
   abi: string,
-  accountAddress: string,
   nftAddress: string,
   nftId: string
 ) => {
@@ -194,61 +185,6 @@ export const getDeployPackageManifest = (
         Enum("AccessRule::DenyAll")          # Default Auth Mutability Field
     );
       `
-}
-
-export const queryResources = async (selectedAccountAddress: string) => {
-  const details = await getEntityDetails(selectedAccountAddress)
-  const non_fungible_resources = details.non_fungible_resources || { items: [] }
-
-  if (non_fungible_resources.items.length === 0) {
-    return []
-  }
-
-  const addresses = non_fungible_resources.items.map(
-    (nft) => nft.resource_address
-  )
-
-  const addName = (entity: StateEntityDetailsResponse) =>
-    entity.items.map((item) => ({
-      address: item.address,
-      name: getStringMetadata('name')(item.metadata)
-    }))
-
-  const nonFungiblesWithNames = await getEntitiesDetails(addresses).then(
-    addName
-  )
-
-  const vaults = await Promise.all(
-    nonFungiblesWithNames.map(async ({ address }) => ({
-      resource: address,
-      vault: await (
-        await getEntityNonFungibleVaults(selectedAccountAddress, address)
-      ).items[0]!.vault_address
-    }))
-  )
-
-  const nfts = await Promise.all(
-    nonFungiblesWithNames.map(async (nft) => ({
-      name: nft.name,
-      ...(await getEntityNonFungibleIDs(
-        selectedAccountAddress!,
-        nft.address,
-        vaults.find((vault) => vault.resource === nft.address)!.vault
-      ))
-    }))
-  )
-
-  return nfts.reduce(
-    (prev, cur) => [
-      ...prev,
-      ...cur.items.map(({ non_fungible_id }) => ({
-        address: cur.resource_address,
-        id: non_fungible_id,
-        name: cur.name
-      }))
-    ],
-    [] as Array<{ address: string; id: string; name: string | undefined }>
-  )
 }
 
 export const createBadge = (accountAddress: string) =>

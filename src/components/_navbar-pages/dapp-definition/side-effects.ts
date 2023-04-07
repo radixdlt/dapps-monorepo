@@ -1,40 +1,43 @@
-import { getEntitiesDetails } from '@api/gateway'
 import {
   getStringMetadata,
-  getPopulatedResources,
-  getVectorMetadata
+  getAccountData,
+  getVectorMetadata,
+  type DecoratedAccount
 } from '@api/utils/resources'
-import type { StateEntityDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
 import type { Account } from '@stores'
 
 export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>
 >[number]
 
-const hasDAppDefinitionMetadata = (entity?: StateEntityDetailsResponseItem) =>
-  !!entity?.metadata.items.find(
+const hasDAppDefinitionMetadata = (account: DecoratedAccount) =>
+  account.details.metadata.items.some(
     (item) =>
       item.key === 'account_type' && item.value.as_string === 'dapp definition'
   )
 
 export const getFormattedAccounts = async (accounts: Account[]) => {
-  const accountOverviews = await getEntitiesDetails(
+  const decoratedAccounts = await getAccountData(
     accounts.map((acc) => acc.address)
   )
-  const overviews = accountOverviews.items.reduce((prev, next) => {
-    prev[next.address] = next
-    return prev
-  }, {} as Record<string, StateEntityDetailsResponseItem>)
+
+  const getAccount = (address: string) =>
+    decoratedAccounts.find((acc) => acc.accountAddress === address)!
 
   return Promise.all(
     accounts.map(async ({ address, label }) => {
-      const isDApp = hasDAppDefinitionMetadata(overviews[address])
-      const metadata = overviews[address]?.metadata
+      const account = getAccount(address)
+      const isDApp = hasDAppDefinitionMetadata(account)
+      const metadata = account.details.metadata
+
       return {
         label: `${label}${isDApp ? ' - dApp definition' : ''}`,
         address,
         dappDefinition: isDApp,
-        resources: await getPopulatedResources(address),
+        resources: {
+          fungible: account.fungible,
+          nonFungible: account.nonFungible
+        },
         name: getStringMetadata('name')(metadata),
         description: getStringMetadata('description')(metadata),
         domain: getStringMetadata('domain')(metadata),

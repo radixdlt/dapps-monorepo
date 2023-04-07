@@ -8,17 +8,16 @@
   import { pipe } from 'ramda'
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
-  import { getNFTAddress } from '@utils'
   import { derived, writable } from 'svelte/store'
-  import {
-    createBadge,
-    getDeployPackageManifest,
-    queryResources
-  } from './side-effects'
+  import { createBadge, getDeployPackageManifest } from './side-effects'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import type { sendTransaction } from '@api/wallet'
   import { getTransactionDetails } from '@api/gateway'
+  import {
+    getAccountData,
+    type NonFungibleResource
+  } from '@api/utils/resources'
 
   export let accounts: Account[]
 
@@ -49,15 +48,7 @@
   const selectedAccount = writable<(Account & { label: string }) | undefined>(
     undefined
   )
-  const selectedBadge = writable<
-    | {
-        address: string
-        id: string
-        name: string
-        label: string
-      }
-    | undefined
-  >(undefined)
+  const selectedBadge = writable<NonFungibleResource | undefined>(undefined)
   const badgeCreated = writable<string>()
 
   const packageDeployed = writable<{
@@ -67,9 +58,12 @@
 
   const nonFungibleResources = derived<
     typeof selectedAccount,
-    Awaited<ReturnType<typeof queryResources>>
+    Awaited<ReturnType<typeof getAccountData>>[number]['nonFungible']
   >(selectedAccount, ($selectedAccount, set) => {
-    if ($selectedAccount) queryResources($selectedAccount.address).then(set)
+    if ($selectedAccount)
+      getAccountData([$selectedAccount.address]).then((resources) =>
+        set(resources[0]!.nonFungible)
+      )
   })
 
   const deployButtonEnabled = derived(
@@ -83,13 +77,12 @@
   ) => {
     const wasm = await $requiredUploadedFiles.wasm
     const abi = await $requiredUploadedFiles.abi
-    const address = $selectedAccount!.address
     const badge = $selectedBadge!
 
-    send(
-      getDeployPackageManifest(wasm, abi, address, badge.address, badge.id),
-      [wasm, abi]
-    )
+    send(getDeployPackageManifest(wasm, abi, badge.address, badge.id), [
+      wasm,
+      abi
+    ])
   }
 
   const handleResponse = async ({
@@ -159,16 +152,7 @@
         <Select
           placeholder="Select Badge NFT"
           bind:selected={$selectedBadge}
-          options={[
-            ...$nonFungibleResources.map((resource) => ({
-              ...resource,
-              label: `${resource.name ?? ''} ${
-                resource.name ? '(' : ' '
-              }${getNFTAddress(resource.address, resource.id)}${
-                resource.name ? ')' : ' '
-              }`
-            }))
-          ]}
+          options={$nonFungibleResources}
         />
       {:else}
         <Select placeholder="Select Badge NFT" />

@@ -18,16 +18,18 @@
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import { getPopulatedResources, type Resources } from '@api/utils/resources'
+  import { getAccountData, type Resources } from '@api/utils/resources'
 
   type OptionsType = Option<{ address: string }>
 
   export let accounts: OptionsType[]
 
-  let transformedOverview: Promise<Resources> = new Promise((resolve) => {})
+  let resources: Promise<Resources[number]> = new Promise((resolve) => {})
 
   $: if (selectedFromAccount)
-    transformedOverview = getPopulatedResources(selectedFromAccount.address)
+    resources = getAccountData([selectedFromAccount.address]).then(
+      (resources) => resources[0]!
+    )
 
   let selectedFromAccount: { address: string; label: string } | undefined
   let selectedToAccount: { address: string; label: string } | undefined
@@ -94,7 +96,7 @@
   <slot
     selectedFromAccount={selectedFromAccount?.address}
     selectedToAccount={selectedToAccount?.address || otherAccount}
-    resources={transformedOverview}
+    {resources}
     {setTransactionManifest}
     {setResourceSelected}
   />
