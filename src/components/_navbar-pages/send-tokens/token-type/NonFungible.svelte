@@ -58,8 +58,8 @@
   $: setTransactionManifest(
     getSendNFTManifest(
       selected.map((nft) => ({
-        resourceAddress: nft.address.split(':')[0] as string,
-        id: nft.address.split(':')[1] as string
+        resourceAddress: nft.address,
+        id: nft.id as string
       })),
       selectedFromAccount,
       selectedToAccount
