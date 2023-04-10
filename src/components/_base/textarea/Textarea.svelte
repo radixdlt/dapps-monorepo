@@ -22,7 +22,8 @@
     opacity: `${disabled ? '50%' : '100%'}`,
     resize: 'none',
     width: '100%',
-    fontSize
+    fontSize,
+    color: '$textColor'
   })()
 
   let component: HTMLTextAreaElement
