@@ -44,7 +44,6 @@
 </Box>
 <Box justify="center">
   <Textarea
-    fullWidth
     bind:value={transactionManifest}
     placeholder="Enter a raw transaction manifest"
     size="lg"

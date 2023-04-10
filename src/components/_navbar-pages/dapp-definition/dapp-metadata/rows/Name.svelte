@@ -6,7 +6,7 @@
   export let faded: boolean
 </script>
 
-<Box wrapper cx={{ width: '$5xl' }}>
+<Box wrapper cx={{ width: '$6xl' }}>
   <Input
     disabled={faded}
     type="text"

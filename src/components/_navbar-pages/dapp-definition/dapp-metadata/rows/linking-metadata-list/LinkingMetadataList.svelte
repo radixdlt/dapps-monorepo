@@ -28,6 +28,6 @@
 
 <style>
   .input {
-    width: var(--sizes-5xl);
+    width: var(--sizes-6xl);
   }
 </style>

@@ -12,7 +12,6 @@
   export let maxlength: number | undefined = undefined
   export let padding: SpaceKeys = '$sm'
   export let fontSize: Size = '$sm'
-  export let fullWidth = false
 
   $: style = css({
     borderRadius: '$sm',
@@ -22,7 +21,7 @@
     backgroundColor: `${transparent ? '' : '$background'}`,
     opacity: `${disabled ? '50%' : '100%'}`,
     resize: 'none',
-    width: `${fullWidth ? '100%' : 'auto'}`,
+    width: '100%',
     fontSize
   })()
 
