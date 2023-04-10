@@ -117,7 +117,7 @@ const transformNonFungible = async (
         type: 'non-fungible',
         label: nonFungibleResourceDisplayLabel(entity, id),
         id,
-        address: `${entity.address}:${id}`,
+        address: `${entity.address}`,
         name: getStringMetadata('name')(entity.metadata)
       })
     }
