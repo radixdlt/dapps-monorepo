@@ -7,6 +7,6 @@
   export let data: PageData
 </script>
 
-<SearchPage title="Package" address={data.componentAddress}>
+<SearchPage title="Component" address={data.componentAddress}>
   <Component address={data.componentAddress} />
 </SearchPage>

@@ -9,26 +9,51 @@
 
   export let address: string
 
-  $: details = getEntityDetails([address]).then((details) => details[0]!)
+  $: details = getEntityDetails([address]).then((details) => details[0]! as any)
 </script>
 
-<Box>
-  <Card>
-    <Box wrapper slot="body">
-      {#await details}
-        <LoadingInfoBox />
-      {:then details}
-        <InfoBox>
-          {#each details.metadata.items as metadata}
-            <Row>
-              <Text slot="left" bold align="right">{metadata.key}</Text>
-              <Text slot="right" bold align="right">
-                {metadata.value.as_string}
-              </Text>
-            </Row>
-          {/each}
-        </InfoBox>
-      {/await}
-    </Box>
-  </Card>
-</Box>
+<Card>
+  <Text bold slot="header">Info</Text>
+  <div slot="body">
+    {#await details}
+      <LoadingInfoBox />
+    {:then details}
+      <InfoBox>
+        <Row>
+          <Text slot="left" bold align="right">Package Name</Text>
+          <Text slot="right" align="left">{details.details.blueprint_name}</Text
+          >
+        </Row>
+        <Row>
+          <Text slot="left" bold align="right">Package Address</Text>
+          <Text slot="right" align="left"
+            >{details.details.package_address}</Text
+          >
+        </Row>
+      </InfoBox>
+    {/await}
+  </div>
+</Card>
+
+<Card>
+  <Text bold slot="header">Metadata</Text>
+  <Box wrapper slot="body">
+    {#await details}
+      <LoadingInfoBox />
+    {:then details}
+      <InfoBox>
+        {#if details.metadata.items.length === 0}
+          <Row><Text muted slot="left">None</Text></Row>
+        {/if}
+        {#each details.metadata.items as metadata}
+          <Row>
+            <Text slot="left" bold align="right">{metadata.key}</Text>
+            <Text slot="right" bold align="right">
+              {metadata.value.as_string}
+            </Text>
+          </Row>
+        {/each}
+      </InfoBox>
+    {/await}
+  </Box>
+</Card>
