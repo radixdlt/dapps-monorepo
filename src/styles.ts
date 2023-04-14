@@ -237,26 +237,3 @@ export const darkTheme = createTheme<
     success: colors.green3
   }
 })
-
-globalCss({
-  '*': {
-    boxSizing: 'border-box',
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'inherit',
-    margin: 0,
-    padding: 0
-  },
-  body: {
-    minWidth: '100vw',
-    height: '100vh',
-    fontWeight: '400',
-    backgroundColor: '$background',
-    color: '$onBackground'
-  },
-  'a:link': { 'text-decoration': 'none', color: 'inherit' },
-  'a:visited': { 'text-decoration': 'none', color: 'inherit' },
-  'a:hover': { 'text-decoration': 'none' },
-  'a:active': { 'text-decoration': 'none' },
-  'input:hover': { outline: 'none' },
-  'input:focus': { outline: 'none' }
-})()

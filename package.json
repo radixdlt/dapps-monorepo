@@ -79,6 +79,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "request": "^2.88.2",
+    "sass": "^1.61.0",
     "storybook": "^7.0.3",
     "storybook-addon-mock": "^4.0.0",
     "svelte": "^3.49.0",
