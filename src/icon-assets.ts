@@ -17,5 +17,8 @@ export const icons = {
   removeButton: 'icons/remove-button.svg',
   trash: '/icons/trash.svg',
   greenCheck: '/icons/green-check.svg',
+  staking: '/icons/staking.svg',
+  checkmark: '/icons/checkmark.svg',
+  cross: '/icons/cross.svg',
   checkedCheckbox: '/icons/checked-checkbox.svg'
 } as const

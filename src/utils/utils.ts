@@ -89,3 +89,14 @@ export const useContext = <
 
 export const accountLabel = (account: Account) =>
   `${account.label} (${shortenAddress(account.address)})`
+
+export const formatAmount = (amount: number) => {
+  const suffixes = ['', 'K', 'M']
+  let suffixNum = 0
+  let shortValue = amount
+  while (shortValue >= 1000 && suffixNum < 2) {
+    shortValue /= 1000
+    suffixNum++
+  }
+  return shortValue.toFixed(2) + suffixes[suffixNum]
+}
