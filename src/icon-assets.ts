@@ -16,5 +16,6 @@ export const icons = {
   plusButton: '/icons/plus-button.svg',
   removeButton: 'icons/remove-button.svg',
   trash: '/icons/trash.svg',
-  greenCheck: '/icons/green-check.svg'
+  greenCheck: '/icons/green-check.svg',
+  checkedCheckbox: '/icons/checked-checkbox.svg'
 } as const
