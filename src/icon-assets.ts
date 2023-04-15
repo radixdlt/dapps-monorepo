@@ -20,5 +20,6 @@ export const icons = {
   staking: '/icons/staking.svg',
   checkmark: '/icons/checkmark.svg',
   cross: '/icons/cross.svg',
-  checkedCheckbox: '/icons/checked-checkbox.svg'
+  checkedCheckbox: '/icons/checked-checkbox.svg',
+  bookmark: '/icons/bookmark.svg'
 } as const
