@@ -48,9 +48,10 @@
       {#each routes as route (route.path)}
         <SidebarItem
           icon={route.icon}
-          isActive={isSameRoute(route.path, page.routeId ?? '')}
+          isActive={isSameRoute(route.path, page.route.id ?? '')}
           link={route.path}
-          on:click={() => (page.routeId = route.path)}>{route.text}</SidebarItem
+          on:click={() => (page.route.id = route.path)}
+          >{route.text}</SidebarItem
         >
       {/each}
     </Box>

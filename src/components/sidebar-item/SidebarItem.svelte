@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import { css } from '@styles'
-  import type { icons } from 'src/icon-assets'
+  import type { icons } from '../../../src/icon-assets'
 
   export let isActive = false
   export let icon: keyof typeof icons
