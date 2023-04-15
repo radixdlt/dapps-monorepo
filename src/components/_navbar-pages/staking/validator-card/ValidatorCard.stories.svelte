@@ -26,7 +26,7 @@
 <Story
   name="Primary"
   args={{
-    name: 'Validator Name',
+    name: '🔥RADNODE',
     address: 'validator_1234567890',
     totalStake: '1000000',
     percentageOwnerStake: '0.5',
