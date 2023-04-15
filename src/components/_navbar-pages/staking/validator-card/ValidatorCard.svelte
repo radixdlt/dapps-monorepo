@@ -26,7 +26,7 @@
 
 <div class="validator-card">
   <div class="icon">
-    <Icon size="large" type="staking" />
+    <slot name="icon" />
   </div>
 
   <div class="name">
@@ -78,7 +78,7 @@
     align-items: center;
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
-    background: var(--color-tertiary-light);
+    background: var(--color-light);
     padding: var(--spacing-lg) 0;
     border: var(--border);
     min-width: fit-content;
