@@ -9,10 +9,13 @@
 
 <Template let:args>
   <div style:display="flex" style:flex-direction="column" style:gap="2rem">
-    <StakedValidatorCard validatorInfo={args} />
+    <ValidatorListCard validatorInfo={args} />
 
-    <ValidatorListCard
-      validatorInfo={args}
+    <StakedValidatorCard
+      validatorInfo={{
+        ...args,
+        acceptsStake: false
+      }}
       stakedAmount={1000}
       unstakingAmount={500}
       readyToClaim={200}
@@ -23,7 +26,7 @@
 <Story
   name="Primary"
   args={{
-    name: 'Validator Name',
+    name: '🔥RADNODE',
     address: 'validator_1234567890',
     totalStake: '1000000',
     percentageOwnerStake: '0.5',

@@ -21,6 +21,7 @@
     --color-accent-red: #ef4136;
     --color-accent-blue: #00aeef;
     --color-accent-yellow: #fff200;
+    --color-alert: #e59700;
     /* Neutral colors */
     --color-grey-1: #003057;
     --color-grey-2: #8a8fa4;
@@ -72,11 +73,19 @@
   }
   /* common utilities */
   :global(.common) {
+    /* borders */
     --border-radius: 8px;
     --border-radius-small: 2px;
     --border: 1px solid var(--color-grey-4);
     --border-divider: 2px solid #e2e5ed70;
+
+    /* shadows */
     --shadow: 0px 6.72099px 11px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0px 6.72099px 11px rgba(0, 0, 0, 0.12);
+
+    /* transitions */
+    --transition-hover-card: all 0.2s ease-in-out;
+    --transform-hover-card: translate(-0.2rem, -0.2rem);
   }
 
   /* global styles */

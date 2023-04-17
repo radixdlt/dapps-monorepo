@@ -53,7 +53,9 @@
     {#if acceptsStake}
       <Icon size="small" type="checkmark" />
     {:else}
-      <Icon size="small" type="cross" />
+      <div style:color="var(--color-alert)">
+        <Icon size="small" type="cross" />
+      </div>
     {/if}
   </div>
 
@@ -82,6 +84,13 @@
     padding: var(--spacing-lg) 0;
     border: var(--border);
     min-width: fit-content;
+    cursor: pointer;
+    transition: var(--transition-hover-card);
+  }
+
+  .validator-card:hover {
+    transform: var(--transform-hover-card);
+    box-shadow: var(--shadow-hover);
   }
 
   .icon {
