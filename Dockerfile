@@ -43,4 +43,5 @@ CMD ["pm2-runtime","build/index.js"]
 FROM nginx:alpine AS storybook
 
 COPY --from=base /usr/src/app/storybook-static /usr/share/nginx/html
+COPY nginx/mime.types /etc/nginx/mime.types
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
