@@ -87,7 +87,7 @@ export const useContext = <
     getContext<Contexts[typeof name]>(name)
 })
 
-export const accountLabel = (account: Account) =>
+export const accountLabel = (account: Omit<Account, 'displayed'>) =>
   `${account.label} (${shortenAddress(account.address)})`
 
 export const formatAmount = (amount: number) => {

@@ -12,14 +12,20 @@
   import { RadixDappToolkit, type State } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '../../src/network'
   import Theme from '@components/_base/theme/Theme.svelte'
+  import { accountLabel } from '@utils'
 
   let mounted = false
 
   onMount(() => {
     const updateAccounts = (value: State['accounts']) => {
       if (value) {
-        accounts.set(value)
-        selectedAccount.set(value[0])
+        let _accounts = value.map((account) => ({
+          ...account,
+          displayed: accountLabel(account)
+        }))
+
+        accounts.set(_accounts)
+        selectedAccount.set(_accounts[0])
       }
     }
     mounted = true

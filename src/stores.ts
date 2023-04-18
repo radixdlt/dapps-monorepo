@@ -4,6 +4,7 @@ import { writable as localStorageStore } from 'svelte-local-storage-store'
 export type Account = {
   label: string
   address: string
+  displayed: string
   appearanceId?: number
 }
 
