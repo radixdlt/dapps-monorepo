@@ -27,14 +27,14 @@
   $: if (selected.length === 1) dispatch('selected')
 </script>
 
-<div class="validator-card">
-  <div class="icon">
+<div id="validator-card">
+  <div id="icon">
     {#await validatorInfo then}
       <slot name="icon" />
     {/await}
   </div>
 
-  <div class="name">
+  <div id="name">
     {#await validatorInfo}
       <SkeletonLoader width={200} />
     {:then { name }}
@@ -42,7 +42,7 @@
     {/await}
   </div>
 
-  <div class="address">
+  <div id="address">
     {#await validatorInfo}
       <SkeletonLoader width={80} />
     {:then { address }}
@@ -96,10 +96,14 @@
   </div>
 </div>
 
-<style>
-  .validator-card {
-    display: grid;
+<style lang="scss">
+  @mixin validator-card-grid {
     grid: 1fr / 5rem minmax(15rem, 3fr) minmax(8rem, 1.5fr) 1fr 1fr 5fr 0.5fr 1fr;
+  }
+
+  #validator-card {
+    @include validator-card-grid;
+    display: grid;
     align-items: center;
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
@@ -110,26 +114,26 @@
     cursor: pointer;
     transition: var(--transition-hover-card);
     height: 5rem;
+
+    :hover {
+      transform: var(--transform-hover-card);
+      box-shadow: var(--shadow-hover);
+    }
   }
 
-  .validator-card:hover {
-    transform: var(--transform-hover-card);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .icon {
+  #icon {
     height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-right: var(--border-divider);
   }
-  .name {
+  #name {
     font-weight: var(--font-weight-bold-2);
     padding-left: var(--spacing-md);
   }
 
-  .address {
+  #address {
     height: 80%;
     width: 100%;
     display: flex;
