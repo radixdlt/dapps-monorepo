@@ -29,7 +29,9 @@
 
 <div class="validator-card">
   <div class="icon">
-    <slot name="icon" />
+    {#await validatorInfo then}
+      <slot name="icon" />
+    {/await}
   </div>
 
   <div class="name">
