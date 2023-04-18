@@ -3,28 +3,15 @@
   import ValidatorCard from '../ValidatorCard.svelte'
   import type { ComponentProps } from 'svelte'
 
-  export let validatorInfo: ComponentProps<ValidatorCard>
+  export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
   export let stakedAmount: number
   export let unstakingAmount: number
   export let readyToClaim: number
-
-  let bookmarked: boolean
 </script>
 
 <div class="validator-list-card">
-  <ValidatorCard {...validatorInfo}>
-    <div
-      slot="icon"
-      class="bookmark"
-      on:click={() => {
-        bookmarked = !bookmarked
-      }}
-    >
-      <Icon
-        size="small"
-        type={bookmarked ? 'bookmarkFilled' : 'bookmarkEmpty'}
-      />
-    </div>
+  <ValidatorCard {validatorInfo}>
+    <Icon slot="icon" size="large" type="staking" />
   </ValidatorCard>
   <div class="staking-box">
     <div class="staking-box-grid">
@@ -79,7 +66,7 @@
   .staking-box-grid {
     display: grid;
     grid: 1fr/ 1fr 1fr 2fr 3fr;
-    width: 60%;
+    width: 60rem;
     margin-left: 1.5rem;
     gap: var(--spacing-sm);
     align-items: center;
@@ -87,14 +74,13 @@
 
   .amount-display {
     display: grid;
-    grid: 1fr / 1fr 1fr;
+    grid: 1fr / auto 1fr;
     gap: var(--spacing-sm);
   }
 
   .amount-title {
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);
-    justify-self: end;
   }
 
   .amount-value {

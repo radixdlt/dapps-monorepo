@@ -3,9 +3,19 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import ValidatorCard from '../ValidatorCard.svelte'
 
-  export let validatorInfo: ComponentProps<ValidatorCard>
+  export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
+
+  let bookmarked: boolean
 </script>
 
-<ValidatorCard {...validatorInfo}>
-  <Icon slot="icon" size="large" type="staking" />
+<ValidatorCard {validatorInfo}>
+  <div
+    slot="icon"
+    class="bookmark"
+    on:click={() => {
+      bookmarked = !bookmarked
+    }}
+  >
+    <Icon size="small" type={bookmarked ? 'bookmarkFilled' : 'bookmarkEmpty'} />
+  </div>
 </ValidatorCard>
