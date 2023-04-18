@@ -79,16 +79,18 @@
   </div>
 
   <div class="info-column last-column" style:min-width="10rem">
-    <Checkbox
-      options={[
-        {
-          label: 'SELECT',
-          checked: false
-        }
-      ]}
-      bind:selected
-      --label-color="var(--color-grey-2)"
-    />
+    {#await validatorInfo then}
+      <Checkbox
+        options={[
+          {
+            label: 'SELECT',
+            checked: false
+          }
+        ]}
+        bind:selected
+        --label-color="var(--color-grey-2)"
+      />
+    {/await}
   </div>
 </div>
 
