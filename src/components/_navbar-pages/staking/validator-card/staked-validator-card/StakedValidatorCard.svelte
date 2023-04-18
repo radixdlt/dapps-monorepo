@@ -2,11 +2,15 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import ValidatorCard from '../ValidatorCard.svelte'
   import type { ComponentProps } from 'svelte'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
-  export let stakedAmount: number
-  export let unstakingAmount: number
-  export let readyToClaim: number
+
+  export let stakingInfo: Promise<{
+    stakedAmount: number
+    unstakingAmount: number
+    readyToClaim: number
+  }>
 </script>
 
 <div class="validator-list-card">
@@ -17,16 +21,30 @@
     <div class="staking-box-grid">
       <div class="amount-display">
         <div class="amount-title">STAKED</div>
-        <div class="amount-value">{stakedAmount}</div>
+        {#await stakingInfo}
+          <SkeletonLoader width={30} />
+        {:then stakingInfo}
+          <div class="amount-value">{stakingInfo.stakedAmount}</div>
+        {/await}
       </div>
       <div class="amount-display">
         <div class="amount-title">UNSTAKING</div>
-        <div class="amount-value">{unstakingAmount}</div>
+        {#await stakingInfo}
+          <SkeletonLoader width={30} />
+        {:then stakingInfo}
+          <div class="amount-value">{stakingInfo.unstakingAmount}</div>
+        {/await}
       </div>
-      <div class="ready-to-claim-text">(ready to claim in approx. 8 days)</div>
+      {#await validatorInfo then}
+        <div class="ready-to-claim-text">
+          (ready to claim in approx. 8 days)
+        </div>
+      {/await}
       <div class="links">
-        <a>add a reminder to calendar</a>
-        <a>ready to claim {readyToClaim} XRD</a>
+        {#await stakingInfo then stakingInfo}
+          <a>add a reminder to calendar</a>
+          <a>ready to claim {stakingInfo.readyToClaim} XRD</a>
+        {/await}
       </div>
     </div>
   </div>
