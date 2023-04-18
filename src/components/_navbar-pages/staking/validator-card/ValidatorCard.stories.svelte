@@ -20,6 +20,8 @@
       unstakingAmount={500}
       readyToClaim={200}
     />
+
+    <ValidatorListCard validatorInfo={new Promise(() => {})} />
   </div>
 </Template>
 

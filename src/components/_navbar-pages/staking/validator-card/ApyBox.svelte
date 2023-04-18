@@ -1,26 +1,44 @@
 <script lang="ts">
-  export let apy: number
-  export let fee: number
-  export let uptime: number
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+
+  export let apyInfo: Promise<{
+    apy: number
+    fee: number
+    uptime: number
+  }>
 </script>
 
 <div class="apy-box">
   <div class="apy">
-    {apy}%
+    {#await apyInfo}
+      <div style:display="inline-block">
+        <SkeletonLoader width={50} />
+      </div>
+    {:then { apy }}
+      {apy}%
+    {/await}
     <div class="apy-text">per year</div>
   </div>
   <div class="fee">
-    {fee}%
+    {#await apyInfo}
+      <SkeletonLoader width={50} />
+    {:then { fee }}
+      {fee}%
+    {/await}
   </div>
   <div class="uptime">
-    {uptime}%
+    {#await apyInfo}
+      <SkeletonLoader width={50} />
+    {:then { uptime }}
+      {uptime}%
+    {/await}
   </div>
 </div>
 
 <style>
   .apy-box {
     display: grid;
-    grid: 1fr / 10rem 1fr 1fr;
+    grid: 1fr / 10rem 6rem 6rem;
     padding: var(--spacing-sm);
   }
 

@@ -1,17 +1,30 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { formatAmount } from '@utils'
 
-  export let amount: number
-  export let percentage: number
+  export let stakeInfo: Promise<{
+    totalStake: number
+    percentageTotalStake: number
+  }>
 </script>
 
 <div class="stake-display">
   <div class="total">
-    {formatAmount(amount)}
+    {#await stakeInfo}
+      <div style:display="inline-block">
+        <SkeletonLoader width={50} />
+      </div>
+    {:then { totalStake }}
+      {formatAmount(totalStake)}
+    {/await}
   </div>
 
   <div class="percentage">
-    {`(${percentage}%)`}
+    {#await stakeInfo}
+      <SkeletonLoader width={50} />
+    {:then { percentageTotalStake }}
+      {`(${percentageTotalStake}%)`}
+    {/await}
   </div>
 </div>
 

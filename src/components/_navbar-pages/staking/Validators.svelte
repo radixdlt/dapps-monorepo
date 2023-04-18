@@ -1,10 +1,26 @@
-<script>
+<script lang="ts" context="module">
+  export type Validator = {
+    name: string
+    address: string
+    totalStake: number
+    percentageOwnerStake: number
+    apy: number
+    fee: number
+    uptime: number
+    acceptsStake: boolean
+    percentageTotalStake: number
+  }
+</script>
+
+<script lang="ts">
   import { accounts } from '@stores'
   import StakedValidatorList from './staked-validator-list/StakedValidatorList.svelte'
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
 
   $: connected = $accounts.length > 0
+
+  export let validators: Promise<Validator[]>
 </script>
 
 <div id="validators">
@@ -40,7 +56,10 @@
       List of validators available on the Radix Network
     </div>
   </div>
-  <ValidatorList />
+
+  <div>
+    <ValidatorList {validators} />
+  </div>
 </div>
 
 <style lang="scss">
