@@ -35,10 +35,10 @@
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @use './shared.scss';
   .apy-box {
-    display: grid;
-    grid: 1fr / 10rem 6rem 6rem;
+    @include shared.apy-box-grid;
     padding: var(--spacing-sm);
   }
 

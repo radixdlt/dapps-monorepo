@@ -23,5 +23,6 @@ export const icons = {
   checkedCheckbox: '/icons/checked-checkbox.svg',
   bookmarkEmpty: '/icons/bookmark-empty.svg',
   bookmarkFilled: '/icons/bookmark-filled.svg',
-  info: '/icons/info.svg'
+  info: '/icons/info.svg',
+  downArrow: '/icons/down-arrow.svg'
 } as const

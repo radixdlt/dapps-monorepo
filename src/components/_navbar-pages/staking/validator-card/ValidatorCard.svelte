@@ -97,28 +97,23 @@
 </div>
 
 <style lang="scss">
-  @mixin validator-card-grid {
-    grid: 1fr / 5rem minmax(15rem, 3fr) minmax(8rem, 1.5fr) 1fr 1fr 5fr 0.5fr 1fr;
-  }
-
+  @use './shared.scss';
   #validator-card {
-    @include validator-card-grid;
-    display: grid;
+    @include shared.validator-card-grid;
     align-items: center;
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
     background: var(--color-light);
     padding: var(--spacing-lg) 0;
     border: var(--border);
-    min-width: fit-content;
     cursor: pointer;
     transition: var(--transition-hover-card);
     height: 5rem;
+  }
 
-    :hover {
-      transform: var(--transform-hover-card);
-      box-shadow: var(--shadow-hover);
-    }
+  #validator-card:hover {
+    transform: var(--transform-hover-card);
+    box-shadow: var(--shadow-hover);
   }
 
   #icon {
