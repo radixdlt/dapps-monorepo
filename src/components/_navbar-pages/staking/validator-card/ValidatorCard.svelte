@@ -6,6 +6,7 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { truncateNumber } from '@utils'
 
   export let validatorInfo: Promise<{
     name: string
@@ -58,7 +59,7 @@
     {#await validatorInfo}
       <SkeletonLoader width={30} />
     {:then { percentageOwnerStake }}
-      {percentageOwnerStake}%
+      {truncateNumber(percentageOwnerStake)}%
     {/await}
   </div>
 

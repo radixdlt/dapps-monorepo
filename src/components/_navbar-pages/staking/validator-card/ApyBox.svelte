@@ -1,5 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { truncateNumber } from '@utils'
 
   export let apyInfo: Promise<{
     apy: number
@@ -15,7 +16,7 @@
         <SkeletonLoader width={50} />
       </div>
     {:then { apy }}
-      {apy}%
+      {truncateNumber(apy)}%
     {/await}
     <div class="apy-text">per year</div>
   </div>
@@ -23,14 +24,14 @@
     {#await apyInfo}
       <SkeletonLoader width={50} />
     {:then { fee }}
-      {fee}%
+      {truncateNumber(fee)}%
     {/await}
   </div>
   <div class="uptime">
     {#await apyInfo}
       <SkeletonLoader width={50} />
     {:then { uptime }}
-      {uptime}%
+      {truncateNumber(uptime)}%
     {/await}
   </div>
 </div>

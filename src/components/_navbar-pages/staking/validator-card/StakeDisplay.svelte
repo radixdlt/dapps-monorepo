@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { formatAmount } from '@utils'
+  import { formatAmount, truncateNumber } from '@utils'
 
   export let stakeInfo: Promise<{
     totalStake: number
@@ -23,7 +23,7 @@
     {#await stakeInfo}
       <SkeletonLoader width={50} />
     {:then { percentageTotalStake }}
-      {`(${percentageTotalStake}%)`}
+      {`(${truncateNumber(percentageTotalStake)}%)`}
     {/await}
   </div>
 </div>
