@@ -171,13 +171,7 @@ jobs:
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
           parse_json: true
       - name: Run story book tests
-        run: |
-            yarn
-            yarn storybook > output.log 2>&1 &
-            STORYBOOK_PID=$!
-            tail -n0 -f output.log | sed '/Svelte started/ q'
-            yarn test:storybook
-            kill $STORYBOOK_PID
+        run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
