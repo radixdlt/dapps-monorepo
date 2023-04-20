@@ -7,8 +7,9 @@
   import Overview from './Overview.svelte'
   import Raw from './Raw.svelte'
   import { getTransactionDetails } from '@api/gateway'
-  import { getTxManifest } from '../../../to-be-removed/ret'
   import { goto } from '$app/navigation'
+  import { Buffer } from 'buffer'
+  import { NotarizedTransaction } from '@radixdlt/radix-engine-toolkit'
 
   export let transactionHash: string
 
@@ -20,7 +21,13 @@
   $: tx = getTransactionDetails(transactionHash)
     .then((res) => getTransactionDetails(transactionHash, res.stateVersion!))
     .then((tx) => {
-      getTxManifest(tx.encodedManifest).then(resolveManifest)
+      NotarizedTransaction.decompile(
+        Buffer.from(tx.encodedManifest, 'hex')
+      ).then((notarizedTx: any) =>
+        resolveManifest(
+          notarizedTx.signedIntent.intent.manifest.instructions.value as string
+        )
+      )
       return tx
     })
     .catch((_) => {
