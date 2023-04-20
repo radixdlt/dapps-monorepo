@@ -109,10 +109,10 @@
 </script>
 
 <Box>
-  <Text
-    >Deploy a new blueprint package to the Radix Betanet by attaching your WASM
-    and ABI files to a deploy transaction.</Text
-  >
+  <Text>
+    Deploy a new blueprint package to the Radix RCnet by attaching your WASM and
+    schema files to a deploy transaction.
+  </Text>
 </Box>
 <center>
   <Box cx={{ maxWidth: '50%', minWidth: '450px' }}>
