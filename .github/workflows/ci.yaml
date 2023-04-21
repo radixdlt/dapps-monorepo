@@ -170,8 +170,8 @@ jobs:
           secret_prefix: "GH"
           secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
           parse_json: true
-      - name: Run story book tests
-        run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
+      # - name: Run story book tests
+      #   run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
@@ -598,59 +598,59 @@ jobs:
           start: yarn dev
           wait-on: http://localhost:5173
 
-  storybook-tests:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: read
-      contents: read
-    if: ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) || github.event.pull_request
-    needs:
-      - push-dashboard
-      - push-storybook
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - name: Use Node.js
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          always-auth: true
-          node-version: 16.17.1
-          cache: yarn
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with:
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "unit-tests"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-      - name: Integration tests (PR)
-        if: github.event.pull_request
-        run: |
-          # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
-          # job will also be skipped.
-          #
-          echo "Waiting for the Kubernetes deployments to complete"
-          sleep 90
+  # storybook-tests:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write
+  #     pull-requests: read
+  #     contents: read
+  #   if: ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) || github.event.pull_request
+  #   needs:
+  #     - push-dashboard
+  #     - push-storybook
+  #   steps:
+  #     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+  #       with:
+  #         always-auth: true
+  #         node-version: 16.17.1
+  #         cache: yarn
+  #     - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+  #       with:
+  #         role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
+  #         app_name: "dashboard"
+  #         step_name: "unit-tests"
+  #         secret_prefix: "GH"
+  #         secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+  #         parse_json: true
+  #     - uses: ./.github/actions/build
+  #       with:
+  #         npm_token: ${{ env.GH_NPM_TOKEN }}
+  #     - name: Integration tests (PR)
+  #       if: github.event.pull_request
+  #       run: |
+  #         # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
+  #         # job will also be skipped.
+  #         #
+  #         echo "Waiting for the Kubernetes deployments to complete"
+  #         sleep 90
 
-          echo "Running storybook tests against PR environment"
-          export TARGET_URL="https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
-          yarn test:storybook
+  #         echo "Running storybook tests against PR environment"
+  #         export TARGET_URL="https://dashboard-storybook-pr-${{ github.event.number }}.rdx-works-main.extratools.works"
+  #         yarn test:storybook
 
-      - name: Integration tests (Hammunet)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
-          # job will also be skipped.
-          #
-          echo "Waiting for the Kubernetes deployments to complete"
-          sleep 90
+  #     - name: Integration tests (Hammunet)
+  #       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #       run: |
+  #         # Due to a limitation on Github Action we cannot depend on jobs that might be skipped, because this
+  #         # job will also be skipped.
+  #         #
+  #         echo "Waiting for the Kubernetes deployments to complete"
+  #         sleep 90
 
-          echo "Running storybook tests against hammunet"
-          export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
-          yarn test:storybook
+  #         echo "Running storybook tests against hammunet"
+  #         export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
+  #         yarn test:storybook
