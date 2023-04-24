@@ -7,6 +7,7 @@ inputs:
   network_name:
     description: 'Network name to use in build.'
     required: true
+
 runs:
   using: "composite"
   steps:
