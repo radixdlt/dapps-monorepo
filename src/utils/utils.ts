@@ -100,3 +100,5 @@ export const formatAmount = (amount: number) => {
   }
   return shortValue.toFixed(2) + suffixes[suffixNum]
 }
+
+export const truncateNumber = (num: number) => num.toFixed(2)

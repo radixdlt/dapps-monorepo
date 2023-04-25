@@ -1,0 +1,15 @@
+@mixin validator-card-grid {
+  display: grid;
+  grid:
+    1fr / 5rem minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1.5fr) minmax(0, 2fr) minmax(
+      0,
+      5fr
+    )
+    minmax(0, 1.5fr) minmax(0, 1.5fr);
+  min-width: 75rem;
+}
+
+@mixin apy-box-grid {
+  display: grid;
+  grid: 1fr / 10rem 6rem 6rem;
+}

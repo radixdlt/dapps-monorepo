@@ -1,26 +1,26 @@
 <script lang="ts">
-  import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
+  import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
 
-  const validators = Promise.resolve(
-    Array(10).fill({
+  const validators = Array(10)
+    .fill(undefined)
+    .map(() => ({
       name: 'RADNODE🔥',
       address: '0x1234567890',
-      totalStake: 100000,
-      percentageOwnerStake: 50,
-      apy: 10,
-      fee: 0.1,
-      uptime: 0.9,
-      acceptsStake: true,
-      percentageTotalStake: 50
-    })
-  )
+      totalStake: Math.random() * 1000000,
+      percentageOwnerStake: Math.random() * 30,
+      apy: Math.random() * 10,
+      fee: Math.random() * 0.1,
+      uptime: Math.random() * 0.9,
+      acceptsStake: Math.random() > 0.5 ? true : false,
+      percentageTotalStake: Math.random() * 50
+    }))
 </script>
 
 <Meta title="Navbar Pages / Validators" />
 
 <Story name="Primary">
-  <Validators {validators} />
+  <Validators validators={Promise.resolve(validators)} />
 </Story>
 
 <Story name="Loading">
