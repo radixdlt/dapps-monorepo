@@ -7,7 +7,13 @@
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
+  import {
+    ManifestBuilder,
+    ManifestAstValue,
+    InstructionList
+  } from '@radixdlt/radix-engine-toolkit'
   import { boxStyle } from '../SendTokens.svelte'
+  import { CURRENT_NETWORK } from '../../../../network'
 
   export let resources: Promise<FungibleResource[]>
   export let selectedFromAccount: string = ''
@@ -20,24 +26,25 @@
     fromAccount: string,
     toAccount: string,
     amount: number
-  ) =>
-    `
-      CALL_METHOD 
-        Address("${fromAccount}") 
-        "withdraw"
-        Address("${resource}")
-        Decimal("${amount}");  
-        
-      TAKE_FROM_WORKTOP_BY_AMOUNT
-        Decimal("${amount}")
-        Address("${resource}")
-        Bucket("bucket");
-    
-      CALL_METHOD
-        Address("${toAccount}") 
-        "deposit"
-        Bucket("bucket");
-    `
+  ): Promise<string> => {
+    if (!resource || !fromAccount || !toAccount || !amount) {
+      return Promise.resolve('')
+    }
+
+    const manifest = new ManifestBuilder()
+      .callMethod(fromAccount, 'withdraw', [
+        new ManifestAstValue.Address(resource),
+        new ManifestAstValue.Decimal(amount)
+      ])
+      .takeFromWorktopByAmount(resource, amount, (builder, bucket) =>
+        builder.callMethod(toAccount, 'deposit', [bucket])
+      )
+      .build()
+
+    return manifest
+      .convert(InstructionList.Kind.String, CURRENT_NETWORK.id)
+      .then((manifest: any) => manifest.instructions.value)
+  }
 
   const { response } = query('sendTransaction')
 
@@ -72,14 +79,12 @@
     )
 
   $: if (selectedResource)
-    setTransactionManifest(
-      getSendTokenManifest(
-        selectedResource.address,
-        selectedFromAccount,
-        selectedToAccount,
-        amountToSend
-      )
-    )
+    getSendTokenManifest(
+      selectedResource.address,
+      selectedFromAccount,
+      selectedToAccount,
+      amountToSend
+    ).then(setTransactionManifest)
 
   $: if ($response)
     goto(`/send-tokens/success?txID=${$response.transactionIntentHash}`)

@@ -5,6 +5,12 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
+  import {
+    InstructionList,
+    ManifestAstValue,
+    ManifestBuilder
+  } from '@radixdlt/radix-engine-toolkit'
+  import { CURRENT_NETWORK } from '../../../../network'
 
   export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''
@@ -19,29 +25,40 @@
     }[],
     fromAccount: string,
     toAccount: string
-  ) => `
-    ${nfts.reduce(
-      (prev, cur, i) =>
-        `
-      CALL_METHOD 
-        Address("${fromAccount}") 
-        "withdraw_non_fungibles"
-        Address("${cur.resourceAddress}")
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
+  ): Promise<string> => {
+    if (!nfts.length || !fromAccount || !toAccount) {
+      return Promise.resolve('')
+    }
+    const builder = new ManifestBuilder()
 
-      TAKE_FROM_WORKTOP_BY_IDS 
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
-        Address("${cur.resourceAddress}")
-        Bucket("nft${i}");
+    nfts.forEach((nft) => {
+      const nftId = BigInt(nft.id.split('#').join(''))
+      builder
+        .callMethod(fromAccount, 'withdraw_non_fungibles', [
+          new ManifestAstValue.Address(nft.resourceAddress),
+          new ManifestAstValue.Array(ManifestAstValue.Kind.NonFungibleLocalId, [
+            new ManifestAstValue.NonFungibleLocalId(
+              new ManifestAstValue.Integer(nftId)
+            )
+          ])
+        ])
+        .takeFromWorktopByIds(
+          nft.resourceAddress,
+          [
+            new ManifestAstValue.NonFungibleLocalId(
+              new ManifestAstValue.Integer(nftId)
+            )
+          ],
+          (builder, bucket) =>
+            builder.callMethod(toAccount, 'deposit', [bucket])
+        )
+    })
+    const manifest = builder.build()
 
-      CALL_METHOD
-        Address("${toAccount}")
-        "deposit"
-        Bucket("nft${i}");
-        ` + prev,
-      ``
-    )}
-  `
+    return manifest
+      .convert(InstructionList.Kind.String, CURRENT_NETWORK.id)
+      .then((manifest: any) => manifest.instructions.value)
+  }
 
   let selected: Array<Awaited<typeof resources>[number]> = []
 
@@ -55,7 +72,7 @@
 
   $: setResourceSelected(selected.length > 0)
 
-  $: setTransactionManifest(
+  $: {
     getSendNFTManifest(
       selected.map((nft) => ({
         resourceAddress: nft.address,
@@ -63,8 +80,8 @@
       })),
       selectedFromAccount,
       selectedToAccount
-    )
-  )
+    ).then(setTransactionManifest)
+  }
 </script>
 
 <Box wrapper cx={{ width: '30%' }}>
