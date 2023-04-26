@@ -99,14 +99,11 @@
 
 <style lang="scss">
   @use './shared.scss';
+  @use '../../../../mixins.scss';
   #validator-card {
+    @include mixins.card;
     @include shared.validator-card-grid;
     align-items: center;
-    box-shadow: var(--shadow);
-    border-radius: var(--border-radius);
-    background: var(--color-light);
-    padding: var(--spacing-lg) 0;
-    border: var(--border);
     cursor: pointer;
     transition: var(--transition-hover-card);
     height: 5rem;
