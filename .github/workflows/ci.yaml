@@ -540,15 +540,6 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
-          fi
       - name: Fetch AWS secrets
         uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
