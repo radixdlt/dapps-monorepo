@@ -27,7 +27,7 @@ runs:
       shell: bash
       run: |
         if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-          echo "NETWORK_NAME="${{ inputs.manual_network_name }}"" >> $GITHUB_ENV
+          echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
         elif [ "${{ github.event.action }}" = "published" ]; then
           echo "NETWORK_NAME=${{ inputs.release_network_name }}" >> $GITHUB_ENV
         elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
