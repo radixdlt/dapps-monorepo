@@ -17,10 +17,16 @@
   import StakedValidatorList from './staked-validator-list/StakedValidatorList.svelte'
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
+  import StakingCard from './staking-card/StakingCard.svelte'
 
   $: connected = $accounts.length > 0
 
   export let validators: Promise<Validator[]>
+  export let stakeInfo: Promise<{
+    staking: number
+    unstaking: number
+    readyToClaim: number
+  }>
 </script>
 
 <div id="validators">
@@ -37,6 +43,11 @@
       <div class="header-text">Your Staked Validators</div>
       <div class="sub-text">
         {#if connected}
+          <StakingCard
+            staking={stakeInfo.then((info) => info.staking)}
+            unstaking={stakeInfo.then((info) => info.unstaking)}
+            readyToClaim={stakeInfo.then((info) => info.readyToClaim)}
+          />
           <StakedValidatorList />
         {:else}
           Connect your wallet and your accounts containing Radix Network stake

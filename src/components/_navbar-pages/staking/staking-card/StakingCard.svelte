@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Button from '@components/_base/button/ButtonNew.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
 
-  export let staking: number
-  export let unstaking: number
-  export let readyToClaim: number
-  //
+  export let staking: Promise<number>
+  export let unstaking: Promise<number>
+  export let readyToClaim: Promise<number>
 </script>
 
 <div id="staking-card">
@@ -16,7 +16,11 @@
         <div class="title-text">STAKING</div>
       </div>
       <div class="amount-text">
-        {staking} XRD
+        {#await staking}
+          <SkeletonLoader />
+        {:then staking}
+          {staking} XRD
+        {/await}
       </div>
     </div>
   </div>
@@ -27,7 +31,11 @@
         <div class="title-text">UNSTAKING</div>
       </div>
       <div class="amount-text">
-        {unstaking} XRD
+        {#await unstaking}
+          <SkeletonLoader />
+        {:then unstaking}
+          {unstaking} XRD
+        {/await}
       </div>
     </div>
   </div>
@@ -35,7 +43,11 @@
     <div class="stake-display">
       <div class="title-text">READY TO CLAIM</div>
       <div class="amount-text">
-        {readyToClaim} XRD
+        {#await readyToClaim}
+          <SkeletonLoader />
+        {:then readyToClaim}
+          {readyToClaim} XRD
+        {/await}
       </div>
     </div>
     <Button size="big">Claim All</Button>
