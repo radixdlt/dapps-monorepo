@@ -59,6 +59,7 @@
     --font-weight-light: 400;
     --font-weight-bold-1: 500;
     --font-weight-bold-2: 600;
+    --font-weight-bold-3: 700;
   }
   /* themes */
   .light {
