@@ -57,33 +57,6 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
 
-  build-new:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: read
-      contents: read
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - name: Dump context
-        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "build"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
-          parse_json: true
-      - uses: ./.github/actions/new
-        with: 
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-
   setup-tags:
     runs-on: ubuntu-latest
     steps:
