@@ -16,6 +16,8 @@
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   let mounted = false
 
+  console.error('TESTING')
+
   onMount(() => {
     const updateAccounts = (value: State['accounts']) => {
       if (value) {
