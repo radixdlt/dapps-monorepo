@@ -25,5 +25,6 @@ export const icons = {
   bookmarkEmpty: '/icons/bookmark-empty.svg',
   bookmarkFilled: '/icons/bookmark-filled.svg',
   info: '/icons/info.svg',
-  downArrow: '/icons/down-arrow.svg'
+  downArrow: '/icons/down-arrow.svg',
+  ascending: '/icons/ascending.svg',
 } as const

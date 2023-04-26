@@ -11,7 +11,7 @@
   <div>ADDRESS</div>
   <div class="sortable" on:click={() => dispatch('sort-total-stake')}>
     TOTAL STAKE
-    <Icon type="downArrow" size="small" />
+    <Icon type="ascending" size="small" />
   </div>
   <div class="sortable" on:click={() => dispatch('sort-owner-stake')}>
     OWNER STAKE (%)

@@ -82,11 +82,11 @@
 
     /* shadows */
     --shadow: 0px 6.72099px 11px rgba(0, 0, 0, 0.06);
-    --shadow-hover: 0px 6.72099px 11px rgba(0, 0, 0, 0.12);
+    --shadow-hover: 0px 6.720985412597656px 13px 0px #00000030;
 
     /* transitions */
-    --transition-hover-card: all 0.2s ease-in-out;
-    --transform-hover-card: translate(-0.2rem, -0.2rem);
+    --transition-hover-card: all 0.1s ease-in-out;
+    --transform-hover-card: translate(-0.1rem, -0.1rem);
   }
 
   /* global styles */

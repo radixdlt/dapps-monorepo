@@ -10,23 +10,44 @@
     acceptsStake: boolean
     percentageTotalStake: number
   }
+
+  export type AccountWithStakes = Account & {
+    stakes: {
+      validator: string
+      staked: number
+      unstaking: number
+      readyToClaim: number
+    }[]
+  }
 </script>
 
 <script lang="ts">
-  import { accounts } from '@stores'
   import StakedValidatorList from './staked-validator-list/StakedValidatorList.svelte'
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
-
-  $: connected = $accounts.length > 0
+  import type { Account } from '@stores'
 
   export let validators: Promise<Validator[]>
-  export let stakeInfo: Promise<{
-    staking: number
-    unstaking: number
-    readyToClaim: number
-  }>
+  export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
+
+  const getTotal =
+    (type: 'staked' | 'unstaking' | 'readyToClaim') =>
+    (accounts: AccountWithStakes[]) =>
+      accounts.reduce(
+        (prev, cur) =>
+          prev + cur.stakes.reduce((prev, cur) => prev + cur[type], 0),
+        0
+      )
+
+  let totalStaked = new Promise<number>(() => {})
+  $: if (accounts) totalStaked = accounts.then(getTotal('staked'))
+
+  let totalUnstaked = new Promise<number>(() => {})
+  $: if (accounts) totalUnstaked = accounts.then(getTotal('unstaking'))
+
+  let totalReadyToClaim = new Promise<number>(() => {})
+  $: if (accounts) totalReadyToClaim = accounts.then(getTotal('readyToClaim'))
 </script>
 
 <div id="validators">
@@ -39,29 +60,36 @@
   </div>
 
   <div class="divider">
-    <div id="staked-validators" class="section">
+    <div id="staked-validators" class="header-section">
       <div class="header-text">Your Staked Validators</div>
-      <div class="sub-text">
-        {#if connected}
-          <StakingCard
-            staking={stakeInfo.then((info) => info.staking)}
-            unstaking={stakeInfo.then((info) => info.unstaking)}
-            readyToClaim={stakeInfo.then((info) => info.readyToClaim)}
-          />
-          <StakedValidatorList />
-        {:else}
+      {#if accounts}
+        <div class="sub-text">
+          Summary of your stakes for your currently connected accounts.
+        </div>
+      {:else}
+        <div class="sub-text">
           Connect your wallet and your accounts containing Radix Network stake
           pool units to see the status of your current validators and stakes.
-        {/if}
-      </div>
-      <div class="info-text">
-        <Icon size="small" type="info" />
-        What is staking?
-      </div>
+        </div>
+        <div class="info-text">
+          <Icon size="small" type="info" />
+          What is staking?
+        </div>
+      {/if}
     </div>
+    {#if accounts}
+      <div id="staking-info">
+        <StakingCard
+          staking={totalStaked}
+          unstaking={totalUnstaked}
+          readyToClaim={totalReadyToClaim}
+        />
+        <StakedValidatorList />
+      </div>
+    {/if}
   </div>
 
-  <div class="section">
+  <div class="header-section">
     <div class="header-text">All Validators</div>
     <div class="sub-text">
       List of validators available on the Radix Network
@@ -97,6 +125,10 @@
     max-width: 90rem;
   }
 
+  #staking-info {
+    padding-top: var(--spacing-xl);
+  }
+
   .info-text {
     display: flex;
     align-items: center;
@@ -111,7 +143,7 @@
     padding-bottom: var(--spacing-2xl);
   }
 
-  .section {
+  .header-section {
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);

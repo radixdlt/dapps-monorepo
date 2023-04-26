@@ -2,6 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Button from '@components/_base/button/ButtonNew.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
+  import { formatAmount } from '@utils'
 
   export let staking: Promise<number>
   export let unstaking: Promise<number>
@@ -19,7 +20,7 @@
         {#await staking}
           <SkeletonLoader />
         {:then staking}
-          {staking} XRD
+          {formatAmount(staking)} XRD
         {/await}
       </div>
     </div>
@@ -34,7 +35,7 @@
         {#await unstaking}
           <SkeletonLoader />
         {:then unstaking}
-          {unstaking} XRD
+          {formatAmount(unstaking)} XRD
         {/await}
       </div>
     </div>
@@ -46,7 +47,7 @@
         {#await readyToClaim}
           <SkeletonLoader />
         {:then readyToClaim}
-          {readyToClaim} XRD
+          {formatAmount(readyToClaim)} XRD
         {/await}
       </div>
     </div>
@@ -63,6 +64,7 @@
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
     min-width: 60rem;
+    max-width: 80rem;
   }
 
   .section {
