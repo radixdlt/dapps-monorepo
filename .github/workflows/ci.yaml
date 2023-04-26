@@ -53,7 +53,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
 
@@ -112,7 +111,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Lint
@@ -139,7 +137,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Prettier
@@ -199,7 +196,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Svelte check
@@ -232,7 +228,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Unit tests
@@ -552,7 +547,6 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          manual_network_name: ${{ github.event.inputs.ENVIRONMENT_NAME }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Run e2e tests on the PR environment

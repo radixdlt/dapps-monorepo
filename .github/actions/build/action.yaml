@@ -4,9 +4,6 @@ inputs:
   npm_token:
     description: 'NPM token for private package access.'
     required: true
-  manual_network_name:
-    description: 'Network name to use when trigger is manual.'
-    required: true
   active_network_name:
     description: 'Network name to use when triger is merge.'
     required: true
