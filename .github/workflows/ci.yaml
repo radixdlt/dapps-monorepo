@@ -26,6 +26,7 @@ on:
 
 env:
   active_network: "duje"
+  release_network: "duje2"
 
 jobs:
 
@@ -46,9 +47,9 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=${{ env.active_network }}t" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
