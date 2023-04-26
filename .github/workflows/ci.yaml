@@ -24,6 +24,9 @@ on:
           - mardunet
           - kisharnet
 
+env:
+  active_network: "hammunet"
+
 jobs:
 
   build:
@@ -61,7 +64,7 @@ jobs:
           network_name: ${{ env.NETWORK_NAME }}
       - name: Output job summary
         run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -107,6 +110,15 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
+      - name: Define network name
+        run: |
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "published" ]; then
+            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+          fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
@@ -118,6 +130,10 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          network_name: ${{ env.NETWORK_NAME }}
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
       - name: Lint
         run:  yarn lint
 
