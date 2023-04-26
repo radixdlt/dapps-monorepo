@@ -3,7 +3,7 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   KISHARNET: 'kisharnet'
-}
+} as const
 
 export const NETWORK_CONFIG = {
   [Network.HAMMUNET]: {
