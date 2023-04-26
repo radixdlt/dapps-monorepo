@@ -6,36 +6,10 @@
   import TabPanel from '@components/_base/tabs/TabPanel.svelte'
   import Overview from './Overview.svelte'
   import Raw from './Raw.svelte'
-  import { getTransactionDetails } from '@api/gateway'
-  import { goto } from '$app/navigation'
-  import { Buffer } from 'buffer'
-  import { NotarizedTransaction } from '@radixdlt/radix-engine-toolkit'
+  import type { getTransactionDetails } from '@api/gateway'
 
-  export let transactionHash: string
-
-  let resolveManifest: (value?: string) => void
-  let manifest = new Promise<string | undefined>(
-    (resolve) => (resolveManifest = resolve)
-  )
-
-  $: tx = getTransactionDetails(transactionHash)
-    .then((res) => getTransactionDetails(transactionHash, res.stateVersion!))
-    .then((tx) => {
-      NotarizedTransaction.decompile(
-        Buffer.from(tx.encodedManifest, 'hex')
-      ).then((notarizedTx: any) =>
-        resolveManifest(
-          notarizedTx.signedIntent.intent.manifest.instructions.value as string
-        )
-      )
-      return tx
-    })
-    .catch((_) => {
-      goto('/not-found')
-      return undefined as unknown as Awaited<
-        ReturnType<typeof getTransactionDetails>
-      >
-    })
+  export let tx: ReturnType<typeof getTransactionDetails>
+  export let manifest: Promise<string | undefined>
 </script>
 
 <Box bgColor="surface" useTabs>
