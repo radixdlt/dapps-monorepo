@@ -10,10 +10,8 @@ environments:
   pr: {}
   enkinet: {}
   hammunet: {}
-  nebunet: {}
   gilganet: {}
   mardunet: {}
-  betanet: {}
   kisharnet: {}
 repositories:
   - name: rdx-works
