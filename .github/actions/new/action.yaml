@@ -1,0 +1,64 @@
+name: build
+description: Build the project
+inputs:
+  npm_token:
+    description: 'NPM token for private package access.'
+    required: true
+  manual_network_name:
+    description: 'Network name to use when trigger is manual.'
+    required: true
+  active_network_name:
+    description: 'Network name to use when triger is merge.'
+    required: true
+  release_network_name:
+    description: 'Network name to use when trigger is release.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Use Node.js
+      uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      with:
+        always-auth: true
+        node-version: 16.17.1
+        cache: yarn
+    - name: Define network name
+      shell: bash
+      run: |
+        if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+          echo "NETWORK_NAME="${{ inputs.manual_network_name }}"" >> $GITHUB_ENV
+        elif [ "${{ github.event.action }}" = "published" ]; then
+          echo "NETWORK_NAME=${{ inputs.release_network_name }}" >> $GITHUB_ENV
+        elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "NETWORK_NAME=${{ inputs.active_network_name }}" >> $GITHUB_ENV
+        fi
+    - name: Get npm cache directory
+      shell: bash
+      id: npm-cache-dir
+      run: |
+        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+    - name: Cache Node.js modules
+      uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+      id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Authenticate with private NPM package
+      shell: bash
+      run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm_token }}" > ~/.npmrc
+    - name: Add network to prod env variables
+      shell: bash
+      run: echo "PUBLIC_NETWORK_NAME=${{ env.NETWORK_NAME }}" >> .env.production
+    - name: Add env variables
+      shell: bash
+      run: cat .env.production
+    - name: Output job summary
+      shell: bash
+      run: |
+        echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+    - name: Build
+      shell: bash
+      run: yarn --frozen-lockfile && yarn build
