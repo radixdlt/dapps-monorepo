@@ -14,11 +14,15 @@ export const NETWORK_CONFIG = {
   },
   [Network.ENKINET]: {
     id: 33,
-    url: 'https://enkinet-gateway.radixdlt.com'
+    url: 'https://enkinet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_21_1p9jzyn8vguadl8jhgcp0e0e7wtneurm36wadgn3460eqm93rq0'
   },
   [Network.GILGANET]: {
     id: 32,
-    url: 'https://gilganet-gateway.radixdlt.com'
+    url: 'https://gilganet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6'
   },
   [Network.KISHARNET]: {
     id: 12,

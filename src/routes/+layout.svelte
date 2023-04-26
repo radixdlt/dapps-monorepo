@@ -32,7 +32,7 @@
 
     const rdt = RadixDappToolkit(
       {
-        dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress!,
+        dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
         dAppName: 'Dashboard'
       },
       (requestData) => {
