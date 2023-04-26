@@ -20,10 +20,8 @@ on:
         options:
           - enkinet
           - hammunet
-          - nebunet
           - gilganet
           - mardunet
-          - betanet
           - kisharnet
 
 jobs:
@@ -498,50 +496,6 @@ jobs:
       environment: mardunet
       app_name: "dashboard"
       step_name: "deploy-mardunet"
-
-  deploy_nebunet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: nebunet
-      namespace:  dashboard-nebunet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-nebunet-deployer"
-      eks_cluster: rdx-works-main-dev
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=nebunet
-      environment: nebunet
-      app_name: "dashboard"
-      step_name: "deploy-nebunet"
-
-  deploy_betanet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: betanet
-      namespace:  dashboard-betanet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-betanet-deployer"
-      eks_cluster: rdx-works-main-dev
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=betanet
-      environment: betanet
-      app_name: "dashboard"
-      step_name: "deploy-betanet"
 
   deploy_kisharnet:
     if: >
