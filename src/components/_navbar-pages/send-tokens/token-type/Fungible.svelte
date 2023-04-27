@@ -8,36 +8,13 @@
   import Select from '@components/_base/select/Select.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
+  import { getSendTokenManifest } from '../manifests'
 
   export let resources: Promise<FungibleResource[]>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
-
-  const getSendTokenManifest = (
-    resource: string,
-    fromAccount: string,
-    toAccount: string,
-    amount: number
-  ) =>
-    `
-      CALL_METHOD 
-        Address("${fromAccount}") 
-        "withdraw"
-        Address("${resource}")
-        Decimal("${amount}");  
-        
-      TAKE_FROM_WORKTOP_BY_AMOUNT
-        Decimal("${amount}")
-        Address("${resource}")
-        Bucket("bucket");
-    
-      CALL_METHOD
-        Address("${toAccount}") 
-        "deposit"
-        Bucket("bucket");
-    `
 
   const { response } = query('sendTransaction')
 

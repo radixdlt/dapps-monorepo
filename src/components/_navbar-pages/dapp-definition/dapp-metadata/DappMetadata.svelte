@@ -167,14 +167,10 @@
   const dAppDescription = writable('')
 
   const claimedWebsites = writable<string[]>([])
-  const websitesToBeClaimed = writable<string[]>([])
   const claimedEntities = writable<string[]>([])
-  const entitiesToBeClaimed = writable<string[]>([])
 
   const websites = writable<WebsiteT[]>([])
   const entities = writable<EntityT[]>([])
-
-  const requiredProofs = writable<string[]>([])
 
   let faded = writable(false)
   let isDappDefinition = writable(false)
