@@ -13,7 +13,7 @@
   import { CURRENT_NETWORK } from '../../src/network'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
-
+  import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   let mounted = false
 
   onMount(() => {
@@ -49,6 +49,7 @@
           transactionPath: 'transaction/'
         },
         networkId: CURRENT_NETWORK?.id,
+        logger: createLogger(0),
         onInit: ({ accounts }) => updateAccounts(accounts),
         onStateChange: ({ accounts }) => updateAccounts(accounts),
         onDisconnect: () => updateAccounts([])
