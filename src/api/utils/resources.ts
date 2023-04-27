@@ -7,6 +7,7 @@ import {
 } from '@api/gateway'
 import type {
   EntityMetadataCollection,
+  NonFungibleResourcesCollectionItemVaultAggregated,
   StateEntityDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { accountLabel, getNFTAddress } from '@utils'
@@ -73,7 +74,7 @@ export const getVectorMetadata =
 
 const getNonFungibleIds = async (
   accountAddress: string,
-  nonFungibleResource: NonFungibleResourcesVaultCollection['items'][number]
+  nonFungibleResource: NonFungibleResourcesCollectionItemVaultAggregated
 ) => {
   const ids: string[] = []
 
@@ -136,8 +137,6 @@ const transformFungible = async (
   const fungibleEntities = await getEntityDetails(
     fungibles.items.map(({ resource_address }) => resource_address)
   )
-
-  console.log(fungibleEntities, 'fungibleEntities')
 
   return fungibleEntities.map((entity) => {
     const vaults = fungibles.items.find(

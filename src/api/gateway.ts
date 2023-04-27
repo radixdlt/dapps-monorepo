@@ -11,19 +11,16 @@ import {
 import { andThen, pipe } from 'ramda'
 import { CURRENT_NETWORK } from '../../src/network'
 
-export type FungibleResourcesVaultCollection = Omit<
-  FungibleResourcesCollection,
-  'items'
-> & {
-  items: FungibleResourcesCollectionItemVaultAggregated[]
-}
+type ReplaceItems<T, U> = Omit<T, 'items'> & { items: U[] }
 
-export type NonFungibleResourcesVaultCollection = Omit<
+export type FungibleResourcesVaultCollection = ReplaceItems<
+  FungibleResourcesCollection,
+  FungibleResourcesCollectionItemVaultAggregated
+>
+export type NonFungibleResourcesVaultCollection = ReplaceItems<
   NonFungibleResourcesCollection,
-  'items'
-> & {
-  items: NonFungibleResourcesCollectionItemVaultAggregated[]
-}
+  NonFungibleResourcesCollectionItemVaultAggregated
+>
 
 export type StateEntityDetailsVaultResponseItem =
   StateEntityDetailsResponseItem & {
