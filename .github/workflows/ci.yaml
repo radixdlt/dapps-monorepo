@@ -24,6 +24,10 @@ on:
           - mardunet
           - kisharnet
 
+env:
+  active_network: "hammunet"
+  release_network: "kisharnet"
+
 jobs:
 
   build:
@@ -38,15 +42,6 @@ jobs:
           fetch-depth: 0
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
-          fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
@@ -58,10 +53,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          network_name: ${{ env.NETWORK_NAME }}
-      - name: Output job summary
-        run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -118,6 +111,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Lint
         run:  yarn lint
 
@@ -142,6 +137,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Prettier
         run:  yarn prettier
 
@@ -199,6 +196,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Svelte check
         run:  yarn svelte:check
 
@@ -229,6 +228,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Unit tests
         run:  yarn coverage
 
@@ -247,9 +248,9 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -314,9 +315,9 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -546,6 +547,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:
