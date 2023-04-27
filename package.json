@@ -13,7 +13,7 @@
     "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "cypress": "cypress open",
-    "prettier": "prettier --cache --check src ",
+    "prettier": "prettier --cache --check src",
     "prettier:fix": "prettier --cache --write src",
     "lint": "eslint --cache src",
     "lint:fix": "eslint --cache --fix src",
