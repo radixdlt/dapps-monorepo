@@ -75,14 +75,22 @@
 <style lang="scss">
   @use '../../shared.scss';
 
+  @mixin text-style {
+    white-space: nowrap;
+    color: var(--color-grey-2);
+    font-weight: var(--font-weight-bold-2);
+
+    @media screen and (max-width: 1650px) {
+      font-size: var(--text-xs);
+    }
+  }
+
   #column-headers {
     @include shared.validator-card-grid;
     justify-items: center;
 
     div {
-      white-space: nowrap;
-      color: var(--color-grey-2);
-      font-weight: var(--font-weight-bold-2);
+      @include text-style;
     }
 
     #apy-header {
@@ -97,6 +105,7 @@
   }
 
   .sortable {
+    @include text-style;
     cursor: pointer;
     display: flex;
     align-items: center;

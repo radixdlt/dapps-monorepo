@@ -43,7 +43,7 @@
   /* typography */
   :global(body) {
     --font-family: 'IBM Plex Sans';
-    --text-base-size: 1em;
+    --text-base-size: 1rem;
     --text-scale-ratio: 1.15;
     --text-xs: calc(
       var(--text-base-size) /

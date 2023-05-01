@@ -1,7 +1,7 @@
 @mixin validator-card-grid {
   display: grid;
   grid:
-    1fr / 5rem minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1.5fr) minmax(0, 2fr) minmax(
+    1fr / 5rem minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1.5fr) minmax(0, 2fr) minmax(
       0,
       5fr
     )
