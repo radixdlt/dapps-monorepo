@@ -13,7 +13,7 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="staking" size="small" />
+        <Icon type="staking" size="medium" />
         <div class="title-text">STAKING</div>
       </div>
       <div class="amount-text">
@@ -28,7 +28,7 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="unstaking" size="small" />
+        <Icon type="unstaking" size="medium" />
         <div class="title-text">UNSTAKING</div>
       </div>
       <div class="amount-text">

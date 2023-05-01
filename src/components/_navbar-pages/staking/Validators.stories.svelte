@@ -3,11 +3,24 @@
   import Validators from './Validators.svelte'
   import { accountLabel } from '@utils'
 
+  const validatorAddresses = [
+    'validator_1234567890',
+    'validator_1234567891',
+    'validator_1234567892',
+    'validator_1234567893',
+    'validator_1234567894',
+    'validator_1234567895',
+    'validator_1234567896',
+    'validator_1234567897',
+    'validator_1234567898',
+    'validator_1234567899'
+  ]
+
   const validators = Array(10)
     .fill(undefined)
-    .map(() => ({
+    .map((_, i) => ({
       name: 'RADNODE🔥',
-      address: '0x1234567890',
+      address: validatorAddresses[i],
       totalStake: Math.random() * 1000000,
       percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
@@ -17,19 +30,19 @@
       percentageTotalStake: Math.random() * 50
     }))
 
-  const accounts = Array(10)
+  const accounts = Array(3)
     .fill(undefined)
     .map(() => ({
-      address: '0x1234567890',
+      address: 'account_1234567890',
       label: 'Account',
       displayed: accountLabel({
-        address: '0x1234567890',
+        address: 'account_1234567890',
         label: 'Account'
       }),
-      stakes: Array(10)
+      stakes: Array(3)
         .fill(undefined)
-        .map(() => ({
-          validator: '0x1234567890',
+        .map((_, i) => ({
+          validator: validatorAddresses[Math.floor(Math.random() * 9)],
           staked: Math.random() * 1000000,
           unstaking: Math.random() * 1000000,
           readyToClaim: Math.random() * 1000000

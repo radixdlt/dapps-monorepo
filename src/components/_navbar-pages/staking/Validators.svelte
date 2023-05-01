@@ -19,6 +19,10 @@
       readyToClaim: number
     }[]
   }
+
+  export const context = useContext<{
+    connected: Writable<boolean>
+  }>()
 </script>
 
 <script lang="ts">
@@ -27,6 +31,9 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
   import type { Account } from '@stores'
+  import { useContext } from '@utils'
+  import { writable, type Writable } from 'svelte/store'
+  import ValidatorListCard from './validator-card/validator-list-card/ValidatorListCard.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
@@ -48,6 +55,24 @@
 
   let totalReadyToClaim = new Promise<number>(() => {})
   $: if (accounts) totalReadyToClaim = accounts.then(getTotal('readyToClaim'))
+
+  $: loading = !!validators
+
+  validators.then((_) => {
+    loading = false
+  })
+
+  let resolvedValidators: Validator[] = []
+
+  $: if (validators) {
+    validators.then((validators) => {
+      resolvedValidators = validators
+    })
+  }
+
+  context.set('connected', writable(false))
+
+  $: if (accounts) context.get('connected').set(true)
 </script>
 
 <div id="validators">
@@ -72,7 +97,7 @@
           pool units to see the status of your current validators and stakes.
         </div>
         <div class="info-text">
-          <Icon size="small" type="info" />
+          <Icon size="medium" type="info" />
           What is staking?
         </div>
       {/if}
@@ -84,7 +109,7 @@
           unstaking={totalUnstaked}
           readyToClaim={totalReadyToClaim}
         />
-        <StakedValidatorList />
+        <StakedValidatorList {validators} {accounts} />
       </div>
     {/if}
   </div>
@@ -97,7 +122,13 @@
   </div>
 
   <div>
-    <ValidatorList {validators} />
+    <ValidatorList
+      items={resolvedValidators}
+      {loading}
+      let:item={validatorInfo}
+    >
+      <ValidatorListCard {validatorInfo} />
+    </ValidatorList>
   </div>
 </div>
 
@@ -127,6 +158,8 @@
 
   #staking-info {
     padding-top: var(--spacing-xl);
+    display: grid;
+    gap: var(--spacing-2xl);
   }
 
   .info-text {

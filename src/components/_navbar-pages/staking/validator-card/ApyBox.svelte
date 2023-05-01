@@ -37,7 +37,7 @@
 </div>
 
 <style lang="scss">
-  @use './shared.scss';
+  @use '../shared.scss';
   .apy-box {
     @include shared.apy-box-grid;
     padding: var(--spacing-sm);

@@ -2,10 +2,13 @@
   import type { ComponentProps } from 'svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import ValidatorCard from '../ValidatorCard.svelte'
+  import { context } from '../../Validators.svelte'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 
   let bookmarked: boolean
+
+  let connected = context.get('connected')
 </script>
 
 <ValidatorCard {validatorInfo}>
@@ -16,6 +19,11 @@
       bookmarked = !bookmarked
     }}
   >
-    <Icon size="small" type={bookmarked ? 'bookmarkFilled' : 'bookmarkEmpty'} />
+    {#if $connected}
+      <Icon
+        size="medium"
+        type={bookmarked ? 'bookmarkFilled' : 'bookmarkEmpty'}
+      />
+    {/if}
   </div>
 </ValidatorCard>
