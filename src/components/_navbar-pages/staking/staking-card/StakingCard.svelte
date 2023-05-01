@@ -2,6 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Button from '@components/_base/button/ButtonNew.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
+  import { formatAmount } from '@utils'
 
   export let staking: Promise<number>
   export let unstaking: Promise<number>
@@ -12,14 +13,14 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="staking" size="small" />
+        <Icon type="staking" size="medium" />
         <div class="title-text">STAKING</div>
       </div>
       <div class="amount-text">
         {#await staking}
           <SkeletonLoader />
         {:then staking}
-          {staking} XRD
+          {formatAmount(staking)} XRD
         {/await}
       </div>
     </div>
@@ -27,14 +28,14 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="unstaking" size="small" />
+        <Icon type="unstaking" size="medium" />
         <div class="title-text">UNSTAKING</div>
       </div>
       <div class="amount-text">
         {#await unstaking}
           <SkeletonLoader />
         {:then unstaking}
-          {unstaking} XRD
+          {formatAmount(unstaking)} XRD
         {/await}
       </div>
     </div>
@@ -46,7 +47,7 @@
         {#await readyToClaim}
           <SkeletonLoader />
         {:then readyToClaim}
-          {readyToClaim} XRD
+          {formatAmount(readyToClaim)} XRD
         {/await}
       </div>
     </div>
@@ -63,6 +64,7 @@
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
     min-width: 60rem;
+    max-width: 80rem;
   }
 
   .section {

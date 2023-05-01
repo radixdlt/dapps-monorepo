@@ -11,6 +11,5 @@
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
-    "noUncheckedIndexedAccess": true
   }
 }

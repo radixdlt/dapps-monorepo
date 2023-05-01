@@ -3,17 +3,19 @@
   import ValidatorCard from '../ValidatorCard.svelte'
   import type { ComponentProps } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { formatAmount } from '@utils'
+  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 
   export let stakingInfo: Promise<{
-    stakedAmount: number
-    unstakingAmount: number
+    staked: number
+    unstaking: number
     readyToClaim: number
   }>
 </script>
 
-<div class="validator-list-card">
+<div class="staked-validator-card">
   <ValidatorCard {validatorInfo}>
     <Icon slot="icon" size="large" type="staking" />
   </ValidatorCard>
@@ -24,7 +26,7 @@
         {#await stakingInfo}
           <SkeletonLoader width={30} />
         {:then stakingInfo}
-          <div class="amount-value">{stakingInfo.stakedAmount}</div>
+          <div class="amount-value">{formatAmount(stakingInfo.staked)}</div>
         {/await}
       </div>
       <div class="amount-display">
@@ -32,7 +34,7 @@
         {#await stakingInfo}
           <SkeletonLoader width={30} />
         {:then stakingInfo}
-          <div class="amount-value">{stakingInfo.unstakingAmount}</div>
+          <div class="amount-value">{formatAmount(stakingInfo.unstaking)}</div>
         {/await}
       </div>
       {#await validatorInfo then}
@@ -43,7 +45,9 @@
       <div class="links">
         {#await stakingInfo then stakingInfo}
           <a>add a reminder to calendar</a>
-          <a>ready to claim {stakingInfo.readyToClaim} XRD</a>
+          <ButtonNew size="small"
+            >ready to claim {formatAmount(stakingInfo.readyToClaim)} XRD</ButtonNew
+          >
         {/await}
       </div>
     </div>
@@ -51,23 +55,23 @@
 </div>
 
 <style>
-  .validator-list-card :global(.validator-card) {
+  .staked-validator-card :global(#validator-card) {
     border-radius: var(--border-radius) var(--border-radius) 0 0;
     border-bottom: none;
   }
 
-  .validator-list-card :global(.validator-card:hover) {
+  .staked-validator-card :global(#validator-card:hover) {
     transform: none;
   }
 
-  .validator-list-card {
+  .staked-validator-card {
     display: grid;
     grid: 1fr 0.5fr / 1fr;
     box-shadow: var(--shadow);
     transition: var(--transition-hover-card);
   }
 
-  .validator-list-card:hover {
+  .staked-validator-card:hover {
     transform: var(--transform-hover-card);
     box-shadow: var(--shadow-hover);
   }
@@ -84,7 +88,7 @@
   .staking-box-grid {
     display: grid;
     grid: 1fr/ 1fr 1fr 2fr 3fr;
-    width: 60rem;
+    width: 70rem;
     margin-left: 1.5rem;
     gap: var(--spacing-sm);
     align-items: center;
@@ -113,9 +117,5 @@
   .links {
     display: flex;
     gap: 1rem;
-  }
-
-  .bookmark {
-    cursor: pointer;
   }
 </style>

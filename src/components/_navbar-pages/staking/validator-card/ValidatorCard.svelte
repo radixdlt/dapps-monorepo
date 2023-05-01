@@ -7,6 +7,7 @@
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
+  import { context } from '../Validators.svelte'
 
   export let validatorInfo: Promise<{
     name: string
@@ -26,6 +27,8 @@
 
   $: if (selected.length === 0) dispatch('unselected')
   $: if (selected.length === 1) dispatch('selected')
+
+  let connected = context.get('connected')
 </script>
 
 <div id="validator-card">
@@ -72,10 +75,10 @@
       <SkeletonLoader width={20} />
     {:then { acceptsStake }}
       {#if acceptsStake}
-        <Icon size="small" type="checkmark" />
+        <Icon size="medium" type="checkmark" />
       {:else}
         <div style:color="var(--color-alert)">
-          <Icon size="small" type="cross" />
+          <Icon size="medium" type="cross" />
         </div>
       {/if}
     {/await}
@@ -83,22 +86,24 @@
 
   <div class="info-column last-column" style:min-width="10rem">
     {#await validatorInfo then}
-      <Checkbox
-        options={[
-          {
-            label: 'SELECT',
-            checked: false
-          }
-        ]}
-        bind:selected
-        --label-color="var(--color-grey-2)"
-      />
+      {#if $connected}
+        <Checkbox
+          options={[
+            {
+              label: 'SELECT',
+              checked: false
+            }
+          ]}
+          bind:selected
+          --label-color="var(--color-grey-2)"
+        />
+      {/if}
     {/await}
   </div>
 </div>
 
 <style lang="scss">
-  @use './shared.scss';
+  @use '../shared.scss';
   @use '../../../../mixins.scss';
   #validator-card {
     @include mixins.card;
