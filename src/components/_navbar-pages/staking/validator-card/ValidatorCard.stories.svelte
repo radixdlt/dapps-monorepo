@@ -17,9 +17,9 @@
         acceptsStake: false
       }}
       stakingInfo={Promise.resolve({
-        unstakingAmount: 500,
-        readyToClaim: 200,
-        stakedAmount: 1000
+        unstaking: 500,
+        staked: 1000,
+        readyToClaim: 200
       })}
     />
 
@@ -37,12 +37,12 @@
   args={{
     name: '🔥RADNODE',
     address: 'validator_1234567890',
-    totalStake: '1000000',
-    percentageOwnerStake: '0.5',
-    apy: '0.5',
-    fee: '0.5',
-    uptime: '0.5',
+    totalStake: 1000000,
+    percentageOwnerStake: 0.5,
+    apy: 0.5,
+    fee: 0.5,
+    uptime: 0.5,
     acceptsStake: true,
-    percentageTotalStake: '0.5'
+    percentageTotalStake: 0.5
   }}
 />

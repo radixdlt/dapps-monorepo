@@ -1,51 +1,36 @@
 <script lang="ts">
-  import Header from './Header.svelte'
-  import type { Validator } from '../Validators.svelte'
-  import ValidatorListCard from '../validator-card/validator-list-card/ValidatorListCard.svelte'
+  import Header, { type SortableColumn } from './header/Header.svelte'
 
-  export let validators: Promise<Validator[]>
+  type T = $$Generic
+  export let items: (T & Record<SortableColumn, unknown>)[] | undefined =
+    undefined
+  export let loading: boolean = false
 
-  let lastSortedBy: keyof Validator
-  let reverse = false
-
-  const sort = (by: keyof Validator) => {
-    if (lastSortedBy === by) reverse = !reverse
-
-    lastSortedBy = by
-
-    validators = validators.then((validators) =>
-      validators.sort((a, b) => {
-        if (a[by] > b[by]) return reverse ? 1 : -1
-        if (a[by] < b[by]) return reverse ? -1 : 1
-        return 0
-      })
-    )
+  const sort = (by: keyof T, descending: boolean) => {
+    items = items?.sort((a, b) => {
+      if (a[by] > b[by]) return descending ? 1 : -1
+      if (a[by] < b[by]) return descending ? -1 : 1
+      return 0
+    })
   }
 </script>
 
 <div id="validator-list">
-  {#await validators}
+  {#if loading}
     {#each Array(10) as _}
-      <ValidatorListCard validatorInfo={new Promise(() => {})} />
+      <slot item={new Promise(() => {})} />
     {/each}
-  {:then validators}
-    <Header
-      on:sort-total-stake={() => sort('totalStake')}
-      on:sort-owner-stake={() => sort('percentageOwnerStake')}
-      on:sort-apy={() => sort('apy')}
-      on:sort-fee={() => sort('fee')}
-      on:sort-uptime={() => sort('uptime')}
-    />
-    {#each validators as validator}
-      <ValidatorListCard validatorInfo={Promise.resolve(validator)} />
+  {:else if items}
+    <Header on:sort={(e) => sort(e.detail.by, e.detail.descending)} />
+    {#each items as validator}
+      <slot item={Promise.resolve(validator)} />
     {/each}
-  {/await}
+  {/if}
 </div>
 
-<style>
+<style lang="scss">
+  @use '../shared.scss';
   #validator-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    @include shared.card-list;
   }
 </style>

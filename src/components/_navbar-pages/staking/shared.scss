@@ -13,3 +13,9 @@
   display: grid;
   grid: 1fr / 10rem 6rem 6rem;
 }
+
+@mixin card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

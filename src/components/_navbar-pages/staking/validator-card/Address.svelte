@@ -9,7 +9,7 @@
   <a class="text">
     {shortenAddress(address)}
   </a>
-  <IconNew size="small" type="copy" />
+  <IconNew size="medium" type="copy" />
 </div>
 
 <style>
