@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { AccountWithStakes, Validator } from '../Validators.svelte'
-  import StakedValidatorCard from '../validator-card/staked-validator-card/StakedValidatorCard.svelte'
   import ValidatorList from '../validator-list/ValidatorList.svelte'
 
   export let validators: Promise<Validator[]>
@@ -37,19 +36,10 @@
 </script>
 
 {#await accumulatedStakes}
-  <ValidatorList loading />
+  <ValidatorList loading input={{ type: 'staked', items: undefined }} />
 {:then accumulatedStakes}
-  <ValidatorList items={accumulatedStakes} let:item={validator}>
-    {#await Promise.all([validator, validators])}
-      <StakedValidatorCard
-        validatorInfo={new Promise(() => {})}
-        stakingInfo={new Promise(() => {})}
-      />
-    {:then [validator, validators]}
-      <StakedValidatorCard
-        validatorInfo={Promise.resolve(validator)}
-        stakingInfo={Promise.resolve(validator)}
-      />
-    {/await}
-  </ValidatorList>
+  <ValidatorList
+    on:selected
+    input={{ type: 'staked', items: accumulatedStakes }}
+  />
 {/await}

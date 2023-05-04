@@ -33,7 +33,7 @@
   import type { Account } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
-  import ValidatorListCard from './validator-card/validator-list-card/ValidatorListCard.svelte'
+  import SelectedValidators from './selected-validators/SelectedValidators.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
@@ -73,6 +73,9 @@
   context.set('connected', writable(false))
 
   $: if (accounts) context.get('connected').set(true)
+
+  let selectedValidators: Validator[] = []
+  let selectedStakedValidators: Validator[] = []
 </script>
 
 <div id="validators">
@@ -109,7 +112,13 @@
           unstaking={totalUnstaked}
           readyToClaim={totalReadyToClaim}
         />
-        <StakedValidatorList {validators} {accounts} />
+        <StakedValidatorList
+          {validators}
+          {accounts}
+          on:selected={(e) => {
+            selectedStakedValidators = e.detail
+          }}
+        />
       </div>
     {/if}
   </div>
@@ -121,14 +130,20 @@
     </div>
   </div>
 
+  <div id="selected-validators">
+    <SelectedValidators
+      count={selectedValidators.length + selectedStakedValidators.length}
+    />
+  </div>
+
   <div>
     <ValidatorList
-      items={resolvedValidators}
+      input={{ type: 'all', items: resolvedValidators }}
       {loading}
-      let:item={validatorInfo}
-    >
-      <ValidatorListCard {validatorInfo} />
-    </ValidatorList>
+      on:selected={(e) => {
+        selectedValidators = e.detail
+      }}
+    />
   </div>
 </div>
 
@@ -152,6 +167,11 @@
     }
   }
 
+  #selected-validators {
+    position: absolute;
+    right: var(--spacing-2xl);
+    top: var(--spacing-2xl);
+  }
   #staked-validators {
     max-width: 90rem;
   }

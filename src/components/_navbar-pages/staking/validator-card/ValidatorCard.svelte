@@ -21,12 +21,17 @@
     percentageTotalStake: number
   }>
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher<{
+    unselected: Awaited<typeof validatorInfo>
+    selected: Awaited<typeof validatorInfo>
+  }>()
 
   let selected: { label: string; checked: boolean }[] = []
 
-  $: if (selected.length === 0) dispatch('unselected')
-  $: if (selected.length === 1) dispatch('selected')
+  $: if (selected.length === 0)
+    validatorInfo.then((info) => dispatch('unselected', info))
+  $: if (selected.length === 1)
+    validatorInfo.then((info) => dispatch('selected', info))
 
   let connected = context.get('connected')
 </script>

@@ -13,6 +13,7 @@
     border-radius: var(--border-radius);
     color: var(--color-light);
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .small {

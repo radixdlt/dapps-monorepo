@@ -11,7 +11,7 @@
   let connected = context.get('connected')
 </script>
 
-<ValidatorCard {validatorInfo}>
+<ValidatorCard on:selected on:unselected {validatorInfo}>
   <div
     slot="icon"
     class="bookmark"
