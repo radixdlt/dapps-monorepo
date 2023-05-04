@@ -19,6 +19,7 @@ dashboard:
       tag: {{$IMAGE_TAG}}
 
   params:
+    DATABASE_URL: "postgresql://postgres:secret@postgres-postgresql:5432/dashboard?schema=public"
 
   ingress:
     enabled: true
