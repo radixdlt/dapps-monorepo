@@ -16,7 +16,9 @@
 
   $: nftData = getNonFungibleData(resourceAddress, nftId)
 
-  $: details = getEntityDetails([address]).then((details) => details[0]!)
+  $: details = getEntityDetails([resourceAddress]).then(
+    (details) => details[0]!
+  )
 </script>
 
 <Box>
