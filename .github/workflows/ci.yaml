@@ -369,7 +369,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -378,6 +378,7 @@ jobs:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
+      restart_pods: false
       create_subns: true
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
@@ -391,7 +392,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -399,6 +400,7 @@ jobs:
     with:
       env_name: dev
       namespace:  dashboard-dev
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -412,7 +414,7 @@ jobs:
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -420,6 +422,7 @@ jobs:
     with:
       env_name: enkinet
       namespace:  dashboard-enkinet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -435,7 +438,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -443,6 +446,7 @@ jobs:
     with:
       env_name: hammunet
       namespace:  dashboard-hammunet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -457,7 +461,7 @@ jobs:
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -465,6 +469,7 @@ jobs:
     with:
       env_name: gilganet
       namespace:  dashboard-gilganet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -479,7 +484,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -487,6 +492,7 @@ jobs:
     with:
       env_name: mardunet
       namespace:  dashboard-mardunet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -502,7 +508,7 @@ jobs:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -510,6 +516,7 @@ jobs:
     with:
       env_name: kisharnet
       namespace:  dashboard-kisharnet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer"

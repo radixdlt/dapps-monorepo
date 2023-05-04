@@ -18,7 +18,13 @@ dashboard:
   image: 
       tag: {{$IMAGE_TAG}}
 
-  params:
+  secrets:
+  - name: database-url
+    variable: "DATABASE_URL"
+    path: "rdx-works-main-dev/eks/dashboard/postgres"
+    secretProperty: "database-url-enkinet"
+    secretName: "database-url"
+    region: "eu-west-2"
 
   ingress:
     enabled: true
