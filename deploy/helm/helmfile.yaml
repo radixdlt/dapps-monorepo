@@ -48,3 +48,20 @@ releases:
     installed: {{ ne .Environment.Name "pr" }}
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: postgres
+    namespace: {{ $DASHBOARD_NS }}
+    chart: bitnami/postgresql
+    version:  12.4.2
+    installed: {{ eq .Environment.Name "pr" }}
+    values:
+      - auth:
+          postgresPassword: secret
+          database: dashboard
+        primary:
+          persistence:
+            storageClass: "gp3-no-retain"
+            size: "1Gi"
+            enabled: true
+        image:
+          tag: 15.2.0-debian-11-r26
