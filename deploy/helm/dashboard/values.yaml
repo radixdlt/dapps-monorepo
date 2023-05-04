@@ -21,6 +21,8 @@ dashboard:
   params:
     NETWORK_GATEWAY_API: ""
 
+  secrets: {}
+
   serviceAccount:
     create: true
     annotations: {}
