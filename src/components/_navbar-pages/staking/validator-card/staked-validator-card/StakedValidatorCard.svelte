@@ -16,7 +16,7 @@
 </script>
 
 <div class="staked-validator-card">
-  <ValidatorCard {validatorInfo}>
+  <ValidatorCard {validatorInfo} on:selected on:unselected>
     <Icon slot="icon" size="large" type="staking" />
   </ValidatorCard>
   <div class="staking-box">
@@ -69,6 +69,7 @@
     grid: 1fr 0.5fr / 1fr;
     box-shadow: var(--shadow);
     transition: var(--transition-hover-card);
+    border-radius: var(--border-radius);
   }
 
   .staked-validator-card:hover {
