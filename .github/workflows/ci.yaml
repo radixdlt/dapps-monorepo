@@ -555,7 +555,7 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet
-      namespace:  dashboard-kisharnet # Not chaning this yet as this will disturb existing rcnet dashboard
+      namespace:  dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer"
@@ -563,7 +563,7 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=kisharnet
-      environment: kisharnet
+      environment: kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
       app_name: "dashboard"
       step_name: "deploy-rcnet"
 
