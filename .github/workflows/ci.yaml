@@ -26,7 +26,7 @@ on:
           - rcnet
 
 env:
-  active_network: "hammunet"
+  active_network: "kisharnet"
   release_network: "rcnet"
 
 jobs:
