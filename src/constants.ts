@@ -2,7 +2,8 @@ export const Network = {
   HAMMUNET: 'hammunet',
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
-  KISHARNET: 'kisharnet'
+  KISHARNET: 'kisharnet',
+  RCNET: 'rcnet'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -25,6 +26,12 @@ export const NETWORK_CONFIG = {
       'account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6'
   },
   [Network.KISHARNET]: {
+    id: 12,
+    url: 'https://kisharnet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
+  },
+  [Network.RCNET]: {
     id: 12,
     url: 'https://kisharnet-gateway.radixdlt.com',
     dappDefAddress:
