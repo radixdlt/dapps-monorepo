@@ -25,6 +25,7 @@ on:
           - mardunet
           - betanet
           - kisharnet
+          - rcnet
 
 jobs:
 
@@ -543,10 +544,10 @@ jobs:
       app_name: "dashboard"
       step_name: "deploy-betanet"
 
-  deploy_kisharnet:
+  deploy_rcnet:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
     needs:
       - push-dashboard
@@ -554,7 +555,7 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet
-      namespace:  dashboard-kisharnet
+      namespace:  dashboard-kisharnet # Not chaning this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer"
@@ -564,7 +565,30 @@ jobs:
         ci.environment=kisharnet
       environment: kisharnet
       app_name: "dashboard"
+      step_name: "deploy-rcnet"
+
+  deploy_kisharnet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: kisharnet
+      namespace:  dashboard-kisharnet-internal
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-internal-deployer"
+      eks_cluster: rtlj-prod
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=kisharnet-internal
+      environment: kisharnet-internal
+      app_name: "dashboard"
       step_name: "deploy-kisharnet"
+
 
   run-e2e-tests:
     runs-on: ubuntu-latest
