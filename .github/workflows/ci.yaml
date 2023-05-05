@@ -538,7 +538,7 @@ jobs:
       - push-storybook
       - setup-tags
     with:
-      env_name: kisharnet
+      env_name: kisharnet-internal
       namespace:  dashboard-kisharnet-internal
       create_subns: false
       aws_region: eu-west-2
