@@ -1,0 +1,10 @@
+@mixin card($use-border: true) {
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+  background: var(--color-light);
+  padding: var(--spacing-lg) 0;
+
+  @if $use-border {
+    border: var(--border);
+  }
+}

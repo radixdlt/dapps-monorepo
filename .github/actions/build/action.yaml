@@ -4,9 +4,13 @@ inputs:
   npm_token:
     description: 'NPM token for private package access.'
     required: true
-  network_name:
-    description: 'Network name to use in build.'
+  active_network_name:
+    description: 'Network name to use when triger is merge.'
     required: true
+  release_network_name:
+    description: 'Network name to use when trigger is release.'
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -16,6 +20,16 @@ runs:
         always-auth: true
         node-version: 16.17.1
         cache: yarn
+    - name: Define network name
+      shell: bash
+      run: |
+        if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+          echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+        elif [ "${{ github.event.action }}" = "published" ]; then
+          echo "NETWORK_NAME=${{ inputs.release_network_name }}" >> $GITHUB_ENV
+        elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "NETWORK_NAME=${{ inputs.active_network_name }}" >> $GITHUB_ENV
+        fi
     - name: Get npm cache directory
       shell: bash
       id: npm-cache-dir
@@ -34,10 +48,14 @@ runs:
       run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm_token }}" > ~/.npmrc
     - name: Add network to prod env variables
       shell: bash
-      run: echo "PUBLIC_NETWORK_NAME=${{ inputs.network_name }}" >> .env.production
+      run: echo "PUBLIC_NETWORK_NAME=${{ env.NETWORK_NAME }}" >> .env.production
     - name: Add env variables
       shell: bash
       run: cat .env.production
+    - name: Output job summary
+      shell: bash
+      run: |
+        echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
     - name: Build
       shell: bash
       run: yarn --frozen-lockfile && yarn build

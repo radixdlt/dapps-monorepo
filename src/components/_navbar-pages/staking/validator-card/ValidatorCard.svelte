@@ -6,6 +6,8 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { truncateNumber } from '@utils'
+  import { context } from '../Validators.svelte'
 
   export let validatorInfo: Promise<{
     name: string
@@ -19,22 +21,29 @@
     percentageTotalStake: number
   }>
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher<{
+    unselected: Awaited<typeof validatorInfo>
+    selected: Awaited<typeof validatorInfo>
+  }>()
 
   let selected: { label: string; checked: boolean }[] = []
 
-  $: if (selected.length === 0) dispatch('unselected')
-  $: if (selected.length === 1) dispatch('selected')
+  $: if (selected.length === 0)
+    validatorInfo.then((info) => dispatch('unselected', info))
+  $: if (selected.length === 1)
+    validatorInfo.then((info) => dispatch('selected', info))
+
+  let connected = context.get('connected')
 </script>
 
-<div class="validator-card">
-  <div class="icon">
+<div id="validator-card">
+  <div id="icon">
     {#await validatorInfo then}
       <slot name="icon" />
     {/await}
   </div>
 
-  <div class="name">
+  <div id="name">
     {#await validatorInfo}
       <SkeletonLoader width={200} />
     {:then { name }}
@@ -42,7 +51,7 @@
     {/await}
   </div>
 
-  <div class="address">
+  <div id="address">
     {#await validatorInfo}
       <SkeletonLoader width={80} />
     {:then { address }}
@@ -58,7 +67,7 @@
     {#await validatorInfo}
       <SkeletonLoader width={30} />
     {:then { percentageOwnerStake }}
-      {percentageOwnerStake}%
+      {truncateNumber(percentageOwnerStake)}%
     {/await}
   </div>
 
@@ -71,10 +80,10 @@
       <SkeletonLoader width={20} />
     {:then { acceptsStake }}
       {#if acceptsStake}
-        <Icon size="small" type="checkmark" />
+        <Icon size="medium" type="checkmark" />
       {:else}
         <div style:color="var(--color-alert)">
-          <Icon size="small" type="cross" />
+          <Icon size="medium" type="cross" />
         </div>
       {/if}
     {/await}
@@ -82,54 +91,52 @@
 
   <div class="info-column last-column" style:min-width="10rem">
     {#await validatorInfo then}
-      <Checkbox
-        options={[
-          {
-            label: 'SELECT',
-            checked: false
-          }
-        ]}
-        bind:selected
-        --label-color="var(--color-grey-2)"
-      />
+      {#if $connected}
+        <Checkbox
+          options={[
+            {
+              label: 'SELECT',
+              checked: false
+            }
+          ]}
+          bind:selected
+          --label-color="var(--color-grey-2)"
+        />
+      {/if}
     {/await}
   </div>
 </div>
 
-<style>
-  .validator-card {
-    display: grid;
-    grid: 1fr / 5rem minmax(15rem, 3fr) minmax(8rem, 1.5fr) 1fr 1fr 5fr 0.5fr 1fr;
+<style lang="scss">
+  @use '../shared.scss';
+  @use '../../../../mixins.scss';
+  #validator-card {
+    @include mixins.card;
+    @include shared.validator-card-grid;
     align-items: center;
-    box-shadow: var(--shadow);
-    border-radius: var(--border-radius);
-    background: var(--color-light);
-    padding: var(--spacing-lg) 0;
-    border: var(--border);
-    min-width: fit-content;
     cursor: pointer;
     transition: var(--transition-hover-card);
     height: 5rem;
   }
 
-  .validator-card:hover {
+  #validator-card:hover {
     transform: var(--transform-hover-card);
     box-shadow: var(--shadow-hover);
   }
 
-  .icon {
+  #icon {
     height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-right: var(--border-divider);
   }
-  .name {
+  #name {
     font-weight: var(--font-weight-bold-2);
     padding-left: var(--spacing-md);
   }
 
-  .address {
+  #address {
     height: 80%;
     width: 100%;
     display: flex;

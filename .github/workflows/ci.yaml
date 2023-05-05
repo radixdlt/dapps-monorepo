@@ -20,12 +20,14 @@ on:
         options:
           - enkinet
           - hammunet
-          - nebunet
           - gilganet
           - mardunet
-          - betanet
           - kisharnet
           - rcnet
+
+env:
+  active_network: "hammunet"
+  release_network: "rcnet"
 
 jobs:
 
@@ -41,15 +43,6 @@ jobs:
           fetch-depth: 0
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
-          fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
           role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
@@ -61,10 +54,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
-          network_name: ${{ env.NETWORK_NAME }}
-      - name: Output job summary
-        run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -121,6 +112,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Lint
         run:  yarn lint
 
@@ -145,6 +138,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Prettier
         run:  yarn prettier
 
@@ -202,6 +197,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Svelte check
         run:  yarn svelte:check
 
@@ -232,6 +229,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Unit tests
         run:  yarn coverage
 
@@ -250,9 +249,9 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -317,9 +316,9 @@ jobs:
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=kisharnet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=hammunet" >> $GITHUB_ENV
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with: 
@@ -371,7 +370,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -380,6 +379,7 @@ jobs:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
+      restart_pods: false
       create_subns: true
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
@@ -393,7 +393,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -401,6 +401,7 @@ jobs:
     with:
       env_name: dev
       namespace:  dashboard-dev
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -414,7 +415,7 @@ jobs:
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -422,6 +423,7 @@ jobs:
     with:
       env_name: enkinet
       namespace:  dashboard-enkinet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -437,7 +439,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -445,6 +447,7 @@ jobs:
     with:
       env_name: hammunet
       namespace:  dashboard-hammunet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -459,7 +462,7 @@ jobs:
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -467,6 +470,7 @@ jobs:
     with:
       env_name: gilganet
       namespace:  dashboard-gilganet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -481,7 +485,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
@@ -489,6 +493,7 @@ jobs:
     with:
       env_name: mardunet
       namespace:  dashboard-mardunet
+      restart_pods: false
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
@@ -500,61 +505,18 @@ jobs:
       app_name: "dashboard"
       step_name: "deploy-mardunet"
 
-  deploy_nebunet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'nebunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: nebunet
-      namespace:  dashboard-nebunet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-nebunet-deployer"
-      eks_cluster: rdx-works-main-dev
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=nebunet
-      environment: nebunet
-      app_name: "dashboard"
-      step_name: "deploy-nebunet"
-
-  deploy_betanet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'betanet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: betanet
-      namespace:  dashboard-betanet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-betanet-deployer"
-      eks_cluster: rdx-works-main-dev
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=betanet
-      environment: betanet
-      app_name: "dashboard"
-      step_name: "deploy-betanet"
-
   deploy_rcnet:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
     needs:
       - push-dashboard
       - push-storybook
       - setup-tags
     with:
       env_name: kisharnet
+      restart_pods: false
       namespace:  dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
@@ -616,6 +578,8 @@ jobs:
       - uses: ./.github/actions/build
         with: 
           npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:

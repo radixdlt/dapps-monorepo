@@ -53,7 +53,7 @@ There's a specific command for updating the gateway sdk dependency:
 PUBLIC_NETWORK_NAME=<network> yarn update:gateway
 ```
 
-where `<network>` is the network (hammunet, nebunet, etc) to use.
+where `<network>` is the network (hammunet, etc) to use.
 
 This updates the gateway sdk, and generates mocks for all the api responses.
 

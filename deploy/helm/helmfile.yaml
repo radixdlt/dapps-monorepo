@@ -10,12 +10,12 @@ environments:
   pr: {}
   enkinet: {}
   hammunet: {}
-  nebunet: {}
   gilganet: {}
   mardunet: {}
-  betanet: {}
   kisharnet: {}
 repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
   - name: rdx-works
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
     username: {{ requiredEnv "HELM_GH_USER" }}
@@ -50,3 +50,20 @@ releases:
     installed: {{ ne .Environment.Name "pr" }}
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: postgres
+    namespace: {{ $DASHBOARD_NS }}
+    chart: bitnami/postgresql
+    version:  12.4.2
+    installed: {{ eq .Environment.Name "pr" }}
+    values:
+      - auth:
+          postgresPassword: secret
+          database: dashboard
+        primary:
+          persistence:
+            storageClass: "gp3-no-retain"
+            size: "1Gi"
+            enabled: true
+        image:
+          tag: 15.2.0-debian-11-r26

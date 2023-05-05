@@ -100,3 +100,32 @@ export const formatAmount = (amount: number) => {
   }
   return shortValue.toFixed(2) + suffixes[suffixNum]
 }
+
+export const truncateNumber = (num: number) => num.toFixed(2)
+
+export type Deferred<T> = Promise<T> & {
+  resolve: (value: T) => void
+  reject: (err: any) => void
+}
+
+export const defer = <T>(): Deferred<T> => {
+  var res, rej
+
+  var promise = new Promise<T>((resolve, reject) => {
+    res = resolve
+    rej = reject
+  })
+
+  // @ts-ignore
+  promise.resolve = res
+  // @ts-ignore
+  promise.reject = rej
+
+  return promise as Deferred<T>
+}
+
+export const deferFromPromise = <T>(promise: Promise<T>): Deferred<T> => {
+  const deferred = defer<T>()
+  promise.then(deferred.resolve).catch(deferred.reject)
+  return deferred
+}

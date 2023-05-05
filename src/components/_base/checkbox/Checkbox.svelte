@@ -1,6 +1,5 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { css } from '@styles'
 
   type G = $$Generic
 
@@ -11,19 +10,6 @@
   export let loading = false
 
   $: selected = options.filter((o) => o.checked)
-
-  const inputStyle = css({
-    appearance: 'none',
-    width: '$xs',
-    height: '$xs',
-    border: '0.1em solid $muted',
-    marginRight: '$sm',
-    marginTop: '$md',
-    transform: 'translateY(0.15em)',
-    '&:checked': {
-      backgroundColor: '$secondary'
-    }
-  })()
 </script>
 
 <div class="wrapper">

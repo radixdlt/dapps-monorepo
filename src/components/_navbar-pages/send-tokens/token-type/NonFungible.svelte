@@ -5,43 +5,13 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
+  import { getSendNFTManifest } from '../manifests'
 
   export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
-
-  const getSendNFTManifest = (
-    nfts: {
-      resourceAddress: string
-      id: string
-    }[],
-    fromAccount: string,
-    toAccount: string
-  ) => `
-    ${nfts.reduce(
-      (prev, cur, i) =>
-        `
-      CALL_METHOD 
-        Address("${fromAccount}") 
-        "withdraw_non_fungibles"
-        Address("${cur.resourceAddress}")
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
-
-      TAKE_FROM_WORKTOP_BY_IDS 
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
-        Address("${cur.resourceAddress}")
-        Bucket("nft${i}");
-
-      CALL_METHOD
-        Address("${toAccount}")
-        "deposit"
-        Bucket("nft${i}");
-        ` + prev,
-      ``
-    )}
-  `
 
   let selected: Array<Awaited<typeof resources>[number]> = []
 

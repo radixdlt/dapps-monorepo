@@ -18,10 +18,14 @@ export const icons = {
   trash: '/icons/trash.svg',
   greenCheck: '/icons/green-check.svg',
   staking: '/icons/staking.svg',
+  unstaking: '/icons/unstaking.svg',
   checkmark: '/icons/checkmark.svg',
   cross: '/icons/cross.svg',
   checkedCheckbox: '/icons/checked-checkbox.svg',
   bookmarkEmpty: '/icons/bookmark-empty.svg',
   bookmarkFilled: '/icons/bookmark-filled.svg',
-  info: '/icons/info.svg'
+  info: '/icons/info.svg',
+  downArrow: '/icons/down-arrow.svg',
+  ascending: '/icons/ascending.svg',
+  descending: '/icons/descending.svg'
 } as const
