@@ -10,7 +10,7 @@
 </script>
 
 <div class="staked-validator-card">
-  <ValidatorCard {validatorInfo} on:selected on:unselected>
+  <ValidatorCard {validatorInfo} on:selected on:unselected on:click-validator>
     <Icon slot="icon" size="large" type="staking" />
   </ValidatorCard>
   <div class="staking-box">

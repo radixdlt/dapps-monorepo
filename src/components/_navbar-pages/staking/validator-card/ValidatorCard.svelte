@@ -19,7 +19,12 @@
   let connected = context.get('connected')
 </script>
 
-<div id="validator-card">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+  id="validator-card"
+  on:click|self={() =>
+    validatorInfo.then((info) => dispatch('click-validator', info))}
+>
   <div id="icon">
     {#await validatorInfo then info}
       <slot name="icon" {info} />

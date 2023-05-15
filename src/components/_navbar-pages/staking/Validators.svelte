@@ -42,6 +42,7 @@
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
+  import ValidatorDetails from './validator-details/ValidatorDetails.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
@@ -117,13 +118,18 @@
     })
   }
 
-  context.set('connected', writable(false))
-
   $: if (accounts) context.get('connected').set(true)
 
-  let selectedValidators: Validator[] = []
-  let selectedStakedValidators: Validator[] = []
+  let showValidatorDetails = false
+  let displayedValidator: Validator | undefined
 </script>
+
+{#if displayedValidator}
+  <ValidatorDetails
+    bind:open={showValidatorDetails}
+    validator={displayedValidator}
+  />
+{/if}
 
 <div id="validators">
   <div id="title-section" class="divider">
@@ -169,11 +175,9 @@
               v.accumulatedReadyToClaim !== 0
           )}
           {loading}
-        <StakedValidatorList
-          {validators}
-          {accounts}
-          on:selected={(e) => {
-            selectedStakedValidators = e.detail
+          on:click-validator={(e) => {
+            displayedValidator = e.detail
+            showValidatorDetails = true
           }}
         />
       </div>
@@ -196,8 +200,9 @@
       type="all"
       items={resolvedValidators}
       {loading}
-      on:selected={(e) => {
-        selectedValidators = e.detail
+      on:click-validator={(e) => {
+        displayedValidator = e.detail
+        showValidatorDetails = true
       }}
     />
   </div>

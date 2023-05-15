@@ -10,7 +10,7 @@
   const bookmarked = context.get('bookmarkedValidators')
 </script>
 
-<ValidatorCard on:selected on:unselected {validatorInfo}>
+<ValidatorCard on:selected on:unselected on:click-validator {validatorInfo}>
   <div
     slot="icon"
     let:info
