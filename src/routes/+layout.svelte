@@ -9,15 +9,19 @@
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
   import '../fonts.css'
-  import { RadixDappToolkit, type State } from '@radixdlt/radix-dapp-toolkit'
+  import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '../../src/network'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   let mounted = false
 
+  type RdtWalletState = ReturnType<
+    Awaited<ReturnType<RadixDappToolkit['requestData']>>['_unsafeUnwrap']
+  >
+
   onMount(() => {
-    const updateAccounts = (value: State['accounts']) => {
+    const updateAccounts = (value: RdtWalletState['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
@@ -33,13 +37,13 @@
     const rdt = RadixDappToolkit(
       {
         dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
-        dAppName: 'Dashboard'
+        networkId: CURRENT_NETWORK?.id
       },
       (requestData) => {
         requestData({
           accounts: { quantifier: 'atLeast', quantity: 1 }
-        }).map(({ data }) => {
-          updateAccounts(data.accounts)
+        }).map(({ accounts }) => {
+          updateAccounts(accounts)
         })
       },
       {
@@ -48,10 +52,9 @@
           accountsPath: 'account/',
           transactionPath: 'transaction/'
         },
-        networkId: CURRENT_NETWORK?.id,
         logger: createLogger(0),
-        onInit: ({ accounts }) => updateAccounts(accounts),
-        onStateChange: ({ accounts }) => updateAccounts(accounts),
+        onInit: ({ walletData }) => updateAccounts(walletData.accounts),
+        onStateChange: ({ walletData }) => updateAccounts(walletData.accounts),
         onDisconnect: () => updateAccounts([])
       }
     )
