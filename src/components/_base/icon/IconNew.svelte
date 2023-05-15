@@ -13,16 +13,16 @@
   }
 
   .small {
-    width: 0.75rem;
-    height: 0.75rem;
+    width: var(--size, 0.75rem);
+    height: var(--size, 0.75rem);
   }
   .medium {
-    width: 1rem;
-    height: 1rem;
+    width: var(--size, 1rem);
+    height: var(--size, 1rem);
   }
 
   .large {
-    width: 3rem;
-    height: 3rem;
+    width: var(--size, 3rem);
+    height: var(--size, 3rem);
   }
 </style>
