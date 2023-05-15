@@ -2097,17 +2097,18 @@
     lit "^2.6.1"
     rxjs "^7.8.0"
 
-"@radixdlt/radix-dapp-toolkit@0.3.0-alpha.4":
-  version "0.3.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.3.0-alpha.4.tgz#8bf7080830c016ec51251acfa1978b1a80fba661"
-  integrity sha512-qO9ymmHEQDfSZ3BHFACieQQlIdxz6YmySAu99en2FI6YIV+LshRJLfA0tuaDyPcJInD42VD4TbJa7e6KE2AcSA==
+"@radixdlt/radix-dapp-toolkit@0.3.0-alpha.5":
+  version "0.3.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.3.0-alpha.5.tgz#aa32a88ae42e7c3b9d4275b726d8528fd6a5914a"
+  integrity sha512-+HZusElbjzOPj1bCLdlZVHHtNJ1pKQFAwXkBsJIqNSoyG/VhQ2sV3tBPDNaN4yNxhQisPUmUhE+5HKrmM4Et1g==
   dependencies:
     "@radixdlt/babylon-gateway-api-sdk" "^1.0.0-rc.1.8"
     "@radixdlt/connect-button" "0.13.0-alpha.1"
-    "@radixdlt/wallet-sdk" "0.9.0-alpha.3"
+    "@radixdlt/wallet-sdk" "0.9.0-alpha.10"
     lodash.isequal "^4.5.0"
     neverthrow "^6.0.0"
     rxjs "^7.8.1"
+    zod "^3.21.4"
 
 "@radixdlt/radix-engine-toolkit@^0.1.3":
   version "0.1.3"
@@ -2126,16 +2127,15 @@
     secp256k1 "^5.0.0"
     secure-random "^1.1.2"
 
-"@radixdlt/wallet-sdk@0.9.0-alpha.3":
-  version "0.9.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.9.0-alpha.3.tgz#c7a391fbe5019b2e0b1ac1a12a3ebf3819340fe8"
-  integrity sha512-LhNDqjXz1s+0gDtZc+AufzsyAjT7GrMkzFYpj7mzF89YuPQsi3b5GVnj566K3J+7UYlNLgkcp+mLcDroqfML/A==
+"@radixdlt/wallet-sdk@0.9.0-alpha.10":
+  version "0.9.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@radixdlt/wallet-sdk/-/wallet-sdk-0.9.0-alpha.10.tgz#179f5dfa8d676b9fb7b5ee4d5d626ba984a55ce9"
+  integrity sha512-V5qsrZpCQYJJ6/UrkPK2N9DcA3A7xInwt2Y9hBkHFz4sKL796stnrJId0fl8fyIfZeNJiWIhVX8DjBuqJu1ouA==
   dependencies:
-    lodash.flow "^3.5.0"
     neverthrow "^6.0.0"
-    rxjs "^7.6.0"
+    rxjs "^7.8.1"
     tslog "^4.8.2"
-    zod "^3.19.1"
+    zod "^3.21.4"
 
 "@rgossiaux/svelte-headlessui@^1.0.2":
   version "1.0.2"
@@ -8528,11 +8528,6 @@ lodash.flattendeep@^4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
   integrity sha512-uHaJFihxmJcEX3kT4I23ABqKKalJ/zDrDg0lsFtc1h+3uw49SIJ5beyhx5ExVRti3AvKoOJngIj7xz3oylPdWQ==
 
-lodash.flow@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.flow/-/lodash.flow-3.5.0.tgz#87bf40292b8cf83e4e8ce1a3ae4209e20071675a"
-  integrity sha512-ff3BX/tSioo+XojX4MOsOMhJw0nZoUEF011LX8g8d3gvjVbxd89cCio4BCXronjxcTUIJUoqKEUA+n4CqvvRPw==
-
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
@@ -10515,7 +10510,7 @@ rxjs@^7.5.1:
   dependencies:
     tslib "^2.1.0"
 
-rxjs@^7.6.0, rxjs@^7.8.0:
+rxjs@^7.8.0:
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
@@ -12343,10 +12338,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@^3.19.1:
-  version "3.19.1"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.19.1.tgz#112f074a97b50bfc4772d4ad1576814bd8ac4473"
-  integrity sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==
+zod@^3.21.4:
+  version "3.21.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
+  integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
 
 zwitch@^2.0.0:
   version "2.0.4"
