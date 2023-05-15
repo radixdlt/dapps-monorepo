@@ -1,84 +1,47 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
   import type { Validator } from '../Validators.svelte'
   import StakedValidatorCard from '../validator-card/staked-validator-card/StakedValidatorCard.svelte'
   import ValidatorListCard from '../validator-card/validator-list-card/ValidatorListCard.svelte'
   import Header from './header/Header.svelte'
 
-  type AllInput = {
-    type: 'all'
-    items: Validator[]
-  }
-
-  type StakedInput = {
-    type: 'staked'
-    items:
-      | (Validator & {
-          validator: string
-          staked: number
-          unstaking: number
-          readyToClaim: number
-        })[]
-      | undefined
-  }
-
-  export let input: AllInput | StakedInput
+  export let type: 'all' | 'staked'
+  export let items: Validator[]
   export let loading: boolean = false
 
   const sort = (by: keyof Validator, descending: boolean) => {
-    input.items = input.items?.sort((a, b) => {
+    items = items?.sort((a, b) => {
       if (a[by] > b[by]) return descending ? 1 : -1
       if (a[by] < b[by]) return descending ? -1 : 1
       return 0
     })
   }
-
-  let selected: Validator[] = []
-
-  const dispatch = createEventDispatcher<{ selected: Validator[] }>()
-
-  const handleSelect = (e: CustomEvent<Validator>) => {
-    selected = [...selected, e.detail]
-    dispatch('selected', selected)
-  }
-
-  const handleUnselect = (e: CustomEvent<Validator>) => {
-    selected = selected.filter((v) => v.address !== e.detail.address)
-    dispatch('selected', selected)
-  }
 </script>
 
 <div id="validator-list">
   {#if loading}
-    {#each Array(10) as _}
-      {#if input.type === 'all'}
+    {#each Array(10) as _, i}
+      {#if type === 'all'}
         <ValidatorListCard validatorInfo={new Promise(() => {})} />
-      {:else if input.type === 'staked'}
-        <StakedValidatorCard
-          validatorInfo={new Promise(() => {})}
-          stakingInfo={new Promise(() => {})}
-        />
+      {:else if type === 'staked'}
+        <StakedValidatorCard validatorInfo={new Promise(() => {})} />
       {/if}
       <slot item={new Promise(() => {})} />
     {/each}
-  {:else if input.items}
+  {:else if items}
     <Header on:sort={(e) => sort(e.detail.by, e.detail.descending)} />
-    {#if input.type === 'all'}
-      {#each input.items as validator}
+    {#if type === 'all'}
+      {#each items as validator}
         <ValidatorListCard
           validatorInfo={Promise.resolve(validator)}
-          on:selected={handleSelect}
-          on:unselected={handleUnselect}
+          on:click-validator
         />
       {/each}
     {/if}
-    {#if input.type === 'staked'}
-      {#each input.items as validator}
+    {#if type === 'staked'}
+      {#each items as validator}
         <StakedValidatorCard
           validatorInfo={Promise.resolve(validator)}
-          stakingInfo={Promise.resolve(validator)}
-          on:selected={handleSelect}
-          on:unselected={handleUnselect}
+          on:click-validator
         />
       {/each}
     {/if}

@@ -2,13 +2,19 @@
   export type Validator = {
     name: string
     address: string
+    ownerAddress: string
     totalStake: number
+    ownerStake: number
     percentageOwnerStake: number
     apy: number
     fee: number
     uptime: number
     acceptsStake: boolean
+    website: string
     percentageTotalStake: number
+    accumulatedStaked: number
+    accumulatedUnstaking: number
+    accumulatedReadyToClaim: number
   }
 
   export type AccountWithStakes = Account & {
@@ -22,11 +28,13 @@
 
   export const context = useContext<{
     connected: Writable<boolean>
+    validators: Writable<Validator[]>
+    selectedValidators: Writable<Record<string, boolean>>
+    bookmarkedValidators: Writable<Record<string, boolean>>
   }>()
 </script>
 
 <script lang="ts">
-  import StakedValidatorList from './staked-validator-list/StakedValidatorList.svelte'
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
@@ -37,6 +45,45 @@
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
+
+  context.set('connected', writable(false))
+  context.set('validators', writable([]))
+  context.set('selectedValidators', writable({}))
+  context.set('bookmarkedValidators', writable({}))
+
+  $: validators.then(context.get('validators').set)
+
+  const updateAccumulatedStakes = async () => {
+    const _validators = await validators
+    const _accounts = await accounts
+
+    validators = Promise.resolve(
+      _validators.map((validator) => {
+        let accumulatedStaked = 0
+        let accumulatedUnstaking = 0
+        let accumulatedReadyToClaim = 0
+
+        _accounts!.forEach((account) => {
+          account.stakes.forEach((stake) => {
+            if (stake.validator === validator.address) {
+              accumulatedStaked += stake.staked
+              accumulatedUnstaking += stake.unstaking
+              accumulatedReadyToClaim += stake.readyToClaim
+            }
+          })
+        })
+
+        return {
+          ...validator,
+          accumulatedStaked,
+          accumulatedUnstaking,
+          accumulatedReadyToClaim
+        }
+      })
+    )
+  }
+
+  $: accounts?.then(() => updateAccumulatedStakes())
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>
@@ -56,7 +103,7 @@
   let totalReadyToClaim = new Promise<number>(() => {})
   $: if (accounts) totalReadyToClaim = accounts.then(getTotal('readyToClaim'))
 
-  $: loading = !!validators
+  let loading = true
 
   validators.then((_) => {
     loading = false
@@ -111,7 +158,17 @@
           staking={totalStaked}
           unstaking={totalUnstaked}
           readyToClaim={totalReadyToClaim}
+          claimText="Claim All"
         />
+        <ValidatorList
+          type="staked"
+          items={resolvedValidators.filter(
+            (v) =>
+              v.accumulatedStaked !== 0 ||
+              v.accumulatedUnstaking !== 0 ||
+              v.accumulatedReadyToClaim !== 0
+          )}
+          {loading}
         <StakedValidatorList
           {validators}
           {accounts}
@@ -131,14 +188,13 @@
   </div>
 
   <div id="selected-validators">
-    <SelectedValidators
-      count={selectedValidators.length + selectedStakedValidators.length}
-    />
+    <SelectedValidators />
   </div>
 
   <div>
     <ValidatorList
-      input={{ type: 'all', items: resolvedValidators }}
+      type="all"
+      items={resolvedValidators}
       {loading}
       on:selected={(e) => {
         selectedValidators = e.detail

@@ -6,23 +6,23 @@
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 
-  let bookmarked: boolean
-
-  let connected = context.get('connected')
+  const connected = context.get('connected')
+  const bookmarked = context.get('bookmarkedValidators')
 </script>
 
 <ValidatorCard on:selected on:unselected {validatorInfo}>
   <div
     slot="icon"
-    class="bookmark"
+    let:info
     on:click={() => {
-      bookmarked = !bookmarked
+      $bookmarked[info.address] = !$bookmarked[info.address]
+      $bookmarked = $bookmarked
     }}
   >
     {#if $connected}
       <Icon
         size="medium"
-        type={bookmarked ? 'bookmarkFilled' : 'bookmarkEmpty'}
+        type={$bookmarked[info.address] ? 'bookmarkFilled' : 'bookmarkEmpty'}
       />
     {/if}
   </div>

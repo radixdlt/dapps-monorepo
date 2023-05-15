@@ -3,43 +3,26 @@
   import StakeDisplay from './StakeDisplay.svelte'
   import ApyBox from './ApyBox.svelte'
   import Address from './Address.svelte'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
-  import { context } from '../Validators.svelte'
+  import { context, type Validator } from '../Validators.svelte'
+  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
 
-  export let validatorInfo: Promise<{
-    name: string
-    address: string
-    totalStake: number
-    percentageOwnerStake: number
-    apy: number
-    fee: number
-    uptime: number
-    acceptsStake: boolean
-    percentageTotalStake: number
-  }>
+  export let validatorInfo: Promise<Validator>
 
   const dispatch = createEventDispatcher<{
-    unselected: Awaited<typeof validatorInfo>
-    selected: Awaited<typeof validatorInfo>
+    'click-validator': Awaited<typeof validatorInfo>
   }>()
 
-  let selected: { label: string; checked: boolean }[] = []
-
-  $: if (selected.length === 0)
-    validatorInfo.then((info) => dispatch('unselected', info))
-  $: if (selected.length === 1)
-    validatorInfo.then((info) => dispatch('selected', info))
-
+  const selected = context.get('selectedValidators')
   let connected = context.get('connected')
 </script>
 
 <div id="validator-card">
   <div id="icon">
-    {#await validatorInfo then}
-      <slot name="icon" />
+    {#await validatorInfo then info}
+      <slot name="icon" {info} />
     {/await}
   </div>
 
@@ -90,18 +73,20 @@
   </div>
 
   <div class="info-column last-column" style:min-width="10rem">
-    {#await validatorInfo then}
+    {#await validatorInfo then info}
       {#if $connected}
         <Checkbox
-          options={[
-            {
-              label: 'SELECT',
-              checked: false
-            }
-          ]}
-          bind:selected
+          bind:checked={$selected[info.address]}
+          on:checked={() => {
+            $selected = $selected
+          }}
+          on:unchecked={() => {
+            $selected = $selected
+          }}
           --label-color="var(--color-grey-2)"
-        />
+        >
+          SELECT
+        </Checkbox>
       {/if}
     {/await}
   </div>

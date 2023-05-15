@@ -7,12 +7,6 @@
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
-
-  export let stakingInfo: Promise<{
-    staked: number
-    unstaking: number
-    readyToClaim: number
-  }>
 </script>
 
 <div class="staked-validator-card">
@@ -23,18 +17,20 @@
     <div class="staking-box-grid">
       <div class="amount-display">
         <div class="amount-title">STAKED</div>
-        {#await stakingInfo}
+        {#await validatorInfo}
           <SkeletonLoader width={30} />
-        {:then stakingInfo}
-          <div class="amount-value">{formatAmount(stakingInfo.staked)}</div>
+        {:then info}
+          <div class="amount-value">{formatAmount(info.accumulatedStaked)}</div>
         {/await}
       </div>
       <div class="amount-display">
         <div class="amount-title">UNSTAKING</div>
-        {#await stakingInfo}
+        {#await validatorInfo}
           <SkeletonLoader width={30} />
-        {:then stakingInfo}
-          <div class="amount-value">{formatAmount(stakingInfo.unstaking)}</div>
+        {:then info}
+          <div class="amount-value">
+            {formatAmount(info.accumulatedUnstaking)}
+          </div>
         {/await}
       </div>
       {#await validatorInfo then}
@@ -43,10 +39,10 @@
         </div>
       {/await}
       <div class="links">
-        {#await stakingInfo then stakingInfo}
+        {#await validatorInfo then info}
           <a>add a reminder to calendar</a>
           <ButtonNew size="small"
-            >ready to claim {formatAmount(stakingInfo.readyToClaim)} XRD</ButtonNew
+            >ready to claim {formatAmount(info.accumulatedReadyToClaim)} XRD</ButtonNew
           >
         {/await}
       </div>
