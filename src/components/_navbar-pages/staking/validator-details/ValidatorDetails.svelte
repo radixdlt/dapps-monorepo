@@ -19,7 +19,7 @@
     <div id="top-row" class="divider">
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div id="close" on:click={() => (open = false)}>
-        <IconNew type="cross2" size="small" />
+        <IconNew type="close" size="small" />
         <div>Close</div>
       </div>
       <div id="validator-title">Validator</div>
