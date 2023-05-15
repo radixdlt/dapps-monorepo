@@ -2,7 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { Resources } from '@api/utils/resources'
   import Box from '@components/_base/box/Box.svelte'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
   import { getSendNFTManifest } from '../manifests'
@@ -53,10 +53,10 @@
   {#await options}
     <SkeletonLoader />
   {:then options}
-    <Checkbox {options} bind:selected let:option loading={!resources}>
+    <CheckedList {options} bind:selected let:option loading={!resources}>
       <Text inline bold underlined>
         <a href="/nft/{option.address}">{option.label}</a>
       </Text>
-    </Checkbox>
+    </CheckedList>
   {/await}
 </Box>
