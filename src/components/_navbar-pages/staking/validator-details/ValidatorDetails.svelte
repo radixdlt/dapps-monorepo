@@ -17,15 +17,13 @@
 <SidePanel bind:open --max-width="80rem" --min-width="70rem">
   <div id="validator-details">
     <div id="top-row" class="divider">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div id="close" on:click={() => (open = false)}>
+      <button id="close" on:click={() => (open = false)}>
         <IconNew type="close" size="small" />
         <div>Close</div>
-      </div>
-      <div id="validator-title">Validator</div>
+      </button>
+      <h3>Validator</h3>
       {#if $connected}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div
+        <button
           id="bookmarked"
           on:click={() => {
             $bookmarked[validator.address] = !$bookmarked[validator.address]
@@ -39,13 +37,13 @@
             size="medium"
           />
           Bookmarked
-        </div>
+        </button>
       {/if}
     </div>
     <div id="name">
-      <div>
+      <h2>
         {validator.name}
-      </div>
+      </h2>
       <a id="address">
         {shortenAddress(validator.address)}
         <IconNew type="copy" size="medium" />
@@ -81,7 +79,7 @@
     {/if}
 
     <div id="details">
-      <div id="title">Validator Details</div>
+      <h3>Validator Details</h3>
       <div class="row">
         <div>ADDRESS</div>
         <a>
@@ -140,13 +138,7 @@
       align-items: center;
       margin-bottom: var(--spacing-xl);
 
-      #validator-title {
-        font-size: var(--text-lg);
-        font-weight: var(--font-weight-bold-2);
-      }
-
       #close {
-        cursor: pointer;
         justify-self: start;
 
         display: flex;
@@ -163,17 +155,11 @@
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
-        cursor: pointer;
         font-weight: var(--font-weight-bold-2);
       }
     }
 
     #name {
-      div {
-        font-size: var(--text-2xl);
-        font-weight: var(--font-weight-bold-2);
-      }
-
       #address {
         display: flex;
         align-items: center;
@@ -192,11 +178,6 @@
 
       margin-top: var(--spacing-2xl);
       padding: var(--spacing-2xl) var(--spacing-xl);
-      #title {
-        font-size: var(--text-lg);
-        font-weight: var(--font-weight-bold-2);
-        margin-bottom: var(--spacing-lg);
-      }
 
       .row {
         display: grid;

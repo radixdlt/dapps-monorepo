@@ -20,7 +20,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
+<button
   id="validator-card"
   on:click|self={() =>
     validatorInfo.then((info) => dispatch('click-validator', info))}
@@ -95,7 +95,7 @@
       {/if}
     {/await}
   </div>
-</div>
+</button>
 
 <style lang="scss">
   @use '../shared.scss';
@@ -104,7 +104,6 @@
     @include mixins.card;
     @include shared.validator-card-grid;
     align-items: center;
-    cursor: pointer;
     transition: var(--transition-hover-card);
     height: 5rem;
   }

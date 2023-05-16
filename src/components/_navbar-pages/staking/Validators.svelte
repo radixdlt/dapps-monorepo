@@ -132,17 +132,17 @@
 {/if}
 
 <div id="validators">
-  <div id="title-section" class="divider">
-    <div id="title">Validators</div>
-    <div id="description">
+  <div>
+    <h1>Validators</h1>
+    <p id="description" class="divider">
       View all your staked validators and list of validators available on the
       Radix Network
-    </div>
+    </p>
   </div>
 
   <div class="divider">
     <div id="staked-validators" class="header-section">
-      <div class="header-text">Your Staked Validators</div>
+      <h2>Your Staked Validators</h2>
       {#if accounts}
         <div class="sub-text">
           Summary of your stakes for your currently connected accounts.
@@ -215,17 +215,8 @@
     gap: var(--spacing-2xl);
   }
 
-  #title-section {
-    display: grid;
-    gap: var(--spacing-md);
-
-    #title {
-      font-size: var(--text-3xl);
-      font-weight: var(--font-weight-bold-2);
-    }
-    #description {
-      font-weight: var(--font-weight-bold-2);
-    }
+  #description {
+    font-weight: var(--font-weight-bold-2);
   }
 
   #selected-validators {
@@ -261,11 +252,6 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
-
-    .header-text {
-      font-size: var(--text-xl);
-      font-weight: var(--font-weight-bold-2);
-    }
 
     .sub-text {
       font-size: var(--text-sm);

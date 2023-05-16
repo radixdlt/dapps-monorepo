@@ -11,7 +11,7 @@
 </script>
 
 <ValidatorCard on:selected on:unselected on:click-validator {validatorInfo}>
-  <div
+  <button
     slot="icon"
     let:info
     on:click={() => {
@@ -25,5 +25,5 @@
         type={$bookmarked[info.address] ? 'bookmarkFilled' : 'bookmarkEmpty'}
       />
     {/if}
-  </div>
+  </button>
 </ValidatorCard>
