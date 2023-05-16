@@ -7,13 +7,14 @@
   export let staking: Promise<number>
   export let unstaking: Promise<number>
   export let readyToClaim: Promise<number>
+  export let claimText: string
 </script>
 
 <div id="staking-card">
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="staking" size="medium" />
+        <Icon type="staking" --size="1.5rem" />
         <div class="title-text">STAKING</div>
       </div>
       <div class="amount-text">
@@ -23,12 +24,13 @@
           {formatAmount(staking)} XRD
         {/await}
       </div>
+      <slot name="staking-section" />
     </div>
   </div>
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="unstaking" size="medium" />
+        <Icon type="unstaking" --size="1.5rem" />
         <div class="title-text">UNSTAKING</div>
       </div>
       <div class="amount-text">
@@ -38,11 +40,15 @@
           {formatAmount(unstaking)} XRD
         {/await}
       </div>
+      <slot name="unstaking-section" />
     </div>
   </div>
   <div class="section last-section">
     <div class="stake-display">
-      <div class="title-text">READY TO CLAIM</div>
+      <div class="text-with-icon">
+        <Icon type="claim" --size="2rem" />
+        <div class="title-text">READY TO CLAIM</div>
+      </div>
       <div class="amount-text">
         {#await readyToClaim}
           <SkeletonLoader />
@@ -50,8 +56,9 @@
           {formatAmount(readyToClaim)} XRD
         {/await}
       </div>
+      <slot name="claim-section" />
     </div>
-    <Button size="big">Claim All</Button>
+    <Button size="big">{claimText}</Button>
   </div>
 </div>
 
@@ -60,10 +67,9 @@
   #staking-card {
     @include mixins.card;
     display: grid;
-    grid: 1fr / 1fr 1fr 1fr;
+    grid: 1fr / auto auto auto;
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
-    min-width: 60rem;
     max-width: 80rem;
   }
 

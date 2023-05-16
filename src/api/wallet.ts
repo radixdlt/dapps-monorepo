@@ -5,7 +5,9 @@ export const requestAddresses = async () => {
   const res = await getWalletData({
     accounts: {
       quantifier: 'atLeast',
-      quantity: 1
+      quantity: 1,
+      reset: false,
+      oneTime: false
     }
   })
   if (res.isOk()) return res.value

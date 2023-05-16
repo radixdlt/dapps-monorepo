@@ -2,13 +2,19 @@
   export type Validator = {
     name: string
     address: string
+    ownerAddress: string
     totalStake: number
+    ownerStake: number
     percentageOwnerStake: number
     apy: number
     fee: number
     uptime: number
     acceptsStake: boolean
+    website: string
     percentageTotalStake: number
+    accumulatedStaked: number
+    accumulatedUnstaking: number
+    accumulatedReadyToClaim: number
   }
 
   export type AccountWithStakes = Account & {
@@ -22,11 +28,13 @@
 
   export const context = useContext<{
     connected: Writable<boolean>
+    validators: Writable<Validator[]>
+    selectedValidators: Writable<Record<string, boolean>>
+    bookmarkedValidators: Writable<Record<string, boolean>>
   }>()
 </script>
 
 <script lang="ts">
-  import StakedValidatorList from './staked-validator-list/StakedValidatorList.svelte'
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
@@ -34,9 +42,49 @@
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
+  import ValidatorDetails from './validator-details/ValidatorDetails.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
+
+  context.set('connected', writable(false))
+  context.set('validators', writable([]))
+  context.set('selectedValidators', writable({}))
+  context.set('bookmarkedValidators', writable({}))
+
+  $: validators.then(context.get('validators').set)
+
+  const updateAccumulatedStakes = async () => {
+    const _validators = await validators
+    const _accounts = await accounts
+
+    validators = Promise.resolve(
+      _validators.map((validator) => {
+        let accumulatedStaked = 0
+        let accumulatedUnstaking = 0
+        let accumulatedReadyToClaim = 0
+
+        _accounts!.forEach((account) => {
+          account.stakes.forEach((stake) => {
+            if (stake.validator === validator.address) {
+              accumulatedStaked += stake.staked
+              accumulatedUnstaking += stake.unstaking
+              accumulatedReadyToClaim += stake.readyToClaim
+            }
+          })
+        })
+
+        return {
+          ...validator,
+          accumulatedStaked,
+          accumulatedUnstaking,
+          accumulatedReadyToClaim
+        }
+      })
+    )
+  }
+
+  $: accounts?.then(() => updateAccumulatedStakes())
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>
@@ -56,7 +104,7 @@
   let totalReadyToClaim = new Promise<number>(() => {})
   $: if (accounts) totalReadyToClaim = accounts.then(getTotal('readyToClaim'))
 
-  $: loading = !!validators
+  let loading = true
 
   validators.then((_) => {
     loading = false
@@ -70,26 +118,31 @@
     })
   }
 
-  context.set('connected', writable(false))
-
   $: if (accounts) context.get('connected').set(true)
 
-  let selectedValidators: Validator[] = []
-  let selectedStakedValidators: Validator[] = []
+  let showValidatorDetails = false
+  let displayedValidator: Validator | undefined
 </script>
 
+{#if displayedValidator}
+  <ValidatorDetails
+    bind:open={showValidatorDetails}
+    validator={displayedValidator}
+  />
+{/if}
+
 <div id="validators">
-  <div id="title-section" class="divider">
-    <div id="title">Validators</div>
-    <div id="description">
+  <div>
+    <h1>Validators</h1>
+    <p id="description" class="divider">
       View all your staked validators and list of validators available on the
       Radix Network
-    </div>
+    </p>
   </div>
 
   <div class="divider">
     <div id="staked-validators" class="header-section">
-      <div class="header-text">Your Staked Validators</div>
+      <h2>Your Staked Validators</h2>
       {#if accounts}
         <div class="sub-text">
           Summary of your stakes for your currently connected accounts.
@@ -111,12 +164,20 @@
           staking={totalStaked}
           unstaking={totalUnstaked}
           readyToClaim={totalReadyToClaim}
+          claimText="Claim All"
         />
-        <StakedValidatorList
-          {validators}
-          {accounts}
-          on:selected={(e) => {
-            selectedStakedValidators = e.detail
+        <ValidatorList
+          type="staked"
+          items={resolvedValidators.filter(
+            (v) =>
+              v.accumulatedStaked !== 0 ||
+              v.accumulatedUnstaking !== 0 ||
+              v.accumulatedReadyToClaim !== 0
+          )}
+          {loading}
+          on:click-validator={(e) => {
+            displayedValidator = e.detail
+            showValidatorDetails = true
           }}
         />
       </div>
@@ -131,17 +192,17 @@
   </div>
 
   <div id="selected-validators">
-    <SelectedValidators
-      count={selectedValidators.length + selectedStakedValidators.length}
-    />
+    <SelectedValidators />
   </div>
 
   <div>
     <ValidatorList
-      input={{ type: 'all', items: resolvedValidators }}
+      type="all"
+      items={resolvedValidators}
       {loading}
-      on:selected={(e) => {
-        selectedValidators = e.detail
+      on:click-validator={(e) => {
+        displayedValidator = e.detail
+        showValidatorDetails = true
       }}
     />
   </div>
@@ -154,17 +215,8 @@
     gap: var(--spacing-2xl);
   }
 
-  #title-section {
-    display: grid;
-    gap: var(--spacing-md);
-
-    #title {
-      font-size: var(--text-3xl);
-      font-weight: var(--font-weight-bold-2);
-    }
-    #description {
-      font-weight: var(--font-weight-bold-2);
-    }
+  #description {
+    font-weight: var(--font-weight-bold-2);
   }
 
   #selected-validators {
@@ -200,11 +252,6 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
-
-    .header-text {
-      font-size: var(--text-xl);
-      font-weight: var(--font-weight-bold-2);
-    }
 
     .sub-text {
       font-size: var(--text-sm);

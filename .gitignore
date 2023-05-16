@@ -18,3 +18,4 @@ storybook-static
 .npmrc
 cypress/screenshots
 yarn-error.log
+.history

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
-  import Checkbox from './Checkbox.svelte'
+  import CheckedList from './CheckedList.svelte'
 
   const options = [
     {
@@ -16,9 +16,9 @@
   ]
 </script>
 
-<Meta title="Checkbox" component={Checkbox} />
+<Meta title="CheckedList" component={CheckedList} />
 <Template>
-  <Checkbox {options} />
+  <CheckedList {options} />
 </Template>
 
 <Story name="Primary" />

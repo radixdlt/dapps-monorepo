@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
 
   export let isDappDefinition: boolean
   export let isChecked: boolean
@@ -25,4 +25,4 @@
   $: isChecked = selected.length > 0
 </script>
 
-<Checkbox bind:options bind:selected />
+<CheckedList bind:options bind:selected />

@@ -104,4 +104,31 @@
     font-weight: var(--font-weight-bold-1);
     cursor: pointer;
   }
+  :global(h1, h2, h3, h4, h5, h6, p, ul, li, ol, span, input, button) {
+    all: unset;
+  }
+  :global(button) {
+    cursor: pointer;
+  }
+  :global(h1) {
+    display: block;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold-2);
+    margin-bottom: var(--spacing-md);
+  }
+  :global(h2) {
+    display: block;
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold-2);
+    margin-bottom: var(--spacing-sm);
+  }
+  :global(h3) {
+    display: block;
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold-2);
+    margin-bottom: var(--spacing-xs);
+  }
+  :global(p) {
+    display: block;
+  }
 </style>

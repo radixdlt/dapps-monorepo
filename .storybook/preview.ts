@@ -22,6 +22,17 @@ export const parameters = {
         }
       }
     ]
+  },
+  viewport: {
+    viewports: {
+      '14" laptop': {
+        name: '14" laptop',
+        styles: {
+          width: '1600px',
+          height: '900px',
+        }
+      },
+    },
   }
 }
 

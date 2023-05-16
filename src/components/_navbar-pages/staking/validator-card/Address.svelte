@@ -6,7 +6,7 @@
 </script>
 
 <div class="address">
-  <a class="text">
+  <a>
     {shortenAddress(address)}
   </a>
   <IconNew size="medium" type="copy" />

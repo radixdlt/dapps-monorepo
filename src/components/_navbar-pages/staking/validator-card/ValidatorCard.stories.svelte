@@ -16,19 +16,11 @@
         ...args,
         acceptsStake: false
       }}
-      stakingInfo={Promise.resolve({
-        unstaking: 500,
-        staked: 1000,
-        readyToClaim: 200
-      })}
     />
 
     <ValidatorListCard validatorInfo={new Promise(() => {})} />
 
-    <StakedValidatorCard
-      validatorInfo={new Promise(() => {})}
-      stakingInfo={new Promise(() => {})}
-    />
+    <StakedValidatorCard validatorInfo={new Promise(() => {})} />
   </div>
 </Template>
 

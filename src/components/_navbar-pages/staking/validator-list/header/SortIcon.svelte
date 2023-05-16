@@ -20,6 +20,7 @@
 <style lang="scss">
   #sort-icons {
     display: flex;
+    z-index: -1;
 
     #up,
     #down {
@@ -27,7 +28,7 @@
       transition: opacity 0.1s ease-in-out;
     }
     #up {
-      translate: -5px 0;
+      translate: -5px;
     }
   }
 

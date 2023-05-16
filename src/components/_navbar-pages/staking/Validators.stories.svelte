@@ -27,7 +27,15 @@
       fee: Math.random() * 0.1,
       uptime: Math.random() * 0.9,
       acceptsStake: Math.random() > 0.5 ? true : false,
-      percentageTotalStake: Math.random() * 50
+      percentageTotalStake: Math.random() * 50,
+      website: 'https://radnode.io',
+      ownerAddress: 'account_1234567890',
+      ownerStake: Math.random() * 1000000,
+      accumulatedStaked: 0,
+      accumulatedUnstaking: 0,
+      accumulatedReadyToClaim: 0,
+      bookmarked: false,
+      selected: false
     }))
 
   const accounts = Array(3)
