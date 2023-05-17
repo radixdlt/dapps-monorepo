@@ -9,16 +9,21 @@
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
   import '../fonts.css'
-  import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+  import {
+    RadixDappToolkit,
+    DataRequestOutput
+  } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '../../src/network'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
-  import type { RdtState } from '@radixdlt/radix-dapp-toolkit/types/io/schemas'
+  import { authApi } from '../server/auth/auth-api'
   let mounted = false
 
+  const { createChallenge, login } = authApi
+
   onMount(() => {
-    const updateAccounts = (value: RdtState['walletData']['accounts']) => {
+    const updateAccounts = (value: DataRequestOutput['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
@@ -30,18 +35,24 @@
       }
     }
     mounted = true
-
     const rdt = RadixDappToolkit(
       {
         dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
         networkId: CURRENT_NETWORK?.id
       },
-      (requestData) => {
-        requestData({
-          accounts: { quantifier: 'atLeast', quantity: 1 }
-        }).map(({ accounts }) => {
-          updateAccounts(accounts)
-        })
+      async (requestData) => {
+        await createChallenge()
+          .andThen((challenge) =>
+            requestData({
+              challenge,
+              accounts: { quantifier: 'atLeast', quantity: 1 }
+            })
+          )
+          .andThen(({ signedChallenges, accounts }) =>
+            login(signedChallenges[0]).map(() => {
+              updateAccounts(accounts)
+            })
+          )
       },
       {
         explorer: {

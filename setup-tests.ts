@@ -1,3 +1,5 @@
+require('isomorphic-fetch')
+
 vi.mock('$env/static/public', () => ({
   PUBLIC_NETWORK_NAME: 'hammunet',
   PUBLIC_APP_ENV: 'development'
