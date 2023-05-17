@@ -30,7 +30,7 @@ export type StateEntityDetailsVaultResponseItem =
 
 const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
 
-const stateApi = new StateApi(config)
+export const stateApi = new StateApi(config)
 const transactionApi = new TransactionApi(config)
 
 export const getTransactionDetails = pipe(

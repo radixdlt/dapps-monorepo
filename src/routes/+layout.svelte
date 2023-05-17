@@ -17,8 +17,12 @@
   import type { RdtState } from '@radixdlt/radix-dapp-toolkit/types/io/schemas'
   let mounted = false
 
+  type RdtWalletState = ReturnType<
+    Awaited<ReturnType<RadixDappToolkit['requestData']>>['_unsafeUnwrap']
+  >
+
   onMount(() => {
-    const updateAccounts = (value: RdtState['walletData']['accounts']) => {
+    const updateAccounts = (value: RdtWalletState['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
