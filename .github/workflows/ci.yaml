@@ -7,10 +7,9 @@ on:
   pull_request:
     branches:
       - main
-      - backend
   release:
     types:
-    - published
+      - published
   workflow_dispatch:
     inputs:
       ENVIRONMENT_NAME:
@@ -27,11 +26,10 @@ on:
           - rcnet
 
 env:
-  active_network: "hammunet"
-  release_network: "rcnet"
+  active_network: 'hammunet'
+  release_network: 'rcnet'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -45,15 +43,15 @@ jobs:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "build"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'build'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
@@ -103,20 +101,20 @@ jobs:
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "lint"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'lint'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Lint
-        run:  yarn lint
+        run: yarn lint
 
   prettier:
     runs-on: ubuntu-latest
@@ -129,20 +127,20 @@ jobs:
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "prettier"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'prettier'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Prettier
-        run:  yarn prettier
+        run: yarn prettier
 
   sonar:
     runs-on: ubuntu-latest
@@ -160,12 +158,12 @@ jobs:
           always-auth: true
           node-version: 16.17.1
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "sonar"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'sonar'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/sonar-token-JkrXwe'
           parse_json: true
       # - name: Run story book tests
       #   run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
@@ -188,20 +186,20 @@ jobs:
         with:
           fetch-depth: 0
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "svelte"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'svelte'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Svelte check
-        run:  yarn svelte:check
+        run: yarn svelte:check
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -220,20 +218,20 @@ jobs:
           node-version: 16.17.1
           cache: yarn
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "unit-tests"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'unit-tests'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Unit tests
-        run:  yarn coverage
+        run: yarn coverage
 
   push-dashboard:
     runs-on: ubuntu-latest
@@ -255,12 +253,12 @@ jobs:
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "push-dash"
-          secret_prefix: "GH_GCR_JSON_KEY"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'push-dash'
+          secret_prefix: 'GH_GCR_JSON_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi'
           parse_json: false
       - name: Login to GCR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -270,11 +268,11 @@ jobs:
           password: ${{ env.GH_GCR_JSON_KEY }}
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with:
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "push-dashboard"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'push-dashboard'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - name: Restore yarn cache
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
@@ -291,7 +289,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
-          target: "dashboard"
+          target: 'dashboard'
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
@@ -322,20 +320,20 @@ jobs:
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-common-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "push-story"
-          secret_prefix: "GH_GCR_JSON_KEY"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'push-story'
+          secret_prefix: 'GH_GCR_JSON_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi'
           parse_json: false
       - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
         with:
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "push-story"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'push-story'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - name: Login to GCR
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -358,7 +356,7 @@ jobs:
           context: .
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
-          target: "storybook"
+          target: 'storybook'
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
@@ -383,14 +381,14 @@ jobs:
       restart_pods: false
       create_subns: true
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
-      app_name: "dashboard"
-      step_name: "deploy-pr"
+      app_name: 'dashboard'
+      step_name: 'deploy-pr'
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -401,17 +399,17 @@ jobs:
       - setup-tags
     with:
       env_name: dev
-      namespace:  dashboard-dev
+      namespace: dashboard-dev
       restart_pods: false
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
-      app_name: "dashboard"
-      step_name: "deploy-dev"
+      app_name: 'dashboard'
+      step_name: 'deploy-dev'
 
   deploy_enkinet:
     if: >
@@ -423,18 +421,18 @@ jobs:
       - setup-tags
     with:
       env_name: enkinet
-      namespace:  dashboard-enkinet
+      namespace: dashboard-enkinet
       restart_pods: false
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=enkinet
       environment: enkinet
-      app_name: "dashboard"
-      step_name: "deploy-enkinet"
+      app_name: 'dashboard'
+      step_name: 'deploy-enkinet'
 
   deploy_hammunet:
     if: >
@@ -447,18 +445,18 @@ jobs:
       - setup-tags
     with:
       env_name: hammunet
-      namespace:  dashboard-hammunet
+      namespace: dashboard-hammunet
       restart_pods: false
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=hammunet
       environment: hammunet
-      app_name: "dashboard"
-      step_name: "deploy-hammunet"
+      app_name: 'dashboard'
+      step_name: 'deploy-hammunet'
 
   deploy_gilganet:
     if: >
@@ -470,18 +468,18 @@ jobs:
       - setup-tags
     with:
       env_name: gilganet
-      namespace:  dashboard-gilganet
+      namespace: dashboard-gilganet
       restart_pods: false
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=gilganet
       environment: gilganet
-      app_name: "dashboard"
-      step_name: "deploy-gilganet"
+      app_name: 'dashboard'
+      step_name: 'deploy-gilganet'
 
   deploy_mardunet:
     if: >
@@ -493,18 +491,18 @@ jobs:
       - setup-tags
     with:
       env_name: mardunet
-      namespace:  dashboard-mardunet
+      namespace: dashboard-mardunet
       restart_pods: false
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer"
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=mardunet
       environment: mardunet
-      app_name: "dashboard"
-      step_name: "deploy-mardunet"
+      app_name: 'dashboard'
+      step_name: 'deploy-mardunet'
 
   deploy_rcnet:
     if: >
@@ -518,17 +516,17 @@ jobs:
     with:
       env_name: kisharnet
       restart_pods: false
-      namespace:  dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
+      namespace: dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer"
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer'
       eks_cluster: rtlj-prod
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=kisharnet
       environment: kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
-      app_name: "dashboard"
-      step_name: "deploy-rcnet"
+      app_name: 'dashboard'
+      step_name: 'deploy-rcnet'
 
   deploy_kisharnet:
     if: >
@@ -540,18 +538,17 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet-internal
-      namespace:  dashboard-kisharnet-internal
+      namespace: dashboard-kisharnet-internal
       create_subns: false
       aws_region: eu-west-2
-      role_to_assume: "arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-internal-deployer"
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-internal-deployer'
       eks_cluster: rtlj-prod
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=kisharnet-internal
       environment: kisharnet-internal
-      app_name: "dashboard"
-      step_name: "deploy-kisharnet"
-
+      app_name: 'dashboard'
+      step_name: 'deploy-kisharnet'
 
   run-e2e-tests:
     runs-on: ubuntu-latest
@@ -569,15 +566,15 @@ jobs:
           fetch-depth: 0
       - name: Fetch AWS secrets
         uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
-        with: 
-          role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
-          app_name: "dashboard"
-          step_name: "e2e-tests"
-          secret_prefix: "GH"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5"
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'e2e-tests'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
           parse_json: true
       - uses: ./.github/actions/build
-        with: 
+        with:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
