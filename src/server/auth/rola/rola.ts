@@ -1,8 +1,9 @@
-import type { ResultAsync } from 'neverthrow'
-import type { Proof } from '@radixdlt/radix-dapp-toolkit'
+import type { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
+import type { GatewayService } from '../gateway'
+import { ResultAsync, err, ok } from 'neverthrow'
 import { createSignatureMessage } from './helpers/create-signature-message'
 import { verifyProofFactory } from './helpers/verify-proof'
-import type { GatewayService } from '../gateway'
+import { deriveVirtualIdentityAddress } from './helpers/derive-address-from-public-key'
 
 export type RolaError = { reason: string; jsError?: Error }
 
@@ -11,30 +12,61 @@ export type VerifyOwnerKeyOnLedgerFn = (
   publicKeyHex: string
 ) => ResultAsync<undefined, RolaError>
 
-export type RolaInput = {
-  challenge: string
-  address: string
-  proof: Proof
-  dAppDefinitionAddress: string
-}
 export const RolaFactory =
-  (expectedOrigin: string, gatewayService: GatewayService) =>
-  ({
-    address,
-    challenge,
-    proof,
-    dAppDefinitionAddress
-  }: RolaInput): ResultAsync<any, RolaError> => {
+  (
+    gatewayService: GatewayService,
+    expectedOrigin: string,
+    dAppDefinitionAddress: string,
+    networkId: number
+  ) =>
+  (signedChallenge: SignedChallenge): ResultAsync<any, RolaError> => {
+    const formattedPublicKey =
+      signedChallenge.proof.curve === 'curve25519'
+        ? `EddsaEd25519PublicKey("${signedChallenge.proof.publicKey}")`
+        : `Secp256k1PublicKey("${signedChallenge.proof.publicKey}")`
+
+    const verifyProof = verifyProofFactory(signedChallenge)
+
+    const getDerivedAddress = () =>
+      deriveVirtualIdentityAddress(signedChallenge.proof.publicKey, networkId)
+        .map(({ address }) => address)
+        .mapErr((jsError) => ({
+          reason: 'couldNotDeriveAddressFromPublicKey',
+          jsError
+        }))
+
+    const queryLedger = () =>
+      gatewayService
+        .getEntityOwnerKeys(signedChallenge.address)
+        .mapErr(() => ({ reason: 'couldNotVerifyPublicKeyOnLedger' }))
+        .map((ownerKeys) => ({
+          ownerKeysMatchesProvidedPublicKey:
+            ownerKeys.includes(formattedPublicKey),
+          ownerKeysSet: ownerKeys.length > 0
+        }))
+
+    const deriveAddressFromPublicKeyAndQueryLedger = () =>
+      ResultAsync.combine([getDerivedAddress(), queryLedger()])
+
     return createSignatureMessage({
       dAppDefinitionAddress,
-      challenge,
-      origin: expectedOrigin
+      origin: expectedOrigin,
+      challenge: signedChallenge.challenge
     })
-      .andThen(verifyProofFactory(proof))
-      .asyncAndThen(() =>
-        gatewayService
-          .getEntityMetadata(address)
-          .map((metadata) => metadata)
-          .mapErr(() => ({ reason: 'couldNotVerifyPublicKeyOnLedger' }))
+      .andThen(verifyProof)
+      .asyncAndThen(deriveAddressFromPublicKeyAndQueryLedger)
+      .andThen(
+        ([
+          derivedAddress,
+          { ownerKeysMatchesProvidedPublicKey, ownerKeysSet }
+        ]) => {
+          const derivedAddressMatchesPublicKey =
+            !ownerKeysSet && derivedAddress === signedChallenge.address
+
+          return ownerKeysMatchesProvidedPublicKey ||
+            derivedAddressMatchesPublicKey
+            ? ok(undefined)
+            : err({ reason: 'invalidPublicKey' })
+        }
       )
   }

@@ -8,11 +8,15 @@ const authController = AuthController({
 })
 
 /** @type {import('./$types').RequestHandler} */
-export const GET = async () => {
-  const result = await authController.createChallenge()
+export const POST = ({ cookies }) => {
+  const result = authController.renewAuthToken(cookies)
 
-  if (result.isErr())
-    throw error(result.error.httpResponseCode, result.error.reason)
+  if (result.isErr()) throw error(401, result.error.reason)
 
-  return json(result.value.data, { status: result.value.httpResponseCode })
+  return json(
+    { authToken: result.value },
+    {
+      status: 200
+    }
+  )
 }

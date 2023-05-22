@@ -1,15 +1,12 @@
 import { Configuration, StateApi } from '@radixdlt/babylon-gateway-api-sdk'
 import { ResultAsync } from 'neverthrow'
+import { stateApi } from '@api/gateway'
 
 export type GatewayService = ReturnType<typeof GatewayService>
 
-export const GatewayService = (
-  stateApi = new StateApi(
-    new Configuration({ basePath: 'https://rcnet.radixdlt.com' })
-  )
-) => {
+export const GatewayService = () => {
   return {
-    getEntityMetadata: (address: string) =>
+    getEntityOwnerKeys: (address: string) =>
       ResultAsync.fromPromise(
         stateApi.stateEntityDetails({
           stateEntityDetailsRequest: {
@@ -18,6 +15,11 @@ export const GatewayService = (
           }
         }),
         (error: any): Error => error
-      ).map((response) => response.items[0].metadata.items)
+      ).map(
+        (response) =>
+          response?.items[0]?.metadata?.items.find(
+            (item) => item.key === 'owner_keys'
+          )?.value.as_string_collection ?? []
+      )
   }
 }

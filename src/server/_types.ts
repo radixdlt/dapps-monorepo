@@ -7,8 +7,11 @@ export type ControllerOutput<T = any> = ResultAsync<
 
 export type ApiError = ReturnType<ReturnType<typeof createApiError>>
 export const createApiError =
-  (reason: string, httpResponseCode: number) => (jsError?: unknown) => ({
-    jsError: jsError as Error | undefined,
+  (reason: string, httpResponseCode: number) =>
+  (
+    jsError?: any
+  ): { jsError?: Error; httpResponseCode: number; reason: string } => ({
+    jsError,
     httpResponseCode,
     reason
   })

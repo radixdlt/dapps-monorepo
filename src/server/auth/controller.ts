@@ -4,69 +4,95 @@ import { AuthModel } from './model'
 import { hasChallengeExpired } from './helpers/has-challenge-expired'
 import { GatewayService } from './gateway'
 import { RolaFactory } from './rola/rola'
-import { object, string, z } from 'zod'
-import { Proof } from '@radixdlt/radix-dapp-toolkit'
-
-export type VerifyRequestBody = z.infer<typeof VerifyRequestBody>
-export const VerifyRequestBody = object({
-  proof: Proof,
-  challenge: string(),
-  address: string(),
-  dAppDefinitionAddress: string()
-})
+import { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
+import { CURRENT_NETWORK } from '../../network'
+import { err, errAsync } from 'neverthrow'
+import { OAuth2 } from './oauth2'
+import { UserModel } from '../user/model'
+import type { Cookies } from '@sveltejs/kit'
 
 export type AuthController = ReturnType<typeof AuthController>
 export const AuthController = ({
   authModel = AuthModel(),
+  userModel = UserModel(),
   gatewayService = GatewayService(),
+  oAuth2 = OAuth2(),
   logger,
-  expectedOrigin = 'http://localhost:3000'
+  expectedOrigin = 'http://localhost:5173',
+  dAppDefinitionAddress = CURRENT_NETWORK.dappDefAddress,
+  networkId = CURRENT_NETWORK.id
 }: Partial<{
   authModel: AuthModel
+  userModel: UserModel
   gatewayService: GatewayService
+  oAuth2: OAuth2
   logger: AppLogger
   expectedOrigin: string
+  dAppDefinitionAddress: string
+  networkId: number
 }>) => {
-  const rola = RolaFactory(expectedOrigin, gatewayService)
+  const rola = RolaFactory(
+    gatewayService,
+    expectedOrigin,
+    dAppDefinitionAddress,
+    networkId
+  )
 
   const createChallenge = (): ControllerOutput<{ challenge: string }> =>
     authModel
       .createChallenge()
       .map((challenge) => ({ data: { challenge }, httpResponseCode: 201 }))
 
-  const verify = ({
-    proof,
-    address,
-    challenge,
-    dAppDefinitionAddress
-  }: VerifyRequestBody): ControllerOutput<any> => {
-    logger?.debug('Verifying signed challenge', {
-      proof,
-      address,
-      challenge,
-      dAppDefinitionAddress
-    })
+  const login = (
+    signedChallenge: SignedChallenge,
+    cookies: Cookies
+  ): ControllerOutput<{
+    authToken: string
+    headers: { ['Set-Cookie']: string }
+  }> => {
+    logger?.debug('Verifying signed challenge', signedChallenge)
+
+    if (!SignedChallenge.safeParse(signedChallenge))
+      return errAsync({
+        httpResponseCode: 400,
+        reason: 'invalidRequestBody'
+      })
+
     return authModel
-      .getAndDelete(challenge)
+      .getAndDelete(signedChallenge.challenge)
       .andThen(hasChallengeExpired)
-      .andThen((data) =>
-        rola({
-          challenge: data.challenge,
-          proof,
-          address,
-          dAppDefinitionAddress
-        })
-      )
+      .andThen(() => rola(signedChallenge))
       .mapErr(({ reason, jsError }) => ({
         httpResponseCode: 400,
         reason,
         jsError
       }))
-      .map(() => ({
-        data: {},
+      .andThen(() =>
+        userModel.create({ identityAddress: signedChallenge.address })
+      )
+      .andThen(() => oAuth2.createTokens(signedChallenge.address))
+      .map(({ authToken, refreshToken }) => ({
+        data: {
+          authToken,
+          headers: oAuth2.createRefreshTokenCookie(refreshToken, cookies)
+        },
         httpResponseCode: 200
       }))
   }
 
-  return { createChallenge, verify, authModel }
+  const renewAuthToken = (cookies: Cookies) => oAuth2.renewAuthToken(cookies)
+
+  const verifyAuthToken = (authorizationHeaderValue: string | null) => {
+    const authToken = (authorizationHeaderValue || '').split(' ')[1]
+    return authToken
+      ? oAuth2.verifyToken(authToken)
+      : err({ reason: 'invalidToken' })
+  }
+
+  return {
+    createChallenge,
+    login,
+    renewAuthToken,
+    isValid: verifyAuthToken
+  }
 }

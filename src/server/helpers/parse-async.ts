@@ -1,5 +1,12 @@
 import { ResultAsync } from 'neverthrow'
-import type { ZodObject, ZodRawShape, ZodError } from 'zod'
+import type {
+  ZodObject,
+  ZodRawShape,
+  ZodError,
+  ZodAny,
+  ZodTypeAny,
+  z
+} from 'zod'
 
 export type ParseAsync = typeof parseAsync
 export const parseAsync = <T extends ZodRawShape>(
