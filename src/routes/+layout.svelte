@@ -14,14 +14,11 @@
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
+  import type { RdtState } from '@radixdlt/radix-dapp-toolkit/types/io/schemas'
   let mounted = false
 
-  type RdtWalletState = ReturnType<
-    Awaited<ReturnType<RadixDappToolkit['requestData']>>['_unsafeUnwrap']
-  >
-
   onMount(() => {
-    const updateAccounts = (value: RdtWalletState['accounts']) => {
+    const updateAccounts = (value: RdtState['walletData']['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
