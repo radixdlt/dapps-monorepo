@@ -2097,10 +2097,10 @@
     lit "^2.6.1"
     rxjs "^7.8.0"
 
-"@radixdlt/radix-dapp-toolkit@0.3.0-alpha.5":
-  version "0.3.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.3.0-alpha.5.tgz#aa32a88ae42e7c3b9d4275b726d8528fd6a5914a"
-  integrity sha512-+HZusElbjzOPj1bCLdlZVHHtNJ1pKQFAwXkBsJIqNSoyG/VhQ2sV3tBPDNaN4yNxhQisPUmUhE+5HKrmM4Et1g==
+"@radixdlt/radix-dapp-toolkit@0.3.0-alpha.11":
+  version "0.3.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/@radixdlt/radix-dapp-toolkit/-/radix-dapp-toolkit-0.3.0-alpha.11.tgz#866b8aba9dfca4f52bfba73009a591365f1b587c"
+  integrity sha512-dT3xQXE1Wu1Z+uTgzJrFDyHbIDbQ9kGRdjoiBTeZv9BM2wjKhq0/PYI3qv0nUmDEbrfz9i1FzEZ+HlveOOFQ7g==
   dependencies:
     "@radixdlt/babylon-gateway-api-sdk" "^1.0.0-rc.1.8"
     "@radixdlt/connect-button" "0.13.0-alpha.1"
