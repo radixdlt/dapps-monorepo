@@ -41,6 +41,9 @@
       backgroundColor: '$primaryButtonHover',
       color: 'white',
       cursor: 'pointer'
+    },
+    '&:hover div': {
+      color: 'white'
     }
   })
 
@@ -49,6 +52,7 @@
     zIndex: 100,
     right: 0,
     left: 0,
+    p: '$0',
     mt: '$xs',
     py: '$xs',
     listStyle: 'none',
