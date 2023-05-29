@@ -1,21 +1,9 @@
-<script lang="ts">
-  import { css } from '@styles'
+<hr id="divider" />
 
-  const variants = {
-    color: {
-      border: {
-        borderColor: '$borderColor'
-      }
-    }
+<style>
+  #divider {
+    border: none;
+    border-bottom: var(--border);
+    margin: var(--spacing-2xl) 0;
   }
-
-  const style = css({
-    borderRadius: '$sm',
-    borderTop: '1px solid',
-    variants
-  })
-
-  export let color: keyof typeof variants['color'] | undefined = undefined
-</script>
-
-<hr class={style({ color })} />
+</style>

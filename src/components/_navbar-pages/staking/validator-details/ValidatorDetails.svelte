@@ -5,6 +5,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
 
   export let open: boolean
   export let validator: Validator
@@ -16,7 +17,7 @@
 
 <SidePanel bind:open --max-width="80rem" --min-width="70rem">
   <div id="validator-details">
-    <div id="top-row" class="divider">
+    <div id="top-row">
       <button id="close" on:click={() => (open = false)}>
         <IconNew type="close" size="small" />
         <div>Close</div>
@@ -40,6 +41,7 @@
         </button>
       {/if}
     </div>
+    <Divider />
     <div id="name">
       <h2>
         {validator.name}
@@ -68,7 +70,7 @@
     </div>
 
     {#if $connected}
-      <div class="divider">
+      <div>
         <ExtendedStakingCard
           staked={validator.accumulatedStaked}
           unstaking={validator.accumulatedUnstaking}
@@ -76,6 +78,7 @@
           claimText="Claim"
         />
       </div>
+      <Divider />
     {/if}
 
     <div id="details">
@@ -124,10 +127,6 @@
 
 <style lang="scss">
   @use '../../../../mixins.scss';
-  .divider {
-    border-bottom: var(--border);
-    padding-bottom: var(--spacing-2xl);
-  }
 
   #validator-details {
     padding: var(--spacing-2xl) var(--spacing-3xl);
