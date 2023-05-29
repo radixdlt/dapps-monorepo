@@ -75,8 +75,9 @@
   /* common utilities */
   :global(.common) {
     /* borders */
-    --border-radius: 8px;
-    --border-radius-small: 2px;
+    --border-radius-sm: 2px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
     --border: 1px solid var(--color-grey-4);
     --border-divider: 2px solid #e2e5ed70;
 

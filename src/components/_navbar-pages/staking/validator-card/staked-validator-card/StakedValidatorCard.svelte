@@ -52,7 +52,7 @@
 
 <style>
   .staked-validator-card :global(#validator-card) {
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
     border-bottom: none;
   }
 
@@ -65,7 +65,7 @@
     grid: 1fr 0.5fr / 1fr;
     box-shadow: var(--shadow);
     transition: var(--transition-hover-card);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
   }
 
   .staked-validator-card:hover {
@@ -78,7 +78,7 @@
     align-items: center;
     border: var(--border);
     border-top: none;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     background: var(--color-grey-5);
     padding: var(--spacing-md) 0;
   }

@@ -42,7 +42,7 @@
     width: 1rem;
     height: 1rem;
     border: 2px solid var(--color-grey-2);
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-sm);
     margin: 0 var(--spacing-sm) 0 0;
     align-self: center;
   }

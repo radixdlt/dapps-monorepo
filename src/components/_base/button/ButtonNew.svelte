@@ -10,7 +10,7 @@
   button {
     background: var(--color-radix-blue-2);
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     color: var(--color-light);
     cursor: pointer;
     white-space: nowrap;

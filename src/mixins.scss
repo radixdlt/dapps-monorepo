@@ -1,6 +1,6 @@
 @mixin card($use-border: true) {
   box-shadow: var(--shadow);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-lg);
   background: var(--color-light);
 
   @if $use-border {
