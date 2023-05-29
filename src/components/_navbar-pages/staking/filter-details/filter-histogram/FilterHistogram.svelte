@@ -97,7 +97,7 @@
     .active-bar,
     .inactive-bar {
       width: 100%;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
     }
 
     .active-bar {
