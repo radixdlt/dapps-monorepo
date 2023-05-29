@@ -6,6 +6,7 @@
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
+  import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
 
   export let open: boolean
   export let validator: Validator
@@ -18,10 +19,7 @@
 <SidePanel bind:open --max-width="80rem" --min-width="70rem">
   <div id="validator-details">
     <div id="top-row">
-      <button id="close" on:click={() => (open = false)}>
-        <IconNew type="close" size="small" />
-        <div>Close</div>
-      </button>
+      <CloseButton on:click={() => (open = false)} />
       <h3>Validator</h3>
       {#if $connected}
         <button
@@ -134,18 +132,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--spacing-xl);
-
-      #close {
-        justify-self: start;
-
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-
-        :nth-child(2) {
-          color: var(--color-radix-blue-2);
-        }
-      }
 
       #bookmarked {
         justify-self: end;
