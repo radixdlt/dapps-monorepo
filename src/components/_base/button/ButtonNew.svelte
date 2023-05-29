@@ -18,7 +18,7 @@
 
   .small {
     height: var(--spacing-xl);
-    padding: 0 var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-lg);
   }
 
   .big {

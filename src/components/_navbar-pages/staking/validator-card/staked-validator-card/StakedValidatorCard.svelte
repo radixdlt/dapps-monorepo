@@ -80,6 +80,7 @@
     border-top: none;
     border-radius: 0 0 var(--border-radius) var(--border-radius);
     background: var(--color-grey-5);
+    padding: var(--spacing-md) 0;
   }
 
   .staking-box-grid {
@@ -114,5 +115,6 @@
   .links {
     display: flex;
     gap: 1rem;
+    align-items: center;
   }
 </style>
