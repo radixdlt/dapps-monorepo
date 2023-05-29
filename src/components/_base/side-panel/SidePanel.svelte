@@ -18,14 +18,13 @@
     id="backdrop"
     transition:fade={{ duration: 300 }}
     on:click|self={() => (open = false)}
+  />
+  <div
+    role="dialog"
+    id="side-panel"
+    transition:fly={{ x: 1500, duration: 300, opacity: 100 }}
   >
-    <div
-      role="dialog"
-      id="side-panel"
-      transition:fly={{ x: 5000, duration: 300 }}
-    >
-      <slot />
-    </div>
+    <slot />
   </div>
 {/if}
 
