@@ -10,7 +10,7 @@
   let _max: number
 </script>
 
-<Meta title="Navbar Pages / Validators / FilterHistogram" />
+<Meta title="Navbar Pages / Validators / Filter Card / Filter Histogram" />
 
 <Story name="primary">
   <FilterHistogram

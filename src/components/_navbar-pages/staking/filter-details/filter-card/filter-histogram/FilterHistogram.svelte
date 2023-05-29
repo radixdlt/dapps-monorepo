@@ -6,6 +6,8 @@
 
   export let values: number[] = []
 
+  const barHeightPx = 60
+
   const transormArray = (original: number[], newLength: number) => {
     const originalLength = original.length
 
@@ -36,7 +38,7 @@
   }
 
   let normalizedValues = values.map(
-    (value) => (value / Math.max(...values)) * 100
+    (value) => (value / Math.max(...values)) * barHeightPx
   )
 
   const nbrOfBars = 36
@@ -54,6 +56,7 @@
 
 <div id="filter-histogram">
   <div
+    id="active"
     class="histogram"
     style:clip-path={`inset(0 ${100 - range[1]}% 0 ${range[0]}%)`}
   >
@@ -109,17 +112,10 @@
     }
   }
 
-  .active-bar {
-    width: 100%;
-    background: var(--color-grey-1);
-  }
-
-  .inactive-bar {
-    width: 100%;
-    background: var(--color-grey-4);
-  }
-
   #slider {
+    position: relative;
+    z-index: 2;
+
     :global(.track) {
       margin: 0;
     }
@@ -141,7 +137,6 @@
 
   #inactive {
     position: absolute;
-    z-index: -1;
     top: 0;
     z-index: 1;
     border-bottom: 5px solid var(--color-grey-4);
