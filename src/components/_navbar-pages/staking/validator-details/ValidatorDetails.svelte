@@ -129,8 +129,6 @@
   @use '../../../../mixins.scss';
 
   #validator-details {
-    padding: var(--spacing-2xl) var(--spacing-3xl);
-
     #top-row {
       display: flex;
       justify-content: space-between;

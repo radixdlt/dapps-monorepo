@@ -41,6 +41,7 @@
     background: var(--color-grey-5);
     z-index: 3;
     overflow-y: scroll;
+    padding: var(--spacing-2xl) var(--spacing-3xl);
   }
   #backdrop {
     backdrop-filter: blur(8px);
