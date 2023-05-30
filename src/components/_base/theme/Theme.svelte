@@ -39,6 +39,7 @@
     --spacing-xl: calc(2 * var(--spacing-unit));
     --spacing-2xl: calc(3.25 * var(--spacing-unit));
     --spacing-3xl: calc(5.25 * var(--spacing-unit));
+    --spacing-4xl: calc(8.5 * var(--spacing-unit));
   }
   /* typography */
   :global(body) {
@@ -75,9 +76,11 @@
   /* common utilities */
   :global(.common) {
     /* borders */
-    --border-radius: 8px;
-    --border-radius-small: 2px;
+    --border-radius-sm: 2px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
     --border: 1px solid var(--color-grey-4);
+    --border-strong: 1px solid var(--color-grey-1);
     --border-divider: 2px solid #e2e5ed70;
 
     /* shadows */

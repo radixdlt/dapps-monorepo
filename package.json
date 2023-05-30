@@ -99,6 +99,7 @@
   "type": "module",
   "dependencies": {
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
+    "@bulatdashiev/svelte-slider": "^1.0.3",
     "@radixdlt/babylon-gateway-api-sdk": "1.0.0-rc.1.5",
     "@radixdlt/radix-dapp-toolkit": "0.3.0-alpha.11",
     "@radixdlt/radix-engine-toolkit": "^0.1.3",

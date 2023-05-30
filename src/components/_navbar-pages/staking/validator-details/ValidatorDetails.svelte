@@ -5,6 +5,8 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
+  import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
 
   export let open: boolean
   export let validator: Validator
@@ -16,11 +18,8 @@
 
 <SidePanel bind:open --max-width="80rem" --min-width="70rem">
   <div id="validator-details">
-    <div id="top-row" class="divider">
-      <button id="close" on:click={() => (open = false)}>
-        <IconNew type="close" size="small" />
-        <div>Close</div>
-      </button>
+    <div id="top-row">
+      <CloseButton on:click={() => (open = false)} />
       <h3>Validator</h3>
       {#if $connected}
         <button
@@ -40,6 +39,7 @@
         </button>
       {/if}
     </div>
+    <Divider />
     <div id="name">
       <h2>
         {validator.name}
@@ -68,7 +68,7 @@
     </div>
 
     {#if $connected}
-      <div class="divider">
+      <div>
         <ExtendedStakingCard
           staked={validator.accumulatedStaked}
           unstaking={validator.accumulatedUnstaking}
@@ -76,6 +76,7 @@
           claimText="Claim"
         />
       </div>
+      <Divider />
     {/if}
 
     <div id="details">
@@ -124,31 +125,13 @@
 
 <style lang="scss">
   @use '../../../../mixins.scss';
-  .divider {
-    border-bottom: var(--border);
-    padding-bottom: var(--spacing-2xl);
-  }
 
   #validator-details {
-    padding: var(--spacing-2xl) var(--spacing-3xl);
-
     #top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--spacing-xl);
-
-      #close {
-        justify-self: start;
-
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-
-        :nth-child(2) {
-          color: var(--color-radix-blue-2);
-        }
-      }
 
       #bookmarked {
         justify-self: end;

@@ -1,9 +1,14 @@
-@mixin card($use-border: true) {
+@mixin card($use-border: true, $background: var(--color-light)) {
   box-shadow: var(--shadow);
-  border-radius: var(--border-radius);
-  background: var(--color-light);
+  border-radius: var(--border-radius-lg);
+  background: $background;
 
   @if $use-border {
     border: var(--border);
   }
+}
+
+@mixin subtext {
+  font-size: var(--text-sm);
+  color: var(--color-grey-2);
 }

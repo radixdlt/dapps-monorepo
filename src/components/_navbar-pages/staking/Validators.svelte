@@ -39,10 +39,13 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
   import type { Account } from '@stores'
+  import { connected } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import ValidatorDetails from './validator-details/ValidatorDetails.svelte'
+  import FilterButton from './filter-button/FilterButton.svelte'
+  import FilterDetails from './filter-details/FilterDetails.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
@@ -122,6 +125,8 @@
 
   let showValidatorDetails = false
   let displayedValidator: Validator | undefined
+
+  let showFilterDetails = false
 </script>
 
 {#if displayedValidator}
@@ -130,6 +135,13 @@
     validator={displayedValidator}
   />
 {/if}
+
+<FilterDetails
+  bind:open={showFilterDetails}
+  feeValues={resolvedValidators.map((v) => v.fee)}
+  totalXRDStakeValues={resolvedValidators.map((v) => v.totalStake)}
+  ownerStakeValues={resolvedValidators.map((v) => v.ownerStake)}
+/>
 
 <div id="validators">
   <div>
@@ -189,10 +201,15 @@
     <div class="sub-text">
       List of validators available on the Radix Network
     </div>
+    <div id="filter-btn">
+      <FilterButton on:click={() => (showFilterDetails = true)} />
+    </div>
   </div>
 
   <div id="selected-validators">
-    <SelectedValidators />
+    {#if $connected}
+      <SelectedValidators />
+    {/if}
   </div>
 
   <div>
@@ -209,6 +226,7 @@
 </div>
 
 <style lang="scss">
+  @use '../../../mixins.scss';
   #validators {
     display: grid;
     padding: var(--spacing-xl);
@@ -254,8 +272,11 @@
     gap: var(--spacing-xl);
 
     .sub-text {
-      font-size: var(--text-sm);
-      color: var(--color-grey-2);
+      @include mixins.subtext;
+    }
+
+    #filter-btn {
+      margin-left: auto;
     }
   }
 </style>

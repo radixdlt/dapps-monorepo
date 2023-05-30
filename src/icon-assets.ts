@@ -29,5 +29,7 @@ export const icons = {
   ascending: '/icons/ascending.svg',
   descending: '/icons/descending.svg',
   close: '/icons/cross-2.svg',
-  claim: '/icons/claim.svg'
+  claim: '/icons/claim.svg',
+  filterList: '/icons/filter-list.svg',
+  sliderHandle: '/icons/slider-handle.svg'
 } as const

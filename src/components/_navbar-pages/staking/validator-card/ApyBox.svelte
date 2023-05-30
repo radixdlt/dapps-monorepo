@@ -53,7 +53,7 @@
   }
 
   .apy {
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
     background: var(--color-grey-5);
   }
 
@@ -64,6 +64,6 @@
   }
 
   .uptime {
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
   }
 </style>

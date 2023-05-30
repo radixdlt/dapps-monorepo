@@ -31,7 +31,7 @@
 
 <style>
   :global(#staking-card) {
-    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
     border-bottom: none !important;
   }
 
@@ -42,7 +42,7 @@
   #ready-to-claim {
     background: var(--color-grey-5);
     border: var(--border);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     padding: var(--spacing-lg);
   }
 </style>

@@ -10,7 +10,7 @@
   button {
     background: var(--color-radix-blue-2);
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     color: var(--color-light);
     cursor: pointer;
     white-space: nowrap;
@@ -18,7 +18,7 @@
 
   .small {
     height: var(--spacing-xl);
-    padding: 0 var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-lg);
   }
 
   .big {
