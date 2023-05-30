@@ -31,5 +31,7 @@ export const icons = {
   close: '/icons/cross-2.svg',
   claim: '/icons/claim.svg',
   filterList: '/icons/filter-list.svg',
-  sliderHandle: '/icons/slider-handle.svg'
+  sliderHandle: '/icons/slider-handle.svg',
+  pickerExpand: '/icons/picker-expand.svg',
+  selectedOption: '/icons/selected-option.svg'
 } as const
