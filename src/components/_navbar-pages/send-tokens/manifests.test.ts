@@ -7,9 +7,9 @@ import { getSendNFTManifest, getSendTokenManifest } from './manifests'
 describe('send tokens manifests', () => {
   it('should create a send tokens manifest', async () => {
     const stringManifest = getSendTokenManifest(
-      'resource_tdx_c_1qyqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq40v2wv',
-      'account_tdx_c_1pxv8mfjgtac0wjhx7ly749c3swxjj2rajwq8j35mlz4sn4dlzv',
-      'account_tdx_c_1pxv3acp0u7aplxsxm0hecwvza2a7kjtk3sgk7ka8kkaq4hnyfj',
+      'resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev',
+      'account_tdx_22_168e8u653alt59xm8ple6khu6cgce9cfx9mlza6wxf7qs3wwdv9pzgd',
+      'account_tdx_22_12xt9uxe39dxdfy9c23vn0qj7eaxs8p3fjjpkr8f48edsfvyk00ck3l',
       500
     )
 
@@ -19,7 +19,7 @@ describe('send tokens manifests', () => {
     )
 
     await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 12)
+      manifest.convert(InstructionList.Kind.Parsed, 34)
     ).resolves.toBeDefined()
   })
 
@@ -28,17 +28,17 @@ describe('send tokens manifests', () => {
       [
         {
           resourceAddress:
-            'resource_tdx_c_1qtwgqa7fjg9e2ht57ag8rzsezll44u5hwzldfhsvel5qv25wxf',
+            'resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev',
           id: '#14#'
         },
         {
           resourceAddress:
-            'resource_tdx_c_1qtu6xqcmm6wdfxdxfn05ed6ns5yhfygtc2qf52me6d3qmtvdnt',
+            'resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev',
           id: '#2#'
         }
       ],
-      'account_tdx_c_1pxv8mfjgtac0wjhx7ly749c3swxjj2rajwq8j35mlz4sn4dlzv',
-      'account_tdx_c_1pxv3acp0u7aplxsxm0hecwvza2a7kjtk3sgk7ka8kkaq4hnyfj'
+      'account_tdx_22_168e8u653alt59xm8ple6khu6cgce9cfx9mlza6wxf7qs3wwdv9pzgd',
+      'account_tdx_22_12xt9uxe39dxdfy9c23vn0qj7eaxs8p3fjjpkr8f48edsfvyk00ck3l'
     )
 
     let manifest = new TransactionManifest(
@@ -47,7 +47,7 @@ describe('send tokens manifests', () => {
     )
 
     await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 12)
+      manifest.convert(InstructionList.Kind.Parsed, 34)
     ).resolves.toBeDefined()
   })
 })

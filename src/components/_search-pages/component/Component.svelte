@@ -5,11 +5,23 @@
   import Row from '@components/info-box/Row.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
-  import { getEntityDetails } from '@api/gateway'
+  import { getSingleEntityDetails } from '@api/gateway'
+  import type {
+    StateEntityDetailsResponseComponentDetails,
+    StateEntityDetailsResponseItem,
+    ReplaceProperty
+  } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let address: string
 
-  $: details = getEntityDetails([address]).then((details) => details[0]! as any)
+  $: details = getSingleEntityDetails(address).then(
+    (details) =>
+      details as ReplaceProperty<
+        StateEntityDetailsResponseItem,
+        'details',
+        StateEntityDetailsResponseComponentDetails
+      >
+  )
 </script>
 
 <Card>

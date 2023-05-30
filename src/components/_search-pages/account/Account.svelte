@@ -69,7 +69,7 @@
             {#each account.nonFungible as nft}
               <Row>
                 <Text slot="left" bold underlined>
-                  <a href="/nft/{nft.address}">{nft.label}</a>
+                  <a href="/nft/{nft.address}:{nft.id}">{nft.label}</a>
                 </Text>
                 <div slot="right" />
               </Row>

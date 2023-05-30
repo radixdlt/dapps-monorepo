@@ -32,14 +32,8 @@
       text="State Version"
       promise={tx.then(({ stateVersion }) => stateVersion)}
     />
-    <AwaitedRow
-      text="Epoch"
-      promise={tx.then(({ ledgerState: { epoch } }) => epoch)}
-    />
-    <AwaitedRow
-      text="Round"
-      promise={tx.then(({ ledgerState: { round } }) => round)}
-    />
+    <AwaitedRow text="Epoch" promise={tx.then(({ epoch }) => epoch)} />
+    <AwaitedRow text="Round" promise={tx.then(({ round }) => round)} />
     <AwaitedRow text="Date" promise={tx.then(({ date }) => date)} />
     <AwaitedRow text="Fee" promise={tx.then(({ fee }) => fee)} />
 
@@ -61,24 +55,8 @@
       <Box wrapper>
         {#each data as entity}
           <Text color="link">
-            <a href={addressToRoute(entity.global_address)}>
-              {entity.global_address}
-            </a>
-          </Text>
-        {/each}
-      </Box>
-    </AwaitedRow>
-
-    <AwaitedRow
-      text="Referenced Entities"
-      promise={tx.then(({ referencedEntities }) => referencedEntities)}
-      let:data
-    >
-      <Box wrapper>
-        {#each data as entity}
-          <Text color="link">
-            <a href={addressToRoute(entity)}>
-              {entity}
+            <a href={addressToRoute(entity.entity_address)}>
+              {entity.entity_address}
             </a>
           </Text>
         {/each}

@@ -9,7 +9,11 @@
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { derived, writable } from 'svelte/store'
-  import { createBadge, getDeployPackageManifest } from './side-effects'
+  import {
+    createBadge,
+    getDeployPackageManifest,
+    sborDecodeSchema
+  } from './side-effects'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import type { sendTransaction } from '@api/wallet'
@@ -39,9 +43,10 @@
         .then(Buffer.from)
         .then((buf) => buf.toString('hex'))
     )
+
     return {
       wasm: fileData[0] as Promise<string>,
-      abi: fileData[1] as Promise<string>
+      schema: fileData[1] as Promise<string>
     }
   })
 
@@ -68,7 +73,7 @@
 
   const deployButtonEnabled = derived(
     [requiredUploadedFiles, selectedBadge],
-    ([{ wasm, abi }, badge]) => !!abi && !!wasm && badge !== undefined,
+    ([{ wasm, schema }, badge]) => !!schema && !!wasm && badge !== undefined,
     false
   )
 
@@ -76,13 +81,18 @@
     send: (...args: Parameters<typeof sendTransaction>) => void
   ) => {
     const wasm = await $requiredUploadedFiles.wasm
-    const abi = await $requiredUploadedFiles.abi
+    const schema = await $requiredUploadedFiles.schema
+    const sborDecodedSchema = await sborDecodeSchema(schema)
     const badge = $selectedBadge!
 
-    send(getDeployPackageManifest(wasm, abi, badge.address, badge.id), [
+    const manifest = getDeployPackageManifest(
       wasm,
-      abi
-    ])
+      sborDecodedSchema,
+      badge?.address,
+      badge?.id
+    )
+
+    send(manifest, [wasm])
   }
 
   const handleResponse = async ({
@@ -92,20 +102,21 @@
       .createdEntities
 
     packageDeployed.set({
-      address: entities[0]?.global_address as string,
+      address: entities[0]?.entity_address as string,
       txID: transactionIntentHash
     })
   }
 
-  $: if ($packageDeployed && $selectedBadge)
+  $: if ($packageDeployed && $selectedBadge) {
     goto(
       `deploy-package/success?` +
         `txID=${$packageDeployed.txID}&` +
         `packageAddress=${$packageDeployed.address}&` +
         `badgeName=${$selectedBadge.name}&` +
         `badgeAddress=${$selectedBadge.address}&` +
-        `badgeId=${$selectedBadge.id}`
+        `badgeId=${encodeURIComponent($selectedBadge.id)}`
     )
+  }
 </script>
 
 <Box>

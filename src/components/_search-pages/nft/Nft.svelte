@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getEntityDetails, getNonFungibleData } from '@api/gateway'
+  import { getNonFungibleData, getSingleEntityDetails } from '@api/gateway'
   import { getStringMetadata } from '@api/utils/resources'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
@@ -16,9 +16,7 @@
 
   $: nftData = getNonFungibleData(resourceAddress, nftId)
 
-  $: details = getEntityDetails([resourceAddress]).then(
-    (details) => details[0]!
-  )
+  $: details = getSingleEntityDetails(resourceAddress)
 </script>
 
 <Box>
