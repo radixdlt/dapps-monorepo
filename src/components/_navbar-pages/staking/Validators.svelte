@@ -39,6 +39,7 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
   import type { Account } from '@stores'
+  import { connected } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
@@ -206,7 +207,9 @@
   </div>
 
   <div id="selected-validators">
+    {#if $connected}
       <SelectedValidators />
+    {/if}
   </div>
 
   <div>
