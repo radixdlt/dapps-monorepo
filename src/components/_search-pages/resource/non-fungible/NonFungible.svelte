@@ -19,11 +19,11 @@
       <SkeletonLoader />
       <SkeletonLoader />
     {:then { non_fungible_ids: { items } }}
-      {#each items as { non_fungible_id }}
+      {#each items as item}
         <Row>
           <Text underlined color="link" slot="left" align="right" bold>
-            <a href={`/nft/${address}:${non_fungible_id}`}>
-              {non_fungible_id}
+            <a href={`/nft/${address}:${item}`}>
+              {item}
             </a>
           </Text>
         </Row>

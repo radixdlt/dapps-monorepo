@@ -1,14 +1,11 @@
-import {
-  getEntityDetails,
-  type NonFungibleResourcesVaultCollection,
-  type FungibleResourcesVaultCollection,
-  getEntityNonFungibleIDs,
-  type StateEntityDetailsVaultResponseItem
-} from '@api/gateway'
+import { getEntityDetails, getEntityNonFungibleIDs } from '@api/gateway'
 import type {
   EntityMetadataCollection,
+  FungibleResourcesVaultCollection,
   NonFungibleResourcesCollectionItemVaultAggregated,
-  StateEntityDetailsResponseItem
+  NonFungibleResourcesVaultCollection,
+  StateEntityDetailsResponseItem,
+  StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
@@ -65,12 +62,12 @@ const nonFungibleResourceDisplayLabel = (
 
 export const getStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
-    metadata?.items.find((item) => item.key === key)?.value?.as_string
+    metadata?.items.find((item) => item.key === key)?.value?.as_string || ''
 
 export const getVectorMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
     metadata?.items.find((item) => item.key === key)?.value
-      ?.as_string_collection
+      ?.as_string_collection || []
 
 const getNonFungibleIds = async (
   accountAddress: string,
@@ -85,9 +82,7 @@ const getNonFungibleIds = async (
       vault.vault_address
     )
 
-    for (const { non_fungible_id } of entityIds.items) {
-      ids.push(non_fungible_id)
-    }
+    ids.push(...entityIds.items)
   }
 
   return ids

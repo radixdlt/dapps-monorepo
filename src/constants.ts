@@ -11,7 +11,7 @@ export const NETWORK_CONFIG = {
     id: 34,
     url: 'https://hammunet-gateway.radixdlt.com:443',
     dappDefAddress:
-      'account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6'
+      'account_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8h4x2ft'
   },
   [Network.ENKINET]: {
     id: 33,

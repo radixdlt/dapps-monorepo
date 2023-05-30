@@ -38,7 +38,7 @@
       <Text slot="left" align="right" bold>Owner badge</Text>
       <Text slot="right" align="left">
         <Text color="link">
-          <a href={`/resource/${badgeInfo.address}`}>
+          <a href={`/nft/${badgeInfo.address}:${badgeInfo.id}`}>
             {badgeInfo.name ? `${badgeInfo.name} (${NFTAddress})` : NFTAddress}
           </a>
         </Text>

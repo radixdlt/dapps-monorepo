@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-  import { getEntityDetails } from '@api/gateway'
+  import { getSingleEntityDetails } from '@api/gateway'
   import { getSetMetadataAuth } from '@api/utils/auth'
   import { getStringMetadata } from '@api/utils/resources'
   import Icon from '@components/_base/icon/Icon.svelte'
@@ -42,9 +42,7 @@
     let details: StateEntityDetailsResponseItem
 
     try {
-      details = await getEntityDetails([entity.address]).then(
-        (details) => details[0]!
-      )
+      details = await getSingleEntityDetails(entity.address)
     } catch {
       validationResult = ValidationResult.INVALID_INPUT
       return ValidationResult.INVALID_INPUT

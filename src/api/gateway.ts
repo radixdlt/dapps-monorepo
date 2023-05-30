@@ -1,83 +1,43 @@
-import {
-  Configuration,
-  StateApi,
-  TransactionApi,
-  type FungibleResourcesCollection,
-  type FungibleResourcesCollectionItemVaultAggregated,
-  type NonFungibleResourcesCollection,
-  type NonFungibleResourcesCollectionItemVaultAggregated,
-  type StateEntityDetailsResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
-import { andThen, pipe } from 'ramda'
 import { CURRENT_NETWORK } from '../../src/network'
+import { GatewayApiClient } from '@radixdlt/babylon-gateway-api-sdk'
 
-type ReplaceItems<T, U> = Omit<T, 'items'> & { items: U[] }
+const gatewayApi = GatewayApiClient.initialize({
+  basePath: CURRENT_NETWORK?.url
+})
 
-export type FungibleResourcesVaultCollection = ReplaceItems<
-  FungibleResourcesCollection,
-  FungibleResourcesCollectionItemVaultAggregated
->
-export type NonFungibleResourcesVaultCollection = ReplaceItems<
-  NonFungibleResourcesCollection,
-  NonFungibleResourcesCollectionItemVaultAggregated
->
+export const getTransactionDetails = (
+  intentHashHex: string,
+  optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]
+) =>
+  gatewayApi.transaction
+    .getCommittedDetails(intentHashHex, optIns)
+    .then((res) => ({
+      epoch: res.transaction.epoch,
+      round: res.transaction.round,
+      status: res.transaction.transaction_status,
+      date: res.transaction.confirmed_at,
+      fee: res.transaction.fee_paid,
+      message: res.transaction.message_hex,
+      encodedManifest: res.transaction.raw_hex,
+      receipt: res.transaction.receipt,
+      createdEntities:
+        (res.transaction.receipt?.state_updates as any)?.new_global_entities ||
+        [],
+      stateVersion: res.transaction.state_version
+    }))
 
-export type StateEntityDetailsVaultResponseItem =
-  StateEntityDetailsResponseItem & {
-    fungible_resources: FungibleResourcesVaultCollection
-    non_fungible_resources: NonFungibleResourcesVaultCollection
-  }
-
-const config = new Configuration({ basePath: CURRENT_NETWORK?.url })
-
-const stateApi = new StateApi(config)
-const transactionApi = new TransactionApi(config)
-
-export const getTransactionDetails = pipe(
-  (intent_hash_hex: string, stateVersion?: number) =>
-    transactionApi.transactionCommittedDetails({
-      transactionCommittedDetailsRequest: {
-        intent_hash_hex,
-        ...(stateVersion
-          ? {
-              at_ledger_state: {
-                state_version: stateVersion
-              }
-            }
-          : {})
-      }
-    }),
-  andThen((res) => ({
-    ledgerState: res.ledger_state,
-    status: res.transaction.transaction_status,
-    date: res.transaction.confirmed_at,
-    fee: res.transaction.fee_paid?.value,
-    message: res.details.message_hex,
-    encodedManifest: res.details.raw_hex,
-    receipt: res.details.receipt,
-    referencedEntities: res.details.referenced_global_entities,
-    createdEntities: (res.details.receipt as any).state_updates
-      .new_global_entities as { global_address: string }[],
-    stateVersion: res.transaction.state_version
-  }))
-)
+export const getSingleEntityDetails = (address: string) =>
+  gatewayApi.state.getEntityDetailsVaultAggregated(address)
 
 export const getEntityDetails = (addresses: string[]) =>
-  stateApi
-    .stateEntityDetails({
-      stateEntityDetailsRequest: {
-        addresses,
-        aggregation_level: 'Vault'
-      }
-    })
-    .then(({ items }) => items as StateEntityDetailsVaultResponseItem[])
+  gatewayApi.state.getEntityDetailsVaultAggregated(addresses)
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,
   nftAddress: string,
   vaultAddress: string
 ) =>
-  stateApi.entityNonFungibleIdsPage({
+  gatewayApi.state.innerClient.entityNonFungibleIdsPage({
     stateEntityNonFungibleIdsPageRequest: {
       address: accountAddress,
       vault_address: vaultAddress,
@@ -89,7 +49,7 @@ export const getEntityNonFungibleVaults = (
   accountAddress: string,
   resourceAddress: string
 ) =>
-  stateApi.entityNonFungibleResourceVaultPage({
+  gatewayApi.state.innerClient.entityNonFungibleResourceVaultPage({
     stateEntityNonFungibleResourceVaultsPageRequest: {
       address: accountAddress,
       resource_address: resourceAddress
@@ -97,7 +57,7 @@ export const getEntityNonFungibleVaults = (
   })
 
 export const getNonFungibleData = (address: string, id: string) =>
-  stateApi.nonFungibleData({
+  gatewayApi.state.innerClient.nonFungibleData({
     stateNonFungibleDataRequest: {
       resource_address: address,
       non_fungible_ids: [id]
@@ -105,7 +65,7 @@ export const getNonFungibleData = (address: string, id: string) =>
   })
 
 export const getNonFungibleIDs = (address: string) =>
-  stateApi.nonFungibleIds({
+  gatewayApi.state.innerClient.nonFungibleIds({
     stateNonFungibleIdsRequest: {
       resource_address: address
     }

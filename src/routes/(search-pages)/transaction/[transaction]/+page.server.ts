@@ -10,18 +10,19 @@ export const load: PageServerLoad = async ({ params }) => {
     (resolve) => (resolveManifest = resolve)
   )
 
-  const tx = getTransactionDetails(params.transaction)
-    .then((res) => getTransactionDetails(params.transaction, res.stateVersion!))
-    .then((tx) => {
-      NotarizedTransaction.decompile(
-        Buffer.from(tx.encodedManifest, 'hex')
-      ).then((notarizedTx: any) =>
-        resolveManifest(
-          notarizedTx.signedIntent.intent.manifest.instructions.value as string
+  const tx = getTransactionDetails(params.transaction).then((tx) => {
+    tx.encodedManifest
+      ? NotarizedTransaction.decompile(
+          Buffer.from(tx.encodedManifest, 'hex')
+        ).then((notarizedTx: any) =>
+          resolveManifest(
+            notarizedTx.signedIntent.intent.manifest.instructions
+              .value as string
+          )
         )
-      )
-      return tx
-    })
+      : resolveManifest('')
+    return tx
+  })
 
   return {
     address: params.transaction,

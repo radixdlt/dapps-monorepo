@@ -8,6 +8,6 @@ export const load: PageLoad = ({ url }) => ({
   badgeInfo: {
     name: url.searchParams.get('badgeName') as string,
     address: url.searchParams.get('badgeAddress') as string,
-    id: url.searchParams.get('badgeId') as string
+    id: decodeURIComponent(url.searchParams.get('badgeId') || '') as string
   }
 })
