@@ -1,0 +1,31 @@
+<script>
+  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import Picker from './Picker.svelte'
+
+  let options = [
+    {
+      label: 'Option 1',
+      value: 1
+    },
+    {
+      label: 'Option 2',
+      value: 2
+    },
+    {
+      label: 'Option 3',
+      value: 3
+    }
+  ]
+</script>
+
+<Meta title="Base Components / Picker" />
+
+<Story name="Primary">
+  <Picker {options}>
+    <div slot="selected">Select an option</div>
+
+    <div slot="option" let:option>
+      {option.label}
+    </div>
+  </Picker>
+</Story>
