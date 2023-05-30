@@ -209,6 +209,7 @@
 </div>
 
 <style lang="scss">
+  @use '../../../mixins.scss';
   #validators {
     display: grid;
     padding: var(--spacing-xl);
@@ -254,8 +255,8 @@
     gap: var(--spacing-xl);
 
     .sub-text {
-      font-size: var(--text-sm);
-      color: var(--color-grey-2);
+      @include mixins.subtext;
+    }
     }
   }
 </style>
