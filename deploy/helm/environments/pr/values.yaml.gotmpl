@@ -18,6 +18,8 @@ dashboard:
   image: 
       tag: {{$IMAGE_TAG}}
 
+  enable_db_migrations: true
+
   params:
     DATABASE_URL: "postgresql://postgres:secret@postgres-postgresql:5432/dashboard?schema=public"
     URL: https://dashboard-pr-{{ .StateValues.ci.prNumber }}.rdx-works-main.extratools.works
