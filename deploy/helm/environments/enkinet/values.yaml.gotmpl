@@ -18,6 +18,9 @@ dashboard:
   image: 
       tag: {{$IMAGE_TAG}}
 
+  params:
+    URL: https://enkinet-dashboard.rdx-works-main.extratools.works
+
   secrets:
   - name: database-url
     variable: "DATABASE_URL"
