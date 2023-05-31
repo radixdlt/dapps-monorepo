@@ -21,6 +21,14 @@ dashboard:
   params:
     URL: https://gilganet-dashboard.rdx-works-main.extratools.works
 
+  secrets:
+  - name: database-url
+    variable: "DATABASE_URL"
+    path: "rdx-works-main-dev/eks/dashboard/postgres"
+    secretProperty: "database-url-gilganet"
+    secretName: "database-url"
+    region: "eu-west-2"
+
   ingress:
     enabled: true
     annotations:

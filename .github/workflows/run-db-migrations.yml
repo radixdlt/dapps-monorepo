@@ -1,0 +1,55 @@
+name: Dashboard DB migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT_NAME:
+        description: 'Environment Name'
+        required: true
+        default: enkinet
+        type: choice
+        options:
+          - enkinet
+          - hammunet
+          - gilganet
+          - mardunet
+          # TODO: No database is created for those environments.
+          # - kisharnet
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'build'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/rdxworks/dashboard/npm-token-aJZLx5'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'build'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:rdx-works-main-dev/eks/dashboard/postgres-jN38G0'
+          parse_json: true
+      - name: Debug
+        run: |
+          env | grep DATABASE
