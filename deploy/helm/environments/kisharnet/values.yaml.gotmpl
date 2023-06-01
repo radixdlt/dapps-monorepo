@@ -21,6 +21,14 @@ dashboard:
   params:
     URL: https://rcnet-dashboard.radixdlt.com
 
+  secrets:
+  - name: database-url
+    variable: "DATABASE_URL"
+    path: "rtlj-prod/eks/dashboard/postgres"
+    secretProperty: "database-url-kisharnet"
+    secretName: "database-url"
+    region: "eu-west-2"
+
   ingress:
     enabled: true
     annotations:
