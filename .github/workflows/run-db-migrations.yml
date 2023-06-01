@@ -1,6 +1,9 @@
 name: Dashboard DB migrations
 
 on:
+  push:
+    branches:
+      - DO-1503-db-migration
   workflow_dispatch:
     inputs:
       ENVIRONMENT_NAME:
@@ -15,6 +18,7 @@ on:
           - mardunet
           # TODO: No database is created for those environments.
           # - kisharnet
+          # - kisharnet-internal
 
 jobs:
   build:
