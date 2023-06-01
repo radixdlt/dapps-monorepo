@@ -93,12 +93,6 @@
   }
 
   /* global styles */
-  :global(*) {
-    font-family: var(--font-family);
-    font-size: var(--text-base-size);
-    color: var(--color-grey-1);
-    box-sizing: border-box;
-  }
   :global(a:link, a:visited, a:hover, a:active, input:hover, input:focus) {
     text-decoration: none;
   }
@@ -107,9 +101,8 @@
     font-weight: var(--font-weight-bold-1);
     cursor: pointer;
   }
-  :global(h1, h2, h3, h4, h5, h6, p, ul, ol, span, input, button) {
+  :global(h1, h2, h3, h4, h5, h6, p, ul, ol, span, input, button, select) {
     all: unset;
-    box-sizing: border-box;
   }
   :global(button) {
     cursor: pointer;
@@ -134,5 +127,12 @@
   }
   :global(p) {
     display: block;
+  }
+
+  :global(*) {
+    font-family: var(--font-family);
+    font-size: var(--text-base-size);
+    color: var(--color-grey-1);
+    box-sizing: border-box;
   }
 </style>
