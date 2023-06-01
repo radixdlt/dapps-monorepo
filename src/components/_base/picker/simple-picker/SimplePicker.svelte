@@ -13,7 +13,13 @@
 </script>
 
 <div id="simple-picker">
-  <Picker {options} on:selected={({ detail }) => (selected = detail)} bind:open>
+  <Picker
+    {options}
+    on:selected={({ detail }) => (selected = detail)}
+    bind:open
+    --drawer-background="var(--color-light)"
+    --drawer-border-radius="0 0 var(--border-radius-lg) var(--border-radius-lg)"
+  >
     <button slot="selected" class="selected option">
       {selected.label}
       <div id="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
@@ -21,20 +27,22 @@
       </div>
     </button>
 
-    <button slot="option" class="option" let:option>
-      {option.label}
-      {#if option === selected}
-        <IconNew type="selectedOption" size="small" />
-      {/if}
-    </button>
+    <div slot="option" let:option class="option-background">
+      <button class="option">
+        {option.label}
+        {#if option === selected}
+          <IconNew type="selectedOption" size="small" />
+        {/if}
+      </button>
+    </div>
   </Picker>
 </div>
 
 <style lang="scss">
   #simple-picker {
-    background-color: var(--color-light);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
     width: fit-content;
+    background-color: var(--color-light);
   }
   .selected {
     background-color: var(--color-grey-4);
