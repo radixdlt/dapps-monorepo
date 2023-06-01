@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
           command: ["/bin/sh", "-c", "-e"]
           args:
-            - npx prisma migrate deploy
+            - ls -l && ls -l prisma && npx prisma migrate deploy --schema prisma/schema.prisma
           env:
           {{- range $key, $value := .Values.dashboard.params }}
           - name: {{ $key }}

@@ -21,7 +21,7 @@ dashboard:
   enable_db_migrations: true
 
   params:
-    DB_URL: "postgresql://postgres:secret@postgres-postgresql:5432/dashboard?schema=public"
+    DATABASE_URL: "postgresql://postgres:secret@postgres-postgresql:5432/dashboard?schema=public"
     URL: https://dashboard-pr-{{ .StateValues.ci.prNumber }}.rdx-works-main.extratools.works
 
   ingress:
