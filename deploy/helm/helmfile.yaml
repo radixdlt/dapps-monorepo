@@ -13,6 +13,7 @@ environments:
   gilganet: {}
   mardunet: {}
   kisharnet: {}
+  kisharnet-internal: {}
 repositories:
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
