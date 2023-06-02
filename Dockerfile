@@ -30,6 +30,7 @@ FROM node:16.17.1-alpine AS dashboard
 WORKDIR /usr/src/app/
 
 COPY --from=base /usr/src/app/build        build
+COPY --from=base /usr/src/app/prisma       prisma
 COPY --from=base /usr/src/app/package.json package.json
 COPY --from=base /usr/src/app/node_modules node_modules
 
