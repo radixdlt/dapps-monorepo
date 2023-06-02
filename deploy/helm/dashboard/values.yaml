@@ -1,6 +1,8 @@
 dashboard:
   replicaCount: 1
 
+  enable_db_migrations: false
+
   metrics:
     enabled: true
     port: 9209
