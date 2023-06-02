@@ -115,7 +115,7 @@
     goto(
       `deploy-package/success?` +
         `txID=${$packageDeployed.txID}&` +
-        `txStatus=${$packageDeployed}&` +
+        `txStatus=${$packageDeployed.txStatus}&` +
         `packageAddress=${$packageDeployed.address}&` +
         `badgeName=${$selectedBadge.name}&` +
         `badgeAddress=${$selectedBadge.address}&` +
