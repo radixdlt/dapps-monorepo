@@ -22,6 +22,7 @@
     getAccountData,
     type NonFungibleResource
   } from '@api/utils/resources'
+  import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let accounts: Account[]
 
@@ -57,6 +58,7 @@
   const badgeCreated = writable<string>()
 
   const packageDeployed = writable<{
+    txStatus: TransactionStatus
     txID: string
     address: string
   }>()
@@ -96,12 +98,14 @@
   }
 
   const handleResponse = async ({
-    transactionIntentHash
+    transactionIntentHash,
+    status
   }: Awaited<ReturnType<typeof sendTransaction>>) => {
     const entities = (await getTransactionDetails(transactionIntentHash))
       .createdEntities
 
     packageDeployed.set({
+      txStatus: status,
       address: entities[0]?.entity_address as string,
       txID: transactionIntentHash
     })
@@ -111,6 +115,7 @@
     goto(
       `deploy-package/success?` +
         `txID=${$packageDeployed.txID}&` +
+        `txStatus=${$packageDeployed}&` +
         `packageAddress=${$packageDeployed.address}&` +
         `badgeName=${$selectedBadge.name}&` +
         `badgeAddress=${$selectedBadge.address}&` +

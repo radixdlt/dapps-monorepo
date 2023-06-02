@@ -4,8 +4,10 @@
   import Success from '@components/success/Success.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { getNFTAddress } from '@utils'
+  import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let txID: string
+  export let txStatus: TransactionStatus
   export let packageAddress: string
   export let badgeInfo: {
     name?: string
@@ -13,10 +15,14 @@
     id: string
   }
 
+  const txStatusTitle =
+    txStatus === TransactionStatus.CommittedSuccess
+      ? 'Your package was submitted! 🎉'
+      : 'Your package was not submitted! ❌'
   const NFTAddress = getNFTAddress(badgeInfo.address, badgeInfo.id)
 </script>
 
-<Success title="Your package was submitted! 🎉">
+<Success title={txStatusTitle}>
   <InfoBox>
     <Row>
       <Text slot="left" align="right" bold>Tx ID</Text>

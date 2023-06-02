@@ -5,4 +5,4 @@
   export let data: PageData
 </script>
 
-<Success txID={data.txID} />
+<Success txID={data.txID} txStatus={data.txStatus} />
