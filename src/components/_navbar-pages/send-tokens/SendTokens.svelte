@@ -109,7 +109,9 @@
       )}
       onClick={(send) => send(transactionManifest)}
       onResponse={(response) =>
-        goto(`/send-nft/success?txID=${response.transactionIntentHash}`)}
+        goto(
+          `/send-tokens/success?txID=${response.transactionIntentHash}&txStatus=${response.status}`
+        )}
     />
   </Box>
 </Box>

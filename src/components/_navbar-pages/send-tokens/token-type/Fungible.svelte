@@ -59,7 +59,9 @@
     )
 
   $: if ($response)
-    goto(`/send-tokens/success?txID=${$response.transactionIntentHash}`)
+    goto(
+      `/send-tokens/success?txID=${$response.transactionIntentHash}&txStatus=${$response.status}`
+    )
 </script>
 
 <Box cx={boxStyle}>
