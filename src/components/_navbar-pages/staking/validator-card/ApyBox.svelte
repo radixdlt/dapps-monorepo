@@ -9,7 +9,7 @@
   }>
 </script>
 
-<div class="apy-box">
+<div class="apy-box apy-box-grid">
   <div class="apy">
     {#await apyInfo}
       <div style:display="inline-block">
@@ -39,7 +39,6 @@
 <style lang="scss">
   @use '../shared.scss';
   .apy-box {
-    @include shared.apy-box-grid;
     padding: var(--spacing-sm);
   }
 

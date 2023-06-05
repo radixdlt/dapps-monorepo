@@ -43,7 +43,7 @@
   }
 </script>
 
-<div id="column-headers">
+<div id="column-headers" class="validator-card-grid">
   <div />
   <div style:justify-self="start">VALIDATOR</div>
   <div id="address-header">ADDRESS</div>
@@ -55,7 +55,7 @@
     OWNER STAKE (%)
     <SortIcon mode={sortStatus['percentageOwnerStake']} />
   </div>
-  <div id="apy-header">
+  <div id="apy-header" class="apy-box-grid">
     <div class="sortable" on:click={() => sort('apy')}>
       APY
       <SortIcon mode={sortStatus['apy']} />
@@ -86,7 +86,6 @@
   }
 
   #column-headers {
-    @include shared.validator-card-grid;
     justify-items: center;
 
     div {
@@ -94,7 +93,6 @@
     }
 
     #apy-header {
-      @include shared.apy-box-grid;
       justify-items: center;
     }
 

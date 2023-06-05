@@ -284,10 +284,6 @@
     align-items: center;
     gap: var(--spacing-xl);
 
-    .sub-text {
-      @include mixins.subtext;
-    }
-
     #filter-btn {
       margin-left: auto;
     }

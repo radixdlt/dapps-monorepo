@@ -17,7 +17,7 @@
   }
 </script>
 
-<div id="validator-list">
+<div class="card-list">
   {#if loading}
     {#each Array(10) as _, i}
       {#if type === 'all'}
@@ -50,7 +50,4 @@
 
 <style lang="scss">
   @use '../shared.scss';
-  #validator-list {
-    @include shared.card-list;
-  }
 </style>
