@@ -12,7 +12,12 @@
   export let open = false
 </script>
 
-<div id="simple-picker">
+<div
+  id="simple-picker"
+  style:border-radius={open
+    ? 'var(--border-radius-lg) var(--border-radius-lg) 0 0'
+    : 'var(--border-radius-lg)'}
+>
   <Picker
     {options}
     on:selected={({ detail }) => (selected = detail)}
@@ -40,7 +45,7 @@
 
 <style lang="scss">
   #simple-picker {
-    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    border-radius: var(--border-radius-lg);
     width: fit-content;
     background-color: var(--color-light);
   }

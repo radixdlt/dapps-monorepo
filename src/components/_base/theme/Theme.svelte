@@ -64,8 +64,8 @@
   }
   /* themes */
   .light {
-    --background: var(--color-secondary-light);
-    --surface: var(--color-grey-4);
+    --background: var(--color-light);
+    --surface: var(--color-grey-5);
     --text-color: var(--color-grey-1);
   }
   .dark {
