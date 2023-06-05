@@ -2084,11 +2084,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@radixdlt/babylon-gateway-api-sdk@^1.0.0-ash.2":
-  version "1.0.0-ash.2"
-  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-ash.2.tgz#d7446c861ab5c10686431566cc4ff793cb100ebd"
-  integrity sha512-5WCWJ9dmdeuTYSf4ljQoM22c9fK2bJqunAKP+opxCUw3VtHQ0Zvj0REl3jmwa8/WC0mMkQoR7eWLCv/2AY8lFw==
-  
 "@prisma/client@4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.13.0.tgz#271d2b9756503ea17bbdb459c7995536cf2a6191"
@@ -2105,6 +2100,11 @@
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.13.0.tgz#582a6b90b6efeb0f465984f1fe0e72a4afaaa5ae"
   integrity sha512-HrniowHRZXHuGT9XRgoXEaP2gJLXM5RMoItaY2PkjvuZ+iHc0Zjbm/302MB8YsPdWozAPHHn+jpFEcEn71OgPw==
+
+"@radixdlt/babylon-gateway-api-sdk@^1.0.0-ash.2":
+  version "1.0.0-ash.2"
+  resolved "https://registry.yarnpkg.com/@radixdlt/babylon-gateway-api-sdk/-/babylon-gateway-api-sdk-1.0.0-ash.2.tgz#d7446c861ab5c10686431566cc4ff793cb100ebd"
+  integrity sha512-5WCWJ9dmdeuTYSf4ljQoM22c9fK2bJqunAKP+opxCUw3VtHQ0Zvj0REl3jmwa8/WC0mMkQoR7eWLCv/2AY8lFw==
 
 "@radixdlt/connect-button@0.13.0-alpha.1":
   version "0.13.0-alpha.1"
@@ -5088,6 +5088,11 @@ cookie@0.5.0, cookie@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
+
+cooltipz-css@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/cooltipz-css/-/cooltipz-css-2.2.2.tgz#7ddc37ed926e7197cbab736fce35127b5a12161e"
+  integrity sha512-7dIFJzMIcPnDNfa1nFvHuMUP4YzCbaxC+Xiz/o27WfpmdgFf/ljmMHjV8hcOoVw97hMlGhcKecCzW5RDX3ZjOA==
 
 core-js-compat@^3.25.1:
   version "3.25.5"
