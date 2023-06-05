@@ -16,7 +16,7 @@
   const bookmarked = context.get('bookmarkedValidators')
 </script>
 
-<SidePanel bind:open --max-width="80rem" --min-width="70rem">
+<SidePanel bind:open>
   <div id="validator-details">
     <div id="top-row">
       <CloseButton on:click={() => (open = false)} />

@@ -2,9 +2,9 @@
   // @ts-ignore
   import Slider from '@bulatdashiev/svelte-slider'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { createEventDispatcher } from 'svelte'
 
   export let values: number[] = []
+  export let range: [number, number] = [0, 100]
 
   const barHeightPx = 60
 
@@ -37,21 +37,15 @@
     return interpolatedArray
   }
 
-  let normalizedValues = values.map(
-    (value) => (value / Math.max(...values)) * barHeightPx
-  )
+  let normalizedValues: number[] = []
+  $: if (values)
+    normalizedValues = values.map(
+      (value) => (value / Math.max(...values)) * barHeightPx
+    )
 
   const nbrOfBars = 36
 
-  const transformedArray = transormArray(normalizedValues, nbrOfBars)
-
-  let range = [0, 100]
-
-  const dispatchFilterEvent = createEventDispatcher<{
-    'new-range': { min: number; max: number }
-  }>()
-
-  $: dispatchFilterEvent('new-range', { min: range[0], max: range[1] })
+  $: transformedArray = transormArray(normalizedValues, nbrOfBars)
 </script>
 
 <div id="filter-histogram">

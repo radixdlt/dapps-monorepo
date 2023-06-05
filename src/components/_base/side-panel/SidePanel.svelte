@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fade, fly } from 'svelte/transition'
+  import { fade } from 'svelte/transition'
 
   export let open = false
 
@@ -19,14 +19,10 @@
     transition:fade={{ duration: 300 }}
     on:click|self={() => (open = false)}
   />
-  <div
-    role="dialog"
-    id="side-panel"
-    transition:fly={{ x: 1500, duration: 300, opacity: 100 }}
-  >
-    <slot />
-  </div>
 {/if}
+<div role="dialog" id="side-panel" class:closed={!open}>
+  <slot />
+</div>
 
 <style lang="scss">
   #side-panel {
@@ -36,13 +32,19 @@
     bottom: 0;
     height: 100vh;
     width: 60vw;
-    min-width: var(--min-width);
-    max-width: var(--max-width);
+    max-width: 70rem;
     background: var(--color-grey-5);
     z-index: 3;
     overflow-y: scroll;
     padding: var(--spacing-2xl) var(--spacing-3xl);
+
+    transition: transform 300ms ease-in-out;
   }
+
+  .closed {
+    transform: translateX(100%);
+  }
+
   #backdrop {
     backdrop-filter: blur(8px);
     position: fixed;

@@ -57,6 +57,10 @@
 
   $: validators.then(context.get('validators').set)
 
+  let bookmarkedValidators = context.get('bookmarkedValidators')
+
+  let resolvedValidators = context.get('validators')
+
   const updateAccumulatedStakes = async () => {
     const _validators = await validators
     const _accounts = await accounts
@@ -113,20 +117,14 @@
     loading = false
   })
 
-  let resolvedValidators: Validator[] = []
-
-  $: if (validators) {
-    validators.then((validators) => {
-      resolvedValidators = validators
-    })
-  }
-
   $: if (accounts) context.get('connected').set(true)
 
   let showValidatorDetails = false
   let displayedValidator: Validator | undefined
 
   let showFilterDetails = false
+
+  $: displayedValidators = $resolvedValidators
 </script>
 
 {#if displayedValidator}
@@ -138,9 +136,24 @@
 
 <FilterDetails
   bind:open={showFilterDetails}
-  feeValues={resolvedValidators.map((v) => v.fee)}
-  totalXRDStakeValues={resolvedValidators.map((v) => v.totalStake)}
-  ownerStakeValues={resolvedValidators.map((v) => v.ownerStake)}
+  feeValues={$resolvedValidators.map((v) => v.fee)}
+  totalXRDStakeValues={$resolvedValidators.map((v) => v.totalStake)}
+  ownerStakeValues={$resolvedValidators.map((v) => v.ownerStake)}
+  on:applyFilter={(e) => {
+    displayedValidators = $resolvedValidators.filter((v) => {
+      return v.fee >= e.detail.feeFilter.min &&
+        v.fee <= e.detail.feeFilter.max &&
+        v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
+        v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
+        v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
+        v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
+        e.detail.acceptsStakeFilter
+        ? v.acceptsStake
+        : true && e.detail.bookmarkedFilter
+        ? $bookmarkedValidators[v.address]
+        : true
+    })
+  }}
 />
 
 <div id="validators">
@@ -180,7 +193,7 @@
         />
         <ValidatorList
           type="staked"
-          items={resolvedValidators.filter(
+          items={$resolvedValidators.filter(
             (v) =>
               v.accumulatedStaked !== 0 ||
               v.accumulatedUnstaking !== 0 ||
@@ -215,7 +228,7 @@
   <div>
     <ValidatorList
       type="all"
-      items={resolvedValidators}
+      items={displayedValidators}
       {loading}
       on:click-validator={(e) => {
         displayedValidator = e.detail

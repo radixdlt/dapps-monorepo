@@ -31,23 +31,38 @@
   const dispatchSelectedEvent = createEventDispatcher<{
     selected: typeof options[number]
   }>()
+
+  let offset: number
+  let width: number
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div id="picker">
-  <div class="option" on:click={() => (open = !open)}>
+<div id="picker" bind:clientWidth={width}>
+  <div
+    class="option"
+    on:click={() => (open = !open)}
+    bind:clientHeight={offset}
+  >
     <slot name="selected" />
   </div>
+
   {#if open}
-    {#each options as option}
-      <div
-        class="option"
-        transition:slide
-        on:click={() => dispatchSelectedEvent('selected', option)}
-      >
-        <slot name="option" {option} />
-      </div>
-    {/each}
+    <div
+      id="drawer"
+      style:background-color="var(--drawer-background)"
+      style:border-radius="var(--drawer-border-radius)"
+      style:transform={`translateY(${offset}px)`}
+      transition:slide
+    >
+      {#each options as option, i}
+        <div
+          class="option"
+          on:click={() => dispatchSelectedEvent('selected', option)}
+        >
+          <slot name="option" {option} />
+        </div>
+      {/each}
+    </div>
   {/if}
 </div>
 
@@ -55,6 +70,11 @@
   #picker {
     display: flex;
     flex-direction: column;
+  }
+
+  #drawer {
+    position: absolute;
+    width: 100%;
   }
 
   .option {

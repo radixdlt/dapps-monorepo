@@ -13,7 +13,6 @@
     border: var(--border-strong);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-sm);
-    width: 8rem;
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
