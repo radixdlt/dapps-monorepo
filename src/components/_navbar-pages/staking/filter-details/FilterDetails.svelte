@@ -54,7 +54,6 @@
   let selectedUptime = recentUptimeOptions[0]
 
   const onClose = () => {
-    console.log('onClose')
     dispatchApplyFilterEvent('applyFilter', {
       feeFilter,
       totalXRDStakeFilter,

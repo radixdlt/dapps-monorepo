@@ -11,7 +11,6 @@
   const barHeightPx = 60
   const barCount = 36
 
-  // thanks chatGPT
   const generateHistogram = (array: number[]) => {
     const barHeights: number[] = Array(barCount).fill(0)
 
