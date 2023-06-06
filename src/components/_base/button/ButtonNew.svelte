@@ -2,7 +2,7 @@
   export let size: 'small' | 'big'
 </script>
 
-<button class:small={size === 'small'} class:big={size === 'big'}>
+<button on:click class:small={size === 'small'} class:big={size === 'big'}>
   <slot />
 </button>
 

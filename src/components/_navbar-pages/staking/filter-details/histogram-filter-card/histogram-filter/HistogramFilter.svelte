@@ -4,63 +4,56 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
 
   export let values: number[] = []
-  export let range: [number, number] = [0, 100]
+  export let min = 0
+  export let max = 100
+  export let range: [number, number]
 
   const barHeightPx = 60
+  const barCount = 36
 
-  const transormArray = (original: number[], newLength: number) => {
-    const originalLength = original.length
+  const generateHistogram = (array: number[]) => {
+    const barHeights: number[] = Array(barCount).fill(0)
 
-    if (newLength <= originalLength) {
-      return original.slice(0, newLength)
-    }
+    const barWidth = 100 / barCount
 
-    const interpolatedArray = []
-    const stepSize = (originalLength - 1) / (newLength - 1)
-
-    for (let i = 0; i < newLength - 1; i++) {
-      const index = i * stepSize
-      const floorIndex = Math.floor(index)
-      const ceilIndex = Math.ceil(index)
-
-      if (floorIndex === ceilIndex) {
-        interpolatedArray.push(original[floorIndex])
-      } else {
-        const weight = index - floorIndex
-        const interpolatedValue =
-          original[floorIndex] * (1 - weight) + original[ceilIndex] * weight
-        interpolatedArray.push(interpolatedValue)
+    let maxBarHeight = 0
+    for (const value of array) {
+      const barIndex = Math.floor(value / barWidth)
+      barHeights[barIndex]++
+      if (barHeights[barIndex] > maxBarHeight) {
+        maxBarHeight = barHeights[barIndex]
       }
     }
 
-    interpolatedArray.push(original[originalLength - 1])
-    return interpolatedArray
+    const normalizationFactor = maxBarHeight / barHeightPx
+
+    for (let i = 0; i < barCount; i++) {
+      barHeights[i] = Math.floor(barHeights[i] / normalizationFactor)
+    }
+
+    return barHeights
   }
 
-  let normalizedValues: number[] = []
-  $: if (values)
-    normalizedValues = values.map(
-      (value) => (value / Math.max(...values)) * barHeightPx
-    )
+  let histogramBarHeights: number[] = []
 
-  const nbrOfBars = 36
-
-  $: transformedArray = transormArray(normalizedValues, nbrOfBars)
+  $: if (values) histogramBarHeights = generateHistogram(values)
 </script>
 
 <div id="filter-histogram">
   <div
     id="active"
     class="histogram"
-    style:clip-path={`inset(0 ${100 - range[1]}% 0 ${range[0]}%)`}
+    style:clip-path={`inset(0 ${((max - range[1]) / max) * 100}% 0 ${
+      (range[0] / max) * 100
+    }%)`}
   >
-    {#each transformedArray as value}
+    {#each histogramBarHeights as value}
       <div class="active-bar" style="height: {value}px" />
     {/each}
   </div>
 
   <div id="inactive" class="histogram">
-    {#each transformedArray as value}
+    {#each histogramBarHeights as value}
       <div class="inactive-bar" style="height: {value}px" />
     {/each}
   </div>
@@ -71,6 +64,9 @@
     bind:value={range}
     range
     order
+    {min}
+    {max}
+    step={max / 100}
     --progress-bg="transparent"
     --track-bg="transparent"
     --thumb-bg="transparent"

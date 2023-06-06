@@ -3,7 +3,7 @@
   import Switch from './Switch.svelte'
 </script>
 
-<Meta title="Switch" />
+<Meta title="Base Components / Switch" />
 
 <Story name="Primary">
   <Switch />

@@ -85,8 +85,9 @@
       values={feeValues}
       minText="MIN FEE (%)"
       maxText="MAX FEE (%)"
-      bind:min={feeFilter.min}
-      bind:max={feeFilter.max}
+      bind:lowValue={feeFilter.min}
+      bind:highValue={feeFilter.max}
+      max={5}
     />
   </div>
 
@@ -102,8 +103,8 @@
       values={totalXRDStakeValues}
       minText="MIN AMOUNT (%)"
       maxText="MAX AMOUNT (%)"
-      bind:min={totalXRDStakeFilter.min}
-      bind:max={totalXRDStakeFilter.max}
+      bind:lowValue={totalXRDStakeFilter.min}
+      bind:highValue={totalXRDStakeFilter.max}
     />
   </div>
 
@@ -121,8 +122,8 @@
       values={ownerStakeValues}
       minText="MIN STAKE (%)"
       maxText="MAX STAKE (%)"
-      bind:min={ownerStakeFilter.min}
-      bind:max={ownerStakeFilter.max}
+      bind:lowValue={ownerStakeFilter.min}
+      bind:highValue={ownerStakeFilter.max}
     />
   </div>
 

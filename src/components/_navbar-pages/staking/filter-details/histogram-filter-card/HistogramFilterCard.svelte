@@ -1,20 +1,22 @@
 <script lang="ts">
-  import FilterHistogram from './histogram-filter/HistogramFilter.svelte'
+  import HistogramFilter from './histogram-filter/HistogramFilter.svelte'
 
   export let values: number[]
   export let minText: string
   export let maxText: string
-  export let min: number
-  export let max: number
+  export let min = 0
+  export let max = 100
+  export let lowValue: number
+  export let highValue: number
 
   let range: [number, number] = [0, 100]
 
-  $: min = range[0]
-  $: max = range[1]
+  $: lowValue = range[0]
+  $: highValue = range[1]
 </script>
 
 <div id="filter-card">
-  <FilterHistogram {values} bind:range />
+  <HistogramFilter bind:range {values} {min} {max} />
 
   <div id="value-cards">
     <div class="value-card">
@@ -22,7 +24,7 @@
         {minText}
       </div>
       <div id="value">
-        {min}%
+        {lowValue.toFixed(2)}%
       </div>
     </div>
 
@@ -31,7 +33,7 @@
         {maxText}
       </div>
       <div id="value">
-        {max}%
+        {highValue.toFixed(2)}%
       </div>
     </div>
   </div>
