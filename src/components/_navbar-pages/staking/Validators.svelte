@@ -137,21 +137,20 @@
 <FilterDetails
   bind:open={showFilterDetails}
   feeValues={$resolvedValidators.map((v) => v.fee)}
-  totalXRDStakeValues={$resolvedValidators.map((v) => v.totalStake)}
-  ownerStakeValues={$resolvedValidators.map((v) => v.ownerStake)}
+  totalXRDStakeValues={$resolvedValidators.map((v) => v.percentageTotalStake)}
+  ownerStakeValues={$resolvedValidators.map((v) => v.percentageOwnerStake)}
   on:applyFilter={(e) => {
     displayedValidators = $resolvedValidators.filter((v) => {
-      return v.fee >= e.detail.feeFilter.min &&
+      return (
+        v.fee >= e.detail.feeFilter.min &&
         v.fee <= e.detail.feeFilter.max &&
         v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
         v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
         v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
         v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
-        e.detail.acceptsStakeFilter
-        ? v.acceptsStake
-        : true && e.detail.bookmarkedFilter
-        ? $bookmarkedValidators[v.address]
-        : true
+        (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
+        (e.detail.bookmarkedFilter ? $bookmarkedValidators[v.address] : true)
+      )
     })
   }}
 />
