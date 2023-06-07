@@ -5,3 +5,7 @@
 <Theme theme="light">
   <slot />
 </Theme>
+
+<style lang="scss" global>
+  @use '../src/global.css';
+</style>
