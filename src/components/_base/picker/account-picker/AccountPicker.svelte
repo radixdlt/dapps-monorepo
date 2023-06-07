@@ -5,32 +5,55 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import Picker from '../Picker.svelte'
   import Account from '@components/_base/account/Account.svelte'
+  import { slide, type TransitionConfig } from 'svelte/transition'
 
-  export let selected: AccountType
+  function slidePicker(node: Element): TransitionConfig {
+    const slideTransition = slide(node)
+
+    const offset = 82 // height of "selected" div when picker is opened
+    const safetyPadding = 8 // sliding needs to stop before the rounded corners start
+
+    return {
+      ...slideTransition,
+      css: (t, u) =>
+        slideTransition.css?.(t, u) +
+        `transform: translateY(${
+          t * offset < safetyPadding ? safetyPadding : t * offset
+        }px)`
+    }
+  }
+
   const options = $accounts.map((account) => ({
     label: account.label,
     value: account
   }))
+
+  export let selected: AccountType | undefined = options?.[0]?.value
+
   let open = false
 </script>
 
 <Picker
   {options}
+  transition={slidePicker}
   on:selected={({ detail }) => (selected = detail.value)}
   bind:open
   --drawer-background="#fff"
-  --drawer-border-radius="0 0 12px 12px"
-  --drawer-padding="0 12px 12px"
+  --drawer-border-radius="0 0 var(--border-radius-xlg) var(--border-radius-xlg)"
+  --drawer-padding="0 16px 16px"
+  --drawer-box-shadow="var(--shadow)"
 >
-  <div slot="selected" class="{open ? 'selected-open' : ''} selected">
-    <Account account={selected}>
-      <div class="icon" style:transform={`rotate(${open ? '-180deg' : 0})`}>
-        <IconNew type="accountPickerExpand" size="small" />
-      </div>
-    </Account>
+  <div slot="selected" class="selected-wrapper">
+    <div class="{open ? 'open' : ''} selected">
+      <Account account={selected}>
+        <div class="icon" style:transform={`rotate(${open ? '-180deg' : 0})`}>
+          <IconNew type="accountPickerExpand" size="small" />
+        </div>
+      </Account>
+    </div>
   </div>
 
-  <span class="options-header" slot="options-header">Select account</span>
+  <div class="options-header" slot="options-header">Select account</div>
 
   <div slot="option" let:option class="option-wrapper">
     <Account account={option.value}>
@@ -40,14 +63,20 @@
 </Picker>
 
 <style lang="scss">
-  .selected {
-    transition: padding 300ms ease;
-    background: #fff;
-    border-radius: 12px;
+  .selected-wrapper {
+    overflow-y: clip;
   }
-  .selected-open {
-    padding: 12px;
-    border-radius: 12px 12px 0 0;
+
+  .selected {
+    transition: padding 300ms ease, border-radius 300ms ease;
+    background: #fff;
+    border-radius: var(--border-radius-xlg);
+
+    &.open {
+      padding: 16px;
+      border-radius: var(--border-radius-xlg) var(--border-radius-xlg) 0 0;
+      box-shadow: var(--shadow);
+    }
   }
 
   .icon {
@@ -61,6 +90,6 @@
   }
 
   .option-wrapper {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 </style>

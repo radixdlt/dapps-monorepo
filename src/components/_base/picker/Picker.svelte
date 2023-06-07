@@ -3,7 +3,7 @@
   import { createEventDispatcher, onMount } from 'svelte'
 
   type T = $$Generic
-
+  export let transition = slide
   export let options: {
     label: string
     value: T
@@ -39,7 +39,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div id="picker" bind:clientWidth={width}>
   <div
-    class="option"
+    class="option selected"
     on:click={() => (open = !open)}
     bind:clientHeight={offset}
   >
@@ -52,8 +52,9 @@
       style:padding="var(--drawer-padding)"
       style:background-color="var(--drawer-background)"
       style:border-radius="var(--drawer-border-radius)"
+      style:box-shadow="var(--drawer-box-shadow)"
       style:transform={`translateY(${offset}px)`}
-      transition:slide
+      transition:transition
     >
       <slot name="options-header" />
       {#each options as option, i}
@@ -84,5 +85,9 @@
 
   .option {
     cursor: pointer;
+
+    &.selected {
+      z-index: 1;
+    }
   }
 </style>
