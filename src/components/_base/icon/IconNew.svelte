@@ -5,7 +5,7 @@
   export let size: 'small' | 'medium' | 'large' = 'medium'
 </script>
 
-<img class={size} src={icons[type]} alt="icon {type}" />
+<img class={size} on:click src={icons[type]} alt="icon {type}" />
 
 <style>
   img {
