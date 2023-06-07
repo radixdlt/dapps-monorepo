@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { Meta, Story } from '@storybook/addon-svelte-csf'
-    import Radio from './Radio.svelte'
+  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import Radio from './Radio.svelte'
 </script>
 
 <Meta title="Radio" />

@@ -33,8 +33,8 @@
   <span class="options-header" slot="options-header">Select account</span>
 
   <div slot="option" let:option class="option-wrapper">
-    <Account account={option.value} >
-        <Radio selected={option.value === selected} />
+    <Account account={option.value}>
+      <Radio selected={option.value === selected} />
     </Account>
   </div>
 </Picker>

@@ -55,7 +55,7 @@
       style:transform={`translateY(${offset}px)`}
       transition:slide
     >
-      <slot name="options-header"></slot>
+      <slot name="options-header" />
       {#each options as option, i}
         <div
           class="option"
