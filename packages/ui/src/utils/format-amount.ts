@@ -11,13 +11,14 @@ const round =
   (stringValue: string, maxPlaces = 8) =>
   (input: BigNumber) => {
     const [integer] = splitIntegerAndDecimals(stringValue)
+
     if (integer.length >= maxPlaces)
       return input.decimalPlaces(1, BigNumber.ROUND_UP)
     const decimalPlaces = maxPlaces - integer.length
     return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
   }
 
-export const seperateThousands =
+export const separateThousands =
   (character = ',') =>
   (input: string) => {
     const [integer, decimals] = input.split('.')
@@ -37,5 +38,5 @@ export const formatTokenValue = (
     stringToBigInt,
     round(input, options?.maxPlaces),
     bigIntToString,
-    seperateThousands(options?.thousandsSeparator)
+    separateThousands(options?.thousandsSeparator)
   )(input)

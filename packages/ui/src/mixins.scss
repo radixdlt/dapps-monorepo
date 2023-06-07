@@ -8,6 +8,21 @@
   }
 }
 
+$viewport-mobile: 393px;
+$viewport-mobile-up: 394px;
+
+@mixin mobile {
+  @media (max-width: $viewport-mobile) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $viewport-mobile-up) {
+    @content;
+  }
+}
+
 .subtext {
   font-size: var(--text-sm);
   color: var(--color-grey-2);

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { seperateThousands } from '../utils/format-amount'
+import { separateThousands } from '../utils/format-amount'
 
 export const format = (
   node: HTMLInputElement,
@@ -66,5 +66,5 @@ export const number =
     if (min) formattedValue = BigNumber.max(formattedValue, min).toString()
     if (max) formattedValue = BigNumber.min(formattedValue, max).toString()
 
-    return seperateThousands()(formattedValue)
+    return separateThousands()(formattedValue)
   }

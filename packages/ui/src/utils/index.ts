@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { Buffer } from 'buffer'
 import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
+import { pipe } from 'ramda'
 
 const XRD_DECIMALS = 18
 
@@ -169,3 +170,81 @@ export const fetchWrapper = <R = any, ER = unknown>(
             })
       )
   )
+
+export const formatTokenValue = (
+  input: string,
+  options?: Partial<{ maxPlaces: number; thousandsSeparator: string }>
+) => {
+  const stringToBigInt = (input: string) => new BigNumber(input)
+  const splitIntegerAndDecimals = (input: string) => input.split('.')
+  const round =
+    (stringValue: string, maxPlaces = 8) =>
+    (input: BigNumber) => {
+      const [integer] = splitIntegerAndDecimals(stringValue)
+      if (integer.length >= maxPlaces)
+        return input.decimalPlaces(1, BigNumber.ROUND_UP)
+      const decimalPlaces = maxPlaces - integer.length
+      return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
+    }
+
+  const addSuffix =
+    (stringValue: string, maxPlaces = 8) =>
+    (input: BigNumber) => {
+      const [integer] = splitIntegerAndDecimals(stringValue)
+
+      let suffix = ''
+      let updatedValue = input
+
+      if (integer.length >= 15) {
+        suffix = 'T'
+        updatedValue = input
+          .shiftedBy(-12)
+          .decimalPlaces(
+            maxPlaces - (integer.length - 12),
+            BigNumber.ROUND_HALF_UP
+          )
+      } else if (integer.length >= 12) {
+        suffix = 'B'
+        updatedValue = input
+          .shiftedBy(-9)
+          .decimalPlaces(
+            maxPlaces - (integer.length - 9),
+            BigNumber.ROUND_HALF_UP
+          )
+      } else if (integer.length >= 9) {
+        suffix = 'M'
+        updatedValue = input
+          .shiftedBy(-6)
+          .decimalPlaces(
+            maxPlaces - (integer.length - 6),
+            BigNumber.ROUND_HALF_UP
+          )
+      }
+
+      return {
+        rounded: updatedValue.toString(),
+        suffix,
+        value: input.toString()
+      }
+    }
+
+  const thousandsSeparator =
+    (character = ',') =>
+    (input: string) => {
+      const [integer, decimals] = input.split('.')
+      return [integer.replace(/\B(?=(\d{3})+(?!\d))/g, character), decimals]
+        .filter((value) => value !== undefined)
+        .join('.')
+    }
+
+  return pipe(
+    stringToBigInt,
+    round(input, options?.maxPlaces),
+    addSuffix(input, options?.maxPlaces),
+    ({ value, suffix, rounded }) => ({
+      rounded: thousandsSeparator(options?.thousandsSeparator)(rounded),
+      value: thousandsSeparator(options?.thousandsSeparator)(value),
+      suffix
+    })
+  )(input)
+}
