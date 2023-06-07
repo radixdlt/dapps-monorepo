@@ -16,11 +16,11 @@
 
   let setTimeoutInstance: ReturnType<typeof setTimeout>
 
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(value)
-
+  const handleCopyClick = (event: MouseEvent) => {
+    event.stopPropagation()
+    event.preventDefault()
     showTooltip = true
-
+    navigator.clipboard.writeText(value)
     if (setTimeoutInstance) clearTimeout(setTimeoutInstance)
 
     setTimeoutInstance = setTimeout(() => {
@@ -35,7 +35,7 @@
 
 <div
   class="address"
-  style:background={useBackground ? 'var(--color-grey-4)' : ''}
+  style:background={useBackground ? 'var(--color-grey-5)' : ''}
   style:padding={useBackground ? 'var(--spacing-xs) var(--spacing-sm)' : ''}
 >
   <!-- svelte-ignore a11y-missing-attribute -->
@@ -68,9 +68,5 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    --cooltipz-bg-color: var(--color-grey-1);
-    --cooltipz-border-radius: 0.5rem;
-    --cooltipz-font-size: 16px;
-    --cooltipz-font-family: var(--font-family);
   }
 </style>
