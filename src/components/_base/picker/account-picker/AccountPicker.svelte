@@ -39,7 +39,7 @@
   on:selected={({ detail }) => (selected = detail.value)}
   bind:open
   --drawer-background="#fff"
-  --drawer-border-radius="0 0 var(--border-radius-xlg) var(--border-radius-xlg)"
+  --drawer-border-radius="0 0 var(--border-radius-xl) var(--border-radius-xl)"
   --drawer-padding="0 16px 16px"
   --drawer-box-shadow="var(--shadow)"
 >
@@ -70,11 +70,11 @@
   .selected {
     transition: padding 300ms ease, border-radius 300ms ease;
     background: #fff;
-    border-radius: var(--border-radius-xlg);
+    border-radius: var(--border-radius-xl);
 
     &.open {
       padding: 16px;
-      border-radius: var(--border-radius-xlg) var(--border-radius-xlg) 0 0;
+      border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
       box-shadow: var(--shadow);
     }
   }
