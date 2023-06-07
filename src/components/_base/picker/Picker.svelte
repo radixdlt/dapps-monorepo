@@ -57,7 +57,10 @@
       {#each options as option, i}
         <div
           class="option"
-          on:click={() => dispatchSelectedEvent('selected', option)}
+          on:click={() => {
+            dispatchSelectedEvent('selected', option)
+            open = false
+          }}
         >
           <slot name="option" {option} />
         </div>
