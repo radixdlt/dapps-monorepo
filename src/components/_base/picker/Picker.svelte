@@ -49,11 +49,13 @@
   {#if open}
     <div
       id="drawer"
+      style:padding="var(--drawer-padding)"
       style:background-color="var(--drawer-background)"
       style:border-radius="var(--drawer-border-radius)"
       style:transform={`translateY(${offset}px)`}
       transition:slide
     >
+      <slot name="options-header"></slot>
       {#each options as option, i}
         <div
           class="option"
