@@ -16,7 +16,7 @@
     'validator_1234567899'
   ]
 
-  const validators = Array(10)
+  const validators = Array(50)
     .fill(undefined)
     .map((_, i) => ({
       name: 'RADNODE🔥',
@@ -24,7 +24,7 @@
       totalStake: Math.random() * 1000000,
       percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
-      fee: Math.random() * 0.1,
+      fee: Math.random() * 5,
       uptime: Math.random() * 0.9,
       acceptsStake: Math.random() > 0.5 ? true : false,
       percentageTotalStake: Math.random() * 50,

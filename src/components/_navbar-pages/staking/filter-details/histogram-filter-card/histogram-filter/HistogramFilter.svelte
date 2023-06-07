@@ -14,7 +14,7 @@
   const generateHistogram = (array: number[]) => {
     const barHeights: number[] = Array(barCount).fill(0)
 
-    const barWidth = 100 / barCount
+    const barWidth = max / barCount
 
     let maxBarHeight = 0
     for (const value of array) {
