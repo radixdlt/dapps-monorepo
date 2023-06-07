@@ -61,7 +61,7 @@ body {
   --border-radius-sm: 2px;
   --border-radius-md: 4px;
   --border-radius-lg: 8px;
-  --border-radius-xlg: 12px;
+  --border-radius-xl: 12px;
   --border: 1px solid var(--color-grey-4);
   --border-strong: 1px solid var(--color-grey-1);
   --border-divider: 2px solid #e2e5ed70;
