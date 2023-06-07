@@ -18,6 +18,7 @@
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { authApi } from '../server/auth/auth-api'
+
   let mounted = false
 
   const { createChallenge, login } = authApi
@@ -129,3 +130,7 @@
     {/if}
   </Box>
 </Theme>
+
+<style lang="scss" global>
+  @use '../global.css';
+</style>
