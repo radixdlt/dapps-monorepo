@@ -21,8 +21,8 @@
       height: 1rem;
       border-radius: 50%;
       top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: rgba(244, 245, 259, 0.4);
       border: 1px solid white;
     }
