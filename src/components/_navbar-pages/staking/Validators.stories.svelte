@@ -20,7 +20,7 @@
     .fill(undefined)
     .map((_, i) => ({
       name: 'RADNODE🔥',
-      address: validatorAddresses[i],
+      address: validatorAddresses[i % 10],
       totalStake: Math.random() * 1000000,
       percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
