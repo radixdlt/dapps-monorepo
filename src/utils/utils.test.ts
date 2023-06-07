@@ -31,6 +31,13 @@ describe('#utils', () => {
     expect(result).toEqual(expected)
   })
 
+  it('should return empty string for empty address', () => {
+    const originalAddress = ''
+    const expected = ''
+    const result = shortenAddress(originalAddress)
+    expect(result).toEqual(expected)
+  })
+
   it('Should return whole units', () => {
     const originalValue = '100000000000000000000'
     const expected = 100

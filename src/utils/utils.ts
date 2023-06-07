@@ -15,11 +15,11 @@ export const getTxIdFromMessage = (message: string): string | undefined => {
   }
 }
 
-export const shortenAddress = (address: string) =>
-  `${address.slice(0, 4)}...${address.slice(
+export const shortenAddress = (address?: string) =>
+  address ? `${address.slice(0, 4)}...${address.slice(
     address.length - 6,
     address.length
-  )}`
+  )}` : ''
 
 export const toWholeUnits = (tokenValue: string) =>
   BigNumber(tokenValue)
