@@ -38,7 +38,7 @@
 </script>
 
 <Meta title="Base Components / Picker / AccountPicker" />
-  
+
 <Story name="Primary">
   <div style="width:400px">
     <AccountPicker bind:selected />
