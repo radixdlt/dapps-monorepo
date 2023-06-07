@@ -13,16 +13,19 @@
   let open = false
 </script>
 
-<Picker {options} on:selected={({ detail }) => (selected = detail.value)} bind:open --drawer-background="#fff">
+<Picker
+  {options}
+  on:selected={({ detail }) => (selected = detail.value)}
+  bind:open
+  --drawer-background="#fff"
+>
   <button
     slot="selected"
     class="selected option gradient-{selected?.appearanceId ?? 'empty'}"
   >
     <span class="label">{selected?.label || 'Not selected'}</span>
     <div class="icon-wrapper">
-      <span class="address"
-        >{shortenAddress(selected?.address || '')}</span
-      >
+      <span class="address">{shortenAddress(selected?.address || '')}</span>
       <div class="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
         <IconNew type="accountPickerExpand" size="small" />
       </div>
