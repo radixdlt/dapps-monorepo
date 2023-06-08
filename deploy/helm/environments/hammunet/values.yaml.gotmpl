@@ -29,6 +29,12 @@ dashboard:
     secretProperty: "database-url-hammunet"
     secretName: "database-url"
     region: "eu-west-2"
+  - name: jwt-secret
+    variable: "JWT_SECRET"
+    path: "rdx-works-main-dev/eks/dashboard/jwt"
+    secretProperty: "jwt-secret"
+    secretName: "jwt-secret"
+    region: "eu-west-2"
 
   ingress:
     enabled: true

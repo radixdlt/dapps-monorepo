@@ -25,6 +25,14 @@ dashboard:
     DATABASE_URL: "postgresql://postgres:secret@postgres-postgresql:5432/dashboard?schema=public"
     URL: https://dashboard-pr-{{ .StateValues.ci.prNumber }}.rdx-works-main.extratools.works
 
+  secrets:
+  - name: jwt-secret
+    variable: "JWT_SECRET"
+    path: "rdx-works-main-dev/eks/dashboard/jwt"
+    secretProperty: "jwt-secret"
+    secretName: "jwt-secret"
+    region: "eu-west-2"
+
   ingress:
     enabled: true
     annotations:
