@@ -42,9 +42,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    box-sizing: border-box;
     border-radius: 12px;
-    height: 50px;
+    min-height: 50px;
+    max-height: 60px;
+    height: 100%;
     width: 100%;
   }
 
