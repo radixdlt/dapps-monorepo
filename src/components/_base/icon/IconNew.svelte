@@ -10,6 +10,8 @@
 <style>
   img {
     display: block;
+    filter: var(--filter);
+    opacity: var(--opacity);
   }
 
   .small {
