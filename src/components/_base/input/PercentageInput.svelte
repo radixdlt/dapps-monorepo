@@ -3,37 +3,32 @@
   import InputNew from './InputNew.svelte'
   import type { ComponentProps } from 'svelte'
 
-  export let value: number
+  export let value: string
   export let inputParams:
     | Omit<ComponentProps<InputNew>, 'formatter' | 'width' | 'value'>
     | undefined = undefined
 </script>
 
-<div id="percentage-input">
+<div class="percentage-input input-box">
   <InputNew
-    bind:value
+    bind:displayedValue={value}
     {...inputParams}
     format={number(0, 100)}
     maxlength={3}
-    width="3.2rem"
-    dir="rtl"
+    --width="3.2rem"
+    --font-size="var(--text-3xl)"
+    --font-weight="var(--font-weight-bold-2)"
   />
   %
 </div>
 
 <style lang="scss">
-  #percentage-input {
+  @use './shared.scss';
+
+  .percentage-input {
     display: flex;
     align-items: center;
-    font-size: var(--card-value-size);
-    font-weight: var(--card-value-weight);
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius-lg);
-
-    &:hover {
-      background-color: var(--color-grey-3);
-    }
-
-    transition: background-color 0.3s ease;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold-2);
   }
 </style>
