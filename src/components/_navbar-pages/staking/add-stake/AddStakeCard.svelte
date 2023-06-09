@@ -17,7 +17,7 @@
   </div>
 
   <div class="staking-info">
-    <div>
+    <div class="dotted-overflow">
       Staking to {validatorName}
     </div>
     <div>
@@ -43,7 +43,10 @@
     @include mixins.card;
     padding: var(--spacing-lg);
     display: grid;
-    grid-template-columns: 5rem 1fr var(--token-amount-card-width, 1fr);
+    grid-template-columns: 5rem minmax(0, 1fr) var(
+        --token-amount-card-width,
+        1fr
+      );
     gap: var(--spacing-lg);
     align-items: center;
 
