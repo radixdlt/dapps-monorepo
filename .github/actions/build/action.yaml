@@ -12,14 +12,14 @@ inputs:
     required: true
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Use Node.js
       uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
       with:
         always-auth: true
         node-version: 16.17.1
-        cache: yarn
+        cache: npm
     - name: Define network name
       shell: bash
       run: |
@@ -58,4 +58,4 @@ runs:
         echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
     - name: Build
       shell: bash
-      run: yarn --frozen-lockfile && yarn build
+      run: npm ci && npm run db:generate && npm run build

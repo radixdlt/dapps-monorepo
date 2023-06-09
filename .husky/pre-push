@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn prettier && yarn lint && yarn svelte-check --tsconfig ./tsconfig.svelte.json
+npm run prettier && npm run lint && npm run svelte-check

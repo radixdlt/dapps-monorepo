@@ -1,48 +1,74 @@
-FROM node:16.17.1-alpine AS base
+FROM node:20.3.0-alpine AS base
 
 ARG NPM_TOKEN
 ARG NETWORK_NAME
 ARG NPM_LOCAL_CACHE=.cache
 
-WORKDIR /usr/src/app/
+FROM base AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /app
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune --scope=dashboard --docker
 
-COPY .                  /usr/src/app/
-COPY .npmrc.docker      /usr/src/app/.npmrc
-COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
+FROM base AS installer
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /app
 
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/package-lock.json ./package-lock.json
+
+RUN npm ci
+
+COPY --from=builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
 RUN apk add git
+RUN npm run db:generate
+RUN npx turbo run build --filter=dashboard...
 
-# Verify what contents where copied.
-# The .dockerignore file can be adjusted to remove unnecessary files.
-RUN ls /usr/src/app/
+# COPY /app/out/json/ .
+# COPY /app/out/package-lock.json ./package-lock.json
 
-RUN yarn --frozen-lockfile && \
-    yarn build && \
-    NODE_OPTIONS=--max_old_space_size=4096 yarn build-storybook
-RUN rm -f .npmrc
+# RUN npm ci
 
-RUN ls -lha .
+# COPY /app/out/full/ .
+# RUN npm turbo run build --filter=dashboard...
 
-FROM node:16.17.1-alpine AS dashboard
+# COPY .npmrc.docker      /usr/src/app/.npmrc
+# # COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
 
-WORKDIR /usr/src/app/
+# RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
+# RUN cat .env.production
+# RUN apk add git
 
-COPY --from=base /usr/src/app/build        build
-COPY --from=base /usr/src/app/prisma       prisma
-COPY --from=base /usr/src/app/package.json package.json
-COPY --from=base /usr/src/app/node_modules node_modules
+# # Verify what contents where copied.
+# # The .dockerignore file can be adjusted to remove unnecessary files.
+# RUN ls /usr/src/app/
 
-RUN ls -lah .
+# RUN npm ci && \
+#     npm run build && \
+#     NODE_OPTIONS=--max_old_space_size=4096 npm run build-storybook
+# RUN rm -f .npmrc
+
+# RUN ls -lha .
+
+FROM node:20.3.0-alpine AS dashboard
+
+WORKDIR /app
+
+COPY --from=installer /app/apps/dashboard/build build
 
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
 
 CMD ["pm2-runtime","build/index.js"]
 
-FROM nginx:alpine AS storybook
+# FROM nginx:alpine AS storybook
 
-COPY --from=base /usr/src/app/storybook-static /usr/share/nginx/html
-COPY nginx/mime.types /etc/nginx/mime.types
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+# COPY --from=base /usr/src/app/storybook-static /usr/share/nginx/html
+# COPY nginx/mime.types /etc/nginx/mime.types
+# COPY nginx/default.conf /etc/nginx/conf.d/default.conf
