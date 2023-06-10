@@ -5,10 +5,10 @@
 
   export let validatorName: string
   export let validatorAddress: string
-  export let currentlyStakingAmount: number
-  export let xrdBalance: number
+  export let currentlyStakingAmount: string
+  export let xrdBalance: string
 
-  let tokenAmount: number
+  let tokenAmount: string
 </script>
 
 <div class="add-stake-card">

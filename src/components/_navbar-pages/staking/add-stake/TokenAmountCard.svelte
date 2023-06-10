@@ -1,13 +1,17 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
   import AmountInput from '@components/_base/input/AmountInput.svelte'
+  import BigNumber from 'bignumber.js'
+  import { formatTokenValue } from '../../../../utils/format-amount'
 
   export let iconUrl: string
   export let tokenName: string
-  export let tokenBalance: number
-  export let tokenAmount: number
+  export let tokenBalance: string
+  export let tokenAmount: string
 
-  $: hasEnoughBalance = tokenBalance >= tokenAmount
+  $: hasEnoughBalance = new BigNumber(tokenBalance).gte(
+    new BigNumber(tokenAmount)
+  )
 </script>
 
 <div class="token-amount-card" class:invalid-box={!hasEnoughBalance}>
@@ -33,7 +37,7 @@
   />
 
   <div class:invalid-text={!hasEnoughBalance} class="subtext">
-    Balance {tokenBalance}
+    Balance {formatTokenValue(tokenBalance)}
   </div>
 </div>
 

@@ -12,8 +12,8 @@
       validatorName: '🔥 RADNODE',
       validatorAddress:
         'validator_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8habcee',
-      currentlyStakingAmount: 1234567890,
-      xrdBalance: 10000
+      currentlyStakingAmount: '1234567890',
+      xrdBalance: '10000'
     }}
   />
 </Story>

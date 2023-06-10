@@ -1,4 +1,5 @@
-import numbro from 'numbro'
+import BigNumber from 'bignumber.js'
+import { seperateThousands } from '../utils/format-amount'
 
 export const format = (
   node: HTMLInputElement,
@@ -21,11 +22,14 @@ export const format = (
   }
 }
 
+const removeNonNumericCharacters = (value: string) =>
+  value.replace(/[^0-9.]/g, '')
+const removeLeadingZeros = (value: string) => value.replace(/^0+/, '')
+
 export const number =
-  (min?: number, max?: number, decimalPlaces = 2) =>
+  (min?: string, max?: string, maxChars?: number, decimalPlaces = 2) =>
   (value: string) => {
-    // Remove any non-numeric characters except decimal point
-    const numericValue = value.replace(/[^0-9.]/g, '')
+    const numericValue = removeNonNumericCharacters(value)
 
     // Split the value into integer and decimal parts
     const parts = numericValue.split('.')
@@ -33,10 +37,9 @@ export const number =
     let integerPart = parts[0]
     let decimalPart = parts[1]
 
-    // Remove leading zeros from the integer part
-    integerPart = numbro(Number(integerPart.replace(/^0+/, ''))).format({
-      thousandSeparated: true
-    })
+    integerPart = removeLeadingZeros(integerPart)
+
+    if (maxChars) integerPart = integerPart.slice(0, maxChars)
 
     // Limit the number of decimal places
     if (decimalPart || decimalPart === '') {
@@ -54,15 +57,8 @@ export const number =
     }
 
     // Apply minimum and maximum value constraints
-    const numericFormattedValue = parseFloat(formattedValue)
-    if (!isNaN(numericFormattedValue)) {
-      if (min) {
-        formattedValue = Math.max(numericFormattedValue, min).toString()
-      }
-      if (max) {
-        formattedValue = Math.min(numericFormattedValue, max).toString()
-      }
-    }
+    if (min) formattedValue = BigNumber.max(formattedValue, min).toString()
+    if (max) formattedValue = BigNumber.min(formattedValue, max).toString()
 
-    return formattedValue
+    return seperateThousands()(formattedValue)
   }

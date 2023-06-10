@@ -13,7 +13,7 @@
   <InputNew
     bind:displayedValue={value}
     {...inputParams}
-    format={number(0, 100)}
+    format={number('0', '100')}
     maxlength={3}
     --width="3.2rem"
     --font-size="var(--text-3xl)"
