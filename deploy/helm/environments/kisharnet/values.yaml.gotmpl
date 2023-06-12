@@ -28,6 +28,13 @@ dashboard:
     secretProperty: "database-url-kisharnet"
     secretName: "database-url"
     region: "eu-west-2"
+  - name: jwt-secret
+    variable: "JWT_SECRET"
+    path: "rtlj-prod/eks/dashboard/jwt"
+    secretProperty: "jwt-secret"
+    secretName: "jwt-secret"
+    region: "eu-west-2"
+
 
   ingress:
     enabled: true

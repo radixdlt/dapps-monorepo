@@ -58,7 +58,9 @@
       </div>
       <slot name="claim-section" />
     </div>
-    <Button size="big">{claimText}</Button>
+    <div>
+      <Button size="big">{claimText}</Button>
+    </div>
   </div>
 </div>
 

@@ -8,11 +8,15 @@ body {
   --color-radix-blue-2: #052cc0;
   --color-radix-blue-3: #20e4ff;
   --color-light: #ffffff;
+
   /* Accent colors */
   --color-accent-red: #ef4136;
   --color-accent-blue: #00aeef;
   --color-accent-yellow: #fff200;
   --color-alert: #e59700;
+  --color-radix-error-red-1: #c82020;
+  --color-radix-error-red-2: #fcebeb;
+
   /* Neutral colors */
   --color-grey-1: #003057;
   --color-grey-2: #8a8fa4;
@@ -127,6 +131,13 @@ h2 {
 h3 {
   display: block;
   font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold-2);
+  margin-bottom: var(--spacing-xs);
+}
+
+h4 {
+  display: block;
+  font-size: var(--text-md);
   font-weight: var(--font-weight-bold-2);
   margin-bottom: var(--spacing-xs);
 }

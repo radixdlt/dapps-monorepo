@@ -1,5 +1,6 @@
 import { mockGatewayCall, MOCK_ACCOUNTS, MOCK_WEBSITES } from './test-utils'
 import ThemeDecorator from './ThemeDecorator.svelte'
+import './__mocks__/accounts'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

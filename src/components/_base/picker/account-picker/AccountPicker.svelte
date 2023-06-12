@@ -10,7 +10,7 @@
   function slidePicker(node: Element): TransitionConfig {
     const slideTransition = slide(node)
 
-    const offset = 82 // height of "selected" div when picker is opened
+    const offset = 60 // height of "selected" div when picker is opened
     const safetyPadding = 8 // sliding needs to stop before the rounded corners start
 
     return {
@@ -40,7 +40,7 @@
   bind:open
   --drawer-background="#fff"
   --drawer-border-radius="0 0 var(--border-radius-xl) var(--border-radius-xl)"
-  --drawer-padding="0 16px 16px"
+  --drawer-padding="0 10px 10px"
   --drawer-box-shadow="var(--shadow)"
 >
   <div slot="selected" class="selected-wrapper">
@@ -71,9 +71,10 @@
     transition: padding 300ms ease, border-radius 300ms ease;
     background: #fff;
     border-radius: var(--border-radius-xl);
+    height: 60px;
 
     &.open {
-      padding: 16px;
+      padding: 10px;
       border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
       box-shadow: var(--shadow);
     }
@@ -87,9 +88,14 @@
     font-weight: 700;
     font-size: 18px;
     color: #8a8fa4;
+    margin-top: 15px;
   }
 
   .option-wrapper {
     margin-top: 15px;
+    transition: opacity 300ms ease;
+    &:hover {
+      opacity: 50%;
+    }
   }
 </style>
