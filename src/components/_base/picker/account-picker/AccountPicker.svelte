@@ -93,5 +93,9 @@
 
   .option-wrapper {
     margin-top: 15px;
+    transition: opacity 300ms ease;
+    &:hover {
+      opacity: 50%;
+    }
   }
 </style>

@@ -12,3 +12,9 @@
   font-size: var(--text-sm);
   color: var(--color-grey-2);
 }
+
+.dotted-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

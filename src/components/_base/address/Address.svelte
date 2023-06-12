@@ -6,21 +6,22 @@
 
   export let value = ''
   export let short = false
-  export let onClick = (event: MouseEvent) => {}
+  export let useBackground = true
+
   const tooltipTimer = 2_000
 
   let showTooltip = false
-  const showTooltipClassNames = [
-    'cooltipz--top',
-    'cooltipz--visible',
-    'tooltip-wrapper'
-  ].join(' ')
+  const showTooltipClassNames = ['cooltipz--top', 'cooltipz--visible'].join(' ')
 
   let setTimeoutInstance: ReturnType<typeof setTimeout>
 
   const handleCopyClick = () => {
+    navigator.clipboard.writeText(value)
+
     showTooltip = true
+
     if (setTimeoutInstance) clearTimeout(setTimeoutInstance)
+
     setTimeoutInstance = setTimeout(() => {
       showTooltip = false
     }, tooltipTimer)
@@ -31,15 +32,19 @@
   })
 </script>
 
-<div class="address">
+<div
+  class="address"
+  style:background={useBackground ? 'var(--color-grey-4)' : ''}
+  style:padding={useBackground ? 'var(--spacing-xs) var(--spacing-sm)' : ''}
+>
   <!-- svelte-ignore a11y-missing-attribute -->
-  <button class="text" on:click={onClick}>
+  <button class="text" on:click>
     {short ? shortenAddress(value) : value}
   </button>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     aria-label="Copied!"
-    class={showTooltip ? showTooltipClassNames : 'tooltip-wrapper'}
+    class={`${showTooltip ? showTooltipClassNames : ''} tooltip-wrapper`}
     on:click={handleCopyClick}
   >
     <IconNew size="small" type="copy" />
@@ -50,8 +55,6 @@
   .address {
     display: inline-flex;
     align-items: center;
-    background: var(--color-grey-4);
-    padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--border-radius-lg);
   }
   .text {
