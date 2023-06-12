@@ -29,6 +29,7 @@
   </div>
 
   <TokenAmountCard
+    on:invalid
     tokenName="XRD"
     tokenBalance={xrdBalance}
     iconUrl=""

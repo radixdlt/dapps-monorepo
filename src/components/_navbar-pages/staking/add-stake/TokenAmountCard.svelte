@@ -3,6 +3,7 @@
   import AmountInput from '@components/_base/input/AmountInput.svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '../../../../utils/format-amount'
+  import { createEventDispatcher } from 'svelte'
 
   export let iconUrl: string
   export let tokenName: string
@@ -12,6 +13,12 @@
   $: hasEnoughBalance = new BigNumber(tokenBalance).gte(
     new BigNumber(tokenAmount)
   )
+
+  const dispatchInvalidEvent = createEventDispatcher<{
+    invalid: boolean
+  }>()
+
+  $: dispatchInvalidEvent('invalid', !hasEnoughBalance)
 </script>
 
 <div class="token-amount-card" class:invalid-box={!hasEnoughBalance}>

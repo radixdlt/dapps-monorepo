@@ -14,6 +14,8 @@
 
   let rightColumnWidth = '25rem'
   let selectedAccount: Account
+
+  let stakeButtonDisabled = true
 </script>
 
 <SidePanel bind:open>
@@ -43,6 +45,9 @@
   <div class="add-stake-card">
     <AddStakeCard
       {...validatorProps}
+      on:invalid={(e) => {
+        stakeButtonDisabled = e.detail
+      }}
       --token-amount-card-width={rightColumnWidth}
     />
   </div>
@@ -56,7 +61,7 @@
       />
     </div>
     <div class="stake-button" style:width={rightColumnWidth}>
-      <ButtonNew size="big" disabled>Stake</ButtonNew>
+      <ButtonNew size="big" disabled={stakeButtonDisabled}>Stake</ButtonNew>
     </div>
   </div>
 </SidePanel>
