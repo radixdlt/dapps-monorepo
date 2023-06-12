@@ -26,7 +26,7 @@
   }
   let uptimeFilter = {
     days: 1,
-    percentage: 0
+    percentage: '0'
   }
   let acceptsStakeFilter = false
   let bookmarkedFilter = false

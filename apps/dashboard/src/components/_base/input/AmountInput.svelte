@@ -2,33 +2,29 @@
   import { number } from '@directives/format-input'
   import InputNew from './InputNew.svelte'
   import type { ComponentProps } from 'svelte'
+  import { removeThousandsSeparator } from '../../../utils/format-amount'
 
-  export let value: string
+  export let displayedValue: string = ''
   export let inputParams:
     | Omit<ComponentProps<InputNew>, 'formatter' | 'width' | 'value'>
     | undefined = undefined
+
+  export let value = '0'
+
+  $: value = removeThousandsSeparator(displayedValue)
 </script>
 
-<div class="percentage-input input-box">
+<div class="input-box">
   <InputNew
-    bind:displayedValue={value}
+    bind:displayedValue
     {...inputParams}
-    format={number('0', '100')}
-    maxlength={3}
-    --width="3.2rem"
+    format={number(undefined, undefined, 10)}
     --font-size="var(--text-3xl)"
     --font-weight="var(--font-weight-bold-2)"
+    --text-align="right"
   />
-  %
 </div>
 
 <style lang="scss">
   @use './shared.scss';
-
-  .percentage-input {
-    display: flex;
-    align-items: center;
-    font-size: var(--text-3xl);
-    font-weight: var(--font-weight-bold-2);
-  }
 </style>

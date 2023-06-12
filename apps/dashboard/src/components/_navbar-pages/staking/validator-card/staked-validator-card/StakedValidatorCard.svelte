@@ -41,9 +41,11 @@
       <div class="links">
         {#await validatorInfo then info}
           <a>add a reminder to calendar</a>
-          <ButtonNew size="small"
-            >ready to claim {formatAmount(info.accumulatedReadyToClaim)} XRD</ButtonNew
-          >
+          <div>
+            <ButtonNew size="small"
+              >ready to claim {formatAmount(info.accumulatedReadyToClaim)} XRD</ButtonNew
+            >
+          </div>
         {/await}
       </div>
     </div>

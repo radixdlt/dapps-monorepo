@@ -76,6 +76,7 @@
   #picker {
     display: flex;
     flex-direction: column;
+    z-index: 1;
   }
 
   #drawer {
