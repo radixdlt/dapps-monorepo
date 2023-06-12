@@ -156,7 +156,7 @@ jobs:
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
+          node-version: 20.3.0
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
@@ -215,7 +215,7 @@ jobs:
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
+          node-version: 20.3.0
           cache: npm
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
@@ -277,14 +277,14 @@ jobs:
       - name: Restore yarn cache
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          node-version: 16.17.1
+          node-version: 20.3.0
           cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
-          file: ./apps/dashboard/Dockerfile
+          file: ./Dockerfile
           push: true
           context: .
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
@@ -344,14 +344,14 @@ jobs:
       - name: Restore yarn cache
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          node-version: 16.17.1
+          node-version: 20.3.0
           cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
-          file: ./apps/dashboard/Dockerfile
+          file: ./Dockerfile
           push: true
           context: .
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
@@ -560,7 +560,7 @@ jobs:
       - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
+          node-version: 20.3.0
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
@@ -603,7 +603,7 @@ jobs:
   #       uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
   #       with:
   #         always-auth: true
-  #         node-version: 16.17.1
+  #         node-version: 20.3.0
   #         cache: yarn
   #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
   #       with:

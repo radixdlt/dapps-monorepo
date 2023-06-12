@@ -97,7 +97,7 @@ export const accountLabel = (account: Omit<Account, 'displayed'>) =>
 export const formatAmount = (amount: number) => {
   const suffixes = ['', 'K', 'M']
   let suffixNum = 0
-  let shortValue = amount
+  let shortValue = amount ?? 0
   while (shortValue >= 1000 && suffixNum < 2) {
     shortValue /= 1000
     suffixNum++

@@ -23,7 +23,7 @@
     "test:storybook": "npx wait-on http://localhost:6006 && test-storybook --no-index-json --coverage && nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook",
     "test:storybook:watch": "test-storybook --no-index-json --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build:storybook": "storybook build",
     "coverage": "vitest run --coverage",
     "update:gateway": "ts-node --esm ./scripts/update-gateway.ts",
     "db:migrate:dev": "prisma migrate dev",

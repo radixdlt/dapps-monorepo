@@ -6,10 +6,12 @@
     "lint": "turbo run lint",
     "prettier": "turbo run prettier",
     "prepare": "husky install",
-    "svelte-check": "turbo run svelte-check",
+    "svelte:check": "turbo run svelte:check",
     "db:generate": "turbo run db:generate",
     "format": "turbo run format",
-    "coverage": "turbo run coverage"
+    "coverage": "turbo run coverage",
+    "pre-push": "turbo run pre-push",
+    "storybook": "turbo run storybook"
   },
   "devDependencies": {
     "eslint": "^8.0.0",

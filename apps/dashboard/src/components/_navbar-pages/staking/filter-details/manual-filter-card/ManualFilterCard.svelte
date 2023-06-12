@@ -8,8 +8,8 @@
     label: string
     value: T
   }[]
-  export let selected: typeof options[number]
-  export let percentage = 0
+  export let selected: (typeof options)[number]
+  export let percentage = '0'
 </script>
 
 <div id="manual-filter-card">

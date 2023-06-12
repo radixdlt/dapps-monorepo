@@ -1,4 +1,4 @@
-import type { Challenge } from 'database'
+import type { Challenge } from '@prisma/client'
 import { config } from '../../config'
 import { ResultAsync, errAsync, okAsync } from 'neverthrow'
 import { createApiError, type ApiError } from '../../_types'
