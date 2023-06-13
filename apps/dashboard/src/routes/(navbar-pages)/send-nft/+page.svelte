@@ -1,6 +1,6 @@
 <script lang="ts">
-  import NavbarPage from '@components/_navbar-pages/NavbarPage.svelte'
-  import SendNonFungibleTokens from '@components/_navbar-pages/send-tokens/SendNonFungibleTokens.svelte'
+  import NavbarPage from '../../../pages/_navbar-pages/NavbarPage.svelte'
+  import SendNonFungibleTokens from '../../../pages/_navbar-pages/send-tokens/SendNonFungibleTokens.svelte'
 </script>
 
 <NavbarPage title="Send NFTs" let:accounts>
