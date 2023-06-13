@@ -199,7 +199,7 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Svelte check
-        run: npm run svelte-check
+        run: npm run svelte:check
 
   unit-tests:
     runs-on: ubuntu-latest
