@@ -40,7 +40,7 @@ WORKDIR /app
 COPY --from=installer /app/apps/dashboard/build build
 COPY --from=installer /app/apps/dashboard/prisma prisma
 COPY --from=installer /app/apps/dashboard/package.json package.json
-COPY --from=installer /app/apps/dashboard/node_modules node_modules
+COPY --from=installer /app/node_modules node_modules
 
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
