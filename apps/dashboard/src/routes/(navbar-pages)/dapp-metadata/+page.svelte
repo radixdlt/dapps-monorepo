@@ -1,6 +1,6 @@
 <script>
-  import DappDefinition from '@components/_navbar-pages/dapp-definition/DappDefinition.svelte'
-  import NavbarPage from '@components/_navbar-pages/NavbarPage.svelte'
+  import DappDefinition from '../../../pages/_navbar-pages/dapp-definition/DappDefinition.svelte'
+  import NavbarPage from '../../../pages/_navbar-pages/NavbarPage.svelte'
 </script>
 
 <NavbarPage title="Manage dApp Definition" let:accounts>

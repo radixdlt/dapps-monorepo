@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SearchPage from '@components/_search-pages/SearchPage.svelte'
-  import Transaction from '@components/_search-pages/transaction/Transaction.svelte'
+  import SearchPage from '@pages/_search-pages/SearchPage.svelte'
+  import Transaction from '@pages/_search-pages/transaction/Transaction.svelte'
   import type { PageServerData } from './$types'
   import { goto } from '$app/navigation'
 

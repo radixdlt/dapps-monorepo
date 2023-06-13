@@ -59,3 +59,5 @@ runs:
     - name: Build
       shell: bash
       run: npm ci && npm run db:generate && npm run build
+      env:
+        PUBLIC_NETWORK_NAME: ${{ env.NETWORK_NAME }}

@@ -11,7 +11,7 @@ WORKDIR /app
 
 RUN npm install -g turbo
 COPY . .
-RUN turbo prune --scope=dashboard --docker
+RUN turbo prune --scope=dashboard --scope=ui --docker
 
 FROM base AS installer
 RUN apk add --no-cache libc6-compat
@@ -29,8 +29,9 @@ RUN npm ci
 COPY --from=builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
-RUN npx turbo run build --filter=dashboard...
-RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build:storybook --filter=dashboard...
+RUN npx turbo run build --filter=ui
+RUN npx turbo run build --filter=dashboard
+RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build --filter=ui
 RUN rm -f .npmrc
 
 FROM node:20.3.0-alpine AS dashboard
@@ -51,6 +52,6 @@ FROM nginx:alpine AS storybook
 
 WORKDIR /app
 
-COPY --from=installer /app/apps/dashboard/storybook-static /usr/share/nginx/html
-COPY /apps/dashboard/nginx/mime.types /etc/nginx/mime.types
-COPY /apps/dashboard/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=installer /app/packages/ui/storybook-static /usr/share/nginx/html
+COPY --from=installer /app/packages/ui/nginx/mime.types /etc/nginx/mime.types
+COPY --from=installer /app/packages/ui/nginx/default.conf /etc/nginx/conf.d/default.conf
