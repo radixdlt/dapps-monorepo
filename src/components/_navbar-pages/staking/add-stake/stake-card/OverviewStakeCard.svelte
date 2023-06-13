@@ -6,7 +6,13 @@
   import type { ComponentProps } from 'svelte'
 
   export let rightColumnWidth: string
-  export let tokenInfo: ComponentProps<TokenAmountCardWithBalance>
+  export let tokenInfo: Omit<
+    ComponentProps<TokenAmountCardWithBalance>,
+    'tokenAmount'
+  >
+  export let tokenAmount: string
+  export let tokenAmountDisabled = false
+  export let tokenAmountInvalid = false
 </script>
 
 <StakeCard --token-amount-card-width={rightColumnWidth}>
@@ -17,6 +23,11 @@
   <slot name="info" slot="info" />
 
   <svelte:fragment slot="token-amount-card">
-    <TokenAmountCardWithBalance on:invalid {...tokenInfo} />
+    <TokenAmountCardWithBalance
+      {...tokenInfo}
+      bind:tokenAmount
+      bind:disabled={tokenAmountDisabled}
+      bind:invalid={tokenAmountInvalid}
+    />
   </svelte:fragment>
 </StakeCard>

@@ -10,6 +10,8 @@
   export let validatorInfo: ComponentProps<ValidatorInfo>
   export let tokenInfo: ComponentProps<TokenAmountCardWithBalance>
 
+  let stakeAmount: string
+
   let stakeButtonDisabled = true
 </script>
 
@@ -41,6 +43,7 @@
           rightColumnWidth,
           tokenInfo
         }}
+        bind:stakeAmount
       />
     </div>
   </svelte:fragment>

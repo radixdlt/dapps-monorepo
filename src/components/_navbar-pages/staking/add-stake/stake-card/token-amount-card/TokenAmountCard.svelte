@@ -4,11 +4,14 @@
   export let iconUrl: string
   export let tokenName: string
   export let tokenAmount: string
+  export let tokenDisplayedAmount: string
   export let invalid: boolean
+  export let disabled: boolean = false
 </script>
 
 <div
   class="token-amount-card"
+  class:disabled
   style:background={`${
     invalid ? 'var(--invalid-background-color)' : 'var(--surface)'
   }`}
@@ -21,6 +24,7 @@
     </div>
 
     <AmountInput
+      bind:displayedValue={tokenDisplayedAmount}
       bind:value={tokenAmount}
       --width="15rem"
       --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}

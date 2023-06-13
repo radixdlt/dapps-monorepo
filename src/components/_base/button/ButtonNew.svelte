@@ -12,7 +12,9 @@
   <slot />
 </button>
 
-<style>
+<style lang="scss">
+  @use '../../../mixins.scss';
+
   button {
     box-sizing: border-box;
     background: var(--color-radix-blue-2);
@@ -35,10 +37,5 @@
   .big {
     height: var(--spacing-2xl);
     padding: 0 var(--spacing-2xl);
-  }
-
-  .disabled {
-    opacity: 50%;
-    pointer-events: none;
   }
 </style>

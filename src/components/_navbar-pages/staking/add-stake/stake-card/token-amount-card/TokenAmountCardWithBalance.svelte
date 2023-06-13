@@ -1,7 +1,6 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
   import BigNumber from 'bignumber.js'
-  import { createEventDispatcher } from 'svelte'
   import { formatTokenValue } from '../../../../../../utils/format-amount'
   import TokenAmountCard from './TokenAmountCard.svelte'
 
@@ -9,27 +8,29 @@
   export let tokenName: string
   export let tokenBalance: string
   export let tokenAmount: string
+  export let tokenDisplayedAmount: string = ''
+  export let disabled = false
+  export let invalid = false
 
   $: hasEnoughBalance = new BigNumber(tokenBalance).gte(
     new BigNumber(tokenAmount)
   )
 
-  const dispatchInvalidEvent = createEventDispatcher<{
-    invalid: boolean
-  }>()
-
-  $: dispatchInvalidEvent('invalid', !hasEnoughBalance)
+  $: invalid = !hasEnoughBalance
 </script>
 
 <div class="token-amount-card">
   <TokenAmountCard
     {iconUrl}
     bind:tokenAmount
+    bind:tokenDisplayedAmount
     {tokenName}
     invalid={!hasEnoughBalance}
+    bind:disabled
   />
   <div
     class="extension"
+    class:disabled
     style:background={`${
       !hasEnoughBalance ? 'var(--invalid-background-color)' : 'var(--surface)'
     }`}

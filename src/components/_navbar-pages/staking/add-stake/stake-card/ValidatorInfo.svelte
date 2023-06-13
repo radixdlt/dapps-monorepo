@@ -13,7 +13,7 @@
   <div>
     <Address value={validatorAddress} short useBackground={false} />
   </div>
-  <div class="currently-staking">
+  <div class="currently-staking dotted-overflow">
     Currently staking: {currentlyStakingAmount} XRD
   </div>
 </div>
