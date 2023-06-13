@@ -1,0 +1,8 @@
+* {
+  --invalid-text-color: var(--error-dark);
+  --invalid-background-color: var(--error-light);
+  --invalid-border-color: var(--error-dark);
+
+  --card-padding: var(--spacing-md) var(--spacing-lg);
+  --card-border-radius: var(--border-radius-xl);
+}
