@@ -34,5 +34,6 @@ export const icons = {
   sliderHandle: '/icons/slider-handle.svg',
   pickerExpand: '/icons/picker-expand.svg',
   accountPickerExpand: '/icons/account-picker-expand.svg',
-  selectedOption: '/icons/selected-option.svg'
+  selectedOption: '/icons/selected-option.svg',
+  validatorsMenu: '/icons/validators-menu.svg'
 } as const
