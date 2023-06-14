@@ -33,3 +33,8 @@ $viewport-mobile-up: 394px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.disabled {
+  opacity: 50%;
+  pointer-events: none;
+}

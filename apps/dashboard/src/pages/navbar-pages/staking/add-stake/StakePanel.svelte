@@ -2,16 +2,13 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import InfoBox from './InfoBox.svelte'
-  import type { Account } from '@stores'
 
   export let open: boolean
-  export let stakeButtonDisabled = true
+  export let stakeButtonDisabled = false
 
   let rightColumnWidth = '25rem'
-  let selectedAccount: Account
 </script>
 
 <SidePanel bind:open>
@@ -25,9 +22,18 @@
 
   <div class="flex">
     <div />
-    <div class="account-picker" style:width={rightColumnWidth}>
-      <h4><slot name="account-picker-text" /></h4>
-      <AccountPicker bind:selected={selectedAccount} />
+    <slot name="account-picker" {rightColumnWidth} />
+  </div>
+
+  <div
+    class="heading-text flex"
+    style:margin-top={`${
+      $$slots['account-picker'] ? 'var(--spacing-2xl)' : ''
+    }`}
+  >
+    <h4><slot name="heading-text" /></h4>
+    <div class="align-left heading-subtext" style:width={rightColumnWidth}>
+      <slot name="heading-subtext" />
     </div>
   </div>
 
@@ -53,12 +59,10 @@
     display: flex;
     justify-content: space-between;
     padding-right: var(--spacing-lg);
-  }
 
-  .account-picker {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+    .align-left {
+      text-align: left;
+    }
   }
 
   .header {
@@ -78,5 +82,13 @@
   .stake {
     margin-top: var(--spacing-2xl);
     gap: var(--spacing-3xl);
+  }
+
+  .heading-text {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .heading-subtext {
+    color: var(--color-grey-2);
   }
 </style>

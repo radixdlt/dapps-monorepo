@@ -1,11 +1,13 @@
 <script lang="ts">
   import AmountInput from '@components/_base/input/AmountInput.svelte'
 
-  export let iconUrl: string
-  export let tokenName: string
+  export let token: {
+    name: string
+    iconUrl: string
+  }
   export let tokenAmount: string
   export let tokenDisplayedAmount: string
-  export let invalid: boolean
+  export let invalid: boolean = false
   export let disabled: boolean = false
 </script>
 
@@ -19,14 +21,14 @@
 >
   <div class="token-amount">
     <div class="name">
-      <img src={iconUrl} alt="bitcoin" />
-      {tokenName}
+      <img src={token.iconUrl} alt="bitcoin" />
+      {token.name}
     </div>
 
     <AmountInput
       bind:displayedValue={tokenDisplayedAmount}
       bind:value={tokenAmount}
-      --width="15rem"
+      --width="14rem"
       --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
     />
   </div>
@@ -44,6 +46,7 @@
     .token-amount {
       display: flex;
       justify-content: space-between;
+      gap: var(--spacing-lg);
 
       .name {
         display: flex;
