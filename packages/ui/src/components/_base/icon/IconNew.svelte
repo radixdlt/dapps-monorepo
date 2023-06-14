@@ -3,15 +3,19 @@
 
   export let type: keyof typeof icons
   export let size: 'small' | 'medium' | 'large' = 'medium'
+  export let faded = false
 </script>
 
-<img class={size} on:click src={icons[type]} alt="icon {type}" />
+<img class={size} class:faded on:click src={icons[type]} alt="icon {type}" />
 
 <style>
   img {
     display: block;
-    filter: var(--filter);
-    opacity: var(--opacity);
+  }
+
+  .faded {
+    filter: grayscale(100%);
+    opacity: 50%;
   }
 
   .small {

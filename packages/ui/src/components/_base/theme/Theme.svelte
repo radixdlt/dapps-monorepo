@@ -11,6 +11,7 @@
     --background: var(--color-light);
     --surface: var(--color-grey-5);
     --text-color: var(--color-grey-1);
+    --subtext-color: var(--color-grey-2);
     --error-dark: var(--color-radix-error-red-1);
     --error-light: var(--color-radix-error-red-2);
   }

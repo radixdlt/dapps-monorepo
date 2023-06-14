@@ -1,8 +1,6 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
 
-  export let title: string
-  export let explanation: string
   export let link: {
     text: string
     href: string
@@ -11,15 +9,15 @@
 
 <div class="info-box">
   <div>
-    <IconNew type="info" --filter="grayscale(100%)" --opacity="50%" />
+    <IconNew type="info" faded />
   </div>
 
   <div class="body">
     <div class="title">
-      {title}
+      <slot name="title" />
     </div>
     <div class="explanation">
-      {explanation}
+      <slot name="explanation" />
     </div>
   </div>
 

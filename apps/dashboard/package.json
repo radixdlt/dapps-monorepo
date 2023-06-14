@@ -16,7 +16,7 @@
     "prettier:fix": "prettier --cache --write src",
     "lint": "eslint --cache src",
     "lint:fix": "eslint --cache --fix src",
-    "format": "yarn prettier:fix && yarn lint:fix",
+    "format": "npm run prettier:fix && npm run lint:fix",
     "e2etest": "cypress run",
     "test": "vitest run",
     "test:watch": "vitest",
