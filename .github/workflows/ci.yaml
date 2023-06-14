@@ -538,6 +538,7 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet-internal
+      restart_pods: false
       namespace: dashboard-kisharnet-internal
       create_subns: false
       aws_region: eu-west-2
