@@ -5,6 +5,14 @@ const gatewayApi = GatewayApiClient.initialize({
   basePath: CURRENT_NETWORK?.url
 })
 
+export const getValidatorsList = () => {
+  return gatewayApi.state.innerClient
+    .stateValidatorsList({
+      stateValidatorsListRequest: {}
+    })
+    .then(({ validators }) => validators)
+}
+
 export const getTransactionDetails = (
   intentHashHex: string,
   optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]

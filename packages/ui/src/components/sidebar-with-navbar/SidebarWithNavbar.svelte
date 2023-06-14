@@ -38,6 +38,11 @@
       text: 'Manage dApp Definition',
       icon: 'dappMetadata',
       path: '/dapp-metadata'
+    },
+    {
+      text: 'Validators',
+      icon: 'validatorsMenu',
+      path: '/validators'
     }
   ]
 </script>

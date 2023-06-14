@@ -60,6 +60,11 @@ const nonFungibleResourceDisplayLabel = (
         : `${getNFTAddress(resource.address, id)}`
   )()
 
+export const getEnumStringMetadata =
+  (key: string) => (metadata?: EntityMetadataCollection) =>
+    (metadata?.items.find((item) => item.key === key)?.value?.raw_json as any)
+      ?.fields?.[0].value || ''
+
 export const getStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
     metadata?.items.find((item) => item.key === key)?.value?.as_string || ''
