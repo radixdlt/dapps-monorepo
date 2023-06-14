@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { featureFlags } from '@featureFlags'
   import Header from '@components/header/Header.svelte'
+  import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'

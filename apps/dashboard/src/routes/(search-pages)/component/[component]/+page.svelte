@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Component from '@components/_search-pages/component/Component.svelte'
-  import SearchPage from '@components/_search-pages/SearchPage.svelte'
+  import Component from '@pages/_search-pages/component/Component.svelte'
+  import SearchPage from '@pages/_search-pages/SearchPage.svelte'
 
   import type { PageData } from './$types'
 
