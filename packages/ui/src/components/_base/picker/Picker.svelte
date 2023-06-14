@@ -54,10 +54,11 @@
       style:border-radius="var(--drawer-border-radius)"
       style:box-shadow="var(--drawer-box-shadow)"
       style:transform={`translateY(${offset}px)`}
+      style:max-height={`${offset*5+10}px`}
       transition:transition
     >
       <slot name="options-header" />
-      {#each options as option, i}
+      {#each options as option}
         <div
           class="option"
           on:click={() => {
@@ -82,6 +83,7 @@
   #drawer {
     position: absolute;
     width: 100%;
+    overflow-y: auto;
   }
 
   .option {
