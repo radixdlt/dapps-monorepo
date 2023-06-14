@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { featureFlags } from '@featureFlags'
+  import '@fonts'
   import Header from '@components/header/Header.svelte'
+  import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
@@ -8,16 +9,21 @@
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
-  import '../fonts.css'
   import {
     RadixDappToolkit,
     DataRequestOutput
   } from '@radixdlt/radix-dapp-toolkit'
-  import { CURRENT_NETWORK } from '../../src/network'
+  import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { authApi } from '../server/auth/auth-api'
+  import LayersIcon from '@icons/layers.svg'
+  import TransactionsIcon from '@icons/transactions.svg'
+  import TokensIcon from '@icons/tokens.svg'
+  import NftsIcon from '@icons/nfts.svg'
+  import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import ValidatorsIcon from '@icons/validators-menu.svg'
 
   let mounted = false
 
@@ -71,6 +77,43 @@
     resolveRDT(rdt)
   })
 
+  const routes: {
+    text: string
+    icon: string
+    path: string
+  }[] = [
+    {
+      text: 'Deploy Package',
+      icon: LayersIcon,
+      path: '/deploy-package'
+    },
+    {
+      text: 'Send Raw Transaction',
+      icon: TransactionsIcon,
+      path: '/transaction-manifest'
+    },
+    {
+      text: 'Send Tokens',
+      icon: TokensIcon,
+      path: '/send-tokens'
+    },
+    {
+      text: 'Send NFTs',
+      icon: NftsIcon,
+      path: '/send-nft'
+    },
+    {
+      text: 'Manage dApp Definition',
+      icon: DappMetadataIcon,
+      path: '/dapp-metadata'
+    },
+    {
+      text: 'Validators',
+      icon: ValidatorsIcon,
+      path: '/validators'
+    }
+  ]
+
   $: if (mounted) {
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
       darkTheme
@@ -114,7 +157,7 @@
   >
     {#if mounted}
       <Header />
-      <SidebarWithNavbar page={$page} />
+      <SidebarWithNavbar page={$page} {routes} />
       <Box
         cx={{
           gridArea: 'content',
@@ -132,5 +175,5 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../global.css';
+  @use '../../../../packages/ui/src/global.css';
 </style>

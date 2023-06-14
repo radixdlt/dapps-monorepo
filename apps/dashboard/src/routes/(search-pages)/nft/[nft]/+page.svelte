@@ -1,6 +1,6 @@
 <script lang="ts">
-  import NonFungible from '@components/_search-pages/nft/Nft.svelte'
-  import SearchPage from '@components/_search-pages/SearchPage.svelte'
+  import NonFungible from '@pages/_search-pages/nft/Nft.svelte'
+  import SearchPage from '@pages/_search-pages/SearchPage.svelte'
   import type { PageData } from './$types'
 
   export let data: PageData
