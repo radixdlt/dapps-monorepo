@@ -2,13 +2,14 @@
   import { css, config } from '@styles'
   import Box from '../box/Box.svelte'
   import Icon from '../icon/Icon.svelte'
+  import SearchIcon from '@icons/search_icon.svg'
 
   export let onSearch: (address: string) => void
   export let placeholder: string = ''
 
   let value: string = ''
 
-  const iconHeight: keyof (typeof config)['theme']['sizes'] = 'sm'
+  const iconHeight: keyof typeof config['theme']['sizes'] = 'sm'
 
   const search = () => {
     onSearch(value)
@@ -42,7 +43,7 @@
       <Icon
         on:click={() => onSearch(value)}
         interactive
-        type="search"
+        icon={SearchIcon}
         height={iconHeight}
       />
     </Box>

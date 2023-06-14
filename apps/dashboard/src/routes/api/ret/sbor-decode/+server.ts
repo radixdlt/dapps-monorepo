@@ -1,6 +1,6 @@
 import { RadixEngineToolkit, SborValue } from '@radixdlt/radix-engine-toolkit'
 import { error, json } from '@sveltejs/kit'
-import { CURRENT_NETWORK } from '../../../../network'
+import { CURRENT_NETWORK } from '@networks'
 import type { RequestEvent } from './$types'
 
 export const POST = async ({ request }: RequestEvent) => {

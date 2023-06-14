@@ -21,6 +21,7 @@
   import type { StateEntityDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
   import { ValidationResult } from '../../DappMetadata.svelte'
   import LinkingMetadataList from './LinkingMetadataList.svelte'
+  import GreenCheckIcon from '@icons/checked-checkbox.svg'
 
   export let entity: EntityT
   export let disabled: boolean
@@ -92,7 +93,7 @@
   {#if validationResult !== undefined}
     {#if validationResult === ValidationResult.LINKED}
       <div style:display="flex" style:gap="0.3rem" style:flex-direction="row">
-        <Icon filter="" height="xs" width="xs" type="greenCheck" />
+        <Icon filter="" height="xs" width="xs" icon={GreenCheckIcon} />
         <Text size="small">Linked</Text>
       </div>
     {/if}

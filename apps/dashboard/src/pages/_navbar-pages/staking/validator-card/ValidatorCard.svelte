@@ -100,7 +100,7 @@
 
 <style lang="scss">
   @use '../shared.scss';
-  @use '../../../../mixins.scss';
+  @use '../../../../../../../packages/ui/src/mixins.scss';
   #validator-card {
     @include mixins.card;
     align-items: center;

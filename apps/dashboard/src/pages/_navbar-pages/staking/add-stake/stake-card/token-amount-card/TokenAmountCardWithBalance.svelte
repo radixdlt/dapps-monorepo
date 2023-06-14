@@ -1,7 +1,7 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
   import BigNumber from 'bignumber.js'
-  import { formatTokenValue } from '../../../../../../utils/format-amount'
+  import { formatTokenValue } from '@utils/format-amount'
   import TokenAmountCard from './TokenAmountCard.svelte'
 
   export let iconUrl: string
@@ -52,7 +52,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../mixins.scss';
+  @use '../../../../../../../../../packages/ui/src/mixins.scss';
   @use './shared.scss';
 
   .token-amount-card {

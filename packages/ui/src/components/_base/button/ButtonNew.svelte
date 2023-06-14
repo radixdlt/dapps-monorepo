@@ -13,7 +13,7 @@
 </button>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
+  @use '../../../../../../packages/ui/src/mixins.scss';
 
   button {
     box-sizing: border-box;

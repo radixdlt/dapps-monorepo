@@ -1,4 +1,4 @@
-@use '../../../../mixins.scss';
+@use '../../../../../../../packages/ui/src/mixins.scss';
 
 @mixin value-card {
   @include mixins.card(true, var(--color-grey-5));

@@ -9,7 +9,7 @@ import {
   getAddressPrefix,
   getTxIdFromMessage,
   accountLabel
-} from './utils'
+} from './'
 
 describe('#utils', () => {
   it('should extract txId from error', () => {

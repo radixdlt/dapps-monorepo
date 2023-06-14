@@ -9,7 +9,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../mixins.scss';
+  @use '../../../../../../../../packages/ui/src/mixins.scss';
 
   .add-stake-card {
     @include mixins.card;
