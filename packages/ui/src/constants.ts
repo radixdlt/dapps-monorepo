@@ -3,6 +3,7 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   KISHARNET: 'kisharnet',
+  ANSHARNET: 'ansharnet',
   RCNET: 'rcnet'
 } as const
 
@@ -30,6 +31,12 @@ export const NETWORK_CONFIG = {
     url: 'https://kisharnet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
+  },
+  [Network.ANSHARNET]: {
+    id: 12, ##TODO: Change network ID
+    url: 'https://ansharnet-gateway.radixdlt.com',
+    dappDefAddress:
+      ''
   },
   [Network.RCNET]: {
     id: 12,

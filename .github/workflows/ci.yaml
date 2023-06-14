@@ -23,6 +23,7 @@ on:
           - gilganet
           - mardunet
           - kisharnet
+          - ansharnet
           - rcnet
 
 env:
@@ -528,6 +529,8 @@ jobs:
       app_name: 'dashboard'
       step_name: 'deploy-rcnet'
 
+##TODO DEFINE WORKFLOW FOR RCNETv2
+
   deploy_kisharnet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
@@ -549,6 +552,28 @@ jobs:
       environment: kisharnet-internal
       app_name: 'dashboard'
       step_name: 'deploy-kisharnet'
+
+  deploy_ansharnet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: ansharnet-internal
+      namespace: dashboard-ansharnet-internal
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
+      eks_cluster: rtlj-prod
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=ansharnet-internal
+      environment: ansharnet-internal
+      app_name: 'dashboard'
+      step_name: 'deploy-ansharnet'
 
   run-e2e-tests:
     runs-on: ubuntu-latest
