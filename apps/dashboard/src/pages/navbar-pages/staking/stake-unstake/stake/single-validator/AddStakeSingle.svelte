@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
-  import StakeUnstakePanel from '../StakePanel.svelte'
-  import StakeCardSingle from '../stake-card/OverviewStakeCardSingle.svelte'
-  import type ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
-  import type TokenAmountCardWithBalance from '../stake-card/token-amount-card/TokenAmountCardWithBalance.svelte'
-  import AccountSection from '../AccountSection.svelte'
+  import StakeUnstakePanel from '../../StakePanel.svelte'
+  import StakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
+  import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
+  import type TokenAmountCardWithBalance from '../../stake-card/token-amount-card/TokenAmountCardWithBalance.svelte'
+  import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
 
   export let open: boolean

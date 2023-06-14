@@ -1,14 +1,14 @@
 <script lang="ts">
-  import StakeUnstakePanel from '../StakePanel.svelte'
-  import type { Validator } from '../../Validators.svelte'
+  import StakeUnstakePanel from '../../StakePanel.svelte'
+  import type { Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import OverviewStakeCardMultiple from '../stake-card/OverviewStakeCardMultiple.svelte'
+  import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import type { ComponentProps } from 'svelte'
-  import StakeCardMultiple from '../stake-card/StakeCardMultiple.svelte'
-  import type TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
+  import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
+  import type TokenAmountCard from '../../stake-card/token-amount-card/TokenAmountCard.svelte'
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
-  import AccountSection from '../AccountSection.svelte'
+  import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
 
   export let open: boolean
@@ -109,7 +109,7 @@
 </StakeUnstakePanel>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
+  @use '../../../../../../../../../packages/ui/src/mixins.scss';
 
   .validator-card {
     display: flex;
