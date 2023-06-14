@@ -44,10 +44,12 @@
   <AddStakeMultiple
     open={true}
     {validators}
-    tokenInfo={{
-      iconUrl:
-        'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
-      tokenName: 'XRD'
+    tokenCardProps={{
+      token: {
+        iconUrl:
+          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
+        name: 'XRD'
+      }
     }}
     tokenBalance="10000"
   />

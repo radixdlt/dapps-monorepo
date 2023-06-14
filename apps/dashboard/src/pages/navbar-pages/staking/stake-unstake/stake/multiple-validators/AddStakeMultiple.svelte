@@ -13,7 +13,7 @@
 
   export let open: boolean
   export let validators: Validator[]
-  export let tokenInfo: Omit<
+  export let tokenCardProps: Omit<
     ComponentProps<TokenAmountCard>,
     'invalid' | 'tokenAmount' | 'tokenDisplayedAmount'
   >
@@ -66,7 +66,7 @@
     <OverviewStakeCardMultiple
       cardProps={{
         tokenInfo: {
-          ...tokenInfo,
+          ...tokenCardProps,
           tokenBalance
         }
       }}
@@ -90,7 +90,7 @@
         <StakeCardMultiple
           {rightColumnWidth}
           {validator}
-          {tokenInfo}
+          tokenInfo={tokenCardProps}
           bind:tokenDisplayedAmount={individualValidatorStakeAmounts[i]}
           amountCardDisabled={distributeEqually}
           currentlyStakingAmount="100"
