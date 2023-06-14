@@ -33,7 +33,7 @@ export const NETWORK_CONFIG = {
       'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
   },
   [Network.ANSHARNET]: {
-    id: 12, ##TODO: Change network ID
+    id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
     dappDefAddress:
       ''
