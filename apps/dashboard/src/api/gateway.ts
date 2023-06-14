@@ -1,4 +1,4 @@
-import { CURRENT_NETWORK } from '../../src/network'
+import { CURRENT_NETWORK } from '@networks'
 import { GatewayApiClient } from '@radixdlt/babylon-gateway-api-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({

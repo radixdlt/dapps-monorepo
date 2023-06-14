@@ -107,7 +107,7 @@
 </StakeUnstakePanel>
 
 <style lang="scss">
-  @use '../../../../../mixins.scss';
+  @use '../../../../../../../../packages/ui/src/mixins.scss';
 
   .flex {
     display: flex;

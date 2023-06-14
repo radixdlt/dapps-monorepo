@@ -5,11 +5,12 @@ export const configs = {
   alias: {
     '@components': 'src/components',
     '@styles': 'src/styles.ts',
-    '@utils': 'src/utils/utils.ts',
+    '@utils': 'src/utils',
     '@configs': 'configs.js',
     '@directives': 'src/directives',
     '@api': 'src/api',
     '@constants': 'src/constants',
-    '@stores': 'src/stores'
+    '@stores': 'src/stores',
+    '@icons': 'static/icons'
   }
 }

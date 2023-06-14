@@ -1,7 +1,7 @@
 <script lang="ts">
   import 'cooltipz-css'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { shortenAddress } from '@utils'
+  import { shortenAddress } from '../../../utils'
   import { onDestroy } from 'svelte'
 
   export let value = ''

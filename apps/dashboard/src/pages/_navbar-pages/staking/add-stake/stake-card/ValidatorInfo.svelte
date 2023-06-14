@@ -19,7 +19,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../mixins.scss';
+  @use '../../../../../../../../packages/ui/src/mixins.scss';
 
   .staking-info {
     display: flex;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import Search from '@components/_base/search/Search.svelte'
-  import { addressToRoute } from '@utils'
+  import { addressToRoute } from '../../utils'
 
   const search = (address: string) => goto(addressToRoute(address))
 </script>

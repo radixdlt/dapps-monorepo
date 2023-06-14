@@ -4,23 +4,22 @@
   import Text from '@components/_base/text/Text.svelte'
   import type { CSS } from '@stitches/core/types/css-util'
   import type { config } from '@styles'
-  import type { icons } from '../../icon-assets'
 
   export let noPadding: boolean = false
   export let noMargin: boolean = false
-  export let icon: keyof typeof icons
+  export let icon: string
   export let interactiveIcon: boolean = false
   export let iconSize: 'xs' | 'sm' | 'md' | 'lg' = 'sm'
   export let isIconColor: boolean = false
   export let bold = false
-  export let textColor: `$${keyof (typeof config)['theme']['colors']}` = '$text'
+  export let textColor: `$${keyof typeof config['theme']['colors']}` = '$text'
   export let iconPosition: 'left' | 'right' = 'left'
 
   export let cx: CSS<typeof config> = {}
 
   const iconProps = {
     filter: !isIconColor ? 'grayscale(100%)' : 'undefined',
-    type: icon,
+    icon: icon,
     height: iconSize,
     width: iconSize,
     interactive: interactiveIcon

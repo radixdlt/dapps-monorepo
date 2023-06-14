@@ -65,7 +65,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../mixins.scss';
+  @use '../../../../../../../packages/ui/src/mixins.scss';
   #staking-card {
     @include mixins.card;
     display: grid;

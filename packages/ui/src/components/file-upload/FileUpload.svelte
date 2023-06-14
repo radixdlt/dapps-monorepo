@@ -7,7 +7,7 @@
   // @ts-ignore no type definitions available
   import FileUpload, { registerPlugin } from 'svelte-filepond'
   import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
-  import { getFileExtension } from '@utils'
+  import { getFileExtension } from '../../utils'
 
   registerPlugin(FilePondPluginFileValidateType)
   const name = 'fileupload'

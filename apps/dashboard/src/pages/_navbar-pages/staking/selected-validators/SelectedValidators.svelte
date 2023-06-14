@@ -17,7 +17,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../mixins.scss';
+  @use '../../../../../../../packages/ui/src/mixins.scss';
 
   #selected-validators {
     @include mixins.card(false);

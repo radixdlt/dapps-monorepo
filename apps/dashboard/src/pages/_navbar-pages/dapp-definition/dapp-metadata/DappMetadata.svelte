@@ -29,6 +29,7 @@
   } from './rows/linking-metadata-list/Website.svelte'
   import Icon from '@components/_base/icon/Icon.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import TrashIcon from '@icons/trash.svg'
 
   export let accounts: Account[]
 
@@ -314,7 +315,7 @@
 
       <div slot="remove-button">
         {#if !$faded}
-          <Icon type="trash" width="xs" height="xs" interactive filter="" />
+          <Icon icon={TrashIcon} width="xs" height="xs" interactive filter="" />
         {/if}
       </div>
     </StackList>
@@ -337,7 +338,7 @@
       </div>
       <div slot="remove-button">
         {#if !$faded}
-          <Icon type="trash" width="xs" height="xs" interactive filter="" />
+          <Icon icon={TrashIcon} width="xs" height="xs" interactive filter="" />
         {/if}
       </div>
     </StackList>

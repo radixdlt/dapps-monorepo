@@ -54,7 +54,7 @@
 </StakeCard>
 
 <style lang="scss">
-  @use '../../../../../mixins.scss';
+  @use '../../../../../../../../packages/ui/src/mixins.scss';
 
   .remove-icon {
     display: flex;

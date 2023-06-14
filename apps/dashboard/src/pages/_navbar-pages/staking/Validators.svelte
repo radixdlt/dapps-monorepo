@@ -238,7 +238,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
+  @use '../../../../../../packages/ui/src/mixins.scss';
   #validators {
     display: grid;
     padding: var(--spacing-xl);

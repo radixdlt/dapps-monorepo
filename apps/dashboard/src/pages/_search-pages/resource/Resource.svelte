@@ -8,6 +8,7 @@
   import Row from '@components/info-box/Row.svelte'
   import { getStringMetadata } from '@api/utils/resources'
   import type { getEntityDetails } from '@api/gateway'
+  import ExternalLinkIcon from '@icons/external.svg'
 
   export let details: Promise<
     Awaited<ReturnType<typeof getEntityDetails>>[number]
@@ -39,7 +40,7 @@
       {#await url then url}
         {#if url}
           <Text color="link" ml="auto" pointer items="center">
-            <Icon type="external" width="xs" height="xs" />
+            <Icon icon={ExternalLinkIcon} width="xs" height="xs" />
             <Text ml="small">
               <a href={url} target="_blank">{url}</a>
             </Text>
