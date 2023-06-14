@@ -1,0 +1,32 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["db:generate"],
+      "outputs": [".svelte-kit/**", ".vercel/**"]
+    },
+    "build:storybook": {
+      "outputs": ["storybook-static/**"]
+    },
+    "svelte:check": {},
+    "format": {},
+    "prettier": {},
+    "coverage": {},
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["db:generate"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "pre-push": {
+      "dependsOn": ["prettier", "lint", "svelte:check"]
+    },
+    "storybook": {}
+  }
+}

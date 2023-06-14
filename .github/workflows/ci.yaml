@@ -42,7 +42,7 @@ jobs:
           fetch-depth: 0
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -100,7 +100,7 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -114,7 +114,7 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
   prettier:
     runs-on: ubuntu-latest
@@ -126,7 +126,7 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -140,7 +140,7 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Prettier
-        run: yarn prettier
+        run: npm run prettier
 
   sonar:
     runs-on: ubuntu-latest
@@ -156,8 +156,8 @@ jobs:
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+          node-version: 20.3.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -170,7 +170,7 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: ./
+          projectBaseDir: ./apps/dashboard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
@@ -185,7 +185,7 @@ jobs:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -199,7 +199,7 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Svelte check
-        run: yarn svelte:check
+        run: npm run svelte:check
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -215,9 +215,9 @@ jobs:
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
-          cache: yarn
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+          node-version: 20.3.0
+          cache: npm
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -231,7 +231,7 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       - name: Unit tests
-        run: yarn coverage
+        run: npm run coverage
 
   push-dashboard:
     runs-on: ubuntu-latest
@@ -252,7 +252,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
@@ -266,7 +266,7 @@ jobs:
           registry: eu.gcr.io
           username: _json_key
           password: ${{ env.GH_GCR_JSON_KEY }}
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -277,10 +277,10 @@ jobs:
       - name: Restore yarn cache
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          node-version: 16.17.1
-          cache: yarn
-      - name: Copy cache locally
-        run: cp -R $HOME/.cache .cache
+          node-version: 20.3.0
+          cache: npm
+      # - name: Copy cache locally
+      #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -319,7 +319,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
@@ -327,7 +327,7 @@ jobs:
           secret_prefix: 'GH_GCR_JSON_KEY'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi'
           parse_json: false
-      - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -344,10 +344,10 @@ jobs:
       - name: Restore yarn cache
         uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          node-version: 16.17.1
-          cache: yarn
-      - name: Copy cache locally
-        run: cp -R $HOME/.cache .cache
+          node-version: 20.3.0
+          cache: npm
+      # - name: Copy cache locally
+      #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -560,12 +560,12 @@ jobs:
       - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           always-auth: true
-          node-version: 16.17.1
+          node-version: 20.3.0
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
           fetch-depth: 0
       - name: Fetch AWS secrets
-        uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+        uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access'
           app_name: 'dashboard'
@@ -581,8 +581,9 @@ jobs:
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:
-          start: yarn dev
+          start: npm run dev
           wait-on: http://localhost:5173
+          project: ./apps/dashboard
 
   # storybook-tests:
   #   runs-on: ubuntu-latest
@@ -602,9 +603,9 @@ jobs:
   #       uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
   #       with:
   #         always-auth: true
-  #         node-version: 16.17.1
+  #         node-version: 20.3.0
   #         cache: yarn
-  #     - uses: radixdlt/iac-resuable-artifacts/fetch-secrets@v0.8.0
+  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
   #       with:
   #         role_name: "arn:aws:iam::308190735829:role/gh-dashboard-secrets-read-access"
   #         app_name: "dashboard"
