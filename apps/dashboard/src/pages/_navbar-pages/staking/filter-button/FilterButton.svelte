@@ -1,9 +1,10 @@
 <script>
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import FilterList from '@icons/filter-list.svg'
 </script>
 
 <button id="filter-btn" on:click>
-  <IconNew type="filterList" size="medium" --size="24px" />
+  <IconNew icon={FilterList} size="medium" --size="24px" />
   <div id="text">Filter</div>
 </button>
 

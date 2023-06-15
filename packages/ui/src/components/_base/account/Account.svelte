@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Account } from '@stores'
-  import { shortenAddress } from '../../../utils'
+  import { shortenAddress } from '@utils'
 
   export let account: Account | undefined = undefined
 </script>

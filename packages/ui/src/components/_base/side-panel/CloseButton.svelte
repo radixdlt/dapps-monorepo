@@ -1,9 +1,10 @@
 <script>
   import IconNew from '../icon/IconNew.svelte'
+  import CloseIcon from '@icons/cross-2.svg'
 </script>
 
 <button id="close" on:click>
-  <IconNew type="close" size="small" />
+  <IconNew icon={CloseIcon} size="small" />
   <div>Close</div>
 </button>
 

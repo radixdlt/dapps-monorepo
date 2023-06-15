@@ -7,6 +7,9 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
+  import CopyIcon from '@icons/copy.svg'
+  import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
+  import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
 
   export let open: boolean
   export let validator: Validator
@@ -30,9 +33,9 @@
           }}
         >
           <IconNew
-            type={$bookmarked[validator.address]
-              ? 'bookmarkFilled'
-              : 'bookmarkEmpty'}
+            icon={$bookmarked[validator.address]
+              ? BookmarkFilledIcon
+              : BookmarkEmptyIcon}
             size="medium"
           />
           Bookmarked
@@ -46,7 +49,7 @@
       </h2>
       <a id="address">
         {shortenAddress(validator.address)}
-        <IconNew type="copy" size="medium" />
+        <IconNew icon={CopyIcon} size="medium" />
       </a>
     </div>
 

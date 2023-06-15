@@ -3,6 +3,9 @@
   import Button from '@components/_base/button/ButtonNew.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import { formatAmount } from '@utils'
+  import StakingIcon from '@icons/staking.svg'
+  import UnstakingIcon from '@icons/unstaking.svg'
+  import ClaimIcon from '@icons/claim.svg'
 
   export let staking: Promise<number>
   export let unstaking: Promise<number>
@@ -14,7 +17,7 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="staking" --size="1.5rem" />
+        <Icon icon={StakingIcon} --size="1.5rem" />
         <div class="title-text">STAKING</div>
       </div>
       <div class="amount-text">
@@ -30,7 +33,7 @@
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="unstaking" --size="1.5rem" />
+        <Icon icon={UnstakingIcon} --size="1.5rem" />
         <div class="title-text">UNSTAKING</div>
       </div>
       <div class="amount-text">
@@ -46,7 +49,7 @@
   <div class="section last-section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon type="claim" --size="2rem" />
+        <Icon icon={ClaimIcon} --size="2rem" />
         <div class="title-text">READY TO CLAIM</div>
       </div>
       <div class="amount-text">

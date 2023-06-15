@@ -5,13 +5,14 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { formatAmount } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import StakingIcon from '@icons/staking.svg'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 </script>
 
 <div class="staked-validator-card">
   <ValidatorCard {validatorInfo} on:selected on:unselected on:click-validator>
-    <Icon slot="icon" size="large" type="staking" />
+    <Icon slot="icon" size="large" icon={StakingIcon} />
   </ValidatorCard>
   <div class="staking-box">
     <div class="staking-box-grid">

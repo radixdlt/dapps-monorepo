@@ -1,8 +1,9 @@
 <script lang="ts">
   import 'cooltipz-css'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { shortenAddress } from '../../../utils'
+  import { shortenAddress } from '@utils'
   import { onDestroy } from 'svelte'
+  import CopyIcon from '@icons/copy.svg'
 
   export let value = ''
   export let short = false
@@ -47,7 +48,7 @@
     class={`${showTooltip ? showTooltipClassNames : ''} tooltip-wrapper`}
     on:click={handleCopyClick}
   >
-    <IconNew size="small" type="copy" />
+    <IconNew size="small" icon={CopyIcon} />
   </div>
 </div>
 

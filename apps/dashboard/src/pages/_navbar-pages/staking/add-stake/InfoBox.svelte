@@ -1,5 +1,6 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import InfoIcon from '@icons/info.svg'
 
   export let link: {
     text: string
@@ -9,7 +10,7 @@
 
 <div class="info-box">
   <div>
-    <IconNew type="info" faded />
+    <IconNew icon={InfoIcon} faded />
   </div>
 
   <div class="body">
