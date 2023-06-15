@@ -376,7 +376,6 @@ jobs:
       - setup-tags
     with:
       env_name: pr
-      environment: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
       restart_pods: false
