@@ -369,7 +369,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -392,14 +392,13 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
       - setup-tags
     with:
       env_name: dev
-      environment: dev
       namespace: dashboard-dev
       restart_pods: false
       create_subns: false
@@ -415,7 +414,7 @@ jobs:
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -439,7 +438,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -462,7 +461,7 @@ jobs:
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -485,7 +484,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -509,7 +508,7 @@ jobs:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -532,7 +531,7 @@ jobs:
   deploy_kisharnet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
