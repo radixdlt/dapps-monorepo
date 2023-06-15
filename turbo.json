@@ -28,7 +28,7 @@
     "pre-push": {
       "dependsOn": ["prettier", "lint", "svelte:check", "test"]
     },
-    "storybook": {},
+    "storybook": { "cache": false },
     "test": {}
   }
 }
