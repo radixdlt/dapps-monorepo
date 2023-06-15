@@ -371,11 +371,12 @@ jobs:
     if: ${{ github.event.pull_request }}
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-1539
     needs:
-      # - push-dashboard
-      # - push-storybook
+      - push-dashboard
+      - push-storybook
       - setup-tags
     with:
       env_name: pr
+      environment: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
       restart_pods: false
@@ -399,6 +400,7 @@ jobs:
       - setup-tags
     with:
       env_name: dev
+      environment: dev
       namespace: dashboard-dev
       restart_pods: false
       create_subns: false
@@ -585,7 +587,6 @@ jobs:
           start: npm run dev
           wait-on: http://localhost:5173
           project: ./apps/dashboard
-          
           
   # storybook-tests:
   #   runs-on: ubuntu-latest
