@@ -46,15 +46,20 @@
         <slot name="info-box-explanation" slot="explanation" />
       </InfoBox>
     </div>
-    <div class="stake-button" style:width={rightColumnWidth}>
-      <ButtonNew size="big" disabled={stakeButtonDisabled}>
-        <slot name="button-text" />
-      </ButtonNew>
+    <div class="summary" style:width={rightColumnWidth}>
+      <slot name="summary" />
+      <div class="stake-button">
+        <ButtonNew size="big" disabled={stakeButtonDisabled}>
+          <slot name="button-text" />
+        </ButtonNew>
+      </div>
     </div>
   </div>
 </SidePanel>
 
 <style lang="scss">
+  @use '../../../../../../../packages/ui/src/mixins.scss';
+
   .flex {
     display: flex;
     justify-content: space-between;
@@ -71,8 +76,14 @@
     justify-content: space-between;
   }
 
-  .stake-button {
+  .summary {
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+
+    .stake-button {
+      margin-top: auto;
+    }
   }
 
   .info {

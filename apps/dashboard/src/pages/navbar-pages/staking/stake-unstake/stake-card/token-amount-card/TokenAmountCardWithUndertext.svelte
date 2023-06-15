@@ -11,7 +11,7 @@
     name: string
     iconUrl: string
   }
-  export let tokenAmount: string
+  export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = ''
   export let disabled = false
   export let invalid = false

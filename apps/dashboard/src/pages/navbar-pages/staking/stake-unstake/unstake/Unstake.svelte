@@ -1,16 +1,28 @@
 <script lang="ts">
-  import StakePanel from '../../StakePanel.svelte'
-  import OverviewUnstakeCard from '../../stake-card/OverviewUnstakeCard.svelte'
+  import type { Account } from '@stores'
+  import StakePanel from '../StakePanel.svelte'
+  import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import type { ComponentProps } from 'svelte'
+  import BigNumber from 'bignumber.js'
 
   export let open: boolean
   export let unstakeCardProps: Omit<
     ComponentProps<OverviewUnstakeCard>,
-    'amountToUnstake' | 'invalid'
+    'amountToUnstake' | 'invalid' | 'stake'
   >
-  export let amountToUnstake = '0'
+  export let stakes: {
+    account: Account
+    amount: string
+  }[]
+
+  export let amountsToUnstake = new Array(stakes.length).fill('0')
 
   let stakeButtonDisabled = false
+
+  $: totalUnstakeAmount = amountsToUnstake.reduce(
+    (acc, amount) => acc.plus(amount === '' ? '0' : amount),
+    new BigNumber(0)
+  )
 </script>
 
 <StakePanel bind:open {stakeButtonDisabled}>
@@ -23,14 +35,19 @@
   <svelte:fragment slot="heading-subtext">Unstaking amount</svelte:fragment>
 
   <svelte:fragment slot="content" let:rightColumnWidth>
-    <div class="add-stake-card">
-      <OverviewUnstakeCard
-        {...unstakeCardProps}
-        bind:amountToUnstake
-        bind:invalid={stakeButtonDisabled}
-        --token-amount-card-width={rightColumnWidth}
-        --stake-card-height="12rem"
-      />
+    <div class="card-list">
+      {#each stakes as stake, i}
+        <div class="add-stake-card">
+          <OverviewUnstakeCard
+            {...unstakeCardProps}
+            {stake}
+            bind:amountToUnstake={amountsToUnstake[i]}
+            bind:invalid={stakeButtonDisabled}
+            --token-amount-card-width={rightColumnWidth}
+            --stake-card-height="12rem"
+          />
+        </div>
+      {/each}
     </div>
   </svelte:fragment>
 
@@ -43,5 +60,36 @@
     transaction to review on your Radix Wallet
   </svelte:fragment>
 
+  <svelte:fragment slot="summary">
+    <div class="summary">
+      <div class="summary-title">You're unstaking a total</div>
+      <div class="summary-value">{totalUnstakeAmount} XRD</div>
+    </div>
+  </svelte:fragment>
+
   <svelte:fragment slot="button-text">Unstake</svelte:fragment>
 </StakePanel>
+
+<style lang="scss">
+  .card-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: var(--spacing-sm);
+
+    .summary-title {
+      color: var(--subtext-color);
+    }
+
+    .summary-value {
+      font-size: var(--text-3xl);
+      font-weight: var(--font-weight-bold-1);
+    }
+  }
+</style>

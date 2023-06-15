@@ -5,8 +5,8 @@
     name: string
     iconUrl: string
   }
-  export let tokenAmount: string
-  export let tokenDisplayedAmount: string
+  export let tokenAmount: string = '0'
+  export let tokenDisplayedAmount: string = '0'
   export let invalid: boolean = false
   export let disabled: boolean = false
 </script>

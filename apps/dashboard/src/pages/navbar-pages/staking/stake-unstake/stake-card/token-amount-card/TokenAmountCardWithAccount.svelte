@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Account from '@components/_base/account/Account.svelte'
   import type { Account as AccountT } from '@stores'
+
+  import Account from '@components/_base/account/Account.svelte'
   import TokenAmountCardWithUndertext from './TokenAmountCardWithUndertext.svelte'
   import BigNumber from 'bignumber.js'
 
@@ -8,19 +9,21 @@
     name: string
     iconUrl: string
   }
-  export let amount: string
+  export let stake: {
+    account: AccountT
+    amount: string
+  }
+  export let amount = '0'
   export let tokenDisplayedAmount: string = ''
   export let invalid = false
   export let disabled = false
-  export let account: AccountT
-  export let stakedAmount: string
 
-  $: invalid = new BigNumber(stakedAmount).lt(new BigNumber(amount))
+  $: invalid = new BigNumber(stake.amount).lt(new BigNumber(amount))
 </script>
 
 <div class="token-amount-card">
   <div class="account">
-    <Account {account} />
+    <Account account={stake.account} />
   </div>
   <TokenAmountCardWithUndertext
     {token}
@@ -30,7 +33,7 @@
     bind:disabled
   >
     <div slot="undertext" class="subtext">
-      Staked {stakedAmount}
+      Staked {stake.amount}
     </div>
   </TokenAmountCardWithUndertext>
 </div>
