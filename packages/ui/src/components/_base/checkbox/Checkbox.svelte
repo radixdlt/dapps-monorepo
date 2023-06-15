@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import CheckedIcon from '@icons/checked-checkbox.svg'
 
   export let checked = false
 
@@ -18,8 +19,12 @@
     <input
       id="checkbox"
       type="checkbox"
+      class:checked
       bind:checked
       on:click={handleOnClick}
+      style={checked
+        ? `background: center / contain no-repeat url(${CheckedIcon}); border: none;`
+        : ''}
     />
     <slot />
   </label>
@@ -45,10 +50,5 @@
     border-radius: var(--border-radius-sm);
     margin: 0 var(--spacing-sm) 0 0;
     align-self: center;
-  }
-
-  #checkbox:checked {
-    background: center / contain no-repeat url('/icons/checked-checkbox.svg');
-    border: none;
   }
 </style>

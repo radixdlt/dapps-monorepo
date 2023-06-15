@@ -2,6 +2,7 @@
   // @ts-ignore
   import Slider from '@bulatdashiev/svelte-slider'
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import SliderHandleIcon from '@icons/slider-handle.svg'
 
   export let values: number[] = []
   export let min = 0
@@ -71,9 +72,9 @@
     --track-bg="transparent"
     --thumb-bg="transparent"
   >
-    <IconNew type="sliderHandle" slot="left" size="large" />
+    <IconNew icon={SliderHandleIcon} slot="left" size="large" />
     <div id="right-handle" slot="right">
-      <IconNew type="sliderHandle" size="large" />
+      <IconNew icon={SliderHandleIcon} size="large" />
     </div>
   </Slider>
 </div>

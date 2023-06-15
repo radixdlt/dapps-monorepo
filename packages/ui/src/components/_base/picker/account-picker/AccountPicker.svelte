@@ -6,6 +6,7 @@
   import Picker from '../Picker.svelte'
   import Account from '@components/_base/account/Account.svelte'
   import { slide, type TransitionConfig } from 'svelte/transition'
+  import AccountPickerExpandIcon from '@icons/account-picker-expand.svg'
 
   function slidePicker(node: Element): TransitionConfig {
     const slideTransition = slide(node)
@@ -47,7 +48,7 @@
     <div class="{open ? 'open' : ''} selected">
       <Account account={selected}>
         <div class="icon" style:transform={`rotate(${open ? '-180deg' : 0})`}>
-          <IconNew type="accountPickerExpand" size="small" />
+          <IconNew icon={AccountPickerExpandIcon} size="small" />
         </div>
       </Account>
     </div>

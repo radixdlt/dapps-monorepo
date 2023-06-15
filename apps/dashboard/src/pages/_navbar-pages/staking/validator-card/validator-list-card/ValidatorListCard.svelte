@@ -3,6 +3,8 @@
   import Icon from '@components/_base/icon/IconNew.svelte'
   import ValidatorCard from '../ValidatorCard.svelte'
   import { context } from '../../Validators.svelte'
+  import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
+  import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 
@@ -22,7 +24,9 @@
     {#if $connected}
       <Icon
         size="medium"
-        type={$bookmarked[info.address] ? 'bookmarkFilled' : 'bookmarkEmpty'}
+        icon={$bookmarked[info.address]
+          ? BookmarkFilledIcon
+          : BookmarkEmptyIcon}
       />
     {/if}
   </button>

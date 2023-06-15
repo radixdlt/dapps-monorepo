@@ -1,5 +1,6 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import StakingIcon from '@icons/staking.svg'
 
   import StakeCard from './StakeCard.svelte'
   import TokenAmountCardWithBalance from './token-amount-card/TokenAmountCardWithBalance.svelte'
@@ -17,7 +18,7 @@
 
 <StakeCard --token-amount-card-width={rightColumnWidth}>
   <svelte:fragment slot="icon">
-    <IconNew type="staking" --size="4rem" />
+    <IconNew icon={StakingIcon} --size="4rem" />
   </svelte:fragment>
 
   <slot name="info" slot="info" />

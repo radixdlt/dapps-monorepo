@@ -1,6 +1,7 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import { shortenAddress } from '@utils'
+  import CopyIcon from '@icons/copy.svg'
 
   export let address: string
 </script>
@@ -9,7 +10,7 @@
   <a>
     {shortenAddress(address)}
   </a>
-  <IconNew size="medium" type="copy" />
+  <IconNew size="medium" icon={CopyIcon} />
 </div>
 
 <style>

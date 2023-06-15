@@ -8,6 +8,8 @@
   import { truncateNumber } from '@utils'
   import { context, type Validator } from '../Validators.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import CheckMarkIcon from '@icons/checkmark.svg'
+  import CrossIcon from '@icons/cross.svg'
 
   export let validatorInfo: Promise<Validator>
 
@@ -69,10 +71,10 @@
       <SkeletonLoader width={20} />
     {:then { acceptsStake }}
       {#if acceptsStake}
-        <Icon size="medium" type="checkmark" />
+        <Icon size="medium" icon={CheckMarkIcon} />
       {:else}
         <div style:color="var(--color-alert)">
-          <Icon size="medium" type="cross" />
+          <Icon size="medium" icon={CrossIcon} />
         </div>
       {/if}
     {/await}

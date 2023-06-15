@@ -16,6 +16,7 @@
   import { css } from '@styles'
   import Text from '../text/Text.svelte'
   import LoadingSpinner from '../button/loading-spinner/LoadingSpinner.svelte'
+  import ListboxChevronIcon from '@icons/listbox-chevron.svg'
 
   type T = $$Generic
   export let options: Array<Option<T>> = []
@@ -80,7 +81,7 @@
       borderColor: '$borderColorHover'
     },
     '&:after': {
-      content: "url('/icons/listbox-chevron.svg')",
+      content: `url(${ListboxChevronIcon})`,
       width: '18px',
       height: '18px',
       position: 'absolute',
