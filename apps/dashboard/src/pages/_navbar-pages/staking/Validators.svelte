@@ -16,6 +16,7 @@
     accumulatedUnstaking: number
     accumulatedReadyToClaim: number
   }
+  import InfoIcon from '@icons/info.svg'
 
   export type AccountWithStakes = Account & {
     stakes: {
@@ -177,7 +178,7 @@
           pool units to see the status of your current validators and stakes.
         </div>
         <div class="info-text">
-          <Icon size="medium" type="info" />
+          <Icon size="medium" icon={InfoIcon} />
           What is staking?
         </div>
       {/if}

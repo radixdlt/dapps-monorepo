@@ -1,17 +1,18 @@
 <script>
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import StakingIcon from '@icons/staking.svg'
 </script>
 
 <div id="icon">
   <div>
     <div id="main-icon">
-      <IconNew type="staking" size="large" />
+      <IconNew icon={StakingIcon} size="large" />
     </div>
     <div class="secondary-icon-1">
-      <IconNew type="staking" size="large" />
+      <IconNew icon={StakingIcon} size="large" />
     </div>
     <div class="secondary-icon-2">
-      <IconNew type="staking" size="large" />
+      <IconNew icon={StakingIcon} size="large" />
     </div>
   </div>
 </div>

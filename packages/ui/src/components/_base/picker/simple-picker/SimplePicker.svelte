@@ -1,10 +1,12 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import Picker from '../Picker.svelte'
+  import PickerExpandIcon from '@icons/picker-expand.svg'
+  import SelectedOptionIcon from '@icons/selected-option.svg'
 
   type T = $$Generic
 
-  export let selected: (typeof options)[number]
+  export let selected: typeof options[number]
   export let options: {
     label: string
     value: T
@@ -28,7 +30,7 @@
     <button slot="selected" class="selected option">
       {selected.label}
       <div id="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
-        <IconNew type="pickerExpand" size="small" />
+        <IconNew icon={PickerExpandIcon} size="small" />
       </div>
     </button>
 
@@ -36,7 +38,7 @@
       <button class="option">
         {option.label}
         {#if option === selected}
-          <IconNew type="selectedOption" size="small" />
+          <IconNew icon={SelectedOptionIcon} size="small" />
         {/if}
       </button>
     </div>

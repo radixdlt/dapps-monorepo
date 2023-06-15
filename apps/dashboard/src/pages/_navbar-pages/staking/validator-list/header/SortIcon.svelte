@@ -1,5 +1,7 @@
 <script lang="ts">
   import Icon from '@components/_base/icon/IconNew.svelte'
+  import DescendingIcon from '@icons/descending.svg'
+  import AscendingIcon from '@icons/ascending.svg'
 
   export let mode: 'ascending' | 'descending' | 'unsorted'
 </script>
@@ -10,10 +12,10 @@
   class:descending={mode === 'descending'}
 >
   <div id="down">
-    <Icon type="descending" size="small" />
+    <Icon icon={DescendingIcon} size="small" />
   </div>
   <div id="up">
-    <Icon type="ascending" size="small" />
+    <Icon icon={AscendingIcon} size="small" />
   </div>
 </div>
 

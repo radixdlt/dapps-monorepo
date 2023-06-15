@@ -5,6 +5,7 @@
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { createEventDispatcher, type ComponentProps } from 'svelte'
   import type { Validator } from '../../Validators.svelte'
+  import TrashIcon from '@icons/trash.svg'
 
   export let rightColumnWidth: string
   export let validator: Validator
@@ -30,7 +31,7 @@
     on:click={() =>
       dispatchRemoveEvent('remove', { validator: validator.address })}
   >
-    <IconNew type="trash" --size="1rem" faded />
+    <IconNew icon={TrashIcon} --size="1rem" faded />
     <div class="subtext">Remove</div>
   </div>
 
