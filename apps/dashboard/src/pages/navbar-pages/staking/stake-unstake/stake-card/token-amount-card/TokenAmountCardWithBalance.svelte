@@ -1,7 +1,7 @@
 <script lang="ts">
   import BigNumber from 'bignumber.js'
   import TokenAmountCardWithUndertext from './TokenAmountCardWithUndertext.svelte'
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue } from '@utils/format-amount'
 
   export let token: {
     name: string

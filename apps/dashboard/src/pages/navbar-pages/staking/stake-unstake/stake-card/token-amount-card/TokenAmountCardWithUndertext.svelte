@@ -1,10 +1,5 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
-<<<<<<< HEAD:apps/dashboard/src/pages/navbar-pages/staking/stake-unstake/stake-card/token-amount-card/TokenAmountCardWithUndertext.svelte
-=======
-  import BigNumber from 'bignumber.js'
-  import { formatTokenValue } from '@utils/format-amount'
->>>>>>> 26d42ce (build: setup console project):apps/dashboard/src/pages/_navbar-pages/staking/add-stake/stake-card/token-amount-card/TokenAmountCardWithBalance.svelte
   import TokenAmountCard from './TokenAmountCard.svelte'
 
   export let token: {

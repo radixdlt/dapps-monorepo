@@ -5,6 +5,7 @@
   import TokenAmountCardWithAccount from './token-amount-card/TokenAmountCardWithAccount.svelte'
   import type { ComponentProps } from 'svelte'
   import type { Account } from '@stores'
+  import UnstakeIcon from '@icons/unstake.svg'
 
   export let amountToUnstake: string = '0'
   export let validator: {
@@ -24,16 +25,15 @@
 
 <StakeCard>
   <svelte:fragment slot="icon">
-    <IconNew type="unstaking" --size="4rem" />
+    <IconNew icon={UnstakeIcon} --size="4rem" />
   </svelte:fragment>
 
   <div class="info" slot="info">
     <div class="validator-name dotted-overflow">
       Unstaking from {validator.name}
     </div>
-    <div>
-      <Address value={validator.address} short useBackground={false} />
-    </div>
+
+    <Address value={validator.address} short useBackground={false} />
   </div>
 
   <svelte:fragment slot="token-amount-card">
@@ -47,7 +47,7 @@
 </StakeCard>
 
 <style lang="scss">
-  @use '../../../../../mixins.scss';
+  @use '../../../../../../../../packages/ui/src/mixins.scss';
 
   .validator-name {
     font-size: var(--text-lg);
