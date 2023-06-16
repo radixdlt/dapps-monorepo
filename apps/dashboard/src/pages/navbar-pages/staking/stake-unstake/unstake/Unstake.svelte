@@ -19,10 +19,14 @@
 
   let stakeButtonDisabled = false
 
-  $: totalUnstakeAmount = amountsToUnstake.reduce(
-    (acc, amount) => acc.plus(amount === '' ? '0' : amount),
-    new BigNumber(0)
-  )
+  let totalUnstakeAmount = '0'
+
+  $: totalUnstakeAmount = amountsToUnstake
+    .reduce<BigNumber>(
+      (acc, amount) => acc.plus(amount === '' ? '0' : amount),
+      new BigNumber(0)
+    )
+    .toString()
 </script>
 
 <StakePanel bind:open {stakeButtonDisabled}>

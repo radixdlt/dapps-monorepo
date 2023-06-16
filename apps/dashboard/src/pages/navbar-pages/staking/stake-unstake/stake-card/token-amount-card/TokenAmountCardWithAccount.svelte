@@ -15,7 +15,7 @@
   }
   export let amount = '0'
   export let tokenDisplayedAmount: string = ''
-  export let invalid = false
+  export let invalid: boolean
   export let disabled = false
 
   $: invalid = new BigNumber(stake.amount).lt(new BigNumber(amount))

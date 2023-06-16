@@ -7,8 +7,8 @@
   }
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = '0'
-  export let invalid: boolean = false
-  export let disabled: boolean = false
+  export let invalid: boolean
+  export let disabled: boolean
 </script>
 
 <div

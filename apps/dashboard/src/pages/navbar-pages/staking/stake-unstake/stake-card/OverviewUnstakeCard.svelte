@@ -5,7 +5,7 @@
   import TokenAmountCardWithAccount from './token-amount-card/TokenAmountCardWithAccount.svelte'
   import type { ComponentProps } from 'svelte'
   import type { Account } from '@stores'
-  import UnstakeIcon from '@icons/unstake.svg'
+  import UnstakeIcon from '@icons/unstaking.svg'
 
   export let amountToUnstake: string = '0'
   export let validator: {

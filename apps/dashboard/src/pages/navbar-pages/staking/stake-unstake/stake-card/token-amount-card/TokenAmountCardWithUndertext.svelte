@@ -9,7 +9,7 @@
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = ''
   export let disabled = false
-  export let invalid = false
+  export let invalid: boolean
 </script>
 
 <div class="token-amount-card">
@@ -18,7 +18,7 @@
     bind:tokenAmount
     bind:tokenDisplayedAmount
     {invalid}
-    bind:disabled
+    {disabled}
   />
   <div
     class="extension"
