@@ -2,18 +2,16 @@
   export let active = false
 </script>
 
-<button style={$$props.style} class="pill" class:active on:click
-  ><slot /></button
->
+<button class="pill" class:active on:click><slot /></button>
 
 <style lang="scss">
   .pill {
     &:hover {
-      background: var(--color-grey-4);
+      background: var(--pills-menu-item-hover-background);
     }
     &.active {
-      background: var(--color-grey-1);
-      color: var(--color-grey-5);
+      background: var(--pills-menu-item-active-background);
+      color: var(--pills-menu-item-active-text);
     }
     white-space: nowrap;
     transition: background-color 0.1s ease-in-out;
@@ -21,5 +19,6 @@
     padding: 0.6rem 1rem;
     font-weight: var(--font-weight-bold-2);
     user-select: none;
+    margin-right: var(--pill-margin-right);
   }
 </style>

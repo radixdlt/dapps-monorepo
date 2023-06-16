@@ -12,8 +12,7 @@
     {/if}
     {#each itemGroup as item, itemIndex}
       <Pill
-        class="item"
-        style={itemGroup.length - 1 === itemIndex ? '' : 'margin-right: 1rem'}
+        --pill-margin-right={itemGroup.length - 1 === itemIndex ? '' : '1rem'}
         active={item.id === active}
         on:click={() => {
           active = item.id
@@ -38,7 +37,7 @@
     display: none;
   }
   .divider {
-    background: var(--color-grey-3);
+    background: var(--border);
     width: 1px;
     height: 2rem;
     margin: 0 2rem;
