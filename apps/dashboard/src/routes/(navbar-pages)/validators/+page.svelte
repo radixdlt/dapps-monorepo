@@ -3,7 +3,7 @@
   import { getEnumStringMetadata } from '@api/utils/resources'
   import Validators, {
     type Validator
-  } from '@pages/_navbar-pages/staking/Validators.svelte'
+  } from '@pages/navbar-pages/staking/Validators.svelte'
 
   const validators = getValidatorsList().then(({ items }) =>
     items.map((validator) => {

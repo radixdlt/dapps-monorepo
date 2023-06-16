@@ -1,19 +1,21 @@
 <script lang="ts">
-  import StakeUnstakePanel from '../StakePanel.svelte'
-  import type { Validator } from '../../Validators.svelte'
+  import StakeUnstakePanel from '../../StakePanel.svelte'
+  import type { Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import OverviewStakeCardMultiple from '../stake-card/OverviewStakeCardMultiple.svelte'
+  import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import type { ComponentProps } from 'svelte'
-  import StakeCardMultiple from '../stake-card/StakeCardMultiple.svelte'
-  import type TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
+  import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
+  import type TokenAmountCard from '../../stake-card/token-amount-card/TokenAmountCard.svelte'
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
+  import AccountSection from '../../AccountSection.svelte'
+  import type { Account } from '@stores'
 
   export let open: boolean
   export let validators: Validator[]
-  export let tokenInfo: Omit<
+  export let tokenCardProps: Omit<
     ComponentProps<TokenAmountCard>,
-    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount'
+    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
   >
   export let tokenBalance: string
 
@@ -39,41 +41,41 @@
     individualValidatorStakeAmounts.every((amount) =>
       new BigNumber(amount).lte(0)
     ) || tokenAmountInvalid
+
+  let selectedAccount: Account
 </script>
 
 <StakeUnstakePanel bind:open {stakeButtonDisabled}>
   <svelte:fragment slot="title">Add Stake</svelte:fragment>
 
-  <svelte:fragment slot="account-picker-text">
-    <h4>Stake amount coming from</h4>
+  <svelte:fragment slot="account-picker" let:rightColumnWidth>
+    <AccountSection bind:selectedAccount --width={rightColumnWidth}>
+      <svelte:fragment slot="account-picker-text">
+        <h4>Stake amount coming from</h4>
+      </svelte:fragment>
+    </AccountSection>
   </svelte:fragment>
 
-  <svelte:fragment slot="content" let:rightColumnWidth>
-    <div class="validator-header flex">
-      <h4>Total amount you're staking</h4>
-      <div
-        class="align-left staking-amount-text"
-        style:width={rightColumnWidth}
-      >
-        Total staking amount
-      </div>
-    </div>
+  <svelte:fragment slot="heading-text">
+    Validator you have chosen to stake to
+  </svelte:fragment>
 
-    <div class="add-stake-card">
-      <OverviewStakeCardMultiple
-        cardProps={{
-          rightColumnWidth,
-          tokenInfo: {
-            ...tokenInfo,
-            tokenBalance
-          }
-        }}
-        nbrOfValidators={validators.length}
-        bind:stakeAmount
-        bind:tokenAmountInvalid
-        tokenAmountDisabled={!distributeEqually}
-      />
-    </div>
+  <svelte:fragment slot="heading-subtext">Total staking amount</svelte:fragment>
+
+  <svelte:fragment slot="content" let:rightColumnWidth>
+    <OverviewStakeCardMultiple
+      cardProps={{
+        tokenInfo: {
+          ...tokenCardProps,
+          tokenBalance
+        }
+      }}
+      nbrOfValidators={validators.length}
+      bind:stakeAmount
+      bind:tokenAmountInvalid
+      tokenAmountDisabled={!distributeEqually}
+      --token-amount-card-width={rightColumnWidth}
+    />
 
     <Divider />
 
@@ -88,7 +90,7 @@
         <StakeCardMultiple
           {rightColumnWidth}
           {validator}
-          {tokenInfo}
+          tokenInfo={tokenCardProps}
           bind:tokenDisplayedAmount={individualValidatorStakeAmounts[i]}
           amountCardDisabled={distributeEqually}
           currentlyStakingAmount="100"
@@ -107,29 +109,7 @@
 </StakeUnstakePanel>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
-  .flex {
-    display: flex;
-    justify-content: space-between;
-    padding-right: var(--spacing-lg);
-
-    .align-left {
-      text-align: left;
-    }
-  }
-
-  .validator-header {
-    margin-top: var(--spacing-2xl);
-  }
-
-  .staking-amount-text {
-    color: var(--subtext-color);
-  }
-
-  .add-stake-card {
-    margin-top: var(--spacing-lg);
-  }
+  @use '../../../../../../../../../packages/ui/src/mixins.scss';
 
   .validator-card {
     display: flex;

@@ -21,7 +21,7 @@
       );
     gap: var(--spacing-lg);
     align-items: center;
-    height: 9.5rem;
+    height: var(--stake-card-height, 9.5rem);
 
     .icon {
       display: flex;

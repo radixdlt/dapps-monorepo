@@ -15,12 +15,13 @@
       currentlyStakingAmount: '1234567890'
     }}
     tokenInfo={{
-      iconUrl:
-        'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
-      tokenName: 'XRD',
+      token: {
+        iconUrl:
+          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
+        name: 'XRD'
+      },
       tokenBalance: '10000',
       tokenAmount: '10000'
     }}
-    xrdBalance="10000"
   />
 </Story>

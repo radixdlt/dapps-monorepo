@@ -32,7 +32,7 @@
 <style lang="scss">
   .info-box {
     display: grid;
-    grid: 1fr 2fr / 2rem auto;
+    grid: 1fr 2rem / 2rem auto;
     border: var(--border);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
@@ -41,7 +41,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: var(--spacing-xs);
+      gap: var(--spacing-md);
     }
 
     .title {

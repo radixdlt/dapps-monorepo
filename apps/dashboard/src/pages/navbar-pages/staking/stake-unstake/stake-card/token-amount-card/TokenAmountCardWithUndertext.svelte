@@ -1,53 +1,38 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
-  import BigNumber from 'bignumber.js'
-  import { formatTokenValue } from '@utils/format-amount'
   import TokenAmountCard from './TokenAmountCard.svelte'
 
-  export let iconUrl: string
-  export let tokenName: string
-  export let tokenBalance: string
-  export let tokenAmount: string
+  export let token: {
+    name: string
+    iconUrl: string
+  }
+  export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = ''
   export let disabled = false
-  export let invalid = false
-
-  $: hasEnoughBalance = new BigNumber(tokenBalance).gte(
-    new BigNumber(tokenAmount)
-  )
-
-  $: invalid = !hasEnoughBalance
+  export let invalid: boolean
 </script>
 
 <div class="token-amount-card">
   <TokenAmountCard
-    {iconUrl}
+    {token}
     bind:tokenAmount
     bind:tokenDisplayedAmount
-    {tokenName}
-    invalid={!hasEnoughBalance}
-    bind:disabled
+    {invalid}
+    {disabled}
   />
   <div
     class="extension"
     class:disabled
     style:background={`${
-      !hasEnoughBalance ? 'var(--invalid-background-color)' : 'var(--surface)'
+      invalid ? 'var(--invalid-background-color)' : 'var(--surface)'
     }`}
-    style:border-color={`${
-      !hasEnoughBalance ? 'var(--invalid-border-color)' : ''
-    }`}
+    style:border-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
   >
     <Divider
-      --spacing="var(--spacing-sm)"
-      --color={`${!hasEnoughBalance ? 'var(--invalid-border-color)' : ''}`}
+      --spacing="var(--spacing-xs)"
+      --color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
     />
-    <div
-      style:color={!hasEnoughBalance ? 'var(--invalid-border-color)' : ''}
-      class="subtext"
-    >
-      Balance {formatTokenValue(tokenBalance)}
-    </div>
+    <slot name="undertext" />
   </div>
 </div>
 
