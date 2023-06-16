@@ -11,7 +11,7 @@
   export let validator: Validator
   export let tokenInfo: Omit<
     ComponentProps<TokenAmountCard>,
-    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount'
+    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
   >
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = '0'
