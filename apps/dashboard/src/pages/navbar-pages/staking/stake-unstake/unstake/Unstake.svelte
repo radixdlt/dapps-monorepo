@@ -9,7 +9,7 @@
   export let open: boolean
   export let unstakeCardProps: Omit<
     ComponentProps<OverviewUnstakeCard>,
-    'amountToUnstake' | 'invalid' | 'stake'
+    'amountToUnstake' | 'invalid' | 'stake' | 'account' | 'stakedAmount'
   >
   export let stakes: {
     account: Account
@@ -83,25 +83,10 @@
 </StakePanel>
 
 <style lang="scss">
+  @use '../shared.scss';
   .card-list {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-  }
-
-  .summary {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    gap: var(--spacing-sm);
-
-    .summary-title {
-      color: var(--subtext-color);
-    }
-
-    .summary-value {
-      font-size: var(--text-3xl);
-      font-weight: var(--font-weight-bold-1);
-    }
   }
 </style>

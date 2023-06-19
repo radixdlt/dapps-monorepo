@@ -13,6 +13,7 @@
   export let tokenDisplayedAmount: string = '0'
   export let invalid = false
   export let disabled = false
+  export let readonly: boolean = false
 
   let hasEnoughBalance = true
 
@@ -51,6 +52,7 @@
       <AmountInput
         bind:displayedValue={tokenDisplayedAmount}
         bind:value={tokenAmount}
+        {readonly}
         --width="14rem"
         --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
       />

@@ -8,11 +8,24 @@
 <Story name="Primary">
   <Claim
     open={true}
-    validator={{
-      validatorName: '🔥 RADNODE',
-      validatorAddress:
-        'validator_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8habcee'
-    }}
+    availableToClaim={[
+      {
+        validator: {
+          validatorName: '🔥 RADNODE',
+          validatorAddress:
+            'validator_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8habcee'
+        },
+        amount: '90000'
+      },
+      {
+        validator: {
+          validatorName: '🔥 RADNODE',
+          validatorAddress:
+            'validator_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8habcee'
+        },
+        amount: '1000'
+      }
+    ]}
     token={{
       iconUrl:
         'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
