@@ -1,9 +1,17 @@
-import { CURRENT_NETWORK } from '../../src/network'
+import { CURRENT_NETWORK } from '@networks'
 import { GatewayApiClient } from '@radixdlt/babylon-gateway-api-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
   basePath: CURRENT_NETWORK?.url
 })
+
+export const getValidatorsList = () => {
+  return gatewayApi.state.innerClient
+    .stateValidatorsList({
+      stateValidatorsListRequest: {}
+    })
+    .then(({ validators }) => validators)
+}
 
 export const getTransactionDetails = (
   intentHashHex: string,

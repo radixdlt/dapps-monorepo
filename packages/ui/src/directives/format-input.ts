@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { seperateThousands } from '../utils/format-amount'
+import { separateThousands } from '../utils/format-amount'
 
 export const format = (
   node: HTMLInputElement,
@@ -24,11 +24,17 @@ export const format = (
 
 const removeNonNumericCharacters = (value: string) =>
   value.replace(/[^0-9.]/g, '')
-const removeLeadingZeros = (value: string) => value.replace(/^0+/, '')
+
+const removeLeadingZeros = (value: string) => {
+  const newValue = value.replace(/^0+/, '')
+  if (newValue === '') return '0'
+  return newValue
+}
 
 export const number =
   (min?: string, max?: string, maxChars?: number, decimalPlaces = 2) =>
   (value: string) => {
+    if (value === '') value = '0'
     const numericValue = removeNonNumericCharacters(value)
 
     // Split the value into integer and decimal parts
@@ -60,5 +66,5 @@ export const number =
     if (min) formattedValue = BigNumber.max(formattedValue, min).toString()
     if (max) formattedValue = BigNumber.min(formattedValue, max).toString()
 
-    return seperateThousands()(formattedValue)
+    return separateThousands()(formattedValue)
   }

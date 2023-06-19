@@ -1,17 +1,19 @@
 <script lang="ts">
-  import { icons } from '../../../icon-assets'
-
-  export let type: keyof typeof icons
+  export let icon: string
   export let size: 'small' | 'medium' | 'large' = 'medium'
+  export let faded = false
 </script>
 
-<img class={size} on:click src={icons[type]} alt="icon {type}" />
+<img class={size} class:faded on:click src={icon} alt="icon" />
 
 <style>
   img {
     display: block;
-    filter: var(--filter);
-    opacity: var(--opacity);
+  }
+
+  .faded {
+    filter: grayscale(100%);
+    opacity: 50%;
   }
 
   .small {

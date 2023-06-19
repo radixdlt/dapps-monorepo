@@ -152,3 +152,11 @@ p {
   color: var(--color-grey-1);
   box-sizing: border-box;
 }
+
+/* 3rd party libs */
+body {
+  --cooltipz-bg-color: var(--color-grey-1);
+  --cooltipz-border-radius: 0.5rem;
+  --cooltipz-font-size: 16px;
+  --cooltipz-font-family: var(--font-family);
+}

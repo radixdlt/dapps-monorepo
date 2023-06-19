@@ -1,6 +1,6 @@
 <script lang="ts">
   export let on = false
-  export let width = '48px'
+  export let width = '40px'
 </script>
 
 <label class="switch" style:--width={width}>
@@ -51,6 +51,6 @@
   }
 
   input:checked + .slider:before {
-    transform: translateX(calc(var(--width) * 0.32));
+    transform: translateX(calc(var(--width) * 0.31));
   }
 </style>

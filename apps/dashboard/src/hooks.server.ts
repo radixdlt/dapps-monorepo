@@ -1,5 +1,5 @@
 import type { Handle } from '@sveltejs/kit'
-import { CURRENT_NETWORK } from './network'
+import { CURRENT_NETWORK } from '@networks'
 
 const json = {
   dApps: [
