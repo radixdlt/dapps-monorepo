@@ -17,7 +17,7 @@
     ComponentProps<TokenAmountCard>,
     'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
   >
-  export let tokenBalance: string
+  export let balance: string
 
   let stakeButtonDisabled = true
 
@@ -66,12 +66,12 @@
     <OverviewStakeCardMultiple
       cardProps={{
         tokenInfo: {
-          ...tokenCardProps,
-          tokenBalance
-        }
+          ...tokenCardProps
+        },
+        tokenBalance: balance
       }}
       nbrOfValidators={validators.length}
-      bind:stakeAmount
+      bind:amountToStake={stakeAmount}
       bind:tokenAmountInvalid
       tokenAmountDisabled={!distributeEqually}
       --token-amount-card-width={rightColumnWidth}

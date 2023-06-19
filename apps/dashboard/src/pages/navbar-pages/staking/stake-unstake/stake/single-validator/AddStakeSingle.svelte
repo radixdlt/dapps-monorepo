@@ -1,15 +1,14 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import StakeUnstakePanel from '../../StakePanel.svelte'
-  import StakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
+  import OverviewStakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
-  import type TokenAmountCardWithBalance from '../../stake-card/token-amount-card/TokenAmountCardWithBalance.svelte'
   import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
 
   export let open: boolean
   export let validatorInfo: ComponentProps<ValidatorInfo>
-  export let tokenInfo: ComponentProps<TokenAmountCardWithBalance>
+  export let cardProps: ComponentProps<OverviewStakeCardSingle>['cardProps']
 
   let stakeAmount: string
 
@@ -36,15 +35,11 @@
   <svelte:fragment slot="heading-subtext">Total staking amount</svelte:fragment>
 
   <svelte:fragment slot="content" let:rightColumnWidth>
-    <StakeCardSingle
-      on:invalid={(e) => {
-        stakeButtonDisabled = e.detail
-      }}
+    <OverviewStakeCardSingle
       {validatorInfo}
-      cardProps={{
-        tokenInfo
-      }}
+      {cardProps}
       bind:stakeAmount
+      bind:tokenAmountInvalid={stakeButtonDisabled}
       --token-amount-card-width={rightColumnWidth}
     />
   </svelte:fragment>

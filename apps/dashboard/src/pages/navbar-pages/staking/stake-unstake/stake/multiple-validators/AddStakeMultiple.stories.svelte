@@ -51,6 +51,6 @@
         name: 'XRD'
       }
     }}
-    tokenBalance="10000"
+    balance="10000"
   />
 </Story>

@@ -4,10 +4,12 @@
   export let displayedValue: string
   export let maxlength: number | undefined = undefined
   export let format: (value: string) => string = (value) => value
+  export let readonly = false
 </script>
 
 <input
   type="text"
+  {readonly}
   use:_format={format}
   bind:value={displayedValue}
   {maxlength}
