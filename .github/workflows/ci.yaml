@@ -27,7 +27,7 @@ on:
           - rcnet
 
 env:
-  active_network: 'hammunet'
+  active_network: 'enkinet'
   release_network: 'rcnet'
 
 jobs:
@@ -370,7 +370,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -393,7 +393,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -414,8 +414,9 @@ jobs:
 
   deploy_enkinet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) || 
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -437,9 +438,8 @@ jobs:
 
   deploy_hammunet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -462,7 +462,7 @@ jobs:
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -485,7 +485,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -509,7 +509,7 @@ jobs:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
@@ -556,13 +556,14 @@ jobs:
   deploy_kisharnet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
     needs:
       - push-dashboard
       - push-storybook
       - setup-tags
     with:
       env_name: kisharnet-internal
+      restart_pods: false
       namespace: dashboard-kisharnet-internal
       create_subns: false
       aws_region: eu-west-2
@@ -631,7 +632,7 @@ jobs:
           start: npm run dev
           wait-on: http://localhost:5173
           project: ./apps/dashboard
-
+          
   # storybook-tests:
   #   runs-on: ubuntu-latest
   #   permissions:
@@ -688,3 +689,4 @@ jobs:
   #         echo "Running storybook tests against hammunet"
   #         export TARGET_URL="https://hammunet-dashboard-storybook.rdx-works-main.extratools.works"
   #         yarn test:storybook
+  

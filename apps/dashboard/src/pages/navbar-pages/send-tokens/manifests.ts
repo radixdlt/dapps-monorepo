@@ -5,22 +5,21 @@ export const getSendTokenManifest = (
   amount: number
 ) =>
   `
-      CALL_METHOD 
-        Address("${fromAccount}") 
-        "withdraw"
-        Address("${resource}")
-        Decimal("${amount}");  
-        
-      TAKE_FROM_WORKTOP_BY_AMOUNT
-        Decimal("${amount}")
-        Address("${resource}")
-        Bucket("bucket");
-    
-      CALL_METHOD
-        Address("${toAccount}") 
-        "deposit"
-        Bucket("bucket");
-    `
+CALL_METHOD 
+  Address("${fromAccount}") 
+  "withdraw"
+  Address("${resource}")
+  Decimal("${amount}");
+ 
+TAKE_FROM_WORKTOP
+  Address("${resource}")
+  Decimal("${amount}")
+  Bucket("bucket");
+
+CALL_METHOD
+  Address("${toAccount}") 
+  "try_deposit_or_abort"
+  Bucket("bucket");`
 
 export const getSendNFTManifest = (
   nfts: {
@@ -39,14 +38,14 @@ export const getSendNFTManifest = (
         Address("${cur.resourceAddress}")
         Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"));
 
-      TAKE_FROM_WORKTOP_BY_IDS 
-        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
+      TAKE_NON_FUNGIBLES_FROM_WORKTOP 
         Address("${cur.resourceAddress}")
+        Array<NonFungibleLocalId>(NonFungibleLocalId("${cur.id}"))
         Bucket("nft${i}");
 
       CALL_METHOD
         Address("${toAccount}")
-        "deposit"
+        "try_deposit_or_abort"
         Bucket("nft${i}");
         ` + prev,
       ``
