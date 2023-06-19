@@ -3,6 +3,7 @@
   --invalid-background-color: var(--error-light);
   --invalid-border-color: var(--error-dark);
 
-  --card-padding: var(--spacing-md) var(--spacing-lg);
+  --card-padding-left-right: var(--spacing-lg);
+  --card-padding-top-bottom: var(--spacing-md);
   --card-border-radius: var(--border-radius-xl);
 }

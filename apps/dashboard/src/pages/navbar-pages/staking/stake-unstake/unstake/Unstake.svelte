@@ -4,6 +4,7 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import type { ComponentProps } from 'svelte'
   import BigNumber from 'bignumber.js'
+  import { formatTokenValue } from '@utils'
 
   export let open: boolean
   export let unstakeCardProps: Omit<
@@ -27,6 +28,10 @@
       new BigNumber(0)
     )
     .toString()
+
+  let invalidInputs = new Array(stakes.length).fill(false)
+
+  $: stakeButtonDisabled = invalidInputs.some((invalid) => invalid)
 </script>
 
 <StakePanel bind:open {stakeButtonDisabled}>
@@ -44,9 +49,10 @@
         <div class="add-stake-card">
           <OverviewUnstakeCard
             {...unstakeCardProps}
-            {stake}
+            account={stake.account}
+            stakedAmount={stake.amount}
             bind:amountToUnstake={amountsToUnstake[i]}
-            bind:invalid={stakeButtonDisabled}
+            bind:invalid={invalidInputs[i]}
             --token-amount-card-width={rightColumnWidth}
             --stake-card-height="12rem"
           />
@@ -67,7 +73,9 @@
   <svelte:fragment slot="summary">
     <div class="summary">
       <div class="summary-title">You're unstaking a total</div>
-      <div class="summary-value">{totalUnstakeAmount} XRD</div>
+      <div class="summary-value">
+        {formatTokenValue(totalUnstakeAmount).value} XRD
+      </div>
     </div>
   </svelte:fragment>
 
