@@ -67,11 +67,11 @@
           )}));`
         }
 
-        if (typeof value === 'string') {
-          manifestValue = `Enum(0u8, Enum(0u8, "${value}"));`
+          if (typeof value === 'string') {
+          manifestValue = `Enum<Metadata::String>("${value}");`
           try {
             new URL(value)
-            manifestValue = `Enum(0u8, Enum(13u8, ${value}));`
+            manifestValue = `Enum<Metadata::Url>("${value}");`
           } catch {}
         }
 
@@ -89,7 +89,7 @@
         SET_METADATA
           Address("${entity.address}")
           "dapp_definition"
-          Enum(0u8, Enum(8u8, Address("${$selectedAccount!.address}")));
+          Enum<Metadata::Address>(Address("${address}"));
       `
     }
     return manifest
