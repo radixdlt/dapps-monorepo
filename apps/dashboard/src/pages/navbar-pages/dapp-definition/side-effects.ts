@@ -5,6 +5,7 @@ import {
   type DecoratedAccount
 } from '@api/utils/resources'
 import type { Account } from '@stores'
+import type { EntityT } from './dapp-metadata/rows/linking-metadata-list/Entity.svelte'
 
 export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>
@@ -15,6 +16,69 @@ const hasDAppDefinitionMetadata = (account: DecoratedAccount) =>
     (item) =>
       item.key === 'account_type' && item.value.as_string === 'dapp definition'
   )
+
+export const getTxManifest = (
+  address: string,
+  entities: EntityT[],
+  metadata: { key: string; value: unknown }[]
+) => {
+  let manifest = ''
+
+  for (const entity of entities) {
+    if (entity.requiredProof && entity.requiredProof !== 'AllowAll') {
+      manifest += `CALL_METHOD
+          Address("${address}")
+          "create_proof_by_ids"
+          Address("${entity.requiredProof.split(':')[0]}")
+          Array<NonFungibleLocalId>(NonFungibleLocalId("${
+            entity.requiredProof.split(':')[1]
+          }"));`
+    }
+  }
+
+  for (const { key, value } of metadata) {
+    if (value === undefined) {
+      manifest += `
+        REMOVE_METADATA
+        Address("${address}")
+        "${key}";
+        `
+    } else {
+      let manifestValue: string = ''
+
+      if (Array.isArray(value)) {
+        manifestValue = `Enum(1u8, Array<Enum>(${value.map(
+          (v) => `Enum(0u8, "${v.address}")`
+        )}));`
+      }
+
+      if (typeof value === 'string') {
+        manifestValue = `Enum<Metadata::String>("${value}");`
+        try {
+          new URL(value)
+          manifestValue = `Enum<Metadata::Url>("${value}");`
+        } catch {}
+      }
+
+      manifest += `
+          SET_METADATA
+            Address("${address}")
+            "${key}"
+            ${manifestValue}
+          `
+    }
+  }
+
+  for (const entity of entities) {
+    manifest += `
+        SET_METADATA
+          Address("${entity.address}")
+          "dapp_definition"
+          Enum<Metadata::Address>(Address("${address}"));
+      `
+  }
+  return manifest
+}
 
 export const getFormattedAccounts = async (accounts: Account[]) => {
   const decoratedAccounts = await getAccountData(
