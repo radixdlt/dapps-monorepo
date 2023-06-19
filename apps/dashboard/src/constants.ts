@@ -4,6 +4,7 @@ export const Network = {
   GILGANET: 'gilganet',
   KISHARNET: 'kisharnet',
   ANSHARNET: 'ansharnet',
+  RCNETV2: 'rcnet-v2',
   RCNET: 'rcnet'
 } as const
 
@@ -43,6 +44,12 @@ export const NETWORK_CONFIG = {
     url: 'https://kisharnet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
+  },
+  [Network.RCNETV2]: {
+    id: 13,
+    url: 'https://ansharnet-gateway.radixdlt.com',
+    dappDefAddress:
+      ''
   }
 } as const
 

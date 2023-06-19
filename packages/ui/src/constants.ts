@@ -4,7 +4,7 @@ export const Network = {
   GILGANET: 'gilganet',
   KISHARNET: 'kisharnet',
   ANSHARNET: 'ansharnet',
-  RCNETV2: 'rcnetv2',
+  RCNETV2: 'rcnet-v2',
   RCNET: 'rcnet'
 } as const
 
