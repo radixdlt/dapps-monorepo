@@ -1,35 +1,36 @@
-<script>
+<script lang="ts">
   import Address from '@components/_base/address/Address.svelte'
   import Tags from './Tags.svelte'
   import { formatTokenValue } from '@utils'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import 'cooltipz-css'
 
-  export let showNetworkTag = false
+  export let isXrd = false
   export let numberOfTags = 0
-  export let address = ''
-  export let amount = ''
-  export let symbol = ''
-  export let iconUrl = ''
-  export let linksTo = ''
+  export let address: string | undefined
+  export let amount: string | undefined
+  export let symbol: string | undefined
+  export let iconUrl: string | undefined
+  export let linksTo: string | undefined
+  export let loading = false
 
-  $: formatted = formatTokenValue(amount)
+  $: formatted = formatTokenValue(amount ?? '0')
 </script>
 
 <a class="card" href={linksTo}>
-  <TokenIcon {iconUrl} />
+  <TokenIcon {isXrd} {iconUrl} />
   <div>
     <div class="token-text">
-      <span class="token-symbol">{symbol.slice(0, 5)}</span>
-      <Address short value={address} />
+      <span class="token-symbol">{symbol ? symbol.slice(0, 5) : ''}</span>
+      <Address short value={address} --background="var(--color-grey-5)" />
     </div>
 
-    <Tags {showNetworkTag} {numberOfTags} />
+    <Tags showNetworkTag={isXrd} {numberOfTags} />
   </div>
   <div style="text-align: right">
     <button
       on:click|preventDefault|stopPropagation={() => {
-        navigator.clipboard.writeText(amount)
+        navigator.clipboard.writeText(amount ?? '0')
       }}
       class:cooltipz--top={formatted.suffix}
       class="token-amount"
@@ -54,6 +55,7 @@
     transition: var(--transition-hover-card);
     min-height: 90px;
     container-type: inline-size;
+    margin: var(--margin);
     &:hover {
       transform: var(--transform-hover-card);
       box-shadow: var(--shadow-hover);

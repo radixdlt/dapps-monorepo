@@ -5,7 +5,12 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, selectedAccount, storage } from '@stores'
+  import {
+    accounts,
+    networkConfiguration,
+    selectedAccount,
+    storage
+  } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
@@ -24,12 +29,16 @@
   import NftsIcon from '@icons/nfts.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
+  import { getNetworkConfiguration } from '@api/gateway'
 
   let mounted = false
 
   const { createChallenge, login } = authApi
 
   onMount(() => {
+    getNetworkConfiguration().then((res) => {
+      networkConfiguration.set(res)
+    })
     const updateAccounts = (value: DataRequestOutput['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({

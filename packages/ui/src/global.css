@@ -50,6 +50,7 @@ body {
   --text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
   --text-2xl: calc(var(--text-xl) * var(--text-scale-ratio));
   --text-3xl: calc(var(--text-2xl) * var(--text-scale-ratio));
+  --text-4xl: calc(var(--text-3xl) * var(--text-scale-ratio));
 
   --font-weight-light: 400;
   --font-weight-bold-1: 500;

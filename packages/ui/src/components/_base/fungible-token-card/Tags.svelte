@@ -29,18 +29,20 @@
   .tags {
     display: flex;
     align-items: center;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
   }
 
   .tag {
     display: flex;
     align-items: center;
     font-size: var(--text-sm);
+    border: 1px solid var(--theme-surface-3);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px 36px 36px 4px;
     &.network {
       margin-right: var(--spacing-md);
       white-space: nowrap;
     }
-
     &.other {
       @container (width < 30rem) {
         display: none;
@@ -50,7 +52,7 @@
     .tag-text {
       margin-left: var(--spacing-xs);
       text-transform: uppercase;
-      color: var(--color-grey-2);
+      color: var(--theme-subtext);
     }
   }
 </style>
