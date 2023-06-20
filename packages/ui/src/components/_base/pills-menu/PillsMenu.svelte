@@ -31,6 +31,7 @@
     justify-content: flex-start;
     flex-wrap: nowrap;
     overflow: auto;
+    margin: var(--margin, 0);
   }
 
   .menu::-webkit-scrollbar {

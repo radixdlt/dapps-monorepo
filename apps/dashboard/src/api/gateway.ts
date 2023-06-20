@@ -34,6 +34,9 @@ export const getTransactionDetails = (
       stateVersion: res.transaction.state_version
     }))
 
+export const getNetworkConfiguration = () =>
+  gatewayApi.status.getNetworkConfiguration()
+
 export const getSingleEntityDetails = (address: string) =>
   gatewayApi.state.getEntityDetailsVaultAggregated(address)
 
