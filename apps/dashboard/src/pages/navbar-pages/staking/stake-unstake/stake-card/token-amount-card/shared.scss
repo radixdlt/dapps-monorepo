@@ -1,7 +1,7 @@
 * {
-  --invalid-text-color: var(--error-dark);
-  --invalid-background-color: var(--error-light);
-  --invalid-border-color: var(--error-dark);
+  --invalid-text-color: var(--theme-error-primary);
+  --invalid-background-color: var(--theme-error-secondary);
+  --invalid-border-color: var(--theme-error-primary);
 
   --card-padding-left-right: var(--spacing-lg);
   --card-padding-top-bottom: var(--spacing-md);

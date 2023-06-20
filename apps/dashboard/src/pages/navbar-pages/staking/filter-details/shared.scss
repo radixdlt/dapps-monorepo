@@ -1,9 +1,9 @@
 @use '../../../../../../../packages/ui/src/mixins.scss';
 
 @mixin value-card {
-  @include mixins.card(true, var(--color-grey-5));
+  @include mixins.card(true, var(--theme-surface-1));
   --card-text-size: var(--font-size-sm);
-  --card-text-color: var(--color-grey-2);
+  --card-text-color: var(--theme-subtext);
   --card-value-size: var(--text-3xl);
   --card-value-weight: var(--font-weight-bold-2);
 
@@ -18,7 +18,7 @@
 .card {
   border-radius: var(--border-radius-lg);
   background: var(--background);
-  border: var(--border);
+  border: var(--border) var(--theme-border);
   width: 100%;
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow);
@@ -26,7 +26,7 @@
 
 .value-card {
   --card-text-size: var(--font-size-sm);
-  --card-text-color: var(--color-grey-2);
+  --card-text-color: var(--theme-subtext);
   --card-value-size: var(--text-3xl);
   --card-value-weight: var(--font-weight-bold-2);
 

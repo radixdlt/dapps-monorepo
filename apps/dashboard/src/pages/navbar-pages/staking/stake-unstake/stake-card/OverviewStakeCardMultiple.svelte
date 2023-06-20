@@ -37,7 +37,7 @@
     }
 
     .text {
-      color: var(--subtext-color);
+      color: var(--theme-subtext);
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let theme: 'light' | 'dark'
+  export let theme: 'light'
 </script>
 
 <div class={`${theme} common`}>
@@ -8,22 +8,28 @@
 
 <style>
   .light {
-    --background: var(--color-light);
-    --surface: var(--color-grey-5);
-    --text-color: var(--color-grey-1);
-    --subtext-color: var(--color-grey-2);
-    --error-dark: var(--color-radix-error-red-1);
-    --error-light: var(--color-radix-error-red-2);
-    --border: var(--color-grey-3);
+    --theme-surface-1: var(--color-grey-5);
+    --theme-surface-2: var(--color-light);
+    --theme-surface-3: var(--color-grey-4);
 
-    /* Pills menu */
-    --pills-menu-item-active-background: var(--color-grey-1);
-    --pills-menu-item-active-text: var(--color-grey-5);
-    --pills-menu-item-hover-background: var(--color-grey-4);
+    --theme-text-primary: var(--color-grey-1);
+    --theme-text-secondary: var(--color-light);
+    --theme-subtext: var(--color-grey-2);
+
+    --theme-error-primary: var(--color-radix-error-red-1);
+    --theme-error-secondary: var(--color-radix-error-red-2);
+
+    --theme-border: var(--color-grey-4);
+    --theme-border-strong: var(--color-grey-1);
+
+    --theme-button-primary: var(--color-radix-blue-2);
   }
-  .dark {
-    --background: var(--color-tertiary-dark);
-    --surface: var(--color-grey-0);
-    --text-color: var(--color-grey-4);
+
+  :global(*) {
+    color: var(--theme-text-primary);
+  }
+
+  :global(a) {
+    color: var(--theme-button-primary);
   }
 </style>

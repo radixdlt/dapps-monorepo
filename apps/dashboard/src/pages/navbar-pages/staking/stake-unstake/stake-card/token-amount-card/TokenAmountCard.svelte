@@ -31,7 +31,7 @@
     class="token-amount-card"
     class:disabled
     style:background={`${
-      invalid ? 'var(--invalid-background-color)' : 'var(--surface)'
+      invalid ? 'var(--invalid-background-color)' : 'var(--theme-surface-1)'
     }`}
     style:border-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
     style:border-radius={`
@@ -40,8 +40,10 @@
       ${$$slots.footer ? '0' : 'var(--card-border-radius)'}
       ${$$slots.footer ? '0' : 'var(--card-border-radius)'}
     `}
-    style:border-top={`${account ? 'none' : 'var(--border)'}`}
-    style:border-bottom={`${$$slots.footer ? 'none' : 'var(--border)'}`}
+    style:border-top={`${account ? 'none' : 'var(--border) var(-theme-border'}`}
+    style:border-bottom={`${
+      $$slots.footer ? 'none' : 'var(--border) var(--theme-border)'
+    }`}
   >
     <div class="token-amount">
       <div class="name">
@@ -64,7 +66,7 @@
       class="footer"
       class:disabled
       style:background={`${
-        invalid ? 'var(--invalid-background-color)' : 'var(--surface)'
+        invalid ? 'var(--invalid-background-color)' : 'var(--theme-surface-1)'
       }`}
       style:border-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
     >
@@ -86,7 +88,7 @@
   .token-amount-card {
     padding: var(--card-padding-top-bottom) var(--card-padding-left-right);
     border-radius: var(--card-border-radius);
-    border: var(--border);
+    border: var(--border) var(--theme-border);
 
     .token-amount {
       display: flex;
@@ -110,7 +112,7 @@
   .account {
     :global(.option) {
       border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
-      border: var(--border);
+      border: var(--border) var(--theme-border);
       border-bottom: none;
     }
   }
@@ -119,7 +121,7 @@
     background-color: var(--surface);
     padding: 0 var(--card-padding-left-right);
     border-radius: 0 0 var(--card-border-radius) var(--card-border-radius);
-    border: var(--border);
+    border: var(--border) var(--theme-border);
     border-top: none;
 
     .content {

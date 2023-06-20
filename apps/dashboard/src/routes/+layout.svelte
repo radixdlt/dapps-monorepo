@@ -158,17 +158,9 @@
     {#if mounted}
       <Header />
       <SidebarWithNavbar page={$page} {routes} />
-      <Box
-        cx={{
-          gridArea: 'content',
-          backgroundColor: '$background',
-          display: 'flex',
-          flexDirection: 'column',
-          paddingBottom: '$6xl'
-        }}
-      >
+      <div class="main-content">
         <slot />
-      </Box>
+      </div>
       <center />
     {/if}
   </Box>
@@ -176,4 +168,10 @@
 
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.css';
+
+  .main-content {
+    background: var(--theme-surface-1);
+    grid-area: content;
+    padding-bottom: var(--spacing-lg);
+  }
 </style>

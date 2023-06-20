@@ -11,7 +11,7 @@
 <style>
   div :global(#card) {
     --card-text-size: var(--font-size-sm);
-    --card-text-color: var(--color-grey-2);
+    --card-text-color: var(--theme-subtext);
     --card-value-size: var(--text-3xl);
     --card-value-weight: var(--font-weight-bold-2);
 
