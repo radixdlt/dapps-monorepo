@@ -20,7 +20,8 @@
   @use '../../../../../../../packages/ui/src/mixins.scss';
 
   #selected-validators {
-    @include mixins.card(false);
+    @include mixins.card;
+    border: none;
     display: grid;
     grid: auto / 0.5fr 2fr 2fr;
     align-items: center;

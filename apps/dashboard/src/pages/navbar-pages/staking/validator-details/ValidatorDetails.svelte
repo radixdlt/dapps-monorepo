@@ -160,8 +160,9 @@
     }
 
     #details {
-      @include mixins.card(false);
+      @include mixins.card();
 
+      border: none;
       margin-top: var(--spacing-2xl);
       padding: var(--spacing-2xl) var(--spacing-xl);
 
