@@ -47,9 +47,10 @@ export const getTxManifest = (
       let manifestValue: string = ''
 
       if (Array.isArray(value)) {
-        manifestValue = `Enum(1u8, Array<Enum>(${value.map(
-          (v) => `Enum(0u8, "${v.address}")`
-        )}));`
+        manifestValue = `
+        Enum<Metadata::StringArray>(
+          Array<String>(${value.map((v) => `"${v.address}"`).join(', ')})
+        );`
       }
 
       if (typeof value === 'string') {
@@ -77,6 +78,7 @@ export const getTxManifest = (
           Enum<Metadata::Address>(Address("${address}"));
       `
   }
+
   return manifest
 }
 
