@@ -35,7 +35,7 @@
 
     .currently-staking {
       margin-top: var(--spacing-sm);
-      color: var(--subtext-color);
+      color: var(--theme-subtext);
     }
   }
 </style>

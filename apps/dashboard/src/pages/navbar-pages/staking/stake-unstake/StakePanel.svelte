@@ -100,6 +100,6 @@
   }
 
   .heading-subtext {
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
   }
 </style>

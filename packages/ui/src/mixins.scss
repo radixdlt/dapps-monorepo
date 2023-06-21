@@ -1,11 +1,8 @@
-@mixin card($use-border: true, $background: var(--color-light)) {
+@mixin card() {
   box-shadow: var(--shadow);
   border-radius: var(--border-radius-lg);
-  background: $background;
-
-  @if $use-border {
-    border: var(--border);
-  }
+  background: var(--theme-surface-2);
+  border: var(--border) var(--theme-border);
 }
 
 $viewport-mobile: 393px;
@@ -25,7 +22,7 @@ $viewport-mobile-up: 394px;
 
 .subtext {
   font-size: var(--text-sm);
-  color: var(--color-grey-2);
+  color: var(--theme-subtext);
 }
 
 .dotted-overflow {

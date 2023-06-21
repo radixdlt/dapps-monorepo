@@ -124,7 +124,7 @@
 
     :nth-child(1) {
       align-self: end;
-      color: var(--subtext-color);
+      color: var(--theme-subtext);
     }
   }
 </style>

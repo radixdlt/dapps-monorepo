@@ -269,7 +269,7 @@
     display: flex;
     align-items: center;
     font-size: var(--text-sm);
-    color: var(--color-radix-blue-2);
+    color: var(--theme-button-primary);
     gap: var(--spacing-md);
     cursor: pointer;
   }

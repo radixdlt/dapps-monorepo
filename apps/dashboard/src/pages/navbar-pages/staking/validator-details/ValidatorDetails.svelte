@@ -160,8 +160,9 @@
     }
 
     #details {
-      @include mixins.card(false);
+      @include mixins.card();
 
+      border: none;
       margin-top: var(--spacing-2xl);
       padding: var(--spacing-2xl) var(--spacing-xl);
 
@@ -175,7 +176,7 @@
         padding-top: var(--spacing-lg);
 
         :nth-child(1) {
-          color: var(--color-grey-2);
+          color: var(--theme-subtext);
           font-weight: var(--font-weight-bold-2);
         }
         :nth-child(2) {

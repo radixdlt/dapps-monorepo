@@ -33,7 +33,7 @@
   .info-box {
     display: grid;
     grid: 1fr 2rem / 2rem auto;
-    border: var(--border);
+    border: var(--border) var(--theme-border);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
 
@@ -47,12 +47,12 @@
     .title {
       font-size: var(--text-md);
       font-weight: var(--font-weight-bold);
-      color: var(--color-grey-2);
+      color: var(--theme-subtext);
     }
 
     .explanation {
       font-size: var(--text-sm);
-      color: var(--color-grey-2);
+      color: var(--theme-subtext);
     }
 
     .link {

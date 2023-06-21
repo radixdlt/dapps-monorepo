@@ -41,7 +41,7 @@
   }
   #ready-to-claim {
     background: var(--color-grey-5);
-    border: var(--border);
+    border: var(--border) var(--theme-border);
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     padding: var(--spacing-lg);
   }

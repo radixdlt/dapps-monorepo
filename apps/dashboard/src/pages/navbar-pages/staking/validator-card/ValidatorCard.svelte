@@ -108,6 +108,7 @@
     align-items: center;
     transition: var(--transition-hover-card);
     height: 5rem;
+    background: var(--theme-surface-2);
   }
 
   #validator-card:hover {
@@ -120,7 +121,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: var(--border-divider);
+    border-right: var(--border-divider) var(--theme-border);
   }
   #name {
     font-weight: var(--font-weight-bold-2);
@@ -134,7 +135,7 @@
     justify-self: center;
     align-items: center;
     justify-content: end;
-    border-right: var(--border-divider);
+    border-right: var(--border-divider) var(--theme-border);
     padding-right: var(--spacing-md);
   }
 

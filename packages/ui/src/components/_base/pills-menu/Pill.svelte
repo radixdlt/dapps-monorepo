@@ -7,11 +7,11 @@
 <style lang="scss">
   .pill {
     &:hover {
-      background: var(--pills-menu-item-hover-background);
+      background: var(--theme-surface-3);
     }
     &.active {
-      background: var(--pills-menu-item-active-background);
-      color: var(--pills-menu-item-active-text);
+      background: var(--theme-text-primary);
+      color: var(--theme-text-secondary);
     }
     white-space: nowrap;
     transition: background-color 0.1s ease-in-out;
