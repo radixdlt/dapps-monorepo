@@ -167,13 +167,13 @@
 
   <div class="divider">
     <div id="staked-validators" class="header-section">
-      <h2>Your Staked Validators</h2>
+      <h2 class="title">Your Staked Validators</h2>
       {#if accounts}
-        <div class="sub-text">
+        <div class="subtext">
           Summary of your stakes for your currently connected accounts.
         </div>
       {:else}
-        <div class="sub-text">
+        <div class="subtext">
           Connect your wallet and your accounts containing Radix Network stake
           pool units to see the status of your current validators and stakes.
         </div>
@@ -275,7 +275,7 @@
   }
 
   .divider {
-    border-bottom: var(--border);
+    border-bottom: var(--border) var(--theme-border);
     padding-bottom: var(--spacing-2xl);
   }
 
@@ -283,6 +283,10 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
+
+    .title {
+      margin: 0;
+    }
 
     #filter-btn {
       margin-left: auto;
