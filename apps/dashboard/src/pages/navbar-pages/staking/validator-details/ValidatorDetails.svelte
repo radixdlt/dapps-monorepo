@@ -99,6 +99,7 @@
           unstaking={validator.then((v) => v.accumulatedUnstaking)}
           readyToClaim={validator.then((v) => v.accumulatedReadyToClaim)}
           claimText="Claim"
+          on:add-stake
         />
       </div>
       <Divider />

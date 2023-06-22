@@ -38,14 +38,10 @@
         <div class="validator-card">
           <div class="validator">
             <div class="dotted-overflow">
-              {validator.validatorName}
+              {validator.name}
             </div>
             <div>
-              <Address
-                value={validator.validatorAddress}
-                short
-                useBackground={false}
-              />
+              <Address value={validator.address} short useBackground={false} />
             </div>
           </div>
           <TokenAmountCard

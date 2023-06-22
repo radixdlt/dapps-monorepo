@@ -1,20 +1,31 @@
 <script lang="ts">
   import ValidatorDetails from '@pages/navbar-pages/staking/validator-details/ValidatorDetails.svelte'
-  import type { LayoutData } from '../$types'
-  import { page } from '$app/stores'
   import { goto } from '$app/navigation'
+  import type { PageData } from './$types'
+  import AddStakeSingle from '@pages/navbar-pages/staking/stake-unstake/stake/single-validator/AddStakeSingle.svelte'
 
-  export let data: LayoutData
+  export let data: PageData
 
-  $: validator = data.promises.validators.then((validators) =>
-    validators.find((validator) => validator.address === $page.params.validator)
-  )
+  let detailsOpen = true
+  let stakeOpen = false
 
-  let open = true
-
-  $: if (!open) {
+  $: if (!detailsOpen) {
     goto('/validators')
   }
 </script>
 
-<ValidatorDetails {validator} bind:open />
+<ValidatorDetails
+  validator={data.promises.validator}
+  bind:open={detailsOpen}
+  on:add-stake={() => (stakeOpen = true)}
+/>
+
+{#await data.promises.validator then validator}
+  <AddStakeSingle
+    bind:open={stakeOpen}
+    validatorInfo={{
+      address: validator.address,
+      name: validator.name
+    }}
+  />
+{/await}

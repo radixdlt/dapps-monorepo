@@ -17,7 +17,7 @@
     ComponentProps<TokenAmountCard>,
     'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
   >
-  export let balance: string
+  export let balance: Promise<string>
 
   let stakeButtonDisabled = true
 
@@ -65,10 +65,7 @@
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardMultiple
       cardProps={{
-        tokenInfo: {
-          ...tokenCardProps
-        },
-        tokenBalance: balance
+        xrdBalance: balance
       }}
       nbrOfValidators={validators.length}
       bind:amountToStake={stakeAmount}

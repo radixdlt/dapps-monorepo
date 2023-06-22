@@ -37,8 +37,8 @@
 
   <svelte:fragment slot="info">
     <ValidatorInfo
-      validatorName={validator.name}
-      validatorAddress={validator.address}
+      name={validator.name}
+      address={validator.address}
       {currentlyStakingAmount}
     />
   </svelte:fragment>
