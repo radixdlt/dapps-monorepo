@@ -5,17 +5,8 @@
   border: var(--border) var(--theme-border);
 }
 
-$viewport-mobile: 393px;
-$viewport-mobile-up: 394px;
-
-@mixin mobile {
-  @media (max-width: $viewport-mobile) {
-    @content;
-  }
-}
-
 @mixin desktop {
-  @media (min-width: $viewport-mobile-up) {
+  @media (min-width: 768px) {
     @content;
   }
 }

@@ -158,7 +158,7 @@
     cx={{
       display: 'grid',
       gridTemplateColumns: '250px auto',
-      gridTemplateRows: '100px auto',
+      gridTemplateRows: 'auto auto',
       gridTemplateAreas: `
     "header header"
     "nav content"`
