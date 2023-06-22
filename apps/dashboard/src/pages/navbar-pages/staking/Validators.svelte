@@ -143,12 +143,19 @@
 />
 
 <div id="validators">
-  <div>
-    <h1>Validators</h1>
-    <p id="description" class="divider">
-      View all your staked validators and list of validators available on the
-      Radix Network
-    </p>
+  <div class="header">
+    <div>
+      <h1>Validators</h1>
+      <p id="description" class="divider">
+        View all your staked validators and list of validators available on the
+        Radix Network
+      </p>
+    </div>
+    <div id="selected-validators">
+      {#if $connected}
+        <SelectedValidators />
+      {/if}
+    </div>
   </div>
 
   <div class="divider">
@@ -195,19 +202,11 @@
   </div>
 
   <div class="header-section">
-    <div class="header-text">All Validators</div>
-    <div class="sub-text">
-      List of validators available on the Radix Network
-    </div>
+    <h2 class="title">All Validators</h2>
+    <div class="subtext">List of validators available on the Radix Network</div>
     <div id="filter-btn">
       <FilterButton on:click={() => (showFilterDetails = true)} />
     </div>
-  </div>
-
-  <div id="selected-validators">
-    {#if $connected}
-      <SelectedValidators />
-    {/if}
   </div>
 
   <div>
@@ -230,15 +229,18 @@
     gap: var(--spacing-2xl);
   }
 
+  .header {
+    display: flex;
+  }
+
   #description {
     font-weight: var(--font-weight-bold-2);
   }
 
   #selected-validators {
-    position: absolute;
-    right: var(--spacing-2xl);
-    top: var(--spacing-2xl);
+    margin-left: auto;
   }
+
   #staked-validators {
     max-width: 90rem;
   }

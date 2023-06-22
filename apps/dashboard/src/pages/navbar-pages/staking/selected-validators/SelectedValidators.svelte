@@ -28,8 +28,6 @@
     justify-items: center;
     max-width: 50rem;
     min-width: 40rem;
-    padding-left: var(--spacing-xl);
-    padding-right: var(--spacing-xl);
-    top: var(--spacing-xl);
+    padding: var(--spacing-xl);
   }
 </style>
