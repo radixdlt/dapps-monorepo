@@ -1,11 +1,11 @@
 <script lang="ts">
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import Icon from './Icon.svelte'
-  import { context } from '../Validators.svelte'
+  import { selectedValidators } from '../Validators.svelte'
 
-  const selected = context.get('selectedValidators')
-
-  $: count = Object.keys($selected).filter((key) => $selected[key]).length
+  $: count = Object.keys($selectedValidators).filter(
+    (key) => $selectedValidators[key]
+  ).length
 </script>
 
 <div id="selected-validators">

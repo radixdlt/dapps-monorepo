@@ -2,18 +2,13 @@
   import type { ComponentProps } from 'svelte'
   import StakingCard from '../staking-card/StakingCard.svelte'
 
-  export let staked: Awaited<ComponentProps<StakingCard>['staking']>
-  export let unstaking: Awaited<ComponentProps<StakingCard>['unstaking']>
-  export let readyToClaim: Awaited<ComponentProps<StakingCard>['readyToClaim']>
-  export let claimText: Awaited<ComponentProps<StakingCard>['claimText']>
+  export let staked: ComponentProps<StakingCard>['staking']
+  export let unstaking: ComponentProps<StakingCard>['unstaking']
+  export let readyToClaim: ComponentProps<StakingCard>['readyToClaim']
+  export let claimText: ComponentProps<StakingCard>['claimText']
 </script>
 
-<StakingCard
-  staking={Promise.resolve(staked)}
-  unstaking={Promise.resolve(unstaking)}
-  readyToClaim={Promise.resolve(readyToClaim)}
-  {claimText}
->
+<StakingCard staking={staked} {unstaking} {readyToClaim} {claimText}>
   <div slot="staking-section">
     <a>Add Stake</a>
   </div>

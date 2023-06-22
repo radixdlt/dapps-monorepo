@@ -6,7 +6,11 @@
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
-  import { context, type Validator } from '../Validators.svelte'
+  import {
+    context,
+    selectedValidators,
+    type Validator
+  } from '../Validators.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import CheckMarkIcon from '@icons/checkmark.svg'
   import CrossIcon from '@icons/cross.svg'
@@ -17,7 +21,6 @@
     'click-validator': Awaited<typeof validatorInfo>
   }>()
 
-  const selected = context.get('selectedValidators')
   let connected = context.get('connected')
 </script>
 
@@ -84,12 +87,12 @@
     {#await validatorInfo then info}
       {#if $connected}
         <Checkbox
-          bind:checked={$selected[info.address]}
+          bind:checked={$selectedValidators[info.address]}
           on:checked={() => {
-            $selected = $selected
+            $selectedValidators = $selectedValidators
           }}
           on:unchecked={() => {
-            $selected = $selected
+            $selectedValidators = $selectedValidators
           }}
           --label-color="var(--color-grey-2)"
         >

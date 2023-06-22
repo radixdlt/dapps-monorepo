@@ -30,30 +30,28 @@
   export const context = useContext<{
     connected: Writable<boolean>
     validators: Writable<Validator[]>
-    selectedValidators: Writable<Record<string, boolean>>
     bookmarkedValidators: Writable<Record<string, boolean>>
   }>()
+
+  export const selectedValidators = writable<Record<string, boolean>>({})
 </script>
 
 <script lang="ts">
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
-  import type { Account } from '@stores'
-  import { connected } from '@stores'
+  import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
-  import ValidatorDetails from './validator-details/ValidatorDetails.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import FilterDetails from './filter-details/FilterDetails.svelte'
+  import { goto } from '$app/navigation'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
 
-  context.set('connected', writable(false))
   context.set('validators', writable([]))
-  context.set('selectedValidators', writable({}))
   context.set('bookmarkedValidators', writable({}))
 
   $: validators.then(context.get('validators').set)
@@ -118,22 +116,10 @@
     loading = false
   })
 
-  $: if (accounts) context.get('connected').set(true)
-
-  let showValidatorDetails = false
-  let displayedValidator: Validator | undefined
-
   let showFilterDetails = false
 
   $: displayedValidators = $resolvedValidators
 </script>
-
-{#if displayedValidator}
-  <ValidatorDetails
-    bind:open={showValidatorDetails}
-    validator={displayedValidator}
-  />
-{/if}
 
 <FilterDetails
   bind:open={showFilterDetails}
@@ -201,8 +187,7 @@
           )}
           {loading}
           on:click-validator={(e) => {
-            displayedValidator = e.detail
-            showValidatorDetails = true
+            goto(`/validators/${e.detail.address}`)
           }}
         />
       </div>
@@ -231,8 +216,7 @@
       items={displayedValidators}
       {loading}
       on:click-validator={(e) => {
-        displayedValidator = e.detail
-        showValidatorDetails = true
+        goto(`/validators/${e.detail.address}`)
       }}
     />
   </div>
