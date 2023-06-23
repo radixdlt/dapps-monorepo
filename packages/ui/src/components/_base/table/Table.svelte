@@ -1,155 +1,173 @@
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import {
-    createSvelteTable,
-    type TableOptions,
-    getCoreRowModel,
-    type ColumnDef,
-    flexRender,
-    type ColumnSort,
-    getSortedRowModel,
-    getFilteredRowModel
-  } from '@tanstack/svelte-table'
-  import { writable } from 'svelte/store'
-  import { css } from '@styles'
-  import { afterUpdate } from 'svelte'
-  import { includesString } from './filters'
+  import { sort } from './sorting'
 
-  export let data: any
-  export let columns: Array<ColumnDef<unknown>>
-  export let globalFilter: string | undefined = undefined
+  import type { TableColumn, TableConfig } from './types'
 
-  let sorting: ColumnSort[] = []
+  import TableRow from './TableRow.svelte'
 
-  const setGlobalFilter = () => {
-    options.update((old) => ({
-      ...old,
-      state: {
-        ...old.state,
-        globalFilter
-      }
-    }))
+  import SortIcon from './SortIcon.svelte'
+  import ResponsiveTableCell from './ResponsiveTableCell.svelte'
+
+  type T = $$Generic
+  export let entries: any[]
+  export let config: TableConfig
+
+  let sortedEntries: any[] = []
+  let lastSortedBy: string | number | symbol
+  let ascendingSort = true
+  let sortStatus: Record<
+    string | number | symbol,
+    'ascending' | 'descending' | 'unsorted'
+  > = {}
+
+  const transformProps = (columnConfig: TableColumn, entry: any) => {
+    if (!columnConfig.componentProps) {
+      return {}
+    }
+
+    return Object.entries(columnConfig.componentProps).reduce(
+      (acc, [key, value]) => {
+        if (typeof value === 'string' && value.startsWith('$$')) {
+          acc[key] = entry[value.slice(2)]
+        } else {
+          acc[key] = value
+        }
+        return acc
+      },
+      {} as Record<string, string>
+    )
   }
 
-  afterUpdate(setGlobalFilter)
+  const sortColumn = (column: TableColumn) => {
+    const property = column?.property
 
-  const setSorting = (updater: ColumnSort[] | Function) => {
-    if (updater instanceof Function) {
-      sorting = updater(sorting)
-    } else {
-      sorting = updater
+    if (!property || !column?.sortable) {
+      return
     }
-    options.update((old) => ({
-      ...old,
-      state: {
-        ...old.state,
-        sorting
-      }
-    }))
+    if (lastSortedBy) {
+      sortStatus[lastSortedBy] = 'unsorted'
+    }
+
+    ascendingSort = property === lastSortedBy ? !ascendingSort : true
+    lastSortedBy = property
+    const direction = ascendingSort ? 'ascending' : 'descending'
+    sortStatus[property] = direction
+
+    sortedEntries = sort(entries, column, direction)
   }
-
-  const options = writable<TableOptions<unknown>>({
-    data,
-    columns,
-    state: {
-      sorting,
-      globalFilter
-    },
-    globalFilterFn: includesString,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel()
-  })
-
-  $: options.update((options) => ({
-    ...options,
-    data,
-    columns
-  }))
-
-  const table = createSvelteTable(options)
-
-  const tableStyle = css({
-    width: '$1',
-    borderCollapse: 'collapse'
-  })
-
-  const trHeadStyle = css({
-    'th:nth-child(1)': {
-      borderTopLeftRadius: '$md'
-    },
-    'th:nth-last-child(1)': {
-      borderTopRightRadius: '$md'
-    }
-  })
-
-  const thStyle = css({
-    borderTopWidth: '$sm',
-    borderBottom: 'solid $borderColor',
-    padding: '$lg',
-    textAlign: 'left',
-    whiteSpace: 'nowrap',
-    fontWeight: '$600'
-  })
-
-  const tdStyle = css({
-    padding: '$lg'
-  })
-
-  const trStyle = css({
-    borderColor: '$borderColor',
-    borderStyle: 'solid',
-    borderWidth: '$0',
-    borderBottomWidth: '$sm'
-  })
 </script>
 
-<Box bgColor="surface" p="none">
-  <table class={tableStyle()}>
-    <thead>
-      {#each $table.getHeaderGroups() as headerGroup}
-        <tr class={trHeadStyle()}>
-          {#each headerGroup.headers as header}
-            <th class={thStyle()}>
-              {#if !header.isPlaceholder}
-                <Box
-                  interactiveText
-                  p="none"
-                  pointer={header.column.getCanSort()}
-                  on:click={() => header.column.getToggleSortingHandler()}
-                >
-                  <svelte:component
-                    this={flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  />
-                  <Box p="none" inline bgColor="surface" mx="small">
-                    {{
-                      asc: ' 🔼',
-                      desc: ' 🔽'
-                    }[header.column.getIsSorted().toString()] ?? ''}
-                  </Box>
-                </Box>
-              {/if}
-            </th>
-          {/each}
-        </tr>
-      {/each}
-    </thead>
-    <tbody>
-      {#each $table.getRowModel().rows as row}
-        <tr class={trStyle()}>
-          {#each row.getVisibleCells() as cell}
-            <td class={tdStyle()}>
-              <svelte:component
-                this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+<table>
+  <thead class="desktop-only">
+    <tr>
+      {#each config.columns as column}
+        <th>
+          <div
+            class="flex-align-center {column.sortable ? 'sortable' : ''}"
+            on:click={() => sortColumn(column)}
+            on:keypress={(ev) => console.log(ev)}
+          >
+            {#if column.label}
+              <span>{column.label}</span>
+            {/if}
+            {#if column.sortable}
+              <SortIcon
+                mode={column?.property
+                  ? sortStatus[column.property] || 'unsorted'
+                  : 'unsorted'}
               />
-            </td>
-          {/each}
-        </tr>
+            {/if}
+          </div>
+        </th>
       {/each}
-    </tbody>
-  </table>
-</Box>
+    </tr>
+  </thead>
+  <tbody>
+    {#each lastSortedBy ? sortedEntries : entries as entry, i}
+      <slot name="row" {entry} {i}>
+        <TableRow>
+          {#each config.columns as column}
+            <ResponsiveTableCell label={column.label}>
+              {#if !column.component}
+                {#if column.property}
+                  <span class="cell-text">
+                    {column.transform
+                      ? column.transform(entry)
+                      : entry[column.property]}
+                  </span>
+                {/if}
+              {:else}
+                <svelte:component
+                  this={column.component}
+                  {...transformProps(column, entry)}
+                />
+              {/if}
+            </ResponsiveTableCell>
+          {/each}
+        </TableRow>
+      </slot>
+    {/each}
+    <slot />
+  </tbody>
+</table>
+
+<style lang="scss">
+  @use '../../../mixins.scss';
+  @mixin text-style {
+    white-space: nowrap;
+    color: var(--color-grey-2);
+    font-weight: var(--font-weight-bold-2);
+    text-transform: uppercase;
+  }
+
+  .sortable {
+    cursor: pointer;
+    gap: var(--spacing-xs);
+  }
+
+  .header-text {
+    white-space: nowrap;
+    color: var(--color-grey-2);
+    font-weight: var(--font-weight-bold-2);
+    text-transform: uppercase;
+  }
+
+  .cell-text {
+    font-weight: var(--font-weight-bold-2);
+
+    @include mixins.desktop {
+      font-weight: var(--font-weight-bold-1);
+    }
+  }
+
+  .flex-align-center {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  table {
+    border-collapse: separate;
+    @include mixins.desktop {
+      border-spacing: 0 20px;
+    }
+
+    width: 100%;
+  }
+
+  thead {
+    th {
+      text-align: left;
+      span {
+        @include text-style;
+      }
+
+      &:first-child {
+        padding-left: 20px;
+      }
+
+      &:last-child {
+        padding-right: 20px;
+      }
+    }
+  }
+</style>
