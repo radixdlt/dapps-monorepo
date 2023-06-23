@@ -9,7 +9,7 @@
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
 
   type T = $$Generic
-  export let entries: any[]
+  export let entries: T[]
   export let config: TableConfig
 
   let sortedEntries: any[] = []
