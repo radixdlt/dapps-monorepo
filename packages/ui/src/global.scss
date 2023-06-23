@@ -1,3 +1,5 @@
+@use './mixins';
+
 /* Radix colors */
 body {
   /* Core colors */
@@ -157,4 +159,32 @@ body {
   --cooltipz-border-radius: 0.5rem;
   --cooltipz-font-size: 16px;
   --cooltipz-font-family: var(--font-family);
+}
+
+.subtext {
+  font-size: var(--text-sm);
+  color: var(--theme-subtext);
+}
+
+.dotted-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.disabled {
+  opacity: 50%;
+  pointer-events: none;
+}
+
+.mobile-only {
+  @include mixins.desktop {
+    display: none;
+  }
+}
+
+.desktop-only {
+  @include mixins.mobile {
+    display: none;
+  }
 }
