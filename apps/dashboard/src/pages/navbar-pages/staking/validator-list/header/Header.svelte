@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import SortIcon from './SortIcon.svelte'
+  import SortIcon from '@components/_base/table/SortIcon.svelte'
 
   const dispatch = createEventDispatcher()
 

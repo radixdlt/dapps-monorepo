@@ -176,7 +176,7 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../../../../packages/ui/src/global.css';
+  @use '../../../../packages/ui/src/global.scss';
 
   .main-content {
     background: var(--theme-surface-1);

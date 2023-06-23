@@ -11,18 +11,9 @@
   }
 }
 
-.subtext {
-  font-size: var(--text-sm);
-  color: var(--theme-subtext);
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
 }
 
-.dotted-overflow {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.disabled {
-  opacity: 50%;
-  pointer-events: none;
-}
