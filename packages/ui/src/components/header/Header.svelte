@@ -37,7 +37,7 @@
     border-width: 1px;
     border-color: var(--theme-border);
     grid-area: header;
-    z-index: 1000; // some elements in content area are positioned relative to this
+    z-index: 2;
     padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
     flex-direction: column;
 
