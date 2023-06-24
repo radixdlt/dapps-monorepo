@@ -54,6 +54,7 @@
       <AmountInput
         bind:displayedValue={tokenDisplayedAmount}
         bind:value={tokenAmount}
+        on:input
         {readonly}
         --width="14rem"
         --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}

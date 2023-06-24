@@ -34,6 +34,7 @@
   }>()
 
   export const selectedValidators = writable<Record<string, boolean>>({})
+  export const stakes = writable<AccountWithStakes[]>([])
 </script>
 
 <script lang="ts">
@@ -47,6 +48,7 @@
   import FilterButton from './filter-button/FilterButton.svelte'
   import FilterDetails from './filter-details/FilterDetails.svelte'
   import { goto } from '$app/navigation'
+  import AddStakeMultiple from './stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
@@ -90,7 +92,10 @@
     )
   }
 
-  $: accounts?.then(() => updateAccumulatedStakes())
+  $: accounts?.then((_accounts) => {
+    updateAccumulatedStakes()
+    $stakes = _accounts
+  })
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>
@@ -117,6 +122,7 @@
   })
 
   let showFilterDetails = false
+  let showAddMultipleStake = false
 
   $: displayedValidators = $resolvedValidators
 </script>
@@ -142,6 +148,11 @@
   }}
 />
 
+<AddStakeMultiple
+  bind:open={showAddMultipleStake}
+  validators={$resolvedValidators.filter((v) => $selectedValidators[v.address])}
+/>
+
 <div id="validators">
   <div class="header">
     <div>
@@ -153,7 +164,7 @@
     </div>
     <div id="selected-validators">
       {#if $connected}
-        <SelectedValidators />
+        <SelectedValidators on:click={() => (showAddMultipleStake = true)} />
       {/if}
     </div>
   </div>
@@ -194,7 +205,7 @@
           )}
           {loading}
           on:click-validator={(e) => {
-            goto(`/validators/${e.detail.address}`)
+            goto(`/validators/${e.detail}`)
           }}
         />
       </div>
@@ -215,7 +226,7 @@
       items={displayedValidators}
       {loading}
       on:click-validator={(e) => {
-        goto(`/validators/${e.detail.address}`)
+        goto(`/validators/${e.detail}`)
       }}
     />
   </div>

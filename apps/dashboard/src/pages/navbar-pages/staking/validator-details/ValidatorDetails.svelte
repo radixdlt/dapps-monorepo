@@ -17,11 +17,7 @@
   export let open: boolean
   export let validator: Promise<Validator>
 
-  selectedValidators
-
   const bookmarked = bookmarkedValidatorsApi.getAll()
-
-  bookmarked.then(console.log)
 </script>
 
 <SidePanel bind:open>

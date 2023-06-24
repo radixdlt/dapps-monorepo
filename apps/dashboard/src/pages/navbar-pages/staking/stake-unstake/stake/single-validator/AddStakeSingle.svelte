@@ -5,38 +5,12 @@
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
-  import { getAccountData } from '@api/utils/resources'
-  import { CURRENT_NETWORK } from '@networks'
   import { sendTransaction } from '@api/wallet'
+  import { getXRDBalance } from '../getXrdBalance'
+  import { getStakeManifest } from '../manifests'
 
   export let open: boolean
   export let validatorInfo: ComponentProps<ValidatorInfo>
-
-  const getStakeManifest = (
-    accountAddress: string,
-    validatorAddress: string,
-    amount: string
-  ) => `
-    CALL_METHOD
-      Address("${accountAddress}")
-      "withdraw"
-      Address("${CURRENT_NETWORK.xrdAddress}")
-      Decimal("${amount}");
-
-    TAKE_ALL_FROM_WORKTOP
-      Address("${CURRENT_NETWORK.xrdAddress}")
-      Bucket("bucket1");
-
-    CALL_METHOD
-      Address("${validatorAddress}")
-      "stake"
-      Bucket("bucket1");
-
-    CALL_METHOD
-      Address("${accountAddress}")
-      "try_deposit_batch_or_abort"
-      Expression("ENTIRE_WORKTOP");
-  `
 
   let stakeAmount: string
 
@@ -47,12 +21,7 @@
   let xrdBalance: Promise<string> = new Promise(() => {})
 
   $: if (selectedAccount) {
-    xrdBalance = getAccountData([selectedAccount.address]).then(
-      (data) =>
-        data[0].fungible
-          .find((f) => f.address === CURRENT_NETWORK.xrdAddress)
-          ?.value.toString() ?? '0'
-    )
+    xrdBalance = getXRDBalance(selectedAccount.address)
   }
 
   const stake = () => {
