@@ -40,3 +40,4 @@ export const NETWORK_CONFIG = {
 } as const
 
 export const XRD_NAME = 'Radix'
+export const XRD_SYMBOL = 'XRD'

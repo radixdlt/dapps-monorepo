@@ -1,6 +1,5 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
-  import { context, type Validator } from '../Validators.svelte'
   import { formatAmount, shortenAddress } from '@utils'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
@@ -10,13 +9,15 @@
   import CopyIcon from '@icons/copy.svg'
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
+  import { bookmarkedValidatorsApi } from '../../../../server/validators/validators-api'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { connected } from '@stores'
+  import { selectedValidators, type Validator } from '../Validators.svelte'
 
   export let open: boolean
-  export let validator: Validator
+  export let validator: Promise<Validator>
 
-  const selected = context.get('selectedValidators')
-  const connected = context.get('connected')
-  const bookmarked = context.get('bookmarkedValidators')
+  const bookmarked = bookmarkedValidatorsApi.getAll()
 </script>
 
 <SidePanel bind:open>
@@ -28,16 +29,23 @@
         <button
           id="bookmarked"
           on:click={() => {
-            $bookmarked[validator.address] = !$bookmarked[validator.address]
-            $bookmarked = $bookmarked
+            validator.then((validator) => {
+              /*
+              bookmarkedValidatorsApi[!bookmarked
+                ? 'add'
+                : 'remove'](validator.address)
+              */
+            })
           }}
         >
-          <IconNew
-            icon={$bookmarked[validator.address]
-              ? BookmarkFilledIcon
-              : BookmarkEmptyIcon}
-            size="medium"
-          />
+          {#await bookmarked}
+            <IconNew icon={BookmarkEmptyIcon} size="medium" />
+          {:then bookmarked}
+            <IconNew
+              icon={bookmarked ? BookmarkFilledIcon : BookmarkEmptyIcon}
+              size="medium"
+            />
+          {/await}
           Bookmarked
         </button>
       {/if}
@@ -45,38 +53,49 @@
     <Divider />
     <div id="name">
       <h2>
-        {validator.name}
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          {validator.name}
+        {/await}
       </h2>
       <a id="address">
-        {shortenAddress(validator.address)}
-        <IconNew icon={CopyIcon} size="medium" />
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          {shortenAddress(validator.address)}
+          <IconNew icon={CopyIcon} size="medium" />
+        {/await}
       </a>
     </div>
 
     <div id="select">
       {#if $connected}
-        <Checkbox
-          bind:checked={$selected[validator.address]}
-          on:checked={() => {
-            $selected = $selected
-          }}
-          on:unchecked={() => {
-            $selected = $selected
-          }}
-          --label-color="var(--color-grey-2)"
-        >
-          SELECT VALIDATOR
-        </Checkbox>
+        {#await validator then validator}
+          <Checkbox
+            bind:checked={$selectedValidators[validator.address]}
+            on:checked={() => {
+              $selectedValidators = $selectedValidators
+            }}
+            on:unchecked={() => {
+              $selectedValidators = $selectedValidators
+            }}
+            --label-color="var(--color-grey-2)"
+          >
+            SELECT VALIDATOR
+          </Checkbox>
+        {/await}
       {/if}
     </div>
 
     {#if $connected}
       <div>
         <ExtendedStakingCard
-          staked={validator.accumulatedStaked}
-          unstaking={validator.accumulatedUnstaking}
-          readyToClaim={validator.accumulatedReadyToClaim}
+          staked={validator.then((v) => v.accumulatedStaked)}
+          unstaking={validator.then((v) => v.accumulatedUnstaking)}
+          readyToClaim={validator.then((v) => v.accumulatedReadyToClaim)}
           claimText="Claim"
+          on:add-stake
         />
       </div>
       <Divider />
@@ -86,41 +105,75 @@
       <h3>Validator Details</h3>
       <div class="row">
         <div>ADDRESS</div>
-        <a>
-          {shortenAddress(validator.address)}
-        </a>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <a>{shortenAddress(validator.address)}</a>
+        {/await}
       </div>
       <div class="row">
         <div>OWNER ADDRESS</div>
-        <a>{validator.ownerAddress}</a>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <a>{shortenAddress(validator.ownerAddress)}</a>
+        {/await}
       </div>
       <div class="row">
         <div>WEBSITE</div>
-        <a>{validator.website}</a>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <a>{validator.website}</a>
+        {/await}
       </div>
       <div class="row">
         <div>TOTAL STAKE</div>
-        <div>{validator.totalStake}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{validator.totalStake}</div>
+        {/await}
       </div>
       <div class="row">
         <div>OWNER STAKE</div>
-        <div>{validator.ownerStake}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{validator.ownerStake}</div>
+        {/await}
       </div>
       <div class="row">
         <div>FEE (%)</div>
-        <div>{formatAmount(validator.fee)}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{formatAmount(validator.fee)}</div>
+        {/await}
       </div>
       <div class="row">
         <div>APY</div>
-        <div>{formatAmount(validator.apy)}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{formatAmount(validator.apy)}</div>
+        {/await}
       </div>
       <div class="row">
         <div>RECENT UPTIME</div>
-        <div>{formatAmount(validator.uptime)}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{formatAmount(validator.uptime)}</div>
+        {/await}
       </div>
       <div class="row">
         <div>ACCEPTS STAKE</div>
-        <div>{validator.acceptsStake}</div>
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <div>{validator.acceptsStake}</div>
+        {/await}
       </div>
     </div>
   </div>

@@ -3,17 +3,14 @@
   import OverviewStakeCard from './OverviewStakeCard.svelte'
   import ValidatorInfo from './ValidatorInfo.svelte'
 
-  export let cardProps: Omit<
-    ComponentProps<OverviewStakeCard>,
-    'amountToStake' | 'tokenAmountInvalid'
-  >
+  export let xrdBalance: Promise<string>
   export let validatorInfo: ComponentProps<ValidatorInfo>
   export let stakeAmount: string
   export let tokenAmountInvalid: boolean
 </script>
 
 <OverviewStakeCard
-  {...cardProps}
+  {xrdBalance}
   bind:amountToStake={stakeAmount}
   bind:tokenAmountInvalid
 >

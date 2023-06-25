@@ -5,19 +5,37 @@
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
+  import { sendTransaction } from '@api/wallet'
+  import { getXRDBalance } from '../getXrdBalance'
+  import { getStakeManifest } from '../manifests'
 
   export let open: boolean
   export let validatorInfo: ComponentProps<ValidatorInfo>
-  export let cardProps: ComponentProps<OverviewStakeCardSingle>['cardProps']
 
   let stakeAmount: string
 
   let stakeButtonDisabled = true
 
   let selectedAccount: Account
+
+  let xrdBalance: Promise<string> = new Promise(() => {})
+
+  $: if (selectedAccount) {
+    xrdBalance = getXRDBalance(selectedAccount.address)
+  }
+
+  const stake = () => {
+    const manifest = getStakeManifest(
+      selectedAccount.address,
+      validatorInfo.address,
+      stakeAmount
+    )
+
+    sendTransaction(manifest)
+  }
 </script>
 
-<StakeUnstakePanel bind:open bind:stakeButtonDisabled>
+<StakeUnstakePanel bind:open bind:stakeButtonDisabled on:click={stake}>
   <svelte:fragment slot="title">Add Stake</svelte:fragment>
 
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
@@ -37,7 +55,7 @@
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardSingle
       {validatorInfo}
-      {cardProps}
+      {xrdBalance}
       bind:stakeAmount
       bind:tokenAmountInvalid={stakeButtonDisabled}
       --token-amount-card-width={rightColumnWidth}

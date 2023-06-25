@@ -10,22 +10,20 @@
   }[]
   export let open = false
 
+  let picker: HTMLElement
+
   onMount(() => {
-    const picker = document.getElementById('picker')
+    picker.addEventListener('clickoutside', () => (open = false))
 
-    if (picker) {
-      picker.addEventListener('clickoutside', () => (open = false))
-
-      const handleClick = (event: any) => {
-        if (!picker.contains(event.target)) {
-          picker.dispatchEvent(new CustomEvent('clickoutside'))
-        }
+    const handleClick = (event: any) => {
+      if (!picker.contains(event.target)) {
+        picker.dispatchEvent(new CustomEvent('clickoutside'))
       }
-
-      document.addEventListener('click', handleClick, true)
-
-      return () => document.removeEventListener('click', handleClick, true)
     }
+
+    document.addEventListener('click', handleClick, true)
+
+    return () => document.removeEventListener('click', handleClick, true)
   })
 
   const dispatchSelectedEvent = createEventDispatcher<{
@@ -37,7 +35,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div id="picker" bind:clientWidth={width}>
+<div class="picker" bind:clientWidth={width} bind:this={picker}>
   <div
     class="option selected"
     on:click={() => (open = !open)}
@@ -48,13 +46,13 @@
 
   {#if open}
     <div
-      id="drawer"
+      class="drawer"
       style:padding="var(--drawer-padding)"
       style:background-color="var(--drawer-background)"
       style:border-radius="var(--drawer-border-radius)"
       style:box-shadow="var(--drawer-box-shadow)"
       style:transform={`translateY(${offset}px)`}
-      style:max-height={`${offset*5+10}px`}
+      style:max-height={`${offset * 5 + 10}px`}
       transition:transition
     >
       <slot name="options-header" />
@@ -74,13 +72,13 @@
 </div>
 
 <style lang="scss">
-  #picker {
+  .picker {
     display: flex;
     flex-direction: column;
     z-index: 1;
   }
 
-  #drawer {
+  .drawer {
     position: absolute;
     width: 100%;
     overflow-y: auto;

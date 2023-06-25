@@ -13,6 +13,7 @@
   use:_format={format}
   bind:value={displayedValue}
   {maxlength}
+  on:input
 />
 
 <style>

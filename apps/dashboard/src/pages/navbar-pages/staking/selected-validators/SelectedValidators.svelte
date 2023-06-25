@@ -1,11 +1,11 @@
 <script lang="ts">
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import Icon from './Icon.svelte'
-  import { context } from '../Validators.svelte'
+  import { selectedValidators } from '../Validators.svelte'
 
-  const selected = context.get('selectedValidators')
-
-  $: count = Object.keys($selected).filter((key) => $selected[key]).length
+  $: count = Object.keys($selectedValidators).filter(
+    (key) => $selectedValidators[key]
+  ).length
 </script>
 
 <div id="selected-validators">
@@ -13,7 +13,7 @@
   <div>
     You've selected {count} validators
   </div>
-  <ButtonNew size="big">Stake to multiple validators</ButtonNew>
+  <ButtonNew on:click size="big">Stake to multiple validators</ButtonNew>
 </div>
 
 <style lang="scss">
@@ -28,8 +28,6 @@
     justify-items: center;
     max-width: 50rem;
     min-width: 40rem;
-    padding-left: var(--spacing-xl);
-    padding-right: var(--spacing-xl);
-    top: var(--spacing-xl);
+    padding: var(--spacing-xl);
   }
 </style>

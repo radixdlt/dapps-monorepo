@@ -30,30 +30,30 @@
   export const context = useContext<{
     connected: Writable<boolean>
     validators: Writable<Validator[]>
-    selectedValidators: Writable<Record<string, boolean>>
     bookmarkedValidators: Writable<Record<string, boolean>>
   }>()
+
+  export const selectedValidators = writable<Record<string, boolean>>({})
+  export const stakes = writable<AccountWithStakes[]>([])
 </script>
 
 <script lang="ts">
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from './staking-card/StakingCard.svelte'
-  import type { Account } from '@stores'
-  import { connected } from '@stores'
+  import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
-  import ValidatorDetails from './validator-details/ValidatorDetails.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import FilterDetails from './filter-details/FilterDetails.svelte'
+  import { goto } from '$app/navigation'
+  import AddStakeMultiple from './stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
 
   export let validators: Promise<Validator[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
 
-  context.set('connected', writable(false))
   context.set('validators', writable([]))
-  context.set('selectedValidators', writable({}))
   context.set('bookmarkedValidators', writable({}))
 
   $: validators.then(context.get('validators').set)
@@ -92,7 +92,10 @@
     )
   }
 
-  $: accounts?.then(() => updateAccumulatedStakes())
+  $: accounts?.then((_accounts) => {
+    updateAccumulatedStakes()
+    $stakes = _accounts
+  })
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>
@@ -118,22 +121,11 @@
     loading = false
   })
 
-  $: if (accounts) context.get('connected').set(true)
-
-  let showValidatorDetails = false
-  let displayedValidator: Validator | undefined
-
   let showFilterDetails = false
+  let showAddMultipleStake = false
 
   $: displayedValidators = $resolvedValidators
 </script>
-
-{#if displayedValidator}
-  <ValidatorDetails
-    bind:open={showValidatorDetails}
-    validator={displayedValidator}
-  />
-{/if}
 
 <FilterDetails
   bind:open={showFilterDetails}
@@ -156,24 +148,36 @@
   }}
 />
 
+<AddStakeMultiple
+  bind:open={showAddMultipleStake}
+  validators={$resolvedValidators.filter((v) => $selectedValidators[v.address])}
+/>
+
 <div id="validators">
-  <div>
-    <h1>Validators</h1>
-    <p id="description" class="divider">
-      View all your staked validators and list of validators available on the
-      Radix Network
-    </p>
+  <div class="header">
+    <div>
+      <h1>Validators</h1>
+      <p id="description" class="divider">
+        View all your staked validators and list of validators available on the
+        Radix Network
+      </p>
+    </div>
+    <div id="selected-validators">
+      {#if $connected}
+        <SelectedValidators on:click={() => (showAddMultipleStake = true)} />
+      {/if}
+    </div>
   </div>
 
   <div class="divider">
     <div id="staked-validators" class="header-section">
-      <h2>Your Staked Validators</h2>
+      <h2 class="title">Your Staked Validators</h2>
       {#if accounts}
-        <div class="sub-text">
+        <div class="subtext">
           Summary of your stakes for your currently connected accounts.
         </div>
       {:else}
-        <div class="sub-text">
+        <div class="subtext">
           Connect your wallet and your accounts containing Radix Network stake
           pool units to see the status of your current validators and stakes.
         </div>
@@ -201,8 +205,7 @@
           )}
           {loading}
           on:click-validator={(e) => {
-            displayedValidator = e.detail
-            showValidatorDetails = true
+            goto(`/validators/${e.detail}`)
           }}
         />
       </div>
@@ -210,19 +213,11 @@
   </div>
 
   <div class="header-section">
-    <div class="header-text">All Validators</div>
-    <div class="sub-text">
-      List of validators available on the Radix Network
-    </div>
+    <h2 class="title">All Validators</h2>
+    <div class="subtext">List of validators available on the Radix Network</div>
     <div id="filter-btn">
       <FilterButton on:click={() => (showFilterDetails = true)} />
     </div>
-  </div>
-
-  <div id="selected-validators">
-    {#if $connected}
-      <SelectedValidators />
-    {/if}
   </div>
 
   <div>
@@ -231,8 +226,7 @@
       items={displayedValidators}
       {loading}
       on:click-validator={(e) => {
-        displayedValidator = e.detail
-        showValidatorDetails = true
+        goto(`/validators/${e.detail}`)
       }}
     />
   </div>
@@ -246,15 +240,18 @@
     gap: var(--spacing-2xl);
   }
 
+  .header {
+    display: flex;
+  }
+
   #description {
     font-weight: var(--font-weight-bold-2);
   }
 
   #selected-validators {
-    position: absolute;
-    right: var(--spacing-2xl);
-    top: var(--spacing-2xl);
+    margin-left: auto;
   }
+
   #staked-validators {
     max-width: 90rem;
   }
@@ -275,7 +272,7 @@
   }
 
   .divider {
-    border-bottom: var(--border);
+    border-bottom: var(--border) var(--theme-border);
     padding-bottom: var(--spacing-2xl);
   }
 
@@ -283,6 +280,10 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
+
+    .title {
+      margin: 0;
+    }
 
     #filter-btn {
       margin-left: auto;

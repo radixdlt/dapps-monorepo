@@ -1,27 +1,23 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
-
   import StakeCard from './StakeCard.svelte'
-  import type { ComponentProps } from 'svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
+  import { XRD_SYMBOL } from '@constants'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
 
-  export let tokenInfo: Omit<
-    ComponentProps<TokenAmountCard>,
-    'tokenAmount' | 'invalid' | 'disabled'
-  >
   export let amountToStake: string
   export let tokenAmountDisabled = false
   export let tokenAmountInvalid = false
-  export let tokenBalance: string
+  export let xrdBalance: Promise<string>
 
   let validStakeAmount: boolean
 
-  $: validStakeAmount = new BigNumber(tokenBalance).gte(
-    new BigNumber(amountToStake)
-  )
+  $: xrdBalance.then((balance) => {
+    validStakeAmount = new BigNumber(balance).gte(new BigNumber(amountToStake))
+  })
 
   $: tokenAmountInvalid = !validStakeAmount
 </script>
@@ -35,7 +31,11 @@
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      {...tokenInfo}
+      token={{
+        name: XRD_SYMBOL,
+        iconUrl:
+          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
+      }}
       bind:tokenAmount={amountToStake}
       bind:disabled={tokenAmountDisabled}
       bind:invalid={tokenAmountInvalid}
@@ -45,7 +45,11 @@
         class="footer subtext"
         class:invalid={tokenAmountInvalid}
       >
-        Balance {formatTokenValue(tokenBalance).value}
+        {#await xrdBalance}
+          <SkeletonLoader />
+        {:then balance}
+          Balance {formatTokenValue(balance).value}
+        {/await}
       </div>
     </TokenAmountCard>
   </svelte:fragment>

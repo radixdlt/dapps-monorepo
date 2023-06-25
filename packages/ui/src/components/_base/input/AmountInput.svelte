@@ -18,6 +18,7 @@
 <div class="input-box" class:no-hover={readonly}>
   <InputNew
     bind:displayedValue
+    on:input
     {...inputParams}
     {readonly}
     format={number(undefined, undefined, 10)}
