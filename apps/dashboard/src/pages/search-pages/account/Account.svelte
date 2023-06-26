@@ -22,8 +22,12 @@
 </div>
 
 <style lang="scss">
+  @use '../../../../../../packages/ui/src/mixins.scss';
   .account-page {
+    margin: 0 1rem;
     container-type: inline-size;
-    margin: 0 3rem;
+    @include mixins.desktop {
+      margin: 0 3rem;
+    }
   }
 </style>
