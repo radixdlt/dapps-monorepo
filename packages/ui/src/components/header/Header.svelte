@@ -4,12 +4,15 @@
   import { isMobile } from '@utils'
   import MenuIcon from '@icons/menu.svg'
   import LogoIcon from '@images/dashboard_logo.svg'
+  import { showSidebar } from '@stores'
 </script>
 
 <header>
   <div class="logo-wrapper">
     <button
-      on:click
+      on:click={() => {
+        showSidebar.set(true)
+      }}
       style={`background-image: url(${MenuIcon});`}
       class="mobile-menu"
     />

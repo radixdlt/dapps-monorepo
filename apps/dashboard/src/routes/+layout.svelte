@@ -1,18 +1,17 @@
 <script lang="ts">
   import '@fonts'
-  import Header from '@components/header/Header.svelte'
+  import Layout from '@components/layout/Layout.svelte'
   import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
-  import { navigating, page } from '$app/stores'
+  import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
   import {
     accounts,
+    isMobileDevice,
     networkConfiguration,
     selectedAccount,
     storage
   } from '@stores'
-  import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
-  import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
   import {
     RadixDappToolkit,
@@ -86,42 +85,40 @@
     resolveRDT(rdt)
   })
 
-  const routes: {
-    text: string
-    icon: string
-    path: string
-  }[] = [
-    {
-      text: 'Deploy Package',
-      icon: LayersIcon,
-      path: '/deploy-package'
-    },
-    {
-      text: 'Send Raw Transaction',
-      icon: TransactionsIcon,
-      path: '/transaction-manifest'
-    },
-    {
-      text: 'Send Tokens',
-      icon: TokensIcon,
-      path: '/send-tokens'
-    },
-    {
-      text: 'Send NFTs',
-      icon: NftsIcon,
-      path: '/send-nft'
-    },
-    {
-      text: 'Manage dApp Definition',
-      icon: DappMetadataIcon,
-      path: '/dapp-metadata'
-    },
-    {
-      text: 'Validators',
-      icon: ValidatorsIcon,
-      path: '/validators'
-    }
-  ]
+  const routes = $isMobileDevice
+    ? []
+    : [
+        {
+          text: 'Deploy Package',
+          icon: LayersIcon,
+          path: '/deploy-package'
+        },
+        {
+          text: 'Send Raw Transaction',
+          icon: TransactionsIcon,
+          path: '/transaction-manifest'
+        },
+        {
+          text: 'Send Tokens',
+          icon: TokensIcon,
+          path: '/send-tokens'
+        },
+        {
+          text: 'Send NFTs',
+          icon: NftsIcon,
+          path: '/send-nft'
+        },
+        {
+          text: 'Manage dApp Definition',
+          icon: DappMetadataIcon,
+          path: '/dapp-metadata'
+        },
+        {
+          text: 'Validators',
+          icon: ValidatorsIcon,
+          path: '/validators'
+        }
+      ]
 
   $: if (mounted) {
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
@@ -153,26 +150,9 @@
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
-  <Box
-    p="none"
-    cx={{
-      display: 'grid',
-      gridTemplateColumns: '250px auto',
-      gridTemplateRows: 'auto auto',
-      gridTemplateAreas: `
-    "header header"
-    "nav content"`
-    }}
-  >
-    {#if mounted}
-      <Header />
-      <SidebarWithNavbar page={$page} {routes} />
-      <div class="main-content">
-        <slot />
-      </div>
-      <center />
-    {/if}
-  </Box>
+  {#if mounted}
+    <Layout {routes}><slot /></Layout>
+  {/if}
 </Theme>
 
 <style lang="scss" global>

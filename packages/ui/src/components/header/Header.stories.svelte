@@ -8,9 +8,12 @@
 <Meta title="Header" />
 
 <Story name="Primary">
-  <Header
-    on:click={() => {
-      console.log('menu icon click')
-    }}
-  />
+  <Header />
 </Story>
+
+<style lang="scss">
+  :global(body) {
+    // storybook adds a padding to the body
+    padding: 0 !important;
+  }
+</style>
