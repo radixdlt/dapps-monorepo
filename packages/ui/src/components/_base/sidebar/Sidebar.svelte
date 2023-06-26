@@ -1,34 +1,23 @@
 <script lang="ts">
   import { fly, scale } from 'svelte/transition'
   import CloseIcon from '@icons/cross-2.svg'
-  import { showSidebar, isMobileDevice as isMobileDeviceStore } from '@stores'
+  import { showSidebar } from '@stores'
   import { VIEW_PORTS } from '@constants'
-  import { onDestroy, onMount } from 'svelte'
 
   let width: number
+  let windowWidth: number
 
   $: showMobileSidebar = $showSidebar
-  $: isDesktopViewport = false
+  $: isDesktopViewport = (windowWidth ?? 0) > VIEW_PORTS.desktop
 
   $: {
     if (showMobileSidebar && !isDesktopViewport)
       document.body.classList.add('no-scroll')
     else document.body.classList.remove('no-scroll')
   }
-
-  const onResize = () => {
-    isDesktopViewport = window.innerWidth > VIEW_PORTS.desktop
-  }
-
-  onMount(() => {
-    onResize()
-    window.addEventListener('resize', onResize)
-  })
-
-  onDestroy(() => {
-    window.removeEventListener('resize', onResize)
-  })
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 {#if showMobileSidebar && !isDesktopViewport}
   <button
