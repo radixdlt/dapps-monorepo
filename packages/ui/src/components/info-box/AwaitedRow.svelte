@@ -7,11 +7,12 @@
   type T = $$Generic
 
   export let text: string
+  export let modifiers = ''
   export let promise: Promise<T>
 </script>
 
-<Row {text}>
-  <Box wrapper slot="right">
+<Row {text} {modifiers}>
+  <svelte:fragment slot="right">
     {#await promise}
       <SkeletonLoader />
     {:then data}
@@ -19,5 +20,5 @@
         <Text>{data}</Text>
       </slot>
     {/await}
-  </Box>
+  </svelte:fragment>
 </Row>
