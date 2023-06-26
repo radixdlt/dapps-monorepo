@@ -8,7 +8,7 @@
 <Story name="Primary">
   <Claim
     open={true}
-    availableToClaim={[
+    claims={[
       {
         validator: {
           name: '🔥 RADNODE',

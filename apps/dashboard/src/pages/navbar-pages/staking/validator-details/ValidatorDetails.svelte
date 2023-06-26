@@ -102,6 +102,7 @@
           claimText="Claim"
           on:add-stake
           on:unstake
+          on:claim
         />
       </div>
       <Divider />

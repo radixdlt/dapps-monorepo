@@ -62,7 +62,7 @@
       <slot name="claim-section" />
     </div>
     <div>
-      <Button size="big">{claimText}</Button>
+      <Button size="big" on:click>{claimText}</Button>
     </div>
   </div>
 </div>

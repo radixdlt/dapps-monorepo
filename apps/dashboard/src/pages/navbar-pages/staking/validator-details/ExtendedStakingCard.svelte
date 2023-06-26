@@ -10,10 +10,17 @@
   const dispatchEvent = createEventDispatcher<{
     'add-stake': undefined
     unstake: undefined
+    claim: undefined
   }>()
 </script>
 
-<StakingCard staking={staked} {unstaking} {readyToClaim} {claimText}>
+<StakingCard
+  staking={staked}
+  {unstaking}
+  {readyToClaim}
+  {claimText}
+  on:click={() => dispatchEvent('claim')}
+>
   <div slot="staking-section">
     <button
       class="stake-unstake-button"
