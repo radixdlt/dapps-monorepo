@@ -87,7 +87,7 @@
   }
 
   :global(body.no-scroll) {
-    overflow: hidden;
+    overflow: hidden !important;
     @include mixins.desktop {
       overflow: auto;
     }
