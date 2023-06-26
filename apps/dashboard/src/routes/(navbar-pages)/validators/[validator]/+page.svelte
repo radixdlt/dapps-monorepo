@@ -42,6 +42,27 @@
       []
     )
   )
+
+  let stakes: Promise<ComponentProps<Unstake>['stakes']>
+
+  $: stakes = data.promises.validator.then((validator) =>
+    $accountsWithStakes.reduce<Awaited<typeof stakes>>(
+      (acc, account) => [
+        ...acc,
+        ...account.stakes
+          .filter((stake) => stake.validator === validator.address)
+          .map((stake) => ({
+            account,
+            ...stake,
+            validator: {
+              name: validator.name,
+              address: validator.address
+            }
+          }))
+      ],
+      []
+    )
+  )
 </script>
 
 <ValidatorDetails
@@ -59,17 +80,12 @@
       address: validator.address,
       name: validator.name
     }}
+    {token}
   />
 {/await}
 
-{#await data.promises.validator then validator}
-  <Unstake
-    bind:open={unstakeOpen}
-    validator={{
-      address: validator.address,
-      name: validator.name
-    }}
-  />
+{#await stakes then stakes}
+  <Unstake bind:open={unstakeOpen} {stakes} {token} />
 {/await}
 
 {#await claims then claims}

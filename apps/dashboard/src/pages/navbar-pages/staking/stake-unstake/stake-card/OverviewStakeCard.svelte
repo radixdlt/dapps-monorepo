@@ -5,13 +5,14 @@
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
-  import { XRD_SYMBOL } from '@constants'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import type { ComponentProps } from 'svelte'
 
   export let amountToStake: string
   export let tokenAmountDisabled = false
   export let tokenAmountInvalid = false
   export let xrdBalance: Promise<string>
+  export let token: ComponentProps<TokenAmountCard>['token']
 
   let validStakeAmount: boolean
 
@@ -31,11 +32,7 @@
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      token={{
-        name: XRD_SYMBOL,
-        iconUrl:
-          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
-      }}
+      {token}
       bind:tokenAmount={amountToStake}
       bind:disabled={tokenAmountDisabled}
       bind:invalid={tokenAmountInvalid}

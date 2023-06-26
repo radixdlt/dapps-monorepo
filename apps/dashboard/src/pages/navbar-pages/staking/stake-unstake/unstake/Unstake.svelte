@@ -5,31 +5,18 @@
   import type { ComponentProps } from 'svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
-  import {
-    accountsWithStakes,
-    type AccountWithStakes
-  } from '../../Validators.svelte'
+  import type { AccountWithStakes } from '../../Validators.svelte'
 
   export let open: boolean
-  export let validator: ComponentProps<OverviewUnstakeCard>['validator']
+  export let stakes: ({
+    account: Account
+    validator: ComponentProps<OverviewUnstakeCard>['validator']
+  } & Omit<AccountWithStakes['stakes'][number], 'validator'>)[]
+  export let token: ComponentProps<OverviewUnstakeCard>['token']
 
   let stakeButtonDisabled = false
 
   let totalUnstakeAmount = '0'
-
-  let stakes: ({
-    account: Account
-  } & AccountWithStakes['stakes'][number])[] = []
-
-  $: stakes = $accountsWithStakes.reduce<typeof stakes>(
-    (acc, account) => [
-      ...acc,
-      ...account.stakes
-        .filter((stake) => stake.validator === validator.address)
-        .map((stake) => ({ account, ...stake }))
-    ],
-    []
-  )
 
   let invalidInputs = new Array(stakes.length).fill(false)
 
@@ -59,7 +46,8 @@
       {#each stakes as stake, i}
         <div class="add-stake-card">
           <OverviewUnstakeCard
-            {validator}
+            {token}
+            validator={stake.validator}
             account={stake.account}
             stakedAmount={stake.staked.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}

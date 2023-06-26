@@ -11,6 +11,7 @@
 
   export let open: boolean
   export let validator: ComponentProps<ValidatorInfo>
+  export let token: ComponentProps<OverviewStakeCardSingle>['token']
 
   let stakeAmount: string
 
@@ -54,6 +55,7 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardSingle
+      {token}
       {validator}
       {xrdBalance}
       bind:stakeAmount

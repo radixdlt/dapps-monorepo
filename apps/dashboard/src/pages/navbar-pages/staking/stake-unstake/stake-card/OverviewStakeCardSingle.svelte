@@ -7,9 +7,11 @@
   export let validator: ComponentProps<ValidatorInfo>
   export let stakeAmount: string
   export let tokenAmountInvalid: boolean
+  export let token: ComponentProps<OverviewStakeCard>['token']
 </script>
 
 <OverviewStakeCard
+  {token}
   {xrdBalance}
   bind:amountToStake={stakeAmount}
   bind:tokenAmountInvalid
