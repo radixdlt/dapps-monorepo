@@ -23,6 +23,7 @@ on:
           - gilganet
           - mardunet
           - kisharnet
+          - ansharnet
           - rcnet
 
 env:
@@ -528,6 +529,30 @@ jobs:
       app_name: 'dashboard'
       step_name: 'deploy-rcnet'
 
+  deploy_rcnet_v2:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: ansharnet
+      restart_pods: false
+      namespace: dashboard-ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-deployer'
+      eks_cluster: rtlj-prod
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=ansharnet
+      environment: ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
+      app_name: 'dashboard'
+      step_name: 'deploy-rcnet-v2'
+
   deploy_kisharnet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
@@ -550,6 +575,28 @@ jobs:
       environment: kisharnet-internal
       app_name: 'dashboard'
       step_name: 'deploy-kisharnet'
+
+  deploy_ansharnet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: ansharnet-internal
+      namespace: dashboard-ansharnet-internal
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
+      eks_cluster: rtlj-prod
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=ansharnet-internal
+      environment: ansharnet-internal
+      app_name: 'dashboard'
+      step_name: 'deploy-ansharnet'
 
   run-e2e-tests:
     runs-on: ubuntu-latest
