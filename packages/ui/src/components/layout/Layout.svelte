@@ -36,5 +36,6 @@
     background: var(--theme-surface-1);
     padding-bottom: var(--spacing-lg);
     min-height: calc(100vh - 100px);
+    overflow: auto;
   }
 </style>
