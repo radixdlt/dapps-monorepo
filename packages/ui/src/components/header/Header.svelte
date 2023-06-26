@@ -1,15 +1,17 @@
 <script lang="ts">
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
-  import { isMobile } from '@utils'
   import MenuIcon from '@icons/menu.svg'
   import LogoIcon from '@images/dashboard_logo.svg'
+  import { showSidebar } from '@stores'
 </script>
 
 <header>
   <div class="logo-wrapper">
     <button
-      on:click
+      on:click={() => {
+        showSidebar.set(true)
+      }}
       style={`background-image: url(${MenuIcon});`}
       class="mobile-menu"
     />
@@ -17,9 +19,7 @@
     <a href="/" class="logo" style={`background-image: url(${LogoIcon});`} />
   </div>
   <div class="search"><NetworkLookupSearch /></div>
-  {#if !isMobile()}
-    <div class="connect-button"><ConnectButton /></div>
-  {/if}
+  <div class="connect-button"><ConnectButton /></div>
 </header>
 
 <style lang="scss">
@@ -64,9 +64,9 @@
     .logo {
       background-size: contain;
       background-repeat: no-repeat;
-      background-position: center;
-      width: 216px;
-      height: 32px;
+      background-position: center center;
+      width: 219px;
+      height: 40px;
       display: inline-flex;
     }
   }

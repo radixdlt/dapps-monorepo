@@ -36,14 +36,12 @@ export const NETWORK_CONFIG = {
   [Network.ANSHARNET]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
-    dappDefAddress:
-      ''
+    dappDefAddress: ''
   },
   [Network.RCNETV2]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
-    dappDefAddress:
-      ''
+    dappDefAddress: ''
   },
   [Network.RCNET]: {
     id: 12,
@@ -55,3 +53,5 @@ export const NETWORK_CONFIG = {
 
 export const XRD_NAME = 'Radix'
 export const XRD_SYMBOL = 'XRD'
+
+export const VIEW_PORTS = { desktop: 768 }

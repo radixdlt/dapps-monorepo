@@ -1,5 +1,6 @@
 <script lang="ts">
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
+  import { showSidebar } from '@stores'
   import { css } from '@styles'
 
   export let isActive = false
@@ -26,7 +27,11 @@
   on:mouseleave={() => (isHovered = false)}
   class={styles() + (isHovered || isActive ? ' isHovered' : '')}
 >
-  <a href={link}
+  <a
+    href={link}
+    on:click={() => {
+      showSidebar.set(false)
+    }}
     ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem
     ></a
   >

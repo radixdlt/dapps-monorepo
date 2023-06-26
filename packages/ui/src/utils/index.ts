@@ -251,5 +251,5 @@ export const formatTokenValue = (
 
 export const isMobile = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
+    globalThis.navigator ? globalThis.navigator.userAgent : ''
   )

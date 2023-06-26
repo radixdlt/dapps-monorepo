@@ -1,9 +1,9 @@
 <script lang="ts">
   import '@fonts'
-  import Header from '@components/header/Header.svelte'
+  import Layout from '@components/layout/Layout.svelte'
   import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
-  import { navigating, page } from '$app/stores'
+  import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
   import {
     accounts,
@@ -11,8 +11,6 @@
     selectedAccount,
     storage
   } from '@stores'
-  import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
-  import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
   import {
     RadixDappToolkit,
@@ -86,11 +84,7 @@
     resolveRDT(rdt)
   })
 
-  const routes: {
-    text: string
-    icon: string
-    path: string
-  }[] = [
+  const routes = [
     {
       text: 'Deploy Package',
       icon: LayersIcon,
@@ -153,26 +147,9 @@
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
-  <Box
-    p="none"
-    cx={{
-      display: 'grid',
-      gridTemplateColumns: '250px auto',
-      gridTemplateRows: 'auto auto',
-      gridTemplateAreas: `
-    "header header"
-    "nav content"`
-    }}
-  >
-    {#if mounted}
-      <Header />
-      <SidebarWithNavbar page={$page} {routes} />
-      <div class="main-content">
-        <slot />
-      </div>
-      <center />
-    {/if}
-  </Box>
+  {#if mounted}
+    <Layout {routes}><slot /></Layout>
+  {/if}
 </Theme>
 
 <style lang="scss" global>
