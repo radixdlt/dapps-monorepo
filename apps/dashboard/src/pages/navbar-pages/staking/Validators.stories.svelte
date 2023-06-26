@@ -61,15 +61,22 @@
 <Meta title="Navbar Pages / Validators" />
 
 <Story name="Not Connected">
-  <Validators validators={Promise.resolve(validators)} />
+  <Validators
+    validators={Promise.resolve(validators)}
+    bookmarked={Promise.resolve([])}
+  />
 </Story>
 
 <Story name="Not Connected / Loading">
-  <Validators validators={new Promise(() => {})} />
+  <Validators
+    validators={new Promise(() => {})}
+    bookmarked={Promise.resolve([])}
+  />
 </Story>
 
 <Story name="Connected">
   <Validators
+    bookmarked={Promise.resolve([])}
     validators={Promise.resolve(validators)}
     accounts={Promise.resolve(accounts)}
   />

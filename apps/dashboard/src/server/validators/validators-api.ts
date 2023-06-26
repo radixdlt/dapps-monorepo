@@ -42,3 +42,11 @@ export const bookmarkedValidatorsApi = {
       ).map(({ data }) => data)
     )
 } as const
+
+export const setFavoriteValidator = (
+  validatorAddress: string,
+  favorite: boolean
+) =>
+  favorite
+    ? bookmarkedValidatorsApi.create(validatorAddress)
+    : bookmarkedValidatorsApi.remove(validatorAddress)
