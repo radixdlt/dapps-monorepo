@@ -4,32 +4,15 @@
   import { shortenAddress } from '@utils'
   import { onDestroy, onMount } from 'svelte'
   import CopyIcon from '@icons/copy.svg'
+  import { copyToClipboard } from '@directives/copy-to-clipboard'
 
   export let value = ''
   export let short = false
   export let useBackground = true
   export let autoShorten = false
 
-  const tooltipTimer = 2_000
   let addressElement: HTMLElement | undefined
   let addressElementMaxWidth = 0
-
-  let showTooltip = false
-  const showTooltipClassNames = ['cooltipz--top', 'cooltipz--visible'].join(' ')
-
-  let setTimeoutInstance: ReturnType<typeof setTimeout>
-
-  const handleCopyClick = (event: MouseEvent) => {
-    event.stopPropagation()
-    event.preventDefault()
-    showTooltip = true
-    navigator.clipboard.writeText(value)
-    if (setTimeoutInstance) clearTimeout(setTimeoutInstance)
-
-    setTimeoutInstance = setTimeout(() => {
-      showTooltip = false
-    }, tooltipTimer)
-  }
 
   const handleResize = () => {
     if (addressElementMaxWidth < addressElement?.clientWidth!) {
@@ -49,7 +32,6 @@
   })
 
   onDestroy(() => {
-    if (setTimeoutInstance) clearTimeout(setTimeoutInstance)
     window.removeEventListener('resize', handleResize)
   })
 </script>
@@ -64,14 +46,9 @@
   <button class="text" on:click>
     {short ? shortenAddress(value) : value}
   </button>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div
-    aria-label="Copied!"
-    class={`${showTooltip ? showTooltipClassNames : ''} tooltip-wrapper`}
-    on:click={handleCopyClick}
-  >
+  <button use:copyToClipboard={value}>
     <IconNew size="medium" icon={CopyIcon} />
-  </div>
+  </button>
 </div>
 
 <style>
@@ -86,11 +63,5 @@
     font-weight: var(--font-weight-bold-1);
     margin-right: var(--spacing-sm);
     color: var(--color-radix-blue-2);
-  }
-  .tooltip-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
   }
 </style>
