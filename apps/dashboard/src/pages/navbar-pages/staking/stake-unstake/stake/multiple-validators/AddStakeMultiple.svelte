@@ -1,6 +1,9 @@
 <script lang="ts">
   import StakeUnstakePanel from '../../StakePanel.svelte'
-  import { stakes, type Validator } from '../../../Validators.svelte'
+  import {
+    accountsWithStakes,
+    type Validator
+  } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
@@ -71,8 +74,8 @@
     stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
   }
 
-  let currentlyStakingAmounts = $stakes
-    .find((stake) => stake.address === selectedAccount.address)
+  let currentlyStakingAmounts = $accountsWithStakes
+    .find((account) => account.address === selectedAccount.address)
     ?.stakes.map((stake) => ({
       validator: stake.validator,
       amount: stake.staked.toString()

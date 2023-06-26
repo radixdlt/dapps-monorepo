@@ -8,7 +8,7 @@
 <Story name="Primary">
   <AddSingleStake
     open={true}
-    validatorInfo={{
+    validator={{
       name: '🔥 RADNODE',
       address:
         'validator_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8habcee',

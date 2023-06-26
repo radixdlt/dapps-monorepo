@@ -9,17 +9,22 @@
 
   const dispatchEvent = createEventDispatcher<{
     'add-stake': undefined
+    unstake: undefined
   }>()
 </script>
 
 <StakingCard staking={staked} {unstaking} {readyToClaim} {claimText}>
   <div slot="staking-section">
-    <button class="add-stake" on:click={() => dispatchEvent('add-stake')}
-      >Add Stake</button
+    <button
+      class="stake-unstake-button"
+      on:click={() => dispatchEvent('add-stake')}>Add Stake</button
     >
   </div>
   <div slot="unstaking-section">
-    <a>Request Unstake</a>
+    <button
+      class="stake-unstake-button"
+      on:click={() => dispatchEvent('unstake')}>Request Unstake</button
+    >
   </div>
   <div slot="claim-section">
     <br />
@@ -47,7 +52,7 @@
     padding: var(--spacing-lg);
   }
 
-  .add-stake {
+  .stake-unstake-button {
     color: var(--theme-button-primary);
   }
 </style>

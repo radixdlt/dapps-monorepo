@@ -5,22 +5,37 @@
   import type { ComponentProps } from 'svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
+  import {
+    accountsWithStakes,
+    type AccountWithStakes
+  } from '../../Validators.svelte'
 
   export let open: boolean
-  export let unstakeCardProps: Omit<
-    ComponentProps<OverviewUnstakeCard>,
-    'amountToUnstake' | 'invalid' | 'stake' | 'account' | 'stakedAmount'
-  >
-  export let stakes: {
-    account: Account
-    amount: string
-  }[]
-
-  export let amountsToUnstake = new Array(stakes.length).fill('0')
+  export let validator: ComponentProps<OverviewUnstakeCard>['validator']
 
   let stakeButtonDisabled = false
 
   let totalUnstakeAmount = '0'
+
+  let stakes: ({
+    account: Account
+  } & AccountWithStakes['stakes'][number])[] = []
+
+  $: stakes = $accountsWithStakes.reduce<typeof stakes>(
+    (acc, account) => [
+      ...acc,
+      ...account.stakes
+        .filter((stake) => stake.validator === validator.address)
+        .map((stake) => ({ account, ...stake }))
+    ],
+    []
+  )
+
+  let invalidInputs = new Array(stakes.length).fill(false)
+
+  $: stakeButtonDisabled = invalidInputs.some((invalid) => invalid)
+
+  let amountsToUnstake = new Array(stakes.length).fill('0')
 
   $: totalUnstakeAmount = amountsToUnstake
     .reduce<BigNumber>(
@@ -28,10 +43,6 @@
       new BigNumber(0)
     )
     .toString()
-
-  let invalidInputs = new Array(stakes.length).fill(false)
-
-  $: stakeButtonDisabled = invalidInputs.some((invalid) => invalid)
 </script>
 
 <StakePanel bind:open {stakeButtonDisabled}>
@@ -48,9 +59,9 @@
       {#each stakes as stake, i}
         <div class="add-stake-card">
           <OverviewUnstakeCard
-            {...unstakeCardProps}
+            {validator}
             account={stake.account}
-            stakedAmount={stake.amount}
+            stakedAmount={stake.staked.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
             --token-amount-card-width={rightColumnWidth}

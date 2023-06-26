@@ -34,7 +34,7 @@
   }>()
 
   export const selectedValidators = writable<Record<string, boolean>>({})
-  export const stakes = writable<AccountWithStakes[]>([])
+  export const accountsWithStakes = writable<AccountWithStakes[]>([])
 </script>
 
 <script lang="ts">
@@ -101,7 +101,7 @@
 
   $: accounts?.then((_accounts) => {
     updateAccumulatedStakes()
-    $stakes = _accounts
+    $accountsWithStakes = _accounts
   })
 
   const getTotal =

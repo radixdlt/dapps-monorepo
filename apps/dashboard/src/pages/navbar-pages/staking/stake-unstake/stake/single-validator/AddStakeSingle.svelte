@@ -10,7 +10,7 @@
   import { getStakeManifest } from '../manifests'
 
   export let open: boolean
-  export let validatorInfo: ComponentProps<ValidatorInfo>
+  export let validator: ComponentProps<ValidatorInfo>
 
   let stakeAmount: string
 
@@ -27,7 +27,7 @@
   const stake = () => {
     const manifest = getStakeManifest(
       selectedAccount.address,
-      validatorInfo.address,
+      validator.address,
       stakeAmount
     )
 
@@ -54,7 +54,7 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardSingle
-      {validatorInfo}
+      {validator}
       {xrdBalance}
       bind:stakeAmount
       bind:tokenAmountInvalid={stakeButtonDisabled}

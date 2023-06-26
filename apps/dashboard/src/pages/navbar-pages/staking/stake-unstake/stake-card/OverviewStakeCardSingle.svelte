@@ -4,7 +4,7 @@
   import ValidatorInfo from './ValidatorInfo.svelte'
 
   export let xrdBalance: Promise<string>
-  export let validatorInfo: ComponentProps<ValidatorInfo>
+  export let validator: ComponentProps<ValidatorInfo>
   export let stakeAmount: string
   export let tokenAmountInvalid: boolean
 </script>
@@ -15,6 +15,6 @@
   bind:tokenAmountInvalid
 >
   <svelte:fragment slot="info">
-    <ValidatorInfo {...validatorInfo} />
+    <ValidatorInfo {...validator} />
   </svelte:fragment>
 </OverviewStakeCard>

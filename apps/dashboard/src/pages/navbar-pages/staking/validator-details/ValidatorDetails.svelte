@@ -101,6 +101,7 @@
           readyToClaim={validator.then((v) => v.accumulatedReadyToClaim)}
           claimText="Claim"
           on:add-stake
+          on:unstake
         />
       </div>
       <Divider />
