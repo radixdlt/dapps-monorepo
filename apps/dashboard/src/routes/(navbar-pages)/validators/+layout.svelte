@@ -5,6 +5,9 @@
   export let data: LayoutData
 </script>
 
-<Validators validators={data.promises.validators} />
+<Validators
+  validators={data.promises.validators}
+  bookmarked={data.promises.bookmarkedValidators}
+/>
 
 <slot />

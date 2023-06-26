@@ -1,3 +1,4 @@
+import { bookmarkedValidatorsApi } from './../../../server/validators/validators-api'
 import type { LayoutLoad } from './$types'
 import { getValidatorsList } from '@api/gateway'
 import { getEnumStringMetadata } from '@api/utils/resources'
@@ -29,9 +30,14 @@ export const load: LayoutLoad = ({ url }) => {
     })
   )
 
+  const bookmarkedValidators = bookmarkedValidatorsApi
+    .getAll()
+    .unwrapOr([]) as Promise<string[]>
+
   return {
     promises: {
-      validators
+      validators,
+      bookmarkedValidators
     }
   }
 }
