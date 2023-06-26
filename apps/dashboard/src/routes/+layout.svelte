@@ -159,5 +159,6 @@
     background: var(--theme-surface-1);
     grid-area: content;
     padding-bottom: var(--spacing-lg);
+    position: relative;
   }
 </style>

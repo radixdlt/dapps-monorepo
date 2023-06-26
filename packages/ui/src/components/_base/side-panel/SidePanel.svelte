@@ -68,12 +68,12 @@
 
 <style lang="scss">
   .side-panel {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    height: 100vh;
-    width: 60vw;
+    width: 60vw; 
+    max-width: 70rem;
     background: var(--color-grey-5);
     z-index: 3;
     overflow-y: scroll;
@@ -82,7 +82,7 @@
 
   .backdrop {
     backdrop-filter: blur(8px);
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
