@@ -53,13 +53,13 @@
 
   .apy {
     border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
-    background: var(--color-grey-5);
+    background: var(--theme-surface-1);
   }
 
   .apy-text {
     display: inline-block;
     font-size: var(--text-sm);
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
   }
 
   .uptime {

@@ -9,7 +9,7 @@
       amount: '1000000.00',
       icon: 'https://picsum.photos/1000/500?shuffle',
       linksTo: 'https://radixdlt.com',
-      showNetworkTag: true
+      isXrd: true
     },
     {
       symbol: 'PEPE',
@@ -74,7 +74,7 @@
         amount={token.amount}
         iconUrl={`${token.icon}?${index}`}
         linksTo={token.linksTo}
-        showNetworkTag={token.showNetworkTag}
+        isXrd={token.isXrd}
       />
     </div>
   {/each}

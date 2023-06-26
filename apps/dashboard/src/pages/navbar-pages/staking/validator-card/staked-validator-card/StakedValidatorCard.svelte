@@ -79,10 +79,10 @@
   .staking-box {
     display: flex;
     align-items: center;
-    border: var(--border);
+    border: var(--border) var(--theme-border);
     border-top: none;
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-    background: var(--color-grey-5);
+    background: var(--theme-surface-1);
     padding: var(--spacing-md) 0;
   }
 
@@ -102,7 +102,7 @@
   }
 
   .amount-title {
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
     font-weight: var(--font-weight-bold-2);
   }
 
@@ -112,7 +112,7 @@
   }
 
   .ready-to-claim-text {
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
   }
 
   .links {

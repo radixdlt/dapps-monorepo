@@ -1,21 +1,22 @@
 <script lang="ts">
-  import type { ComponentProps } from 'svelte'
+  import { createEventDispatcher, type ComponentProps } from 'svelte'
   import StakingCard from '../staking-card/StakingCard.svelte'
 
-  export let staked: Awaited<ComponentProps<StakingCard>['staking']>
-  export let unstaking: Awaited<ComponentProps<StakingCard>['unstaking']>
-  export let readyToClaim: Awaited<ComponentProps<StakingCard>['readyToClaim']>
-  export let claimText: Awaited<ComponentProps<StakingCard>['claimText']>
+  export let staked: ComponentProps<StakingCard>['staking']
+  export let unstaking: ComponentProps<StakingCard>['unstaking']
+  export let readyToClaim: ComponentProps<StakingCard>['readyToClaim']
+  export let claimText: ComponentProps<StakingCard>['claimText']
+
+  const dispatchEvent = createEventDispatcher<{
+    'add-stake': undefined
+  }>()
 </script>
 
-<StakingCard
-  staking={Promise.resolve(staked)}
-  unstaking={Promise.resolve(unstaking)}
-  readyToClaim={Promise.resolve(readyToClaim)}
-  {claimText}
->
+<StakingCard staking={staked} {unstaking} {readyToClaim} {claimText}>
   <div slot="staking-section">
-    <a>Add Stake</a>
+    <button class="add-stake" on:click={() => dispatchEvent('add-stake')}
+      >Add Stake</button
+    >
   </div>
   <div slot="unstaking-section">
     <a>Request Unstake</a>
@@ -41,8 +42,12 @@
   }
   #ready-to-claim {
     background: var(--color-grey-5);
-    border: var(--border);
+    border: var(--border) var(--theme-border);
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     padding: var(--spacing-lg);
+  }
+
+  .add-stake {
+    color: var(--theme-button-primary);
   }
 </style>

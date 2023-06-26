@@ -117,5 +117,5 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../../../../packages/ui/src/global.css';
+  @use '../../../../packages/ui/src/global.scss';
 </style>

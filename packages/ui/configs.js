@@ -11,6 +11,7 @@ export const configs = {
     '@api': 'src/api',
     '@constants': 'src/constants',
     '@stores': 'src/stores',
-    '@icons': 'static/icons'
+    '@icons': 'static/icons',
+    '@images': 'static/images'
   }
 }

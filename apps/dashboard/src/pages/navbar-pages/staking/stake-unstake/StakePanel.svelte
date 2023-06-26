@@ -49,7 +49,7 @@
     <div class="summary" style:width={rightColumnWidth}>
       <slot name="summary" />
       <div class="stake-button">
-        <ButtonNew size="big" disabled={stakeButtonDisabled}>
+        <ButtonNew on:click size="big" disabled={stakeButtonDisabled}>
           <slot name="button-text" />
         </ButtonNew>
       </div>
@@ -100,6 +100,6 @@
   }
 
   .heading-subtext {
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
   }
 </style>

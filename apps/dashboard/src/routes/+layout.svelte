@@ -5,7 +5,12 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, selectedAccount, storage } from '@stores'
+  import {
+    accounts,
+    networkConfiguration,
+    selectedAccount,
+    storage
+  } from '@stores'
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import { resolveRDT } from '../radix'
@@ -24,12 +29,16 @@
   import NftsIcon from '@icons/nfts.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
+  import { getNetworkConfiguration } from '@api/gateway'
 
   let mounted = false
 
   const { createChallenge, login } = authApi
 
   onMount(() => {
+    getNetworkConfiguration().then((res) => {
+      networkConfiguration.set(res)
+    })
     const updateAccounts = (value: DataRequestOutput['accounts']) => {
       if (value) {
         let _accounts = value.map((account) => ({
@@ -149,7 +158,7 @@
     cx={{
       display: 'grid',
       gridTemplateColumns: '250px auto',
-      gridTemplateRows: '100px auto',
+      gridTemplateRows: 'auto auto',
       gridTemplateAreas: `
     "header header"
     "nav content"`
@@ -158,22 +167,20 @@
     {#if mounted}
       <Header />
       <SidebarWithNavbar page={$page} {routes} />
-      <Box
-        cx={{
-          gridArea: 'content',
-          backgroundColor: '$background',
-          display: 'flex',
-          flexDirection: 'column',
-          paddingBottom: '$6xl'
-        }}
-      >
+      <div class="main-content">
         <slot />
-      </Box>
+      </div>
       <center />
     {/if}
   </Box>
 </Theme>
 
 <style lang="scss" global>
-  @use '../../../../packages/ui/src/global.css';
+  @use '../../../../packages/ui/src/global.scss';
+
+  .main-content {
+    background: var(--theme-surface-1);
+    grid-area: content;
+    padding-bottom: var(--spacing-lg);
+  }
 </style>

@@ -42,6 +42,6 @@
   .percentage {
     font-weight: var(--font-weight-bold-1);
     font-size: var(--text-sm);
-    color: var(--color-grey-2);
+    color: var(--theme-subtext);
   }
 </style>

@@ -6,19 +6,17 @@
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
-  import { context, type Validator } from '../Validators.svelte'
+  import { selectedValidators, type Validator } from '../Validators.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import CheckMarkIcon from '@icons/checkmark.svg'
   import CrossIcon from '@icons/cross.svg'
+  import { connected } from '@stores'
 
   export let validatorInfo: Promise<Validator>
 
   const dispatch = createEventDispatcher<{
-    'click-validator': Awaited<typeof validatorInfo>
+    'click-validator': string
   }>()
-
-  const selected = context.get('selectedValidators')
-  let connected = context.get('connected')
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -26,7 +24,7 @@
   id="validator-card"
   class="validator-card-grid"
   on:click|self={() =>
-    validatorInfo.then((info) => dispatch('click-validator', info))}
+    validatorInfo.then((info) => dispatch('click-validator', info.address))}
 >
   <div id="icon">
     {#await validatorInfo then info}
@@ -84,12 +82,12 @@
     {#await validatorInfo then info}
       {#if $connected}
         <Checkbox
-          bind:checked={$selected[info.address]}
+          bind:checked={$selectedValidators[info.address]}
           on:checked={() => {
-            $selected = $selected
+            $selectedValidators = $selectedValidators
           }}
           on:unchecked={() => {
-            $selected = $selected
+            $selectedValidators = $selectedValidators
           }}
           --label-color="var(--color-grey-2)"
         >
@@ -108,6 +106,7 @@
     align-items: center;
     transition: var(--transition-hover-card);
     height: 5rem;
+    background: var(--theme-surface-2);
   }
 
   #validator-card:hover {
@@ -120,7 +119,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: var(--border-divider);
+    border-right: var(--border-divider) var(--theme-border);
   }
   #name {
     font-weight: var(--font-weight-bold-2);
@@ -134,7 +133,7 @@
     justify-self: center;
     align-items: center;
     justify-content: end;
-    border-right: var(--border-divider);
+    border-right: var(--border-divider) var(--theme-border);
     padding-right: var(--spacing-md);
   }
 

@@ -1,51 +1,85 @@
 <script lang="ts">
   import StakeUnstakePanel from '../../StakePanel.svelte'
-  import type { Validator } from '../../../Validators.svelte'
+  import { stakes, type Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
-  import type { ComponentProps } from 'svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
-  import type TokenAmountCard from '../../stake-card/token-amount-card/TokenAmountCard.svelte'
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
   import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
+  import { getXRDBalance } from '../getXrdBalance'
+  import { getMultipleStakeManifest } from '../manifests'
+  import { sendTransaction } from '@api/wallet'
+  import { removeThousandsSeparator } from '@utils/format-amount'
 
   export let open: boolean
   export let validators: Validator[]
-  export let tokenCardProps: Omit<
-    ComponentProps<TokenAmountCard>,
-    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
-  >
-  export let tokenBalance: string
+
+  const stake = () => {
+    const manifest = getMultipleStakeManifest(
+      selectedAccount.address,
+      stakeAmounts
+    )
+
+    sendTransaction(manifest)
+  }
 
   let stakeButtonDisabled = true
 
-  let stakeAmount: string
+  let distributeEquallyAmount: string
 
-  let individualValidatorStakeAmounts = Array(validators.length).fill('0')
+  let stakeAmounts: {
+    validator: string
+    amount: string
+  }[]
+
+  $: stakeAmounts = [...validators].map((validator) => ({
+    validator: validator.address,
+    amount: '0'
+  }))
 
   let distributeEqually = true
 
   $: if (distributeEqually) {
-    individualValidatorStakeAmounts = individualValidatorStakeAmounts.map((_) =>
-      stakeAmount
-        ? new BigNumber(stakeAmount).dividedBy(validators.length).toString()
+    stakeAmounts = stakeAmounts.map((stake) => ({
+      validator: stake.validator,
+      amount: distributeEquallyAmount
+        ? new BigNumber(distributeEquallyAmount)
+            .dividedBy(validators.length)
+            .toString()
         : '0'
-    )
+    }))
   }
 
   let tokenAmountInvalid = false
 
   $: stakeButtonDisabled =
-    individualValidatorStakeAmounts.every((amount) =>
-      new BigNumber(amount).lte(0)
-    ) || tokenAmountInvalid
+    stakeAmounts.every((stake) => new BigNumber(stake.amount).lte(0)) ||
+    tokenAmountInvalid
 
   let selectedAccount: Account
+
+  let xrdBalance: Promise<string> = new Promise(() => {})
+
+  $: if (selectedAccount) {
+    xrdBalance = getXRDBalance(selectedAccount.address)
+  }
+
+  const handleStakeInput = (i: number) => (e: Event) => {
+    // @ts-ignore
+    stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
+  }
+
+  let currentlyStakingAmounts = $stakes
+    .find((stake) => stake.address === selectedAccount.address)
+    ?.stakes.map((stake) => ({
+      validator: stake.validator,
+      amount: stake.staked.toString()
+    }))
 </script>
 
-<StakeUnstakePanel bind:open {stakeButtonDisabled}>
+<StakeUnstakePanel bind:open {stakeButtonDisabled} on:click={stake}>
   <svelte:fragment slot="title">Add Stake</svelte:fragment>
 
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
@@ -64,14 +98,9 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardMultiple
-      cardProps={{
-        tokenInfo: {
-          ...tokenCardProps,
-          tokenBalance
-        }
-      }}
+      {xrdBalance}
       nbrOfValidators={validators.length}
-      bind:stakeAmount
+      bind:amountToStake={distributeEquallyAmount}
       bind:tokenAmountInvalid
       tokenAmountDisabled={!distributeEqually}
       --token-amount-card-width={rightColumnWidth}
@@ -90,10 +119,12 @@
         <StakeCardMultiple
           {rightColumnWidth}
           {validator}
-          tokenInfo={tokenCardProps}
-          bind:tokenDisplayedAmount={individualValidatorStakeAmounts[i]}
+          tokenDisplayedAmount={stakeAmounts[i].amount}
           amountCardDisabled={distributeEqually}
-          currentlyStakingAmount="100"
+          currentlyStakingAmount={currentlyStakingAmounts?.find(
+            (stake) => stake.validator === validator.address
+          )?.amount ?? '0'}
+          on:input={handleStakeInput(i)}
         />
       {/each}
     </div>
@@ -124,7 +155,7 @@
 
     :nth-child(1) {
       align-self: end;
-      color: var(--subtext-color);
+      color: var(--theme-subtext);
     }
   }
 </style>

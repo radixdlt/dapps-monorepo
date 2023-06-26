@@ -10,8 +10,8 @@
 
 <style lang="scss">
   #filter-btn {
-    background-color: var(--color-light);
-    border: var(--border-strong);
+    background-color: var(--theme-surface-2);
+    border: var(--border) var(--theme-border-strong);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-sm);
     display: flex;

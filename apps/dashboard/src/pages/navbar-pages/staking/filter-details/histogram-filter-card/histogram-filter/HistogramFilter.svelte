@@ -95,11 +95,11 @@
     }
 
     .active-bar {
-      background: var(--color-grey-1);
+      background: var(--theme-border-strong);
     }
 
     .inactive-bar {
-      background: var(--color-grey-4);
+      background: var(--theme-surface-3);
     }
   }
 
@@ -123,13 +123,13 @@
   #active {
     position: relative;
     z-index: 2;
-    border-bottom: 5px solid var(--color-grey-1);
+    border-bottom: 5px solid var(--theme-border-strong);
   }
 
   #inactive {
     position: absolute;
     top: 0;
     z-index: 1;
-    border-bottom: 5px solid var(--color-grey-4);
+    border-bottom: 5px solid var(--theme-border);
   }
 </style>

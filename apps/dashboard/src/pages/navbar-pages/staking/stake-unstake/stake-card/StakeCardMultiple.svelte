@@ -3,16 +3,13 @@
   import StakeCard from './StakeCard.svelte'
   import ValidatorInfo from './ValidatorInfo.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
-  import { createEventDispatcher, type ComponentProps } from 'svelte'
+  import { createEventDispatcher } from 'svelte'
   import type { Validator } from '../../Validators.svelte'
   import TrashIcon from '@icons/trash.svg'
+  import { XRD_SYMBOL } from '@constants'
 
   export let rightColumnWidth: string
   export let validator: Validator
-  export let tokenInfo: Omit<
-    ComponentProps<TokenAmountCard>,
-    'invalid' | 'tokenAmount' | 'tokenDisplayedAmount' | 'disabled'
-  >
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = '0'
   export let amountCardDisabled = false
@@ -37,16 +34,21 @@
 
   <svelte:fragment slot="info">
     <ValidatorInfo
-      validatorName={validator.name}
-      validatorAddress={validator.address}
+      name={validator.name}
+      address={validator.address}
       {currentlyStakingAmount}
     />
   </svelte:fragment>
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      {...tokenInfo}
+      token={{
+        name: XRD_SYMBOL,
+        iconUrl:
+          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
+      }}
       invalid={false}
+      on:input
       bind:tokenAmount
       bind:tokenDisplayedAmount
       bind:disabled={amountCardDisabled}

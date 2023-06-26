@@ -41,16 +41,5 @@
 <Meta title="Navbar Pages / Validators / Add Multiple Stake" />
 
 <Story name="Primary">
-  <AddStakeMultiple
-    open={true}
-    {validators}
-    tokenCardProps={{
-      token: {
-        iconUrl:
-          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579',
-        name: 'XRD'
-      }
-    }}
-    tokenBalance="10000"
-  />
+  <AddStakeMultiple open={true} {validators} />
 </Story>
