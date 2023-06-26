@@ -18,7 +18,7 @@
       <SkeletonLoader />
       <SkeletonLoader />
       <SkeletonLoader />
-    {:then { non_fungible_ids: { items } }}
+    {:then items}
       {#each items as item}
         <Row>
           <Text underlined color="link" slot="left" align="right" bold>

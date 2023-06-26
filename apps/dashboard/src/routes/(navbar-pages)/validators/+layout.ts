@@ -5,8 +5,8 @@ import { getEnumStringMetadata } from '@api/utils/resources'
 import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
 
 export const load: LayoutLoad = ({ url }) => {
-  const validators = getValidatorsList().then(({ items }) =>
-    items.map((validator) => {
+  const validators = getValidatorsList().then((validators) =>
+    validators.map((validator) => {
       const state: any = validator.state || {}
       return {
         name: getEnumStringMetadata('name')(validator.metadata),

@@ -105,7 +105,7 @@
     "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
-    "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-birch.1",
+    "@radixdlt/babylon-gateway-api-sdk": "^1.0.0-birch.2",
     "@radixdlt/radix-dapp-toolkit": "^0.3.0-birch.1",
     "@radixdlt/radix-engine-toolkit": "^0.2.0-birch.5",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
