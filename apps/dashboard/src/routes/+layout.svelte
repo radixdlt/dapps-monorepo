@@ -7,7 +7,6 @@
   import { onMount } from 'svelte'
   import {
     accounts,
-    isMobileDevice,
     networkConfiguration,
     selectedAccount,
     storage
@@ -85,40 +84,38 @@
     resolveRDT(rdt)
   })
 
-  const routes = $isMobileDevice
-    ? []
-    : [
-        {
-          text: 'Deploy Package',
-          icon: LayersIcon,
-          path: '/deploy-package'
-        },
-        {
-          text: 'Send Raw Transaction',
-          icon: TransactionsIcon,
-          path: '/transaction-manifest'
-        },
-        {
-          text: 'Send Tokens',
-          icon: TokensIcon,
-          path: '/send-tokens'
-        },
-        {
-          text: 'Send NFTs',
-          icon: NftsIcon,
-          path: '/send-nft'
-        },
-        {
-          text: 'Manage dApp Definition',
-          icon: DappMetadataIcon,
-          path: '/dapp-metadata'
-        },
-        {
-          text: 'Validators',
-          icon: ValidatorsIcon,
-          path: '/validators'
-        }
-      ]
+  const routes = [
+    {
+      text: 'Deploy Package',
+      icon: LayersIcon,
+      path: '/deploy-package'
+    },
+    {
+      text: 'Send Raw Transaction',
+      icon: TransactionsIcon,
+      path: '/transaction-manifest'
+    },
+    {
+      text: 'Send Tokens',
+      icon: TokensIcon,
+      path: '/send-tokens'
+    },
+    {
+      text: 'Send NFTs',
+      icon: NftsIcon,
+      path: '/send-nft'
+    },
+    {
+      text: 'Manage dApp Definition',
+      icon: DappMetadataIcon,
+      path: '/dapp-metadata'
+    },
+    {
+      text: 'Validators',
+      icon: ValidatorsIcon,
+      path: '/validators'
+    }
+  ]
 
   $: if (mounted) {
     document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
