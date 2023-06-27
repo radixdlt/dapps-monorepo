@@ -9,15 +9,14 @@
   import CopyIcon from '@icons/copy.svg'
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
-  import { bookmarkedValidatorsApi } from '../../../../server/validators/validators-api'
+  import { setFavoriteValidator } from '../../../../server/validators/validators-api'
+  import { bookmarkedValidatorsStore } from '../../../../stores'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
   import { selectedValidators, type Validator } from '../Validators.svelte'
 
   export let open: boolean
   export let validator: Promise<Validator>
-
-  const bookmarked = bookmarkedValidatorsApi.getAll()
 </script>
 
 <SidePanel bind:open>
@@ -26,28 +25,34 @@
       <CloseButton on:click={() => (open = false)} />
       <h3>Validator</h3>
       {#if $connected}
-        <button
-          id="bookmarked"
-          on:click={() => {
-            validator.then((validator) => {
-              /*
-              bookmarkedValidatorsApi[!bookmarked
-                ? 'add'
-                : 'remove'](validator.address)
-              */
-            })
-          }}
-        >
-          {#await bookmarked}
-            <IconNew icon={BookmarkEmptyIcon} size="medium" />
-          {:then bookmarked}
+        {#await validator}
+          <SkeletonLoader />
+        {:then validator}
+          <button
+            id="bookmarked"
+            on:click={() => {
+              $bookmarkedValidatorsStore[validator.address] =
+                !$bookmarkedValidatorsStore[validator.address]
+              bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)
+              setFavoriteValidator(
+                validator.address,
+                $bookmarkedValidatorsStore[validator.address]
+              ).mapErr(() => {
+                $bookmarkedValidatorsStore[validator.address] =
+                  !$bookmarkedValidatorsStore[validator.address]
+                bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)
+              })
+            }}
+          >
             <IconNew
-              icon={bookmarked ? BookmarkFilledIcon : BookmarkEmptyIcon}
+              icon={$bookmarkedValidatorsStore[validator.address]
+                ? BookmarkFilledIcon
+                : BookmarkEmptyIcon}
               size="medium"
             />
-          {/await}
-          Bookmarked
-        </button>
+            Bookmarked
+          </button>
+        {/await}
       {/if}
     </div>
     <Divider />

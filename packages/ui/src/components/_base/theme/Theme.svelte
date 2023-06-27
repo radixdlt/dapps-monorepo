@@ -16,6 +16,8 @@
     --theme-text-secondary: var(--color-light);
     --theme-subtext: var(--color-grey-2);
 
+    --theme-success-primary: var(--color-radix-green-2);
+
     --theme-error-primary: var(--color-radix-error-red-1);
     --theme-error-secondary: var(--color-radix-error-red-2);
 
@@ -31,5 +33,17 @@
 
   :global(a) {
     color: var(--theme-button-primary);
+  }
+
+  :global(.text-success) {
+    color: var(--theme-success-primary);
+  }
+
+  :global(.text-error) {
+    color: var(--theme-error-primary);
+  }
+
+  :global(.surface-2) {
+    background: var(--theme-surface-2);
   }
 </style>

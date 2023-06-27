@@ -49,14 +49,21 @@
   import FilterDetails from './filter-details/FilterDetails.svelte'
   import { goto } from '$app/navigation'
   import AddStakeMultiple from './stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
+  import { bookmarkedValidatorsStore } from '../../../stores'
 
   export let validators: Promise<Validator[]>
+  export let bookmarked: Promise<string[]>
   export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
 
   context.set('validators', writable([]))
-  context.set('bookmarkedValidators', writable({}))
+  context.set('bookmarkedValidators', bookmarkedValidatorsStore)
 
   $: validators.then(context.get('validators').set)
+  $: bookmarked
+    .then((bookmarked) =>
+      bookmarked.reduce((prev, curr) => ({ ...prev, [curr]: true }), {})
+    )
+    .then(context.get('bookmarkedValidators').set)
 
   let bookmarkedValidators = context.get('bookmarkedValidators')
 

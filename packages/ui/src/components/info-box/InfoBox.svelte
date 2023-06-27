@@ -3,22 +3,22 @@
 </script>
 
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import type { Size } from '@styles'
-  import type { CSS } from '@stitches/core'
-  import type { Index } from '@stitches/core/types/util'
 
-  export let keyColumnWidth: Size | Index = 'auto'
-  export let cx: CSS = {}
 </script>
 
-<Box
-  gap="medium"
-  cx={{
-    display: 'grid',
-    gridTemplateColumns: `${keyColumnWidth} 5fr`,
-    ...cx
-  }}
->
+<div class="info-box">
   <slot />
-</Box>
+</div>
+
+<style lang="scss">
+  @use '../../mixins';
+
+  .info-box {
+    padding: 1.5rem;
+
+    @include mixins.desktop {
+      padding: 2.5rem;
+    }
+  }
+</style>
+
