@@ -1,17 +1,20 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import CodeBox from '@components/code-box/CodeBox.svelte'
-  import Box from '@components/_base/box/Box.svelte'
 
   export let receipt: Promise<any>
 </script>
 
-<Box cx={{ width: '100vh' }}>
+<div class="wrapper surface-2" style:--code-box-min-height="500px">
   {#await receipt}
     <SkeletonLoader count={10} />
   {:then receipt}
-    <div style:width="100%" style:height="100vh">
-      <CodeBox text={JSON.stringify(receipt, null, 4)} />
-    </div>
+    <CodeBox text={JSON.stringify(receipt, null, 2)} />
   {/await}
-</Box>
+</div>
+
+<style lang="scss">
+  .wrapper {
+    padding: 1rem;
+  }
+</style>

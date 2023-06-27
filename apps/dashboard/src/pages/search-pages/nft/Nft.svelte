@@ -25,9 +25,7 @@
     <InfoBox slot="body">
       <AwaitedRow
         text="ID"
-        promise={nftData.then(
-          ({ non_fungible_ids }) => non_fungible_ids[0]?.non_fungible_id
-        )}
+        promise={nftData.then(({ non_fungible_id }) => non_fungible_id)}
       />
     </InfoBox>
   </Card>

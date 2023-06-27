@@ -1,25 +1,40 @@
 <script lang="ts">
-  import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
-  import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
+  import Address from '@components/_base/address/Address.svelte'
+  import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
+  import { createEventDispatcher } from 'svelte'
 
   export let title: string
   export let address: string
+  export let menuItems: { id: string; label: string }[][] = []
+  export let activeTab: string = ''
+
+  const dispatch = createEventDispatcher()
 </script>
 
-<Box>
-  <Text inline size="xxlarge" bold>{title}</Text>
-  <Box m="none" p="none" inline>
-    <IconTextItem
-      on:click={() => navigator.clipboard.writeText(address)}
-      icon="copy"
-      interactiveIcon
-      iconPosition="right"
-      iconSize="xs"
-      noPadding
-      textColor="$highlightedText">{address}</IconTextItem
-    >
-  </Box>
-</Box>
+<section class="search-page">
+  <h1>{title}</h1>
 
-<slot />
+  <Address value={address} autoShorten --background="var(--theme-surface-3)" />
+
+  {#if menuItems.length > 0}
+    <PillsMenu
+      active={activeTab}
+      items={menuItems}
+      onClick={(id) => dispatch('navigate', id)}
+      --margin="2rem 0"
+    />
+  {/if}
+  <slot />
+</section>
+
+<style lang="scss">
+  @use '../../../../../packages/ui/src/mixins.scss';
+
+  .search-page {
+    margin: 0 1rem;
+
+    @include mixins.desktop {
+      margin: 0 3rem;
+    }
+  }
+</style>

@@ -1,18 +1,17 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { getTransactionDetails } from '@api/gateway'
   import CodeBox from '@components/code-box/CodeBox.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
   import { addressToRoute } from '@utils'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
+  import Address from '@components/_base/address/Address.svelte'
+  import { goto } from '$app/navigation'
 
   export let tx: ReturnType<typeof getTransactionDetails>
   export let manifest: Promise<string | undefined>
 </script>
 
-<Box wrapper>
+<div class="surface-2">
   <InfoBox>
     <AwaitedRow
       text="Status"
@@ -20,11 +19,11 @@
       let:data
     >
       {#if data === 'CommittedSuccess'}
-        <Text color="success">{data}</Text>
-      {/if}
-
-      {#if data === 'CommittedFailure' || data === 'Rejected'}
-        <Text color="error">{data}</Text>
+        <span class="text-success">Committed Success</span>
+      {:else if data === 'CommittedFailure' || data === 'Rejected'}
+        <span class="text-error">{data}</span>
+      {:else}
+        {data}
       {/if}
     </AwaitedRow>
 
@@ -42,9 +41,7 @@
       promise={tx.then(({ message }) => message)}
       let:data
     >
-      <Box wrapper>
-        <Text>{data ?? ''}</Text>
-      </Box>
+      {data ?? 'N/A'}
     </AwaitedRow>
 
     <AwaitedRow
@@ -52,26 +49,69 @@
       promise={tx.then(({ createdEntities }) => createdEntities)}
       let:data
     >
-      <Box wrapper>
-        {#each data as entity}
-          <Text color="link">
-            <a href={addressToRoute(entity.entity_address)}>
-              {entity.entity_address}
-            </a>
-          </Text>
-        {/each}
-      </Box>
+      {#if data.length === 0}
+        N/A
+      {:else}
+        <div class="addresses-list">
+          {#each data as { entity_address }}
+            <Address
+              autoShorten
+              useBackground
+              on:click={() => goto(addressToRoute(entity_address))}
+              value={entity_address}
+            />
+          {/each}
+        </div>
+      {/if}
+    </AwaitedRow>
+
+    <AwaitedRow
+      text="Affected Entities"
+      promise={tx.then(({ affectedEntities }) => affectedEntities)}
+      let:data
+    >
+      {#if data.length === 0}
+        N/A
+      {:else}
+        <div class="addresses-list">
+          {#each data as entity_address}
+            <Address
+              autoShorten
+              useBackground
+              on:click={() => goto(addressToRoute(entity_address))}
+              value={entity_address}
+            />
+          {/each}
+        </div>
+      {/if}
+    </AwaitedRow>
+
+    <AwaitedRow
+      text="Transaction manifest"
+      promise={manifest}
+      modifiers="label-full"
+      let:data
+    >
+      <CodeBox
+        --code-box-min-height="300px"
+        text={data ?? 'Failed to decode manifest'}
+      />
+    </AwaitedRow>
+
+    <AwaitedRow
+      text="Events"
+      promise={tx.then(({ events }) => events)}
+      modifiers="label-full"
+      let:data
+    >
+      <CodeBox --code-box-min-height="300px" text={data} />
     </AwaitedRow>
   </InfoBox>
+</div>
 
-  <Box>
-    <Text bold mb="medium">Transaction manifest</Text>
-    {#await manifest}
-      <SkeletonLoader />
-    {:then manifest}
-      <div style:height="300px">
-        <CodeBox text={manifest ?? 'Failed to decode manifest'} />
-      </div>
-    {/await}
-  </Box>
-</Box>
+<style lang="scss">
+  .addresses-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
