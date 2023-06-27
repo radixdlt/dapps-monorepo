@@ -13,7 +13,7 @@
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = '0'
   export let amountCardDisabled = false
-  export let currentlyStakingAmount: string
+  export let currentlyStakingAmount: Promise<string>
 
   const dispatchRemoveEvent = createEventDispatcher<{
     remove: { validator: string }

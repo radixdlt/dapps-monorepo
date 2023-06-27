@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Address from '@components/_base/address/Address.svelte'
   import { formatTokenValue } from '@utils'
 
   export let name: string
   export let address: string
-  export let currentlyStakingAmount: string | undefined = undefined
+  export let currentlyStakingAmount: Promise<string> | undefined = undefined
 </script>
 
 <div class="staking-info">
@@ -16,7 +17,12 @@
   </div>
   {#if currentlyStakingAmount}
     <div class="currently-staking dotted-overflow">
-      Currently staking: {formatTokenValue(currentlyStakingAmount).value} XRD
+      Currently staking:
+      {#await currentlyStakingAmount}
+        <SkeletonLoader />
+      {:then amount}
+        {formatTokenValue(amount).value} XRD
+      {/await}
     </div>
   {/if}
 </div>

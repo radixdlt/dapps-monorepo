@@ -110,6 +110,13 @@
   let showAddMultipleStake = false
 
   $: filteredValidators = $resolvedValidators
+
+  $: currentlyStaked = $stakeInfo.then((info) =>
+    info.stakes.reduce<{ [k: string]: string }>((prev, cur) => {
+      prev[cur.validator.address] = cur.amount
+      return prev
+    }, {})
+  )
 </script>
 
 <FilterDetails
@@ -136,6 +143,7 @@
 <AddStakeMultiple
   bind:open={showAddMultipleStake}
   validators={$resolvedValidators.filter((v) => $selectedValidators[v.address])}
+  {currentlyStaked}
 />
 
 <div id="validators">

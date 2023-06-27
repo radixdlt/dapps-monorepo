@@ -1,9 +1,6 @@
 <script lang="ts">
   import StakeUnstakePanel from '../../StakePanel.svelte'
-  import {
-    accountsWithStakes,
-    type Validator
-  } from '../../../Validators.svelte'
+  import type { Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
@@ -18,6 +15,9 @@
 
   export let open: boolean
   export let validators: Validator[]
+  export let currentlyStaked: Promise<{
+    [validator: string]: string
+  }>
 
   const stake = () => {
     const manifest = getMultipleStakeManifest(
@@ -73,13 +73,6 @@
     // @ts-ignore
     stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
   }
-
-  let currentlyStakingAmounts = $accountsWithStakes
-    .find((account) => account.address === selectedAccount.address)
-    ?.stakes.map((stake) => ({
-      validator: stake.validator,
-      amount: stake.staked.toString()
-    }))
 </script>
 
 <StakeUnstakePanel bind:open {stakeButtonDisabled} on:click={stake}>
@@ -124,9 +117,9 @@
           {validator}
           tokenDisplayedAmount={stakeAmounts[i].amount}
           amountCardDisabled={distributeEqually}
-          currentlyStakingAmount={currentlyStakingAmounts?.find(
-            (stake) => stake.validator === validator.address
-          )?.amount ?? '0'}
+          currentlyStakingAmount={currentlyStaked.then(
+            (staked) => staked[validator.address]
+          )}
           on:input={handleStakeInput(i)}
         />
       {/each}
