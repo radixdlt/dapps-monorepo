@@ -17,7 +17,6 @@
     unstaking: string
     readyToClaim: string
   }[]
-  export let token: ComponentProps<OverviewUnstakeCard>['token']
 
   let stakeButtonDisabled = false
 
@@ -75,7 +74,6 @@
       {#each stakes as stake, i}
         <div class="add-stake-card">
           <OverviewUnstakeCard
-            {token}
             validator={stake.validator}
             account={stake.account}
             stakedAmount={stake.staked.toString()}

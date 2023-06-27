@@ -55,3 +55,9 @@ export const XRD_NAME = 'Radix'
 export const XRD_SYMBOL = 'XRD'
 
 export const VIEW_PORTS = { desktop: 768 }
+
+export const XRDToken = {
+  name: XRD_SYMBOL,
+  iconUrl:
+    'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
+}

@@ -6,13 +6,12 @@
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { ComponentProps } from 'svelte'
+  import { XRDToken } from '@constants'
 
   export let amountToStake: string
   export let tokenAmountDisabled = false
   export let tokenAmountInvalid = false
   export let xrdBalance: Promise<string>
-  export let token: ComponentProps<TokenAmountCard>['token']
 
   let validStakeAmount: boolean
 
@@ -32,7 +31,7 @@
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      {token}
+      token={XRDToken}
       bind:tokenAmount={amountToStake}
       bind:disabled={tokenAmountDisabled}
       bind:invalid={tokenAmountInvalid}

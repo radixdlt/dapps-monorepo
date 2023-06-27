@@ -4,8 +4,6 @@
   import type { PageData } from './$types'
   import AddStakeSingle from '@pages/navbar-pages/staking/stake-unstake/stake/single-validator/AddStakeSingle.svelte'
   import Unstake from '@pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
-  import Claim from '@pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
-  import { XRD_SYMBOL } from '@constants'
   import BigNumber from 'bignumber.js'
   import type { ComponentProps } from 'svelte'
   import type { Account } from '@stores'
@@ -19,12 +17,6 @@
 
   $: if (!detailsOpen) {
     goto('/validators')
-  }
-
-  const token = {
-    name: XRD_SYMBOL,
-    iconUrl:
-      'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
   }
 
   $: stakeInfo = data.stakes
@@ -99,12 +91,11 @@
       address: validator.address,
       name: validator.name
     }}
-    {token}
   />
 {/await}
 
 {#await stakes then stakes}
-  <Unstake bind:open={unstakeOpen} {stakes} {token} />
+  <Unstake bind:open={unstakeOpen} {stakes} />
 {/await}
 
 <!--
