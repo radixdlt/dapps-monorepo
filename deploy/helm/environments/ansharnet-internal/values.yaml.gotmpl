@@ -20,13 +20,14 @@ dashboard:
 
   params:
     URL: https://ansharnet-dashboard.radixdlt.com
+    NETWORK_GATEWAY_API: https://ansharnet-gateway.radixdlt.com
     PUBLIC_NETWORK_NAME: "ansharnet"
 
   secrets:
   - name: database-url
     variable: "DATABASE_URL"
-    path: "rtlj-prod/eks/dashboard/postgres"
-    secretProperty: "database-url-ansharnet"
+    path: "rtlj-prod/eks/dashboard/ansharnet/postgres"
+    secretProperty: "database-url"
     secretName: "database-url"
     region: "eu-west-2"
   - name: jwt-secret
