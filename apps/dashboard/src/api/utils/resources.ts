@@ -69,9 +69,9 @@ const nonFungibleResourceDisplayLabel = (
     (name) =>
       name
         ? `${accountLabel({
-          address: getNFTAddress(resource.address, id),
-          label: name || ''
-        })}`
+            address: getNFTAddress(resource.address, id),
+            label: name || ''
+          })}`
         : `${getNFTAddress(resource.address, id)}`
   )()
 
@@ -217,10 +217,10 @@ const transformResources = (
 
 const getResource =
   (type: 'fungible' | 'nonFungible') =>
-    (name: string) =>
-      (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
-        // @ts-ignore
-        resources[type].find((resource: Resource) => resource.name === name)
+  (name: string) =>
+  (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
+    // @ts-ignore
+    resources[type].find((resource: Resource) => resource.name === name)
 
 export type Resources = Awaited<ReturnType<typeof getAccountData>>
 

@@ -28,11 +28,11 @@ export const load: LayoutLoad = ({ fetch }) => {
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
         totalStake: parseInt(validator.current_stake),
 
+        stakeUnitResourceAddress: (validator.state! as any)
+          .stake_unit_resource_address as string,
 
-        stakeUnitResourceAddress: (validator.state! as any).stake_unit_resource_address as string,
-
-        unstakeClaimResourceAddress:
-          (validator.state! as any).unstake_claim_token_resource_address as string,
+        unstakeClaimResourceAddress: (validator.state! as any)
+          .unstake_claim_token_resource_address as string,
 
         // TODO:
         ownerAddress: '',
@@ -51,7 +51,9 @@ export const load: LayoutLoad = ({ fetch }) => {
 
   const getStakeInfo =
     (validators: Validator[]) => async (account: Account) => {
-      const { fungible, nonFungible } = (await getAccountData([account.address]))[0]
+      const { fungible, nonFungible } = (
+        await getAccountData([account.address])
+      )[0]
 
       const stakes = fungible
         .filter((token) =>
@@ -149,7 +151,7 @@ export const load: LayoutLoad = ({ fetch }) => {
         stakes: StakeInfo[]
         unstaking: StakeInfo[]
         readyToClaim: StakeInfo[]
-      }>(() => { })
+      }>(() => {})
     }
   })
 

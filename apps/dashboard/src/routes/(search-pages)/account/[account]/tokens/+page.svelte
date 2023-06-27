@@ -1,8 +1,5 @@
 <script lang="ts">
-  import {
-    type FungibleResource,
-    getAccountData
-  } from '@api/utils/resources'
+  import { type FungibleResource, getAccountData } from '@api/utils/resources'
   import Account from '@pages/search-pages/account/Account.svelte'
   import type { PageData } from './$types'
   import type { Token } from '@pages/search-pages/account/types'
