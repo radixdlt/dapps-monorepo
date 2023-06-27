@@ -12,7 +12,7 @@
   import AccountSection from '../../AccountSection.svelte'
   import type { Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
-  import { getMultipleStakeManifest } from '../manifests'
+  import { getMultipleStakeManifest } from '../../manifests'
   import { sendTransaction } from '@api/wallet'
   import { removeThousandsSeparator } from '@utils/format-amount'
 

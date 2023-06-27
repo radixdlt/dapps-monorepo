@@ -5,13 +5,18 @@
   import type { ComponentProps } from 'svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
-  import type { AccountWithStakes } from '../../Validators.svelte'
+  import { getUnstakeManifest } from '../manifests'
+  import type { Validator } from '../../Validators.svelte'
+  import { sendTransaction } from '@api/wallet'
 
   export let open: boolean
-  export let stakes: ({
+  export let stakes: {
     account: Account
-    validator: ComponentProps<OverviewUnstakeCard>['validator']
-  } & Omit<AccountWithStakes['stakes'][number], 'validator'>)[]
+    validator: Validator
+    staked: string
+    unstaking: string
+    readyToClaim: string
+  }[]
   export let token: ComponentProps<OverviewUnstakeCard>['token']
 
   let stakeButtonDisabled = false
@@ -30,9 +35,33 @@
       new BigNumber(0)
     )
     .toString()
+
+  const unstake = () => {
+    const unstakes: {
+      accountAddress: string
+      validatorAddress: string
+      stakeUnitResource: string
+      amount: string
+    }[] = []
+
+    stakes.forEach((stake, i) => {
+      if (amountsToUnstake[i] !== '0') {
+        unstakes.push({
+          accountAddress: stake.account.address,
+          validatorAddress: stake.validator.address,
+          stakeUnitResource: stake.validator.stakeUnitResourceAddress,
+          amount: amountsToUnstake[i]
+        })
+      }
+    })
+
+    const manifest = getUnstakeManifest(unstakes)
+
+    sendTransaction(manifest)
+  }
 </script>
 
-<StakePanel bind:open {stakeButtonDisabled}>
+<StakePanel bind:open {stakeButtonDisabled} on:click={unstake}>
   <svelte:fragment slot="title">Unstake</svelte:fragment>
 
   <svelte:fragment slot="heading-text">

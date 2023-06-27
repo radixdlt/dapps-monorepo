@@ -12,6 +12,8 @@ export const getValidatorsList = () => {
   return gatewayApi.state.getAllValidators()
 }
 
+export const getGatewayStatus = () => gatewayApi.status.getCurrent()
+
 export const getTransactionDetails = (
   intentHashHex: string,
   optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]

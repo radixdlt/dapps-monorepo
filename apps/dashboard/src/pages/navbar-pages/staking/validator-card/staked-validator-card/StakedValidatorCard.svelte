@@ -6,6 +6,7 @@
   import { formatAmount } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import StakingIcon from '@icons/staking.svg'
+  import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 </script>
@@ -18,19 +19,21 @@
     <div class="staking-box-grid">
       <div class="amount-display">
         <div class="amount-title">STAKED</div>
-        {#await validatorInfo}
+        {#await Promise.all([validatorInfo, $accumulatedStakes])}
           <SkeletonLoader width={30} />
-        {:then info}
-          <div class="amount-value">{formatAmount(info.accumulatedStaked)}</div>
+        {:then [info, stakes]}
+          <div class="amount-value">
+            {formatAmount(stakes[info.address].accumulatedStakes)}
+          </div>
         {/await}
       </div>
       <div class="amount-display">
         <div class="amount-title">UNSTAKING</div>
-        {#await validatorInfo}
+        {#await Promise.all([validatorInfo, $accumulatedStakes])}
           <SkeletonLoader width={30} />
-        {:then info}
+        {:then [info, stakes]}
           <div class="amount-value">
-            {formatAmount(info.accumulatedUnstaking)}
+            {formatAmount(stakes[info.address].accumulatedUnstaking)}
           </div>
         {/await}
       </div>
@@ -40,11 +43,13 @@
         </div>
       {/await}
       <div class="links">
-        {#await validatorInfo then info}
+        {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
           <a>add a reminder to calendar</a>
           <div>
             <ButtonNew size="small"
-              >ready to claim {formatAmount(info.accumulatedReadyToClaim)} XRD</ButtonNew
+              >ready to claim {formatAmount(
+                stakes[info.address].accumulatedReadyToClaim
+              )} XRD</ButtonNew
             >
           </div>
         {/await}

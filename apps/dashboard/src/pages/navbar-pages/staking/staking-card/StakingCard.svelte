@@ -7,9 +7,9 @@
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
 
-  export let staking: Promise<number>
-  export let unstaking: Promise<number>
-  export let readyToClaim: Promise<number>
+  export let staking: Promise<string>
+  export let unstaking: Promise<string>
+  export let readyToClaim: Promise<string>
   export let claimText: string
 </script>
 

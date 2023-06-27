@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
-    getAccountFungibleTokens,
-    type FungibleResource
+    type FungibleResource,
+    getAccountData
   } from '@api/utils/resources'
   import Account from '@pages/search-pages/account/Account.svelte'
   import type { PageData } from './$types'
@@ -31,7 +31,8 @@
   $: xrdAddress = $xrdAddressStore
 
   $: promise = xrdAddress
-    ? getAccountFungibleTokens(data.accountAddress)
+    ? getAccountData([data.accountAddress])
+        .then((arr) => arr[0])
         .then((details) => {
           const { [xrdAddress!]: xrdRaw, ...tokensRaw } = indexBy(
             prop('address'),

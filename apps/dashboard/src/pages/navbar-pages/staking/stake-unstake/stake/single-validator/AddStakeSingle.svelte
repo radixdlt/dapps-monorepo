@@ -7,7 +7,7 @@
   import type { Account } from '@stores'
   import { sendTransaction } from '@api/wallet'
   import { getXRDBalance } from '../getXrdBalance'
-  import { getStakeManifest } from '../manifests'
+  import { getStakeManifest } from '../../manifests'
 
   export let open: boolean
   export let validator: ComponentProps<ValidatorInfo>

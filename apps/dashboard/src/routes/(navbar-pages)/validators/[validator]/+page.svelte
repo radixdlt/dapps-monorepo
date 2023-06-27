@@ -6,8 +6,9 @@
   import Unstake from '@pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
   import Claim from '@pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
   import { XRD_SYMBOL } from '@constants'
-  import { accountsWithStakes } from '@pages/navbar-pages/staking/Validators.svelte'
+  import BigNumber from 'bignumber.js'
   import type { ComponentProps } from 'svelte'
+  import type { Account } from '@stores'
 
   export let data: PageData
 
@@ -26,47 +27,65 @@
       'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
   }
 
-  let claims = data.promises.validator.then((validator) =>
-    $accountsWithStakes.reduce<ComponentProps<Claim>['claims']>(
-      (acc, account) => {
-        const claims = account.stakes
-          .filter((stake) => stake.validator === validator.address)
-          .map((stake) => ({
-            amount: stake.readyToClaim.toString(),
-            validator,
-            account: account
-          }))
+  $: stakeInfo = data.stakes
 
-        return [...acc, ...claims]
-      },
-      []
+  $: stakes = $stakeInfo.then(async (info) => {
+    const validator = await data.promises.validator
+
+    const staking = info.stakes.filter(
+      (stake) => stake.validator.address === validator.address
     )
-  )
-
-  let stakes: Promise<ComponentProps<Unstake>['stakes']>
-
-  $: stakes = data.promises.validator.then((validator) =>
-    $accountsWithStakes.reduce<Awaited<typeof stakes>>(
-      (acc, account) => [
-        ...acc,
-        ...account.stakes
-          .filter((stake) => stake.validator === validator.address)
-          .map((stake) => ({
-            account,
-            ...stake,
-            validator: {
-              name: validator.name,
-              address: validator.address
-            }
-          }))
-      ],
-      []
+    const unstaking = info.unstaking.filter(
+      (stake) => stake.validator.address === validator.address
     )
-  )
+    const readyToClaim = info.readyToClaim.filter(
+      (stake) => stake.validator.address === validator.address
+    )
+
+    const allAccounts = new Map<string, Account>()
+
+    const addAccount = (account: Account) => {
+      if (!allAccounts.has(account.address)) {
+        allAccounts.set(account.address, account)
+      }
+    }
+
+    staking.forEach((entry) => addAccount(entry.account))
+    unstaking.forEach((entry) => addAccount(entry.account))
+    readyToClaim.forEach((entry) => addAccount(entry.account))
+
+    const transformedData: ComponentProps<Unstake>['stakes'] = []
+
+    for (const account of allAccounts.values()) {
+      const [accumulatedStake, accumulatedUnstake, accumulatedClaim] = [
+        staking,
+        unstaking,
+        readyToClaim
+      ].map((arr) =>
+        arr
+          .filter((entry) => entry.account.address === account.address)
+          .reduce((sum, entry) => sum.plus(entry.amount), new BigNumber(0))
+          .toString()
+      )
+
+      transformedData.push({
+        account,
+        validator,
+        staked: accumulatedStake,
+        unstaking: accumulatedUnstake,
+        readyToClaim: accumulatedClaim
+      })
+    }
+
+    return transformedData
+  })
+
+  $: accumulatedStakes = data.validatorAccumulatedStakes
 </script>
 
 <ValidatorDetails
   validator={data.promises.validator}
+  accumulatedValidatorStakes={$accumulatedStakes}
   bind:open={detailsOpen}
   on:add-stake={() => (stakeOpen = true)}
   on:unstake={() => (unstakeOpen = true)}
@@ -88,6 +107,8 @@
   <Unstake bind:open={unstakeOpen} {stakes} {token} />
 {/await}
 
-{#await claims then claims}
-  <Claim bind:open={claimOpen} {claims} {token} />
-{/await}
+<!--
+  {#await $stakeInfo then stakes}
+    <Claim bind:open={claimOpen} {claims} {token} />
+  {/await}
+-->
