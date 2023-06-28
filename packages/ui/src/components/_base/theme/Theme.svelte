@@ -26,6 +26,8 @@
     --theme-border-separator: var(--color-grey-3);
 
     --theme-button-primary: var(--color-radix-blue-2);
+    
+    --theme-link: var(--color-radix-blue-2);
   }
 
   :global(*) {
