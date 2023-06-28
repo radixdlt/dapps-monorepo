@@ -11,7 +11,7 @@
 <script lang="ts">
   import Validators, {
     type Validator
-  } from '@pages/navbar-pages/staking/Validators.svelte'
+  } from '../../../../src/pages/navbar-pages/staking/Validators.svelte'
   import type { LayoutData } from './$types'
   import type { Account } from '@stores'
   import { writable } from 'svelte/store'
