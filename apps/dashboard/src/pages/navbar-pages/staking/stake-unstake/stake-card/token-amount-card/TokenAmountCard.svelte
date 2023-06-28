@@ -1,6 +1,7 @@
 <script lang="ts">
   import Account from '@components/_base/account/Account.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
   import AmountInput from '@components/_base/input/AmountInput.svelte'
   import type { Account as AccountT } from '@stores'
 
@@ -47,7 +48,7 @@
   >
     <div class="token-amount">
       <div class="name">
-        <img src={token.iconUrl} alt="bitcoin" />
+        <IconNew icon={token.iconUrl} --size="2rem" />
         {token.name}
       </div>
 

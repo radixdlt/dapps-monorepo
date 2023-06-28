@@ -1,3 +1,5 @@
+import xrdIcon from '@icons/xrd-token-icon.svg'
+
 export const Network = {
   HAMMUNET: 'hammunet',
   ENKINET: 'enkinet',
@@ -58,6 +60,5 @@ export const VIEW_PORTS = { desktop: 768 }
 
 export const XRDToken = {
   name: XRD_SYMBOL,
-  iconUrl:
-    'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
+  iconUrl: xrdIcon
 }

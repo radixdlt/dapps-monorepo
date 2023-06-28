@@ -6,7 +6,7 @@
   import { createEventDispatcher } from 'svelte'
   import type { Validator } from '../../Validators.svelte'
   import TrashIcon from '@icons/trash.svg'
-  import { XRD_SYMBOL } from '@constants'
+  import { XRDToken, XRD_SYMBOL } from '@constants'
 
   export let rightColumnWidth: string
   export let validator: Validator
@@ -42,11 +42,7 @@
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      token={{
-        name: XRD_SYMBOL,
-        iconUrl:
-          'https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579'
-      }}
+      token={XRDToken}
       invalid={false}
       on:input
       bind:tokenAmount
