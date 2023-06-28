@@ -23,6 +23,7 @@
 
     --theme-border: var(--color-grey-4);
     --theme-border-strong: var(--color-grey-1);
+    --theme-border-separator: var(--color-grey-3);
 
     --theme-button-primary: var(--color-radix-blue-2);
   }

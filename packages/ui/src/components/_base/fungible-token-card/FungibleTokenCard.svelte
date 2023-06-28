@@ -20,7 +20,7 @@
 <a class="card" href={linksTo}>
   <TokenIcon {isXrd} {iconUrl} />
   <div>
-    <div class="token-text {isXrd || numberOfTags > 0 ? 'has-tags' : ''}">
+    <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
       {#if symbol}<span class="token-symbol">{symbol.slice(0, 5)}</span>{/if}
       <Address short value={address} --background="var(--color-grey-5)" />
     </div>

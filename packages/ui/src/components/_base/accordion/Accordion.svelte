@@ -34,10 +34,10 @@
 <style lang="scss">
   @use '../../../mixins.scss';
   .accordion {
-    border-top: 1px solid var(--color-grey-3);
+    border-top: 1px solid var(--theme-border-separator);
 
     &:last-child {
-      border-bottom: 1px solid var(--color-grey-3);
+      border-bottom: 1px solid var(--theme-border-separator);
     }
   }
 
@@ -69,10 +69,10 @@
 
   .header-wrapper {
     position: relative;
-    height: 130px;
+    height: 8rem;
 
     @include mixins.desktop {
-      height: 112px;
+      height: 7rem;
     }
     cursor: pointer;
     display: flex;
