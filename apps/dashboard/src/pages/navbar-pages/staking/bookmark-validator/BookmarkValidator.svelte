@@ -41,7 +41,6 @@
         size="medium"
       />
       {#if withText}<span>Bookmarked</span>{/if}
-      
     </button>
   {/await}
 {/if}

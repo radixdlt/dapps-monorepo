@@ -5,7 +5,6 @@
   import { connected } from '@stores'
   export let text: string
   export let validator: Promise<Validator>
-  
 </script>
 
 {#if $connected}
