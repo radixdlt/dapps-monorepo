@@ -1,25 +1,19 @@
-import { xrdAddress } from '@stores'
 import BigNumber from 'bignumber.js'
-
-let xrd: string | undefined
-
-xrdAddress.subscribe((xrdAddress) => {
-  xrd = xrdAddress
-})
 
 export const getStakeManifest = (
   accountAddress: string,
   validatorAddress: string,
-  amount: string
+  amount: string,
+  xrdAddress: string
 ) => `
     CALL_METHOD
       Address("${accountAddress}")
       "withdraw"
-      Address("${xrd}")
+      Address("${xrdAddress}")
       Decimal("${amount}");
 
     TAKE_ALL_FROM_WORKTOP
-      Address("${xrd}")
+      Address("${xrdAddress}")
       Bucket("bucket1");
 
     CALL_METHOD
@@ -35,12 +29,13 @@ export const getStakeManifest = (
 
 export const getMultipleStakeManifest = (
   accountAddress: string,
-  stakes: { validator: string; amount: string }[]
+  stakes: { validator: string; amount: string }[],
+  xrdAddress: string
 ) => `
         CALL_METHOD
         Address("${accountAddress}")
         "withdraw"
-        Address("${xrd}")
+        Address("${xrdAddress}")
         Decimal("${stakes
           .reduce(
             (acc, { amount }) => acc.plus(new BigNumber(amount)),
@@ -53,7 +48,7 @@ export const getMultipleStakeManifest = (
           .map(
             ({ validator, amount }, i) => `
             TAKE_FROM_WORKTOP
-            Address("${xrd}")
+            Address("${xrdAddress}")
             Decimal("${amount}")
             Bucket("bucket${i}");
 

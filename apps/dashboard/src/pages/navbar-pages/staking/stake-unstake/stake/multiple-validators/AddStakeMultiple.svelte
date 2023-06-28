@@ -7,7 +7,7 @@
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
   import AccountSection from '../../AccountSection.svelte'
-  import type { Account } from '@stores'
+  import { xrdAddress, type Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getMultipleStakeManifest } from '../../manifests'
   import { sendTransaction } from '@api/wallet'
@@ -19,10 +19,17 @@
     [validator: string]: string
   }>
 
+  let xrd: string
+
+  xrdAddress.subscribe((xrdAddress) => {
+    xrd = xrdAddress as string
+  })
+
   const stake = () => {
     const manifest = getMultipleStakeManifest(
       selectedAccount.address,
-      stakeAmounts
+      stakeAmounts,
+      xrd
     )
 
     sendTransaction(manifest)

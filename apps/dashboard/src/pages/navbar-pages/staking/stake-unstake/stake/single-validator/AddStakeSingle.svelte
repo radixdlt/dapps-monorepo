@@ -4,13 +4,19 @@
   import OverviewStakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
-  import type { Account } from '@stores'
+  import { xrdAddress, type Account } from '@stores'
   import { sendTransaction } from '@api/wallet'
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
 
   export let open: boolean
   export let validator: ComponentProps<ValidatorInfo>
+
+  let xrd: string
+
+  xrdAddress.subscribe((xrdAddress) => {
+    xrd = xrdAddress as string
+  })
 
   let stakeAmount: string
 
@@ -28,7 +34,8 @@
     const manifest = getStakeManifest(
       selectedAccount.address,
       validator.address,
-      stakeAmount
+      stakeAmount,
+      xrd
     )
 
     sendTransaction(manifest)
