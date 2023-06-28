@@ -1,0 +1,19 @@
+{{- if .Values.console.metrics.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dapps-console.serviceAccountName" . }}
+  labels:
+    release: prometheus-operator
+    {{- include "dapps-console.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - port: metrics
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace | quote }}
+  selector:
+    matchLabels:
+      {{- include "dapps-console.selectorLabels" . | nindent 6 }}
+{{- end }}

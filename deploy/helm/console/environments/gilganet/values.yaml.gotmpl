@@ -1,0 +1,42 @@
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+console:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  params:
+    URL: https://gilganet-console.rdx-works-main.extratools.works
+    PUBLIC_NETWORK_NAME: "gilganet"
+
+  secrets:
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: gilganet-console.rdx-works-main.extratools.works
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true
+
+alertmanager:
+  env: "non-prod"
+  nameOverride: "console-amcfg"
+  slackConfig:
+    channel: "feed--alerts-dev-dapps-console"
+  secrets:
+    region: eu-west-2
+    name: "rdx-works-main-dev/eks/dapps-console/dev/alertmanager-integration-keys"

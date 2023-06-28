@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dapps-console.fullname" . }}
+  labels:
+    {{- include "dapps-console.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.console.service.type }}
+  ports:
+    - port: {{ .Values.console.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dapps-console.selectorLabels" . | nindent 4 }}
+{{- if .Values.console.metrics.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dapps-console.fullname" . }}-metrics
+  labels:
+    {{- include "dapps-console.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.console.metrics.port }}
+    name: metrics
+    targetPort: {{ .Values.console.metrics.port }}
+  selector:
+    {{- include "dapps-console.selectorLabels" . | nindent 4 }}
+{{- end }}
