@@ -3,7 +3,7 @@
   import { formatAmount, truncateNumber } from '@utils'
 
   export let stakeInfo: Promise<{
-    totalStake: number
+    totalStake: string
     percentageTotalStake: number
   }>
 </script>

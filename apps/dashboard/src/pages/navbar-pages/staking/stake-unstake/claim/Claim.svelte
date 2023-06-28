@@ -6,18 +6,19 @@
   import TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
+  import type { Account } from '@stores'
 
   export let open: boolean
-  export let availableToClaim: {
+  export let claims: {
     validator: Omit<ComponentProps<ValidatorInfo>, 'currentlyStakingAmount'>
     amount: string
+    account: Account
   }[]
   export let token: ComponentProps<TokenAmountCard>['token']
-  export let account: ComponentProps<TokenAmountCard>['account']
 
   let totalClaimAmount = '0'
 
-  $: totalClaimAmount = availableToClaim
+  $: totalClaimAmount = claims
     .reduce<BigNumber>(
       (acc, claim) => acc.plus(claim.amount === '' ? '0' : claim.amount),
       new BigNumber(0)
@@ -34,7 +35,7 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
-      {#each availableToClaim as { validator, amount }}
+      {#each claims as { validator, amount, account }}
         <div class="validator-card">
           <div class="validator">
             <div class="dotted-overflow">

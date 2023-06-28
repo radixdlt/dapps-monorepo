@@ -2,22 +2,18 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakeCard from './StakeCard.svelte'
   import Address from '@components/_base/address/Address.svelte'
-  import type { ComponentProps } from 'svelte'
   import type { Account } from '@stores'
   import UnstakeIcon from '@icons/unstaking.svg'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
+  import { XRDToken } from '@constants'
 
   export let amountToUnstake: string = '0'
   export let validator: {
     name: string
     address: string
   }
-  export let tokenCardProps: Omit<
-    ComponentProps<TokenAmountCard>,
-    'amount' | 'tokenDisplayedAmount' | 'invalid' | 'disabled'
-  >
   export let invalid: boolean
   export let account: Account
   export let stakedAmount: string
@@ -46,7 +42,7 @@
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
-      {...tokenCardProps}
+      token={XRDToken}
       {account}
       bind:tokenAmount={amountToUnstake}
       bind:invalid

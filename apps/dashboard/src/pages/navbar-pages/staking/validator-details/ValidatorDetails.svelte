@@ -14,9 +14,11 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
   import { selectedValidators, type Validator } from '../Validators.svelte'
+  import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/validators/proxy+layout'
 
   export let open: boolean
   export let validator: Promise<Validator>
+  export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
 </script>
 
 <SidePanel bind:open>
@@ -96,11 +98,25 @@
     {#if $connected}
       <div>
         <ExtendedStakingCard
-          staked={validator.then((v) => v.accumulatedStaked)}
-          unstaking={validator.then((v) => v.accumulatedUnstaking)}
-          readyToClaim={validator.then((v) => v.accumulatedReadyToClaim)}
+          staked={validator.then((v) =>
+            accumulatedValidatorStakes.then(
+              (accum) => accum[v.address].accumulatedStakes
+            )
+          )}
+          unstaking={validator.then((v) =>
+            accumulatedValidatorStakes.then(
+              (accum) => accum[v.address].accumulatedUnstaking
+            )
+          )}
+          readyToClaim={validator.then((v) =>
+            accumulatedValidatorStakes.then(
+              (accum) => accum[v.address].accumulatedReadyToClaim
+            )
+          )}
           claimText="Claim"
           on:add-stake
+          on:unstake
+          on:claim
         />
       </div>
       <Divider />
@@ -153,7 +169,7 @@
         {#await validator}
           <SkeletonLoader />
         {:then validator}
-          <div>{formatAmount(validator.fee)}</div>
+          <div>{formatAmount(validator.fee.toString())}</div>
         {/await}
       </div>
       <div class="row">
@@ -161,7 +177,7 @@
         {#await validator}
           <SkeletonLoader />
         {:then validator}
-          <div>{formatAmount(validator.apy)}</div>
+          <div>{formatAmount(validator.apy.toString())}</div>
         {/await}
       </div>
       <div class="row">
@@ -169,7 +185,7 @@
         {#await validator}
           <SkeletonLoader />
         {:then validator}
-          <div>{formatAmount(validator.uptime)}</div>
+          <div>{formatAmount(validator.uptime.toString())}</div>
         {/await}
       </div>
       <div class="row">

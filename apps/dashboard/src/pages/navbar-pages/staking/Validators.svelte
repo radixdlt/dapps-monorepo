@@ -3,8 +3,8 @@
     name: string
     address: string
     ownerAddress: string
-    totalStake: number
-    ownerStake: number
+    totalStake: string
+    ownerStake: string
     percentageOwnerStake: number
     apy: number
     fee: number
@@ -12,9 +12,8 @@
     acceptsStake: boolean
     website: string
     percentageTotalStake: number
-    accumulatedStaked: number
-    accumulatedUnstaking: number
-    accumulatedReadyToClaim: number
+    stakeUnitResourceAddress: string
+    unstakeClaimResourceAddress: string
   }
   import InfoIcon from '@icons/info.svg'
 
@@ -34,7 +33,7 @@
   }>()
 
   export const selectedValidators = writable<Record<string, boolean>>({})
-  export const stakes = writable<AccountWithStakes[]>([])
+  export const accountsWithStakes = writable<AccountWithStakes[]>([])
 </script>
 
 <script lang="ts">
@@ -43,17 +42,25 @@
   import StakingCard from './staking-card/StakingCard.svelte'
   import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
-  import { writable, type Writable } from 'svelte/store'
+  import { writable, type Readable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import FilterDetails from './filter-details/FilterDetails.svelte'
   import { goto } from '$app/navigation'
   import AddStakeMultiple from './stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
   import { bookmarkedValidatorsStore } from '../../../stores'
+  import type { StakeInfo } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
+  import BigNumber from 'bignumber.js'
 
-  export let validators: Promise<Validator[]>
   export let bookmarked: Promise<string[]>
-  export let accounts: Promise<AccountWithStakes[]> | undefined = undefined
+  export let validators: Promise<Validator[]>
+  export let stakeInfo: Readable<
+    Promise<{
+      stakes: StakeInfo[]
+      unstaking: StakeInfo[]
+      readyToClaim: StakeInfo[]
+    }>
+  >
 
   context.set('validators', writable([]))
   context.set('bookmarkedValidators', bookmarkedValidatorsStore)
@@ -69,69 +76,47 @@
 
   let resolvedValidators = context.get('validators')
 
-  const updateAccumulatedStakes = async () => {
-    const _validators = await validators
-    const _accounts = await accounts
-
-    validators = Promise.resolve(
-      _validators.map((validator) => {
-        let accumulatedStaked = 0
-        let accumulatedUnstaking = 0
-        let accumulatedReadyToClaim = 0
-
-        _accounts!.forEach((account) => {
-          account.stakes.forEach((stake) => {
-            if (stake.validator === validator.address) {
-              accumulatedStaked += stake.staked
-              accumulatedUnstaking += stake.unstaking
-              accumulatedReadyToClaim += stake.readyToClaim
-            }
-          })
-        })
-
-        return {
-          ...validator,
-          accumulatedStaked,
-          accumulatedUnstaking,
-          accumulatedReadyToClaim
-        }
-      })
-    )
-  }
-
-  $: accounts?.then((_accounts) => {
-    updateAccumulatedStakes()
-    $stakes = _accounts
-  })
-
   const getTotal =
-    (type: 'staked' | 'unstaking' | 'readyToClaim') =>
-    (accounts: AccountWithStakes[]) =>
-      accounts.reduce(
-        (prev, cur) =>
-          prev + cur.stakes.reduce((prev, cur) => prev + cur[type], 0),
-        0
-      )
+    (type: 'stakes' | 'unstaking' | 'readyToClaim') =>
+    (info: {
+      stakes: StakeInfo[]
+      unstaking: StakeInfo[]
+      readyToClaim: StakeInfo[]
+    }) =>
+      info[type]
+        .reduce(
+          (prev, cur) => prev.plus(new BigNumber(cur.amount)),
+          new BigNumber(0)
+        )
+        .toString()
 
-  let totalStaked = new Promise<number>(() => {})
-  $: if (accounts) totalStaked = accounts.then(getTotal('staked'))
+  let totalStaked = new Promise<string>(() => {})
 
-  let totalUnstaked = new Promise<number>(() => {})
-  $: if (accounts) totalUnstaked = accounts.then(getTotal('unstaking'))
+  $: totalStaked = $stakeInfo.then(getTotal('stakes'))
 
-  let totalReadyToClaim = new Promise<number>(() => {})
-  $: if (accounts) totalReadyToClaim = accounts.then(getTotal('readyToClaim'))
+  let totalUnstaking = new Promise<string>(() => {})
+  $: totalUnstaking = $stakeInfo.then(getTotal('unstaking'))
+
+  let totalReadyToClaim = new Promise<string>(() => {})
+  $: totalReadyToClaim = $stakeInfo.then(getTotal('readyToClaim'))
 
   let loading = true
 
-  validators.then((_) => {
+  validators.then(() => {
     loading = false
   })
 
   let showFilterDetails = false
   let showAddMultipleStake = false
 
-  $: displayedValidators = $resolvedValidators
+  $: filteredValidators = $resolvedValidators
+
+  $: currentlyStaked = $stakeInfo.then((info) =>
+    info.stakes.reduce<{ [k: string]: string }>((prev, cur) => {
+      prev[cur.validator.address] = cur.amount
+      return prev
+    }, {})
+  )
 </script>
 
 <FilterDetails
@@ -140,7 +125,7 @@
   totalXRDStakeValues={$resolvedValidators.map((v) => v.percentageTotalStake)}
   ownerStakeValues={$resolvedValidators.map((v) => v.percentageOwnerStake)}
   on:applyFilter={(e) => {
-    displayedValidators = $resolvedValidators.filter((v) => {
+    filteredValidators = $resolvedValidators.filter((v) => {
       return (
         v.fee >= e.detail.feeFilter.min &&
         v.fee <= e.detail.feeFilter.max &&
@@ -158,6 +143,7 @@
 <AddStakeMultiple
   bind:open={showAddMultipleStake}
   validators={$resolvedValidators.filter((v) => $selectedValidators[v.address])}
+  {currentlyStaked}
 />
 
 <div id="validators">
@@ -179,11 +165,7 @@
   <div class="divider">
     <div id="staked-validators" class="header-section">
       <h2 class="title">Your Staked Validators</h2>
-      {#if accounts}
-        <div class="subtext">
-          Summary of your stakes for your currently connected accounts.
-        </div>
-      {:else}
+      {#await $stakeInfo}
         <div class="subtext">
           Connect your wallet and your accounts containing Radix Network stake
           pool units to see the status of your current validators and stakes.
@@ -192,13 +174,17 @@
           <Icon size="medium" icon={InfoIcon} />
           What is staking?
         </div>
-      {/if}
+      {:then}
+        <div class="subtext">
+          Summary of your stakes for your currently connected accounts.
+        </div>
+      {/await}
     </div>
-    {#if accounts}
+    {#await $stakeInfo then stakes}
       <div id="staking-info">
         <StakingCard
           staking={totalStaked}
-          unstaking={totalUnstaked}
+          unstaking={totalUnstaking}
           readyToClaim={totalReadyToClaim}
           claimText="Claim All"
         />
@@ -206,9 +192,9 @@
           type="staked"
           items={$resolvedValidators.filter(
             (v) =>
-              v.accumulatedStaked !== 0 ||
-              v.accumulatedUnstaking !== 0 ||
-              v.accumulatedReadyToClaim !== 0
+              stakes.stakes.some((s) => s.validator.address === v.address) ||
+              stakes.unstaking.some((s) => s.validator.address === v.address) ||
+              stakes.readyToClaim.some((s) => s.validator.address === v.address)
           )}
           {loading}
           on:click-validator={(e) => {
@@ -216,7 +202,7 @@
           }}
         />
       </div>
-    {/if}
+    {/await}
   </div>
 
   <div class="header-section">
@@ -230,7 +216,7 @@
   <div>
     <ValidatorList
       type="all"
-      items={displayedValidators}
+      items={filteredValidators}
       {loading}
       on:click-validator={(e) => {
         goto(`/validators/${e.detail}`)

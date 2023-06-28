@@ -1,25 +1,35 @@
 <script lang="ts">
   import StakeUnstakePanel from '../../StakePanel.svelte'
-  import { stakes, type Validator } from '../../../Validators.svelte'
+  import type { Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
   import AccountSection from '../../AccountSection.svelte'
-  import type { Account } from '@stores'
+  import { xrdAddress, type Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
-  import { getMultipleStakeManifest } from '../manifests'
+  import { getMultipleStakeManifest } from '../../manifests'
   import { sendTransaction } from '@api/wallet'
   import { removeThousandsSeparator } from '@utils/format-amount'
 
   export let open: boolean
   export let validators: Validator[]
+  export let currentlyStaked: Promise<{
+    [validator: string]: string
+  }>
+
+  let xrd: string
+
+  xrdAddress.subscribe((xrdAddress) => {
+    xrd = xrdAddress as string
+  })
 
   const stake = () => {
     const manifest = getMultipleStakeManifest(
       selectedAccount.address,
-      stakeAmounts
+      stakeAmounts,
+      xrd
     )
 
     sendTransaction(manifest)
@@ -70,13 +80,6 @@
     // @ts-ignore
     stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
   }
-
-  let currentlyStakingAmounts = $stakes
-    .find((stake) => stake.address === selectedAccount.address)
-    ?.stakes.map((stake) => ({
-      validator: stake.validator,
-      amount: stake.staked.toString()
-    }))
 </script>
 
 <StakeUnstakePanel bind:open {stakeButtonDisabled} on:click={stake}>
@@ -121,9 +124,9 @@
           {validator}
           tokenDisplayedAmount={stakeAmounts[i].amount}
           amountCardDisabled={distributeEqually}
-          currentlyStakingAmount={currentlyStakingAmounts?.find(
-            (stake) => stake.validator === validator.address
-          )?.amount ?? '0'}
+          currentlyStakingAmount={currentlyStaked.then(
+            (staked) => staked[validator.address]
+          )}
           on:input={handleStakeInput(i)}
         />
       {/each}

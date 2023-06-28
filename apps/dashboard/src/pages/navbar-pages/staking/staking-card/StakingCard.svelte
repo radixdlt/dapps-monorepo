@@ -7,13 +7,13 @@
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
 
-  export let staking: Promise<number>
-  export let unstaking: Promise<number>
-  export let readyToClaim: Promise<number>
+  export let staking: Promise<string>
+  export let unstaking: Promise<string>
+  export let readyToClaim: Promise<string>
   export let claimText: string
 </script>
 
-<div id="staking-card">
+<div class="staking-card">
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
@@ -49,7 +49,7 @@
   <div class="section last-section">
     <div class="stake-display">
       <div class="text-with-icon">
-        <Icon icon={ClaimIcon} --size="2rem" />
+        <Icon icon={ClaimIcon} --size="1.5rem" />
         <div class="title-text">READY TO CLAIM</div>
       </div>
       <div class="amount-text">
@@ -62,14 +62,14 @@
       <slot name="claim-section" />
     </div>
     <div>
-      <Button size="big">{claimText}</Button>
+      <Button size="big" on:click>{claimText}</Button>
     </div>
   </div>
 </div>
 
 <style lang="scss">
   @use '../../../../../../../packages/ui/src/mixins.scss';
-  #staking-card {
+  .staking-card {
     @include mixins.card;
     display: grid;
     grid: 1fr / auto auto auto;
@@ -84,7 +84,7 @@
     justify-content: space-between;
     align-items: center;
     gap: var(--spacing-lg);
-    border-right: var(--border-divider);
+    border-right: var(--border-divider) var(--theme-border);
   }
 
   .last-section {
