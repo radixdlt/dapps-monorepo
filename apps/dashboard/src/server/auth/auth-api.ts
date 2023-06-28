@@ -2,9 +2,9 @@ import type { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
 import { fetchWrapper } from '@utils'
 
 export const authApi = {
-  login: (signedChallenge: SignedChallenge) =>
+  login: (signedChallenge: SignedChallenge, serverFetch?: typeof fetch) =>
     fetchWrapper<{ authToken: string }>(
-      fetch('/api/auth/login', {
+      (() => serverFetch ?? fetch)()('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -12,13 +12,13 @@ export const authApi = {
         body: JSON.stringify(signedChallenge)
       })
     ).map(({ data }) => data.authToken),
-  createChallenge: () =>
-    fetchWrapper<{ challenge: string }>(fetch('/api/auth/challenge')).map(
-      ({ data }) => data.challenge
-    ),
-  renewAuthToken: () =>
+  createChallenge: (serverFetch?: typeof fetch) =>
+    fetchWrapper<{ challenge: string }>(
+      (() => serverFetch ?? fetch)()('/api/auth/challenge')
+    ).map(({ data }) => data.challenge),
+  renewAuthToken: (serverFetch?: typeof fetch) =>
     fetchWrapper<{ authToken: string }>(
-      fetch('/api/auth/renew', {
+      (() => serverFetch ?? fetch)()('/api/auth/renew', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

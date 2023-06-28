@@ -4,7 +4,7 @@ import { getValidatorsList } from '@api/gateway'
 import { getEnumStringMetadata } from '@api/utils/resources'
 import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
 
-export const load: LayoutLoad = ({ url }) => {
+export const load: LayoutLoad = ({ fetch }) => {
   const validators = getValidatorsList().then((validators) =>
     validators.map((validator) => {
       const state: any = validator.state || {}
@@ -31,7 +31,7 @@ export const load: LayoutLoad = ({ url }) => {
   )
 
   const bookmarkedValidators = bookmarkedValidatorsApi
-    .getAll()
+    .getAll(fetch)
     .unwrapOr([]) as Promise<string[]>
 
   return {
