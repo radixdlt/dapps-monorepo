@@ -2,10 +2,10 @@ import { fetchWrapper } from '@utils'
 import { authApi } from '../auth/auth-api'
 
 export const bookmarkedValidatorsApi = {
-  getAll: () =>
-    authApi.renewAuthToken().andThen((authToken) =>
+  getAll: (serverFetch?: typeof fetch) =>
+    authApi.renewAuthToken(serverFetch).andThen((authToken) =>
       fetchWrapper<string[]>(
-        fetch('/api/validators', {
+        (() => serverFetch ?? fetch)()('/api/validators', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -15,10 +15,10 @@ export const bookmarkedValidatorsApi = {
       ).map(({ data }) => data)
     ),
 
-  create: (validatorAddress: string) =>
-    authApi.renewAuthToken().andThen((authToken) =>
+  create: (validatorAddress: string, serverFetch?: typeof fetch) =>
+    authApi.renewAuthToken(serverFetch).andThen((authToken) =>
       fetchWrapper<string[]>(
-        fetch('/api/validators', {
+        (() => serverFetch ?? fetch)()('/api/validators', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -29,10 +29,10 @@ export const bookmarkedValidatorsApi = {
       ).map(({ data }) => data)
     ),
 
-  remove: (validatorAddress: string) =>
-    authApi.renewAuthToken().andThen((authToken) =>
+  remove: (validatorAddress: string, serverFetch?: typeof fetch) =>
+    authApi.renewAuthToken(serverFetch).andThen((authToken) =>
       fetchWrapper<string[]>(
-        fetch(`/api/validators/${validatorAddress}`, {
+        (() => serverFetch ?? fetch)()(`/api/validators/${validatorAddress}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
