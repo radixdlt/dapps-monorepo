@@ -1,9 +1,9 @@
-<div id="card">
+<div class="card">
   <slot />
 </div>
 
 <style>
-  #card {
+  .card {
     box-shadow: var(--shadow);
     border-radius: var(--border-radius-lg);
     background: var(--background, var(--surface));
