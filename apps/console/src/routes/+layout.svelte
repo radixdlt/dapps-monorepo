@@ -48,6 +48,7 @@
           accountsPath: 'account/',
           transactionPath: 'transaction/'
         },
+        gatewayBaseUrl: CURRENT_NETWORK.url,
         logger: createLogger(0),
         onInit: ({ walletData }) => updateAccounts(walletData.accounts),
         onStateChange: ({ walletData }) => updateAccounts(walletData.accounts),
