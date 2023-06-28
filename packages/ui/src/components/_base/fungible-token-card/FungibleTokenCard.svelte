@@ -1,6 +1,6 @@
 <script lang="ts">
   import Address from '@components/_base/address/Address.svelte'
-  import Tags from './Tags.svelte'
+  import Tags from '../tags/Tags.svelte'
   import { formatTokenValue } from '@utils'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import 'cooltipz-css'
@@ -20,8 +20,8 @@
 <a class="card" href={linksTo}>
   <TokenIcon {isXrd} {iconUrl} />
   <div>
-    <div class="token-text">
-      <span class="token-symbol">{symbol ? symbol.slice(0, 5) : ''}</span>
+    <div class="token-text {isXrd || numberOfTags > 0 ? 'has-tags' : ''}">
+      {#if symbol}<span class="token-symbol">{symbol.slice(0, 5)}</span>{/if}
       <Address short value={address} --background="var(--color-grey-5)" />
     </div>
 
@@ -65,6 +65,10 @@
   .token-text {
     display: flex;
     flex-wrap: wrap;
+
+    &.has-tags {
+      margin-bottom: var(--spacing-sm);
+    }
   }
 
   .token-symbol {
