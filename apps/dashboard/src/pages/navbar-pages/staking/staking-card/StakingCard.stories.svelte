@@ -7,9 +7,9 @@
 
 <Story name="Primary">
   <StakingCard
-    staking={Promise.resolve(20000)}
-    unstaking={Promise.resolve(5000)}
-    readyToClaim={Promise.resolve(200)}
+    staking={Promise.resolve('20000')}
+    unstaking={Promise.resolve('5000')}
+    readyToClaim={Promise.resolve('200')}
     claimText="Claim"
   />
   <br />

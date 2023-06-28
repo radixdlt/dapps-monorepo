@@ -10,7 +10,7 @@ import type {
   NonFungibleResourcesVaultCollection,
   StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem,
-  StateNonFungibleDataResponse
+  StateNonFungibleDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
@@ -37,7 +37,7 @@ export type NonFungibleResource = _Resource<'non-fungible'> & {
   unstakeData: {
     claimEpoch: string
     unstakeAmount: string
-  }[]
+  }
 }
 
 export type Resource = FungibleResource | NonFungibleResource
@@ -89,13 +89,14 @@ export const getVectorMetadata =
     metadata?.items.find((item) => item.key === key)?.value
       ?.as_string_collection || []
 
-export const getUnstakeData = (nftData: StateNonFungibleDataResponse) =>
-  nftData.non_fungible_ids.map((id) => ({
-    // @ts-ignore
-    claimEpoch: id.data.raw_json.fields[0].value as string,
-    // @ts-ignore
-    unstakeAmount: id.data.raw_json.fields[1].value as string
-  }))
+export const getUnstakeData = (
+  nftData: StateNonFungibleDetailsResponseItem
+) => ({
+  // @ts-ignore
+  claimEpoch: nftData.data.raw_json.fields[0].value as string,
+  // @ts-ignore
+  unstakeAmount: nftData.data.raw_json.fields[1].value as string
+})
 
 const getNonFungibleIds = async (
   accountAddress: string,

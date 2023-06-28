@@ -2,7 +2,6 @@
   import type { Account } from '@stores'
   import StakePanel from '../StakePanel.svelte'
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
-  import type { ComponentProps } from 'svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
   import { getUnstakeManifest } from '../manifests'

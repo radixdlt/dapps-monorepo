@@ -2,6 +2,8 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
   import { accountLabel } from '@utils'
+  import { writable, type Readable } from 'svelte/store'
+  import type { StakeInfo } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -21,7 +23,7 @@
     .map((_, i) => ({
       name: 'RADNODE🔥',
       address: validatorAddresses[i % 10],
-      totalStake: Math.random() * 1000000,
+      totalStake: '100000000',
       percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
       fee: Math.random() * 5,
@@ -30,12 +32,11 @@
       percentageTotalStake: Math.random() * 50,
       website: 'https://radnode.io',
       ownerAddress: 'account_1234567890',
-      ownerStake: Math.random() * 1000000,
-      accumulatedStaked: 0,
-      accumulatedUnstaking: 0,
-      accumulatedReadyToClaim: 0,
+      ownerStake: '23000',
       bookmarked: false,
-      selected: false
+      selected: false,
+      stakeUnitResourceAddress: 'resource_1234567890',
+      unstakeClaimResourceAddress: 'resource_1234567890'
     }))
 
   const accounts = Array(3)
@@ -56,28 +57,46 @@
           readyToClaim: Math.random() * 1000000
         }))
     }))
+
+  const stakeInfo: Readable<
+    Promise<{
+      stakes: StakeInfo[]
+      unstaking: StakeInfo[]
+      readyToClaim: StakeInfo[]
+    }>
+  > = writable(
+    Promise.resolve({
+      stakes: Array(3)
+        .fill(undefined)
+        .map((_, i) => ({
+          validator: validators[Math.floor(Math.random() * 9)],
+          account: accounts[Math.floor(Math.random() * 2)],
+          amount: '1000000'
+        })),
+      unstaking: Array(3)
+        .fill(undefined)
+        .map((_, i) => ({
+          validator: validators[Math.floor(Math.random() * 9)],
+          account: accounts[Math.floor(Math.random() * 2)],
+          amount: '20000'
+        })),
+      readyToClaim: Array(3)
+        .fill(undefined)
+        .map((_, i) => ({
+          validator: validators[Math.floor(Math.random() * 9)],
+          account: accounts[Math.floor(Math.random() * 2)],
+          amount: '30000'
+        }))
+    })
+  )
 </script>
 
 <Meta title="Navbar Pages / Validators" />
-
-<Story name="Not Connected">
-  <Validators
-    validators={Promise.resolve(validators)}
-    bookmarked={Promise.resolve([])}
-  />
-</Story>
-
-<Story name="Not Connected / Loading">
-  <Validators
-    validators={new Promise(() => {})}
-    bookmarked={Promise.resolve([])}
-  />
-</Story>
 
 <Story name="Connected">
   <Validators
     bookmarked={Promise.resolve([])}
     validators={Promise.resolve(validators)}
-    accounts={Promise.resolve(accounts)}
+    {stakeInfo}
   />
 </Story>

@@ -3,8 +3,8 @@
     name: string
     address: string
     ownerAddress: string
-    totalStake: number
-    ownerStake: number
+    totalStake: string
+    ownerStake: string
     percentageOwnerStake: number
     apy: number
     fee: number

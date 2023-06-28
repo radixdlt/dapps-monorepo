@@ -8,6 +8,8 @@ import BigNumber from 'bignumber.js'
 import { derived } from 'svelte/store'
 import type { StakeInfo } from './+layout.svelte'
 
+export const prerender = false
+
 export type AccumulatedStakes = {
   [validator: string]: {
     accumulatedStakes: string
@@ -26,7 +28,7 @@ export const load: LayoutLoad = ({ fetch }) => {
         address: validator.address,
         fee: (state.validator_fee_factor || 0) * 100,
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-        totalStake: parseInt(validator.current_stake),
+        totalStake: validator.current_stake,
 
         stakeUnitResourceAddress: (validator.state! as any)
           .stake_unit_resource_address as string,
@@ -36,7 +38,7 @@ export const load: LayoutLoad = ({ fetch }) => {
 
         // TODO:
         ownerAddress: '',
-        ownerStake: 0,
+        ownerStake: '0',
         percentageOwnerStake: 0,
         apy: 0,
         uptime: 0,
@@ -81,34 +83,18 @@ export const load: LayoutLoad = ({ fetch }) => {
       let readyToClaim: StakeInfo[] = []
 
       for (const token of unstakeTokens) {
-        const unstakes = token.unstakeData.filter(({ claimEpoch }) =>
-          new BigNumber(claimEpoch).gt(currentEpoch)
-        )
-        const claims = token.unstakeData.filter(({ claimEpoch }) =>
-          new BigNumber(claimEpoch).lte(currentEpoch)
+        const isClaimable = new BigNumber(token.unstakeData.claimEpoch).lte(
+          currentEpoch
         )
 
-        unstaking.push(
-          ...unstakes.map(({ unstakeAmount }) => ({
-            account,
-            validator: validators.find(
-              (validator) =>
-                validator.unstakeClaimResourceAddress === token.address
-            )!,
-            amount: unstakeAmount
-          }))
-        )
-
-        readyToClaim.push(
-          ...claims.map(({ unstakeAmount }) => ({
-            account,
-            validator: validators.find(
-              (validator) =>
-                validator.unstakeClaimResourceAddress === token.address
-            )!,
-            amount: unstakeAmount
-          }))
-        )
+        ;(() => (isClaimable ? readyToClaim : unstaking))().push({
+          account,
+          validator: validators.find(
+            (validator) =>
+              validator.unstakeClaimResourceAddress === token.address
+          )!,
+          amount: token.unstakeData.unstakeAmount
+        })
       }
 
       return {
