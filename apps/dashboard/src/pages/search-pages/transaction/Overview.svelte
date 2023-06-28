@@ -52,7 +52,7 @@
       {#if data.length === 0}
         N/A
       {:else}
-        <div class="addresses-list">
+        <div class="addresses-list" style:--background="var(--theme-surface-1)">
           {#each data as { entity_address }}
             <Address
               autoShorten
@@ -73,7 +73,7 @@
       {#if data.length === 0}
         N/A
       {:else}
-        <div class="addresses-list">
+        <div class="addresses-list" style:--background="var(--theme-surface-1)">
           {#each data as entity_address}
             <Address
               autoShorten
@@ -110,8 +110,19 @@
 </div>
 
 <style lang="scss">
+  @use '../../../../../../packages/ui/src/mixins.scss';
+
   .addresses-list {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+
+    :global(.address:not(:first-child)) {
+      margin-top: 0.5rem;
+    }
+
+    @include mixins.desktop {
+      align-items: flex-end;
+    }
   }
 </style>

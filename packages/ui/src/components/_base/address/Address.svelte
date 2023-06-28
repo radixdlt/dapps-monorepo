@@ -56,7 +56,6 @@
     display: inline-flex;
     align-items: center;
     border-radius: var(--border-radius-lg);
-    align-self: flex-start;
   }
 
   .text {
