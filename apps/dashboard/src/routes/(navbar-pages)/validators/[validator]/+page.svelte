@@ -1,13 +1,13 @@
 <script lang="ts">
-  import ValidatorDetails from '@pages/navbar-pages/staking/validator-details/ValidatorDetails.svelte'
+  import ValidatorDetails from '@dashboard-pages/navbar-pages/staking/validator-details/ValidatorDetails.svelte'
   import { goto } from '$app/navigation'
   import type { PageData } from './$types'
-  import AddStakeSingle from '@pages/navbar-pages/staking/stake-unstake/stake/single-validator/AddStakeSingle.svelte'
-  import Unstake from '@pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
+  import AddStakeSingle from '@dashboard-pages/navbar-pages/staking/stake-unstake/stake/single-validator/AddStakeSingle.svelte'
+  import Unstake from '@dashboard-pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
   import BigNumber from 'bignumber.js'
   import type { Account } from '@stores'
-  import Claim from '@pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
-  import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
+  import Claim from '@dashboard-pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
+  import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 
   export let data: PageData
 

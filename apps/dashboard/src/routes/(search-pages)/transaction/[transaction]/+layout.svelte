@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SearchPage from '@pages/search-pages/SearchPage.svelte'
+  import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
 

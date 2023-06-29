@@ -12,15 +12,15 @@
   import Validators, {
     selectedValidators,
     type Validator
-  } from '../../../../src/pages/navbar-pages/staking/Validators.svelte'
+  } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
   import type { LayoutData } from './$types'
   import type { Account } from '@stores'
   import { writable } from 'svelte/store'
   import type { AccumulatedStakes } from './proxy+layout'
-  import Claim from '../../../../src/pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
-  import FilterDetails from '../../../../src/pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
+  import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
-  import AddStakeMultiple from '../../../../src/pages/navbar-pages/staking/stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
+  import AddStakeMultiple from '@dashboard-pages/navbar-pages/staking/stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
+  import Claim from '@dashboard-pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
 
   export let data: LayoutData
 

@@ -1,6 +1,6 @@
 import preprocess from 'svelte-preprocess'
-import { configs } from './configs.js'
 import adapter from '@sveltejs/adapter-node';
+import { aliases } from '../../aliases.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,7 +8,7 @@ const config = {
 
 	kit: {
 		adapter: adapter({ out: 'build' }),
-		alias: configs.alias,
+		alias: aliases(),
 		env: {
 			dir: process.cwd()
 		}

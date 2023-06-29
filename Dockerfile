@@ -17,6 +17,7 @@ FROM base AS installer
 RUN apk add --no-cache libc6-compat
 RUN apk update
 COPY .npmrc.docker      /app/.npmrc
+COPY aliases.js /app/aliases.js
 # COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
 WORKDIR /app
 

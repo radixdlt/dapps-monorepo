@@ -2,7 +2,7 @@ import { bookmarkedValidatorsApi } from './../../../server/validators/validators
 import type { LayoutLoad } from './$types'
 import { getGatewayStatus, getValidatorsList } from '@api/gateway'
 import { getAccountData, getEnumStringMetadata } from '@api/utils/resources'
-import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
+import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { derived } from 'svelte/store'
