@@ -1,0 +1,504 @@
+name: Console CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT_NAME:
+        description: 'Environment Name'
+        required: true
+        default: enkinet
+        type: choice
+        options:
+          - enkinet
+          - hammunet
+          - gilganet
+          - mardunet
+          - ansharnet
+          - rcnet-v2
+
+env:
+  active_network: 'enkinet'
+  release_network: 'rcnet'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'build'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+
+  setup-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - name: Docker tags for console
+        id: console-tags
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            eu.gcr.io/dev-container-repo/dapps-console
+          tags: |
+            type=sha,event=pr
+            type=sha,event=branch
+            type=semver,pattern={{version}}
+    outputs:
+      console-tags: ${{ steps.console-tags.outputs.tags }}
+      console-labels: ${{ steps.console-tags.outputs.labels }}
+      console-json: ${{ steps.console-tags.outputs.json }}
+
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'lint'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+      - name: Lint
+        run: npm run lint
+
+  prettier:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'prettier'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+      - name: Prettier
+        run: npm run prettier
+
+  sonar:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        with:
+          always-auth: true
+          node-version: 20.3.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'sonar'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/console/sonar-token-xXTI1Y'
+          parse_json: true
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ./apps/console
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
+
+  svelte-check:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'svelte'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+      - name: Svelte check
+        run: npm run svelte:check
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        with:
+          always-auth: true
+          node-version: 20.3.0
+          cache: npm
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'unit-tests'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - uses: ./.github/actions/build
+        with:
+          npm_token: ${{ env.GH_NPM_TOKEN }}
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
+      - name: Unit tests
+        run: npm run coverage
+
+  push-console:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    needs:
+      - setup-tags
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Define network name
+        run: |
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "published" ]; then
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
+          fi
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'console'
+          step_name: 'push-dash'
+          secret_prefix: 'GH_GCR_JSON_KEY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi'
+          parse_json: false
+      - name: Login to GCR
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          registry: eu.gcr.io
+          username: _json_key
+          password: ${{ env.GH_GCR_JSON_KEY }}
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'console'
+          step_name: 'push-console'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+          parse_json: true
+      - name: Restore yarn cache
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        with:
+          node-version: 20.3.0
+          cache: npm
+      # - name: Copy cache locally
+      #   run: cp -R $HOME/.cache .cache
+      - name: Docker build and push
+        uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
+        with:
+          file: ./Dockerfile
+          push: true
+          context: .
+          tags: ${{ needs.setup-tags.outputs.console-tags }}
+          labels: ${{ needs.setup-tags.outputs.console-labels }}
+          target: 'console'
+          build-args: |
+            NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
+            NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NPM_LOCAL_CACHE=.cache/
+      - name: Docker Image output
+        run: docker images
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+
+  deploy_pull_request:
+    if: ${{ github.event.pull_request }}
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: pr
+      hierarchical_namespace: dapps-console-ci-pr
+      namespace: dapps-console-pr-${{ github.event.number }}
+      restart_pods: false
+      create_subns: true
+      aws_region: eu-west-2
+      role_to_assume: arn:aws:iam::308190735829:role/gh-dapps-console-pr-deployer
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.prNumber=${{ github.event.number }},
+        ci.environment=pr
+      app_name: 'console'
+      step_name: 'deploy-pr'
+
+  deploy_dev:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: dev
+      namespace: dapps-console-dev
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: arn:aws:iam::308190735829:role/gh-dapps-console-dev-deployer
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=dev
+      app_name: 'console'
+      step_name: 'deploy-dev'
+
+  deploy_enkinet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) || 
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: enkinet
+      namespace: dapps-console-enkinet
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dapps-console-dev-deployer'
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=enkinet
+      environment: enkinet
+      app_name: 'console'
+      step_name: 'deploy-enkinet'
+
+  deploy_hammunet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: hammunet
+      namespace: dapps-console-hammunet
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dapps-console-dev-deployer'
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=hammunet
+      environment: hammunet
+      app_name: 'console'
+      step_name: 'deploy-hammunet'
+
+  deploy_gilganet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: gilganet
+      namespace: dapps-console-gilganet
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dapps-console-dev-deployer'
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=gilganet
+      environment: gilganet
+      app_name: 'console'
+      step_name: 'deploy-gilganet'
+
+  deploy_mardunet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: mardunet
+      namespace: dapps-console-mardunet
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::308190735829:role/gh-dapps-console-dev-deployer'
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=mardunet
+      environment: mardunet
+      app_name: 'console'
+      step_name: 'deploy-mardunet'
+
+  deploy_rcnet_v2:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease && github.event.release.tag_name == 'console-*') ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: ansharnet
+      restart_pods: false
+      namespace: dapps-console-ansharnet # Not changing this yet as this will disturb existing rcnet console
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-ansharnet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=ansharnet
+      environment: ansharnet # Not changing this yet as this will disturb existing rcnet console
+      app_name: 'console'
+      step_name: 'deploy-rcnet-v2'
+
+  deploy_ansharnet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: ansharnet-internal
+      namespace: dapps-console-ansharnet-internal
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-ansharnet-internal-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=ansharnet-internal
+      environment: ansharnet-internal
+      app_name: 'console'
+      step_name: 'deploy-ansharnet'
+
+  # run-e2e-tests:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write
+  #     pull-requests: read
+  #     contents: read
+  #   steps:
+  #     - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+  #       with:
+  #         always-auth: true
+  #         node-version: 20.3.0
+  #     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Fetch AWS secrets
+  #       uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+  #       with:
+  #         role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+  #         app_name: 'console'
+  #         step_name: 'e2e-tests'
+  #         secret_prefix: 'GH'
+  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
+  #         parse_json: true
+  #     - uses: ./.github/actions/build
+  #       with:
+  #         npm_token: ${{ env.GH_NPM_TOKEN }}
+  #         active_network_name: ${{ env.active_network }}
+  #         release_network_name: ${{ env.release_network }}
+  #     - name: Run e2e tests on the PR environment
+  #       uses: cypress-io/github-action@v4
+  #       with:
+  #         start: npm run dev
+  #         wait-on: http://localhost:5173
+  #         project: ./apps/console

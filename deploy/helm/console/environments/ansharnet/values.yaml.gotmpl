@@ -1,0 +1,50 @@
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+console:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  params:
+    URL: https://rcnet-console.radixdlt.com
+    NETWORK_GATEWAY_API: https://ansharnet-gateway.radixdlt.com
+
+  secrets:
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: rcnet-console.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true
+
+alertmanager:
+  env: "prod"
+  nameOverride: "console-amcfg"
+  slackConfig:
+    channel: "feed--alerts-ansharnet-dapps-console"
+  secrets:
+    region: eu-west-2
+    name: "rtlj-prod/eks/dapps-console/ansharnet/alertmanager-integration-keys"

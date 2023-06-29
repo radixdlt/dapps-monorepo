@@ -385,6 +385,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.prNumber=${{ github.event.number }},
@@ -407,6 +408,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=dev
@@ -430,6 +432,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=enkinet
@@ -453,6 +456,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=hammunet
@@ -476,6 +480,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=gilganet
@@ -499,6 +504,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
       eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=mardunet
@@ -523,6 +529,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer'
       eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=kisharnet
@@ -547,6 +554,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-deployer'
       eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=ansharnet
@@ -570,6 +578,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-internal-deployer'
       eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=kisharnet-internal
@@ -592,6 +601,7 @@ jobs:
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
       eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
         ci.environment=ansharnet-internal
