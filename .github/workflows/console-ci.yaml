@@ -27,11 +27,28 @@ on:
 
 env:
   active_network: 'enkinet'
-  release_network: 'rcnet'
+  release_network: 'rcnet-v2'
 
 jobs:
+  trigger:
+    name: Check trigger
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'console') ) ||
+      (github.event_name == 'workflow_dispatch' ) ||
+      (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
+      ( github.event_name == 'pull_request' )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@v2
+      - name: Info
+        run: |
+          echo "This is triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+
   build:
     runs-on: ubuntu-latest
+    needs:
+    - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -58,6 +75,8 @@ jobs:
 
   setup-tags:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
         with:
@@ -67,7 +86,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            eu.gcr.io/dev-container-repo/dapps-console
+            docker.io/radixdlt/dapps-console
           tags: |
             type=sha,event=pr
             type=sha,event=branch
@@ -79,6 +98,8 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -105,6 +126,8 @@ jobs:
 
   prettier:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -131,6 +154,8 @@ jobs:
 
   sonar:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -162,6 +187,8 @@ jobs:
 
   svelte-check:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -188,6 +215,8 @@ jobs:
 
   unit-tests:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     permissions:
       id-token: write
       pull-requests: read
@@ -241,16 +270,15 @@ jobs:
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'console'
-          step_name: 'push-dash'
-          secret_prefix: 'GH_GCR_JSON_KEY'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/gcr-credentials-OeJwWi'
-          parse_json: false
-      - name: Login to GCR
+          step_name: 'push-console'
+          secret_prefix: 'DOCKERHUB_PRIVATE'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
+          parse_json: true
+      - name: Login to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
-          registry: eu.gcr.io
-          username: _json_key
-          password: ${{ env.GH_GCR_JSON_KEY }}
+          username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
+          password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
@@ -287,7 +315,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -310,7 +338,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -333,7 +361,7 @@ jobs:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) || 
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -349,14 +377,14 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=enkinet
-      environment: enkinet
+      github_environment: console-enkinet
       app_name: 'console'
       step_name: 'deploy-enkinet'
 
   deploy_hammunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -372,14 +400,14 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=hammunet
-      environment: hammunet
+      github_environment: console-hammunet
       app_name: 'console'
       step_name: 'deploy-hammunet'
 
   deploy_gilganet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'gilganet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -395,14 +423,14 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=gilganet
-      environment: gilganet
+      github_environment: console-gilganet
       app_name: 'console'
       step_name: 'deploy-gilganet'
 
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.10.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
@@ -418,22 +446,22 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=mardunet
-      environment: mardunet
+      github_environment: console-mardunet
       app_name: 'console'
       step_name: 'deploy-mardunet'
 
   deploy_rcnet_v2:
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && github.event.release.tag_name == 'console-*') ||
+      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'console') ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.9.6
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
     with:
       env_name: ansharnet
       restart_pods: false
-      namespace: dapps-console-ansharnet # Not changing this yet as this will disturb existing rcnet console
+      namespace: dapps-console-ansharnet
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-ansharnet-deployer'
@@ -442,19 +470,20 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=ansharnet
-      environment: ansharnet # Not changing this yet as this will disturb existing rcnet console
+      github_environment: console-ansharnet
       app_name: 'console'
       step_name: 'deploy-rcnet-v2'
 
   deploy_ansharnet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.8.3
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
       - setup-tags
     with:
       env_name: ansharnet-internal
+      restart_pods: false
       namespace: dapps-console-ansharnet-internal
       create_subns: false
       aws_region: eu-west-2
@@ -464,41 +493,6 @@ jobs:
       helmfile_extra_vars: >-
         ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
         ci.environment=ansharnet-internal
-      environment: ansharnet-internal
+      github_environment: console-ansharnet-internal
       app_name: 'console'
       step_name: 'deploy-ansharnet'
-
-  # run-e2e-tests:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     id-token: write
-  #     pull-requests: read
-  #     contents: read
-  #   steps:
-  #     - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-  #       with:
-  #         always-auth: true
-  #         node-version: 20.3.0
-  #     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Fetch AWS secrets
-  #       uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-  #         app_name: 'console'
-  #         step_name: 'e2e-tests'
-  #         secret_prefix: 'GH'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-  #         parse_json: true
-  #     - uses: ./.github/actions/build
-  #       with:
-  #         npm_token: ${{ env.GH_NPM_TOKEN }}
-  #         active_network_name: ${{ env.active_network }}
-  #         release_network_name: ${{ env.release_network }}
-  #     - name: Run e2e tests on the PR environment
-  #       uses: cypress-io/github-action@v4
-  #       with:
-  #         start: npm run dev
-  #         wait-on: http://localhost:5173
-  #         project: ./apps/console
