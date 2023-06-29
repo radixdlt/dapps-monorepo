@@ -16,13 +16,13 @@
   } from './side-effects'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import type { sendTransaction } from '@api/wallet'
   import { getTransactionDetails } from '@api/gateway'
   import {
     getAccountData,
     type NonFungibleResource
   } from '@api/utils/resources'
   import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { ComponentEvents } from 'svelte'
 
   export let accounts: Account[]
 
@@ -79,9 +79,7 @@
     false
   )
 
-  const deployPackage = async (
-    send: (...args: Parameters<typeof sendTransaction>) => void
-  ) => {
+  const deployPackage = async (e: ComponentEvents<SendTxButton>['click']) => {
     const wasm = await $requiredUploadedFiles.wasm
     const schema = await $requiredUploadedFiles.schema
     const sborDecodedSchema = await sborDecodeSchema(schema)
@@ -94,20 +92,20 @@
       badge?.id
     )
 
-    send(manifest, [wasm])
+    e.detail(manifest, [wasm])
   }
 
-  const handleResponse = async ({
-    transactionIntentHash,
-    status
-  }: Awaited<ReturnType<typeof sendTransaction>>) => {
-    const entities = (await getTransactionDetails(transactionIntentHash))
-      .createdEntities
+  const handleResponse = async (
+    e: ComponentEvents<SendTxButton>['response']
+  ) => {
+    const entities = (
+      await getTransactionDetails(e.detail.transactionIntentHash)
+    ).createdEntities
 
     packageDeployed.set({
-      txStatus: status,
+      txStatus: e.detail.status,
       address: entities[0]?.entity_address as string,
-      txID: transactionIntentHash
+      txID: e.detail.transactionIntentHash
     })
   }
 
@@ -198,9 +196,9 @@
 
   <Box px="none" mx="none">
     <SendTxButton
-      disabled={!$deployButtonEnabled}
-      onClick={deployPackage}
-      onResponse={handleResponse}
+      buttonProps={{ disabled: !$deployButtonEnabled, size: 'big' }}
+      on:click={deployPackage}
+      on:response={handleResponse}
     />
   </Box>
 </center>

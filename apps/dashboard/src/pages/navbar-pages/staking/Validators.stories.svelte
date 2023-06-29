@@ -94,9 +94,5 @@
 <Meta title="Navbar Pages / Validators" />
 
 <Story name="Connected">
-  <Validators
-    bookmarked={Promise.resolve([])}
-    validators={Promise.resolve(validators)}
-    {stakeInfo}
-  />
+  <Validators validators={Promise.resolve(validators)} {stakeInfo} />
 </Story>
