@@ -5,20 +5,21 @@
   import Header from './header/Header.svelte'
 
   export let type: 'all' | 'staked'
-  export let items: Validator[]
-  export let loading: boolean = false
+  export let validators: Promise<Validator[]>
 
   const sort = (by: keyof Validator, descending: boolean) => {
-    items = items?.sort((a, b) => {
-      if (a[by] > b[by]) return descending ? 1 : -1
-      if (a[by] < b[by]) return descending ? -1 : 1
-      return 0
-    })
+    validators = validators.then((v) =>
+      v.sort((a, b) => {
+        if (a[by] > b[by]) return descending ? 1 : -1
+        if (a[by] < b[by]) return descending ? -1 : 1
+        return 0
+      })
+    )
   }
 </script>
 
 <div class="card-list">
-  {#if loading}
+  {#await validators}
     {#each Array(10) as _, i}
       {#if type === 'all'}
         <ValidatorListCard validatorInfo={new Promise(() => {})} />
@@ -27,10 +28,10 @@
       {/if}
       <slot item={new Promise(() => {})} />
     {/each}
-  {:else if items}
+  {:then validators}
     <Header on:sort={(e) => sort(e.detail.by, e.detail.descending)} />
     {#if type === 'all'}
-      {#each items as validator}
+      {#each validators as validator}
         <ValidatorListCard
           validatorInfo={Promise.resolve(validator)}
           on:click-validator
@@ -38,14 +39,14 @@
       {/each}
     {/if}
     {#if type === 'staked'}
-      {#each items as validator}
+      {#each validators as validator}
         <StakedValidatorCard
           validatorInfo={Promise.resolve(validator)}
           on:click-validator
         />
       {/each}
     {/if}
-  {/if}
+  {/await}
 </div>
 
 <style lang="scss">

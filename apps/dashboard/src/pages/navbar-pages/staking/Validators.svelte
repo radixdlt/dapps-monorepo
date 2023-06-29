@@ -45,15 +45,11 @@
   import { writable, type Readable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
-  import FilterDetails from './filter-details/FilterDetails.svelte'
   import { goto } from '$app/navigation'
-  import AddStakeMultiple from './stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
-  import { bookmarkedValidatorsStore } from '../../../stores'
   import type { StakeInfo } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
 
-  export let bookmarked: Promise<string[]>
   export let validators: Promise<Validator[]>
   export let stakeInfo: Readable<
     Promise<{
@@ -64,18 +60,8 @@
   >
 
   context.set('validators', writable([]))
-  context.set('bookmarkedValidators', bookmarkedValidatorsStore)
 
   $: validators.then(context.get('validators').set)
-  $: bookmarked
-    .then((bookmarked) =>
-      bookmarked.reduce((prev, curr) => ({ ...prev, [curr]: true }), {})
-    )
-    .then(context.get('bookmarkedValidators').set)
-
-  let bookmarkedValidators = context.get('bookmarkedValidators')
-
-  let resolvedValidators = context.get('validators')
 
   const getTotal =
     (type: 'stakes' | 'unstaking' | 'readyToClaim') =>
@@ -101,55 +87,12 @@
   let totalReadyToClaim = new Promise<string>(() => {})
   $: totalReadyToClaim = $stakeInfo.then(getTotal('readyToClaim'))
 
-  let loading = true
-
-  validators.then(() => {
-    loading = false
-  })
-
-  let showFilterDetails = false
-  let showAddMultipleStake = false
-
-  $: filteredValidators = $resolvedValidators
-
-  $: currentlyStaked = $stakeInfo.then((info) =>
-    info.stakes.reduce<{ [k: string]: string }>((prev, cur) => {
-      prev[cur.validator.address] = cur.amount
-      return prev
-    }, {})
-  )
-
   const dispatch = createEventDispatcher<{
-    'claim-all': undefined
+    'show-claim-all': undefined
+    'show-stake-multiple': undefined
+    'show-filters': undefined
   }>()
 </script>
-
-<FilterDetails
-  bind:open={showFilterDetails}
-  feeValues={$resolvedValidators.map((v) => v.fee)}
-  totalXRDStakeValues={$resolvedValidators.map((v) => v.percentageTotalStake)}
-  ownerStakeValues={$resolvedValidators.map((v) => v.percentageOwnerStake)}
-  on:applyFilter={(e) => {
-    filteredValidators = $resolvedValidators.filter((v) => {
-      return (
-        v.fee >= e.detail.feeFilter.min &&
-        v.fee <= e.detail.feeFilter.max &&
-        v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
-        v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
-        v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
-        v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
-        (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-        (e.detail.bookmarkedFilter ? $bookmarkedValidators[v.address] : true)
-      )
-    })
-  }}
-/>
-
-<AddStakeMultiple
-  bind:open={showAddMultipleStake}
-  validators={$resolvedValidators.filter((v) => $selectedValidators[v.address])}
-  {currentlyStaked}
-/>
 
 <div id="validators">
   <div class="header">
@@ -162,7 +105,11 @@
     </div>
     <div id="selected-validators">
       {#if $connected}
-        <SelectedValidators on:click={() => (showAddMultipleStake = true)} />
+        <SelectedValidators
+          on:click={() => {
+            dispatch('show-stake-multiple')
+          }}
+        />
       {/if}
     </div>
   </div>
@@ -193,18 +140,23 @@
           readyToClaim={totalReadyToClaim}
           claimText="Claim All"
           on:click={() => {
-            dispatch('claim-all')
+            dispatch('show-claim-all')
           }}
         />
         <ValidatorList
           type="staked"
-          items={$resolvedValidators.filter(
-            (v) =>
-              stakes.stakes.some((s) => s.validator.address === v.address) ||
-              stakes.unstaking.some((s) => s.validator.address === v.address) ||
-              stakes.readyToClaim.some((s) => s.validator.address === v.address)
+          validators={validators.then((v) =>
+            v.filter(
+              (v) =>
+                stakes.stakes.some((s) => s.validator.address === v.address) ||
+                stakes.unstaking.some(
+                  (s) => s.validator.address === v.address
+                ) ||
+                stakes.readyToClaim.some(
+                  (s) => s.validator.address === v.address
+                )
+            )
           )}
-          {loading}
           on:click-validator={(e) => {
             goto(`/validators/${e.detail}`)
           }}
@@ -217,15 +169,18 @@
     <h2 class="title">All Validators</h2>
     <div class="subtext">List of validators available on the Radix Network</div>
     <div id="filter-btn">
-      <FilterButton on:click={() => (showFilterDetails = true)} />
+      <FilterButton
+        on:click={() => {
+          dispatch('show-filters')
+        }}
+      />
     </div>
   </div>
 
   <div>
     <ValidatorList
       type="all"
-      items={filteredValidators}
-      {loading}
+      {validators}
       on:click-validator={(e) => {
         goto(`/validators/${e.detail}`)
       }}

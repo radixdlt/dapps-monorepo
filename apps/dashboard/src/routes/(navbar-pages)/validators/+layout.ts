@@ -20,6 +20,8 @@ export type AccumulatedStakes = {
   }
 }
 
+export type Bookmarked = { [validator: string]: boolean }
+
 export const load: LayoutLoad = ({ fetch, depends }) => {
   depends(_dependency)
 
@@ -53,7 +55,13 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
 
   const bookmarkedValidators = bookmarkedValidatorsApi
     .getAll(fetch)
-    .unwrapOr([]) as Promise<string[]>
+    .unwrapOr([] as string[])
+    .then((bookmarked) =>
+      bookmarked.reduce<Bookmarked>(
+        (prev, curr) => ({ ...prev, [curr]: true }),
+        {}
+      )
+    )
 
   const getStakeInfo =
     (validators: Validator[]) => async (account: Account) => {
