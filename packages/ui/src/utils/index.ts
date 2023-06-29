@@ -95,7 +95,7 @@ export const useContext = <
 export const accountLabel = (account: Omit<Account, 'displayed'>) =>
   `${account.label} (${shortenAddress(account.address)})`
 
-export const formatAmount = (amount: string) => {
+export const formatAmount = (amount: string | number) => {
   let _amount = new BigNumber(amount)
 
   const suffixes = ['', 'K', 'M']
