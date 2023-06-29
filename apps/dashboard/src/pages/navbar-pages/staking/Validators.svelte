@@ -171,7 +171,7 @@
           pool units to see the status of your current validators and stakes.
         </div>
         <div class="info-text">
-          <Icon size="medium" icon={InfoIcon} />
+          <Icon icon={InfoIcon} />
           What is staking?
         </div>
       {:then}

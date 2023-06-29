@@ -5,8 +5,9 @@
   import AddStakeSingle from '@pages/navbar-pages/staking/stake-unstake/stake/single-validator/AddStakeSingle.svelte'
   import Unstake from '@pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
   import BigNumber from 'bignumber.js'
-  import type { ComponentProps } from 'svelte'
   import type { Account } from '@stores'
+  import Claim from '@pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
+  import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
 
   export let data: PageData
 
@@ -46,7 +47,13 @@
     unstaking.forEach((entry) => addAccount(entry.account))
     readyToClaim.forEach((entry) => addAccount(entry.account))
 
-    const transformedData: ComponentProps<Unstake>['stakes'] = []
+    const transformedData: {
+      account: Account
+      validator: Validator
+      staked: string
+      unstaking: string
+      readyToClaim: string
+    }[] = []
 
     for (const account of allAccounts.values()) {
       const [accumulatedStake, accumulatedUnstake, accumulatedClaim] = [
@@ -95,11 +102,23 @@
 {/await}
 
 {#await stakes then stakes}
-  <Unstake bind:open={unstakeOpen} {stakes} />
+  <Unstake
+    bind:open={unstakeOpen}
+    stakes={stakes.map(({ account, validator, staked }) => ({
+      account,
+      validator,
+      amount: staked
+    }))}
+  />
 {/await}
 
-<!--
-  {#await $stakeInfo then stakes}
-    <Claim bind:open={claimOpen} {claims} {token} />
+{#await stakes then stakes}
+  <Claim
+    bind:open={claimOpen}
+    readyToClaim={stakes.map(({ account, validator, readyToClaim }) => ({
+      account,
+      validator,
+      amount: readyToClaim
+    }))}
+  />
   {/await}
--->
