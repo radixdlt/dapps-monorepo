@@ -17,7 +17,7 @@
       on:unchecked={() => {
         $selectedValidators = $selectedValidators
       }}
-      --label-color="var(--color-grey-2)"
+      --label-color="var(--theme-subtext)"
     >
       {text}
     </Checkbox>

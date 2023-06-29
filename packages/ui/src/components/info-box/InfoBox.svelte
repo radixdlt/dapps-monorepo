@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-  export let header: string = ''
+  export let header = ''
 </script>
 
 <div class="info-box">
