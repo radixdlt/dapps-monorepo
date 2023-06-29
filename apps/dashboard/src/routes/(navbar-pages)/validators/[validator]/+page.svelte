@@ -121,4 +121,4 @@
       amount: readyToClaim
     }))}
   />
-  {/await}
+{/await}

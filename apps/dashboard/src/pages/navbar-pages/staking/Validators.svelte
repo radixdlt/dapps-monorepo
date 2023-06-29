@@ -51,6 +51,7 @@
   import { bookmarkedValidatorsStore } from '../../../stores'
   import type { StakeInfo } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
+  import { createEventDispatcher } from 'svelte'
 
   export let bookmarked: Promise<string[]>
   export let validators: Promise<Validator[]>
@@ -117,6 +118,10 @@
       return prev
     }, {})
   )
+
+  const dispatch = createEventDispatcher<{
+    'claim-all': undefined
+  }>()
 </script>
 
 <FilterDetails
@@ -187,6 +192,9 @@
           unstaking={totalUnstaking}
           readyToClaim={totalReadyToClaim}
           claimText="Claim All"
+          on:click={() => {
+            dispatch('claim-all')
+          }}
         />
         <ValidatorList
           type="staked"

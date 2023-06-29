@@ -49,12 +49,17 @@ const fixtures = [
   },
   {
     name: 'claim',
-    manifest: getClaimManifest(
-      'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
-      'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
-      'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder',
-      '500'
-    )
+    manifest: getClaimManifest([
+      {
+        accountAddress:
+          'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
+        validatorAddress:
+          'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
+        amount: '500',
+        stakeUnitResource:
+          'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder'
+      }
+    ])
   }
 ]
 
