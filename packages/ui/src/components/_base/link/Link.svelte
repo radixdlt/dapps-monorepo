@@ -20,7 +20,7 @@
   }
 
   a {
-    color: var(--theme-link);
+    color: var(--theme-button-primary);
     text-decoration: none;
 
     &:hover {
