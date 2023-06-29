@@ -10,6 +10,8 @@ import type { StakeInfo } from './+layout.svelte'
 
 export const prerender = false
 
+export const _dependency = 'load:validators'
+
 export type AccumulatedStakes = {
   [validator: string]: {
     accumulatedStakes: string
@@ -18,7 +20,9 @@ export type AccumulatedStakes = {
   }
 }
 
-export const load: LayoutLoad = ({ fetch }) => {
+export const load: LayoutLoad = ({ fetch, depends }) => {
+  depends(_dependency)
+
   const validators = getValidatorsList().then((validators) =>
     validators.map((validator) => {
       const state: any = validator.state || {}

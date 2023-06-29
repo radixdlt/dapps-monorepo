@@ -34,7 +34,11 @@
     )
     .toString()
 
-  const unstake = () => {
+  const unstake = (
+    e: CustomEvent<
+      (transactionManifest: string, blobs?: string[] | undefined) => void
+    >
+  ) => {
     const unstakes: {
       accountAddress: string
       validatorAddress: string
@@ -55,7 +59,7 @@
 
     const manifest = getUnstakeManifest(unstakes)
 
-    sendTransaction(manifest)
+    e.detail(manifest)
   }
 </script>
 

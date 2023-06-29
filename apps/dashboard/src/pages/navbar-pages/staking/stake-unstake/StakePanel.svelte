@@ -2,8 +2,11 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
-  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import InfoBox from './InfoBox.svelte'
+  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+  import { invalidate } from '$app/navigation'
+  import { _dependency } from '../../../../routes/(navbar-pages)/validators/+layout'
 
   export let open: boolean
   export let stakeButtonDisabled = false
@@ -49,9 +52,18 @@
     <div class="summary" style:width={rightColumnWidth}>
       <slot name="summary" />
       <div class="stake-button">
-        <ButtonNew on:click size="big" disabled={stakeButtonDisabled}>
+        <SendTxButton
+          on:click
+          on:response={(e) => {
+            if (e.detail.status === TransactionStatus.CommittedSuccess) {
+              invalidate(_dependency)
+              open = false
+            }
+          }}
+          buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
+        >
           <slot name="button-text" />
-        </ButtonNew>
+        </SendTxButton>
       </div>
     </div>
   </div>
