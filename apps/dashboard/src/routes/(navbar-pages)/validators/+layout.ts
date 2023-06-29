@@ -2,13 +2,15 @@ import { bookmarkedValidatorsApi } from './../../../server/validators/validators
 import type { LayoutLoad } from './$types'
 import { getGatewayStatus, getValidatorsList } from '@api/gateway'
 import { getAccountData, getEnumStringMetadata } from '@api/utils/resources'
-import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
+import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { derived } from 'svelte/store'
 import type { StakeInfo } from './+layout.svelte'
 
 export const prerender = false
+
+export const _dependency = 'load:validators'
 
 export type AccumulatedStakes = {
   [validator: string]: {
@@ -18,7 +20,11 @@ export type AccumulatedStakes = {
   }
 }
 
-export const load: LayoutLoad = ({ fetch }) => {
+export type Bookmarked = { [validator: string]: boolean }
+
+export const load: LayoutLoad = ({ fetch, depends }) => {
+  depends(_dependency)
+
   const validators = getValidatorsList().then((validators) =>
     validators.map((validator) => {
       const state: any = validator.state || {}
@@ -49,7 +55,13 @@ export const load: LayoutLoad = ({ fetch }) => {
 
   const bookmarkedValidators = bookmarkedValidatorsApi
     .getAll(fetch)
-    .unwrapOr([]) as Promise<string[]>
+    .unwrapOr([] as string[])
+    .then((bookmarked) =>
+      bookmarked.reduce<Bookmarked>(
+        (prev, curr) => ({ ...prev, [curr]: true }),
+        {}
+      )
+    )
 
   const getStakeInfo =
     (validators: Validator[]) => async (account: Account) => {

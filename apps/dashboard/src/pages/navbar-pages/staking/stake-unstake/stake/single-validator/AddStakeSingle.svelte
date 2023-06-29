@@ -5,7 +5,6 @@
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
   import { xrdAddress, type Account } from '@stores'
-  import { sendTransaction } from '@api/wallet'
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
 
@@ -29,8 +28,12 @@
   $: if (selectedAccount) {
     xrdBalance = getXRDBalance(selectedAccount.address)
   }
+</script>
 
-  const stake = () => {
+<StakeUnstakePanel
+  bind:open
+  bind:stakeButtonDisabled
+  on:click={(e) => {
     const manifest = getStakeManifest(
       selectedAccount.address,
       validator.address,
@@ -38,11 +41,9 @@
       xrd
     )
 
-    sendTransaction(manifest)
-  }
-</script>
-
-<StakeUnstakePanel bind:open bind:stakeButtonDisabled on:click={stake}>
+    e.detail(manifest)
+  }}
+>
   <svelte:fragment slot="title">Add Stake</svelte:fragment>
 
   <svelte:fragment slot="account-picker" let:rightColumnWidth>

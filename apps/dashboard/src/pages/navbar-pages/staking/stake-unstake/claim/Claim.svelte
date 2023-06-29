@@ -1,32 +1,49 @@
 <script lang="ts">
-  import type { ComponentProps } from 'svelte'
   import StakePanel from '../StakePanel.svelte'
   import Address from '@components/_base/address/Address.svelte'
-  import type ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
   import TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import type { Account } from '@stores'
+  import { XRDToken } from '@constants'
+  import type { Validator } from '../../Validators.svelte'
+  import { getClaimManifest } from '../manifests'
 
   export let open: boolean
-  export let claims: {
-    validator: Omit<ComponentProps<ValidatorInfo>, 'currentlyStakingAmount'>
+  export let readyToClaim: {
+    validator: Validator
     amount: string
     account: Account
   }[]
-  export let token: ComponentProps<TokenAmountCard>['token']
 
   let totalClaimAmount = '0'
 
-  $: totalClaimAmount = claims
+  $: totalClaimAmount = readyToClaim
     .reduce<BigNumber>(
       (acc, claim) => acc.plus(claim.amount === '' ? '0' : claim.amount),
       new BigNumber(0)
     )
     .toString()
+
+  const claim = (
+    e: CustomEvent<
+      (transactionManifest: string, blobs?: string[] | undefined) => void
+    >
+  ) => {
+    e.detail(
+      getClaimManifest(
+        readyToClaim.map((claim) => ({
+          ...claim,
+          accountAddress: claim.account.address,
+          validatorAddress: claim.validator.address,
+          stakeUnitResource: claim.validator.stakeUnitResourceAddress
+        }))
+      )
+    )
+  }
 </script>
 
-<StakePanel {open}>
+<StakePanel bind:open on:click={claim}>
   <svelte:fragment slot="title">Claim</svelte:fragment>
 
   <svelte:fragment slot="heading-text">Claim your XRD tokens</svelte:fragment>
@@ -35,7 +52,7 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
-      {#each claims as { validator, amount, account }}
+      {#each readyToClaim as { validator, amount, account }}
         <div class="validator-card">
           <div class="validator">
             <div class="dotted-overflow">
@@ -46,7 +63,7 @@
             </div>
           </div>
           <TokenAmountCard
-            {token}
+            token={XRDToken}
             {account}
             tokenAmount={amount}
             tokenDisplayedAmount={amount}

@@ -1,4 +1,4 @@
-import type { Validator } from '@pages/navbar-pages/staking/Validators.svelte'
+import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import { goto } from '$app/navigation'
 import type { PageLoad } from './$types'
 

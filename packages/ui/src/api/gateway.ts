@@ -1,15 +1,24 @@
 import { CURRENT_NETWORK } from '../../src/network'
-import { GatewayApiClient } from '@radixdlt/babylon-gateway-api-sdk'
+import {
+  GatewayApiClient,
+  type StateNonFungibleDetailsResponseItem
+} from '@radixdlt/babylon-gateway-api-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
   basePath: CURRENT_NETWORK?.url
 })
 
+export const getValidatorsList = () => {
+  return gatewayApi.state.getAllValidators()
+}
+
+export const getGatewayStatus = () => gatewayApi.status.getCurrent()
+
 export const getTransactionDetails = (
   intentHashHex: string,
   optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]
-) =>
-  gatewayApi.transaction
+) => {
+  return gatewayApi.transaction
     .getCommittedDetails(intentHashHex, optIns)
     .then((res) => ({
       epoch: res.transaction.epoch,
@@ -20,11 +29,17 @@ export const getTransactionDetails = (
       message: res.transaction.message_hex,
       encodedManifest: res.transaction.raw_hex,
       receipt: res.transaction.receipt,
+      events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
+      affectedEntities: res.transaction.affected_global_entities || [],
       createdEntities:
         (res.transaction.receipt?.state_updates as any)?.new_global_entities ||
         [],
       stateVersion: res.transaction.state_version
     }))
+}
+
+export const getNetworkConfiguration = () =>
+  gatewayApi.status.getNetworkConfiguration()
 
 export const getSingleEntityDetails = (address: string) =>
   gatewayApi.state.getEntityDetailsVaultAggregated(address)
@@ -56,17 +71,11 @@ export const getEntityNonFungibleVaults = (
     }
   })
 
-export const getNonFungibleData = (address: string, id: string) =>
-  gatewayApi.state.innerClient.nonFungibleData({
-    stateNonFungibleDataRequest: {
-      resource_address: address,
-      non_fungible_ids: [id]
-    }
-  })
+export const getNonFungibleData = (
+  address: string,
+  id: string
+): Promise<StateNonFungibleDetailsResponseItem> =>
+  gatewayApi.state.getNonFungibleData(address, id)
 
 export const getNonFungibleIDs = (address: string) =>
-  gatewayApi.state.innerClient.nonFungibleIds({
-    stateNonFungibleIdsRequest: {
-      resource_address: address
-    }
-  })
+  gatewayApi.state.getAllNonFungibleIds(address)

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { type FungibleResource, getAccountData } from '@api/utils/resources'
-  import Account from '@pages/search-pages/account/Account.svelte'
+  import Account from '@dashboard-pages/search-pages/account/Account.svelte'
   import type { PageData } from './$types'
-  import type { Token } from '@pages/search-pages/account/types'
-  import FungibleTokensPage from '@pages/search-pages/account/FungibleTokensPage.svelte'
+  import type { Token } from '@dashboard-pages/search-pages/account/types'
+  import FungibleTokensPage from '@dashboard-pages/search-pages/account/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
   import { goto } from '$app/navigation'

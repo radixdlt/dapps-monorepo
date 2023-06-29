@@ -102,15 +102,18 @@
   />
   <Box bgColor="surface" justify="end">
     <SendTxButton
-      disabled={!(
-        selectedFromAccount?.address &&
-        (selectedToAccount?.address || otherAccount.length > 0) &&
-        resourceSelected
-      )}
-      onClick={(send) => send(transactionManifest)}
-      onResponse={(response) =>
+      buttonProps={{
+        disabled: !(
+          selectedFromAccount?.address &&
+          (selectedToAccount?.address || otherAccount.length > 0) &&
+          resourceSelected
+        ),
+        size: 'big'
+      }}
+      on:click={(e) => e.detail(transactionManifest)}
+      on:response={(e) =>
         goto(
-          `/send-tokens/success?txID=${response.transactionIntentHash}&txStatus=${response.status}`
+          `/send-tokens/success?txID=${e.detail.transactionIntentHash}&txStatus=${e.detail.status}`
         )}
     />
   </Box>
