@@ -11,7 +11,6 @@
     selectedAccount,
     storage
   } from '@stores'
-  import { resolveRDT } from '../radix'
   import {
     RadixDappToolkit,
     DataRequestOutput
@@ -28,6 +27,7 @@
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { getNetworkConfiguration } from '@api/gateway'
+  import { resolveRDT } from '../../../../packages/ui/src/radix'
 
   let mounted = false
 
