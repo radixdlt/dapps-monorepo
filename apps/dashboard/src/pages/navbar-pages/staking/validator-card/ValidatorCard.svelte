@@ -20,7 +20,7 @@
 <button
   id="validator-card"
   class="validator-card-grid"
-  on:click|self={() =>
+  on:click={() =>
     validatorInfo.then((info) => dispatch('click-validator', info.address))}
 >
   <div id="icon">
