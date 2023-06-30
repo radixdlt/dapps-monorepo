@@ -45,19 +45,20 @@
   @use '../../../mixins.scss';
 
   nav {
-    position: fixed;
     z-index: 2000;
     height: 100%;
     width: calc(100% - 70px);
     border-width: 1px;
     border-color: var(--theme-border);
     background-color: var(--theme-surface-2);
+    position: fixed;
+    top: 0;
 
     @include mixins.desktop {
       grid-area: nav;
       position: sticky;
       height: calc(100vh - 100px);
-      top: 100px;
+      top: 0px;
       width: auto;
       z-index: unset;
     }
@@ -77,6 +78,7 @@
     -webkit-mask-size: contain;
     position: fixed;
     right: 0;
+    top: 0;
     &:hover {
       transition: background-color 0.1s ease-in-out;
       background-color: var(--theme-subtext);

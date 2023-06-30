@@ -38,11 +38,11 @@
   } else {
     popFromStack()
   }
-
-  $: document.body.style.overflow = $panelStack.length > 0 ? 'hidden' : 'auto'
 </script>
 
-<svelte:window on:keydown={(e) => handleKeydown(e)} />
+<svelte:window
+  on:keydown={(e) => handleKeydown(e)}
+/>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if open}
@@ -72,7 +72,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 60vw; 
+    width: 60vw;
     max-width: 70rem;
     background: var(--color-grey-5);
     z-index: 3;
