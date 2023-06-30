@@ -28,7 +28,6 @@
   header {
     padding: var(--spacing-xl);
     background-color: var(--color-light);
-    position: sticky;
     top: 0;
     border-bottom: solid;
     display: flex;
@@ -36,7 +35,6 @@
     align-items: center;
     border-width: 1px;
     border-color: var(--theme-border);
-    grid-area: header;
     z-index: 2;
     padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
     flex-direction: column;

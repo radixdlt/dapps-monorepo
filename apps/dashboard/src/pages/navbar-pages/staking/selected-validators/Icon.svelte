@@ -19,6 +19,7 @@
 
 <style lang="scss">
   #icon {
+    position: relative;
     #main-icon {
       position: relative;
       z-index: 1;
