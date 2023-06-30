@@ -50,7 +50,7 @@
       }),
       stakes: Array(3)
         .fill(undefined)
-        .map((_, i) => ({
+        .map((_) => ({
           validator: validatorAddresses[Math.floor(Math.random() * 9)],
           staked: Math.random() * 1000000,
           unstaking: Math.random() * 1000000,
@@ -68,21 +68,21 @@
     Promise.resolve({
       stakes: Array(3)
         .fill(undefined)
-        .map((_, i) => ({
+        .map((_) => ({
           validator: validators[Math.floor(Math.random() * 9)],
           account: accounts[Math.floor(Math.random() * 2)],
           amount: '1000000'
         })),
       unstaking: Array(3)
         .fill(undefined)
-        .map((_, i) => ({
+        .map((_) => ({
           validator: validators[Math.floor(Math.random() * 9)],
           account: accounts[Math.floor(Math.random() * 2)],
           amount: '20000'
         })),
       readyToClaim: Array(3)
         .fill(undefined)
-        .map((_, i) => ({
+        .map((_) => ({
           validator: validators[Math.floor(Math.random() * 9)],
           account: accounts[Math.floor(Math.random() * 2)],
           amount: '30000'

@@ -2,10 +2,8 @@
   import type { getTransactionDetails } from '@api/gateway'
   import CodeBox from '@components/code-box/CodeBox.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import { addressToRoute } from '@utils'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
-  import Address from '@components/_base/address/Address.svelte'
-  import { goto } from '$app/navigation'
+  import AddressesList from '@components/_base/address/AddressesList.svelte'
 
   export let tx: ReturnType<typeof getTransactionDetails>
   export let manifest: Promise<string | undefined>
@@ -52,16 +50,7 @@
       {#if data.length === 0}
         N/A
       {:else}
-        <div class="addresses-list" style:--background="var(--theme-surface-1)">
-          {#each data as { entity_address }}
-            <Address
-              autoShorten
-              useBackground
-              on:click={() => goto(addressToRoute(entity_address))}
-              value={entity_address}
-            />
-          {/each}
-        </div>
+        <AddressesList addresses={data} autoShorten />
       {/if}
     </AwaitedRow>
 
@@ -73,16 +62,7 @@
       {#if data.length === 0}
         N/A
       {:else}
-        <div class="addresses-list" style:--background="var(--theme-surface-1)">
-          {#each data as entity_address}
-            <Address
-              autoShorten
-              useBackground
-              on:click={() => goto(addressToRoute(entity_address))}
-              value={entity_address}
-            />
-          {/each}
-        </div>
+        <AddressesList addresses={data} autoShorten />
       {/if}
     </AwaitedRow>
 
@@ -108,21 +88,3 @@
     </AwaitedRow>
   </InfoBox>
 </div>
-
-<style lang="scss">
-  @use '../../../../../../packages/ui/src/mixins.scss';
-
-  .addresses-list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    :global(.address:not(:first-child)) {
-      margin-top: 0.5rem;
-    }
-
-    @include mixins.desktop {
-      align-items: flex-end;
-    }
-  }
-</style>
