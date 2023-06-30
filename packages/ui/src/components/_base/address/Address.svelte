@@ -51,7 +51,7 @@
   bind:this={addressElement}
 >
   <!-- svelte-ignore a11y-missing-attribute -->
-  <button class="text" on:click={handleAddressClick}>
+  <button class="text" on:click|stopPropagation={handleAddressClick}>
     {short ? shortenAddress(value) : value}
   </button>
   <button use:copyToClipboard={value}>

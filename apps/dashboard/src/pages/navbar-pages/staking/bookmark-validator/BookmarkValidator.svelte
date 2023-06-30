@@ -20,7 +20,7 @@
   {:then validator}
     <button
       class="bookmarked"
-      on:click={() => {
+      on:click|stopPropagation={() => {
         $bookmarkedValidatorsStore[validator.address] =
           !$bookmarkedValidatorsStore[validator.address]
         bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)
