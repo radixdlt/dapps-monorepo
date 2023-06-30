@@ -187,7 +187,7 @@ const transformFungible = async (
   })
 }
 
-const transformResources = (
+export const transformResources = (
   items: StateEntityDetailsVaultResponseItem[],
   options?: Partial<{ fungibles: boolean; nfts: boolean }>
 ) => {

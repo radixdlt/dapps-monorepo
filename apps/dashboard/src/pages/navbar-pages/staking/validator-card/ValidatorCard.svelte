@@ -1,7 +1,7 @@
 <script lang="ts">
   import StakeDisplay from './StakeDisplay.svelte'
   import ApyBox from './ApyBox.svelte'
-  import Address from './Address.svelte'
+  import Address from '@components/_base/address/Address.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
@@ -41,7 +41,7 @@
     {#await validatorInfo}
       <SkeletonLoader width={80} />
     {:then { address }}
-      <Address {address} />
+      <Address short value={address} --background="var(--theme-surface-1)" />
     {/await}
   </div>
 

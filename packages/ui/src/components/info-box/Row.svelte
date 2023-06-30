@@ -18,6 +18,7 @@
     font-weight: var(--font-weight-bold-2);
     text-transform: uppercase;
     margin-bottom: 1rem;
+    margin-right: 2rem;
 
     @include mixins.desktop {
       margin-bottom: 0;

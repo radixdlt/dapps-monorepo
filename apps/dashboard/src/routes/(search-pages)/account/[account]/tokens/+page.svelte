@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { type FungibleResource, getAccountData } from '@api/utils/resources'
-  import Account from '@dashboard-pages/search-pages/account/Account.svelte'
+  import type { FungibleResource } from '@api/utils/resources'
   import type { PageData } from './$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/FungibleTokensPage.svelte'
@@ -28,7 +27,7 @@
   $: xrdAddress = $xrdAddressStore
 
   $: promise = xrdAddress
-    ? getAccountData([data.accountAddress])
+    ? data.promises.account
         .then((arr) => arr[0])
         .then((details) => {
           const { [xrdAddress!]: xrdRaw, ...tokensRaw } = indexBy(
@@ -50,14 +49,12 @@
     : Promise.resolve(undefined)
 </script>
 
-<Account address={data.accountAddress} activeTab="tokens">
-  {#await promise}
-    <FungibleTokensPage loading={true} />
-  {:then value}
-    {#if value}
-      <FungibleTokensPage xrd={value.xrd} tokens={value.tokens} />
-    {/if}
-  {:catch}
-    <!-- INVALID ACCOUNT -->
-  {/await}
-</Account>
+{#await promise}
+  <FungibleTokensPage loading={true} />
+{:then value}
+  {#if value}
+    <FungibleTokensPage xrd={value.xrd} tokens={value.tokens} />
+  {/if}
+{:catch}
+  <!-- INVALID ACCOUNT -->
+{/await}
