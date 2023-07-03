@@ -73,9 +73,9 @@ export const getEntityNonFungibleVaults = (
 
 export const getNonFungibleData = (
   address: string,
-  id: string
-): Promise<StateNonFungibleDetailsResponseItem> =>
-  gatewayApi.state.getNonFungibleData(address, id)
+  ids: string[]
+): Promise<StateNonFungibleDetailsResponseItem[]> =>
+  gatewayApi.state.getNonFungibleData(address, ids)
 
 export const getNonFungibleIDs = (address: string) =>
   gatewayApi.state.getAllNonFungibleIds(address)
