@@ -42,31 +42,27 @@
   import StakingCard from './staking-card/StakingCard.svelte'
   import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
-  import { writable, type Readable, type Writable } from 'svelte/store'
+  import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import { goto } from '$app/navigation'
-  import type { StakeInfo } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
+  import {
+    stakeInfo,
+    type StakeInfo
+  } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
 
   export let validators: Promise<Validator[]>
-  export let stakeInfo: Readable<
-    Promise<{
-      stakes: StakeInfo[]
-      unstaking: StakeInfo[]
-      readyToClaim: StakeInfo[]
-    }>
-  >
 
   context.set('validators', writable([]))
 
   $: validators.then(context.get('validators').set)
 
   const getTotal =
-    (type: 'stakes' | 'unstaking' | 'readyToClaim') =>
+    (type: 'staked' | 'unstaking' | 'readyToClaim') =>
     (info: {
-      stakes: StakeInfo[]
+      staked: StakeInfo[]
       unstaking: StakeInfo[]
       readyToClaim: StakeInfo[]
     }) =>
@@ -79,7 +75,7 @@
 
   let totalStaked = new Promise<string>(() => {})
 
-  $: totalStaked = $stakeInfo.then(getTotal('stakes'))
+  $: totalStaked = $stakeInfo.then(getTotal('staked'))
 
   let totalUnstaking = new Promise<string>(() => {})
   $: totalUnstaking = $stakeInfo.then(getTotal('unstaking'))
@@ -148,7 +144,7 @@
           validators={validators.then((v) =>
             v.filter(
               (v) =>
-                stakes.stakes.some((s) => s.validator.address === v.address) ||
+                stakes.staked.some((s) => s.validator.address === v.address) ||
                 stakes.unstaking.some(
                   (s) => s.validator.address === v.address
                 ) ||
