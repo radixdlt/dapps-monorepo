@@ -46,11 +46,13 @@
       {/await}
       <div class="claim-button">
         {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
-          <ButtonNew size="small"
-            >ready to claim {formatAmount(
-              stakes[info.address].accumulatedReadyToClaim
-            )} XRD</ButtonNew
-          >
+          {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
+            <ButtonNew size="small"
+              >ready to claim {formatAmount(
+                stakes[info.address].accumulatedReadyToClaim
+              )} XRD</ButtonNew
+            >
+          {/if}
         {/await}
       </div>
     </div>
