@@ -14,7 +14,7 @@
     ? address.split(':')
     : [address, '']
 
-  $: nftData = getNonFungibleData(resourceAddress, nftId)
+  $: nftData = getNonFungibleData(resourceAddress, [nftId])
 
   $: details = getSingleEntityDetails(resourceAddress)
 </script>
@@ -25,7 +25,7 @@
     <InfoBox slot="body">
       <AwaitedRow
         text="ID"
-        promise={nftData.then(({ non_fungible_id }) => non_fungible_id)}
+        promise={nftData.then(([{ non_fungible_id }]) => non_fungible_id)}
       />
     </InfoBox>
   </Card>

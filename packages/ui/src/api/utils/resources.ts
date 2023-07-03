@@ -137,16 +137,19 @@ const transformNonFungible = async (
       ({ address }) => address === nonFungible.resource_address
     )!
 
-    for (const id of ids) {
-      const nftData = await getNonFungibleData(nonFungible.resource_address, id)
+    const nftData = await getNonFungibleData(
+      nonFungible.resource_address,
+      ids
+    )
 
+    for (const singleNftData of nftData) {
       transformedNonFungibles.push({
         type: 'non-fungible',
-        label: nonFungibleResourceDisplayLabel(entity, id),
-        id,
+        label: nonFungibleResourceDisplayLabel(entity, singleNftData.non_fungible_id),
+        id: singleNftData.non_fungible_id,
         address: `${entity.address}`,
         name: getStringMetadata('name')(entity.metadata),
-        unstakeData: getUnstakeData(nftData) ?? []
+        unstakeData: getUnstakeData(singleNftData) ?? []
       })
     }
   }
