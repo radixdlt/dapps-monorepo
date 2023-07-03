@@ -1,9 +1,9 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
+  import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
   import { formatAmount, formatTokenValue } from '@utils'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/validators/proxy+layout'
@@ -23,14 +23,10 @@
 </script>
 
 <SidePanel bind:open>
-  <div id="top-row">
-    <CloseButton on:click={() => (open = false)} />
-    <h3>Validator</h3>
-    <div id="bookmarked">
-      <BookmarkValidator {validator} withText />
-    </div>
-  </div>
-  <Divider />
+  <SidePanelHeader text="Validator" on:closeClick={() => (open = false)}>
+    <BookmarkValidator {validator} withText />
+  </SidePanelHeader>
+
   {#await validator}
     <SkeletonLoader />
   {:then validator}
@@ -40,11 +36,7 @@
     {#await validator}
       <SkeletonLoader />
     {:then { address }}
-      <Address
-        value={address}
-        short
-        --background="var(--theme-surface-3)"
-      />
+      <Address value={address} short --background="var(--theme-surface-3)" />
     {/await}
     <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
@@ -150,16 +142,6 @@
 
   .surface-2 {
     @include mixins.card();
-  }
-
-  #top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    #bookmarked {
-      justify-self: end;
-    }
   }
 
   .subheader {

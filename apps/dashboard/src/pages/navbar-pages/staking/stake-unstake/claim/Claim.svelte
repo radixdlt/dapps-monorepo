@@ -43,9 +43,7 @@
   }
 </script>
 
-<StakePanel bind:open on:click={claim}>
-  <svelte:fragment slot="title">Claim</svelte:fragment>
-
+<StakePanel bind:open on:click={claim} sidePanelHeader="Claim">
   <svelte:fragment slot="heading-text">Claim your XRD tokens</svelte:fragment>
 
   <svelte:fragment slot="heading-subtext">Ready to claim</svelte:fragment>
@@ -59,7 +57,7 @@
               {validator.name}
             </div>
             <div>
-              <Address value={validator.address} short/>
+              <Address value={validator.address} short />
             </div>
           </div>
           <TokenAmountCard

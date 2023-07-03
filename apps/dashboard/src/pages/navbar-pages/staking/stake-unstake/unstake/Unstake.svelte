@@ -60,9 +60,12 @@
   }
 </script>
 
-<StakePanel bind:open {stakeButtonDisabled} on:click={unstake}>
-  <svelte:fragment slot="title">Unstake</svelte:fragment>
-
+<StakePanel
+  bind:open
+  {stakeButtonDisabled}
+  on:click={unstake}
+  sidePanelHeader="Unstake"
+>
   <svelte:fragment slot="heading-text">
     Validator you have chosen to unstake from
   </svelte:fragment>

@@ -1,27 +1,24 @@
 <script lang="ts">
-  import Divider from '@components/_base/divider/Divider.svelte'
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
-  import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
   import InfoBox from './InfoBox.svelte'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
   import { invalidate } from '$app/navigation'
   import { _dependency } from '../../../../routes/(navbar-pages)/validators/+layout'
+  import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
 
   export let open: boolean
+  export let sidePanelHeader: string
   export let stakeButtonDisabled = false
 
   let rightColumnWidth = '25rem'
 </script>
 
 <SidePanel bind:open>
-  <div class="header">
-    <CloseButton on:click={() => (open = false)} />
-    <h3><slot name="title" /></h3>
-    <div />
-  </div>
-
-  <Divider />
+  <SidePanelHeader
+    text={sidePanelHeader}
+    on:closeClick={() => (open = false)}
+  />
 
   <div class="flex">
     <div />
@@ -80,12 +77,6 @@
     .align-left {
       text-align: left;
     }
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 
   .summary {

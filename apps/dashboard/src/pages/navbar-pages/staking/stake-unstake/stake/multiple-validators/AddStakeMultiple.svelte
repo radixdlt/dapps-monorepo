@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StakeUnstakePanel from '../../StakePanel.svelte'
+  import StakePanel from '../../StakePanel.svelte'
   import type { Validator } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
@@ -71,7 +71,8 @@
   }
 </script>
 
-<StakeUnstakePanel
+<StakePanel
+  sidePanelHeader="Add Stake"
   bind:open
   {stakeButtonDisabled}
   on:click={(e) => {
@@ -84,8 +85,6 @@
     e.detail(manifest)
   }}
 >
-  <svelte:fragment slot="title">Add Stake</svelte:fragment>
-
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>
       <svelte:fragment slot="account-picker-text">
@@ -141,7 +140,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="button-text">Stake</svelte:fragment>
-</StakeUnstakePanel>
+</StakePanel>
 
 <style lang="scss">
   @use '../../../../../../../../../packages/ui/src/mixins.scss';
