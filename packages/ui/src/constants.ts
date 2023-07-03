@@ -62,3 +62,5 @@ export const XRDToken = {
   name: XRD_SYMBOL,
   iconUrl: xrdIcon
 }
+
+export const EXPECTED_EPOCH_TIME_MINUTES = 5

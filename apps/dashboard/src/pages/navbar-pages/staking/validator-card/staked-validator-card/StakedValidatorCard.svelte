@@ -7,6 +7,8 @@
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import StakingIcon from '@icons/staking.svg'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
+  import BigNumber from 'bignumber.js'
+  import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 </script>
@@ -37,21 +39,18 @@
           </div>
         {/await}
       </div>
-      {#await validatorInfo then}
-        <div class="ready-to-claim-text">
-          (ready to claim in approx. 8 days)
-        </div>
+      {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
+        {#if new BigNumber(stakes[info.address].accumulatedUnstaking).gt(0)}
+          <ReadyToClaim validatorAddress={info.address} />
+        {/if}
       {/await}
-      <div class="links">
+      <div class="claim-button">
         {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
-          <a>add a reminder to calendar</a>
-          <div>
-            <ButtonNew size="small"
-              >ready to claim {formatAmount(
-                stakes[info.address].accumulatedReadyToClaim
-              )} XRD</ButtonNew
-            >
-          </div>
+          <ButtonNew size="small"
+            >ready to claim {formatAmount(
+              stakes[info.address].accumulatedReadyToClaim
+            )} XRD</ButtonNew
+          >
         {/await}
       </div>
     </div>
@@ -116,13 +115,7 @@
     font-weight: var(--font-weight-bold-2);
   }
 
-  .ready-to-claim-text {
-    color: var(--theme-subtext);
-  }
-
-  .links {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  .claim-button {
+    width: 15rem;
   }
 </style>
