@@ -662,6 +662,7 @@ jobs:
       env_name: ansharnet-internal
       namespace: dashboard-ansharnet-internal
       create_subns: false
+      restart_pods: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
       eks_cluster: rtlj-prod
