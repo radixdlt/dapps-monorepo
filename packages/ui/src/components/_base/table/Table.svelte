@@ -29,12 +29,14 @@
       (acc, [key, value]) => {
         if (typeof value === 'string' && value.startsWith('$$')) {
           acc[key] = entry[value.slice(2)]
+        } else if (typeof value === 'function') {
+          acc[key] = value(entry)
         } else {
           acc[key] = value
         }
         return acc
       },
-      {} as Record<string, string>
+      {} as Record<string, string | number | boolean | Record<string, any>>
     )
   }
 

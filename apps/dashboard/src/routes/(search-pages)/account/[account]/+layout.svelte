@@ -17,7 +17,10 @@
   activeTab={data.activeTab || 'tokens'}
   menuItems={[
     [{ id: 'tokens', label: 'Tokens' }],
-    [{ id: 'metadata', label: 'Metadata' }]
+    [
+      { id: 'recent-transactions', label: 'Recent Transactions' },
+      { id: 'metadata', label: 'Metadata' }
+    ]
   ]}
   on:navigate={({ detail }) => goto(detail)}
 >
