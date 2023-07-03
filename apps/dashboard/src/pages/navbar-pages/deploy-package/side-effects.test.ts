@@ -9,7 +9,7 @@ import {
   getDeployPackageManifest
 } from './side-effects'
 import { readFileSync } from 'fs'
-import { resolve, join } from 'path'
+import { join } from 'path'
 
 describe('Deploy Package Transaction Manifests', () => {
   it('should create a create badge manifest', async () => {

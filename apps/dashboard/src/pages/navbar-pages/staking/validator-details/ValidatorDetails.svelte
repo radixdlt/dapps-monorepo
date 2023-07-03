@@ -1,20 +1,21 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
-  import { formatAmount, shortenAddress } from '@utils'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import { formatAmount, formatTokenValue } from '@utils'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
-  import CopyIcon from '@icons/copy.svg'
-  import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
-  import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
-  import { setFavoriteValidator } from '../../../../server/validators/validators-api'
-  import { bookmarkedValidatorsStore } from '../../../../stores'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
-  import { selectedValidators, type Validator } from '../Validators.svelte'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/validators/proxy+layout'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
+  import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
+  import Address from '@components/_base/address/Address.svelte'
+  import Row from '@components/info-box/Row.svelte'
+  import Link from '@components/_base/link/Link.svelte'
+  import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
+  import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
+  import SelectValidator from '../select-validator/SelectValidator.svelte'
+  import type { Validator } from '../Validators.svelte'
 
   export let open: boolean
   export let validator: Promise<Validator>
@@ -22,241 +23,150 @@
 </script>
 
 <SidePanel bind:open>
-  <div id="validator-details">
-    <div id="top-row">
-      <CloseButton on:click={() => (open = false)} />
-      <h3>Validator</h3>
-      {#if $connected}
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <button
-            id="bookmarked"
-            on:click={() => {
-              $bookmarkedValidatorsStore[validator.address] =
-                !$bookmarkedValidatorsStore[validator.address]
-              bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)
-              setFavoriteValidator(
-                validator.address,
-                $bookmarkedValidatorsStore[validator.address]
-              ).mapErr(() => {
-                $bookmarkedValidatorsStore[validator.address] =
-                  !$bookmarkedValidatorsStore[validator.address]
-                bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)
-              })
-            }}
-          >
-            <IconNew
-              icon={$bookmarkedValidatorsStore[validator.address]
-                ? BookmarkFilledIcon
-                : BookmarkEmptyIcon}
-              size="medium"
-            />
-            Bookmarked
-          </button>
-        {/await}
-      {/if}
+  <div id="top-row">
+    <CloseButton on:click={() => (open = false)} />
+    <h3>Validator</h3>
+    <div id="bookmarked">
+      <BookmarkValidator {validator} withText />
+    </div>
+  </div>
+  <Divider />
+  {#await validator}
+    <SkeletonLoader />
+  {:then validator}
+    <h1>{validator.name}</h1>
+  {/await}
+  <div class="subheader">
+    {#await validator}
+      <SkeletonLoader />
+    {:then { address }}
+      <Address
+        value={address}
+        short
+        useBackground
+        --background="var(--theme-surface-3)"
+      />
+    {/await}
+    <SelectValidator {validator} text="SELECT VALIDATOR" />
+  </div>
+
+  {#if $connected}
+    <div>
+      <ExtendedStakingCard
+        staked={validator.then((v) =>
+          accumulatedValidatorStakes.then(
+            (accum) => accum[v.address].accumulatedStakes
+          )
+        )}
+        unstaking={validator.then((v) =>
+          accumulatedValidatorStakes.then(
+            (accum) => accum[v.address].accumulatedUnstaking
+          )
+        )}
+        readyToClaim={validator.then((v) =>
+          accumulatedValidatorStakes.then(
+            (accum) => accum[v.address].accumulatedReadyToClaim
+          )
+        )}
+        claimText="Claim"
+        on:add-stake
+        on:unstake
+        on:claim
+      />
     </div>
     <Divider />
-    <div id="name">
-      <h2>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          {validator.name}
-        {/await}
-      </h2>
-      <a id="address">
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          {shortenAddress(validator.address)}
-          <IconNew icon={CopyIcon} size="medium" />
-        {/await}
-      </a>
-    </div>
+  {/if}
 
-    <div id="select">
-      {#if $connected}
-        {#await validator then validator}
-          <Checkbox
-            bind:checked={$selectedValidators[validator.address]}
-            on:checked={() => {
-              $selectedValidators = $selectedValidators
-            }}
-            on:unchecked={() => {
-              $selectedValidators = $selectedValidators
-            }}
-            --label-color="var(--color-grey-2)"
-          >
-            SELECT VALIDATOR
-          </Checkbox>
-        {/await}
-      {/if}
-    </div>
-
-    {#if $connected}
-      <div>
-        <ExtendedStakingCard
-          staked={validator.then((v) =>
-            accumulatedValidatorStakes.then(
-              (accum) => accum[v.address].accumulatedStakes
-            )
-          )}
-          unstaking={validator.then((v) =>
-            accumulatedValidatorStakes.then(
-              (accum) => accum[v.address].accumulatedUnstaking
-            )
-          )}
-          readyToClaim={validator.then((v) =>
-            accumulatedValidatorStakes.then(
-              (accum) => accum[v.address].accumulatedReadyToClaim
-            )
-          )}
-          claimText="Claim"
-          on:add-stake
-          on:unstake
-          on:claim
+  <div class="surface-2">
+    <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
+      <AwaitedRow
+        text="Address"
+        promise={validator.then(({ address }) => address)}
+        let:data
+      >
+        <Address value={data} />
+      </AwaitedRow>
+      <AwaitedRow
+        text="Owner address"
+        promise={validator.then(({ ownerAddress }) => ownerAddress)}
+        let:data
+      >
+        <Address value={data} />
+      </AwaitedRow>
+      <AwaitedRow
+        text="Website"
+        promise={validator.then(({ website }) => website)}
+        let:data
+      >
+        <Link url={data} external />
+      </AwaitedRow>
+      <AwaitedRow text="Total Stake" promise={validator} let:data>
+        <div>
+          <span>{formatTokenValue(data.totalStake).value} XRD</span>
+          <span>({data.percentageTotalStake.toFixed(1)}%)</span>
+        </div>
+      </AwaitedRow>
+      <AwaitedRow text="Owner Stake" promise={validator} let:data>
+        <div>
+          <span>{formatTokenValue(data.ownerStake).value} XRD</span>
+          <span>({data.percentageOwnerStake.toFixed(1)}%)</span>
+        </div>
+      </AwaitedRow>
+      <AwaitedRow
+        text="Fee (%)"
+        promise={validator.then(({ fee }) => fee)}
+        let:data
+      >
+        {formatAmount(data)}
+      </AwaitedRow>
+      <AwaitedRow
+        text="Apy"
+        promise={validator.then(({ apy }) => apy)}
+        let:data
+      >
+        {formatAmount(data)}
+      </AwaitedRow>
+      <AwaitedRow
+        text="Server Provider"
+        promise={validator.then(({ uptime }) => uptime)}
+        let:data
+      >
+        N/A ({formatAmount(data)}%)
+      </AwaitedRow>
+      <Row text="Accepts Stake">
+        <AcceptsStake
+          slot="right"
+          value={validator.then(({ acceptsStake }) => acceptsStake)}
         />
-      </div>
-      <Divider />
-    {/if}
-
-    <div id="details">
-      <h3>Validator Details</h3>
-      <div class="row">
-        <div>ADDRESS</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <a>{shortenAddress(validator.address)}</a>
-        {/await}
-      </div>
-      <div class="row">
-        <div>OWNER ADDRESS</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <a>{shortenAddress(validator.ownerAddress)}</a>
-        {/await}
-      </div>
-      <div class="row">
-        <div>WEBSITE</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <a>{validator.website}</a>
-        {/await}
-      </div>
-      <div class="row">
-        <div>TOTAL STAKE</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{validator.totalStake}</div>
-        {/await}
-      </div>
-      <div class="row">
-        <div>OWNER STAKE</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{validator.ownerStake}</div>
-        {/await}
-      </div>
-      <div class="row">
-        <div>FEE (%)</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{formatAmount(validator.fee.toString())}</div>
-        {/await}
-      </div>
-      <div class="row">
-        <div>APY</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{formatAmount(validator.apy.toString())}</div>
-        {/await}
-      </div>
-      <div class="row">
-        <div>RECENT UPTIME</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{formatAmount(validator.uptime.toString())}</div>
-        {/await}
-      </div>
-      <div class="row">
-        <div>ACCEPTS STAKE</div>
-        {#await validator}
-          <SkeletonLoader />
-        {:then validator}
-          <div>{validator.acceptsStake}</div>
-        {/await}
-      </div>
-    </div>
+      </Row>
+      <Row text="Registration Status">
+        <span slot="right">N/A</span>
+      </Row>
+    </InfoBox>
   </div>
 </SidePanel>
 
 <style lang="scss">
   @use '../../../../../../../packages/ui/src/mixins.scss';
 
-  #validator-details {
-    #top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--spacing-xl);
+  .surface-2 {
+    @include mixins.card();
+  }
 
-      #bookmarked {
-        justify-self: end;
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-        font-weight: var(--font-weight-bold-2);
-      }
+  #top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    #bookmarked {
+      justify-self: end;
     }
+  }
 
-    #name {
-      #address {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm);
-      }
-    }
-
-    #select {
-      display: flex;
-      justify-content: end;
-      margin-bottom: var(--spacing-xl);
-    }
-
-    #details {
-      @include mixins.card();
-
-      border: none;
-      margin-top: var(--spacing-2xl);
-      padding: var(--spacing-2xl) var(--spacing-xl);
-
-      .row {
-        display: grid;
-        grid: 1fr / 1fr 1fr;
-        align-items: center;
-        gap: var(--spacing-md);
-        border-bottom: var(--border);
-        padding-bottom: var(--spacing-lg);
-        padding-top: var(--spacing-lg);
-
-        :nth-child(1) {
-          color: var(--theme-subtext);
-          font-weight: var(--font-weight-bold-2);
-        }
-        :nth-child(2) {
-          justify-self: end;
-        }
-      }
-    }
+  .subheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
   }
 </style>

@@ -10,7 +10,6 @@
   import { xrdAddress, type Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getMultipleStakeManifest } from '../../manifests'
-  import { sendTransaction } from '@api/wallet'
   import { removeThousandsSeparator } from '@utils/format-amount'
 
   export let open: boolean
@@ -24,16 +23,6 @@
   xrdAddress.subscribe((xrdAddress) => {
     xrd = xrdAddress as string
   })
-
-  const stake = () => {
-    const manifest = getMultipleStakeManifest(
-      selectedAccount.address,
-      stakeAmounts,
-      xrd
-    )
-
-    sendTransaction(manifest)
-  }
 
   let stakeButtonDisabled = true
 
@@ -82,7 +71,19 @@
   }
 </script>
 
-<StakeUnstakePanel bind:open {stakeButtonDisabled} on:click={stake}>
+<StakeUnstakePanel
+  bind:open
+  {stakeButtonDisabled}
+  on:click={(e) => {
+    const manifest = getMultipleStakeManifest(
+      selectedAccount.address,
+      stakeAmounts,
+      xrd
+    )
+
+    e.detail(manifest)
+  }}
+>
   <svelte:fragment slot="title">Add Stake</svelte:fragment>
 
   <svelte:fragment slot="account-picker" let:rightColumnWidth>

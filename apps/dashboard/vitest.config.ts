@@ -1,9 +1,9 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig } from 'vitest/config'
-import { configs } from './configs'
 import path from 'path'
+import { aliases } from '../../aliases'
 
-const mappedAliases = Object.entries(configs.alias).reduce(
+const mappedAliases = Object.entries(aliases()).reduce(
   (obj, [key, value]) => ({
     [key]: path.resolve(__dirname, value),
     ...obj

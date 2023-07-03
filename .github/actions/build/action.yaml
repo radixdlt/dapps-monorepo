@@ -58,6 +58,6 @@ runs:
         echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
     - name: Build
       shell: bash
-      run: npm ci && npm run db:generate && npm run build
+      run: npm ci && npm run db:generate && npx turbo run build --filter=ui && npx turbo run build --filter=dashboard
       env:
         PUBLIC_NETWORK_NAME: ${{ env.NETWORK_NAME }}

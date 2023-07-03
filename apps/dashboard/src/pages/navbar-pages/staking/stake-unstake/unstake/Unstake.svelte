@@ -6,15 +6,12 @@
   import { formatTokenValue } from '@utils'
   import { getUnstakeManifest } from '../manifests'
   import type { Validator } from '../../Validators.svelte'
-  import { sendTransaction } from '@api/wallet'
 
   export let open: boolean
   export let stakes: {
     account: Account
     validator: Validator
-    staked: string
-    unstaking: string
-    readyToClaim: string
+    amount: string
   }[]
 
   let stakeButtonDisabled = false
@@ -34,7 +31,11 @@
     )
     .toString()
 
-  const unstake = () => {
+  const unstake = (
+    e: CustomEvent<
+      (transactionManifest: string, blobs?: string[] | undefined) => void
+    >
+  ) => {
     const unstakes: {
       accountAddress: string
       validatorAddress: string
@@ -55,7 +56,7 @@
 
     const manifest = getUnstakeManifest(unstakes)
 
-    sendTransaction(manifest)
+    e.detail(manifest)
   }
 </script>
 
@@ -75,7 +76,7 @@
           <OverviewUnstakeCard
             validator={stake.validator}
             account={stake.account}
-            stakedAmount={stake.staked.toString()}
+            stakedAmount={stake.amount.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
             --token-amount-card-width={rightColumnWidth}

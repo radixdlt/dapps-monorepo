@@ -102,28 +102,35 @@ export const getUnstakeManifest = (
     .join(' ')
 
 export const getClaimManifest = (
-  accountAddress: string,
-  validatorAddress: string,
-  unstakeNftAddress: string,
-  amount: string
-) => `
+  claims: {
+    accountAddress: string
+    validatorAddress: string
+    stakeUnitResource: string
+    amount: string
+  }[]
+) =>
+  claims
+    .map(
+      ({ accountAddress, validatorAddress, stakeUnitResource, amount }, i) => `
     CALL_METHOD
     Address("${accountAddress}")
     "withdraw"
-    Address("${unstakeNftAddress}")
+    Address("${stakeUnitResource}")
     Decimal("${amount}");
 
     TAKE_ALL_FROM_WORKTOP
-    Address("${unstakeNftAddress}")
-    Bucket("bucket1");
+    Address("${stakeUnitResource}")
+    Bucket("bucket${i}");
 
     CALL_METHOD
     Address("${validatorAddress}")
     "claim_xrd"
-    Bucket("bucket1");
+    Bucket("bucket${i}");
 
     CALL_METHOD
     Address("${accountAddress}")
     "try_deposit_batch_or_abort"
     Expression("ENTIRE_WORKTOP");
-  `
+`
+    )
+    .join('')

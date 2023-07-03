@@ -52,19 +52,20 @@
 
 <Box justify="center">
   <SendTxButton
-    onClick={async (send) => {
+    on:click={(e) => {
       if (transactionManifest.includes('lock_fee')) {
         showDialog = true
-        waitForConfirm.then((_) => send(transactionManifest))
+        waitForConfirm.then((_) => e.detail(transactionManifest))
         waitForConfirm = new Promise((_) => {})
       } else {
-        send(transactionManifest)
+        e.detail(transactionManifest)
       }
     }}
-    onResponse={(response) => {
+    on:response={(e) => {
       goto(
-        `/transaction-manifest/success?txID=${response.transactionIntentHash}`
+        `/transaction-manifest/success?txID=${e.detail.transactionIntentHash}`
       )
     }}
+    buttonProps={{ size: 'big' }}
   />
 </Box>

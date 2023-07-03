@@ -21,7 +21,7 @@
       type="checkbox"
       class:checked
       bind:checked
-      on:click={handleOnClick}
+      on:click|stopPropagation={handleOnClick}
       style={checked
         ? `background: center / contain no-repeat url(${CheckedIcon}); border: none;`
         : ''}

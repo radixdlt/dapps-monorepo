@@ -1,28 +1,43 @@
-import { getEntityDetails, getEntityNonFungibleIDs } from '@api/gateway'
+import {
+  getEntityDetails,
+  getEntityNonFungibleIDs,
+  getSingleEntityDetails
+} from '@api/gateway'
 import type {
   EntityMetadataCollection,
   FungibleResourcesVaultCollection,
   NonFungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesVaultCollection,
   StateEntityDetailsResponseItem,
-  StateEntityDetailsVaultResponseItem
+  StateEntityDetailsVaultResponseItem,
+  StateNonFungibleDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
+import { BigNumber } from 'bignumber.js'
+import { getNonFungibleData } from '@api/gateway'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = {
   type: T
   address: string
   label: string
   name?: string
+  symbol?: string
+  iconUrl?: string
+  description?: string
+  tags?: string[]
 }
 
 export type FungibleResource = _Resource<'fungible'> & {
-  value: number
+  value: string
 }
 
 export type NonFungibleResource = _Resource<'non-fungible'> & {
   id: string
+  unstakeData: {
+    claimEpoch: string
+    unstakeAmount: string
+  }
 }
 
 export type Resource = FungibleResource | NonFungibleResource
@@ -60,6 +75,11 @@ const nonFungibleResourceDisplayLabel = (
         : `${getNFTAddress(resource.address, id)}`
   )()
 
+export const getEnumStringMetadata =
+  (key: string) => (metadata?: EntityMetadataCollection) =>
+    (metadata?.items.find((item) => item.key === key)?.value?.raw_json as any)
+      ?.fields?.[0].value || ''
+
 export const getStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
     metadata?.items.find((item) => item.key === key)?.value?.as_string || ''
@@ -68,6 +88,15 @@ export const getVectorMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
     metadata?.items.find((item) => item.key === key)?.value
       ?.as_string_collection || []
+
+export const getUnstakeData = (
+  nftData: StateNonFungibleDetailsResponseItem
+) => ({
+  // @ts-ignore
+  claimEpoch: nftData.data.raw_json.fields[0].value as string,
+  // @ts-ignore
+  unstakeAmount: nftData.data.raw_json.fields[1].value as string
+})
 
 const getNonFungibleIds = async (
   accountAddress: string,
@@ -109,12 +138,15 @@ const transformNonFungible = async (
     )!
 
     for (const id of ids) {
+      const nftData = await getNonFungibleData(nonFungible.resource_address, id)
+
       transformedNonFungibles.push({
         type: 'non-fungible',
         label: nonFungibleResourceDisplayLabel(entity, id),
         id,
         address: `${entity.address}`,
-        name: getStringMetadata('name')(entity.metadata)
+        name: getStringMetadata('name')(entity.metadata),
+        unstakeData: getUnstakeData(nftData) ?? []
       })
     }
   }
@@ -142,18 +174,25 @@ const transformFungible = async (
       type: 'fungible',
       label: fungibleResourceDisplayLabel(entity),
       value:
-        vaults?.items.reduce(
-          (prev: any, next) => prev + Number(next.amount),
-          0
-        ) || 0,
+        vaults?.items
+          .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
+          .toString() || '0',
       address: entity.address,
-      name: getStringMetadata('name')(entity.metadata)
+      name: getStringMetadata('name')(entity.metadata),
+      symbol: getStringMetadata('symbol')(entity.metadata),
+      iconUrl: getStringMetadata('icon_url')(entity.metadata),
+      description: getStringMetadata('description')(entity.metadata),
+      tags: getVectorMetadata('tags')(entity.metadata)
     }
   })
 }
 
-const transformResources = (items: StateEntityDetailsVaultResponseItem[]) =>
-  Promise.all(
+export const transformResources = (
+  items: StateEntityDetailsVaultResponseItem[],
+  options?: Partial<{ fungibles: boolean; nfts: boolean }>
+) => {
+  const { fungibles = true, nfts = true } = options || {}
+  return Promise.all(
     items.map(async (item) => {
       const {
         non_fungible_resources = { items: [] },
@@ -161,12 +200,12 @@ const transformResources = (items: StateEntityDetailsVaultResponseItem[]) =>
         address
       } = item
 
-      const fungible = await transformFungible(fungible_resources)
-      const nonFungible = await transformNonFungible(
-        non_fungible_resources,
-        address
-      )
-
+      const fungible = fungibles
+        ? await transformFungible(fungible_resources)
+        : []
+      const nonFungible = nfts
+        ? await transformNonFungible(non_fungible_resources, address)
+        : []
       return {
         accountAddress: item.address,
         details: item,
@@ -175,6 +214,7 @@ const transformResources = (items: StateEntityDetailsVaultResponseItem[]) =>
       }
     })
   )
+}
 
 const getResource =
   (type: 'fungible' | 'nonFungible') =>
@@ -190,3 +230,12 @@ export const getNonFungibleResource = getResource('nonFungible')
 
 export const getAccountData = (accounts: string[]) =>
   pipe(() => getEntityDetails(accounts), andThen(transformResources))()
+
+export const getAccountFungibleTokens = (accounts: string) =>
+  pipe(
+    () => getSingleEntityDetails(accounts),
+    andThen((data) =>
+      transformResources([data], { nfts: false, fungibles: true })
+    ),
+    andThen((data) => data[0])
+  )()

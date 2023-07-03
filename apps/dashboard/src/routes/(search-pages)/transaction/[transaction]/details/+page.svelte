@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Overview from '@pages/search-pages/transaction/Overview.svelte'
+  import Overview from '@dashboard-pages/search-pages/transaction/Overview.svelte'
   import type { LayoutData } from '../$types'
 
   export let data: LayoutData

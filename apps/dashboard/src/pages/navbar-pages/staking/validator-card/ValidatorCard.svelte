@@ -1,16 +1,13 @@
 <script lang="ts">
-  import Icon from '@components/_base/icon/IconNew.svelte'
   import StakeDisplay from './StakeDisplay.svelte'
   import ApyBox from './ApyBox.svelte'
-  import Address from './Address.svelte'
+  import Address from '@components/_base/address/Address.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { truncateNumber } from '@utils'
-  import { selectedValidators, type Validator } from '../Validators.svelte'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
-  import CheckMarkIcon from '@icons/checkmark.svg'
-  import CrossIcon from '@icons/cross.svg'
-  import { connected } from '@stores'
+  import SelectValidator from '../select-validator/SelectValidator.svelte'
+  import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
+  import type { Validator } from '../Validators.svelte'
 
   export let validatorInfo: Promise<Validator>
 
@@ -23,7 +20,7 @@
 <button
   id="validator-card"
   class="validator-card-grid"
-  on:click|self={() =>
+  on:click={() =>
     validatorInfo.then((info) => dispatch('click-validator', info.address))}
 >
   <div id="icon">
@@ -44,7 +41,7 @@
     {#await validatorInfo}
       <SkeletonLoader width={80} />
     {:then { address }}
-      <Address {address} />
+      <Address short value={address} --background="var(--theme-surface-1)" />
     {/await}
   </div>
 
@@ -65,36 +62,13 @@
   </div>
 
   <div class="info-column" style:line-height="0">
-    {#await validatorInfo}
-      <SkeletonLoader width={20} />
-    {:then { acceptsStake }}
-      {#if acceptsStake}
-        <Icon size="medium" icon={CheckMarkIcon} />
-      {:else}
-        <div style:color="var(--color-alert)">
-          <Icon size="medium" icon={CrossIcon} />
-        </div>
-      {/if}
-    {/await}
+    <AcceptsStake
+      value={validatorInfo.then(({ acceptsStake }) => acceptsStake)}
+    />
   </div>
 
   <div class="info-column last-column" style:min-width="10rem">
-    {#await validatorInfo then info}
-      {#if $connected}
-        <Checkbox
-          bind:checked={$selectedValidators[info.address]}
-          on:checked={() => {
-            $selectedValidators = $selectedValidators
-          }}
-          on:unchecked={() => {
-            $selectedValidators = $selectedValidators
-          }}
-          --label-color="var(--color-grey-2)"
-        >
-          SELECT
-        </Checkbox>
-      {/if}
-    {/await}
+    <SelectValidator validator={validatorInfo} text="SELECT" />
   </div>
 </button>
 
