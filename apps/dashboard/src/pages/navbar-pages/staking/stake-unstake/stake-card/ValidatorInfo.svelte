@@ -13,7 +13,7 @@
     {name}
   </div>
   <div>
-    <Address value={address} short useBackground={false} />
+    <Address value={address} short />
   </div>
   {#if currentlyStakingAmount}
     <div class="currently-staking dotted-overflow">

@@ -59,7 +59,7 @@
               {validator.name}
             </div>
             <div>
-              <Address value={validator.address} short useBackground={false} />
+              <Address value={validator.address} short/>
             </div>
           </div>
           <TokenAmountCard

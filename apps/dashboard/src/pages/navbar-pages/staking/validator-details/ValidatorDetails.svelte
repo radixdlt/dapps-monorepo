@@ -43,7 +43,6 @@
       <Address
         value={address}
         short
-        useBackground
         --background="var(--theme-surface-3)"
       />
     {/await}
@@ -84,14 +83,14 @@
         promise={validator.then(({ address }) => address)}
         let:data
       >
-        <Address value={data} />
+        <Address short value={data} />
       </AwaitedRow>
       <AwaitedRow
         text="Owner address"
         promise={validator.then(({ ownerAddress }) => ownerAddress)}
         let:data
       >
-        <Address value={data} />
+        <Address short value={data} />
       </AwaitedRow>
       <AwaitedRow
         text="Website"
