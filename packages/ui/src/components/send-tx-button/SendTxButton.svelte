@@ -23,6 +23,6 @@
       <LoadingSpinner />
     </div>
   {:else}
-    <slot />
+    <slot>Send</slot>
   {/if}
 </ButtonNew>
