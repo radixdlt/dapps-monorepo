@@ -2,13 +2,13 @@ storybook:
   replicaCount: 1
 
   image:
-    repository: eu.gcr.io/dev-container-repo/storybook
+    repository: docker.io/radixdlt/dapps-dashboard-storybook
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
   imagePullSecrets:
-    - name: docker-eu-gcr-dev-api
+    - name: docker-hub-dev
 
   nameOverride: "storybook"
 

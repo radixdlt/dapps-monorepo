@@ -8,13 +8,13 @@ console:
     port: 9209
 
   image:
-    repository: eu.gcr.io/dev-container-repo/dapps-console
+    repository: docker.io/radixdlt/dapps-console
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
   imagePullSecrets:
-    - name: docker-eu-gcr-dev-api
+    - name: docker-hub-dev
 
   nameOverride: "console"
 
@@ -68,7 +68,7 @@ console:
   docker:
     secrets:
       region: eu-west-1
-      name: eu.gcr.io/dev-container-repo
+      name: docker.io/radixdlt
 
   # Set it to true if you want to secret to be deployed.
   docker_secret: 
