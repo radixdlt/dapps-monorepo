@@ -31,12 +31,12 @@ export const AuthController = ({
   dAppDefinitionAddress: string
   networkId: number
 }>) => {
-  const rola = RolaFactory(
+  const rola = RolaFactory({
     gatewayService,
     expectedOrigin,
     dAppDefinitionAddress,
     networkId
-  )
+  })
 
   const createChallenge = (): ControllerOutput<{ challenge: string }> =>
     authModel

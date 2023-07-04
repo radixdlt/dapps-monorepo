@@ -1,3 +1,3 @@
-import { ec as Elliptic } from 'elliptic'
+import Eliptic from 'elliptic'
 
-export const secp256k1 = new Elliptic('secp256k1')
+export const secp256k1 = new Eliptic.ec('secp256k1')
