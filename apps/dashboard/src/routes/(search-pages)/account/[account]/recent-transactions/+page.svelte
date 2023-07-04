@@ -3,18 +3,19 @@
   import type { PageData } from './$types'
   import Table from '@components/_base/table/Table.svelte'
   import type { TableConfig } from '@components/_base/table/types'
-  import Link from '@components/_base/link/Link.svelte'
+  import DateAndTxIdColumn from './DateAndTxIdColumn.svelte'
+
   export let data: PageData
 
   const config: TableConfig = {
     columns: [
       {
-        label: 'Tx Intent Hash',
+        label: 'ID/DATE (GMT +00)',
         property: 'intent_hash_hex',
-        component: Link,
+        component: DateAndTxIdColumn,
         componentProps: {
-          url: (entry: any) => `/transaction/${entry.intent_hash_hex}`,
-          text: '$$intent_hash_hex'
+          id: '$$intent_hash_hex',
+          date: '$$confirmed_at'
         }
       },
       {
