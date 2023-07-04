@@ -6,14 +6,14 @@
   import { createEventDispatcher } from 'svelte'
   import type { Validator } from '../../Validators.svelte'
   import TrashIcon from '@icons/trash.svg'
-  import { XRDToken, XRD_SYMBOL } from '@constants'
+  import { XRDToken } from '@constants'
 
   export let rightColumnWidth: string
   export let validator: Validator
   export let tokenAmount: string = '0'
   export let tokenDisplayedAmount: string = '0'
   export let amountCardDisabled = false
-  export let currentlyStakingAmount: Promise<string>
+  export let currentlyStakingAmount: Promise<string | undefined>
 
   const dispatchRemoveEvent = createEventDispatcher<{
     remove: { validator: string }
@@ -59,5 +59,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
   }
 </style>

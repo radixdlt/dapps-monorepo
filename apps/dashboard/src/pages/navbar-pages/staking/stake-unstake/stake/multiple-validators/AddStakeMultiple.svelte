@@ -69,6 +69,10 @@
     // @ts-ignore
     stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
   }
+
+  const removeValidator = (i: number) => {
+    validators = validators.filter((_, index) => index !== i)
+  }
 </script>
 
 <StakePanel
@@ -128,6 +132,7 @@
             (staked) => staked[validator.address]
           )}
           on:input={handleStakeInput(i)}
+          on:remove={() => removeValidator(i)}
         />
       {/each}
     </div>

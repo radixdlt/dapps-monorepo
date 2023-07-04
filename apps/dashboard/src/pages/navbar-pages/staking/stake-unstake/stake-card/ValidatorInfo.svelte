@@ -5,7 +5,8 @@
 
   export let name: string
   export let address: string
-  export let currentlyStakingAmount: Promise<string> | undefined = undefined
+  export let currentlyStakingAmount: Promise<string | undefined> | undefined =
+    undefined
 </script>
 
 <div class="staking-info">
@@ -19,9 +20,9 @@
     <div class="currently-staking dotted-overflow">
       Currently staking:
       {#await currentlyStakingAmount}
-        <SkeletonLoader />
+        <SkeletonLoader width={100} />
       {:then amount}
-        {formatTokenValue(amount).value} XRD
+        {formatTokenValue(amount ?? '0').value} XRD
       {/await}
     </div>
   {/if}
@@ -42,6 +43,8 @@
     .currently-staking {
       margin-top: var(--spacing-sm);
       color: var(--theme-subtext);
+      display: flex;
+      gap: var(--spacing-md);
     }
   }
 </style>
