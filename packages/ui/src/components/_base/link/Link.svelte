@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation'
   import IconNew from '../icon/IconNew.svelte'
   import ExternalLink from '@icons/external-link.svg'
 
@@ -7,13 +8,23 @@
   export let external = false
 </script>
 
-<a class="wrapper" href={url} target={external ? '_blank' : '_self'}>
-  {text || url}
+{#if external}
+  <a class="wrapper" href={url} target="_blank">
+    {text || url}
 
-  {#if external}<IconNew icon={ExternalLink} />{/if}
-</a>
+    <IconNew icon={ExternalLink} />
+  </a>
+{:else}
+  <button class="link" on:click={() => goto(url)}>
+    {text || url}
+  </button>
+{/if}
 
 <style lang="scss">
+  .link {
+     color: var(--theme-button-primary);
+  }
+
   .wrapper {
     display: inline-flex;
     align-items: center;
