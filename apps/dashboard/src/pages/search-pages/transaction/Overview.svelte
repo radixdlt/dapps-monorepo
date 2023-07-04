@@ -44,7 +44,9 @@
 
     <AwaitedRow
       text="Created Entities"
-      promise={tx.then(({ createdEntities }) => createdEntities)}
+      promise={tx.then(({ createdEntities }) =>
+        createdEntities.map(({ entity_address }) => entity_address)
+      )}
       let:data
     >
       {#if data.length === 0}

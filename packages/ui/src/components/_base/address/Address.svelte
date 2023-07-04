@@ -9,7 +9,6 @@
 
   export let value = ''
   export let short = false
-  export let useBackground = true
   export let autoShorten = false
   export let preventNavigation = false
 
@@ -44,12 +43,7 @@
   })
 </script>
 
-<div
-  class="address"
-  style:background={useBackground ? 'var(--background)' : ''}
-  style:padding={useBackground ? 'var(--spacing-xs) var(--spacing-sm)' : ''}
-  bind:this={addressElement}
->
+<div class="address" bind:this={addressElement}>
   <!-- svelte-ignore a11y-missing-attribute -->
   <button class="text" on:click|stopPropagation={handleAddressClick}>
     {short ? shortenAddress(value) : value}
@@ -63,6 +57,8 @@
   .address {
     display: inline-flex;
     align-items: center;
+    background: var(--background);
+    padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--border-radius-lg);
   }
 

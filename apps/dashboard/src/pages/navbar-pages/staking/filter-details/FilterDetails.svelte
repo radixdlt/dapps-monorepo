@@ -1,11 +1,11 @@
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
-  import CloseButton from '@components/_base/side-panel/CloseButton.svelte'
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import HistogramFilterCard from './histogram-filter-card/HistogramFilterCard.svelte'
   import ManualFilterCard from './manual-filter-card/ManualFilterCard.svelte'
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
+  import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
 
   export let open: boolean
   export let feeValues: number[]
@@ -68,12 +68,10 @@
 </script>
 
 <SidePanel bind:open>
-  <div id="header">
-    <CloseButton on:click={() => (open = false)} />
-    <h3>Validator Filters</h3>
-    <div />
-  </div>
-  <Divider />
+  <SidePanelHeader
+    text="Validator Filters"
+    on:closeClick={() => (open = false)}
+  />
 
   <div class="text">
     <h2>Fee (%)</h2>
@@ -165,12 +163,6 @@
 
 <style lang="scss">
   @use '../../../../../../../packages/ui/src/mixins.scss';
-
-  #header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 
   .text {
     margin-bottom: var(--spacing-xl);

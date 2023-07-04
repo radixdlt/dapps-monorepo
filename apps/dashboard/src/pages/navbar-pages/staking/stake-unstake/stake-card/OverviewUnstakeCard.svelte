@@ -37,7 +37,7 @@
       {validator.name}
     </div>
 
-    <Address value={validator.address} short useBackground={false} />
+    <Address value={validator.address} short />
   </div>
 
   <svelte:fragment slot="token-amount-card">

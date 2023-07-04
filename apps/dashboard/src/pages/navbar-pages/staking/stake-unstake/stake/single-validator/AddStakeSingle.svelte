@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
-  import StakeUnstakePanel from '../../StakePanel.svelte'
+  import StakePanel from '../../StakePanel.svelte'
   import OverviewStakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
@@ -30,9 +30,10 @@
   }
 </script>
 
-<StakeUnstakePanel
+<StakePanel
   bind:open
   bind:stakeButtonDisabled
+  sidePanelHeader="Add Stake"
   on:click={(e) => {
     const manifest = getStakeManifest(
       selectedAccount.address,
@@ -44,8 +45,6 @@
     e.detail(manifest)
   }}
 >
-  <svelte:fragment slot="title">Add Stake</svelte:fragment>
-
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>
       <svelte:fragment slot="account-picker-text">
@@ -77,4 +76,4 @@
   </svelte:fragment>
 
   <svelte:fragment slot="button-text">Stake</svelte:fragment>
-</StakeUnstakePanel>
+</StakePanel>

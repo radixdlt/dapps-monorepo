@@ -3,14 +3,13 @@
 
   export let addresses: string[] = []
   export let short = false
-  export let useBackground = true
   export let autoShorten = false
 </script>
 
 {#if addresses.length > 0}
   <div class="addresses-list" style:--background="var(--theme-surface-1)">
     {#each addresses as value}
-      <Address {value} {autoShorten} {useBackground} {short} />
+      <Address {value} {autoShorten} {short} />
     {/each}
   </div>
 {/if}

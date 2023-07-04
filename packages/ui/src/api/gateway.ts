@@ -32,8 +32,8 @@ export const getTransactionDetails = (
       events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
       affectedEntities: res.transaction.affected_global_entities || [],
       createdEntities:
-        (res.transaction.receipt?.state_updates as any)?.new_global_entities ||
-        [],
+        ((res.transaction.receipt?.state_updates as any)
+          ?.new_global_entities as any[]) || [],
       stateVersion: res.transaction.state_version
     }))
 }
