@@ -8,6 +8,7 @@
   import type { Account } from '@stores'
   import Claim from '@dashboard-pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
   import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
+  import type { StakeInfo } from '../+layout.svelte'
 
   export let data: PageData
 
@@ -25,7 +26,7 @@
   $: stakes = $stakeInfo.then(async (info) => {
     const validator = await data.promises.validator
 
-    const staking = info.stakes.filter(
+    const staking = info.staked.filter(
       (stake) => stake.validator.address === validator.address
     )
     const unstaking = info.unstaking.filter(
@@ -60,7 +61,7 @@
         staking,
         unstaking,
         readyToClaim
-      ].map((arr) =>
+      ].map((arr: StakeInfo[]) =>
         arr
           .filter((entry) => entry.account.address === account.address)
           .reduce((sum, entry) => sum.plus(entry.amount), new BigNumber(0))

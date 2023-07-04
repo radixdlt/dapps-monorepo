@@ -1,11 +1,29 @@
 <script lang="ts" context="module">
-  export type StakeInfo = {
+  type CommonStakeInfo<T extends string> = {
+    type: T
     account: Account
     validator: Validator
     amount: string
   }
 
+  export type StakedInfo = CommonStakeInfo<'staked'>
+  export type UnstakingInfo = CommonStakeInfo<'unstaking'> & {
+    claimEpoch: string
+  }
+  export type ReadyToClaimInfo = CommonStakeInfo<'readyToClaim'> & {
+    claimEpoch: string
+  }
+
+  export type StakeInfo = StakedInfo | UnstakingInfo | ReadyToClaimInfo
+
   export const accumulatedStakes = writable<Promise<AccumulatedStakes>>()
+  export const stakeInfo = writable<
+    Promise<{
+      staked: StakedInfo[]
+      unstaking: UnstakingInfo[]
+      readyToClaim: ReadyToClaimInfo[]
+    }>
+  >()
 </script>
 
 <script lang="ts">
@@ -25,14 +43,14 @@
   export let data: LayoutData
 
   $: _accumulatedStakes = data.validatorAccumulatedStakes
+  $: _stakeInfo = data.stakes
 
   $: accumulatedStakes.set($_accumulatedStakes)
+  $: stakeInfo.set($_stakeInfo)
 
   let claimAllOpen = false
   let filterOpen = false
   let multipleStakeOpen = false
-
-  $: stakeInfo = data.stakes
 
   let filteredValidators = new Promise<
     Awaited<typeof data.promises.validators>
@@ -61,7 +79,7 @@
     }
 
   $: currentlyStaked = $stakeInfo.then((info) =>
-    info.stakes.reduce<{ [k: string]: string }>((prev, cur) => {
+    info.staked.reduce<{ [k: string]: string }>((prev, cur) => {
       prev[cur.validator.address] = cur.amount
       return prev
     }, {})
@@ -70,7 +88,6 @@
 
 <Validators
   validators={data.promises.validators}
-  stakeInfo={data.stakes}
   on:show-claim-all={() => {
     claimAllOpen = true
   }}
