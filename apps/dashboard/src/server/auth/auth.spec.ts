@@ -24,11 +24,10 @@ describe('AuthController', () => {
       authModel: AuthModel(ctx.prisma),
       userModel: UserModel(ctx.prisma),
       gatewayService: ctx.gatewayService,
-      expectedOrigin:
-        'https://radix-dapp-toolkit-dev.rdx-works-main.extratools.works',
+      expectedOrigin: 'http://localhost:5173',
       dAppDefinitionAddress:
-        'account_tdx_c_1pyzqdjf32fg7et45y700pl7vhfrmdpss2sn6rdr4nkgskc4tw8',
-      networkId: 12
+        'account_tdx_21_12x4zx09f8962a9wesfqvxaue0qn6m39r3cpysrjd6dtqppzhrkjrsr',
+      networkId: 33
     })
   })
 
@@ -48,18 +47,18 @@ describe('AuthController', () => {
   })
   it('should successfully verify a valid challenge', async () => {
     const signedChallenge: SignedChallenge = {
-      address:
-        'identity_tdx_c_1pnp5sss27cp86h4n0c7y76r5xk7fxhpvmczy5zvvw7nqnkct7f',
-      type: 'persona',
+      challenge:
+        '761d830fc7e87771ae9cdff2808460b5307e46f3565705b40796f69049205b34',
       proof: {
         publicKey:
-          '40a0ae91901259b374a5ec9b618718a23ecd910fa2eb39ecc858f6e627d9734c',
+          'fd727795ef11ae3d5115d4d43d663a11fdffba423fcdecc31bcabe294f36de26',
         signature:
-          'a9c8a1a9c6ad79913f833d0013c33bc03b8b4cf77f171d9f63d62b0ff0f5711b6fbac4845270782c74956602ed25f322318c4b6160745f32a4d9521f01acc402',
+          '3594b237d16ceba0856320168856608909df37012c3656150533ac6d2a702c08cc405fba6388a272d57d5f91661d3b7ce91d6bae0cdc30f67e084c25f8750d00',
         curve: 'curve25519'
       },
-      challenge:
-        '15fd9109de8e811054b4b99e1e65fc901d5ce6213b0944176921ca42b2b0655b'
+      address:
+        'identity_tdx_21_122e2z3e5ejjt5scy68jq0papztuddq49frm928vp5u24wn72qqzalc',
+      type: 'persona'
     }
 
     mockCtx.prisma.challenge.delete.mockResolvedValue(
@@ -70,9 +69,9 @@ describe('AuthController', () => {
     )
 
     mockCtx.gatewayService.getEntityOwnerKeys.mockReturnValue(
-      okAsync([
-        `EddsaEd25519PublicKey("${signedChallenge.proof.publicKey}")`
-      ]) as any
+      okAsync(
+        `5c228f01202202010120071dc519481efeb8703f2e47d7449f5f28493a1d255da95ef9973e27286347010120071db2a14734cca4ba4304d1e40787a112f8d682a548f6551d81a715574fca`
+      ) as any
     )
 
     mockCtx.prisma.user.upsert.mockResolvedValue(

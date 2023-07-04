@@ -11,8 +11,8 @@ export const GatewayService = () => {
         (error: any): Error => error
       ).map(
         (response) =>
-          response.metadata.items.find((item) => item.key === 'owner_keys')
-            ?.value.as_string_collection ?? []
+          response?.metadata?.items.find((item) => item.key === 'owner_keys')
+            ?.value.raw_hex ?? ''
       )
   }
 }

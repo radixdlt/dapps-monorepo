@@ -11,7 +11,7 @@
 
 import { Buffer } from 'buffer'
 import type { Result } from 'neverthrow'
-import { blake2b } from '../../../crypto/blake2b'
+import { blake2b } from '../../helpers/blake2b'
 
 export const createSignatureMessage = ({
   challenge,
@@ -22,16 +22,18 @@ export const createSignatureMessage = ({
   dAppDefinitionAddress: string
   origin: string
 }): Result<string, { reason: string; jsError: Error }> => {
+  const prefix = Buffer.from('R', 'ascii')
   const lengthOfDappDefAddress = dAppDefinitionAddress.length
   const lengthOfDappDefAddressBuffer = Buffer.from(
     lengthOfDappDefAddress.toString(16),
     'hex'
   )
   const dappDefAddressBuffer = Buffer.from(dAppDefinitionAddress, 'utf-8')
-  const originBuffer = Buffer.from(origin, 'utf8')
+  const originBuffer = Buffer.from(origin, 'utf-8')
   const challengeBuffer = Buffer.from(challenge, 'hex')
 
   const messageBuffer = Buffer.concat([
+    prefix,
     challengeBuffer,
     lengthOfDappDefAddressBuffer,
     dappDefAddressBuffer,

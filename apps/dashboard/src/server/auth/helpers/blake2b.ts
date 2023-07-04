@@ -1,9 +1,9 @@
 import { Result, err, ok } from 'neverthrow'
-import hasher from 'blakejs'
+import blake from 'blakejs'
 
 export const blake2b = (input: Buffer): Result<Buffer, Error> => {
   try {
-    return ok(hasher.blake2bHex(input, undefined, 32)).map((hex) =>
+    return ok(blake.blake2bHex(input, undefined, 32)).map((hex) =>
       Buffer.from(hex, 'hex')
     )
   } catch (error) {
