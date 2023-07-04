@@ -7,10 +7,11 @@
   export let external = false
 </script>
 
-<div class="wrapper">
-  <a href={url} target={external ? '_blank' : '_self'}>{text || url}</a>
+<a class="wrapper" href={url} target={external ? '_blank' : '_self'}>
+  {text || url}
+
   {#if external}<IconNew icon={ExternalLink} />{/if}
-</div>
+</a>
 
 <style lang="scss">
   .wrapper {

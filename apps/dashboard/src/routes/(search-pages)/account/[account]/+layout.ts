@@ -7,7 +7,8 @@ export const prerender = false
 export const load: LayoutLoad = ({ params, route }) => {
   routerRedirect(route, `/account/${params.account}/tokens`, [
     'tokens',
-    'metadata'
+    'metadata',
+    'recent-transactions'
   ])
 
   const entityDetails = getSingleEntityDetails(params.account)

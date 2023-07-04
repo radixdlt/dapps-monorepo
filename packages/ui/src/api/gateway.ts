@@ -8,6 +8,8 @@ const gatewayApi = GatewayApiClient.initialize({
   basePath: CURRENT_NETWORK?.url
 })
 
+export const getRecentTransactions = (address: string, cursor?: string) => gatewayApi.stream.getTransactionsList([address], cursor)
+
 export const getValidatorsList = () => {
   return gatewayApi.state.getAllValidators()
 }
