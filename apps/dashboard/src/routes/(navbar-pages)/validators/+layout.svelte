@@ -52,9 +52,9 @@
   let filterOpen = false
   let multipleStakeOpen = false
 
-  let filteredValidators = new Promise<
-    Awaited<typeof data.promises.validators>
-  >(() => {})
+  let filteredValidators: Awaited<typeof data.promises.validators> = []
+  
+  let useFilter = false
 
   const applyFilter =
     (
@@ -62,20 +62,20 @@
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
     (e: ComponentEvents<FilterDetails>['applyFilter']) => {
-      filteredValidators = Promise.resolve(
-        validators.filter((v) => {
-          return (
-            v.fee >= e.detail.feeFilter.min &&
-            v.fee <= e.detail.feeFilter.max &&
-            v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
-            v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
-            v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
-            v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
-            (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-            (e.detail.bookmarkedFilter ? bookmarked[v.address] : true)
-          )
-        })
-      )
+      filteredValidators = validators.filter((v) => {
+        return (
+          v.fee >= e.detail.feeFilter.min &&
+          v.fee <= e.detail.feeFilter.max &&
+          v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
+          v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
+          v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
+          v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
+          (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
+          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true)
+        )
+      })
+
+      useFilter = true
     }
 
   $: currentlyStaked = $stakeInfo.then((info) =>
@@ -87,7 +87,7 @@
 </script>
 
 <Validators
-  validators={data.promises.validators}
+  validators={useFilter ? Promise.resolve(filteredValidators) : data.promises.validators}
   on:show-claim-all={() => {
     claimAllOpen = true
   }}
