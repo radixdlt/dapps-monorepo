@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PercentageInput from '@components/_base/input/PercentageInput.svelte'
   import HistogramFilter from './histogram-filter/HistogramFilter.svelte'
 
   export let values: number[]
@@ -6,13 +7,9 @@
   export let maxText: string
   export let min = 0
   export let max = 100
-  export let lowValue: number
-  export let highValue: number
+  export let range: [number, number] = [0, 100]
 
-  let range: [number, number] = [0, 100]
-
-  $: lowValue = range[0]
-  $: highValue = range[1]
+  $: range = [parseFloat(range[0].toFixed(2)), parseFloat(range[1].toFixed(2))]
 </script>
 
 <div id="filter-card">
@@ -24,7 +21,7 @@
         {minText}
       </div>
       <div id="value">
-        {lowValue.toFixed(2)}%
+        <PercentageInput bind:value={range[0]} />
       </div>
     </div>
 
@@ -33,7 +30,7 @@
         {maxText}
       </div>
       <div id="value">
-        {highValue.toFixed(2)}%
+        <PercentageInput bind:value={range[1]} />
       </div>
     </div>
   </div>

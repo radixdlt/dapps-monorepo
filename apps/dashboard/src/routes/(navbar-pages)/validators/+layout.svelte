@@ -53,7 +53,7 @@
   let multipleStakeOpen = false
 
   let filteredValidators: Awaited<typeof data.promises.validators> = []
-  
+
   let useFilter = false
 
   const applyFilter =
@@ -64,12 +64,12 @@
     (e: ComponentEvents<FilterDetails>['applyFilter']) => {
       filteredValidators = validators.filter((v) => {
         return (
-          v.fee >= e.detail.feeFilter.min &&
-          v.fee <= e.detail.feeFilter.max &&
-          v.percentageTotalStake >= e.detail.totalXRDStakeFilter.min &&
-          v.percentageTotalStake <= e.detail.totalXRDStakeFilter.max &&
-          v.percentageOwnerStake >= e.detail.ownerStakeFilter.min &&
-          v.percentageOwnerStake <= e.detail.ownerStakeFilter.max &&
+          v.fee >= e.detail.feeFilter[0] &&
+          v.fee <= e.detail.feeFilter[1] &&
+          v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
+          v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
+          v.percentageOwnerStake >= e.detail.ownerStakeFilter[0] &&
+          v.percentageOwnerStake <= e.detail.ownerStakeFilter[1] &&
           (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
           (e.detail.bookmarkedFilter ? bookmarked[v.address] : true)
         )
@@ -87,7 +87,9 @@
 </script>
 
 <Validators
-  validators={useFilter ? Promise.resolve(filteredValidators) : data.promises.validators}
+  validators={useFilter
+    ? Promise.resolve(filteredValidators)
+    : data.promises.validators}
   on:show-claim-all={() => {
     claimAllOpen = true
   }}
