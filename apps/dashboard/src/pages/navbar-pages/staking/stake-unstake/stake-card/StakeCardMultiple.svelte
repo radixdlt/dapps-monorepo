@@ -11,7 +11,6 @@
   export let rightColumnWidth: string
   export let validator: Validator
   export let tokenAmount: string = '0'
-  export let tokenDisplayedAmount: string = '0'
   export let amountCardDisabled = false
   export let currentlyStakingAmount: Promise<string | undefined>
 
@@ -46,7 +45,6 @@
       invalid={false}
       on:input
       bind:tokenAmount
-      bind:tokenDisplayedAmount
       bind:disabled={amountCardDisabled}
     />
   </svelte:fragment>

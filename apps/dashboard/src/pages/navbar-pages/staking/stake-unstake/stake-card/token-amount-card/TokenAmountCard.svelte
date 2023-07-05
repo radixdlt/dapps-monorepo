@@ -11,7 +11,6 @@
   }
   export let account: AccountT | undefined = undefined
   export let tokenAmount = '0'
-  export let tokenDisplayedAmount: string = '0'
   export let invalid = false
   export let disabled = false
   export let readonly: boolean = false
@@ -53,9 +52,10 @@
       </div>
 
       <AmountInput
-        bind:displayedValue={tokenDisplayedAmount}
-        bind:value={tokenAmount}
-        on:input
+        value={tokenAmount}
+        on:input={(e) => {
+          tokenAmount = e.detail.value
+        }}
         {readonly}
         --width="14rem"
         --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}

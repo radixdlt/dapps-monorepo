@@ -64,7 +64,6 @@
             token={XRDToken}
             {account}
             tokenAmount={amount}
-            tokenDisplayedAmount={amount}
             readonly={true}
             --width={rightColumnWidth}
           />

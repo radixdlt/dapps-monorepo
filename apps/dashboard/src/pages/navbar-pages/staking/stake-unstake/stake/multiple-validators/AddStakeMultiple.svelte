@@ -126,7 +126,7 @@
         <StakeCardMultiple
           {rightColumnWidth}
           {validator}
-          tokenDisplayedAmount={stakeAmounts[i].amount}
+          tokenAmount={stakeAmounts[i].amount}
           amountCardDisabled={distributeEqually}
           currentlyStakingAmount={currentlyStaked.then(
             (staked) => staked[validator.address]
