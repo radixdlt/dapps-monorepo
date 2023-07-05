@@ -3,6 +3,7 @@ import { getRecentTransactions } from '@api/gateway'
 
 export const load: PageLoad = async ({ params }) => {
   return {
+    account: params.account,
     promises: {
       transactionList: getRecentTransactions(params.account)
     }
