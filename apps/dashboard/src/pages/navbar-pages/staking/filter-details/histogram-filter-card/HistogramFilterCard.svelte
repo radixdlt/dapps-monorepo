@@ -21,12 +21,7 @@
         {minText}
       </div>
       <div id="value">
-        <PercentageInput
-          value={range[0].toString()}
-          on:input={(e) => {
-            range[0] = parseFloat(e.detail.value)
-          }}
-        />
+        <PercentageInput bind:value={range[0]} />
       </div>
     </div>
 
@@ -35,12 +30,7 @@
         {maxText}
       </div>
       <div id="value">
-        <PercentageInput
-          value={range[1].toString()}
-          on:input={(e) => {
-            range[1] = parseFloat(e.detail.value)
-          }}
-        />
+        <PercentageInput bind:value={range[1]} />
       </div>
     </div>
   </div>

@@ -1,11 +1,22 @@
 <script lang="ts">
   import { number } from '@directives/format-input'
   import AmountInput from './AmountInput.svelte'
+  import { createEventDispatcher } from 'svelte'
 
-  export let value: string
+  export let value: number
+
+  const dispatch = createEventDispatcher<{ input: { value: number } }>()
 </script>
 
-<AmountInput bind:value format={number('0', '100')} --width="6rem" on:input>
+<AmountInput
+  value={value.toString()}
+  format={number('0', '100')}
+  --width="6rem"
+  on:input={(e) => {
+    value = parseFloat(e.detail.value)
+    dispatch('input', { value })
+  }}
+>
   <div class="percentage" slot="postfix">%</div>
 </AmountInput>
 

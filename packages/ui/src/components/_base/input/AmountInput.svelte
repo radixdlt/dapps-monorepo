@@ -1,23 +1,29 @@
 <script lang="ts">
   import { number } from '@directives/format-input'
   import InputNew from './InputNew.svelte'
+  import { createEventDispatcher } from 'svelte'
+  import { removeThousandsSeparator } from '@utils/format-amount'
 
   export let value: string
   export let maxlength: number | undefined = undefined
   export let readonly = false
   export let format = number(undefined, undefined, 10).bind(null)
+
+  const dispatch = createEventDispatcher<{ input: { value: string } }>()
 </script>
 
 <div class="input-box" class:no-hover={readonly} class:editable={!readonly}>
   <InputNew
-    displayedValue={value}
+    {value}
     {maxlength}
     {readonly}
     {format}
     --font-size="var(--text-3xl)"
     --font-weight="var(--font-weight-bold-2)"
     --text-align="right"
-    on:input
+    on:input={(e) => {
+      dispatch('input', { value: removeThousandsSeparator(e.detail.value) })
+    }}
   >
     <slot name="postfix" slot="postfix" />
   </InputNew>

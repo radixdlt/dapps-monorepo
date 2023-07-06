@@ -5,19 +5,19 @@ export const format = (
   node: HTMLInputElement,
   formatFunction: (value: string) => string
 ) => {
+  const events = ['input', 'paste', 'change']
+
   function updateValue() {
     node.value = formatFunction(node.value)
   }
 
-  node.addEventListener('input', updateValue)
-  node.addEventListener('paste', updateValue)
+  events.forEach(event => node.addEventListener(event, updateValue))
 
   node.value = formatFunction(node.value)
 
   return {
     destroy() {
-      node.removeEventListener('input', updateValue)
-      node.removeEventListener('paste', updateValue)
+      events.forEach(event => node.removeEventListener(event, updateValue))
     }
   }
 }
