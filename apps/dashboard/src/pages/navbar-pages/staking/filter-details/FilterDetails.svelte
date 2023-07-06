@@ -12,22 +12,17 @@
   export let totalXRDStakeValues: number[]
   export let ownerStakeValues: number[]
 
-  let feeFilter = {
-    min: 0,
-    max: 100
-  }
-  let totalXRDStakeFilter = {
-    min: 0,
-    max: 100
-  }
-  let ownerStakeFilter = {
-    min: 0,
-    max: 100
-  }
+  let feeFilter: [number, number] = [0, 100]
+
+  let totalXRDStakeFilter: [number, number] = [0, 100]
+
+  let ownerStakeFilter: [number, number] = [0, 100]
+
   let uptimeFilter = {
     days: 1,
-    percentage: '0'
+    percentage: 0
   }
+
   let acceptsStakeFilter = false
   let bookmarkedFilter = false
 
@@ -83,8 +78,7 @@
       values={feeValues}
       minText="MIN FEE (%)"
       maxText="MAX FEE (%)"
-      bind:lowValue={feeFilter.min}
-      bind:highValue={feeFilter.max}
+      bind:range={feeFilter}
       max={5}
     />
   </div>
@@ -101,8 +95,7 @@
       values={totalXRDStakeValues}
       minText="MIN AMOUNT (%)"
       maxText="MAX AMOUNT (%)"
-      bind:lowValue={totalXRDStakeFilter.min}
-      bind:highValue={totalXRDStakeFilter.max}
+      bind:range={totalXRDStakeFilter}
     />
   </div>
 
@@ -120,8 +113,7 @@
       values={ownerStakeValues}
       minText="MIN STAKE (%)"
       maxText="MAX STAKE (%)"
-      bind:lowValue={ownerStakeFilter.min}
-      bind:highValue={ownerStakeFilter.max}
+      bind:range={ownerStakeFilter}
     />
   </div>
 
