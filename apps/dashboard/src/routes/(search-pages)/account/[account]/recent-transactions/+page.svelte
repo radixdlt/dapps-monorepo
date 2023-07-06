@@ -1,11 +1,14 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { PageData } from './$types'
-  import Table from '@components/_base/table/Table.svelte'
+  import PaginatedTable from '@components/_base/table/PaginatedTable.svelte'
   import type { TableConfig } from '@components/_base/table/types'
   import DateAndTxIdColumn from './DateAndTxIdColumn.svelte'
+  import { getRecentTransactions } from '@api/gateway'
 
   export let data: PageData
+
+  const queryFunction = (cursor?: string) =>
+    getRecentTransactions(data.account, cursor)
 
   const config: TableConfig = {
     columns: [
@@ -31,8 +34,4 @@
   }
 </script>
 
-{#await data.promises.transactionList}
-  <SkeletonLoader />
-{:then transactions}
-  <Table {config} entries={transactions.items} />
-{/await}
+<PaginatedTable {config} {queryFunction} />

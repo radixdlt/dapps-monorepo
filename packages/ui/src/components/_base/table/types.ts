@@ -3,6 +3,13 @@ import type { SvelteComponent } from 'svelte'
 export type TableConfig<Entry = any> = {
   columns: TableColumn<Entry>[]
 }
+
+export type TablePage<T> = {
+  next_cursor?: string | null;
+  previous_cursor?: string | null;
+  items: T[]
+}
+
 export type TableColumn<Entry = any> = {
   /**
    * The label of the column which will be displayed as column header
