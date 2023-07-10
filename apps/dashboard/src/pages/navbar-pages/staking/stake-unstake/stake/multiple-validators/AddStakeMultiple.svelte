@@ -11,6 +11,7 @@
   import { getXRDBalance } from '../getXrdBalance'
   import { getMultipleStakeManifest } from '../../manifests'
   import { removeThousandsSeparator } from '@utils/format-amount'
+  import type { ComponentEvents } from 'svelte'
 
   export let open: boolean
   export let validators: Validator[]
@@ -49,6 +50,13 @@
             .toString()
         : '0'
     }))
+  } else {
+    distributeEquallyAmount = new BigNumber(
+      stakeAmounts.reduce(
+        (acc, stake) => acc.plus(stake.amount),
+        new BigNumber(0)
+      )
+    ).toString()
   }
 
   let tokenAmountInvalid = false
@@ -65,10 +73,10 @@
     xrdBalance = getXRDBalance(selectedAccount.address)
   }
 
-  const handleStakeInput = (i: number) => (e: Event) => {
-    // @ts-ignore
-    stakeAmounts[i].amount = removeThousandsSeparator(e.target.value)
-  }
+  const handleStakeInput =
+    (i: number) => (e: ComponentEvents<StakeCardMultiple>['input']) => {
+      stakeAmounts[i].amount = removeThousandsSeparator(e.detail)
+    }
 
   const removeValidator = (i: number) => {
     validators = validators.filter((_, index) => index !== i)

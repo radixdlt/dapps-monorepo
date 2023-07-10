@@ -4,6 +4,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import AmountInput from '@components/_base/input/AmountInput.svelte'
   import type { Account as AccountT } from '@stores'
+  import { createEventDispatcher } from 'svelte'
 
   export let token: {
     name: string
@@ -18,6 +19,8 @@
   let hasEnoughBalance = true
 
   $: invalid = !hasEnoughBalance
+
+  const dispatch = createEventDispatcher<{ input: string }>()
 </script>
 
 <div>
@@ -55,6 +58,7 @@
         value={tokenAmount}
         on:input={(e) => {
           tokenAmount = e.detail.value
+          dispatch('input', tokenAmount)
         }}
         {readonly}
         --width="14rem"
