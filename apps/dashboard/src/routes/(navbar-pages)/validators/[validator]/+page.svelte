@@ -21,7 +21,7 @@
     goto('/validators')
   }
 
-  $: stakeInfo = data.stakes
+  $: stakeInfo = data.stakeInfo
 
   $: stakes = $stakeInfo.then(async (info) => {
     const validator = await data.promises.validator
@@ -54,6 +54,7 @@
       staked: string
       unstaking: string
       readyToClaim: string
+      stakeUnits: string
     }[] = []
 
     for (const account of allAccounts.values()) {
@@ -64,16 +65,25 @@
       ].map((arr: StakeInfo[]) =>
         arr
           .filter((entry) => entry.account.address === account.address)
-          .reduce((sum, entry) => sum.plus(entry.amount), new BigNumber(0))
+          .reduce((sum, entry) => sum.plus(entry.xrdAmount), new BigNumber(0))
           .toString()
       )
+
+      const accumulatedStakeUnits = staking
+        .filter((entry) => entry.account.address === account.address)
+        .reduce(
+          (sum, entry) => sum.plus(entry.stakeUnitAmount),
+          new BigNumber(0)
+        )
+        .toString()
 
       transformedData.push({
         account,
         validator,
         staked: accumulatedStake,
         unstaking: accumulatedUnstake,
-        readyToClaim: accumulatedClaim
+        readyToClaim: accumulatedClaim,
+        stakeUnits: accumulatedStakeUnits
       })
     }
 
@@ -105,10 +115,11 @@
 {#await stakes then stakes}
   <Unstake
     bind:open={unstakeOpen}
-    stakes={stakes.map(({ account, validator, staked }) => ({
+    stakes={stakes.map(({ account, validator, staked, stakeUnits }) => ({
       account,
       validator,
-      amount: staked
+      amount: staked,
+      stakeUnits
     }))}
   />
 {/await}
@@ -119,7 +130,7 @@
     readyToClaim={stakes.map(({ account, validator, readyToClaim }) => ({
       account,
       validator,
-      amount: readyToClaim
+      xrdAmount: readyToClaim
     }))}
   />
 {/await}

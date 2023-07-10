@@ -12,6 +12,7 @@
     account: Account
     validator: Validator
     amount: string
+    stakeUnits: string
   }[]
 
   let stakeButtonDisabled = false
@@ -45,11 +46,16 @@
 
     stakes.forEach((stake, i) => {
       if (amountsToUnstake[i] !== '0') {
+        const stakeUnitsAmount = new BigNumber(amountsToUnstake[i])
+          .dividedBy(stake.amount)
+          .multipliedBy(stake.stakeUnits)
+          .toString()
+
         unstakes.push({
           accountAddress: stake.account.address,
           validatorAddress: stake.validator.address,
           stakeUnitResource: stake.validator.stakeUnitResourceAddress,
-          amount: amountsToUnstake[i]
+          amount: stakeUnitsAmount
         })
       }
     })

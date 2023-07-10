@@ -12,7 +12,7 @@
   export let open: boolean
   export let readyToClaim: {
     validator: Validator
-    amount: string
+    xrdAmount: string
     account: Account
   }[]
 
@@ -20,7 +20,7 @@
 
   $: totalClaimAmount = readyToClaim
     .reduce<BigNumber>(
-      (acc, claim) => acc.plus(claim.amount === '' ? '0' : claim.amount),
+      (acc, claim) => acc.plus(claim.xrdAmount === '' ? '0' : claim.xrdAmount),
       new BigNumber(0)
     )
     .toString()
@@ -33,7 +33,7 @@
     e.detail(
       getClaimManifest(
         readyToClaim.map((claim) => ({
-          ...claim,
+          amount: claim.xrdAmount,
           accountAddress: claim.account.address,
           validatorAddress: claim.validator.address,
           stakeUnitResource: claim.validator.stakeUnitResourceAddress
@@ -50,7 +50,7 @@
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
-      {#each readyToClaim as { validator, amount, account }}
+      {#each readyToClaim as { validator, xrdAmount, account }}
         <div class="validator-card">
           <div class="validator">
             <div class="dotted-overflow">
@@ -63,7 +63,7 @@
           <TokenAmountCard
             token={XRDToken}
             {account}
-            tokenAmount={amount}
+            tokenAmount={xrdAmount}
             readonly={true}
             --width={rightColumnWidth}
           />
