@@ -79,7 +79,8 @@ export const addressToRoute = (address: string) =>
       : `/resource/${address}`,
     package: `/package/${address}`,
     component: `/component/${address}`,
-    transaction: `/transaction/${address}`
+    transaction: `/transaction/${address}`,
+    validator: `/validators/${address}`
   }[getAddressPrefix(address)])
 
 export const useContext = <
