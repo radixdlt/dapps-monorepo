@@ -98,9 +98,10 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
             (validator) => validator.stakeUnitResourceAddress === token.address
           )!
 
-          const xrdAmount = validator.stakeUnitsToStakedRatio
+          const xrdAmount = new BigNumber(validator.totalStake)
             .multipliedBy(token.value)
-            .toFixed(RET_DECIMAL_PRECISION)
+            .dividedBy(token.totalSupply)
+            .toFixed(RET_DECIMAL_PRECISION - 1)
 
           return {
             type: 'staked',
