@@ -7,31 +7,18 @@
   export let format: (value: string) => string = (value) => value
   export let readonly = false
 
-  let blockValueChange = false
-  let _value: typeof value
-
-  // this prevents the input value from being set after the on:input event fires and formatting to be bypassed
-  const setValue = (v: typeof value) => {
-    if (blockValueChange) return
-    _value = v
-    blockValueChange = false
-  }
-
-  $: setValue(value)
-
   const dispatch = createEventDispatcher<{
     input: { value: string }
   }>()
 </script>
 
 <input
-  value={_value}
+  {value}
   type="text"
   {readonly}
   use:_format={format}
   {maxlength}
   on:input={(e) => {
-    blockValueChange = true
     dispatch('input', { value: e.currentTarget.value })
   }}
 />
