@@ -1,6 +1,10 @@
 import { bookmarkedValidatorsApi } from './../../../server/validators/validators-api'
 import type { LayoutLoad } from './$types'
-import { getGatewayStatus, getValidatorsList } from '@api/gateway'
+import {
+  getEntityDetails,
+  getGatewayStatus,
+  getValidatorsList
+} from '@api/gateway'
 import { getAccountData, getEnumStringMetadata } from '@api/utils/resources'
 import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import { accounts, type Account } from '@stores'
@@ -12,6 +16,7 @@ import type {
   StakedInfo,
   UnstakingInfo
 } from './+layout.svelte'
+import type { StateEntityDetailsResponseFungibleResourceDetails } from '@radixdlt/babylon-gateway-api-sdk'
 
 export const prerender = false
 
@@ -30,9 +35,19 @@ export type Bookmarked = { [validator: string]: boolean }
 export const load: LayoutLoad = ({ fetch, depends }) => {
   depends(_dependency)
 
-  const validators = getValidatorsList().then((validators) =>
-    validators.map((validator) => {
+  const validators = getValidatorsList().then(async (validators) => {
+    const stakeUnitTotalSupply = await getEntityDetails(
+      validators.map(
+        (v) => (v.state as any).stake_unit_resource_address as string
+      )
+    )
+
+    return validators.map((validator, i) => {
       const state: any = validator.state || {}
+
+      const stakeUnitResourceAddress = (validator.state! as any)
+        .stake_unit_resource_address as string
+
       return {
         name: getEnumStringMetadata('name')(validator.metadata),
         website: getEnumStringMetadata('url')(validator.metadata),
@@ -41,11 +56,18 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
         totalStake: validator.current_stake,
 
-        stakeUnitResourceAddress: (validator.state! as any)
-          .stake_unit_resource_address as string,
-
+        stakeUnitResourceAddress,
         unstakeClaimResourceAddress: (validator.state! as any)
           .unstake_claim_token_resource_address as string,
+
+        stakeUnitsToStakedRatio: new BigNumber(
+          validator.current_stake
+        ).dividedBy(
+          (
+            stakeUnitTotalSupply[i]
+              .details as StateEntityDetailsResponseFungibleResourceDetails
+          ).total_supply
+        ),
 
         // TODO:
         ownerAddress: '',
@@ -56,7 +78,91 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         acceptsStake: true
       } as Validator
     })
-  )
+  })
+
+  const getStakedInfo =
+    (validators: Validator[]) =>
+    (
+      account: Account,
+      accountData: Awaited<ReturnType<typeof getAccountData>>[number]
+    ) =>
+      accountData.fungible
+        .filter((token) =>
+          validators.some(
+            (validator) => validator.stakeUnitResourceAddress === token.address
+          )
+        )
+        .map((token) => {
+          const validator = validators.find(
+            (validator) => validator.stakeUnitResourceAddress === token.address
+          )!
+
+          const xrdAmount = validator.stakeUnitsToStakedRatio
+            .multipliedBy(token.value)
+            .toFixed(5)
+
+          return {
+            type: 'staked',
+            account,
+            validator,
+            stakeUnitAmount: token.value,
+            xrdAmount
+          } as StakedInfo
+        })
+
+  const getUnstakeAndClaimInfo =
+    (validators: Validator[]) =>
+    (
+      account: Account,
+      accountData: Awaited<ReturnType<typeof getAccountData>>[number],
+      currentEpoch: number
+    ) => {
+      const unstakeTokens = accountData.nonFungible.filter((token) =>
+        validators.some(
+          (validator) => validator.unstakeClaimResourceAddress === token.address
+        )
+      )
+
+      let unstaking: UnstakingInfo[] = []
+      let readyToClaim: ReadyToClaimInfo[] = []
+
+      for (const token of unstakeTokens) {
+        const isClaimable = new BigNumber(token.unstakeData.claimEpoch).lte(
+          currentEpoch
+        )
+
+        const validator = validators.find(
+          (validator) => validator.unstakeClaimResourceAddress === token.address
+        )!
+
+        const xrdAmount = new BigNumber(
+          token.unstakeData.unstakeAmount
+        ).toFixed(5)
+
+        const stakeInfo = {
+          account,
+          validator,
+          stakeUnitAmount: token.unstakeData.unstakeAmount,
+          xrdAmount: xrdAmount,
+          claimEpoch: token.unstakeData.claimEpoch
+        }
+
+        isClaimable
+          ? readyToClaim.push({
+              ...stakeInfo,
+              type: 'readyToClaim'
+            })
+          : unstaking.push({
+              ...stakeInfo,
+              type: 'unstaking'
+            })
+      }
+
+      return {
+        unstaking,
+        readyToClaim
+      }
+    }
 
   const bookmarkedValidators = bookmarkedValidatorsApi
     .getAll(fetch)
@@ -68,100 +174,35 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
       )
     )
 
-  const getStakeInfo =
-    (validators: Validator[]) => async (account: Account) => {
-      const { fungible, nonFungible } = (
-        await getAccountData([account.address])
-      )[0]
-
-      const staked = fungible
-        .filter((token) =>
-          validators.some(
-            (validator) => validator.stakeUnitResourceAddress === token.address
-          )
-        )
-        .map(
-          (token) =>
-            ({
-              type: 'staked',
-              account,
-              validator: validators.find(
-                (validator) =>
-                  validator.stakeUnitResourceAddress === token.address
-              )!,
-              amount: token.value
-            } as StakedInfo)
-        )
-
-      const unstakeTokens = nonFungible.filter((token) =>
-        validators.some(
-          (validator) => validator.unstakeClaimResourceAddress === token.address
-        )
-      )
-
-      const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
-
-      let unstaking: UnstakingInfo[] = []
-      let readyToClaim: ReadyToClaimInfo[] = []
-
-      for (const token of unstakeTokens) {
-        const isClaimable = new BigNumber(token.unstakeData.claimEpoch).lte(
-          currentEpoch
-        )
-
-        const getStakeInfo = <T extends 'readyToClaim' | 'unstaking'>(
-          type: T
-        ) => ({
-          type,
-          account,
-          validator: validators.find(
-            (validator) =>
-              validator.unstakeClaimResourceAddress === token.address
-          )!,
-          amount: token.unstakeData.unstakeAmount,
-          claimEpoch: token.unstakeData.claimEpoch
-        })
-
-        isClaimable
-          ? readyToClaim.push(getStakeInfo('readyToClaim'))
-          : unstaking.push(getStakeInfo('unstaking'))
-      }
-
-      return {
-        staked,
-        unstaking,
-        readyToClaim
-      }
-    }
-
-  const stakes = derived(accounts, ($accounts) => {
+  const stakeInfo = derived(accounts, ($accounts) => {
     if ($accounts.length > 0) {
-      return validators
-        .then((validators) =>
-          Promise.all($accounts.map(getStakeInfo(validators)))
+      return validators.then(async (validators) => {
+        const accountData = await getAccountData(
+          $accounts.map((a) => a.address)
         )
-        .then((info) => {
-          const staked = info.reduce(
-            (acc, { staked }) => [...acc, ...staked],
-            [] as (typeof info)[number]['staked']
-          )
 
-          const unstaking = info.reduce(
-            (acc, { unstaking }) => [...acc, ...unstaking],
-            [] as (typeof info)[number]['unstaking']
-          )
+        const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
-          const readyToClaim = info.reduce(
-            (acc, { readyToClaim }) => [...acc, ...readyToClaim],
-            [] as (typeof info)[number]['readyToClaim']
-          )
+        return $accounts.reduce(
+          (prev, cur, i) => {
+            const staked = getStakedInfo(validators)(cur, accountData[i])
+            const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
+              validators
+            )(cur, accountData[i], currentEpoch)
 
-          return {
-            staked,
-            unstaking,
-            readyToClaim
+            return {
+              staked: prev.staked.concat(staked),
+              unstaking: prev.unstaking.concat(unstaking),
+              readyToClaim: prev.readyToClaim.concat(readyToClaim)
+            }
+          },
+          {
+            staked: [] as StakedInfo[],
+            unstaking: [] as UnstakingInfo[],
+            readyToClaim: [] as ReadyToClaimInfo[]
           }
-        })
+        )
+      })
     } else {
       return new Promise<{
         staked: StakedInfo[]
@@ -171,8 +212,8 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
     }
   })
 
-  const validatorAccumulatedStakes = derived(stakes, ($stakes) =>
-    $stakes.then(async ({ staked, unstaking, readyToClaim }) => {
+  const validatorAccumulatedStakes = derived(stakeInfo, ($info) =>
+    $info.then(async ({ staked, unstaking, readyToClaim }) => {
       const _validators = await validators
 
       return _validators.reduce<AccumulatedStakes>((prev, cur) => {
@@ -183,7 +224,10 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         ] = ([staked, unstaking, readyToClaim] as StakeInfo[][]).map((s) =>
           s
             .filter((s) => s.validator.address === cur.address)
-            .reduce((acc, { amount }) => acc.plus(amount), new BigNumber(0))
+            .reduce(
+              (acc, { xrdAmount }) => acc.plus(xrdAmount),
+              new BigNumber(0)
+            )
             .toString()
         )
 
@@ -199,7 +243,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
 
   return {
     validatorAccumulatedStakes,
-    stakes: stakes,
+    stakeInfo,
     promises: {
       validators,
       bookmarkedValidators

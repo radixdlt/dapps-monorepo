@@ -8,6 +8,7 @@ import type {
   FungibleResourcesVaultCollection,
   NonFungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesVaultCollection,
+  StateEntityDetailsResponseFungibleResourceDetails,
   StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem,
   StateNonFungibleDetailsResponseItem
@@ -26,6 +27,7 @@ type _Resource<T extends 'fungible' | 'non-fungible'> = {
   iconUrl?: string
   description?: string
   tags?: string[]
+  totalSupply: string
 }
 
 export type FungibleResource = _Resource<'fungible'> & {
@@ -69,9 +71,9 @@ const nonFungibleResourceDisplayLabel = (
     (name) =>
       name
         ? `${accountLabel({
-            address: getNFTAddress(resource.address, id),
-            label: name || ''
-          })}`
+          address: getNFTAddress(resource.address, id),
+          label: name || ''
+        })}`
         : `${getNFTAddress(resource.address, id)}`
   )()
 
@@ -149,7 +151,8 @@ const transformNonFungible = async (
         id: singleNftData.non_fungible_id,
         address: `${entity.address}`,
         name: getStringMetadata('name')(entity.metadata),
-        unstakeData: getUnstakeData(singleNftData) ?? []
+        unstakeData: getUnstakeData(singleNftData) ?? [],
+        totalSupply: (entity.details as StateEntityDetailsResponseFungibleResourceDetails).total_supply,
       })
     }
   }
@@ -185,7 +188,8 @@ const transformFungible = async (
       symbol: getStringMetadata('symbol')(entity.metadata),
       iconUrl: getStringMetadata('icon_url')(entity.metadata),
       description: getStringMetadata('description')(entity.metadata),
-      tags: getVectorMetadata('tags')(entity.metadata)
+      tags: getVectorMetadata('tags')(entity.metadata),
+      totalSupply: (entity.details as StateEntityDetailsResponseFungibleResourceDetails).total_supply,
     }
   })
 }
@@ -221,10 +225,10 @@ export const transformResources = (
 
 const getResource =
   (type: 'fungible' | 'nonFungible') =>
-  (name: string) =>
-  (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
-    // @ts-ignore
-    resources[type].find((resource: Resource) => resource.name === name)
+    (name: string) =>
+      (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
+        // @ts-ignore
+        resources[type].find((resource: Resource) => resource.name === name)
 
 export type Resources = Awaited<ReturnType<typeof getAccountData>>
 

@@ -14,6 +14,7 @@
     percentageTotalStake: number
     stakeUnitResourceAddress: string
     unstakeClaimResourceAddress: string
+    stakeUnitsToStakedRatio: BigNumber
   }
   import InfoIcon from '@icons/info.svg'
 
@@ -68,7 +69,7 @@
     }) =>
       info[type]
         .reduce(
-          (prev, cur) => prev.plus(new BigNumber(cur.amount)),
+          (prev, cur) => prev.plus(new BigNumber(cur.xrdAmount)),
           new BigNumber(0)
         )
         .toString()

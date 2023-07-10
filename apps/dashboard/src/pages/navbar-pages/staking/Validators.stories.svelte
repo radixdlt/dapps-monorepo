@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
+  import BigNumber from 'bignumber.js'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -33,7 +34,8 @@
       bookmarked: false,
       selected: false,
       stakeUnitResourceAddress: 'resource_1234567890',
-      unstakeClaimResourceAddress: 'resource_1234567890'
+      unstakeClaimResourceAddress: 'resource_1234567890',
+      stakeUnitsToStakedRatio: new BigNumber(1)
     }))
 </script>
 

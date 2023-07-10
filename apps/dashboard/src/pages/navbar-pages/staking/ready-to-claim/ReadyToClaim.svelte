@@ -3,6 +3,7 @@
   import { stakeInfo } from '../../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { EXPECTED_EPOCH_TIME_MINUTES, XRD_SYMBOL } from '@constants'
+  import { formatAmount } from '@utils'
 
   export let validatorAddress: string
 
@@ -23,7 +24,7 @@
         ) {
           nearestClaim = {
             claimEpoch: unstake.claimEpoch,
-            amount: unstake.amount
+            amount: unstake.xrdAmount
           }
         }
       })
@@ -42,7 +43,8 @@
   {#await nearestClaim}
     <SkeletonLoader />
   {:then claim}
-    (ready to claim {claim.amount} {XRD_SYMBOL} in approx. {claim.days} days)
+    (ready to claim {formatAmount(claim.amount)}
+    {XRD_SYMBOL} in approx. {claim.days} days)
   {/await}
 </div>
 

@@ -3,7 +3,8 @@
     type: T
     account: Account
     validator: Validator
-    amount: string
+    xrdAmount: string
+    stakeUnitAmount: string
   }
 
   export type StakedInfo = CommonStakeInfo<'staked'>
@@ -43,7 +44,7 @@
   export let data: LayoutData
 
   $: _accumulatedStakes = data.validatorAccumulatedStakes
-  $: _stakeInfo = data.stakes
+  $: _stakeInfo = data.stakeInfo
 
   $: accumulatedStakes.set($_accumulatedStakes)
   $: stakeInfo.set($_stakeInfo)
@@ -80,7 +81,7 @@
 
   $: currentlyStaked = $stakeInfo.then((info) =>
     info.staked.reduce<{ [k: string]: string }>((prev, cur) => {
-      prev[cur.validator.address] = cur.amount
+      prev[cur.validator.address] = cur.xrdAmount
       return prev
     }, {})
   )
