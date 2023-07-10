@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { format as _format } from '@directives/format-input'
   import { createEventDispatcher } from 'svelte'
 
   export let value: string
@@ -10,13 +9,14 @@
   const dispatch = createEventDispatcher<{
     input: { value: string }
   }>()
+
+  $: value = format(value)
 </script>
 
 <input
   {value}
   type="text"
   {readonly}
-  use:_format={format}
   {maxlength}
   on:input={(e) => {
     dispatch('input', { value: e.currentTarget.value })
