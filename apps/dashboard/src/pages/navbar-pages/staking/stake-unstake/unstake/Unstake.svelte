@@ -6,6 +6,7 @@
   import { formatTokenValue } from '@utils'
   import { getUnstakeManifest } from '../manifests'
   import type { Validator } from '../../Validators.svelte'
+  import { RET_DECIMAL_PRECISION } from '@constants'
 
   export let open: boolean
   export let stakes: {
@@ -49,7 +50,7 @@
         const stakeUnitsAmount = new BigNumber(amountsToUnstake[i])
           .dividedBy(stake.amount)
           .multipliedBy(stake.stakeUnits)
-          .toString()
+          .toFixed(RET_DECIMAL_PRECISION, BigNumber.ROUND_DOWN)
 
         unstakes.push({
           accountAddress: stake.account.address,

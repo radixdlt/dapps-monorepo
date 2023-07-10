@@ -17,6 +17,7 @@ import type {
   UnstakingInfo
 } from './+layout.svelte'
 import type { StateEntityDetailsResponseFungibleResourceDetails } from '@radixdlt/babylon-gateway-api-sdk'
+import { RET_DECIMAL_PRECISION } from '@constants'
 
 export const prerender = false
 
@@ -99,7 +100,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
 
           const xrdAmount = validator.stakeUnitsToStakedRatio
             .multipliedBy(token.value)
-            .toFixed(5)
+            .toFixed(RET_DECIMAL_PRECISION)
 
           return {
             type: 'staked',
@@ -137,7 +138,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
 
         const xrdAmount = new BigNumber(
           token.unstakeData.unstakeAmount
-        ).toFixed(5)
+        ).toFixed(RET_DECIMAL_PRECISION)
 
         const stakeInfo = {
           account,

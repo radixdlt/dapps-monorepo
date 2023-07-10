@@ -12,6 +12,7 @@
   import { getMultipleStakeManifest } from '../../manifests'
   import { removeThousandsSeparator } from '@utils/format-amount'
   import type { ComponentEvents } from 'svelte'
+  import { RET_DECIMAL_PRECISION } from '@constants'
 
   export let open: boolean
   export let validators: Validator[]
@@ -47,7 +48,7 @@
       amount: distributeEquallyAmount
         ? new BigNumber(distributeEquallyAmount)
             .dividedBy(validators.length)
-            .toString()
+            .toFixed(RET_DECIMAL_PRECISION)
         : '0'
     }))
   } else {
