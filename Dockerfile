@@ -33,7 +33,7 @@ RUN cat .env.production
 RUN npx turbo run build --filter=ui
 RUN npx turbo run build --filter=dashboard
 RUN npx turbo run build --filter=console
-RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build --filter=ui
+RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build:storybook --filter=ui
 RUN rm -f .npmrc
 
 FROM node:20.3.0-alpine AS dashboard
