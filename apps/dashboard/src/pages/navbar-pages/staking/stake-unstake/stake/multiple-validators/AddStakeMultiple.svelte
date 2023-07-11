@@ -35,8 +35,8 @@
     amount: string
   }[]
 
-  $: stakeAmounts = [...validators].map((validator) => ({
-    validator: validator.address,
+  $: stakeAmounts = Array.from({ length: validators.length }, (_, i) => ({
+    validator: validators[i].address,
     amount: '0'
   }))
 
