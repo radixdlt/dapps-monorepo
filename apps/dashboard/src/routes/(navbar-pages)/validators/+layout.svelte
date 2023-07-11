@@ -116,12 +116,14 @@
   />
 {/await}
 
-{#await data.promises.validators then validators}
-  <AddStakeMultiple
-    bind:open={multipleStakeOpen}
-    validators={validators.filter((v) => $selectedValidators[v.address])}
-    {currentlyStaked}
-  />
-{/await}
+{#key multipleStakeOpen}
+  {#await data.promises.validators then validators}
+    <AddStakeMultiple
+      bind:open={multipleStakeOpen}
+      validators={validators.filter((v) => $selectedValidators[v.address])}
+      {currentlyStaked}
+    />
+  {/await}
+{/key}
 
 <slot />
