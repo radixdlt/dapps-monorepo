@@ -2,7 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { stakeInfo } from '../../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
-  import { EXPECTED_EPOCH_TIME_MINUTES, XRD_SYMBOL } from '@constants'
+  import { EXPECTED_EPOCH_TIME_MINUTES } from '@constants'
   import { formatAmount } from '@utils'
 
   export let validatorAddress: string
@@ -39,17 +39,8 @@
   })
 </script>
 
-<div class="ready-to-claim-text">
-  {#await nearestClaim}
-    <SkeletonLoader />
-  {:then claim}
-    (ready to claim {formatAmount(claim.amount)}
-    {XRD_SYMBOL} in approx. {claim.days} days)
-  {/await}
-</div>
-
-<style>
-  .ready-to-claim-text {
-    color: var(--theme-subtext);
-  }
-</style>
+{#await nearestClaim}
+  <SkeletonLoader />
+{:then claim}
+  <slot name="text" amount={formatAmount(claim.amount)} days={claim.days} />
+{/await}

@@ -6,11 +6,17 @@
   import StakingIcon from '@icons/staking.svg'
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
+  import BigNumber from 'bignumber.js'
 
   export let staking: Promise<string>
   export let unstaking: Promise<string>
   export let readyToClaim: Promise<string>
   export let claimText: string
+
+  $: showSlotSection =
+    !!$$slots['staking-section'] ||
+    !!$$slots['unstaking-section'] ||
+    !!$$slots['claim-section']
 </script>
 
 <div class="staking-card">
@@ -27,7 +33,9 @@
           {formatAmount(staking)} XRD
         {/await}
       </div>
-      <slot name="staking-section" />
+      <div class:slot-section={showSlotSection}>
+        <slot name="staking-section" />
+      </div>
     </div>
   </div>
   <div class="section">
@@ -43,7 +51,9 @@
           {formatAmount(unstaking)} XRD
         {/await}
       </div>
-      <slot name="unstaking-section" />
+      <div class:slot-section={showSlotSection}>
+        <slot name="unstaking-section" />
+      </div>
     </div>
   </div>
   <div class="section last-section">
@@ -59,10 +69,18 @@
           {formatAmount(readyToClaim)} XRD
         {/await}
       </div>
-      <slot name="claim-section" />
+      <div class:slot-section={showSlotSection}>
+        <slot name="claim-section" />
+      </div>
     </div>
     <div>
-      <Button size="big" on:click>{claimText}</Button>
+      {#await readyToClaim}
+        <Button disabled={true} size="big" on:click>{claimText}</Button>
+      {:then readyToClaim}
+        <Button disabled={new BigNumber(readyToClaim).eq(0)} size="big" on:click
+          >{claimText}</Button
+        >
+      {/await}
     </div>
   </div>
 </div>
@@ -111,5 +129,9 @@
   .stake-display {
     display: flex;
     flex-direction: column;
+  }
+
+  .slot-section {
+    height: 2.5rem;
   }
 </style>

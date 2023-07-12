@@ -9,6 +9,7 @@
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
+  import { XRD_SYMBOL } from '@constants'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
 </script>
@@ -41,7 +42,12 @@
       </div>
       {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
         {#if new BigNumber(stakes[info.address].accumulatedUnstaking).gt(0)}
-          <ReadyToClaim validatorAddress={info.address} />
+          <ReadyToClaim validatorAddress={info.address}>
+            <div class="ready-to-claim-text" slot="text" let:amount let:days>
+              (ready to claim {formatAmount(amount)}
+              {XRD_SYMBOL} in approx. {days} days)
+            </div>
+          </ReadyToClaim>
         {/if}
       {/await}
       <div class="claim-button">
@@ -95,7 +101,6 @@
   .staking-box-grid {
     display: grid;
     grid: 1fr/ 1fr 1fr 2fr 3fr;
-    width: 70rem;
     margin-left: 1.5rem;
     gap: var(--spacing-sm);
     align-items: center;
@@ -119,5 +124,9 @@
 
   .claim-button {
     width: 15rem;
+  }
+
+  .ready-to-claim-text {
+    color: var(--theme-subtext);
   }
 </style>
