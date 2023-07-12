@@ -25,60 +25,59 @@
   }>()
 </script>
 
-<div class:with-ready-to-claim={$isUnstaking}>
-  <StakingCard
-    staking={staked}
-    {unstaking}
-    {readyToClaim}
-    {claimText}
-    on:click={() => dispatchEvent('claim')}
-  >
-    <div slot="staking-section">
-      <button
-        class="stake-unstake-button"
-        on:click={() => dispatchEvent('add-stake')}>Add Stake</button
-      >
-    </div>
-    <div slot="unstaking-section">
-      <button
-        class="stake-unstake-button"
-        on:click={() => dispatchEvent('unstake')}>Request Unstake</button
-      >
-    </div>
-    <div slot="claim-section">
-      <br />
-    </div>
-  </StakingCard>
-</div>
-
-{#await unstaking then amount}
-  {#if new BigNumber(amount).gt(0)}
-    <div id="ready-to-claim">
-      {#await validatorAddress}
-        <SkeletonLoader />
-      {:then validatorAddress}
-        <ReadyToClaim {validatorAddress} />
-      {/await}
-    </div>
-  {/if}
-{/await}
+<StakingCard
+  staking={staked}
+  {unstaking}
+  {readyToClaim}
+  {claimText}
+  on:click={() => dispatchEvent('claim')}
+>
+  <div slot="staking-section" class="stake-unstake">
+    <button
+      class="stake-unstake-button"
+      on:click={() => dispatchEvent('add-stake')}>Add Stake</button
+    >
+    {#await staked then staked}
+      {#if new BigNumber(staked).gt(0)}
+        <button
+          class="stake-unstake-button"
+          on:click={() => dispatchEvent('unstake')}>Request Unstake</button
+        >
+      {/if}
+    {/await}
+  </div>
+  <div slot="unstaking-section">
+    {#await unstaking then amount}
+      {#if new BigNumber(amount).gt(0)}
+        <div class="ready-to-claim">
+          {#await validatorAddress}
+            <SkeletonLoader />
+          {:then validatorAddress}
+            <ReadyToClaim {validatorAddress}>
+              <div slot="text" let:days>
+                Ready to claim in approx. {days} days
+              </div>
+            </ReadyToClaim>
+          {/await}
+        </div>
+      {/if}
+    {/await}
+  </div>
+</StakingCard>
 
 <style lang="scss">
-  .with-ready-to-claim {
-    :global(.staking-card) {
-      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0 !important;
-      border-bottom: none !important;
-    }
-  }
-
-  #ready-to-claim {
-    background: var(--color-grey-5);
-    border: var(--border) var(--theme-border);
-    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-    padding: var(--spacing-lg);
+  .ready-to-claim,
+  .stake-unstake {
+    margin-top: var(--spacing-sm);
   }
 
   .stake-unstake-button {
     color: var(--theme-button-primary);
+  }
+
+  .stake-unstake {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
   }
 </style>
