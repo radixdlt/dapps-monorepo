@@ -186,11 +186,15 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
         return $accounts.reduce(
-          (prev, cur, i) => {
-            const staked = getStakedInfo(validators)(cur, accountData[i])
+          (prev, cur) => {
+            const data = accountData.find(
+              (d) => d.accountAddress === cur.address
+            )!
+
+            const staked = getStakedInfo(validators)(cur, data)
             const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
               validators
-            )(cur, accountData[i], currentEpoch)
+            )(cur, data, currentEpoch)
 
             return {
               staked: prev.staked.concat(staked),
