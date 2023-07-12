@@ -18,6 +18,7 @@ import type {
 } from './+layout.svelte'
 import type { StateEntityDetailsResponseFungibleResourceDetails } from '@radixdlt/babylon-gateway-api-sdk'
 import { RET_DECIMAL_PRECISION } from '@constants'
+import { bookmarkedValidatorsStore } from '../../../stores'
 
 export const prerender = false
 
@@ -175,7 +176,10 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         {}
       )
     )
-
+    .then((bookmarked) => {
+      bookmarkedValidatorsStore.set(bookmarked)
+      return bookmarked
+    })
   const stakeInfo = derived(accounts, ($accounts) => {
     if ($accounts.length > 0) {
       return validators.then(async (validators) => {
