@@ -265,7 +265,8 @@ jobs:
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           command: container monitor
-          args: ${{ needs.setup-tags.outputs.console-tags }} -d
+          image: ${{ needs.setup-tags.outputs.console-tags }}
+          args: --file=Dockerfile  -d
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
