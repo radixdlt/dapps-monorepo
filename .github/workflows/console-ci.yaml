@@ -207,6 +207,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
+      - setup-tags
       - push-console
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
