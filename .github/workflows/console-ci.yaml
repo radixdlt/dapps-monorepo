@@ -248,7 +248,7 @@ jobs:
         with:
           command: container monitor
           image: ${{ needs.setup-tags.outputs.console-tags }}
-          args: --file=Dockerfile  -d
+          args: --file=Dockerfile --org=${{ secrets.SNYK_ORG_ID }} --target-reference=${{ github.ref_name }} -d
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
