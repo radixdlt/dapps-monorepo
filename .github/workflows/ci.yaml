@@ -265,6 +265,7 @@ jobs:
         uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           command: container monitor ${{ needs.setup-tags.outputs.console-tags }}
+          args: ${{ needs.setup-tags.outputs.console-tags }} -d
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
