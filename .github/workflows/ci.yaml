@@ -510,7 +510,9 @@ jobs:
       pull-requests: read
       contents: read
     needs:
+      - setup-tags
       - push-storybook
+      - push-dashboard
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
