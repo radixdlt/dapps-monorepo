@@ -1,12 +1,29 @@
 <script lang="ts" context="module">
-  export type MetadataInfoBoxConfig = {
-    label?: string
-    transformValue?: (value: EntityMetadataItemValue) => string
-    component?: any
-    componentProperties?: (
+  type ValueRendererConfig = {
+    component: any
+    componentProperties: (
       value: EntityMetadataItemValue
     ) => Record<string, any>
   }
+
+  export type MetadataInfoBoxConfig = {
+    label?: string
+    transformValue?: (value: EntityMetadataItemValue) => string
+  } & Partial<ValueRendererConfig>
+
+  type VariantId = string
+
+  type ExtendedEntityMetadataItemValue = {
+    raw_json: {
+      variant_id: string
+    }
+  } & EntityMetadataItemValue
+
+  export type ExtendedEntityMetadataItem = ReplaceProperty<
+    EntityMetadataItem,
+    'value',
+    ExtendedEntityMetadataItemValue
+  >
 </script>
 
 <script lang="ts">
@@ -16,11 +33,60 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type {
     EntityMetadataItem,
-    EntityMetadataItemValue
+    EntityMetadataItemValue,
+    ReplaceProperty
   } from '@radixdlt/babylon-gateway-api-sdk'
+  import AddressesList from '@components/_base/address/AddressesList.svelte'
+  import Link from '@components/_base/link/Link.svelte'
+  import LinksList from '@components/_base/link/LinksList.svelte'
 
-  export let expectedEntries: Record<string, MetadataInfoBoxConfig>
-  export let metadata: EntityMetadataItem[] | Promise<EntityMetadataItem[]>
+  export let expectedEntries: Record<string, MetadataInfoBoxConfig> = {}
+  export let metadata:
+    | ExtendedEntityMetadataItem[]
+    | Promise<ExtendedEntityMetadataItem[]>
+
+  const defaults: Record<VariantId, ValueRendererConfig> = {
+    '8': {
+      component: AddressesList,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        addresses: [metadataItem.as_string]
+      })
+    },
+    '13': {
+      component: Link,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        url: metadataItem.as_string,
+        external: true
+      })
+    },
+    '14': {
+      component: Link,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        url: metadataItem.as_string,
+        external: true
+      })
+    },
+    '136': {
+      component: AddressesList,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        addresses: metadataItem.as_string_collection
+      })
+    },
+    '141': {
+      component: LinksList,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        links: metadataItem.as_string_collection?.map((url) => ({ url })),
+        external: true
+      })
+    },
+    '142': {
+      component: LinksList,
+      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
+        links: metadataItem.as_string_collection?.map((url) => ({ url })),
+        external: true
+      })
+    }
+  }
 
   $: entries = Promise.resolve(metadata).then((resolved) =>
     indexBy(prop('key'), resolved)
@@ -33,7 +99,7 @@
   <InfoBox>
     {#each Object.entries(expectedEntries) as [key, config]}
       {#if resolvedEntries[key]}
-        <Row text={config?.label || key.split('_').join(' ')}>
+        <Row text={config?.label || key}>
           <svelte:fragment slot="right">
             {#if config?.component}
               {#if config?.componentProperties}
@@ -60,9 +126,19 @@
 
     {#each Object.entries(resolvedEntries) as [key, { value }]}
       {#if !expectedEntries[key]}
-        <Row text={key.split('_').join(' ')}>
+        <Row text={key}>
           <div slot="right" class="text-right">
-            {value.as_string || value.as_string_collection?.join(', ') || ''}
+            {@const variantId = value.raw_json.variant_id}
+            {#if defaults[variantId]}
+              <svelte:component
+                this={defaults[variantId].component}
+                {...defaults[variantId].componentProperties(
+                  resolvedEntries[key].value
+                )}
+              />
+            {:else}
+              {value.as_string || value.as_string_collection?.join(', ') || ''}
+            {/if}
           </div>
         </Row>
       {/if}
