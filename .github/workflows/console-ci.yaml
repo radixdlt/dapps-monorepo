@@ -253,7 +253,7 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
       - name: Enable Snyk online images monitoring
         run: |
-          snyk container monitor ${{ needs.setup-tags.outputs.dashboard-tags }} --file=Dockerfile --org=${{ secrets.SNYK_ORG_ID }} --target-reference=${{ github.ref_name }} -d
+          snyk container monitor ${{ needs.setup-tags.outputs.console-tags }} --file=Dockerfile --org=${{ secrets.SNYK_ORG_ID }} --target-reference=${{ github.ref_name }} -d
 
   sonar:
     runs-on: ubuntu-latest
