@@ -243,14 +243,17 @@ jobs:
         with:
           username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
           password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-      - name: Enable Snyk online images monitoring
-        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+      - uses: actions/setup-node@v2
         with:
-          command: container monitor
-          image: ${{ needs.setup-tags.outputs.console-tags }}
-          args: --file=Dockerfile --org=${{ secrets.SNYK_ORG_ID }} --target-reference=${{ github.ref_name }} -d
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          node-version: '14'
+      - name: Install snyk
+        run: |
+          npm install snyk -g
+          snyk -v
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+      - name: Enable Snyk online images monitoring
+        run: |
+          snyk container monitor ${{ needs.setup-tags.outputs.dashboard-tags }} --file=Dockerfile --org=${{ secrets.SNYK_ORG_ID }} --target-reference=${{ github.ref_name }} -d
 
   sonar:
     runs-on: ubuntu-latest
