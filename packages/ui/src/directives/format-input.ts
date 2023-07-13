@@ -5,7 +5,7 @@ export const format = (
   node: HTMLInputElement,
   formatFunction: (value: string) => string
 ) => {
-  const events = ['input', 'paste', 'change']
+  const events = ['paste', 'change']
 
   function updateValue() {
     node.value = formatFunction(node.value)
@@ -35,16 +35,18 @@ export const number = (
   min?: string,
   max?: string,
   maxChars?: number,
-  decimalPlaces = 2
+  decimalPlaces = 2,
+  keepDecimalPoint = false
 ) => (value: string) => {
   if (value === '') value = '0'
+
   const numericValue = removeNonNumericCharacters(value)
 
   // Split the value into integer and decimal parts
   const parts = numericValue.split('.')
 
   let integerPart = parts[0]
-  let decimalPart = parts[1]
+  let decimalPart: string | undefined = parts[1]
 
   integerPart = removeLeadingZeros(integerPart)
 
@@ -53,6 +55,9 @@ export const number = (
   // Limit the number of decimal places
   if (decimalPart || decimalPart === '') {
     decimalPart = decimalPart.slice(0, decimalPlaces)
+    decimalPart = decimalPart.replace(/0+$/, ''); // Remove trailing zeroes
+
+    if (!keepDecimalPoint && decimalPart === '') decimalPart = undefined
   }
 
   // Apply minimum and maximum value constraints

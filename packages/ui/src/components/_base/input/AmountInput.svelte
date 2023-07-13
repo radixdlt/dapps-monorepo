@@ -3,11 +3,22 @@
   import InputNew from './InputNew.svelte'
   import { createEventDispatcher } from 'svelte'
   import { removeThousandsSeparator } from '@utils/format-amount'
+  import { RET_DECIMAL_PRECISION } from '@constants'
 
   export let value: string
   export let maxlength: number | undefined = undefined
   export let readonly = false
-  export let format = number(undefined, undefined, 10).bind(null)
+  export let format: undefined | ((value: string) => string) = undefined
+
+  let numberFormatting = number.bind(
+    null,
+    undefined,
+    undefined,
+    10,
+    RET_DECIMAL_PRECISION
+  )
+
+  let isFocused = false
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
 </script>
@@ -17,7 +28,13 @@
     {value}
     {maxlength}
     {readonly}
-    {format}
+    format={format ?? numberFormatting(isFocused ? true : false).bind(null)}
+    on:focus={() => {
+      isFocused = true
+    }}
+    on:blur={() => {
+      isFocused = false
+    }}
     --font-size="var(--text-3xl)"
     --font-weight="var(--font-weight-bold-2)"
     --text-align="right"

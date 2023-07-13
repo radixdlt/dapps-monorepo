@@ -8,12 +8,19 @@
 
   const dispatch = createEventDispatcher<{
     input: { value: string }
+    focus: boolean
   }>()
 
   $: value = format(value)
 </script>
 
 <input
+  on:focus={() => {
+    dispatch('focus', true)
+  }}
+  on:blur={() => {
+    dispatch('focus', false)
+  }}
   {value}
   type="text"
   {readonly}
