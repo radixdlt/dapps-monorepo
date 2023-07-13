@@ -373,50 +373,24 @@ jobs:
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
             NPM_LOCAL_CACHE=.cache/
-      - name: Docker Image output
-        run: docker images
-      - name: Output job summary
-        run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
-
-  snyk-scan-images:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pull-requests: read
-      contents: read
-    needs:
-      - setup-tags
-      - push-console
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
-          app_name: 'console'
-          step_name: 'push-console'
-          secret_prefix: 'DOCKERHUB_PRIVATE'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
-          parse_json: true
-      - name: Login to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
-          password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-      - name: Scan console docker image
+      - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           image: ${{ needs.setup-tags.outputs.console-tags }}
           args: --file=Dockerfile --severity-threshold=critical
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Docker Image output
+        run: docker images
+      - name: Output job summary
+        run: |
+          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: pr
@@ -440,7 +414,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: dev
@@ -464,7 +437,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: enkinet
@@ -488,7 +460,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: hammunet
@@ -512,7 +483,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: gilganet
@@ -536,7 +506,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: mardunet
@@ -561,7 +530,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: ansharnet
@@ -585,7 +553,6 @@ jobs:
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
-      - snyk-scan-images
       - setup-tags
     with:
       env_name: ansharnet-internal
