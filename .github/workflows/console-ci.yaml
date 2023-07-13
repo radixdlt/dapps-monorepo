@@ -220,11 +220,14 @@ jobs:
 
   snyk-container-monitor:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    #if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     needs:
       - setup-tags
-      - push-dashboard
-      - push-storybook
+      - push-console
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main

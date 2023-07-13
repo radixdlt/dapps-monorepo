@@ -238,6 +238,10 @@ jobs:
   snyk-container-monitor:
     runs-on: ubuntu-latest
     #if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
     needs:
       - setup-tags
       - push-dashboard
@@ -248,7 +252,7 @@ jobs:
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
-          step_name: 'push-dashboard'
+          step_name: 'snyk-container-monitor'
           secret_prefix: 'DOCKERHUB_PRIVATE'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
           parse_json: true
