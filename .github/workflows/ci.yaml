@@ -175,9 +175,8 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - name: Run Snyk to check for deps vulnerabilities
         uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        continue-on-error: true
         with:
-          args: --all-projects --org=${{ secrets.SNYK_ORG_ID }} #--severity-threshold=critical
+          args: --all-projects --org=${{ secrets.SNYK_ORG_ID }} --severity-threshold=critical
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -189,9 +188,9 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - name: Run Snyk to check for code vulnerabilities
         uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        continue-on-error: true
+        continue-on-error: true # temporary until code fix
         with:
-          args: --all-projects --org=${{ secrets.SNYK_ORG_ID }} #--severity-threshold=high
+          args: --all-projects --org=${{ secrets.SNYK_ORG_ID }} --severity-threshold=high
           command: code test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -430,13 +429,6 @@ jobs:
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
             NPM_LOCAL_CACHE=.cache/
-      - name: Scan Docker image
-        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          image: ${{ needs.setup-tags.outputs.dashboard-tags }}
-          args: --file=Dockerfile
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Docker Image output
         run: docker images
       - name: Output job summary
@@ -505,19 +497,49 @@ jobs:
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
             NPM_LOCAL_CACHE=.cache/
-      - name: Scan Docker image
-        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          image: ${{ needs.setup-tags.outputs.storybook-tags }}
-          args: --file=Dockerfile
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
       - name: Docker Image output
         run: docker images
       - name: Output job summary
         run: |
           echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+
+  snyk-scan-images:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+    needs:
+      - push-storybook
+    steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'push-story'
+          secret_prefix: 'DOCKERHUB_PRIVATE'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
+          parse_json: true
+      - name: Login to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
+          password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
+      - name: Scan dashboard docker image
+        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        with:
+          image: ${{ needs.setup-tags.outputs.dashboard-tags }}
+          args: --file=Dockerfile --severity-threshold=critical
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Scan storybook docker image
+        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        with:
+          image: ${{ needs.setup-tags.outputs.storybook-tags }}
+          args: --file=Dockerfile --severity-threshold=critical
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
@@ -525,6 +547,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: pr
@@ -549,6 +572,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: dev
@@ -573,6 +597,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: enkinet
@@ -597,6 +622,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: hammunet
@@ -621,6 +647,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: gilganet
@@ -645,6 +672,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: mardunet
@@ -670,6 +698,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: kisharnet
@@ -695,6 +724,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: ansharnet
@@ -719,6 +749,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: kisharnet-internal
@@ -743,6 +774,7 @@ jobs:
     needs:
       - push-dashboard
       - push-storybook
+      - snyk-scan-images
       - setup-tags
     with:
       env_name: ansharnet-internal
