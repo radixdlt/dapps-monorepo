@@ -433,7 +433,7 @@ jobs:
       - name: Scan Docker image
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.dashboard-tags }}
+          image: ${{ needs.setup-tags.outputs.dashboard-tags }}
           args: --file=Dockerfile
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -508,7 +508,7 @@ jobs:
       - name: Scan Docker image
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.storybook-tags }}
+          image: ${{ needs.setup-tags.outputs.storybook-tags }}
           args: --file=Dockerfile
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
