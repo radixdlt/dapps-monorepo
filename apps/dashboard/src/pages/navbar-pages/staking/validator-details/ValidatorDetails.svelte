@@ -94,13 +94,13 @@
       </AwaitedRow>
       <AwaitedRow text="Total Stake" promise={validator} let:data>
         <div>
-          <span>{formatTokenValue(data.totalStake).value} XRD</span>
+          <span>{formatTokenValue(data.totalStake).displayValue} XRD</span>
           <span>({data.percentageTotalStake.toFixed(1)}%)</span>
         </div>
       </AwaitedRow>
       <AwaitedRow text="Owner Stake" promise={validator} let:data>
         <div>
-          <span>{formatTokenValue(data.ownerStake).value} XRD</span>
+          <span>{formatTokenValue(data.ownerStake).displayValue} XRD</span>
           <span>({data.percentageOwnerStake.toFixed(1)}%)</span>
         </div>
       </AwaitedRow>

@@ -19,9 +19,9 @@ export const getTxIdFromMessage = (message: string): string | undefined => {
 export const shortenAddress = (address?: string) =>
   address
     ? `${address.slice(0, 4)}...${address.slice(
-        address.length - 6,
-        address.length
-      )}`
+      address.length - 6,
+      address.length
+    )}`
     : ''
 
 export const toWholeUnits = (tokenValue: string) =>
@@ -72,16 +72,16 @@ export const isNFTAddress = (address: string) =>
   getAddressPrefix(address) === 'resource' && address.split(':').length > 1
 
 export const addressToRoute = (address: string) =>
-  ({
-    account: `/account/${address}`,
-    resource: isNFTAddress(address)
-      ? `/nft/${address}`
-      : `/resource/${address}`,
-    package: `/package/${address}`,
-    component: `/component/${address}`,
-    transaction: `/transaction/${address}`,
-    validator: `/validators/${address}`
-  }[getAddressPrefix(address)])
+({
+  account: `/account/${address}`,
+  resource: isNFTAddress(address)
+    ? `/nft/${address}`
+    : `/resource/${address}`,
+  package: `/package/${address}`,
+  component: `/component/${address}`,
+  transaction: `/transaction/${address}`,
+  validator: `/validators/${address}`
+}[getAddressPrefix(address)])
 
 export const useContext = <
   Contexts extends Record<string, Values>,
@@ -163,14 +163,14 @@ export const fetchWrapper = <R = any, ER = unknown>(
       .andThen((data) =>
         response.ok
           ? okAsync({
-              status: response.status,
-              data: data as R
-            })
+            status: response.status,
+            data: data as R
+          })
           : errAsync({
-              status: response.status,
-              reason: 'RequestStatusNotOk',
-              data: data as ER
-            })
+            status: response.status,
+            reason: 'RequestStatusNotOk',
+            data: data as ER
+          })
       )
   )
 
@@ -182,63 +182,63 @@ export const formatTokenValue = (
   const splitIntegerAndDecimals = (input: string) => input.split('.')
   const round =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
-      const [integer] = splitIntegerAndDecimals(stringValue)
-      if (integer.length >= maxPlaces)
-        return input.decimalPlaces(1, BigNumber.ROUND_UP)
-      const decimalPlaces = maxPlaces - integer.length
-      return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
-    }
+      (input: BigNumber) => {
+        const [integer] = splitIntegerAndDecimals(stringValue)
+        if (integer.length >= maxPlaces)
+          return input.decimalPlaces(1, BigNumber.ROUND_UP)
+        const decimalPlaces = maxPlaces - integer.length
+        return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
+      }
 
   const addSuffix =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
-      const [integer] = splitIntegerAndDecimals(stringValue)
+      (input: BigNumber) => {
+        const [integer] = splitIntegerAndDecimals(stringValue)
 
-      let suffix = ''
-      let updatedValue = input
+        let suffix = ''
+        let updatedValue = input
 
-      if (integer.length >= 15) {
-        suffix = 'T'
-        updatedValue = input
-          .shiftedBy(-12)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 12),
-            BigNumber.ROUND_HALF_UP
-          )
-      } else if (integer.length >= 12) {
-        suffix = 'B'
-        updatedValue = input
-          .shiftedBy(-9)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 9),
-            BigNumber.ROUND_HALF_UP
-          )
-      } else if (integer.length >= 9) {
-        suffix = 'M'
-        updatedValue = input
-          .shiftedBy(-6)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 6),
-            BigNumber.ROUND_HALF_UP
-          )
+        if (integer.length >= 15) {
+          suffix = 'T'
+          updatedValue = input
+            .shiftedBy(-12)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 12),
+              BigNumber.ROUND_HALF_UP
+            )
+        } else if (integer.length >= 12) {
+          suffix = 'B'
+          updatedValue = input
+            .shiftedBy(-9)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 9),
+              BigNumber.ROUND_HALF_UP
+            )
+        } else if (integer.length >= 9) {
+          suffix = 'M'
+          updatedValue = input
+            .shiftedBy(-6)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 6),
+              BigNumber.ROUND_HALF_UP
+            )
+        }
+
+        return {
+          rounded: updatedValue.toString(),
+          suffix,
+          value: input.toString()
+        }
       }
-
-      return {
-        rounded: updatedValue.toString(),
-        suffix,
-        value: input.toString()
-      }
-    }
 
   const thousandsSeparator =
     (character = ',') =>
-    (input: string) => {
-      const [integer, decimals] = input.split('.')
-      return [integer.replace(/\B(?=(\d{3})+(?!\d))/g, character), decimals]
-        .filter((value) => value !== undefined)
-        .join('.')
-    }
+      (input: string) => {
+        const [integer, decimals] = input.split('.')
+        return [integer.replace(/\B(?=(\d{3})+(?!\d))/g, character), decimals]
+          .filter((value) => value !== undefined)
+          .join('.')
+      }
 
   return pipe(
     stringToBigInt,
@@ -247,7 +247,8 @@ export const formatTokenValue = (
     ({ value, suffix, rounded }) => ({
       rounded: thousandsSeparator(options?.thousandsSeparator)(rounded),
       value: thousandsSeparator(options?.thousandsSeparator)(value),
-      suffix
+      suffix,
+      displayValue: `${thousandsSeparator(options?.thousandsSeparator)(rounded)}${suffix}`,
     })
   )(input)
 }

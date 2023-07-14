@@ -110,7 +110,7 @@
     <div class="summary">
       <div class="summary-title">You're unstaking a total</div>
       <div class="summary-value">
-        {formatTokenValue(totalUnstakeAmount).value} XRD
+        {formatTokenValue(totalUnstakeAmount).displayValue} XRD
       </div>
     </div>
   </svelte:fragment>

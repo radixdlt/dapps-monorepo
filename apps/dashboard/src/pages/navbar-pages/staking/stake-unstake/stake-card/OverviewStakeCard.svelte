@@ -44,7 +44,7 @@
         {#await xrdBalance}
           <SkeletonLoader />
         {:then balance}
-          Balance {formatTokenValue(balance).value}
+          Balance {formatTokenValue(balance).displayValue}
         {/await}
       </div>
     </TokenAmountCard>

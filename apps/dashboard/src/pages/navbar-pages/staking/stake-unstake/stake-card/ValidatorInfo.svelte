@@ -22,7 +22,7 @@
       {#await currentlyStakingAmount}
         <SkeletonLoader width={100} />
       {:then amount}
-        {formatTokenValue(amount ?? '0').value} XRD
+        {formatTokenValue(amount ?? '0').displayValue} XRD
       {/await}
     </div>
   {/if}

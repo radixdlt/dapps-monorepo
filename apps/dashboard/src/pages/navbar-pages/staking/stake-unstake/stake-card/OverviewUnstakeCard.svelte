@@ -53,7 +53,7 @@
     >
       <div slot="footer" class:invalid class="footer">
         <div class="subtext">
-          Staked {formatTokenValue(stakedAmount).value}
+          Staked {formatTokenValue(stakedAmount).displayValue}
         </div>
         <button class="max-button subtext" on:click={() => setMax()}>Max</button
         >
