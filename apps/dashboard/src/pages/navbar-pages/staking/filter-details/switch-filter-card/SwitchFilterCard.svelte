@@ -26,6 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: var(--theme-surface-2);
   }
 
   #text {

@@ -68,6 +68,22 @@
     on:closeClick={() => (open = false)}
   />
 
+  <div class="cards">
+    <SwitchFilterCard
+      title="Accepts Stake"
+      description="Validators you're able to stake to"
+      bind:on={acceptsStakeFilter}
+    />
+
+    <SwitchFilterCard
+      title="Bookmarked"
+      description="Validators that you have bookmarked"
+      bind:on={bookmarkedFilter}
+    />
+  </div>
+
+  <Divider />
+
   <div class="text">
     <h2>Fee (%)</h2>
     <p class="subtext">Amount the validator takes when you stake</p>
@@ -129,26 +145,6 @@
       options={recentUptimeOptions}
       selected={selectedUptime}
       bind:percentage={uptimeFilter.percentage}
-    />
-  </div>
-
-  <Divider />
-
-  <div class="text">
-    <h2>Other Options</h2>
-  </div>
-
-  <div class="cards">
-    <SwitchFilterCard
-      title="Accepts Stake"
-      description="Validators you're able to stake to"
-      bind:on={acceptsStakeFilter}
-    />
-
-    <SwitchFilterCard
-      title="Bookmarked"
-      description="Validators that you have bookmarked"
-      bind:on={bookmarkedFilter}
     />
   </div>
 </SidePanel>
