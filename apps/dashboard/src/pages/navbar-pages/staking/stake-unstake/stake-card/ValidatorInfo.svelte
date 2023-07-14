@@ -18,7 +18,7 @@
   </div>
   {#if currentlyStakingAmount}
     <div class="currently-staking dotted-overflow">
-      Currently staking:
+      Currently staked:
       {#await currentlyStakingAmount}
         <SkeletonLoader width={100} />
       {:then amount}
