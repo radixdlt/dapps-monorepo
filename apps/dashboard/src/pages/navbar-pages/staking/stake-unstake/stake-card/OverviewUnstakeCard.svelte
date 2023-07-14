@@ -25,6 +25,10 @@
   )
 
   $: invalid = !validUnstakeAmount
+
+  const setMax = () => {
+    amountToUnstake = stakedAmount
+  }
 </script>
 
 <StakeCard>
@@ -47,8 +51,12 @@
       bind:tokenAmount={amountToUnstake}
       bind:invalid
     >
-      <div slot="footer" class="subtext" class:invalid>
-        Staked {formatTokenValue(stakedAmount).value}
+      <div slot="footer" class:invalid class="footer">
+        <div class="subtext">
+          Staked {formatTokenValue(stakedAmount).value}
+        </div>
+        <button class="max-button subtext" on:click={() => setMax()}>Max</button
+        >
       </div>
     </TokenAmountCard>
   </svelte:fragment>
@@ -69,5 +77,15 @@
 
   .invalid {
     color: var(--invalid-border-color);
+  }
+
+  .max-button {
+    color: var(--theme-button-primary);
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
 </style>
