@@ -24,7 +24,7 @@
     <div class="stake-display">
       <div class="text-with-icon">
         <Icon icon={StakingIcon} --size="1.5rem" />
-        <div class="title-text">STAKING</div>
+        <div class="title-text">STAKED</div>
       </div>
       <div class="amount-text">
         {#await staking}

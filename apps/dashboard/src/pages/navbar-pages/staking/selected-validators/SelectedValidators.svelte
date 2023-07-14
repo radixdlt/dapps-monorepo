@@ -14,7 +14,7 @@
     You've selected {count} validators
   </div>
   <ButtonNew on:click size="big" disabled={count === 0}
-    >Stake to multiple validators</ButtonNew
+    >Stake to Selected Validators</ButtonNew
   >
 </div>
 

@@ -94,10 +94,10 @@
 <div id="validators">
   <div class="header">
     <div>
-      <h1>Validators</h1>
+      <h1>Radix Network Staking</h1>
       <p id="description" class="divider">
-        View all your staked validators and list of validators available on the
-        Radix Network
+        View all currently registered Radix Network validator nodes, and manage
+        your own XRD stakes to validators.
       </p>
     </div>
     <div id="selected-validators">
@@ -113,7 +113,7 @@
 
   <div class="divider">
     <div id="staked-validators" class="header-section">
-      <h2 class="title">Your Staked Validators</h2>
+      <h2 class="title">Your Stakes</h2>
       {#await $stakeInfo}
         <div class="subtext">
           Connect your wallet and your accounts containing Radix Network stake
@@ -125,7 +125,8 @@
         </div>
       {:then}
         <div class="subtext">
-          Summary of your stakes for your currently connected accounts.
+          Summary of your current stakes and requested unstakes for the accounts
+          you have connected.
         </div>
       {/await}
     </div>
@@ -163,8 +164,10 @@
   </div>
 
   <div class="header-section">
-    <h2 class="title">All Validators</h2>
-    <div class="subtext">List of validators available on the Radix Network</div>
+    <h2 class="title">Validator Nodes</h2>
+    <div class="subtext">
+      Full list of validator nodes currently registered on the Radix Network.
+    </div>
     <div id="filter-btn">
       <FilterButton
         on:click={() => {
