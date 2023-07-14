@@ -33,6 +33,7 @@ permissions:
   id-token: write
   pull-requests: read
   contents: read
+  deployments: write
 
 jobs:
   trigger:
