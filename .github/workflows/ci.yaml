@@ -244,8 +244,8 @@ jobs:
       contents: read
     needs:
       - setup-tags
-#      - push-dashboard
-#      - push-storybook
+      - push-dashboard
+      - push-storybook
     steps:
       - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@DO-1618-snyk
         with:
