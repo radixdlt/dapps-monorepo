@@ -169,7 +169,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-scan-deps-licences'
           secret_prefix: 'SNYK'
@@ -188,7 +188,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-scan-code'
           secret_prefix: 'SNYK'
@@ -210,7 +210,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-sbom'
           secret_prefix: 'SNYK'
@@ -241,7 +241,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-monitor'
           secret_prefix: 'SNYK'
