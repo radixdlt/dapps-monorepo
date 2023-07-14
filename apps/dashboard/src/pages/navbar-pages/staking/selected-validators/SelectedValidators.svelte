@@ -13,7 +13,9 @@
   <div>
     You've selected {count} validators
   </div>
-  <ButtonNew on:click size="big">Stake to multiple validators</ButtonNew>
+  <ButtonNew on:click size="big" disabled={count === 0}
+    >Stake to multiple validators</ButtonNew
+  >
 </div>
 
 <style lang="scss">
