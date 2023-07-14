@@ -14,41 +14,50 @@
   }
 </script>
 
-<div id="wrapper">
-  <label id="label">
+<div class="wrapper">
+  <label class="label">
     <input
-      id="checkbox"
+      class="checkbox"
       type="checkbox"
       class:checked
       bind:checked
       on:click|stopPropagation={handleOnClick}
       style={checked
-        ? `background: center / contain no-repeat url(${CheckedIcon}); border: none;`
+        ? `background: center / contain no-repeat url(${CheckedIcon});`
         : ''}
     />
     <slot />
   </label>
 </div>
 
-<style>
-  #wrapper {
+<style lang="scss">
+  $border-width: 2px;
+  $box-size: 1rem;
+
+  .wrapper {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
   }
-  #label {
+  .label {
     display: flex;
     font-weight: var(--font-weight-bold-2);
     color: var(--label-color);
   }
-  #checkbox {
+  .checkbox {
     appearance: none;
     cursor: pointer;
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid var(--color-grey-2);
+    width: $box-size;
+    height: $box-size;
+    border: $border-width solid var(--color-grey-2);
     border-radius: var(--border-radius-sm);
     margin: 0 var(--spacing-sm) 0 0;
     align-self: center;
+  }
+
+  .checked {
+    border: none;
+    width: calc($box-size + $border-width * 2);
+    height: calc($box-size + $border-width * 2);
   }
 </style>
