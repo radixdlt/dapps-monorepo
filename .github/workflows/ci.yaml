@@ -242,8 +242,8 @@ jobs:
       id-token: write
       pull-requests: read
       contents: read
-#    needs:
-#      - setup-tags
+    needs:
+      - setup-tags
 #      - push-dashboard
 #      - push-storybook
     steps:
