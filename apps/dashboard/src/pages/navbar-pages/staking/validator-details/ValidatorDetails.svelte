@@ -36,7 +36,7 @@
     {#await validator}
       <SkeletonLoader />
     {:then { address }}
-      <Address value={address} short --background="var(--theme-surface-3)" />
+      <Address value={address} --background="var(--theme-surface-3)" />
     {/await}
     <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
@@ -71,13 +71,6 @@
 
   <div class="surface-2">
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
-      <AwaitedRow
-        text="Address"
-        promise={validator.then(({ address }) => address)}
-        let:data
-      >
-        <Address short value={data} />
-      </AwaitedRow>
       <AwaitedRow
         text="Owner address"
         promise={validator.then(({ ownerAddress }) => ownerAddress)}
