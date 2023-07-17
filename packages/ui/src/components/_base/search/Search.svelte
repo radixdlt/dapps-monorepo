@@ -9,7 +9,7 @@
 
   let value: string = ''
 
-  const iconHeight: keyof typeof config['theme']['sizes'] = 'sm'
+  const iconHeight: keyof (typeof config)['theme']['sizes'] = 'sm'
 
   const search = () => {
     onSearch(value)

@@ -12,7 +12,7 @@
   export let iconSize: 'xs' | 'sm' | 'md' | 'lg' = 'sm'
   export let isIconColor: boolean = false
   export let bold = false
-  export let textColor: `$${keyof typeof config['theme']['colors']}` = '$text'
+  export let textColor: `$${keyof (typeof config)['theme']['colors']}` = '$text'
   export let iconPosition: 'left' | 'right' = 'left'
 
   export let cx: CSS<typeof config> = {}
