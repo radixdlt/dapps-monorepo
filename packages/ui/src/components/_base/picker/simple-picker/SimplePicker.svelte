@@ -6,7 +6,7 @@
 
   type T = $$Generic
 
-  export let selected: typeof options[number]
+  export let selected: (typeof options)[number]
   export let options: {
     label: string
     value: T

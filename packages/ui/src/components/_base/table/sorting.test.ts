@@ -49,14 +49,21 @@ describe('sorting', () => {
     })
 
     it('should sort by custom function', () => {
-        const entries = [createEntry('aaaa'), createEntry('bb'), createEntry('ccccc')]
-        expect(
-          sort(entries, { property: 'a', sortable: (a, b) => a.a.length > b.a.length ? 1 : -1 }, 'ascending')
-        ).toEqual([
-          createEntry('bb'),
-          createEntry('aaaa'),
-          createEntry('ccccc')
-        ])
+      const entries = [
+        createEntry('aaaa'),
+        createEntry('bb'),
+        createEntry('ccccc')
+      ]
+      expect(
+        sort(
+          entries,
+          {
+            property: 'a',
+            sortable: (a, b) => (a.a.length > b.a.length ? 1 : -1)
+          },
+          'ascending'
+        )
+      ).toEqual([createEntry('bb'), createEntry('aaaa'), createEntry('ccccc')])
     })
   })
 })

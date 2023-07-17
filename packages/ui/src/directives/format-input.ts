@@ -11,13 +11,13 @@ export const format = (
     node.value = formatFunction(node.value)
   }
 
-  events.forEach(event => node.addEventListener(event, updateValue))
+  events.forEach((event) => node.addEventListener(event, updateValue))
 
   node.value = formatFunction(node.value)
 
   return {
     destroy() {
-      events.forEach(event => node.removeEventListener(event, updateValue))
+      events.forEach((event) => node.removeEventListener(event, updateValue))
     }
   }
 }
@@ -31,39 +31,36 @@ const removeLeadingZeros = (value: string) => {
   return newValue
 }
 
-export const number = (
-  min?: string,
-  max?: string,
-  maxChars?: number,
-  decimalPlaces = 2
-) => (value: string) => {
-  if (value === '') value = '0'
-  const numericValue = removeNonNumericCharacters(value)
+export const number =
+  (min?: string, max?: string, maxChars?: number, decimalPlaces = 2) =>
+  (value: string) => {
+    if (value === '') value = '0'
+    const numericValue = removeNonNumericCharacters(value)
 
-  // Split the value into integer and decimal parts
-  const parts = numericValue.split('.')
+    // Split the value into integer and decimal parts
+    const parts = numericValue.split('.')
 
-  let integerPart = parts[0]
-  let decimalPart = parts[1]
+    let integerPart = parts[0]
+    let decimalPart = parts[1]
 
-  integerPart = removeLeadingZeros(integerPart)
+    integerPart = removeLeadingZeros(integerPart)
 
-  if (maxChars) integerPart = integerPart.slice(0, maxChars)
+    if (maxChars) integerPart = integerPart.slice(0, maxChars)
 
-  // Limit the number of decimal places
-  if (decimalPart || decimalPart === '') {
-    decimalPart = decimalPart.slice(0, decimalPlaces)
+    // Limit the number of decimal places
+    if (decimalPart || decimalPart === '') {
+      decimalPart = decimalPart.slice(0, decimalPlaces)
+    }
+
+    // Apply minimum and maximum value constraints
+    if (min) integerPart = BigNumber.max(integerPart, min).toString()
+    if (max) integerPart = BigNumber.min(integerPart, max).toString()
+
+    // Combine the integer and decimal parts
+    let formattedValue = integerPart
+    if (decimalPart || decimalPart === '') {
+      formattedValue += decimalPart ? '.' + decimalPart : '.'
+    }
+
+    return separateThousands()(formattedValue)
   }
-
-  // Apply minimum and maximum value constraints
-  if (min) integerPart = BigNumber.max(integerPart, min).toString()
-  if (max) integerPart = BigNumber.min(integerPart, max).toString()
-
-  // Combine the integer and decimal parts
-  let formattedValue = integerPart
-  if (decimalPart || decimalPart === '') {
-    formattedValue += decimalPart ? '.' + decimalPart : '.'
-  }
-
-  return separateThousands()(formattedValue)
-}

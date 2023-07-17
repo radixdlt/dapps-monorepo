@@ -22,7 +22,7 @@
 
 <style lang="scss">
   .link {
-     color: var(--theme-button-primary);
+    color: var(--theme-button-primary);
   }
 
   .wrapper {

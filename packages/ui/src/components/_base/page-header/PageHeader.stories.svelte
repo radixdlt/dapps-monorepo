@@ -12,7 +12,8 @@
       console.log(id)
     }}
     menuItems={[[{ id: 'tokens', label: 'Tokens' }]]}
-    activeTab="tokens">Account</PageHeader>
+    activeTab="tokens">Account</PageHeader
+  >
 </Template>
 
 <Story name="Primary" />

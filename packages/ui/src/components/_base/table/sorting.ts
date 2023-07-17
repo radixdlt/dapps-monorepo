@@ -1,4 +1,4 @@
-import type { TableColumn } from "./types"
+import type { TableColumn } from './types'
 
 export const sort = (
   entries: unknown[],

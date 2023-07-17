@@ -40,9 +40,7 @@
   }
 </script>
 
-<svelte:window
-  on:keydown={(e) => handleKeydown(e)}
-/>
+<svelte:window on:keydown={(e) => handleKeydown(e)} />
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if open}

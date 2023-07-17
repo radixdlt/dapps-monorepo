@@ -8,7 +8,7 @@
   import Checkmark from '@icons/checkmark.svg'
   import type { TableConfig } from './types'
   import Pagination from './Pagination.svelte'
-    import { formatAmount } from '../../../utils'
+  import { formatAmount } from '../../../utils'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -32,7 +32,7 @@
     apy: (Math.random() * 30).toFixed(2),
     fee: (Math.random() * 15).toFixed(2),
     uptime: `${Math.floor(Math.random() * 100)} %`,
-    acceptsStake: Math.random() > 0.5 ? true : false,    
+    acceptsStake: Math.random() > 0.5 ? true : false,
     ownerStake: (Math.random() * 50).toFixed(2)
   })
 
@@ -163,7 +163,7 @@
         label: 'Id/Date (GMT +00)'
       },
       {
-        label: 'Type',
+        label: 'Type'
       },
       {
         label: 'Withdrawals',
@@ -176,7 +176,7 @@
     ]
   }
 
-  const simpleTableConfig: TableConfig<typeof stakeEntries[0]> = {
+  const simpleTableConfig: TableConfig<(typeof stakeEntries)[0]> = {
     columns: [
       {
         label: 'Validator',

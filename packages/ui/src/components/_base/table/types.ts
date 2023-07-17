@@ -5,8 +5,8 @@ export type TableConfig<Entry = any> = {
 }
 
 export type TablePage<T> = {
-  next_cursor?: string | null;
-  previous_cursor?: string | null;
+  next_cursor?: string | null
+  previous_cursor?: string | null
   items: T[]
 }
 
@@ -31,5 +31,8 @@ export type TableColumn<Entry = any> = {
    * Component to be rendered instead of text content
    */
   component?: new (...args: any[]) => SvelteComponent
-  componentProps?: Record<string, string | number | boolean | Record<string, any> | ((value: Entry) => any)>
+  componentProps?: Record<
+    string,
+    string | number | boolean | Record<string, any> | ((value: Entry) => any)
+  >
 }
