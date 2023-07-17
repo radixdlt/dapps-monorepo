@@ -53,6 +53,7 @@
   } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -95,7 +96,7 @@
   <div class="header">
     <div>
       <h1>Radix Network Staking</h1>
-      <p id="description" class="divider">
+      <p id="description">
         View all currently registered Radix Network validator nodes, and manage
         your own XRD stakes to validators.
       </p>
@@ -111,7 +112,9 @@
     </div>
   </div>
 
-  <div class="divider">
+  <Divider --spacing="var(--spacing-xs)" />
+
+  <div>
     <div id="staked-validators" class="header-section">
       <h2 class="title">Your Stakes</h2>
       {#await $stakeInfo}
@@ -163,6 +166,8 @@
     {/await}
   </div>
 
+  <Divider --spacing="var(--spacing-xs)" />
+
   <div class="header-section">
     <h2 class="title">Validator Nodes</h2>
     <div class="subtext">
@@ -193,7 +198,7 @@
   #validators {
     display: grid;
     padding: var(--spacing-xl);
-    gap: var(--spacing-2xl);
+    gap: var(--spacing-xl);
   }
 
   .header {
@@ -225,11 +230,6 @@
     color: var(--theme-button-primary);
     gap: var(--spacing-md);
     cursor: pointer;
-  }
-
-  .divider {
-    border-bottom: var(--border) var(--theme-border);
-    padding-bottom: var(--spacing-2xl);
   }
 
   .header-section {
