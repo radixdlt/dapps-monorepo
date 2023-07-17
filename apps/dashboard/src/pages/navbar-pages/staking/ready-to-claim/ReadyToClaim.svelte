@@ -3,7 +3,7 @@
   import { stakeInfo } from '../../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { EXPECTED_EPOCH_TIME_MINUTES } from '@constants'
-  import { formatAmount } from '@utils'
+  import { formatTokenValue } from '@utils'
 
   export let validatorAddress: string
 
@@ -42,5 +42,9 @@
 {#await nearestClaim}
   <SkeletonLoader />
 {:then claim}
-  <slot name="text" amount={formatAmount(claim.amount)} days={claim.days} />
+  <slot
+    name="text"
+    amount={formatTokenValue(claim.amount).displayValue}
+    days={claim.days}
+  />
 {/await}

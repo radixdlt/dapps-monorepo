@@ -1,7 +1,7 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import { formatAmount, formatTokenValue } from '@utils'
+  import { formatAmount, formatTokenValue, formatXRDValue } from '@utils'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
@@ -94,13 +94,13 @@
       </AwaitedRow>
       <AwaitedRow text="Total Stake" promise={validator} let:data>
         <div>
-          <span>{formatTokenValue(data.totalStake).value} XRD</span>
+          <span>{formatXRDValue(data.totalStake)}</span>
           <span>({data.percentageTotalStake.toFixed(1)}%)</span>
         </div>
       </AwaitedRow>
       <AwaitedRow text="Owner Stake" promise={validator} let:data>
         <div>
-          <span>{formatTokenValue(data.ownerStake).value} XRD</span>
+          <span>{formatXRDValue(data.ownerStake)}</span>
           <span>({data.percentageOwnerStake.toFixed(1)}%)</span>
         </div>
       </AwaitedRow>

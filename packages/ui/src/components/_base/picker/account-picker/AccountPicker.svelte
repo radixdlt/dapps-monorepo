@@ -8,6 +8,8 @@
   import { slide, type TransitionConfig } from 'svelte/transition'
   import AccountPickerExpandIcon from '@icons/account-picker-expand.svg'
 
+  export let selected: AccountType | undefined
+
   function slidePicker(node: Element): TransitionConfig {
     const slideTransition = slide(node)
 
@@ -24,12 +26,12 @@
     }
   }
 
-  const options = $accounts.map((account) => ({
+  $: options = $accounts.map((account) => ({
     label: account.label,
     value: account
   }))
 
-  export let selected: AccountType | undefined = options?.[0]?.value
+  $: selected = options[0]?.value
 
   let open = false
 </script>

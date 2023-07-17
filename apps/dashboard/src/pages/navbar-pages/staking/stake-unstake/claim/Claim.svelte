@@ -82,7 +82,7 @@
     <div class="summary">
       <div class="summary-title">You're claiming a total</div>
       <div class="summary-value">
-        {formatTokenValue(totalClaimAmount).value} XRD
+        {formatTokenValue(totalClaimAmount).displayValue} XRD
       </div>
     </div>
   </svelte:fragment>

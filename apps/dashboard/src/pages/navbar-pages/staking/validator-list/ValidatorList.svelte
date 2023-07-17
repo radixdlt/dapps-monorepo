@@ -29,22 +29,24 @@
       <slot item={new Promise(() => {})} />
     {/each}
   {:then validators}
-    <Header on:sort={(e) => sort(e.detail.by, e.detail.descending)} />
-    {#if type === 'all'}
-      {#each validators as validator}
-        <ValidatorListCard
-          validatorInfo={Promise.resolve(validator)}
-          on:click-validator
-        />
-      {/each}
-    {/if}
-    {#if type === 'staked'}
-      {#each validators as validator}
-        <StakedValidatorCard
-          validatorInfo={Promise.resolve(validator)}
-          on:click-validator
-        />
-      {/each}
+    {#if validators.length > 0}
+      <Header on:sort={(e) => sort(e.detail.by, e.detail.descending)} />
+      {#if type === 'all'}
+        {#each validators as validator}
+          <ValidatorListCard
+            validatorInfo={Promise.resolve(validator)}
+            on:click-validator
+          />
+        {/each}
+      {/if}
+      {#if type === 'staked'}
+        {#each validators as validator}
+          <StakedValidatorCard
+            validatorInfo={Promise.resolve(validator)}
+            on:click-validator
+          />
+        {/each}
+      {/if}
     {/if}
   {/await}
 </div>

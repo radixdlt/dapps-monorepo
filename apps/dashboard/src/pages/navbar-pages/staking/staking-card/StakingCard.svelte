@@ -2,7 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Button from '@components/_base/button/ButtonNew.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
-  import { formatAmount } from '@utils'
+  import { formatTokenValue } from '@utils'
   import StakingIcon from '@icons/staking.svg'
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
@@ -24,13 +24,13 @@
     <div class="stake-display">
       <div class="text-with-icon">
         <Icon icon={StakingIcon} --size="1.5rem" />
-        <div class="title-text">STAKING</div>
+        <div class="title-text">STAKED</div>
       </div>
       <div class="amount-text">
         {#await staking}
           <SkeletonLoader />
         {:then staking}
-          {formatAmount(staking)} XRD
+          {formatTokenValue(staking).displayValue} XRD
         {/await}
       </div>
       <div class:slot-section={showSlotSection}>
@@ -48,7 +48,7 @@
         {#await unstaking}
           <SkeletonLoader />
         {:then unstaking}
-          {formatAmount(unstaking)} XRD
+          {formatTokenValue(unstaking).displayValue} XRD
         {/await}
       </div>
       <div class:slot-section={showSlotSection}>
@@ -66,7 +66,7 @@
         {#await readyToClaim}
           <SkeletonLoader />
         {:then readyToClaim}
-          {formatAmount(readyToClaim)} XRD
+          {formatTokenValue(readyToClaim).displayValue} XRD
         {/await}
       </div>
       <div class:slot-section={showSlotSection}>

@@ -101,16 +101,12 @@
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>
       <svelte:fragment slot="account-picker-text">
-        <h4>Stake amount coming from</h4>
+        <h4>Stake XRD from account</h4>
       </svelte:fragment>
     </AccountSection>
   </svelte:fragment>
 
-  <svelte:fragment slot="heading-text">
-    Validator you have chosen to stake to
-  </svelte:fragment>
-
-  <svelte:fragment slot="heading-subtext">Total staking amount</svelte:fragment>
+  <svelte:fragment slot="heading-text">Total staking amount</svelte:fragment>
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <OverviewStakeCardMultiple
@@ -153,7 +149,7 @@
     When you stake you will be sent a transaction to review on your Radix Wallet
   </svelte:fragment>
 
-  <svelte:fragment slot="button-text">Stake</svelte:fragment>
+  <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>
 </StakePanel>
 
 <style lang="scss">

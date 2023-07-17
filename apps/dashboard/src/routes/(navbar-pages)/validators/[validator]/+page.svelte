@@ -107,7 +107,12 @@
     bind:open={stakeOpen}
     validator={{
       address: validator.address,
-      name: validator.name
+      name: validator.name,
+      currentlyStakingAmount: stakes.then((stakes) =>
+        stakes
+          .reduce((sum, { staked }) => sum.plus(staked), new BigNumber(0))
+          .toString()
+      )
     }}
   />
 {/await}

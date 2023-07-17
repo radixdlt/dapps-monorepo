@@ -3,7 +3,7 @@
   import ValidatorCard from '../ValidatorCard.svelte'
   import type { ComponentProps } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { formatAmount } from '@utils'
+  import { formatTokenValue, formatXRDValue } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import StakingIcon from '@icons/staking.svg'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
@@ -26,7 +26,8 @@
           <SkeletonLoader width={30} />
         {:then [info, stakes]}
           <div class="amount-value">
-            {formatAmount(stakes[info.address].accumulatedStakes)}
+            {formatTokenValue(stakes[info.address].accumulatedStakes)
+              .displayValue}
           </div>
         {/await}
       </div>
@@ -36,7 +37,8 @@
           <SkeletonLoader width={30} />
         {:then [info, stakes]}
           <div class="amount-value">
-            {formatAmount(stakes[info.address].accumulatedUnstaking)}
+            {formatTokenValue(stakes[info.address].accumulatedUnstaking)
+              .displayValue}
           </div>
         {/await}
       </div>
@@ -44,7 +46,7 @@
         {#if new BigNumber(stakes[info.address].accumulatedUnstaking).gt(0)}
           <ReadyToClaim validatorAddress={info.address}>
             <div class="ready-to-claim-text" slot="text" let:amount let:days>
-              (ready to claim {formatAmount(amount)}
+              (ready to claim {formatTokenValue(amount).displayValue}
               {XRD_SYMBOL} in approx. {days} days)
             </div>
           </ReadyToClaim>
@@ -54,9 +56,9 @@
         {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
           {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
             <ButtonNew size="small"
-              >ready to claim {formatAmount(
+              >ready to claim {formatXRDValue(
                 stakes[info.address].accumulatedReadyToClaim
-              )} XRD</ButtonNew
+              )}</ButtonNew
             >
           {/if}
         {/await}

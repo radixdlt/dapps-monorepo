@@ -34,9 +34,7 @@
       }}
       class:cooltipz--top={formatted.suffix}
       class="token-amount"
-      aria-label={formatted.value}
-      >{formatted.rounded}
-      {formatted.suffix}</button
+      aria-label={formatted.value}>{formatted.displayValue}</button
     >
   </div>
 </a>

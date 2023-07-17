@@ -71,13 +71,11 @@
   bind:open
   {stakeButtonDisabled}
   on:click={unstake}
-  sidePanelHeader="Unstake"
+  sidePanelHeader="Request Unstake"
 >
   <svelte:fragment slot="heading-text">
-    Validator you have chosen to unstake from
+    Validator to request unstake from:
   </svelte:fragment>
-
-  <svelte:fragment slot="heading-subtext">Unstaking amount</svelte:fragment>
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
@@ -106,16 +104,7 @@
     transaction to review on your Radix Wallet
   </svelte:fragment>
 
-  <svelte:fragment slot="summary">
-    <div class="summary">
-      <div class="summary-title">You're unstaking a total</div>
-      <div class="summary-value">
-        {formatTokenValue(totalUnstakeAmount).value} XRD
-      </div>
-    </div>
-  </svelte:fragment>
-
-  <svelte:fragment slot="button-text">Unstake</svelte:fragment>
+  <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>
 </StakePanel>
 
 <style lang="scss">

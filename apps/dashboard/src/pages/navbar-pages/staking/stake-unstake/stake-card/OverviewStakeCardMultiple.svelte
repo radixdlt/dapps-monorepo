@@ -17,7 +17,7 @@
 >
   <div class="info" slot="info">
     <div class="header">Staking to {nbrOfValidators} Validators</div>
-    <div class="text">View Validators and stake amount below</div>
+    <div class="text">Individual amounts below</div>
   </div>
 </OverviewStakeCard>
 
