@@ -6,6 +6,7 @@ import { Buffer } from 'buffer'
 import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
 import { pipe } from 'ramda'
+import { XRD_SYMBOL } from '@constants'
 
 const XRD_DECIMALS = 18
 
@@ -254,6 +255,9 @@ export const formatTokenValue = (
     })
   )(input)
 }
+
+export const formatXRDValue = (value: string) =>
+  `${formatTokenValue(value).displayValue} ${XRD_SYMBOL}`
 
 export const isMobile = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

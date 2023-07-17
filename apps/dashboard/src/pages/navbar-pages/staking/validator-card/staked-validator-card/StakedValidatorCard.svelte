@@ -3,7 +3,7 @@
   import ValidatorCard from '../ValidatorCard.svelte'
   import type { ComponentProps } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue, formatXRDValue } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import StakingIcon from '@icons/staking.svg'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
@@ -56,9 +56,9 @@
         {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
           {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
             <ButtonNew size="small"
-              >ready to claim {formatTokenValue(
+              >ready to claim {formatXRDValue(
                 stakes[info.address].accumulatedReadyToClaim
-              ).displayValue} XRD</ButtonNew
+              )}</ButtonNew
             >
           {/if}
         {/await}
