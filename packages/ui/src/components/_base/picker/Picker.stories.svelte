@@ -22,7 +22,9 @@
 
 <Story name="Primary">
   <Picker {options}>
-    <div slot="selected">Select an option</div>
+    <div slot="selected" let:selected>
+      {selected?.label ?? 'Select an option'}
+    </div>
 
     <div slot="option" let:option>
       {option.label}
