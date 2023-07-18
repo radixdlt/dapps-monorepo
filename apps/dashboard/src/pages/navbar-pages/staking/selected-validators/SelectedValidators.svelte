@@ -8,7 +8,7 @@
   ).length
 </script>
 
-<div id="selected-validators">
+<div class="selected-validators">
   <Icon />
   <div>
     You've selected {count} validators
@@ -21,7 +21,7 @@
 <style lang="scss">
   @use '../../../../../../../packages/ui/src/mixins.scss';
 
-  #selected-validators {
+  .selected-validators {
     @include mixins.card;
     border: none;
     display: grid;

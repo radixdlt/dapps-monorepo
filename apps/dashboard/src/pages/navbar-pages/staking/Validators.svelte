@@ -53,6 +53,7 @@
   } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -92,26 +93,31 @@
 </script>
 
 <div id="validators">
-  <div class="header">
-    <div>
+  <div class="title-header">
+    <div class="title">
       <h1>Radix Network Staking</h1>
-      <p id="description" class="divider">
+      <p class="description">
         View all currently registered Radix Network validator nodes, and manage
         your own XRD stakes to validators.
       </p>
     </div>
-    <div id="selected-validators">
-      {#if $connected}
-        <SelectedValidators
-          on:click={() => {
-            dispatch('show-stake-multiple')
-          }}
-        />
-      {/if}
-    </div>
+
+    <div style:width="50rem" />
   </div>
 
-  <div class="divider">
+  <div class="selected-validators">
+    {#if $connected}
+      <SelectedValidators
+        on:click={() => {
+          dispatch('show-stake-multiple')
+        }}
+      />
+    {/if}
+  </div>
+
+  <Divider --spacing="var(--spacing-xl)" />
+
+  <div>
     <div id="staked-validators" class="header-section">
       <h2 class="title">Your Stakes</h2>
       {#await $stakeInfo}
@@ -163,6 +169,8 @@
     {/await}
   </div>
 
+  <Divider --spacing="var(--spacing-xl)" />
+
   <div class="header-section">
     <h2 class="title">Validator Nodes</h2>
     <div class="subtext">
@@ -191,21 +199,30 @@
 <style lang="scss">
   @use '../../../../../../packages/ui/src/mixins.scss';
   #validators {
-    display: grid;
     padding: var(--spacing-xl);
-    gap: var(--spacing-2xl);
   }
 
   .header {
     display: flex;
   }
 
-  #description {
-    font-weight: var(--font-weight-bold-2);
+  .title-header {
+    display: grid;
+    grid-template-columns: auto 45rem;
   }
 
-  #selected-validators {
-    margin-left: auto;
+  .title {
+    display: inline-block;
+    .description {
+      font-weight: var(--font-weight-bold-2);
+    }
+  }
+
+  .selected-validators {
+    position: absolute;
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+    z-index: 2;
   }
 
   #staked-validators {
@@ -213,7 +230,6 @@
   }
 
   #staking-info {
-    padding-top: var(--spacing-xl);
     display: grid;
     gap: var(--spacing-2xl);
   }
@@ -227,15 +243,11 @@
     cursor: pointer;
   }
 
-  .divider {
-    border-bottom: var(--border) var(--theme-border);
-    padding-bottom: var(--spacing-2xl);
-  }
-
   .header-section {
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
 
     .title {
       margin: 0;
