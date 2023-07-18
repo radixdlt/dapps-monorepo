@@ -20,13 +20,7 @@
     ? 'var(--border-radius-lg) var(--border-radius-lg) 0 0'
     : 'var(--border-radius-lg)'}
 >
-  <Picker
-    {options}
-    on:selected={({ detail }) => (selected = detail)}
-    bind:open
-    --drawer-background="var(--color-light)"
-    --drawer-border-radius="0 0 var(--border-radius-lg) var(--border-radius-lg)"
-  >
+  <Picker {options} on:selected={({ detail }) => (selected = detail)} bind:open>
     <button slot="selected" class="selected option">
       {selected.label}
       <div id="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
@@ -46,6 +40,10 @@
 </div>
 
 <style lang="scss">
+  #simple-picker :global(.picker .drawer) {
+    background: var(--color-light);
+    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  }
   #simple-picker {
     border-radius: var(--border-radius-lg);
     width: fit-content;
