@@ -1,4 +1,4 @@
-FROM node:20.3.0-alpine AS base
+FROM node:20.3.1-alpine AS base
 
 ARG NPM_TOKEN
 ARG NETWORK_NAME
@@ -36,7 +36,7 @@ RUN npx turbo run build --filter=console
 RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build --filter=ui
 RUN rm -f .npmrc
 
-FROM node:20.3.0-alpine AS dashboard
+FROM node:20.3.1-alpine AS dashboard
 
 WORKDIR /app
 
@@ -58,7 +58,7 @@ COPY --from=installer /app/packages/ui/storybook-static /usr/share/nginx/html
 COPY --from=installer /app/packages/ui/nginx/mime.types /etc/nginx/mime.types
 COPY --from=installer /app/packages/ui/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-FROM node:20.3.0-alpine AS console
+FROM node:20.3.1-alpine AS console
 
 WORKDIR /app
 
