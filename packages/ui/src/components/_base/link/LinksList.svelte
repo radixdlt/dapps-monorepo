@@ -3,7 +3,7 @@
 
   export let links: {
     url: string
-    text: string
+    text?: string
   }[] = []
 
   export let external = false

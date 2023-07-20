@@ -32,11 +32,6 @@
     const rdt = RadixDappToolkit({
       dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
       networkId: CURRENT_NETWORK.id,
-      explorer: {
-        baseUrl: '/',
-        accountsPath: 'account/',
-        transactionPath: 'transaction/'
-      },
       gatewayBaseUrl: CURRENT_NETWORK.url,
       logger: createLogger(0),
       onDisconnect: () => updateAccounts([])
