@@ -15,7 +15,7 @@ on:
       ENVIRONMENT_NAME:
         description: 'Environment Name'
         required: true
-        default: enkinet
+        default: ansharnet
         type: choice
         options:
           - enkinet
@@ -593,8 +593,7 @@ jobs:
 
   deploy_enkinet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-dashboard
@@ -764,7 +763,8 @@ jobs:
 
   deploy_ansharnet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' ) ||
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-dashboard

@@ -5,85 +5,161 @@
   }
 
   export type MetadataInfoBoxConfig = {
-    label?: string
-    transformValue?: (value: EntityMetadataItemValue) => string
-  } & Partial<ValueRendererConfig>
-
-  type VariantId = string
-
-  type ExtendedEntityMetadataItemValue = {
-    raw_json: {
-      variant_id: string
-    }
-  } & EntityMetadataItemValue
-
-  export type ExtendedEntityMetadataItem = ReplaceProperty<
-    EntityMetadataItem,
-    'value',
-    ExtendedEntityMetadataItemValue
-  >
+    label: string
+    renderAs?: (value: EntityMetadataItemValue) => string
+  } & ValueRendererConfig
 </script>
 
 <script lang="ts">
-  import { indexBy, prop } from 'ramda'
+  import { indexBy, prop, type } from 'ramda'
   import Row from '@components/info-box/Row.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
+  import Renderer from '@components/renderer/Renderer.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import PadlockIcon from '@icons/validators-menu.svg'
   import type {
     EntityMetadataItem,
     EntityMetadataItemValue,
-    ReplaceProperty
+    MetadataGlobalAddressArrayValue,
+    MetadataGlobalAddressValue,
+    MetadataNonFungibleGlobalIdArrayValue,
+    MetadataNonFungibleGlobalIdValue,
+    MetadataPublicKeyArrayValue,
+    MetadataPublicKeyHashArrayValue,
+    MetadataPublicKeyHashValue,
+    MetadataPublicKeyValue
   } from '@radixdlt/babylon-gateway-api-sdk'
   import AddressesList from '@components/_base/address/AddressesList.svelte'
   import Link from '@components/_base/link/Link.svelte'
   import LinksList from '@components/_base/link/LinksList.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import StringValueMetadata from './StringValueMetadata.svelte'
+  import StringArrayValueMetadata from './StringArrayValueMetadata.svelte'
 
   export let expectedEntries: Record<string, MetadataInfoBoxConfig> = {}
-  export let metadata:
-    | ExtendedEntityMetadataItem[]
-    | Promise<ExtendedEntityMetadataItem[]>
+  export let metadata: EntityMetadataItem[] | Promise<EntityMetadataItem[]>
 
-  const defaults: Record<VariantId, ValueRendererConfig> = {
-    '8': {
+  const stringValueConfig = {
+    component: StringValueMetadata,
+    componentProperties: ({ typed }: any) => ({
+      value: typed.value
+    })
+  }
+
+  const stringArrayValueConfig = {
+    component: StringArrayValueMetadata,
+    componentProperties: ({ typed }: any) => ({
+      values: typed.values
+    })
+  }
+
+  const linkValueConfig = {
+    component: Link,
+    componentProperties: ({ typed }: any) => ({
+      url: typed.value,
+      external: true
+    })
+  }
+
+  const linkArrayValueConfig = {
+    component: LinksList,
+    componentProperties: ({ typed }: any) => ({
+      links: typed.values.map((url: any) => ({ url })),
+      external: true
+    })
+  }
+
+  const defaults = {
+    Bool: stringValueConfig,
+    BoolArray: stringArrayValueConfig,
+    Decimal: stringValueConfig,
+    DecimalArray: stringArrayValueConfig,
+    GlobalAddress: {
       component: AddressesList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        addresses: [metadataItem.as_string]
+      componentProperties: ({ typed }: any) => ({
+        addresses: [typed.value]
       })
     },
-    '13': {
-      component: Link,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        url: metadataItem.as_string,
-        external: true
-      })
-    },
-    '14': {
-      component: Link,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        url: metadataItem.as_string,
-        external: true
-      })
-    },
-    '136': {
+    GlobalAddressArray: {
       component: AddressesList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        addresses: metadataItem.as_string_collection
+      componentProperties: ({ typed }: any) => ({
+        addresses: typed.values
       })
     },
-    '141': {
-      component: LinksList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        links: metadataItem.as_string_collection?.map((url) => ({ url })),
-        external: true
+    I32: stringValueConfig,
+    I32Array: stringArrayValueConfig,
+    I64: stringValueConfig,
+    I64Array: stringArrayValueConfig,
+    Instant: stringValueConfig,
+    InstantArray: stringArrayValueConfig,
+    NonFungibleGlobalId: {
+      component: AddressesList,
+      componentProperties: ({ typed }: any) => ({
+        addresses: [`${typed.resource_address}:${typed.non_fungible_id}`]
       })
     },
-    '142': {
-      component: LinksList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        links: metadataItem.as_string_collection?.map((url) => ({ url })),
-        external: true
+    NonFungibleGlobalIdArray: {
+      component: AddressesList,
+      componentProperties: ({ typed }: any) => ({
+        addresses: typed.values.map(
+          (typed: any) => `${typed.resource_address}:${typed.non_fungible_id}`
+        )
       })
-    }
+    },
+    NonFungibleLocalId: stringValueConfig,
+    NonFungibleLocalIdArray: stringArrayValueConfig,
+    Origin: linkValueConfig,
+    OriginArray: linkArrayValueConfig,
+    PublicKey: {
+      component: StringValueMetadata,
+      componentProperties: ({ typed }: { typed: MetadataPublicKeyValue }) => ({
+        value: `${typed.value.key_type}(${typed.value.key_hex})`
+      })
+    },
+    PublicKeyArray: {
+      component: StringArrayValueMetadata,
+      componentProperties: ({
+        typed
+      }: {
+        typed: MetadataPublicKeyArrayValue
+      }) => ({
+        values: typed.values.map(
+          (value) => `${value.key_type}(${value.key_hex})`
+        )
+      })
+    },
+    PublicKeyHash: {
+      component: StringValueMetadata,
+      componentProperties: ({
+        typed
+      }: {
+        typed: MetadataPublicKeyHashValue
+      }) => ({
+        value: `${typed.value.key_hash_type}(${typed.value.hash_hex})`
+      })
+    },
+    PublicKeyHashArray: {
+      component: StringArrayValueMetadata,
+      componentProperties: ({
+        typed
+      }: {
+        typed: MetadataPublicKeyHashArrayValue
+      }) => ({
+        values: typed.values.map(
+          (value) => `${value.key_hash_type}(${value.hash_hex})`
+        )
+      })
+    },
+    String: stringValueConfig,
+    StringArray: stringArrayValueConfig,
+    U32: stringValueConfig,
+    U32Array: stringArrayValueConfig,
+    U64: stringValueConfig,
+    U64Array: stringArrayValueConfig,
+    U8: stringValueConfig,
+    U8Array: stringArrayValueConfig,
+    Url: linkValueConfig,
+    UrlArray: linkArrayValueConfig
   }
 
   $: entries = Promise.resolve(metadata).then((resolved) =>
@@ -108,14 +184,8 @@
               {:else}
                 <svelte:component this={config.component} />
               {/if}
-            {:else if config?.transformValue}
-              {config.transformValue(resolvedEntries[key].value)}
-            {:else}
-              <div class="text-right">
-                {resolvedEntries[key].value.as_string ||
-                  resolvedEntries[key].value.as_string_collection?.join(', ') ||
-                  ''}
-              </div>
+            {:else if config?.renderAs}
+              {config.renderAs(resolvedEntries[key].value)}
             {/if}
           </svelte:fragment>
         </Row>
@@ -126,16 +196,15 @@
       {#if !expectedEntries[key]}
         <Row text={key}>
           <div slot="right" class="text-right">
-            {@const variantId = value.raw_json.variant_id}
-            {#if defaults[variantId]}
-              <svelte:component
-                this={defaults[variantId].component}
-                {...defaults[variantId].componentProperties(
-                  resolvedEntries[key].value
-                )}
-              />
-            {:else}
-              {value.as_string || value.as_string_collection?.join(', ') || ''}
+            {@const type = value.typed?.type}
+            {@const predefined = defaults[type || 'String']}
+            <Renderer
+              component={predefined.component}
+              props={predefined.componentProperties(resolvedEntries[key].value)}
+            />
+
+            {#if resolvedEntries[key].is_locked}
+              <IconNew icon={PadlockIcon} />
             {/if}
           </div>
         </Row>

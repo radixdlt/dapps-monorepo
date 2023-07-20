@@ -4,8 +4,6 @@
 
   export let faded: boolean
   export let description: string
-
-  $: show = description!!
 </script>
 
 <Box wrapper cx={{ width: '$6xl' }}>

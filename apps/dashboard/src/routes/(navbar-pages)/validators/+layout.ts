@@ -56,14 +56,14 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         address: validator.address,
         fee: (state.validator_fee_factor || 0) * 100,
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-        totalStake: validator.current_stake,
+        totalStake: validator.stake_vault.balance,
 
         stakeUnitResourceAddress,
         unstakeClaimResourceAddress: (validator.state! as any)
           .unstake_claim_token_resource_address as string,
 
         stakeUnitsToStakedRatio: new BigNumber(
-          validator.current_stake
+          validator.stake_vault.balance
         ).dividedBy(
           (
             stakeUnitTotalSupply[i]

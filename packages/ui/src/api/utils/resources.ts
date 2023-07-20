@@ -84,12 +84,13 @@ export const getEnumStringMetadata =
 
 export const getStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
-    metadata?.items.find((item) => item.key === key)?.value?.as_string || ''
+    (metadata?.items.find((item) => item.key === key)?.value?.typed as any)
+      ?.value || ''
 
 export const getVectorMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
-    metadata?.items.find((item) => item.key === key)?.value
-      ?.as_string_collection || []
+    (metadata?.items.find((item) => item.key === key)?.value.typed as any)
+      ?.values || []
 
 export const getUnstakeData = (
   nftData: StateNonFungibleDetailsResponseItem

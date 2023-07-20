@@ -10,11 +10,13 @@ import {
 } from './side-effects'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
 
 describe('Deploy Package Transaction Manifests', () => {
+  const NETWORK_ID = RadixNetwork.RCnetV2
   it('should create a create badge manifest', async () => {
     const stringManifest = getCreateBadgeManifest(
-      `account_tdx_22_12xt9uxe39dxdfy9c23vn0qj7eaxs8p3fjjpkr8f48edsfvyk00ck3l`
+      `account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2`
     )
 
     let manifest = new TransactionManifest(
@@ -23,27 +25,27 @@ describe('Deploy Package Transaction Manifests', () => {
     )
 
     await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 34)
+      manifest.convert(InstructionList.Kind.Parsed, NETWORK_ID)
     ).resolves.toBeDefined()
   })
 
   it('should create deploy package manifest', async () => {
-    const faucetSchema = readFileSync(
-      join(__dirname, 'faucet.schema')
-    ).toString('hex')
+    const faucetSchema = readFileSync(join(__dirname, 'faucet.rpd')).toString(
+      'hex'
+    )
     const faucetWasm = readFileSync(join(__dirname, 'faucet.wasm')).toString(
       'hex'
     )
 
     const sborDecodedSchema = (await RadixEngineToolkit.sborDecode(
       faucetSchema,
-      34
+      NETWORK_ID
     )) as SborValue.ManifestSbor
 
     const stringManifest = getDeployPackageManifest(
       faucetWasm,
       sborDecodedSchema.manifestString,
-      'resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev',
+      'resource_tdx_d_1tkx7f4tdf9zlqnhvtjrftddxvpjtvwqshjw5p9v0qslka44un68w6k',
       '#65#'
     )
 
@@ -53,7 +55,7 @@ describe('Deploy Package Transaction Manifests', () => {
     )
 
     await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 34)
+      manifest.convert(InstructionList.Kind.Parsed, NETWORK_ID)
     ).resolves.toBeDefined()
   })
 })
