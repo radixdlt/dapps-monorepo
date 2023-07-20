@@ -1,28 +1,46 @@
-import type { TableColumn } from './types'
+import type BigNumber from 'bignumber.js'
+import type { Entry, TableColumn } from './types'
 
-export const sort = (
-  entries: unknown[],
-  column: TableColumn,
+export const sort = <E extends Entry>(
+  entries: E[],
+  column: TableColumn<E>,
   direction: 'ascending' | 'descending'
 ) => {
-  const property = column?.property
-
-  if (!property || !column?.sortable) {
+  if (!column.sortBy) {
     return entries
   }
 
-  const defaultSortFn = (a: any, b: any) => {
-    if (a[property] === b[property]) {
-      return 0
+  const defaultSortFn = (a: E, b: E) => {
+    const property = column.sortBy as keyof E
+
+    if (['string', 'number', 'boolean'].includes(a[property])) {
+      return sortBasic(a[property], b[property])
+    } else {
+      return sortBigNumber(a[property], b[property])
     }
-
-    return a[property] < b[property] ? -1 : 1
   }
-  const sortFn =
-    typeof column.sortable === 'function' ? column.sortable : defaultSortFn
 
-  return entries.sort((a, b) => {
+  const sortFn =
+    typeof column.sortBy === 'function' ? column.sortBy : defaultSortFn
+
+  return [...entries].sort((a, b) => {
     const output = sortFn(a, b)
     return direction === 'ascending' ? output : output * -1
   })
+}
+
+const sortBasic = <T extends string | number | boolean>(a: T, b: T) => {
+  if (a === b) {
+    return 0
+  }
+
+  return a < b ? -1 : 1
+}
+
+const sortBigNumber = (a: BigNumber, b: BigNumber) => {
+  if (a.eq(b)) {
+    return 0
+  }
+
+  return a.lt(b) ? -1 : 1
 }

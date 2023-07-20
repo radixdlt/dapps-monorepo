@@ -2,13 +2,13 @@
   import { onMount } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Table from './Table.svelte'
-  import type { TableConfig, TablePage } from './types'
+  import type { TableConfig, TablePage, Entry } from './types'
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import Pagination from './Pagination.svelte'
 
-  type T = $$Generic
+  type T = $$Generic<Entry>
 
-  export let config: TableConfig
+  export let config: TableConfig<T>
   export let queryFunction: (cursor?: string) => Promise<TablePage<T>>
 
   export let mode: 'infiniteScroll' | 'paginated' = 'infiniteScroll'
