@@ -4,10 +4,11 @@
   import TableRow from './TableRow.svelte'
   import SortIcon from './SortIcon.svelte'
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
 
   type T = $$Generic<Entry>
 
-  export let entries: T[]
+  export let entries: Promise<T[]>
   export let config: TableConfig<T>
 
   let sortedEntries: T[] = []
@@ -52,7 +53,9 @@
     const direction = ascendingSort ? 'ascending' : 'descending'
     sortStatus[index] = direction
 
-    sortedEntries = sort(entries, column, direction)
+    entries.then((e) => {
+      sortedEntries = sort(e, column, direction)
+    })
   }
 </script>
 
@@ -79,39 +82,51 @@
     </tr>
   </thead>
   <tbody>
-    {#each lastSortedBy ? sortedEntries : entries as entry, i}
-      <slot name="row" {entry} {i}>
+    {#await entries}
+      {#each Array(3) as _}
         <TableRow>
           {#each config.columns as column}
             <ResponsiveTableCell label={column?.label}>
-              {#if !$$slots.cell}
-                {#if !column?.component}
-                  {#if column?.renderAs}
-                    <span class="cell-text">
-                      {column?.renderAs(entry)}
-                    </span>
-                  {/if}
-                {:else}
-                  <svelte:component
-                    this={column.component}
-                    {...transformProps(column, entry)}
-                  />
-                {/if}
-              {:else}
-                <span class="cell-text">
-                  <slot name="cell" {column} {entry}>
-                    {#if column?.renderAs}
-                      {column?.renderAs(entry)}
-                    {/if}
-                  </slot>
-                </span>
-              {/if}
+              <SkeletonLoader height={30} width={200} />
             </ResponsiveTableCell>
           {/each}
         </TableRow>
-      </slot>
-    {/each}
-    <slot />
+      {/each}
+    {:then entries}
+      {#each lastSortedBy ? sortedEntries : entries as entry, i}
+        <slot name="row" {entry} {i}>
+          <TableRow>
+            {#each config.columns as column}
+              <ResponsiveTableCell label={column?.label}>
+                {#if !$$slots.cell}
+                  {#if !column?.component}
+                    {#if column?.renderAs}
+                      <span class="cell-text">
+                        {column?.renderAs(entry)}
+                      </span>
+                    {/if}
+                  {:else}
+                    <svelte:component
+                      this={column.component}
+                      {...transformProps(column, entry)}
+                    />
+                  {/if}
+                {:else}
+                  <span class="cell-text">
+                    <slot name="cell" {column} {entry}>
+                      {#if column?.renderAs}
+                        {column?.renderAs(entry)}
+                      {/if}
+                    </slot>
+                  </span>
+                {/if}
+              </ResponsiveTableCell>
+            {/each}
+          </TableRow>
+        </slot>
+      {/each}
+      <slot />
+    {/await}
   </tbody>
 </table>
 

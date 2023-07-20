@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import Table from './Table.svelte'
   import type { TableConfig, TablePage, Entry } from './types'
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
@@ -13,7 +12,12 @@
 
   export let mode: 'infiniteScroll' | 'paginated' = 'infiniteScroll'
 
-  let entries: T[] = []
+  let resolvedEntries: Awaited<typeof entries> = []
+  let entries: Promise<T[]> = new Promise(() => {})
+
+  $: entries.then((e) => {
+    resolvedEntries = e
+  })
 
   let nextCursor: string | undefined
   let previousCursor: string | undefined
@@ -24,20 +28,15 @@
     previousCursor = data.previous_cursor ?? undefined
   }
 
-  const updateEntries = (data: TablePage<T>) => {
+  const getUpdatedEntries = (data: TablePage<T>) => {
     updateCursors(data)
-    entries = [...entries, ...data.items]
-  }
-
-  const replaceEntries = (data: TablePage<T>) => {
-    updateCursors(data)
-    entries = data.items
+    return data.items
   }
 
   onMount(() => {
-    queryFunction().then((data) => {
+    entries = queryFunction().then((data) => {
       isLoadingCursor = undefined
-      updateEntries(data)
+      return [...resolvedEntries, ...getUpdatedEntries(data)]
     })
   })
 
@@ -46,36 +45,30 @@
       return
     }
     isLoadingCursor = nextCursor
-    queryFunction(nextCursor).then((data) => {
+    entries = queryFunction(nextCursor).then((data) => {
       isLoadingCursor = undefined
-      updateEntries(data)
+      return [...resolvedEntries, ...getUpdatedEntries(data)]
     })
   }
 
   const nextPage = () => {
     isLoadingCursor = nextCursor
-    queryFunction(nextCursor).then((data) => {
+    entries = queryFunction(nextCursor).then((data) => {
       isLoadingCursor = undefined
-      replaceEntries(data)
+      return getUpdatedEntries(data)
     })
   }
 
   const previousPage = () => {
     isLoadingCursor = previousCursor
-    queryFunction(previousCursor).then((data) => {
+    entries = queryFunction(previousCursor).then((data) => {
       isLoadingCursor = undefined
-      replaceEntries(data)
+      return getUpdatedEntries(data)
     })
   }
 </script>
 
 <Table {config} {entries} />
-
-{#if isLoadingCursor && mode === 'infiniteScroll'}
-  <div class="bottom-space">
-    <SkeletonLoader />
-  </div>
-{/if}
 
 {#if mode === 'infiniteScroll'}
   <InfiniteScroll

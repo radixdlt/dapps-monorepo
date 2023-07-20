@@ -37,9 +37,11 @@
     ownerStake: new BigNumber((Math.random() * 50).toFixed(2))
   })
 
-  const entries = Array(6)
-    .fill(undefined)
-    .map((_, i) => validator(i))
+  const entries = Promise.resolve(
+    Array(6)
+      .fill(undefined)
+      .map((_, i) => validator(i))
+  )
 
   const config: TableConfig<ReturnType<typeof validator>> = {
     columns: [
@@ -98,7 +100,7 @@
     ]
   }
 
-  const stakeEntries = [
+  const stakeEntries = Promise.resolve([
     {
       name: 'RADNODE🔥',
       staking: '75,263.77 XRD',
@@ -129,9 +131,9 @@
       stakingValue: 926.38,
       unstaking: '0 XRD'
     }
-  ]
+  ])
 
-  const transactionEntries = [
+  const transactionEntries = Promise.resolve([
     {
       id: 'trans...973836',
       date: '6 May / 12:36',
@@ -156,9 +158,9 @@
       deposits: 'None',
       info: 'None'
     }
-  ]
+  ])
 
-  const tableConfig: TableConfig<(typeof transactionEntries)[number]> = {
+  const tableConfig: TableConfig<Awaited<typeof transactionEntries>[number]> = {
     columns: [
       null,
       {
@@ -177,7 +179,7 @@
     ]
   }
 
-  const simpleTableConfig: TableConfig<(typeof stakeEntries)[0]> = {
+  const simpleTableConfig: TableConfig<Awaited<typeof stakeEntries>[0]> = {
     columns: [
       {
         label: 'Validator',
@@ -186,14 +188,26 @@
       {
         label: 'Staking',
         renderAs: ({ staking }) => staking,
-        sortBy: (a: (typeof stakeEntries)[0], b: (typeof stakeEntries)[0]) =>
-          a.stakingValue > b.stakingValue ? 1 : -1
+        sortBy: (
+          a: Awaited<typeof stakeEntries>[0],
+          b: Awaited<typeof stakeEntries>[0]
+        ) => (a.stakingValue > b.stakingValue ? 1 : -1)
       },
       {
         label: 'Unstaking',
         renderAs: ({ unstaking }) => unstaking,
         sortBy: 'unstaking'
       }
+    ]
+  }
+
+  const loadingEntries = new Promise<any>(() => {})
+
+  const loadingConfig = {
+    columns: [
+      { label: 'Test Label' },
+      { label: 'Test Label 2' },
+      { label: 'Test Label 3' }
     ]
   }
 </script>
@@ -256,6 +270,10 @@
       </TableRow>
     </svelte:fragment>
   </Table>
+</Story>
+
+<Story name="Loading">
+  <Table entries={loadingEntries} config={loadingConfig} />
 </Story>
 
 <style lang="scss">
