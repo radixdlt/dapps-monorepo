@@ -1,26 +1,23 @@
 <script lang="ts">
   import { sort } from './sorting'
-
-  import type { TableColumn, TableConfig } from './types'
-
+  import type { TableConfig, Entry, TableColumn } from './types'
   import TableRow from './TableRow.svelte'
-
   import SortIcon from './SortIcon.svelte'
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
 
-  type T = $$Generic
+  type T = $$Generic<Entry>
+
   export let entries: T[]
-  export let config: TableConfig
+  export let config: TableConfig<T>
 
-  let sortedEntries: any[] = []
-  let lastSortedBy: string | number | symbol
+  let sortedEntries: T[] = []
+  let lastSortedBy: number
   let ascendingSort = true
-  let sortStatus: Record<
-    string | number | symbol,
-    'ascending' | 'descending' | 'unsorted'
-  > = {}
+  let sortStatus: ('ascending' | 'descending' | 'unsorted')[] = Array(
+    config.columns.length
+  ).fill('unsorted')
 
-  const transformProps = (columnConfig: TableColumn, entry: any) => {
+  const transformProps = (columnConfig: TableColumn, entry: T) => {
     if (!columnConfig.componentProps) {
       return {}
     }
@@ -40,20 +37,20 @@
     )
   }
 
-  const sortColumn = (column: TableColumn) => {
-    const property = column?.property
+  const sortColumn = (
+    column: (typeof config)['columns'][number],
+    index: number
+  ) => {
+    if (!column || !column.sortBy) return
 
-    if (!property || !column?.sortable) {
-      return
-    }
     if (lastSortedBy) {
       sortStatus[lastSortedBy] = 'unsorted'
     }
 
-    ascendingSort = property === lastSortedBy ? !ascendingSort : true
-    lastSortedBy = property
+    ascendingSort = index === lastSortedBy ? !ascendingSort : false
+    lastSortedBy = index
     const direction = ascendingSort ? 'ascending' : 'descending'
-    sortStatus[property] = direction
+    sortStatus[index] = direction
 
     sortedEntries = sort(entries, column, direction)
   }
@@ -62,22 +59,19 @@
 <table>
   <thead class="desktop-only">
     <tr>
-      {#each config.columns as column}
+      {#each config.columns as column, i}
         <th>
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
-            class="flex-align-center {column.sortable ? 'sortable' : ''}"
-            on:click={() => sortColumn(column)}
-            on:keypress={(ev) => console.log(ev)}
+            class="flex-align-center"
+            class:sortable={!!column?.sortBy}
+            on:click={() => sortColumn(column, i)}
           >
-            {#if column.label}
+            {#if column && column.label}
               <span>{column.label}</span>
             {/if}
-            {#if column.sortable}
-              <SortIcon
-                mode={column?.property
-                  ? sortStatus[column.property] || 'unsorted'
-                  : 'unsorted'}
-              />
+            {#if column?.sortBy}
+              <SortIcon mode={sortStatus[i] || 'unsorted'} />
             {/if}
           </div>
         </th>
@@ -89,20 +83,28 @@
       <slot name="row" {entry} {i}>
         <TableRow>
           {#each config.columns as column}
-            <ResponsiveTableCell label={column.label}>
-              {#if !column.component}
-                {#if column.property}
-                  <span class="cell-text">
-                    {column.transform
-                      ? column.transform(entry)
-                      : entry[column.property]}
-                  </span>
+            <ResponsiveTableCell label={column?.label}>
+              {#if !$$slots.cell}
+                {#if !column?.component}
+                  {#if column?.renderAs}
+                    <span class="cell-text">
+                      {column?.renderAs(entry)}
+                    </span>
+                  {/if}
+                {:else}
+                  <svelte:component
+                    this={column.component}
+                    {...transformProps(column, entry)}
+                  />
                 {/if}
               {:else}
-                <svelte:component
-                  this={column.component}
-                  {...transformProps(column, entry)}
-                />
+                <span class="cell-text">
+                  <slot name="cell" {column} {entry}>
+                    {#if column?.renderAs}
+                      {column?.renderAs(entry)}
+                    {/if}
+                  </slot>
+                </span>
               {/if}
             </ResponsiveTableCell>
           {/each}

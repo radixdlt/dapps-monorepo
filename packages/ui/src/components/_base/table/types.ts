@@ -1,7 +1,10 @@
+import type BigNumber from 'bignumber.js'
 import type { SvelteComponent } from 'svelte'
 
-export type TableConfig<Entry = any> = {
-  columns: TableColumn<Entry>[]
+export type Entry = { [key: string | number | symbol]: any }
+
+export type TableConfig<E extends Entry> = {
+  columns: (TableColumn<E> | null)[]
 }
 
 export type TablePage<T> = {
@@ -10,23 +13,33 @@ export type TablePage<T> = {
   items: T[]
 }
 
+export type SortableType = BigNumber | string | number | boolean
+
+type SortableValues<T> = {
+  [K in keyof T]: T[K] extends SortableType ? K : never
+}[keyof T]
+
 export type TableColumn<Entry = any> = {
   /**
-   * The label of the column which will be displayed as column header
+   * The label of the column which will be displayed as column header.
    */
   label?: string
+
   /**
-   * Whether the column is sortable or not. If a function is provided, it will be used as a custom sort function.
+   * Can be a sortable entry in the provided entries, or a custom sort function. Leave unset if the column is not sortable.
    */
-  sortable?: boolean | ((a: Entry, b: Entry) => number)
+  sortBy?: SortableValues<Entry> | ((a: Entry, b: Entry) => number)
+
   /**
-   * Object property to be used for displaying the content of the column. It can be overriden either by `transform` or `component`
+   * The id of the column. This is used to identify the column when rendering a custom component using slots.
    */
-  property?: keyof Entry
+  id?: string
+
   /**
-   * Custom function to be called before rendering text content
+   * For rendering a simple value. Returns a string that will be displayed in the cell.
    */
-  transform?: (entry: Entry) => string
+  renderAs?: (entry: Entry) => string
+
   /**
    * Component to be rendered instead of text content
    */

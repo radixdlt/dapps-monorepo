@@ -10,11 +10,10 @@
   const queryFunction = (cursor?: string) =>
     getRecentTransactions(data.account, cursor)
 
-  const config: TableConfig = {
+  const config: TableConfig<any> = {
     columns: [
       {
         label: 'ID/DATE (GMT +00)',
-        property: 'intent_hash_hex',
         component: DateAndTxIdColumn,
         componentProps: {
           id: '$$intent_hash_hex',
@@ -23,12 +22,11 @@
       },
       {
         label: 'Fee',
-        property: 'fee_paid',
-        transform: (entry) => `${entry.fee_paid} XRD`
+        renderAs: (entry: any) => `${entry.fee_paid} XRD`
       },
       {
         label: 'Status',
-        property: 'transaction_status'
+        renderAs: (entry: any) => entry.transaction_status
       }
     ]
   }

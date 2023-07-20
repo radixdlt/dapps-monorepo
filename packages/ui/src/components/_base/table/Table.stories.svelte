@@ -1,14 +1,15 @@
 <script lang="ts">
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Table from './Table.svelte'
-  import Icon from '../icon/Icon.svelte'
   import Address from '../address/Address.svelte'
-  import TableRow from './TableRow.svelte'
-  import ResponsiveTableCell from './ResponsiveTableCell.svelte'
-  import Checkmark from '@icons/checkmark.svg'
   import type { TableConfig } from './types'
-  import Pagination from './Pagination.svelte'
   import { formatAmount } from '../../../utils'
+  import Pagination from './Pagination.svelte'
+  import TableRow from './TableRow.svelte'
+  import Checkmark from '@icons/checkmark.svg'
+  import ResponsiveTableCell from './ResponsiveTableCell.svelte'
+  import BigNumber from 'bignumber.js'
+  import Icon from '../icon/Icon.svelte'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -27,13 +28,13 @@
   const validator = (i: number) => ({
     name: validatorNames[i % 4],
     address: validatorAddresses[i % 4],
-    totalStake: Math.floor(Math.random() * 300000),
-    percentageOwnerStake: (Math.random() * 30).toFixed(2),
-    apy: (Math.random() * 30).toFixed(2),
-    fee: (Math.random() * 15).toFixed(2),
-    uptime: `${Math.floor(Math.random() * 100)} %`,
+    totalStake: new BigNumber(Math.floor(Math.random() * 300000)),
+    percentageOwnerStake: new BigNumber((Math.random() * 30).toFixed(2)),
+    apy: new BigNumber((Math.random() * 30).toFixed(2)),
+    fee: new BigNumber((Math.random() * 15).toFixed(2)),
+    uptime: `${new BigNumber(Math.floor(Math.random() * 100))} %`,
     acceptsStake: Math.random() > 0.5 ? true : false,
-    ownerStake: (Math.random() * 50).toFixed(2)
+    ownerStake: new BigNumber((Math.random() * 50).toFixed(2))
   })
 
   const entries = Array(6)
@@ -44,55 +45,56 @@
     columns: [
       {
         label: 'Validator',
-        property: 'name'
+        renderAs: ({ name }) => name
       },
       {
         label: 'Address',
-        property: 'address',
-        component: Address,
-        componentProps: {
-          short: true,
-          value: '$$address'
-        }
+        id: 'address'
       },
       {
         label: 'Total Stake',
-        property: 'totalStake',
-        transform: (entry) => formatAmount(entry.totalStake),
-        sortable: true
+        renderAs: ({ totalStake }) => formatAmount(totalStake.toString()),
+        sortBy: 'totalStake'
       },
       {
         label: 'Owner Stake (%)',
-        property: 'ownerStake',
-        transform: (entry) => `${entry.ownerStake} %`,
-        sortable: true
+        renderAs: ({ ownerStake }) => `${ownerStake} %`,
+        sortBy: 'ownerStake'
       },
       {
         label: 'APY',
-        property: 'apy',
-        transform: (entry) => `${entry.apy} %`,
-        sortable: true
+        renderAs: ({ apy }) => `${apy} %`,
+        sortBy: 'apy'
       },
       {
         label: 'Fee',
-        property: 'fee',
-        sortable: true,
-        transform: (entry) => `${entry.fee} %`
+        sortBy: 'fee',
+        renderAs: ({ fee }) => `${fee} %`
       },
       {
         label: 'Uptime',
-        property: 'uptime',
-        sortable: true
+        renderAs: ({ uptime }) => uptime,
+        sortBy: 'uptime'
       },
       {
         label: 'Accepts stake',
-        property: 'acceptsStake',
+        renderAs: ({ acceptsStake }) => (acceptsStake ? 'Yes' : 'No'),
+        sortBy: 'acceptsStake'
+      },
+      null
+    ]
+  }
+
+  const configWithComponents: TableConfig<ReturnType<typeof validator>> = {
+    columns: [
+      {
+        label: 'Accepts stake',
         component: Icon,
         componentProps: {
           icon: Checkmark
         }
       },
-      {}
+      null
     ]
   }
 
@@ -156,9 +158,9 @@
     }
   ]
 
-  const tableConfig: TableConfig = {
+  const tableConfig: TableConfig<(typeof transactionEntries)[number]> = {
     columns: [
-      {},
+      null,
       {
         label: 'Id/Date (GMT +00)'
       },
@@ -167,8 +169,7 @@
       },
       {
         label: 'Withdrawals',
-        property: 'withdrawals',
-        sortable: true
+        sortBy: 'withdrawals'
       },
       {
         label: 'Deposits'
@@ -180,27 +181,41 @@
     columns: [
       {
         label: 'Validator',
-        property: 'name'
+        renderAs: ({ name }) => name
       },
       {
         label: 'Staking',
-        property: 'staking',
-        sortable: (a: (typeof stakeEntries)[0], b: (typeof stakeEntries)[0]) =>
+        renderAs: ({ staking }) => staking,
+        sortBy: (a: (typeof stakeEntries)[0], b: (typeof stakeEntries)[0]) =>
           a.stakingValue > b.stakingValue ? 1 : -1
       },
       {
         label: 'Unstaking',
-        property: 'unstaking',
-        sortable: true
+        renderAs: ({ unstaking }) => unstaking,
+        sortBy: 'unstaking'
       }
     ]
   }
 </script>
 
-<Meta title="Table" />
+<Meta title="Base Components / Table" />
 
 <Story name="Validators Table">
-  <Table {entries} {config} />
+  <Table {entries} {config}>
+    <svelte:fragment slot="cell" let:column let:entry>
+      {#if column}
+        {#if column.id === 'address'}
+          <Address short value={entry.address} />
+        {:else if column.renderAs}
+          {column.renderAs(entry)}
+        {/if}
+      {/if}
+    </svelte:fragment>
+  </Table>
+</Story>
+
+<Story name="With Component API">
+  <Table {entries} config={configWithComponents} />
 </Story>
 
 <Story name="Simple Table">
@@ -214,10 +229,10 @@
 
 <Story name="Custom Row Table">
   <Table entries={transactionEntries} config={tableConfig}>
-    <svelte:fragment slot="row" let:entry let:i>
+    <svelte:fragment slot="row" let:entry>
       <TableRow>
         <ResponsiveTableCell width="80px" />
-        <ResponsiveTableCell width="160px" label={tableConfig.columns[1].label}
+        <ResponsiveTableCell width="160px" label={tableConfig.columns[1]?.label}
           >ID: {entry.id}<br />{entry.date}</ResponsiveTableCell
         >
 
@@ -228,13 +243,13 @@
             </div></td
           >
         {:else}
-          <ResponsiveTableCell label={tableConfig.columns[2].label}>
+          <ResponsiveTableCell label={tableConfig.columns[2]?.label}>
             {entry.type}
           </ResponsiveTableCell>
-          <ResponsiveTableCell label={tableConfig.columns[3].label}>
+          <ResponsiveTableCell label={tableConfig.columns[3]?.label}>
             {entry.withdrawals}
           </ResponsiveTableCell>
-          <ResponsiveTableCell label={tableConfig.columns[4].label}>
+          <ResponsiveTableCell label={tableConfig.columns[4]?.label}>
             {entry.deposits}
           </ResponsiveTableCell>
         {/if}
