@@ -95,7 +95,6 @@
       minText="MIN FEE (%)"
       maxText="MAX FEE (%)"
       bind:range={feeFilter}
-      max={5}
     />
   </div>
 

@@ -19,7 +19,8 @@
 
     let maxBarHeight = 0
     for (const value of array) {
-      const barIndex = Math.floor(value / barWidth)
+      const barIndex = Math.min(Math.floor(value / barWidth), barCount - 1)
+
       barHeights[barIndex]++
       if (barHeights[barIndex] > maxBarHeight) {
         maxBarHeight = barHeights[barIndex]
