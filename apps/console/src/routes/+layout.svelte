@@ -8,10 +8,7 @@
   import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
   import Box from '@components/_base/box/Box.svelte'
   // import '../fonts.css'
-  import {
-    RadixDappToolkit,
-    DataRequestOutput
-  } from '@radixdlt/radix-dapp-toolkit'
+  import { RadixDappToolkit, Account } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
@@ -20,7 +17,7 @@
   let mounted = false
 
   onMount(() => {
-    const updateAccounts = (value: DataRequestOutput['accounts']) => {
+    const updateAccounts = (value: Account[]) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
@@ -32,29 +29,12 @@
       }
     }
     mounted = true
-    const rdt = RadixDappToolkit(
-      {
-        dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
-        networkId: CURRENT_NETWORK.id
-      },
-      async (requestData) => {
-        requestData({
-          accounts: { quantifier: 'atLeast', quantity: 1 }
-        }).map(({ accounts }) => updateAccounts(accounts))
-      },
-      {
-        explorer: {
-          baseUrl: '/',
-          accountsPath: 'account/',
-          transactionPath: 'transaction/'
-        },
-        gatewayBaseUrl: CURRENT_NETWORK.url,
-        logger: createLogger(0),
-        onInit: ({ walletData }) => updateAccounts(walletData.accounts),
-        onStateChange: ({ walletData }) => updateAccounts(walletData.accounts),
-        onDisconnect: () => updateAccounts([])
-      }
-    )
+    const rdt = RadixDappToolkit({
+      dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
+      networkId: CURRENT_NETWORK?.id,
+      logger: createLogger(0),
+      onDisconnect: () => updateAccounts([])
+    })
   })
 
   $: if (mounted) {

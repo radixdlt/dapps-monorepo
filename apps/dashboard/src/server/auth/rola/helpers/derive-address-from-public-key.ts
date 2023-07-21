@@ -5,7 +5,7 @@ import { ResultAsync, errAsync } from 'neverthrow'
 const deriveVirtualIdentityAddress = (publicKey: string, networkId: number) =>
   ResultAsync.fromPromise(
     ManifestAstValue.Address.virtualIdentityAddress(
-      new PublicKey.EddsaEd25519(publicKey),
+      new PublicKey.Ed25519(publicKey),
       networkId /* The ID of the network to derive the address for. */
     ),
     (error: any): Error => error
@@ -17,7 +17,7 @@ const deriveVirtualEddsaEd25519AccountAddress = (
 ) =>
   ResultAsync.fromPromise(
     ManifestAstValue.Address.virtualAccountAddress(
-      new PublicKey.EddsaEd25519(publicKey),
+      new PublicKey.Ed25519(publicKey),
       networkId /* The ID of the network to derive the address for. */
     ),
     (error: any): Error => error
@@ -29,7 +29,7 @@ const deriveVirtualEcdsaSecp256k1AccountAddress = (
 ) =>
   ResultAsync.fromPromise(
     ManifestAstValue.Address.virtualAccountAddress(
-      new PublicKey.EcdsaSecp256k1(publicKey),
+      new PublicKey.Secp256k1(publicKey),
       networkId /* The ID of the network to derive the address for. */
     ),
     (error: any): Error => error
