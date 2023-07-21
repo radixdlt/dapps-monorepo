@@ -28,7 +28,7 @@ on:
           - rcnet-v2
 
 env:
-  active_network: 'enkinet'
+  active_network: 'ansharnet'
   release_network: 'rcnet'
 
 permissions:
