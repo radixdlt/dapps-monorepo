@@ -38,12 +38,14 @@ export const NETWORK_CONFIG = {
   [Network.ANSHARNET]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
-    dappDefAddress: ''
+    dappDefAddress:
+      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2'
   },
   [Network.RCNETV2]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
-    dappDefAddress: ''
+    dappDefAddress:
+      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2'
   },
   [Network.RCNET]: {
     id: 12,

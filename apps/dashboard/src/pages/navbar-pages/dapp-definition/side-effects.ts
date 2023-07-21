@@ -14,7 +14,9 @@ export type FormattedAccount = Awaited<
 const hasDAppDefinitionMetadata = (account: DecoratedAccount) =>
   account.details.metadata.items.some(
     (item) =>
-      item.key === 'account_type' && item.value.as_string === 'dapp definition'
+      item.key === 'account_type' &&
+      item.value.typed?.type === 'String' &&
+      item.value.typed.value === 'dapp definition'
   )
 
 export const getTxManifest = (

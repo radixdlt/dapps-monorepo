@@ -1,14 +1,12 @@
 <script lang="ts">
-  import MetadataInfoBox, {
-    type ExtendedEntityMetadataItem
-  } from '@components/metadata-info-box/MetadataInfoBox.svelte'
+  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
   import type { LayoutData } from '../$types'
 
   export let data: LayoutData
 
   const metadata = data.promises.entityDetails.then(
     ({ metadata }) => metadata.items
-  ) as unknown as Promise<ExtendedEntityMetadataItem[]>
+  )
 </script>
 
 <div class="surface-2">

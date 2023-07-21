@@ -11,6 +11,7 @@
     StateEntityDetailsResponseItem,
     ReplaceProperty
   } from '@radixdlt/babylon-gateway-api-sdk'
+  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
 
   export let address: string
 
@@ -22,6 +23,8 @@
         StateEntityDetailsResponseComponentDetails
       >
   )
+
+  $: metadata = details.then(({ metadata }) => metadata.items)
 </script>
 
 <Card>
@@ -50,22 +53,6 @@
 <Card>
   <Text bold slot="header">Metadata</Text>
   <Box wrapper slot="body">
-    {#await details}
-      <LoadingInfoBox />
-    {:then details}
-      <InfoBox>
-        {#if details.metadata.items.length === 0}
-          <Row><Text muted slot="left">None</Text></Row>
-        {/if}
-        {#each details.metadata.items as metadata}
-          <Row>
-            <Text slot="left" bold align="right">{metadata.key}</Text>
-            <Text slot="right" bold align="right">
-              {metadata.value.as_string}
-            </Text>
-          </Row>
-        {/each}
-      </InfoBox>
-    {/await}
+    <MetadataInfoBox {metadata} />
   </Box>
 </Card>

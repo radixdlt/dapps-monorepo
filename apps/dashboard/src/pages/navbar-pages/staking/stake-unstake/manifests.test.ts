@@ -8,29 +8,30 @@ import {
   getStakeManifest,
   getUnstakeManifest
 } from './manifests'
+import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
 
 const fixtures = [
   {
     name: 'stake',
     manifest: getStakeManifest(
-      'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
-      'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
+      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
+      'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
       '500',
-      'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder'
+      'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5'
     )
   },
   {
     name: 'multiple stake',
     manifest: getMultipleStakeManifest(
-      'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
+      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
       [
         {
           validator:
-            'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
+            'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
           amount: '500'
         }
       ],
-      'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder'
+      'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5'
     )
   },
   {
@@ -38,12 +39,12 @@ const fixtures = [
     manifest: getUnstakeManifest([
       {
         accountAddress:
-          'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
+          'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
         validatorAddress:
-          'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
+          'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
         amount: '500',
         stakeUnitResource:
-          'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder'
+          'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5'
       }
     ])
   },
@@ -52,12 +53,12 @@ const fixtures = [
     manifest: getClaimManifest([
       {
         accountAddress:
-          'account_tdx_21_1290ugdynnku7phlmp20sra86k058snstknhcmsrc7xxnk02mxz76et',
+          'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
         validatorAddress:
-          'validator_tdx_21_1sfl4mj40e52t2phtfctjhult4h5f28umkwmhnf8jh5744we8nfg2cn',
+          'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
         amount: '500',
         stakeUnitResource:
-          'resource_tdx_21_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxsmgder'
+          'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5'
       }
     ])
   }
@@ -70,7 +71,7 @@ describe('staking manifests', () => {
         new TransactionManifest(
           new InstructionList.StringInstructions(manifest),
           []
-        ).convert(InstructionList.Kind.Parsed, 33)
+        ).convert(InstructionList.Kind.Parsed, RadixNetwork.RCnetV2)
       ).resolves.toBeDefined()
     })
   })

@@ -1,34 +1,20 @@
 <script lang="ts">
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
-  import Row from '@components/info-box/Row.svelte'
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { getEntityDetails } from '@api/gateway'
+  import { getSingleEntityDetails } from '@api/gateway'
+  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
 
   export let address: string
 
-  $: details = getEntityDetails([address]).then((details) => details[0]!)
+  $: metadata = getSingleEntityDetails(address).then(
+    ({ metadata }) => metadata.items
+  )
 </script>
 
 <Box>
   <Card>
     <Box wrapper slot="body">
-      {#await details}
-        <LoadingInfoBox />
-      {:then details}
-        <InfoBox>
-          {#each details.metadata.items as metadata}
-            <Row>
-              <Text slot="left" bold align="right">{metadata.key}</Text>
-              <Text slot="right" bold align="right">
-                {metadata.value.as_string}
-              </Text>
-            </Row>
-          {/each}
-        </InfoBox>
-      {/await}
+      <MetadataInfoBox {metadata} />
     </Box>
   </Card>
 </Box>

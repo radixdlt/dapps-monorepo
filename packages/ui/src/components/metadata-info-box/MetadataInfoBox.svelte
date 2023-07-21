@@ -5,86 +5,26 @@
   }
 
   export type MetadataInfoBoxConfig = {
-    label?: string
-    transformValue?: (value: EntityMetadataItemValue) => string
-  } & Partial<ValueRendererConfig>
-
-  type VariantId = string
-
-  type ExtendedEntityMetadataItemValue = {
-    raw_json: {
-      variant_id: string
-    }
-  } & EntityMetadataItemValue
-
-  export type ExtendedEntityMetadataItem = ReplaceProperty<
-    EntityMetadataItem,
-    'value',
-    ExtendedEntityMetadataItemValue
-  >
+    label: string
+    renderAs?: (value: EntityMetadataItemValue) => string
+  } & ValueRendererConfig
 </script>
 
 <script lang="ts">
-  import { indexBy, prop } from 'ramda'
+  import { indexBy, prop, type } from 'ramda'
   import Row from '@components/info-box/Row.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import PadlockIcon from '@icons/validators-menu.svg'
   import type {
     EntityMetadataItem,
-    EntityMetadataItemValue,
-    ReplaceProperty
+    EntityMetadataItemValue
   } from '@radixdlt/babylon-gateway-api-sdk'
-  import AddressesList from '@components/_base/address/AddressesList.svelte'
-  import Link from '@components/_base/link/Link.svelte'
-  import LinksList from '@components/_base/link/LinksList.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import TypedMetadataRenderer from './TypedMetadataRenderer.svelte'
 
   export let expectedEntries: Record<string, MetadataInfoBoxConfig> = {}
-  export let metadata:
-    | ExtendedEntityMetadataItem[]
-    | Promise<ExtendedEntityMetadataItem[]>
-
-  const defaults: Record<VariantId, ValueRendererConfig> = {
-    '8': {
-      component: AddressesList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        addresses: [metadataItem.as_string]
-      })
-    },
-    '13': {
-      component: Link,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        url: metadataItem.as_string,
-        external: true
-      })
-    },
-    '14': {
-      component: Link,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        url: metadataItem.as_string,
-        external: true
-      })
-    },
-    '136': {
-      component: AddressesList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        addresses: metadataItem.as_string_collection
-      })
-    },
-    '141': {
-      component: LinksList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        links: metadataItem.as_string_collection?.map((url) => ({ url })),
-        external: true
-      })
-    },
-    '142': {
-      component: LinksList,
-      componentProperties: (metadataItem: EntityMetadataItemValue) => ({
-        links: metadataItem.as_string_collection?.map((url) => ({ url })),
-        external: true
-      })
-    }
-  }
+  export let metadata: EntityMetadataItem[] | Promise<EntityMetadataItem[]>
 
   $: entries = Promise.resolve(metadata).then((resolved) =>
     indexBy(prop('key'), resolved)
@@ -108,14 +48,8 @@
               {:else}
                 <svelte:component this={config.component} />
               {/if}
-            {:else if config?.transformValue}
-              {config.transformValue(resolvedEntries[key].value)}
-            {:else}
-              <div class="text-right">
-                {resolvedEntries[key].value.as_string ||
-                  resolvedEntries[key].value.as_string_collection?.join(', ') ||
-                  ''}
-              </div>
+            {:else if config?.renderAs}
+              {config.renderAs(resolvedEntries[key].value)}
             {/if}
           </svelte:fragment>
         </Row>
@@ -126,16 +60,10 @@
       {#if !expectedEntries[key]}
         <Row text={key}>
           <div slot="right" class="text-right">
-            {@const variantId = value.raw_json.variant_id}
-            {#if defaults[variantId]}
-              <svelte:component
-                this={defaults[variantId].component}
-                {...defaults[variantId].componentProperties(
-                  resolvedEntries[key].value
-                )}
-              />
-            {:else}
-              {value.as_string || value.as_string_collection?.join(', ') || ''}
+            <TypedMetadataRenderer metadataTypedValue={value.typed} />
+
+            {#if resolvedEntries[key].is_locked}
+              <IconNew icon={PadlockIcon} />
             {/if}
           </div>
         </Row>
