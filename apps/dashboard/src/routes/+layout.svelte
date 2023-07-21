@@ -54,7 +54,7 @@
     })
 
     rdt.state$.subscribe((state) => {
-      updateAccounts(state.walletData.accounts)
+      updateAccounts(state.walletData.accounts ?? [])
     })
 
     rdt.walletData.provideChallengeGenerator(() =>
