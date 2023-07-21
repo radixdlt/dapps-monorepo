@@ -11,10 +11,7 @@
     selectedAccount,
     storage
   } from '@stores'
-  import {
-    RadixDappToolkit,
-    DataRequestOutput
-  } from '@radixdlt/radix-dapp-toolkit'
+  import { RadixDappToolkit, Account } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
@@ -37,7 +34,7 @@
     getNetworkConfiguration().then((res) => {
       networkConfiguration.set(res)
     })
-    const updateAccounts = (value: DataRequestOutput['accounts']) => {
+    const updateAccounts = (value?: Account[]) => {
       if (value) {
         let _accounts = value.map((account) => ({
           ...account,
@@ -49,36 +46,19 @@
       }
     }
     mounted = true
-    const rdt = RadixDappToolkit(
-      {
-        dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
-        networkId: CURRENT_NETWORK?.id
-      },
-      async (requestData) => {
-        await createChallenge()
-          .andThen((challenge) =>
-            requestData({
-              challenge,
-              accounts: { quantifier: 'atLeast', quantity: 1 }
-            })
-          )
-          .andThen(({ signedChallenges, accounts }) =>
-            login(signedChallenges[0]).map(() => {
-              updateAccounts(accounts)
-            })
-          )
-      },
-      {
-        explorer: {
-          baseUrl: '/',
-          accountsPath: 'account/',
-          transactionPath: 'transaction/'
-        },
-        logger: createLogger(0),
-        onInit: ({ walletData }) => updateAccounts(walletData.accounts),
-        onStateChange: ({ walletData }) => updateAccounts(walletData.accounts),
-        onDisconnect: () => updateAccounts([])
-      }
+    const rdt = RadixDappToolkit({
+      dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
+      networkId: CURRENT_NETWORK?.id,
+      logger: createLogger(0),
+      onDisconnect: () => updateAccounts([])
+    })
+
+    rdt.state$.subscribe((state) => {
+      updateAccounts(state.walletData.accounts)
+    })
+
+    rdt.walletData.provideChallengeGenerator(() =>
+      createChallenge().unwrapOr('')
     )
 
     resolveRDT(rdt)
