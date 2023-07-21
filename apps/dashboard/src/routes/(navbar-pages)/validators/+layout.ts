@@ -40,7 +40,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
   const validators = getValidatorsList().then(async (validators) => {
     const stakeUnitTotalSupply = await getEntityDetails(
       validators.map(
-        (v) => (v.state as any).stake_unit_resource_address as string
+        (v) => (v.state as any).value.stake_unit_resource_address as string
       )
     )
 
