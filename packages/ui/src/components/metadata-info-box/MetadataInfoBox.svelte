@@ -59,12 +59,11 @@
     {#each Object.entries(resolvedEntries) as [key, { value }]}
       {#if !expectedEntries[key]}
         <Row text={key}>
-          <div slot="right" class="text-right">
-            <TypedMetadataRenderer metadataTypedValue={value.typed} />
-
+          <div slot="right" class="right-slot">
             {#if resolvedEntries[key].is_locked}
               <IconNew icon={PadlockIcon} />
             {/if}
+            <TypedMetadataRenderer metadataTypedValue={value.typed} />
           </div>
         </Row>
       {/if}
@@ -73,7 +72,10 @@
 {/await}
 
 <style lang="scss">
-  .text-right {
+  .right-slot {
     text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 </style>
