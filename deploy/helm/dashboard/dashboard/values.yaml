@@ -42,7 +42,7 @@ dashboard:
 
   ingress:
     enabled: false
-    className: ""
+    className: "nginx"
     hosts:
       - host: chart-example.local
         paths:
