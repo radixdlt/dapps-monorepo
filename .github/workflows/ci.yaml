@@ -223,12 +223,10 @@ jobs:
           command: sbom
       - name: Upload SBOM
         if: github.event_name == 'release'
-        uses: svenstaro/upload-release-action@2b9d2847a97b04d02ad5c3df2d3a27baa97ce689 # v2.6.1
+        uses: AButler/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a # v2.0.2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: sbom.json
-          tag: ${{ github.ref }}
-          overwrite: true
+          files: sbom.json
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   snyk-monitor:
     runs-on: ubuntu-latest
@@ -445,6 +443,7 @@ jobs:
           tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
+          sbom: true
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}
@@ -522,6 +521,7 @@ jobs:
           tags: ${{ needs.setup-tags.outputs.storybook-tags }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
+          sbom: true
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ env.NETWORK_NAME }}

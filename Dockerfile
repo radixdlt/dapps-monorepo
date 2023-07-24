@@ -1,10 +1,15 @@
+ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
+
 FROM node:20.3.1-alpine AS base
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 ARG NPM_TOKEN
 ARG NETWORK_NAME
 ARG NPM_LOCAL_CACHE=.cache
 
 FROM base AS builder
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
@@ -14,6 +19,8 @@ COPY . .
 RUN turbo prune --scope=dashboard --scope=console --scope=ui --docker
 
 FROM base AS installer
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+
 RUN apk add --no-cache libc6-compat
 RUN apk update
 COPY .npmrc.docker      /app/.npmrc
@@ -37,6 +44,7 @@ RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build --filter=ui
 RUN rm -f .npmrc
 
 FROM node:20.3.1-alpine AS dashboard
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
@@ -51,6 +59,7 @@ RUN npm install pm2 -g && \
 CMD ["pm2-runtime","build/index.js"]
 
 FROM nginx:alpine AS storybook
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
@@ -59,6 +68,7 @@ COPY --from=installer /app/packages/ui/nginx/mime.types /etc/nginx/mime.types
 COPY --from=installer /app/packages/ui/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 FROM node:20.3.1-alpine AS console
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
