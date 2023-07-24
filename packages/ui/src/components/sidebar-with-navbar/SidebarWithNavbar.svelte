@@ -44,8 +44,6 @@
 
   .menu-items {
     flex: 1;
-    height: calc(100vh - 6rem);
-    overflow: auto;
   }
   .links {
     padding: 2rem 1.5rem;

@@ -66,6 +66,7 @@
       .navbar {
         grid-area: navbar;
         position: absolute;
+        height: 100%;
       }
 
       @include mixins.desktop {
@@ -80,7 +81,7 @@
         background: var(--theme-surface-1);
         padding-bottom: var(--spacing-lg);
         overflow-y: scroll;
-        padding-bottom: 5rem;
+        padding: var(--spacing-xl) var(--spacing-2xl);
       }
     }
   }
