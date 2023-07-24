@@ -21,7 +21,6 @@
 <style lang="scss">
   .sort-icons {
     display: flex;
-    z-index: -1;
   }
 
   .sort-icon {

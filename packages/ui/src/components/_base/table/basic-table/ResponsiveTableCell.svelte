@@ -1,9 +1,10 @@
 <script lang="ts">
   export let label: string = ''
   export let width: string = 'auto'
+  export let colspan = 1
 </script>
 
-<td class="cell" style="--responsive-table-cell-width: {width}">
+<td class="cell" style="--responsive-table-cell-width: {width}" {colspan}>
   {#if label}
     <div class="mobile-only header-text">
       {label}
@@ -13,7 +14,7 @@
 </td>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
+  @use '../../../../mixins.scss';
 
   .cell {
     width: var(--responsive-table-cell-width);

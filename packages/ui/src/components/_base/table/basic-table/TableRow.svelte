@@ -1,13 +1,11 @@
-<script lang="ts">
-</script>
-
 <tr class="table-row">
   <slot />
 </tr>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
-  tr.table-row {
+  @use '../../../../mixins.scss';
+
+  .table-row {
     @include mixins.card;
 
     &:hover {
