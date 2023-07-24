@@ -58,11 +58,14 @@
 
     {#each Object.entries(resolvedEntries) as [key, { value }]}
       {#if !expectedEntries[key]}
-        <Row text={key}>
-          <div slot="right" class="right-slot">
+        <Row>
+          <div slot="left" class="label">
+            {key}
             {#if resolvedEntries[key].is_locked}
               <IconNew icon={PadlockIcon} />
             {/if}
+          </div>
+          <div slot="right" class="right-slot">
             <TypedMetadataRenderer metadataTypedValue={value.typed} />
           </div>
         </Row>
@@ -72,6 +75,22 @@
 {/await}
 
 <style lang="scss">
+  @use '../../mixins.scss';
+
+  .label {
+    color: var(--color-grey-2);
+    font-weight: var(--font-weight-bold-2);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 1rem;
+    margin-right: 2rem;
+
+    @include mixins.desktop {
+      margin-bottom: 0;
+    }
+  }
   .right-slot {
     text-align: right;
     display: flex;
