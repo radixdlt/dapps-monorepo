@@ -94,12 +94,14 @@ export const getVectorMetadata =
 
 export const getUnstakeData = (
   nftData: StateNonFungibleDetailsResponseItem
-) => ({
+) => {
   // @ts-ignore
-  claimEpoch: nftData.data.raw_json.fields[0].value as string,
-  // @ts-ignore
-  unstakeAmount: nftData.data.raw_json.fields[1].value as string
-})
+  const [claimEpoch, unstakeAmount] = nftData.data.raw_json.fields
+  return {
+    claimEpoch: claimEpoch?.value as string,
+    unstakeAmount: unstakeAmount?.value as string
+  }
+}
 
 const getNonFungibleIds = async (
   accountAddress: string,
