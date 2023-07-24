@@ -2,7 +2,7 @@
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
   import MenuIcon from '@icons/menu.svg'
-  import LogoIcon from '@images/dashboard_logo.svg'
+  import LogoIcon from '@images/dashboard-logo.svg'
   import { showSidebar } from '@stores'
   import { isMobile } from '@utils'
 </script>
@@ -17,7 +17,7 @@
       class="mobile-menu"
     />
     <!-- svelte-ignore a11y-missing-content -->
-    <a href="/" class="logo" style={`background-image: url(${LogoIcon});`} />
+    <a href="/" class="logo" style={`background-image: url(${LogoIcon})`} />
   </div>
   <div class="search"><NetworkLookupSearch /></div>
   {#if !isMobile()}
@@ -29,9 +29,7 @@
   @use '../../mixins.scss';
 
   header {
-    padding: var(--spacing-xl);
     background-color: var(--color-light);
-    top: 0;
     border-bottom: solid;
     display: flex;
     justify-content: space-between;
@@ -39,11 +37,14 @@
     border-width: 1px;
     border-color: var(--theme-border);
     z-index: 2;
+    height: 100%;
     padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
     flex-direction: column;
+    box-shadow: var(--shadow-sm);
 
     @include mixins.desktop {
       flex-direction: row;
+      padding: 0 var(--spacing-lg);
     }
   }
 
@@ -66,9 +67,10 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center center;
-      width: 219px;
-      height: 40px;
+      width: 10.125rem;
+      height: 1.5rem;
       display: inline-flex;
+      margin-left: var(--spacing-lg);
     }
   }
 
@@ -88,9 +90,12 @@
 
   .search {
     margin: 1rem 0;
-    width: 100%;
+    height: 2.5rem;
+    width: 42.8125rem;
+    display: flex;
+    align-items: center;
+
     @include mixins.desktop {
-      flex: 0.8;
     }
   }
 

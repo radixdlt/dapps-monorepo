@@ -40,6 +40,10 @@
       grid-template-rows: unset;
     }
 
+    @include mixins.desktop {
+      grid-template-rows: 4.6875rem auto;
+    }
+
     .header {
       grid-area: header;
       position: sticky;
@@ -56,7 +60,7 @@
       overflow: hidden;
 
       @include mixins.desktop {
-        grid: 'navbar page' auto / 16rem auto;
+        grid: 'navbar page' auto / 12rem auto;
       }
 
       .navbar {
