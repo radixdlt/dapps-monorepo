@@ -37,8 +37,8 @@
       onDisconnect: () => updateAccounts([])
     })
 
-    rdt.state$.subscribe((state) => {
-      updateAccounts(state.walletData.accounts)
+    rdt.walletApi.walletData$.subscribe((state) => {
+      updateAccounts(state.accounts)
     })
   })
 

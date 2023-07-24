@@ -11,7 +11,11 @@
     selectedAccount,
     storage
   } from '@stores'
-  import { Account, RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+  import {
+    Account,
+    DataRequestBuilder,
+    RadixDappToolkit
+  } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
@@ -53,11 +57,17 @@
       onDisconnect: () => updateAccounts([])
     })
 
-    rdt.state$.subscribe((state) => {
-      updateAccounts(state.walletData.accounts)
+    rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
+
+    rdt.walletApi.walletData$.subscribe(({ accounts, proofs }) => {
+      updateAccounts(accounts)
+
+      const personaProof = proofs.find((proof) => proof.type === 'persona')
+
+      if (personaProof) authApi.login(personaProof)
     })
 
-    rdt.walletData.provideChallengeGenerator(() =>
+    rdt.walletApi.provideChallengeGenerator(() =>
       createChallenge().unwrapOr('')
     )
 
