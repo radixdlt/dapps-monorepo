@@ -95,7 +95,7 @@
   }>()
 </script>
 
-<div id="validators">
+<div>
   <div class="title-header">
     <div class="title">
       <h1>Radix Network Staking</h1>
@@ -224,17 +224,12 @@
 
 <style lang="scss">
   @use '../../../../../../packages/ui/src/mixins.scss';
-  #validators {
-    padding: var(--spacing-xl);
-  }
-
   .header {
     display: flex;
   }
 
   .title-header {
-    display: grid;
-    grid-template-columns: auto 45rem;
+    max-width: 35rem;
   }
 
   .title {
