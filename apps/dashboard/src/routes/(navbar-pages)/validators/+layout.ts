@@ -47,7 +47,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
     return validators.map((validator, i) => {
       const state: any = validator.state || {}
 
-      const stakeUnitResourceAddress = (validator.state! as any)
+      const stakeUnitResourceAddress = state.value
         .stake_unit_resource_address as string
 
       return {
@@ -59,7 +59,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         totalStake: validator.stake_vault.balance,
 
         stakeUnitResourceAddress,
-        unstakeClaimResourceAddress: (validator.state! as any)
+        unstakeClaimResourceAddress: state.value
           .unstake_claim_token_resource_address as string,
 
         stakeUnitsToStakedRatio: new BigNumber(
