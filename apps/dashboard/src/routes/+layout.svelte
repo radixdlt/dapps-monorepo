@@ -57,7 +57,10 @@
       onDisconnect: () => updateAccounts([])
     })
 
-    rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
+    rdt.walletApi.setRequestData(
+      DataRequestBuilder.accounts().atLeast(1),
+      DataRequestBuilder.persona().withProof()
+    )
 
     rdt.walletApi.walletData$.subscribe(({ accounts, proofs }) => {
       updateAccounts(accounts)

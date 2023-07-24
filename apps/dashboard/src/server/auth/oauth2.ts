@@ -14,7 +14,7 @@ export type OAuth2 = ReturnType<typeof OAuth2>
 export const OAuth2 = (input?: Partial<OAuth2Input>) => {
   const { secret, refreshToken, authToken }: OAuth2Input = {
     secret: JWT_SECRET,
-    refreshToken: { expiresIn: '7d', key: 'jwt' },
+    refreshToken: { expiresIn: '30d', key: 'jwt' },
     authToken: { expiresIn: '10m' },
     ...(input || {})
   }
