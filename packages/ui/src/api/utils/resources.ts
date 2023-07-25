@@ -95,11 +95,20 @@ export const getVectorMetadata =
 export const getUnstakeData = (
   nftData: StateNonFungibleDetailsResponseItem
 ) => {
-  // @ts-ignore
-  const [claimEpoch, unstakeAmount] = nftData.data.raw_json.fields
+  const { claimEpoch, unstakeAmount } = (
+    nftData.data.raw_json as { fields: { kind: string; value: string }[] }
+  ).fields.reduce(
+    (acc, curr) =>
+      curr.kind === 'U64'
+        ? { ...acc, claimEpoch: curr.value }
+        : curr.kind === 'Decimal'
+        ? { ...acc, unstakeAmount: curr.value }
+        : acc,
+    { claimEpoch: '', unstakeAmount: '' }
+  )
   return {
-    claimEpoch: claimEpoch?.value as string,
-    unstakeAmount: unstakeAmount?.value as string
+    claimEpoch,
+    unstakeAmount
   }
 }
 
