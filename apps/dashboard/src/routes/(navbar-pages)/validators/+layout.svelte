@@ -49,7 +49,9 @@
   $: accumulatedStakes.set($_accumulatedStakes)
   $: stakeInfo.set($_stakeInfo)
 
-  let claimAllOpen = false
+  let readyToClaim: Promise<ReadyToClaimInfo[]> = new Promise(() => {})
+
+  let claimOpen = false
   let filterOpen = false
   let multipleStakeOpen = false
 
@@ -85,6 +87,12 @@
       return prev
     }, {})
   )
+
+  const getSingleClaim = (validator: string) =>
+    $stakeInfo.then(
+      (info) =>
+        info.readyToClaim.filter((c) => c.validator.address === validator)!
+    )
 </script>
 
 <Validators
@@ -92,7 +100,12 @@
     ? Promise.resolve(filteredValidators)
     : data.promises.validators}
   on:show-claim-all={() => {
-    claimAllOpen = true
+    readyToClaim = $stakeInfo.then((info) => info.readyToClaim)
+    claimOpen = true
+  }}
+  on:show-claim-single={(e) => {
+    readyToClaim = getSingleClaim(e.detail)
+    claimOpen = true
   }}
   on:show-stake-multiple={() => {
     multipleStakeOpen = true
@@ -102,8 +115,8 @@
   }}
 />
 
-{#await $stakeInfo then info}
-  <Claim bind:open={claimAllOpen} readyToClaim={info.readyToClaim} />
+{#await readyToClaim then readyToClaim}
+  <Claim bind:open={claimOpen} {readyToClaim} />
 {/await}
 
 {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}

@@ -44,6 +44,7 @@
           <StakedValidatorCard
             validatorInfo={Promise.resolve(validator)}
             on:click-validator
+            on:claim-validator
           />
         {/each}
       {/if}

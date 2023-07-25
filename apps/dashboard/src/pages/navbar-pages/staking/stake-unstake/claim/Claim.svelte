@@ -33,10 +33,9 @@
     e.detail(
       getClaimManifest(
         readyToClaim.map((claim) => ({
-          amount: claim.xrdAmount,
           accountAddress: claim.account.address,
           validatorAddress: claim.validator.address,
-          stakeUnitResource: claim.validator.stakeUnitResourceAddress
+          unstakeClaimResource: claim.validator.unstakeClaimResourceAddress
         }))
       )
     )
