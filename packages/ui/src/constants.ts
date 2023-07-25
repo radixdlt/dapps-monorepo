@@ -39,13 +39,13 @@ export const NETWORK_CONFIG = {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
     dappDefAddress:
-      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2'
+      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
   },
   [Network.RCNETV2]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
     dappDefAddress:
-      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2'
+      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
   },
   [Network.RCNET]: {
     id: 12,
