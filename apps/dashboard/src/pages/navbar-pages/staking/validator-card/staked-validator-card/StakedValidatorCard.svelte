@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from '@components/_base/icon/IconNew.svelte'
   import ValidatorCard from '../ValidatorCard.svelte'
-  import type { ComponentProps } from 'svelte'
+  import { createEventDispatcher, type ComponentProps } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { formatTokenValue, formatXRDValue } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
@@ -12,6 +12,10 @@
   import { XRD_SYMBOL } from '@constants'
 
   export let validatorInfo: ComponentProps<ValidatorCard>['validatorInfo']
+
+  const dispatch = createEventDispatcher<{
+    'claim-validator': string
+  }>()
 </script>
 
 <div class="staked-validator-card">
@@ -55,7 +59,11 @@
       <div class="claim-button">
         {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
           {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
-            <ButtonNew size="small"
+            <ButtonNew
+              size="small"
+              on:click={() => {
+                dispatch('claim-validator', info.address)
+              }}
               >ready to claim {formatXRDValue(
                 stakes[info.address].accumulatedReadyToClaim
               )}</ButtonNew

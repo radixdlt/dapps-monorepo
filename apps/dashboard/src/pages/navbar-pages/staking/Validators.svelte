@@ -87,6 +87,7 @@
 
   const dispatch = createEventDispatcher<{
     'show-claim-all': undefined
+    'show-claim-single': string
     'show-stake-multiple': undefined
     'show-filters': undefined
   }>()
@@ -163,6 +164,9 @@
           )}
           on:click-validator={(e) => {
             goto(`/validators/${e.detail}`)
+          }}
+          on:claim-validator={(e) => {
+            dispatch('show-claim-single', e.detail)
           }}
         />
       </div>

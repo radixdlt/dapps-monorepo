@@ -105,21 +105,20 @@ export const getClaimManifest = (
   claims: {
     accountAddress: string
     validatorAddress: string
-    stakeUnitResource: string
-    amount: string
+    unstakeClaimResource: string
   }[]
 ) =>
   claims
     .map(
-      ({ accountAddress, validatorAddress, stakeUnitResource, amount }, i) => `
+      ({ accountAddress, validatorAddress, unstakeClaimResource }, i) => `
     CALL_METHOD
     Address("${accountAddress}")
     "withdraw"
-    Address("${stakeUnitResource}")
-    Decimal("${amount}");
+    Address("${unstakeClaimResource}")
+    Decimal("${1}");
 
     TAKE_ALL_FROM_WORKTOP
-    Address("${stakeUnitResource}")
+    Address("${unstakeClaimResource}")
     Bucket("bucket${i}");
 
     CALL_METHOD
