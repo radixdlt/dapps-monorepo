@@ -60,6 +60,7 @@ type AddressPrefix =
   | 'account'
   | 'transaction'
   | 'component'
+  | 'identity'
 
 export const getAddressPrefix = (address: string): AddressPrefix => {
   const parts = address.split('_')
@@ -81,7 +82,8 @@ export const addressToRoute = (address: string) =>
     package: `/package/${address}`,
     component: `/component/${address}`,
     transaction: `/transaction/${address}`,
-    validator: `/validators/${address}`
+    validator: `/validators/${address}`,
+    identity: `/identity/${address}`
   }[getAddressPrefix(address)])
 
 export const useContext = <
