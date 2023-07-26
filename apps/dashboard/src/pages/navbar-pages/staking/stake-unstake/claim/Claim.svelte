@@ -16,6 +16,22 @@
     account: Account
   }[]
 
+  $: readyToClaim = readyToClaim.reduce((acc, claim) => {
+    const existingClaim = acc.find(
+      (c) => c.account.address === claim.account.address
+    )
+
+    if (existingClaim) {
+      existingClaim.xrdAmount = new BigNumber(existingClaim.xrdAmount)
+        .plus(claim.xrdAmount)
+        .toString()
+    } else {
+      acc.push(claim)
+    }
+
+    return acc
+  }, [] as typeof readyToClaim)
+
   let totalClaimAmount = '0'
 
   $: totalClaimAmount = readyToClaim
