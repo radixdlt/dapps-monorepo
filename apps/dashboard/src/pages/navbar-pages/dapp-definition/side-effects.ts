@@ -49,9 +49,17 @@ export const getTxManifest = (
       let manifestValue: string = ''
 
       if (Array.isArray(value)) {
-        manifestValue = `
-        Enum<Metadata::StringArray>(
-          Array<String>(${value.map((v) => `"${v.address}"`).join(', ')})
+        if (key === 'claimed_websites')
+          manifestValue = `
+        Enum<Metadata::OriginArray>(
+          Array<String>(${value.map((v) => `"${v.url}"`).join(', ')})
+        );`
+        else if (key === 'claimed_entities')
+          manifestValue = `
+        Enum<Metadata::AddressArray>(
+          Array<Address>(${value
+            .map((v) => `"Address(${v.address})"`)
+            .join(', ')})
         );`
       }
 

@@ -46,14 +46,7 @@
         return Promise.resolve(false)
       }
 
-      return fetch(new URL(website.url).origin + '/.well-known/radix.json')
-        .then((res) => res.json())
-        .then((json) =>
-          json.dApps.some(
-            (dapp: any) => dapp.dAppDefinitionAddress === dappDefinition
-          )
-        )
-        .catch(() => false)
+      return true
     })()
 
     if (websiteLinksToDapp && linkedFromDapp) {
