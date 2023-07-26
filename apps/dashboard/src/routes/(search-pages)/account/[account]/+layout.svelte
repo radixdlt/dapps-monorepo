@@ -16,7 +16,10 @@
   address={data.address}
   activeTab={data.activeTab || 'tokens'}
   menuItems={[
-    [{ id: 'tokens', label: 'Tokens' }],
+    [
+      { id: 'tokens', label: 'Tokens' },
+      { id: 'nfts', label: 'NFTs' }
+    ],
     [
       { id: 'recent-transactions', label: 'Recent Transactions' },
       { id: 'metadata', label: 'Metadata' }
