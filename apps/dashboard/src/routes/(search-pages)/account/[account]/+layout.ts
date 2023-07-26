@@ -7,6 +7,7 @@ export const prerender = false
 export const load: LayoutLoad = ({ params, route }) => {
   routerRedirect(route, `/account/${params.account}/tokens`, [
     'tokens',
+    'nfts',
     'metadata',
     'recent-transactions'
   ])
