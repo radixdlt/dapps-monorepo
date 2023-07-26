@@ -112,6 +112,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
             xrdAmount
           } as StakedInfo
         })
+        .filter((stakeInfo) => !new BigNumber(stakeInfo.xrdAmount).eq(0))
 
   const getUnstakeAndClaimInfo =
     (validators: Validator[]) =>
@@ -141,6 +142,8 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         const xrdAmount = new BigNumber(
           token.unstakeData.unstakeAmount
         ).toFixed(RET_DECIMAL_PRECISION - 1)
+
+        if (new BigNumber(xrdAmount).eq(0)) continue
 
         const stakeInfo = {
           account,
