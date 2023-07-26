@@ -140,7 +140,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
 
         const xrdAmount = new BigNumber(
           token.unstakeData.unstakeAmount
-        ).toFixed(RET_DECIMAL_PRECISION)
+        ).toFixed(RET_DECIMAL_PRECISION - 1)
 
         const stakeInfo = {
           account,
