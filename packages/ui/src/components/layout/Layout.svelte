@@ -28,11 +28,17 @@
   @use '../../mixins.scss';
   .layout {
     display: grid;
-    grid:
+    height: 100%;
+    width: 100vw;
+
+    grid-template-areas:
       'header'
       'content';
-    height: 100vh;
-    width: 100vw;
+    grid-template-rows: 193px 1fr;
+
+    @include mixins.desktop {
+      grid-template-rows: unset;
+    }
 
     .header {
       grid-area: header;
@@ -58,12 +64,19 @@
         position: absolute;
       }
 
+      @include mixins.desktop {
+        .page {
+          min-height: calc(100vh - 100px);
+          padding-bottom: 0;
+        }
+      }
+
       .page {
         grid-area: page;
         background: var(--theme-surface-1);
         padding-bottom: var(--spacing-lg);
-        min-height: calc(100vh - 100px);
         overflow-y: scroll;
+        padding-bottom: 5rem;
       }
     }
   }

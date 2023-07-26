@@ -7,6 +7,10 @@
 </div>
 
 <style>
+  .common {
+    height: 100vh;
+  }
+
   .light {
     --theme-surface-1: var(--color-grey-5);
     --theme-surface-2: var(--color-light);
