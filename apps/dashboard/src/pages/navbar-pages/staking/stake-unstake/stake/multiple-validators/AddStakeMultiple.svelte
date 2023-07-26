@@ -28,16 +28,16 @@
 
   let stakeButtonDisabled = true
 
-  let distributeEquallyAmount: string
+  let totalXRDAmount: string
 
   let stakeAmounts: {
     validator: string
     amount: string
-  }[]
+  }[] = []
 
   $: stakeAmounts = Array.from({ length: validators.length }, (_, i) => ({
     validator: validators[i].address,
-    amount: '0'
+    amount: stakeAmounts[i]?.amount ?? '0'
   }))
 
   let distributeEqually = true
@@ -45,14 +45,14 @@
   $: if (distributeEqually) {
     stakeAmounts = stakeAmounts.map((stake) => ({
       validator: stake.validator,
-      amount: distributeEquallyAmount
-        ? new BigNumber(distributeEquallyAmount)
+      amount: totalXRDAmount
+        ? new BigNumber(totalXRDAmount)
             .dividedBy(validators.length)
             .toFixed(RET_DECIMAL_PRECISION)
         : '0'
     }))
   } else {
-    distributeEquallyAmount = new BigNumber(
+    totalXRDAmount = new BigNumber(
       stakeAmounts.reduce(
         (acc, stake) => acc.plus(stake.amount),
         new BigNumber(0)
@@ -112,7 +112,7 @@
     <OverviewStakeCardMultiple
       {xrdBalance}
       nbrOfValidators={validators.length}
-      bind:amountToStake={distributeEquallyAmount}
+      bind:amountToStake={totalXRDAmount}
       bind:tokenAmountInvalid
       tokenAmountDisabled={!distributeEqually}
       --token-amount-card-width={rightColumnWidth}
