@@ -3,7 +3,6 @@
   import StakePanel from '../StakePanel.svelte'
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
-  import { formatTokenValue } from '@utils'
   import { getUnstakeManifest } from '../manifests'
   import type { Validator } from '../../Validators.svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'

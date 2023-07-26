@@ -120,22 +120,26 @@
 {#await stakes then stakes}
   <Unstake
     bind:open={unstakeOpen}
-    stakes={stakes.map(({ account, validator, staked, stakeUnits }) => ({
-      account,
-      validator,
-      amount: staked,
-      stakeUnits
-    }))}
+    stakes={stakes
+      .map(({ account, validator, staked, stakeUnits }) => ({
+        account,
+        validator,
+        amount: staked,
+        stakeUnits
+      }))
+      .filter(({ amount }) => !new BigNumber(amount).eq(0))}
   />
 {/await}
 
 {#await stakes then stakes}
   <Claim
     bind:open={claimOpen}
-    readyToClaim={stakes.map(({ account, validator, readyToClaim }) => ({
-      account,
-      validator,
-      xrdAmount: readyToClaim
-    }))}
+    readyToClaim={stakes
+      .map(({ account, validator, readyToClaim }) => ({
+        account,
+        validator,
+        xrdAmount: readyToClaim
+      }))
+      .filter(({ xrdAmount }) => !new BigNumber(xrdAmount).eq(0))}
   />
 {/await}
