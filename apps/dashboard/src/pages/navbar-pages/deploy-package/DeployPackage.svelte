@@ -37,7 +37,7 @@
   )()
 
   const requiredUploadedFiles = derived(files, ($files) => {
-    const fileData = ['wasm', 'schema'].map((extension) =>
+    const fileData = ['wasm', 'rpd'].map((extension) =>
       $files
         .find((file) => file.fileExtension === extension)
         ?.file.arrayBuffer()
@@ -47,7 +47,7 @@
 
     return {
       wasm: fileData[0] as Promise<string>,
-      schema: fileData[1] as Promise<string>
+      rpd: fileData[1] as Promise<string>
     }
   })
 
@@ -75,14 +75,14 @@
 
   const deployButtonEnabled = derived(
     [requiredUploadedFiles, selectedBadge],
-    ([{ wasm, schema }, badge]) => !!schema && !!wasm && badge !== undefined,
+    ([{ wasm, rpd }, badge]) => !!rpd && !!wasm && badge !== undefined,
     false
   )
 
   const deployPackage = async (e: ComponentEvents<SendTxButton>['click']) => {
     const wasm = await $requiredUploadedFiles.wasm
-    const schema = await $requiredUploadedFiles.schema
-    const sborDecodedSchema = await sborDecodeSchema(schema)
+    const rpd = await $requiredUploadedFiles.rpd
+    const sborDecodedSchema = await sborDecodeSchema(rpd)
     const badge = $selectedBadge!
 
     const manifest = getDeployPackageManifest(
@@ -125,7 +125,7 @@
 <Box>
   <Text>
     Deploy a new blueprint package to the Radix RCnet by attaching your WASM and
-    schema files to a deploy transaction.
+    rpd files to a deploy transaction.
   </Text>
 </Box>
 <center>
@@ -138,10 +138,10 @@
       maxFiles={1}
     />
     <FileUpload
-      acceptedFileTypes={['.schema', 'schema']}
+      acceptedFileTypes={['.rpd', 'rpd']}
       onRemoveFile={(_, file) => files.removeFile(file)}
       onAddFile={files.addFile}
-      labelIdle="Drop the package schema file here, <span class='filepond--label-action'>Browse</span>"
+      labelIdle="Drop the package rpd file here, <span class='filepond--label-action'>Browse</span>"
       maxFiles={1}
     />
   </Box>
