@@ -102,12 +102,12 @@
       text: 'Manage dApp Definition',
       icon: DappMetadataIcon,
       path: '/dapp-metadata'
-    },
-    {
-      text: 'Network Staking',
-      icon: ValidatorsIcon,
-      path: '/network-staking'
     }
+    // {
+    //   text: 'Network Staking',
+    //   icon: ValidatorsIcon,
+    //   path: '/network-staking'
+    // }
   ]
 
   $: if (mounted) {
