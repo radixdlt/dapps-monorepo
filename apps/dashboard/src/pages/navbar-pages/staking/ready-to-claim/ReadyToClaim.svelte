@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import { stakeInfo } from '../../../../routes/(navbar-pages)/validators/+layout.svelte'
+  import { stakeInfo } from '../../../../routes/(navbar-pages)/network-staking/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { EXPECTED_EPOCH_TIME_MINUTES } from '@constants'
   import { formatTokenValue } from '@utils'

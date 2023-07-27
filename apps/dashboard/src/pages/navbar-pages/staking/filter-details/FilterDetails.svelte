@@ -71,13 +71,13 @@
   <div class="cards">
     <SwitchFilterCard
       title="Accepts Stake"
-      description="Validators you're able to stake to"
+      description="Show only validators that currently accepts new stake"
       bind:on={acceptsStakeFilter}
     />
 
     <SwitchFilterCard
       title="Bookmarked"
-      description="Validators that you have bookmarked"
+      description="Show only validators that you have bookmarked"
       bind:on={bookmarkedFilter}
     />
   </div>

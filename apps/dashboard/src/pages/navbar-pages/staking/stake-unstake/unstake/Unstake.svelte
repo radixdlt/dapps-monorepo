@@ -5,7 +5,8 @@
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
   import type { Validator } from '../../Validators.svelte'
-  import { RET_DECIMAL_PRECISION } from '@constants'
+  import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
+  import { formatXRDValue } from '@utils'
 
   export let open: boolean
   export let stakes: {
@@ -31,6 +32,8 @@
       new BigNumber(0)
     )
     .toString()
+
+  $: console.log(totalUnstakeAmount)
 
   const unstake = (
     e: CustomEvent<
@@ -97,10 +100,17 @@
   <svelte:fragment slot="info-box-title">How Unstaking Works</svelte:fragment>
 
   <svelte:fragment slot="info-box-explanation">
-    It takes 14 days to unstake from a validator. At 14 days you will need to
-    claim the stakes for it to come back into your account. You can set a
-    reminder on the main page to come back. When you unstake you will be sent a
-    transaction to review on your Radix Wallet
+    After you request an unstake, you will receive a claim NFT that you can use
+    to claim your XRD after a period of 7 days.
+  </svelte:fragment>
+
+  <svelte:fragment slot="summary">
+    <div class="summary">
+      <div class="summary-title">Total unstaking request ({XRD_SYMBOL})</div>
+      <div class="summary-value">
+        {formatXRDValue(totalUnstakeAmount)}
+      </div>
+    </div>
   </svelte:fragment>
 
   <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>

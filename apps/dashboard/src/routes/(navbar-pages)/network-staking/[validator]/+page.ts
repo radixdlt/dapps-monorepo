@@ -13,7 +13,7 @@ export const load: PageLoad = ({ params, parent }) => {
         )
 
         if (!validator) {
-          goto('/validators')
+          goto('/network-staking')
         }
 
         return validator
