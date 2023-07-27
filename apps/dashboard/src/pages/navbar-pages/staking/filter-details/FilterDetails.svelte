@@ -86,7 +86,7 @@
 
   <div class="text">
     <h2>Fee (%)</h2>
-    <p class="subtext">Amount the validator takes when you stake</p>
+    <p class="subtext">% of rewards emissions taken by the validator owner</p>
   </div>
 
   <div class="cards">
@@ -118,9 +118,7 @@
 
   <div class="text">
     <h2>Owner Stake (%)</h2>
-    <p class="subtext">
-      The amount the owner has staked to their own validator
-    </p>
+    <p class="subtext">% of this validator’s stake provided by its owner</p>
   </div>
 
   <div class="cards">
@@ -136,7 +134,9 @@
 
   <div class="text">
     <h2>Recent Uptime (%)</h2>
-    <p class="subtext">The amount of time the validator has been active</p>
+    <p class="subtext">
+      Node performance over the time period selected ({'<'} 100% reduces APY)
+    </p>
   </div>
 
   <div class="cards">

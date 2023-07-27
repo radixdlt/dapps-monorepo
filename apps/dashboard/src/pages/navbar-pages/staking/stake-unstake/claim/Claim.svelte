@@ -59,9 +59,9 @@
 </script>
 
 <StakePanel bind:open on:click={claim} sidePanelHeader="Claim">
-  <svelte:fragment slot="heading-text">Claim your XRD tokens</svelte:fragment>
-
-  <svelte:fragment slot="heading-subtext">Ready to claim</svelte:fragment>
+  <svelte:fragment slot="heading-text"
+    >Claim{readyToClaim.length > 1 ? 's' : ''} to redeem:</svelte:fragment
+  >
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
@@ -87,10 +87,11 @@
     </div>
   </svelte:fragment>
 
-  <svelte:fragment slot="info-box-title">How Claiming Works</svelte:fragment>
+  <svelte:fragment slot="info-box-title">How Stake Claims Work</svelte:fragment>
 
   <svelte:fragment slot="info-box-explanation">
-    Once you claim the XRD will appear in your wallet.
+    Your claim NFT will be returned to the validator in exchange for the
+    quantity of XRD that you requested to unstake.
   </svelte:fragment>
 
   <svelte:fragment slot="summary">
