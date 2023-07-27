@@ -28,7 +28,7 @@ on:
           - rcnet-v2
 
 env:
-  active_network: 'ansharnet'
+  active_network: 'dumunet'
   release_network: 'rcnet'
 
 permissions:
