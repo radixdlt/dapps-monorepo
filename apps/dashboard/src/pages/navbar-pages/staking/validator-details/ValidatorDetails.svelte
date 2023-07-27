@@ -6,7 +6,7 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
-  import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/validators/proxy+layout'
+  import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/proxy+layout'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import Address from '@components/_base/address/Address.svelte'

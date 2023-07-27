@@ -18,7 +18,7 @@
   let claimOpen = false
 
   $: if (!detailsOpen) {
-    goto('/validators')
+    goto('/network-staking')
   }
 
   $: stakeInfo = data.stakeInfo

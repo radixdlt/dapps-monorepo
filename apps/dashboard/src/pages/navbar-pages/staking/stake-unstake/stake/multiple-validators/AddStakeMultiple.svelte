@@ -146,7 +146,9 @@
   <svelte:fragment slot="info-box-title">How Staking Works</svelte:fragment>
 
   <svelte:fragment slot="info-box-explanation">
-    When you stake you will be sent a transaction to review on your Radix Wallet
+    Stake XRD to validators that you trust to reliably validate transactions on
+    the Radix Network. If they maintain their performance, you can share in the
+    XRD emissions rewards that result.
   </svelte:fragment>
 
   <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>

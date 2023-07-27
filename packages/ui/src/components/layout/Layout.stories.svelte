@@ -39,9 +39,9 @@
           path: '/dapp-metadata'
         },
         {
-          text: 'Validators',
+          text: 'Network Staking',
           icon: ValidatorsIcon,
-          path: '/validators'
+          path: '/network-staking'
         }
       ]
 </script>

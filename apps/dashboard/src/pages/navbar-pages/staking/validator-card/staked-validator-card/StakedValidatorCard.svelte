@@ -6,7 +6,7 @@
   import { formatTokenValue, formatXRDValue } from '@utils'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import StakingIcon from '@icons/staking.svg'
-  import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/validators/+layout.svelte'
+  import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
   import { XRD_SYMBOL } from '@constants'

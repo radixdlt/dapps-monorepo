@@ -50,7 +50,7 @@
   import {
     stakeInfo,
     type StakeInfo
-  } from '../../../routes/(navbar-pages)/validators/+layout.svelte'
+  } from '../../../routes/(navbar-pages)/network-staking/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
@@ -163,7 +163,7 @@
             )
           )}
           on:click-validator={(e) => {
-            goto(`/validators/${e.detail}`)
+            goto(`/network-staking/${e.detail}`)
           }}
           on:claim-validator={(e) => {
             dispatch('show-claim-single', e.detail)
@@ -194,7 +194,7 @@
       type="all"
       {validators}
       on:click-validator={(e) => {
-        goto(`/validators/${e.detail}`)
+        goto(`/network-staking/${e.detail}`)
       }}
     />
   </div>

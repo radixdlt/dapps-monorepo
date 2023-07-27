@@ -1,4 +1,4 @@
-import { bookmarkedValidatorsApi } from './../../../server/validators/validators-api'
+import { bookmarkedValidatorsApi } from '../../../server/validators/validators-api'
 import type { LayoutLoad } from './$types'
 import {
   getEntityDetails,

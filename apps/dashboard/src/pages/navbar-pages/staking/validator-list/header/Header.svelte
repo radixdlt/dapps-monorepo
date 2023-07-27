@@ -45,7 +45,7 @@
 
 <div id="column-headers" class="validator-card-grid">
   <div />
-  <div style:justify-self="start">VALIDATOR</div>
+  <div style:justify-self="start">VALIDATOR NAME</div>
   <div id="address-header">ADDRESS</div>
   <div class="sortable" on:click={() => sort('totalStake')}>
     TOTAL STAKE
