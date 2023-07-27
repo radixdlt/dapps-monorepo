@@ -77,7 +77,8 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
         percentageOwnerStake: 0,
         apy: 0,
         uptime: 0,
-        acceptsStake: true
+        acceptsStake: true,
+        metadata: validator.metadata.items
       } as Validator
     })
   })

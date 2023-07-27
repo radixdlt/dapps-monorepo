@@ -23,6 +23,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import TypedMetadataRenderer from './TypedMetadataRenderer.svelte'
 
+  export let header: string | undefined = undefined
   export let expectedEntries: Record<string, MetadataInfoBoxConfig> = {}
   export let metadata: EntityMetadataItem[] | Promise<EntityMetadataItem[]>
 
@@ -34,10 +35,10 @@
 {#await entries}
   <SkeletonLoader />
 {:then resolvedEntries}
-  <InfoBox>
+  <InfoBox {header}>
     {#each Object.entries(expectedEntries) as [key, config]}
       {#if resolvedEntries[key]}
-        <Row text={config?.label || key}>
+        <Row label={config?.label || key}>
           <svelte:fragment slot="right">
             {#if config?.component}
               {#if config?.componentProperties}

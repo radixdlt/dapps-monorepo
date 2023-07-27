@@ -1,7 +1,7 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import { formatAmount, formatTokenValue, formatXRDValue } from '@utils'
+  import { formatAmount, formatXRDValue } from '@utils'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
@@ -16,6 +16,7 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import type { Validator } from '../Validators.svelte'
+  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
 
   export let open: boolean
   export let validator: Promise<Validator>
@@ -118,16 +119,21 @@
       >
         N/A ({formatAmount(data)}%)
       </AwaitedRow>
-      <Row text="Accepts Stake">
+      <Row label="Accepts Stake">
         <AcceptsStake
           slot="right"
           value={validator.then(({ acceptsStake }) => acceptsStake)}
         />
       </Row>
-      <Row text="Registration Status">
+      <Row label="Registration Status">
         <span slot="right">N/A</span>
       </Row>
     </InfoBox>
+
+    <MetadataInfoBox
+      header="Metadata"
+      metadata={validator.then(({ metadata }) => metadata)}
+    />
   </div>
 </SidePanel>
 
@@ -137,7 +143,6 @@
   .surface-2 {
     @include mixins.card();
   }
-
   .subheader {
     display: flex;
     justify-content: space-between;

@@ -35,7 +35,8 @@
       selected: false,
       stakeUnitResourceAddress: 'resource_1234567890',
       unstakeClaimResourceAddress: 'resource_1234567890',
-      stakeUnitsToStakedRatio: new BigNumber(1)
+      stakeUnitsToStakedRatio: new BigNumber(1),
+      metadata: []
     }))
 </script>
 

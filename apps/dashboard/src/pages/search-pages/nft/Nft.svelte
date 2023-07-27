@@ -32,7 +32,7 @@
   <Card>
     <Text slot="header" bold>Resource Info</Text>
     <InfoBox slot="body">
-      <Row text="Address">
+      <Row label="Address">
         <Text color="link" inline slot="right">
           <a href="/resource/{address.split(':')[0]}">{address.split(':')[0]}</a
           >

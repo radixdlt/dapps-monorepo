@@ -1,13 +1,16 @@
 <script lang="ts">
-  export let text: string = ''
+  export let label: string = ''
+  export let value: string = ''
   export let modifiers: string = ''
 </script>
 
 <div class="row {modifiers}">
   <slot name="left">
-    <span class="label">{text}</span>
+    <span class="label">{label}</span>
   </slot>
-  <slot name="right" />
+  <slot name="right">
+    <span class="value">{value}</span>
+  </slot>
 </div>
 
 <style lang="scss">

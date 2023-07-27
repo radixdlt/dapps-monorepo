@@ -10,7 +10,7 @@
   export let promise: Promise<T>
 </script>
 
-<Row {text} {modifiers}>
+<Row label={text} {modifiers}>
   <svelte:fragment slot="right">
     {#await promise}
       <SkeletonLoader />

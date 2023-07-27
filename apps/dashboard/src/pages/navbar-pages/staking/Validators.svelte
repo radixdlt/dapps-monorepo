@@ -15,6 +15,7 @@
     stakeUnitResourceAddress: string
     unstakeClaimResourceAddress: string
     stakeUnitsToStakedRatio: BigNumber
+    metadata: EntityMetadataItem[]
   }
   import InfoIcon from '@icons/info.svg'
 
@@ -54,6 +55,7 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
+  import type { EntityMetadataItem } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let validators: Promise<Validator[]>
 
