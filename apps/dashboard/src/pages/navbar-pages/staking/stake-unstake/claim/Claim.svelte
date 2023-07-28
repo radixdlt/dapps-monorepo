@@ -16,7 +16,7 @@
     account: Account
   }[]
 
-  $: readyToClaim = readyToClaim.reduce((acc, claim) => {
+  $: accumulatedClaims = readyToClaim.reduce((acc, claim) => {
     const existingClaim = acc.find(
       (c) => c.account.address === claim.account.address
     )
@@ -26,7 +26,7 @@
         .plus(claim.xrdAmount)
         .toString()
     } else {
-      acc.push(claim)
+      acc.push({ ...claim })
     }
 
     return acc
@@ -34,7 +34,7 @@
 
   let totalClaimAmount = '0'
 
-  $: totalClaimAmount = readyToClaim
+  $: totalClaimAmount = accumulatedClaims
     .reduce<BigNumber>(
       (acc, claim) => acc.plus(claim.xrdAmount === '' ? '0' : claim.xrdAmount),
       new BigNumber(0)
@@ -60,12 +60,12 @@
 
 <StakePanel bind:open on:click={claim} sidePanelHeader="Claim">
   <svelte:fragment slot="heading-text"
-    >Claim{readyToClaim.length > 1 ? 's' : ''} to redeem:</svelte:fragment
+    >Claim{accumulatedClaims.length > 1 ? 's' : ''} to redeem:</svelte:fragment
   >
 
   <svelte:fragment slot="content" let:rightColumnWidth>
     <div class="card-list">
-      {#each readyToClaim as { validator, xrdAmount, account }}
+      {#each accumulatedClaims as { validator, xrdAmount, account }}
         <div class="validator-card">
           <div class="validator">
             <div class="dotted-overflow">

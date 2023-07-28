@@ -149,7 +149,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
           account,
           validator,
           stakeUnitAmount: token.unstakeData.unstakeAmount,
-          xrdAmount: xrdAmount,
+          xrdAmount,
           claimEpoch: token.unstakeData.claimEpoch
         }
 
