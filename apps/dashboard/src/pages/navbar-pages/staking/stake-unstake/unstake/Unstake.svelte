@@ -97,7 +97,9 @@
     </div>
   </svelte:fragment>
 
-  <svelte:fragment slot="info-box-title">How Unstaking Works</svelte:fragment>
+  <svelte:fragment slot="info-box-title"
+    >How Unstake Requests Works</svelte:fragment
+  >
 
   <svelte:fragment slot="info-box-explanation">
     After you request an unstake, you will receive a claim NFT that you can use
