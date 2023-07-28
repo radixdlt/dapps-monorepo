@@ -129,23 +129,6 @@
       bind:range={ownerStakeFilter}
     />
   </div>
-
-  <Divider />
-
-  <div class="text">
-    <h2>Recent Uptime (%)</h2>
-    <p class="subtext">
-      Node performance over the time period selected ({'<'} 100% reduces APY)
-    </p>
-  </div>
-
-  <div class="cards">
-    <ManualFilterCard
-      options={recentUptimeOptions}
-      selected={selectedUptime}
-      bind:percentage={uptimeFilter.percentage}
-    />
-  </div>
 </SidePanel>
 
 <style lang="scss">
