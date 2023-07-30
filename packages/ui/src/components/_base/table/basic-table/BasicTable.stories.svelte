@@ -46,40 +46,56 @@
     BasicTable<(typeof entries)[number]>
   >['columns'] = [
     {
-      label: 'Validator',
+      header: {
+        label: 'Validator'
+      },
       renderAs: ({ name }) => name
     },
     {
-      label: 'Address',
+      header: {
+        label: 'Address'
+      },
       id: 'address'
     },
     {
-      label: 'Total Stake',
+      header: {
+        label: 'Total Stake'
+      },
       renderAs: ({ totalStake }) => formatAmount(totalStake.toString()),
       sortBy: 'totalStake'
     },
     {
-      label: 'Owner Stake (%)',
+      header: {
+        label: 'Owner Stake (%)'
+      },
       renderAs: ({ ownerStake }) => `${ownerStake} %`,
       sortBy: 'ownerStake'
     },
     {
-      label: 'APY',
+      header: {
+        label: 'APY'
+      },
       renderAs: ({ apy }) => `${apy} %`,
       sortBy: 'apy'
     },
     {
-      label: 'Fee',
+      header: {
+        label: 'Fee'
+      },
       sortBy: 'fee',
       renderAs: ({ fee }) => `${fee} %`
     },
     {
-      label: 'Uptime',
+      header: {
+        label: 'Uptime'
+      },
       renderAs: ({ uptime }) => uptime,
       sortBy: 'uptime'
     },
     {
-      label: 'Accepts stake',
+      header: {
+        label: 'Accepts stake'
+      },
       renderAs: ({ acceptsStake }) => (acceptsStake ? 'Yes' : 'No'),
       sortBy: 'acceptsStake'
     },
@@ -90,7 +106,9 @@
     BasicTable<ReturnType<typeof validator>>
   >['columns'] = [
     {
-      label: 'Accepts stake',
+      header: {
+        label: 'Accepts stake'
+      },
       component: Icon,
       componentProps: {
         icon: Checkmark
@@ -164,17 +182,25 @@
   >['columns'] = [
     null,
     {
-      label: 'Id/Date (GMT +00)'
+      header: {
+        label: 'Id/Date (GMT +00)'
+      }
     },
     {
-      label: 'Type'
+      header: {
+        label: 'Type'
+      }
     },
     {
-      label: 'Withdrawals',
+      header: {
+        label: 'Withdrawals'
+      },
       sortBy: 'withdrawals'
     },
     {
-      label: 'Deposits'
+      header: {
+        label: 'Deposits'
+      }
     }
   ]
 
@@ -182,17 +208,23 @@
     BasicTable<(typeof stakeEntries)[number]>
   >['columns'] = [
     {
-      label: 'Validator',
+      header: {
+        label: 'Validator'
+      },
       renderAs: ({ name }) => name
     },
     {
-      label: 'Staking',
+      header: {
+        label: 'Staking'
+      },
       renderAs: ({ staking }) => staking,
       sortBy: (a: (typeof stakeEntries)[0], b: (typeof stakeEntries)[0]) =>
         a.stakingValue > b.stakingValue ? 1 : -1
     },
     {
-      label: 'Unstaking',
+      header: {
+        label: 'Unstaking'
+      },
       renderAs: ({ unstaking }) => unstaking,
       sortBy: 'unstaking'
     }
@@ -233,7 +265,9 @@
     <svelte:fragment slot="row" let:entry>
       <TableRow>
         <ResponsiveTableCell width="80px" />
-        <ResponsiveTableCell width="160px" label={tableColumns[1]?.label}
+        <ResponsiveTableCell
+          width="160px"
+          label={tableColumns[1]?.header?.label}
           >ID: {entry.id}<br />{entry.date}</ResponsiveTableCell
         >
 
@@ -244,13 +278,13 @@
             </div></ResponsiveTableCell
           >
         {:else}
-          <ResponsiveTableCell label={tableColumns[2]?.label}>
+          <ResponsiveTableCell label={tableColumns[2]?.header?.label}>
             {entry.type}
           </ResponsiveTableCell>
-          <ResponsiveTableCell label={tableColumns[3]?.label}>
+          <ResponsiveTableCell label={tableColumns[3]?.header?.label}>
             {entry.withdrawals}
           </ResponsiveTableCell>
-          <ResponsiveTableCell label={tableColumns[4]?.label}>
+          <ResponsiveTableCell label={tableColumns[4]?.header?.label}>
             {entry.deposits}
           </ResponsiveTableCell>
         {/if}

@@ -66,9 +66,12 @@
     sortBy?: SortableValues<Entry> | ((a: Entry, b: Entry) => number)
 
     /**
-     * The label of the column which will be displayed as column header.
+     * Header options.
      */
-    label?: string
+    header?: {
+      label?: string
+      alignment?: 'left' | 'right' | 'center'
+    }
   }
 </script>
 
@@ -102,24 +105,30 @@
 </script>
 
 <table>
-  <thead class="desktop-only" style:text-align="left">
+  <thead class="desktop-only">
     <tr>
-      {#each columns as column, i}
-        <th>
-          <slot
-            name="header-cell"
-            {column}
-            sort={() => sortColumn(column, i)}
-            sortStatus={sortStatus[i]}
-          />
-        </th>
-      {/each}
+      <slot name="header" sort={sortColumn} {sortStatus}>
+        {#each columns as column, i}
+          <th style:text-align={column?.header?.alignment ?? 'left'}>
+            <slot
+              name="header-cell"
+              {column}
+              sort={() => sortColumn(column, i)}
+              sortStatus={sortStatus[i]}
+            />
+          </th>
+        {/each}
+      </slot>
     </tr>
   </thead>
 
   <tbody>
     {#each lastSortedBy ? sortedEntries : entries as entry}
-      <slot name="row" {entry} />
+      <slot name="empty-row" {entry}>
+        <tr>
+          <slot name="row" {entry} />
+        </tr>
+      </slot>
     {/each}
   </tbody>
 </table>

@@ -7,10 +7,14 @@
     fee: number
     uptime: number
   }>
+
+  export let apyWidth: number
+  export let feeWidth: number
+  export let uptimeWidth: number
 </script>
 
-<div class="apy-box apy-box-grid">
-  <div class="apy">
+<div class="apy-box">
+  <div class="apy" bind:clientWidth={apyWidth}>
     {#await apyInfo}
       <div style:display="inline-block">
         <SkeletonLoader width={50} />
@@ -20,14 +24,14 @@
     {/await}
     <div class="apy-text">per year</div>
   </div>
-  <div class="fee">
+  <div class="fee" bind:clientWidth={feeWidth}>
     {#await apyInfo}
       <SkeletonLoader width={50} />
     {:then { fee }}
       {truncateNumber(fee)}%
     {/await}
   </div>
-  <div class="uptime">
+  <div class="uptime" bind:clientWidth={uptimeWidth}>
     {#await apyInfo}
       <SkeletonLoader width={50} />
     {:then { uptime }}
@@ -37,16 +41,15 @@
 </div>
 
 <style lang="scss">
-  @use '../shared.scss';
   .apy-box {
-    padding: var(--spacing-sm);
+    display: grid;
+    grid: 1fr / auto auto auto;
   }
 
   .apy,
   .fee,
   .uptime {
     border: 1px solid #e2e5ed;
-    width: 100%;
     text-align: center;
     padding: var(--spacing-sm) var(--spacing-xl);
   }
@@ -54,6 +57,7 @@
   .apy {
     border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
     background: var(--theme-surface-1);
+    min-width: 10rem;
   }
 
   .apy-text {

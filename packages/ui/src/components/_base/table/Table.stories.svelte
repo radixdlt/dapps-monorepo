@@ -46,20 +46,26 @@
     Table<(typeof stakeEntries)[number]>
   >['columns'] = [
     {
-      label: 'Letter'
+      header: {
+        label: 'Letter'
+      }
     },
     {
-      label: 'Number',
-
+      header: {
+        label: 'Number'
+      },
       sortBy: 'value2'
     },
     {
-      label: 'Boolean',
-
+      header: {
+        label: 'Boolean'
+      },
       sortBy: 'value3'
     },
     {
-      label: 'Fruit',
+      header: {
+        label: 'Fruit'
+      },
       sortBy: (a, b) => a.value4.tastiness - b.value4.tastiness
     }
   ]
@@ -70,24 +76,22 @@
 <Story name="Primary">
   <Table entries={stakeEntries} columns={simpleTableConfig}>
     <button slot="header-cell" let:column let:sort on:click={sort}>
-      {column?.label}
+      {column?.header?.label}
     </button>
 
     <svelte:fragment slot="row" let:entry>
-      <tr>
-        <td>
-          {entry.value1}
-        </td>
-        <td>
-          {entry.value2}
-        </td>
-        <td>
-          {entry.value3}
-        </td>
-        <td>
-          {entry.value4.fruit}
-        </td>
-      </tr>
+      <td>
+        {entry.value1}
+      </td>
+      <td>
+        {entry.value2}
+      </td>
+      <td>
+        {entry.value3}
+      </td>
+      <td>
+        {entry.value4.fruit}
+      </td>
     </svelte:fragment>
   </Table>
 </Story>

@@ -76,16 +76,16 @@
       on:click={sort}
       sorting={column?.sortBy ? sortStatus : undefined}
     >
-      {#if column?.label}
-        {column.label}
+      {#if column?.header?.label}
+        {column.header.label}
       {/if}
     </BasicHeader>
 
-    <svelte:fragment slot="row" let:entry>
+    <svelte:fragment slot="empty-row" let:entry>
       <slot name="row" {entry}>
         <TableRow>
           {#each columns as column}
-            <ResponsiveTableCell label={column?.label}>
+            <ResponsiveTableCell label={column?.header?.label}>
               {#if !$$slots.cell}
                 {#if !column?.component}
                   {#if column?.renderAs}
@@ -117,6 +117,7 @@
 </div>
 
 <style lang="scss">
+  @use '../shared.scss';
   @use '../../../../mixins.scss';
 
   .cell-text {
@@ -127,16 +128,11 @@
     }
   }
 
-  .flex-align-center {
-    display: inline-flex;
-    align-items: center;
-  }
-
   .basic-table {
     :global(table) {
       border-collapse: separate;
       @include mixins.desktop {
-        border-spacing: 0 20px;
+        border-spacing: 0 shared.$row-spacing;
       }
 
       width: 100%;

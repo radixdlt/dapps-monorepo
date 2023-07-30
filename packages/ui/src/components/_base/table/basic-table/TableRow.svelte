@@ -1,4 +1,4 @@
-<tr class="table-row">
+<tr class="table-row" on:click>
   <slot />
 </tr>
 
@@ -12,6 +12,7 @@
       box-shadow: var(--shadow-hover);
     }
 
+    transition: var(--transition-hover-card);
     height: 84px;
 
     @include mixins.mobile {
