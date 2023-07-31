@@ -24,6 +24,8 @@
 </div>
 
 <style lang="scss">
+  @use '../../../mixins.scss';
+
   .menu {
     display: flex;
     flex-direction: row;
@@ -40,7 +42,12 @@
   .divider {
     background: var(--border);
     width: 1px;
+    min-width: 1px;
     height: 2rem;
     margin: 0 2rem;
+
+    @include mixins.mobile {
+      margin: 0 0.75rem;
+    }
   }
 </style>
