@@ -15,19 +15,22 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
     (resolve) => (resolveManifest = resolve)
   )
 
-  const tx = getTransactionDetails(params.transaction).then((tx) => {
-    tx.encodedManifest
-      ? NotarizedTransaction.decompile(
-          Buffer.from(tx.encodedManifest, 'hex')
-        ).then((notarizedTx: any) =>
-          resolveManifest(
-            notarizedTx.signedIntent.intent.manifest.instructions
-              .value as string
+  const tx = getTransactionDetails(params.transaction)
+    .catch(() => undefined)
+    .then((tx) => {
+      if (!tx) throw redirect(301, '/not-found')
+      tx.encodedManifest
+        ? NotarizedTransaction.decompile(
+            Buffer.from(tx.encodedManifest, 'hex')
+          ).then((notarizedTx: any) =>
+            resolveManifest(
+              notarizedTx.signedIntent.intent.manifest.instructions
+                .value as string
+            )
           )
-        )
-      : resolveManifest('')
-    return tx
-  })
+        : resolveManifest('')
+      return tx
+    })
 
   return {
     address: params.transaction,

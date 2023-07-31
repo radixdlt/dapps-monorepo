@@ -7,6 +7,7 @@
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
+  import { goto } from '$app/navigation'
 
   export let address: string
 
@@ -14,9 +15,13 @@
     ? address.split(':')
     : [address, '']
 
-  $: nftData = getNonFungibleData(resourceAddress, [nftId])
+  $: nftData = getNonFungibleData(resourceAddress, [nftId]).catch(() => [
+    { non_fungible_id: '' }
+  ])
 
-  $: details = getSingleEntityDetails(resourceAddress)
+  $: details = getSingleEntityDetails(resourceAddress).catch(() => {
+    goto('/not-found') as never
+  })
 </script>
 
 <Box>
@@ -40,11 +45,15 @@
       </Row>
 
       <AwaitedRow text="Name" promise={details} let:data>
-        <Text>{getStringMetadata('name')(data.metadata)}</Text>
+        {#if data}
+          <Text>{getStringMetadata('name')(data.metadata)}</Text>
+        {/if}
       </AwaitedRow>
 
       <AwaitedRow text="Description" promise={details} let:data>
-        <Text>{getStringMetadata('description')(data.metadata)}</Text>
+        {#if data}
+          <Text>{getStringMetadata('description')(data.metadata)}</Text>
+        {/if}
       </AwaitedRow>
     </InfoBox>
   </Card>
