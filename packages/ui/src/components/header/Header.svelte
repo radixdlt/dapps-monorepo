@@ -4,6 +4,7 @@
   import MenuIcon from '@icons/menu.svg'
   import LogoIcon from '@images/dashboard_logo.svg'
   import { showSidebar } from '@stores'
+  import { isMobile } from '@utils'
 </script>
 
 <header>
@@ -19,7 +20,9 @@
     <a href="/" class="logo" style={`background-image: url(${LogoIcon});`} />
   </div>
   <div class="search"><NetworkLookupSearch /></div>
-  <div class="connect-button"><ConnectButton /></div>
+  {#if !isMobile()}
+    <div class="connect-button"><ConnectButton /></div>
+  {/if}
 </header>
 
 <style lang="scss">

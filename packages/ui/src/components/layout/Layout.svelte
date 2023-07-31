@@ -34,7 +34,7 @@
     grid-template-areas:
       'header'
       'content';
-    grid-template-rows: 193px 1fr;
+    grid-template-rows: 151px 1fr;
 
     @include mixins.desktop {
       grid-template-rows: unset;
