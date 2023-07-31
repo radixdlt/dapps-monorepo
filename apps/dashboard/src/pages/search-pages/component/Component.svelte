@@ -12,19 +12,22 @@
     ReplaceProperty
   } from '@radixdlt/babylon-gateway-api-sdk'
   import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
+  import { goto } from '$app/navigation'
 
   export let address: string
 
-  $: details = getSingleEntityDetails(address).then(
-    (details) =>
-      details as ReplaceProperty<
-        StateEntityDetailsResponseItem,
-        'details',
-        StateEntityDetailsResponseComponentDetails
-      >
-  )
-
-  $: metadata = details.then(({ metadata }) => metadata.items)
+  $: details = getSingleEntityDetails(address)
+    .then(
+      (details) =>
+        details as ReplaceProperty<
+          StateEntityDetailsResponseItem,
+          'details',
+          StateEntityDetailsResponseComponentDetails
+        >
+    )
+    .catch(() => {
+      goto('/not-found') as never
+    })
 </script>
 
 <Card>
@@ -33,19 +36,22 @@
     {#await details}
       <LoadingInfoBox />
     {:then details}
-      <InfoBox>
-        <Row>
-          <Text slot="left" bold align="right">Package Name</Text>
-          <Text slot="right" align="left">{details.details.blueprint_name}</Text
-          >
-        </Row>
-        <Row>
-          <Text slot="left" bold align="right">Package Address</Text>
-          <Text slot="right" align="left"
-            >{details.details.package_address}</Text
-          >
-        </Row>
-      </InfoBox>
+      {#if details}
+        <InfoBox>
+          <Row>
+            <Text slot="left" bold align="right">Package Name</Text>
+            <Text slot="right" align="left"
+              >{details.details.blueprint_name}</Text
+            >
+          </Row>
+          <Row>
+            <Text slot="left" bold align="right">Package Address</Text>
+            <Text slot="right" align="left"
+              >{details.details.package_address}</Text
+            >
+          </Row>
+        </InfoBox>
+      {/if}
     {/await}
   </div>
 </Card>
@@ -53,6 +59,8 @@
 <Card>
   <Text bold slot="header">Metadata</Text>
   <Box wrapper slot="body">
-    <MetadataInfoBox {metadata} />
+    <MetadataInfoBox
+      metadata={details.then((value) => value?.metadata?.items)}
+    />
   </Box>
 </Card>

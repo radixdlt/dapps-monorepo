@@ -24,10 +24,12 @@
   import TypedMetadataRenderer from './TypedMetadataRenderer.svelte'
 
   export let expectedEntries: Record<string, MetadataInfoBoxConfig> = {}
-  export let metadata: EntityMetadataItem[] | Promise<EntityMetadataItem[]>
+  export let metadata:
+    | EntityMetadataItem[]
+    | Promise<EntityMetadataItem[] | void>
 
   $: entries = Promise.resolve(metadata).then((resolved) =>
-    indexBy(prop('key'), resolved)
+    indexBy(prop('key'), resolved || [])
   )
 </script>
 

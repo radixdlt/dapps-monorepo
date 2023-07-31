@@ -5,13 +5,11 @@
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { getStringMetadata } from '@api/utils/resources'
-  import type { getEntityDetails } from '@api/gateway'
   import ExternalLinkIcon from '@icons/external.svg'
   import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
+  import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
 
-  export let details: Promise<
-    Awaited<ReturnType<typeof getEntityDetails>>[number]
-  >
+  export let details: Promise<StateEntityDetailsVaultResponseItem>
 
   $: metadata = details.then(({ metadata }) => metadata)
 
