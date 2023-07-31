@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { sort } from './sorting'
+import { sort } from './Table.svelte'
 
 const createEntry = (a: BigNumber | string) => ({ a })
 

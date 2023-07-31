@@ -54,6 +54,8 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
+  import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
+  import ValidatorRow from './validator-list/ValidatorRow.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -148,8 +150,8 @@
             dispatch('show-claim-all')
           }}
         />
+
         <ValidatorList
-          type="staked"
           validators={validators.then((v) =>
             v.filter(
               (v) =>
@@ -162,13 +164,19 @@
                 )
             )
           )}
-          on:click-validator={(e) => {
-            goto(`/network-staking/${e.detail}`)
-          }}
-          on:claim-validator={(e) => {
-            dispatch('show-claim-single', e.detail)
-          }}
-        />
+        >
+          <StakedValidatorRow
+            slot="row"
+            let:entry
+            let:columns
+            validator={entry}
+            nbrOfColumns={columns.length}
+            on:click={() => goto(`/network-staking/${entry.address}`)}
+            on:claim-validator={(e) => {
+              dispatch('show-claim-single', e.detail)
+            }}
+          />
+        </ValidatorList>
       </div>
     {/await}
   </div>
@@ -191,12 +199,18 @@
 
   <div>
     <ValidatorList
-      type="all"
       {validators}
       on:click-validator={(e) => {
         goto(`/network-staking/${e.detail}`)
       }}
-    />
+    >
+      <ValidatorRow
+        slot="row"
+        let:entry
+        validator={entry}
+        on:click={() => goto(`/network-staking/${entry.address}`)}
+      />
+    </ValidatorList>
   </div>
 </div>
 

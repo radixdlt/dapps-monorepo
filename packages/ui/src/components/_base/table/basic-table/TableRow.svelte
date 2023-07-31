@@ -1,19 +1,18 @@
-<script lang="ts">
-</script>
-
-<tr class="table-row">
+<tr class="table-row" on:click>
   <slot />
 </tr>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
-  tr.table-row {
+  @use '../../../../mixins.scss';
+
+  .table-row {
     @include mixins.card;
 
     &:hover {
       box-shadow: var(--shadow-hover);
     }
 
+    transition: var(--transition-hover-card);
     height: 84px;
 
     @include mixins.mobile {

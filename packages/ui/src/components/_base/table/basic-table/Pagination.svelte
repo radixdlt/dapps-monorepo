@@ -1,6 +1,6 @@
 <script lang="ts">
+  import IconNew from '@components/_base/icon/IconNew.svelte'
   import ChevronRight from '@icons/chevron-right.svg'
-  import IconNew from '../icon/IconNew.svelte'
   import { createEventDispatcher } from 'svelte'
 
   export let disabledNext = false

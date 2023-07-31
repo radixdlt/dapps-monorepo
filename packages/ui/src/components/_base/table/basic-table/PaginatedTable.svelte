@@ -1,14 +1,16 @@
 <script lang="ts">
+  import type { TablePage } from '../Table.svelte'
+
+  import BasicTable, { type BasicTableColumn } from './BasicTable.svelte'
+
   import { onMount } from 'svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import Table from './Table.svelte'
-  import type { TableConfig, TablePage, Entry } from './types'
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import Pagination from './Pagination.svelte'
 
   type T = $$Generic<Entry>
 
-  export let config: TableConfig<T>
+  export let columns: (BasicTableColumn<T> | null)[]
   export let queryFunction: (cursor?: string) => Promise<TablePage<T>>
 
   export let mode: 'infiniteScroll' | 'paginated' = 'infiniteScroll'
@@ -69,7 +71,7 @@
   }
 </script>
 
-<Table {config} {entries} />
+<BasicTable {columns} {entries} />
 
 {#if isLoadingCursor && mode === 'infiniteScroll'}
   <div class="bottom-space">

@@ -19,7 +19,7 @@
   import ListboxChevronIcon from '@icons/listbox-chevron.svg'
 
   type T = $$Generic
-  export let options: Array<Option<T>> = []
+  export let options: Array<any> = []
   export let placeholder: string | undefined = undefined
   export let placeholderWhenEmpty: string = ''
   export let selected: Option<T> | undefined = undefined
