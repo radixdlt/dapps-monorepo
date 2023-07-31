@@ -6,6 +6,8 @@
 
 <style lang="scss">
   .pill {
+    background: var(--theme-surface-2);
+
     &:hover {
       background: var(--theme-surface-3);
     }
