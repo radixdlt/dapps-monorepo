@@ -2,7 +2,7 @@
   import Address from '@components/_base/address/Address.svelte'
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
-  import StakeDisplay from '../validator-card/StakeDisplay.svelte'
+  import StakeDisplay from './StakeDisplay.svelte'
   import { truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
