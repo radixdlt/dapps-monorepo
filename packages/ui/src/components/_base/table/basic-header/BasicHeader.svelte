@@ -6,7 +6,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="flex-align-center" class:sortable={sorting} on:click>
+<div class="header" class:sortable={sorting} on:click>
   <span class="text"><slot /></span>
 
   {#if sorting}
@@ -20,13 +20,14 @@
     gap: var(--spacing-xs);
   }
 
-  .flex-align-center {
+  .header {
     display: inline-flex;
     align-items: center;
+    padding: 0 var(--spacing-md);
   }
 
   .text {
-    white-space: nowrap;
+    width: minmax(min-content, fit-content);
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);
     text-transform: uppercase;

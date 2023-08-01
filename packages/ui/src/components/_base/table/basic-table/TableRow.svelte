@@ -48,13 +48,11 @@
         }
 
         &:first-child {
-          padding-left: 20px;
           border-top-left-radius: var(--border-radius-lg);
           border-bottom-left-radius: var(--border-radius-lg);
         }
 
         &:last-child {
-          padding-right: 20px;
           border-top-right-radius: var(--border-radius-lg);
           border-bottom-right-radius: var(--border-radius-lg);
         }

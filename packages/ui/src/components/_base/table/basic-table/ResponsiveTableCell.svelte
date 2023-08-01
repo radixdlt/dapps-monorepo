@@ -10,7 +10,11 @@
       {label}
     </div>
   {/if}
-  <slot />
+  <slot name="no-padding-content">
+    <div class="content">
+      <slot />
+    </div>
+  </slot>
 </td>
 
 <style lang="scss">
@@ -23,6 +27,11 @@
       width: 100%;
     }
   }
+
+  .content {
+    margin: 0 var(--spacing-md);
+  }
+
   .header-text {
     white-space: nowrap;
     text-overflow: ellipsis;

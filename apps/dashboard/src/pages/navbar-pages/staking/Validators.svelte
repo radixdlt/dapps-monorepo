@@ -56,6 +56,7 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
   import ValidatorRow from './validator-list/ValidatorRow.svelte'
+  import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -217,7 +218,9 @@
         let:entry
         validator={entry}
         on:click={() => goto(`/network-staking/${entry.address}`)}
-      />
+      >
+        <BookmarkValidator slot="icon" validator={entry} />
+      </ValidatorRow>
     </ValidatorList>
   </div>
 </div>

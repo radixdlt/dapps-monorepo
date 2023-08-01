@@ -138,14 +138,4 @@
       width: 100%;
     }
   }
-
-  .basic-table :global(thead) :global(th) {
-    &:first-child {
-      padding-left: 20px;
-    }
-
-    &:last-child {
-      padding-right: 20px;
-    }
-  }
 </style>
