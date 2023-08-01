@@ -9,7 +9,7 @@ dashboard:
 
   image:
     repository: docker.io/radixdlt/dapps-dashboard
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
