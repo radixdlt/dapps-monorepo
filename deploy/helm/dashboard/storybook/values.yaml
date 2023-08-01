@@ -3,7 +3,7 @@ storybook:
 
   image:
     repository: docker.io/radixdlt/dapps-dashboard-storybook
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
 
