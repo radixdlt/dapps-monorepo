@@ -87,6 +87,16 @@
   @use '../../../../../../../packages/ui/src/components/_base/table/shared.scss';
   .validator-list :global(table) {
     border-spacing: 0 !important;
+
+    :global(td) {
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
   }
 
   .separator {

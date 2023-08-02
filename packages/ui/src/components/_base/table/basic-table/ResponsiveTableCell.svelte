@@ -10,11 +10,10 @@
       {label}
     </div>
   {/if}
-  <slot name="no-padding-content">
-    <div class="content">
-      <slot />
-    </div>
-  </slot>
+
+  <div class="content">
+    <slot />
+  </div>
 </td>
 
 <style lang="scss">
@@ -26,10 +25,6 @@
     @include mixins.mobile {
       width: 100%;
     }
-  }
-
-  .content {
-    margin: 0 var(--spacing-md);
   }
 
   .header-text {

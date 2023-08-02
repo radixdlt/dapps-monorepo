@@ -16,7 +16,7 @@
   <TableRow on:click>
     {#if $connected}
       <ResponsiveTableCell width="5rem">
-        <div slot="no-padding-content" class="left-padded center">
+        <div class="center">
           <slot name="icon" />
         </div>
       </ResponsiveTableCell>
@@ -49,28 +49,22 @@
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <svelte:fragment slot="no-padding-content">
-        <div class="apy apy-text-box no-overflow bold">
-          {truncateNumber(validator.apy)}%
-          <span class="subtext">per year</span>
-        </div>
-      </svelte:fragment>
+      <div class="apy apy-text-box no-overflow bold">
+        {truncateNumber(validator.apy)}%
+        <span class="subtext">per year</span>
+      </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <svelte:fragment slot="no-padding-content">
-        <div class="apy-text-box no-overflow bold">
-          {truncateNumber(validator.fee)}%
-        </div>
-      </svelte:fragment>
+      <div class="apy-text-box no-overflow bold">
+        {truncateNumber(validator.fee)}%
+      </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <svelte:fragment slot="no-padding-content">
-        <div class="uptime apy-text-box no-overflow bold">
-          {truncateNumber(validator.uptime)}%
-        </div>
-      </svelte:fragment>
+      <div class="uptime apy-text-box no-overflow bold">
+        {truncateNumber(validator.uptime)}%
+      </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
@@ -108,7 +102,7 @@
   }
 
   .left-padded {
-    padding-left: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
   }
 
   .no-overflow {

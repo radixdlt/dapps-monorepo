@@ -50,11 +50,13 @@
         &:first-child {
           border-top-left-radius: var(--border-radius-lg);
           border-bottom-left-radius: var(--border-radius-lg);
+          padding-left: var(--spacing-xl);
         }
 
         &:last-child {
           border-top-right-radius: var(--border-radius-lg);
           border-bottom-right-radius: var(--border-radius-lg);
+          padding-right: var(--spacing-xl);
         }
       }
     }

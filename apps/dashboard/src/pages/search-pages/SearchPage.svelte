@@ -26,15 +26,3 @@
   {/if}
   <slot />
 </section>
-
-<style lang="scss">
-  @use '../../../../../packages/ui/src/mixins.scss';
-
-  .search-page {
-    margin: 0 1rem;
-
-    @include mixins.desktop {
-      margin: 0 3rem;
-    }
-  }
-</style>

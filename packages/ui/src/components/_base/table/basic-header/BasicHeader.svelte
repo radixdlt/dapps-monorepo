@@ -23,7 +23,6 @@
   .header {
     display: inline-flex;
     align-items: center;
-    padding: 0 var(--spacing-md);
   }
 
   .text {
