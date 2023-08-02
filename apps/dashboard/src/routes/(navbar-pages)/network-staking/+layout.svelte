@@ -29,17 +29,15 @@
 
 <script lang="ts">
   import Validators, {
-    selectedValidators,
     type Validator
   } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
   import type { LayoutData } from './$types'
   import type { Account } from '@stores'
   import { writable } from 'svelte/store'
   import type { AccumulatedStakes } from './proxy+layout'
+  import { goto } from '$app/navigation'
   import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
-  import AddStakeMultiple from '@dashboard-pages/navbar-pages/staking/stake-unstake/stake/multiple-validators/AddStakeMultiple.svelte'
-  import Claim from '@dashboard-pages/navbar-pages/staking/stake-unstake/claim/Claim.svelte'
 
   export let data: LayoutData
 
@@ -49,15 +47,10 @@
   $: accumulatedStakes.set($_accumulatedStakes)
   $: stakeInfo.set($_stakeInfo)
 
-  let readyToClaim: Promise<ReadyToClaimInfo[]> = new Promise(() => {})
-
-  let claimOpen = false
+  let useFilter = false
   let filterOpen = false
-  let multipleStakeOpen = false
 
   let filteredValidators: Awaited<typeof data.promises.validators> = []
-
-  let useFilter = false
 
   const applyFilter =
     (
@@ -80,44 +73,19 @@
 
       useFilter = true
     }
-
-  $: currentlyStaked = $stakeInfo.then((info) =>
-    info.staked.reduce<{ [k: string]: string }>((prev, cur) => {
-      prev[cur.validator.address] = cur.xrdAmount
-      return prev
-    }, {})
-  )
-
-  const getSingleClaim = (validator: string) =>
-    $stakeInfo.then(
-      (info) =>
-        info.readyToClaim.filter((c) => c.validator.address === validator)!
-    )
 </script>
 
 <Validators
   validators={useFilter
     ? Promise.resolve(filteredValidators)
     : data.promises.validators}
-  on:show-claim-all={() => {
-    readyToClaim = $stakeInfo.then((info) => info.readyToClaim)
-    claimOpen = true
-  }}
-  on:show-claim-single={(e) => {
-    readyToClaim = getSingleClaim(e.detail)
-    claimOpen = true
-  }}
-  on:show-stake-multiple={() => {
-    multipleStakeOpen = true
-  }}
+  on:show-claim-all={() => goto('/network-staking/claim-multiple')}
+  on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
+  on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
   on:show-filters={() => {
     filterOpen = true
   }}
 />
-
-{#await readyToClaim then readyToClaim}
-  <Claim bind:open={claimOpen} {readyToClaim} />
-{/await}
 
 {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
   <FilterDetails
@@ -125,18 +93,11 @@
     feeValues={validators.map((v) => v.fee)}
     totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
     ownerStakeValues={validators.map((v) => v.percentageOwnerStake)}
-    on:applyFilter={applyFilter(validators, bookmarked)}
+    on:close={(e) => {
+      applyFilter(validators, bookmarked)(e)
+      filterOpen = false
+    }}
   />
 {/await}
-
-{#key multipleStakeOpen}
-  {#await data.promises.validators then validators}
-    <AddStakeMultiple
-      bind:open={multipleStakeOpen}
-      validators={validators.filter((v) => $selectedValidators[v.address])}
-      {currentlyStaked}
-    />
-  {/await}
-{/key}
 
 <slot />

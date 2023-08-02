@@ -1,10 +1,10 @@
 import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import { goto } from '$app/navigation'
-import type { PageLoad } from './$types'
+import type { LayoutLoad } from './$types'
 
 export const prerender = false
 
-export const load: PageLoad = ({ params, parent }) => {
+export const load: LayoutLoad = ({ params, parent }) => {
   const validator = parent().then(
     (data) =>
       data.promises.validators.then((validators) => {
@@ -23,6 +23,7 @@ export const load: PageLoad = ({ params, parent }) => {
   return {
     promises: {
       validator
-    }
+    },
+    validatorAddress: params.validator
   }
 }

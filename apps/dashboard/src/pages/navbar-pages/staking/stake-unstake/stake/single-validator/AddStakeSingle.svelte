@@ -8,7 +8,6 @@
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
 
-  export let open: boolean
   export let validator: ComponentProps<ValidatorInfo>
 
   let xrd: string
@@ -31,7 +30,6 @@
 </script>
 
 <StakePanel
-  bind:open
   bind:stakeButtonDisabled
   sidePanelHeader="Add Stake"
   on:click={(e) => {
@@ -44,6 +42,7 @@
 
     e.detail(manifest)
   }}
+  on:close
 >
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>

@@ -35,21 +35,10 @@
     { label: '1 year', value: 365 }
   ]
 
-  const dispatchApplyFilterEvent = createEventDispatcher<{
-    applyFilter: {
-      feeFilter: typeof feeFilter
-      totalXRDStakeFilter: typeof totalXRDStakeFilter
-      ownerStakeFilter: typeof ownerStakeFilter
-      uptimeFilter: typeof uptimeFilter
-      acceptsStakeFilter: boolean
-      bookmarkedFilter: boolean
-    }
-  }>()
-
   let selectedUptime = recentUptimeOptions[0]
 
   const onClose = () => {
-    dispatchApplyFilterEvent('applyFilter', {
+    dispatch('close', {
       feeFilter,
       totalXRDStakeFilter,
       ownerStakeFilter,
@@ -59,14 +48,20 @@
     })
   }
 
-  $: if (!open) onClose()
+  const dispatch = createEventDispatcher<{
+    close: {
+      feeFilter: typeof feeFilter
+      totalXRDStakeFilter: typeof totalXRDStakeFilter
+      ownerStakeFilter: typeof ownerStakeFilter
+      uptimeFilter: typeof uptimeFilter
+      acceptsStakeFilter: boolean
+      bookmarkedFilter: boolean
+    }
+  }>()
 </script>
 
-<SidePanel bind:open>
-  <SidePanelHeader
-    text="Validator Filters"
-    on:closeClick={() => (open = false)}
-  />
+<SidePanel bind:open useBackdrop on:close={onClose}>
+  <SidePanelHeader text="Validator Filters" on:closeClick={onClose} />
 
   <div class="cards">
     <SwitchFilterCard

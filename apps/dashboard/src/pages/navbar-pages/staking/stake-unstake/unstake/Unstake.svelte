@@ -8,7 +8,6 @@
   import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
   import { formatXRDValue } from '@utils'
 
-  export let open: boolean
   export let stakes: {
     account: Account
     validator: Validator
@@ -32,8 +31,6 @@
       new BigNumber(0)
     )
     .toString()
-
-  $: console.log(totalUnstakeAmount)
 
   const unstake = (
     e: CustomEvent<
@@ -70,10 +67,10 @@
 </script>
 
 <StakePanel
-  bind:open
   {stakeButtonDisabled}
   on:click={unstake}
   sidePanelHeader="Request Unstake"
+  on:close
 >
   <svelte:fragment slot="heading-text">
     Validator to request unstake from:
