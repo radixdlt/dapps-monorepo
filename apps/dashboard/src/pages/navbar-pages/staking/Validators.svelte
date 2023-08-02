@@ -112,7 +112,15 @@
     {#if $connected}
       <SelectedValidators
         on:click={() => {
-          dispatch('show-stake-multiple')
+          let selected = Object.keys($selectedValidators).filter(
+            (key) => $selectedValidators[key]
+          )
+
+          if (selected.length === 1) {
+            goto(`/network-staking/${selected[0]}/stake`)
+          } else {
+            dispatch('show-stake-multiple')
+          }
         }}
       />
     {/if}
