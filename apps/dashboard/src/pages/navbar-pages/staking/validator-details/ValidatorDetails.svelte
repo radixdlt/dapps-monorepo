@@ -16,14 +16,18 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import type { Validator } from '../Validators.svelte'
+  import { createEventDispatcher } from 'svelte'
 
-  export let open: boolean
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
+
+  const dispatch = createEventDispatcher<{
+    close: null
+  }>()
 </script>
 
-<SidePanel bind:open>
-  <SidePanelHeader text="Validator" on:closeClick={() => (open = false)}>
+<SidePanel useBackdrop on:close>
+  <SidePanelHeader text="Validator" on:closeClick={() => dispatch('close')}>
     <BookmarkValidator {validator} withText />
   </SidePanelHeader>
 

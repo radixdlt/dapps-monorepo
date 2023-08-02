@@ -14,7 +14,6 @@
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
 
-  export let open: boolean
   export let validators: Validator[]
   export let currentlyStaked: Promise<{
     [validator: string]: string
@@ -86,7 +85,6 @@
 
 <StakePanel
   sidePanelHeader="Add Stake"
-  bind:open
   {stakeButtonDisabled}
   on:click={(e) => {
     const manifest = getMultipleStakeManifest(
@@ -97,6 +95,7 @@
 
     e.detail(manifest)
   }}
+  on:close
 >
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>

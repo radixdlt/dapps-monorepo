@@ -6,18 +6,22 @@
   import { invalidate } from '$app/navigation'
   import { _dependency } from '../../../../routes/(navbar-pages)/network-staking/+layout'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
+  import { createEventDispatcher } from 'svelte'
 
-  export let open: boolean
   export let sidePanelHeader: string
   export let stakeButtonDisabled = false
+
+  const dispatch = createEventDispatcher<{
+    close: null
+  }>()
 
   let rightColumnWidth = '25rem'
 </script>
 
-<SidePanel bind:open>
+<SidePanel on:close>
   <SidePanelHeader
     text={sidePanelHeader}
-    on:closeClick={() => (open = false)}
+    on:closeClick={() => dispatch('close')}
   />
 
   <div class="flex">
@@ -54,7 +58,7 @@
           on:response={(e) => {
             if (e.detail.status === TransactionStatus.CommittedSuccess) {
               invalidate(_dependency)
-              open = false
+              dispatch('close')
             }
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}

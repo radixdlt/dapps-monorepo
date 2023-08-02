@@ -1,42 +1,18 @@
-<script lang="ts" context="module">
-  import { writable } from 'svelte/store'
-
-  export const panelStack = writable<string[]>([])
-</script>
-
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import { fade, fly } from 'svelte/transition'
 
-  export let open = false
+  export let open = true
+  export let useBackdrop = false
+
+  const dispatch = createEventDispatcher<{
+    close: null
+  }>()
 
   let panel: HTMLDivElement
 
-  const id = Math.random().toString(36).substring(2, 15)
-
   function handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape' && $panelStack[$panelStack.length - 1] === id) {
-      open = false
-    }
-  }
-
-  const pushToStack = () => {
-    if (!$panelStack.includes(id)) {
-      $panelStack.push(id)
-      $panelStack = $panelStack
-    }
-  }
-
-  const popFromStack = () => {
-    if ($panelStack[$panelStack.length - 1] === id) {
-      $panelStack.pop()
-      $panelStack = $panelStack
-    }
-  }
-
-  $: if (open) {
-    pushToStack()
-  } else {
-    popFromStack()
+    if (event.key === 'Escape') dispatch('close')
   }
 </script>
 
@@ -44,16 +20,16 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if open}
-  {#if $panelStack[0] === id}
+  {#if useBackdrop}
     <div
       class="backdrop"
       transition:fade={{ duration: 300 }}
       on:click|self={() => {
-        open = false
-        $panelStack = []
+        dispatch('close')
       }}
     />
   {/if}
+
   <div
     role="dialog"
     class="side-panel"

@@ -5,19 +5,15 @@
 
   export let data: LayoutData
 
-  let open = true
-
-  $: if (!open) {
-    goto('/network-staking')
-  }
-
   $: accumulatedStakes = data.validatorAccumulatedStakes
 </script>
 
 <ValidatorDetails
   validator={data.promises.validator}
   accumulatedValidatorStakes={$accumulatedStakes}
-  bind:open
+  on:close={() => {
+    goto('/network-staking')
+  }}
   on:add-stake={() => goto(`/network-staking/${data.validatorAddress}/stake`)}
   on:unstake={() => goto(`/network-staking/${data.validatorAddress}/unstake`)}
   on:claim={() => goto(`/network-staking/${data.validatorAddress}/claim`)}

@@ -9,10 +9,5 @@
 </script>
 
 {#await $readyToClaim then readyToClaim}
-  <Claim
-    {readyToClaim}
-    on:close={() => {
-      goto(`/network-staking/${data.validatorAddress}`)
-    }}
-  />
+  <Claim {readyToClaim} on:close={() => goto('/network-staking')} />
 {/await}

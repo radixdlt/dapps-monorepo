@@ -6,18 +6,11 @@
 
   export let data: LayoutData
 
-  let open = true
-
-  $: if (!open) {
-    goto(`/network-staking/${data.validatorAddress}`)
-  }
-
   $: stakes = data.stakes
 </script>
 
 {#await data.promises.validator then validator}
   <AddStakeSingle
-    bind:open
     validator={{
       address: validator.address,
       name: validator.name,
@@ -26,6 +19,9 @@
           .reduce((sum, { staked }) => sum.plus(staked), new BigNumber(0))
           .toString()
       )
+    }}
+    on:close={() => {
+      goto(`/network-staking/${data.validatorAddress}`)
     }}
   />
 {/await}

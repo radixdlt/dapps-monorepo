@@ -9,7 +9,6 @@
   import type { Validator } from '../../Validators.svelte'
   import { getClaimManifest } from '../manifests'
 
-  export let open: boolean
   export let readyToClaim: {
     validator: Validator
     xrdAmount: string
@@ -58,7 +57,7 @@
   }
 </script>
 
-<StakePanel bind:open on:click={claim} sidePanelHeader="Claim">
+<StakePanel on:click={claim} sidePanelHeader="Claim" on:close>
   <svelte:fragment slot="heading-text"
     >Claim{accumulatedClaims.length > 1 ? 's' : ''} to redeem:</svelte:fragment
   >
