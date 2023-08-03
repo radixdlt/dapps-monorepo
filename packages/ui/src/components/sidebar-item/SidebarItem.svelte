@@ -42,5 +42,12 @@
     border-left-color: transparent;
     border-radius: 0;
     cursor: pointer;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+
+    a {
+      margin: 0 var(--spacing-md);
+    }
   }
 </style>
