@@ -1,31 +1,18 @@
 <script lang="ts">
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import { showSidebar } from '@stores'
-  import { css } from '@styles'
 
   export let isActive = false
   export let icon: string
   export let isHovered = isActive
   export let link: string
-
-  const styles = css({
-    borderStyle: 'solid',
-    borderWidth: '0',
-    borderLeftWidth: '$md',
-    borderLeftColor: 'transparent',
-    borderRadius: '0',
-    cursor: 'pointer',
-    '&.isHovered': {
-      borderLeftWidth: '$md',
-      borderLeftColor: '$grey'
-    }
-  })
 </script>
 
 <div
   on:mouseenter={() => (isHovered = true)}
   on:mouseleave={() => (isHovered = false)}
-  class={styles() + (isHovered || isActive ? ' isHovered' : '')}
+  class="item"
+  class:is-hovered={isHovered || isActive}
 >
   <a
     href={link}
@@ -37,8 +24,23 @@
   >
 </div>
 
-<style>
-  .isHovered :global(img) {
-    filter: grayscale(0);
+<style lang="scss">
+  .is-hovered {
+    border-left-width: 5px !important;
+    border-left-color: var(--color-grey-1) !important;
+
+    :global(img) {
+      filter: grayscale(0);
+      transition: all ease-in-out 0.5s;
+    }
+  }
+
+  .item {
+    border-style: solid;
+    border-width: 0;
+    border-left-width: 5px;
+    border-left-color: transparent;
+    border-radius: 0;
+    cursor: pointer;
   }
 </style>
