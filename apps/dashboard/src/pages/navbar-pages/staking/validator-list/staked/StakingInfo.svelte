@@ -85,9 +85,9 @@
 
   .staking-box-grid {
     display: grid;
-    grid: 1fr/ 1fr 1fr 2fr 3fr;
+    grid: 1fr/ 8rem 8rem auto auto;
     margin-left: 1.5rem;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-lg);
     align-items: center;
   }
 
