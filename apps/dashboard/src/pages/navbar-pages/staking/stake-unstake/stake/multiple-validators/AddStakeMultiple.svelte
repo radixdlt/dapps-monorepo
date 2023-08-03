@@ -1,6 +1,9 @@
 <script lang="ts">
   import StakePanel from '../../StakePanel.svelte'
-  import type { Validator } from '../../../Validators.svelte'
+  import {
+    selectedValidators,
+    type Validator
+  } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
@@ -80,6 +83,7 @@
 
   const removeValidator = (i: number) => {
     validators = validators.filter((_, index) => index !== i)
+    $selectedValidators[stakeAmounts[i].validator] = false
   }
 </script>
 
