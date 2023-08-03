@@ -92,6 +92,7 @@
     'show-claim-all': undefined
     'show-claim-single': string
     'show-stake-multiple': undefined
+    'show-stake-single': string
     'show-filters': undefined
   }>()
 </script>
@@ -115,7 +116,7 @@
         )
 
         if (selected.length === 1) {
-          goto(`/network-staking/${selected[0]}/stake`)
+          dispatch('show-stake-single', selected[0])
         } else {
           dispatch('show-stake-multiple')
         }
