@@ -8,12 +8,15 @@
   import { XRDToken } from '@constants'
   import type { Validator } from '../../Validators.svelte'
   import { getClaimManifest } from '../manifests'
+  import StakeCard from '../stake-card/StakeCard.svelte'
+  import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
 
   export let readyToClaim: {
     validator: Validator
     xrdAmount: string
     account: Account
   }[]
+  export let useBackdrop: boolean = false
 
   $: accumulatedClaims = readyToClaim.reduce((acc, claim) => {
     const existingClaim = acc.find(
@@ -57,33 +60,29 @@
   }
 </script>
 
-<StakePanel on:click={claim} sidePanelHeader="Claim" on:close>
+<StakePanel {useBackdrop} on:click={claim} sidePanelHeader="Claim" on:close>
   <svelte:fragment slot="heading-text"
     >Claim{accumulatedClaims.length > 1 ? 's' : ''} to redeem:</svelte:fragment
   >
 
   <svelte:fragment slot="content" let:rightColumnWidth>
-    <div class="card-list">
-      {#each accumulatedClaims as { validator, xrdAmount, account }}
-        <div class="validator-card">
-          <div class="validator">
-            <div class="dotted-overflow">
-              {validator.name}
-            </div>
-            <div>
-              <Address value={validator.address} short />
-            </div>
-          </div>
+    {#each accumulatedClaims as { validator, xrdAmount, account }}
+      <StakeCard>
+        <svelte:fragment slot="info">
+          <ValidatorInfo {...validator} />
+        </svelte:fragment>
+
+        <svelte:fragment slot="token-amount-card">
           <TokenAmountCard
             token={XRDToken}
             {account}
             tokenAmount={xrdAmount}
             readonly={true}
-            --width={rightColumnWidth}
+            --card-width={rightColumnWidth}
           />
-        </div>
-      {/each}
-    </div>
+        </svelte:fragment>
+      </StakeCard>
+    {/each}
   </svelte:fragment>
 
   <svelte:fragment slot="info-box-title">How Stake Claims Work</svelte:fragment>
@@ -112,8 +111,8 @@
   .validator-card {
     @include mixins.card;
     padding: var(--spacing-lg);
-    display: grid;
-    grid: 1fr / 1fr 25rem;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 
     .validator {

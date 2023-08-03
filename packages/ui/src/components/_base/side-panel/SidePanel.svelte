@@ -34,7 +34,7 @@
     role="dialog"
     class="side-panel"
     bind:this={panel}
-    transition:fly={{ duration: 300, opacity: 1, x: 1300 }}
+    transition:fly={{ duration: 300, opacity: 1, x: 700 }}
   >
     <slot />
   </div>
@@ -46,8 +46,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 60vw;
-    max-width: 70rem;
+    width: var(--width, 45rem);
     background: var(--color-grey-5);
     z-index: 3;
     overflow-y: scroll;

@@ -32,7 +32,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    font-size: var(--text-sm);
+    width: 11rem;
   }
 
   .bold {

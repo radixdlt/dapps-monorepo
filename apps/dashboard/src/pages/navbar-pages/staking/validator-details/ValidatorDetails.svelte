@@ -31,18 +31,20 @@
     <BookmarkValidator {validator} withText />
   </SidePanelHeader>
 
-  {#await validator}
-    <SkeletonLoader />
-  {:then validator}
-    <h1>{validator.name}</h1>
-  {/await}
+  <div class="validator-name">
+    {#await validator}
+      <SkeletonLoader />
+    {:then validator}
+      <h1>{validator.name}</h1>
+    {/await}
+    <SelectValidator {validator} text="SELECT VALIDATOR" />
+  </div>
   <div class="subheader">
     {#await validator}
       <SkeletonLoader />
     {:then { address }}
       <Address value={address} --background="var(--theme-surface-3)" />
     {/await}
-    <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
 
   {#if $connected}
@@ -142,10 +144,14 @@
     @include mixins.card();
   }
 
-  .subheader {
+  .validator-name {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .subheader {
     margin-bottom: var(--spacing-xl);
   }
 </style>

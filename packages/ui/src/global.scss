@@ -29,7 +29,7 @@ body {
 
 /* spacing */
 body {
-  --spacing-unit: 0.8em;
+  --spacing-unit: 0.6em;
   --spacing-xs: calc(0.25 * var(--spacing-unit));
   --spacing-sm: calc(0.5 * var(--spacing-unit));
   --spacing-md: calc(0.75 * var(--spacing-unit));
@@ -43,7 +43,7 @@ body {
 /* typography */
 body {
   --font-family: 'IBM Plex Sans';
-  --text-base-size: 1rem;
+  --text-base-size: 0.8rem;
   --text-scale-ratio: 1.15;
   --text-xs: calc(
     var(--text-base-size) / (var(--text-scale-ratio) * var(--text-scale-ratio))
@@ -124,7 +124,7 @@ button {
 h1 {
   margin: 0;
   display: block;
-  font-size: var(--text-4xl);
+  font-size: var(--text-3xl);
   font-weight: var(--font-weight-bold-2);
   margin-bottom: var(--spacing-md);
 }
@@ -140,7 +140,7 @@ h2 {
 h3 {
   margin: 0;
   display: block;
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   font-weight: var(--font-weight-bold-2);
   margin-bottom: var(--spacing-xs);
 }
@@ -148,7 +148,7 @@ h3 {
 h4 {
   margin: 0;
   display: block;
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   font-weight: var(--font-weight-bold-2);
   margin-bottom: var(--spacing-xs);
 }
@@ -172,7 +172,6 @@ body {
 }
 
 .subtext {
-  font-size: var(--text-sm);
   color: var(--theme-subtext);
 }
 

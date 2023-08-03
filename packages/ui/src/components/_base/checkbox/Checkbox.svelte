@@ -32,7 +32,7 @@
 
 <style lang="scss">
   $border-width: 2px;
-  $box-size: 1rem;
+  $box-size: 0.7rem;
 
   .wrapper {
     display: flex;
@@ -43,7 +43,9 @@
   .label {
     cursor: pointer;
     display: flex;
+    align-items: center;
     font-weight: var(--font-weight-bold-2);
+    font-size: var(--text-sm);
     color: var(--label-color);
   }
   .checkbox {

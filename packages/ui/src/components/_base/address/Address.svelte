@@ -63,7 +63,6 @@
   }
 
   .text {
-    font-weight: var(--font-weight-bold-1);
     margin-right: var(--spacing-sm);
     color: var(--color-radix-blue-2);
   }

@@ -14,12 +14,12 @@
   </div>
 
   <div class="body">
-    <div class="title">
+    <h4 class="title">
       <slot name="title" />
-    </div>
-    <div class="explanation">
+    </h4>
+    <p class="explanation">
       <slot name="explanation" />
-    </div>
+    </p>
   </div>
 
   <div />
@@ -36,6 +36,7 @@
     border: var(--border) var(--theme-border);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
+    max-width: 20rem;
 
     .body {
       display: flex;

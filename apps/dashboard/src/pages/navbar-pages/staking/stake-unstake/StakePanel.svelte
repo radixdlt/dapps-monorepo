@@ -3,7 +3,6 @@
   import InfoBox from './InfoBox.svelte'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
-  import { invalidate } from '$app/navigation'
   import { _dependency } from '../../../../routes/(navbar-pages)/network-staking/+layout'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
   import { createEventDispatcher } from 'svelte'
@@ -16,7 +15,7 @@
     close: null | 'invalidate'
   }>()
 
-  let rightColumnWidth = '25rem'
+  let rightColumnWidth = '15rem'
 </script>
 
 <SidePanel {useBackdrop} on:close>

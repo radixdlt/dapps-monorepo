@@ -31,13 +31,13 @@
     <div class="subtext">Remove</div>
   </div>
 
-  <svelte:fragment slot="info">
+  <div class="info" slot="info">
     <ValidatorInfo
       name={validator.name}
       address={validator.address}
       {currentlyStakingAmount}
     />
-  </svelte:fragment>
+  </div>
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
@@ -58,5 +58,10 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+  }
+
+  .info {
+    border-left: var(--border) var(--theme-border);
+    padding-left: var(--spacing-xl);
   }
 </style>

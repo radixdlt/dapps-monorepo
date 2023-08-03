@@ -26,7 +26,7 @@
 
 <style>
   input {
-    width: var(--width);
+    width: var(--input-width, 100%);
     font-size: var(--font-size);
     font-weight: var(--font-weight);
     text-align: var(--text-align);

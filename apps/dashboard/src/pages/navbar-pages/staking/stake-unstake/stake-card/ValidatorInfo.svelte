@@ -14,7 +14,7 @@
     {name}
   </div>
   <div>
-    <Address value={address} short />
+    <Address --background="var(--theme-surface-3)" value={address} short />
   </div>
   {#if currentlyStakingAmount}
     <div class="currently-staking dotted-overflow">
@@ -34,14 +34,13 @@
   .staking-info {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-md);
 
     .validator-name {
       font-size: var(--text-lg);
     }
 
     .currently-staking {
-      margin-top: var(--spacing-sm);
       color: var(--theme-subtext);
       display: flex;
       gap: var(--spacing-md);

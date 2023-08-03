@@ -13,7 +13,7 @@
 </script>
 
 <div id="manual-filter-card">
-  <div id="value-card">
+  <div class="value-card">
     <div class="row">
       <div id="text">MIN UPTIME (%)</div>
       <SimplePicker {options} bind:selected />
@@ -32,9 +32,7 @@
     width: 100%;
   }
 
-  #value-card {
-    @include shared.value-card();
-
+  .value-card {
     .row {
       display: flex;
       gap: var(--spacing-md);

@@ -19,32 +19,28 @@
     on:click={() => {
       showSidebar.set(false)
     }}
-    ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem
+    ><IconTextItem iconSize="xs" bold={isHovered || isActive} {icon}
+      ><slot /></IconTextItem
     ></a
   >
 </div>
 
 <style lang="scss">
   .is-hovered {
-    border-left-width: 5px !important;
-    border-left-color: var(--color-grey-1) !important;
-
+    background: var(--color-grey-4);
+    transition: all ease-in-out 0.2s;
+    border-radius: var(--border-radius-lg);
     :global(img) {
       filter: grayscale(0);
-      transition: all ease-in-out 0.5s;
     }
   }
 
   .item {
-    border-style: solid;
-    border-width: 0;
-    border-left-width: 5px;
-    border-left-color: transparent;
-    border-radius: 0;
     cursor: pointer;
-    height: 2.5rem;
+    height: 3rem;
     display: flex;
     align-items: center;
+    margin: 0 var(--spacing-md);
 
     a {
       margin: 0 var(--spacing-md);

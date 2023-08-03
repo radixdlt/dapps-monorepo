@@ -15,7 +15,7 @@
     You've selected {count} validators
   </div>
   <ButtonNew on:click size="big" disabled={count === 0}
-    >Stake to Selected Validators</ButtonNew
+    >Stake to Selected</ButtonNew
   >
 </div>
 
@@ -25,12 +25,11 @@
   .selected-validators {
     @include mixins.card;
     display: grid;
-    grid: auto / 0.5fr 4fr 15rem;
+    grid: auto / auto auto auto;
     align-items: center;
     justify-items: center;
-    width: 36.625rem;
-    height: 4.8125rem;
-    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-lg);
   }
 
   .text {

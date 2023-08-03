@@ -10,6 +10,7 @@
 
 {#await $readyToClaim then readyToClaim}
   <Claim
+    useBackdrop
     {readyToClaim}
     on:close={(e) =>
       goto(`/network-staking`, {

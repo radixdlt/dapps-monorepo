@@ -25,7 +25,7 @@
 
     return [...entries].sort((a, b) => {
       const output = sortFn(a, b)
-      return direction === 'ascending' ? output : output * -1
+      return direction === 'descending' ? output : output * -1
     })
   }
 

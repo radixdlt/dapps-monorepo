@@ -3,11 +3,14 @@
   import InputNew from './InputNew.svelte'
   import { createEventDispatcher } from 'svelte'
   import { removeThousandsSeparator } from '@utils/format-amount'
+  import { formatAmount } from '@utils'
 
   export let value: string
   export let maxlength: number | undefined = undefined
   export let readonly = false
-  export let format = number(undefined, undefined, 10).bind(null)
+  export let format = readonly
+    ? formatAmount.bind(value)
+    : number(undefined, undefined, 10).bind(null)
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
 </script>
@@ -18,7 +21,7 @@
     {maxlength}
     {readonly}
     {format}
-    --font-size="var(--text-3xl)"
+    --font-size="var(--text-xl)"
     --font-weight="var(--font-weight-bold-2)"
     --text-align="right"
     on:input={(e) => {

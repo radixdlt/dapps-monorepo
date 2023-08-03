@@ -19,7 +19,7 @@
     {/await}
   </div>
 
-  <div class="percentage">
+  <div class="percentage subtext">
     {#await stakeInfo}
       <SkeletonLoader width={50} />
     {:then { percentageTotalStake }}
@@ -30,9 +30,9 @@
 
 <style>
   .stake-display {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr / 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .total {
@@ -41,7 +41,5 @@
 
   .percentage {
     font-weight: var(--font-weight-bold-1);
-    font-size: var(--text-sm);
-    color: var(--theme-subtext);
   }
 </style>

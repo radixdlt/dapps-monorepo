@@ -1,42 +1,27 @@
 @use '../../../../../../../packages/ui/src/mixins.scss';
 
-@mixin value-card {
-  @include mixins.card();
-  --card-text-size: var(--font-size-sm);
-  --card-text-color: var(--theme-subtext);
-  --card-value-size: var(--text-3xl);
-  --card-value-weight: var(--font-weight-bold-2);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-xl);
-  width: 100%;
-  height: 10rem;
-  background: var(--theme-surface-1);
-}
-
 .card {
   border-radius: var(--border-radius-lg);
   background: var(--background);
   border: var(--border) var(--theme-border);
   width: 100%;
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-xl);
   box-shadow: var(--shadow);
 }
 
 .value-card {
-  --card-text-size: var(--font-size-sm);
+  @include mixins.card();
+
+  --card-text-size: var(--text-sm);
   --card-text-color: var(--theme-subtext);
-  --card-value-size: var(--text-3xl);
   --card-value-weight: var(--font-weight-bold-2);
 
   border-radius: var(--border-radius-lg);
-  background: var(--surface);
-  border: var(--border);
+  background: var(--theme-surface-1);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-xl);
-  height: 10rem;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
 }

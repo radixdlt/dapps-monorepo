@@ -87,7 +87,6 @@
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
             --token-amount-card-width={rightColumnWidth}
-            --stake-card-height="12rem"
           />
         </div>
       {/each}

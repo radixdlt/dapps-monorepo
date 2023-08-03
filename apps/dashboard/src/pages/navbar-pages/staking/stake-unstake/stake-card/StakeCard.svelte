@@ -13,20 +13,20 @@
 
   .add-stake-card {
     @include mixins.card;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
     display: grid;
-    grid-template-columns: 5rem minmax(0, 1fr) var(
+    grid-template-columns: auto minmax(0, 1fr) var(
         --token-amount-card-width,
         1fr
       );
     gap: var(--spacing-lg);
     align-items: center;
-    height: var(--stake-card-height, 9.5rem);
 
     .icon {
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: var(--spacing-lg);
     }
   }
 </style>
