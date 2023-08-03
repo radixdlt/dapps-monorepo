@@ -13,8 +13,9 @@
   <AddStakeMultiple
     validators={validators.filter((v) => $selectedValidators[v.address])}
     currentlyStaked={$currentlyStaked}
-    on:close={() => {
-      goto('/network-staking')
-    }}
+    on:close={(e) =>
+      goto(`/network-staking`, {
+        invalidateAll: e.detail === 'invalidate' ? true : false
+      })}
   />
 {/await}

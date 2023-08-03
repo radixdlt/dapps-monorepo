@@ -3,6 +3,7 @@
   import BigNumber from 'bignumber.js'
   import Unstake from '@dashboard-pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
   import { goto } from '$app/navigation'
+  import { _dependency } from '../../../+layout'
 
   export let data: LayoutData
 
@@ -19,6 +20,10 @@
         stakeUnits
       }))
       .filter(({ amount }) => !new BigNumber(amount).eq(0))}
-    on:close={() => goto(`/network-staking/${data.validatorAddress}`)}
+    on:close={(e) => {
+      goto(`/network-staking/${data.validatorAddress}`, {
+        invalidateAll: e.detail === 'invalidate' ? true : false
+      })
+    }}
   />
 {/await}

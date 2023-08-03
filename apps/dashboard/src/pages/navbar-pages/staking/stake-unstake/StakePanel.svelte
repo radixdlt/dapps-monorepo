@@ -13,7 +13,7 @@
   export let useBackdrop = false
 
   const dispatch = createEventDispatcher<{
-    close: null
+    close: null | 'invalidate'
   }>()
 
   let rightColumnWidth = '25rem'
@@ -58,8 +58,7 @@
           on:click
           on:response={(e) => {
             if (e.detail.status === TransactionStatus.CommittedSuccess) {
-              invalidate(_dependency)
-              dispatch('close')
+              dispatch('close', 'invalidate')
             }
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
