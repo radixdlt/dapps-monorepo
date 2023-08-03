@@ -1,7 +1,8 @@
 <script lang="ts">
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
-  import Icon from './Icon.svelte'
   import { selectedValidators } from '../Validators.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import MultipleStaking from '@icons/multiple-staking.svg'
 
   $: count = Object.keys($selectedValidators).filter(
     (key) => $selectedValidators[key]
@@ -9,8 +10,8 @@
 </script>
 
 <div class="selected-validators">
-  <Icon />
-  <div>
+  <IconNew icon={MultipleStaking} --size="3.5rem" />
+  <div class="text">
     You've selected {count} validators
   </div>
   <ButtonNew on:click size="big" disabled={count === 0}
@@ -23,13 +24,16 @@
 
   .selected-validators {
     @include mixins.card;
-    border: none;
     display: grid;
-    grid: auto / 0.5fr 2fr 2fr;
+    grid: auto / 0.5fr 4fr 15rem;
     align-items: center;
     justify-items: center;
-    max-width: 50rem;
-    min-width: 40rem;
-    padding: var(--spacing-xl);
+    width: 36.625rem;
+    height: 4.8125rem;
+    padding: 0 var(--spacing-xl);
+  }
+
+  .text {
+    font-weight: var(--font-weight-bold-2);
   }
 </style>

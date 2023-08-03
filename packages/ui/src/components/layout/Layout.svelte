@@ -5,6 +5,9 @@
 
   export let routes: { text: string; icon: string; path: string }[] = []
 
+  let sidebarWidth: number
+  const minPageWidth = '1440px'
+
   let scrollOffset: number
 </script>
 
@@ -15,11 +18,20 @@
     <Header />
   </div>
   <div class="content">
-    <div class="navbar" style:top={`${scrollOffset}px`}>
+    <div
+      class="navbar"
+      style:top={`${scrollOffset}px`}
+      bind:clientWidth={sidebarWidth}
+    >
       <SidebarWithNavbar page={$page} {routes} />
     </div>
     <main class="page">
-      <slot />
+      <div
+        class="page-content"
+        style:min-width="calc({minPageWidth} - {sidebarWidth}px)"
+      >
+        <slot />
+      </div>
     </main>
   </div>
 </div>
@@ -40,6 +52,10 @@
       grid-template-rows: unset;
     }
 
+    @include mixins.desktop {
+      grid-template-rows: 4.6875rem auto;
+    }
+
     .header {
       grid-area: header;
       position: sticky;
@@ -56,12 +72,13 @@
       overflow: hidden;
 
       @include mixins.desktop {
-        grid: 'navbar page' auto / 16rem auto;
+        grid: 'navbar page' auto / 12rem auto;
       }
 
       .navbar {
         grid-area: navbar;
         position: absolute;
+        height: 100%;
       }
 
       @include mixins.desktop {
@@ -76,7 +93,10 @@
         background: var(--theme-surface-1);
         padding-bottom: var(--spacing-lg);
         overflow-y: scroll;
-        padding-bottom: 5rem;
+
+        .page-content {
+          padding: var(--spacing-xl) var(--spacing-2xl);
+        }
       }
     }
   }

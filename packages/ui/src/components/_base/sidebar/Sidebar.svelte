@@ -57,7 +57,6 @@
     @include mixins.desktop {
       grid-area: nav;
       position: sticky;
-      height: calc(100vh - 100px);
       top: 0px;
       width: auto;
       z-index: unset;
@@ -85,13 +84,6 @@
     }
     @include mixins.desktop {
       display: none;
-    }
-  }
-
-  :global(body.no-scroll) {
-    overflow: hidden !important;
-    @include mixins.desktop {
-      overflow: auto;
     }
   }
 </style>

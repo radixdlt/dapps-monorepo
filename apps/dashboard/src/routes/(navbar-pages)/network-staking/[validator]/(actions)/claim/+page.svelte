@@ -11,8 +11,10 @@
 {#await $readyToClaim then readyToClaim}
   <Claim
     {readyToClaim}
-    on:close={() => {
-      goto(`/network-staking/${data.validatorAddress}`)
+    on:close={(e) => {
+      goto(`/network-staking/${data.validatorAddress}`, {
+        invalidateAll: e.detail === 'invalidate' ? true : false
+      })
     }}
   />
 {/await}

@@ -9,5 +9,11 @@
 </script>
 
 {#await $readyToClaim then readyToClaim}
-  <Claim {readyToClaim} on:close={() => goto('/network-staking')} />
+  <Claim
+    {readyToClaim}
+    on:close={(e) =>
+      goto(`/network-staking`, {
+        invalidateAll: e.detail === 'invalidate' ? true : false
+      })}
+  />
 {/await}

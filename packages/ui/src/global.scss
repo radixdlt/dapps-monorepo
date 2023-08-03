@@ -74,6 +74,7 @@ body {
 
   /* shadows */
   --shadow: 0px 6.72099px 11px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0px 3px 4px 0px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0px 6.720985412597656px 13px 0px #00000030;
 
   /* transitions */
@@ -86,6 +87,7 @@ body {
   overflow: hidden;
   margin: 0;
 }
+
 a:link,
 a:visited,
 a:hover,
@@ -120,6 +122,7 @@ button {
 }
 
 h1 {
+  margin: 0;
   display: block;
   font-size: var(--text-4xl);
   font-weight: var(--font-weight-bold-2);
@@ -127,6 +130,7 @@ h1 {
 }
 
 h2 {
+  margin: 0;
   display: block;
   font-size: var(--text-2xl);
   font-weight: var(--font-weight-bold-2);
@@ -134,6 +138,7 @@ h2 {
 }
 
 h3 {
+  margin: 0;
   display: block;
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold-2);
@@ -141,6 +146,7 @@ h3 {
 }
 
 h4 {
+  margin: 0;
   display: block;
   font-size: var(--text-md);
   font-weight: var(--font-weight-bold-2);

@@ -141,11 +141,10 @@
 
   .basic-table :global(thead) :global(th) {
     &:first-child {
-      padding-left: 20px;
+      padding-left: var(--spacing-xl);
     }
-
     &:last-child {
-      padding-right: 20px;
+      padding-right: var(--spacing-xl);
     }
   }
 </style>

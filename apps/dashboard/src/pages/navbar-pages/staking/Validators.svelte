@@ -56,6 +56,7 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
   import ValidatorRow from './validator-list/ValidatorRow.svelte'
+  import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -95,146 +96,131 @@
   }>()
 </script>
 
-<div id="validators">
-  <div class="title-header">
-    <div class="title">
-      <h1>Radix Network Staking</h1>
-      <p class="description">
-        View all currently registered Radix Network validator nodes, and manage
-        your own XRD stakes to validators.
-      </p>
-    </div>
-
-    <div style:width="50rem" />
-  </div>
-
-  <div class="selected-validators">
-    {#if $connected}
-      <SelectedValidators
-        on:click={() => {
-          let selected = Object.keys($selectedValidators).filter(
-            (key) => $selectedValidators[key]
-          )
-
-          if (selected.length === 1) {
-            goto(`/network-staking/${selected[0]}/stake`)
-          } else {
-            dispatch('show-stake-multiple')
-          }
-        }}
-      />
-    {/if}
-  </div>
-
-  <Divider --spacing="var(--spacing-xl)" />
-
-  <div>
-    <div id="staked-validators" class="header-section">
-      <h2 class="title">Your Stakes</h2>
-      {#await $stakeInfo}
-        <div class="subtext">
-          Connect your wallet and your accounts containing Radix Network stake
-          pool units to see the status of your current validators and stakes.
-        </div>
-        <div class="info-text">
-          <Icon icon={InfoIcon} />
-          What is staking?
-        </div>
-      {:then}
-        <div class="subtext">
-          Summary of your current stakes and requested unstakes for the accounts
-          you have connected.
-        </div>
-      {/await}
-    </div>
-    {#await $stakeInfo then stakes}
-      <div id="staking-info">
-        <StakingCard
-          staking={totalStaked}
-          unstaking={totalUnstaking}
-          readyToClaim={totalReadyToClaim}
-          claimText="Claim All"
-          on:click={() => {
-            dispatch('show-claim-all')
-          }}
-        />
-
-        <ValidatorList
-          validators={validators.then((v) =>
-            v.filter(
-              (v) =>
-                stakes.staked.some((s) => s.validator.address === v.address) ||
-                stakes.unstaking.some(
-                  (s) => s.validator.address === v.address
-                ) ||
-                stakes.readyToClaim.some(
-                  (s) => s.validator.address === v.address
-                )
-            )
-          )}
-        >
-          <StakedValidatorRow
-            slot="row"
-            let:entry
-            let:columns
-            validator={entry}
-            nbrOfColumns={columns.length}
-            on:click={() => goto(`/network-staking/${entry.address}`)}
-            on:claim-validator={(e) => {
-              dispatch('show-claim-single', e.detail)
-            }}
-          />
-        </ValidatorList>
-      </div>
-    {/await}
-  </div>
-
-  <Divider --spacing="var(--spacing-xl)" />
-
-  <div class="header-section">
-    <h2 class="title">Validator Nodes</h2>
-    <div class="subtext">
-      Full list of validator nodes currently registered on the Radix Network.
-    </div>
-    <div id="filter-btn">
-      <FilterButton
-        on:click={() => {
-          dispatch('show-filters')
-        }}
-      />
-    </div>
-  </div>
-
-  <div>
-    <ValidatorList
-      {validators}
-      on:click-validator={(e) => {
-        goto(`/network-staking/${e.detail}`)
-      }}
-    >
-      <ValidatorRow
-        slot="row"
-        let:entry
-        validator={entry}
-        on:click={() => goto(`/network-staking/${entry.address}`)}
-      />
-    </ValidatorList>
+<div class="title-header">
+  <div class="title">
+    <h1>Radix Network Staking</h1>
+    <p class="description">
+      View all currently registered Radix Network validator nodes, and manage
+      your own XRD stakes to validators.
+    </p>
   </div>
 </div>
 
+<div class="selected-validators">
+  {#if $connected}
+    <SelectedValidators
+      on:click={() => {
+        let selected = Object.keys($selectedValidators).filter(
+          (key) => $selectedValidators[key]
+        )
+
+        if (selected.length === 1) {
+          goto(`/network-staking/${selected[0]}/stake`)
+        } else {
+          dispatch('show-stake-multiple')
+        }
+      }}
+    />
+  {/if}
+</div>
+
+<Divider --spacing="var(--spacing-xl)" />
+
+<div id="staked-validators" class="header-section">
+  <h2 class="title">Your Stakes</h2>
+  {#await $stakeInfo}
+    <div class="subtext">
+      Connect your wallet and your accounts containing Radix Network stake pool
+      units to see the status of your current validators and stakes.
+    </div>
+    <div class="info-text">
+      <Icon icon={InfoIcon} />
+      What is staking?
+    </div>
+  {:then}
+    <div class="subtext">
+      Summary of your current stakes and requested unstakes for the accounts you
+      have connected.
+    </div>
+  {/await}
+</div>
+{#await $stakeInfo then stakes}
+  <div id="staking-info">
+    <StakingCard
+      staking={totalStaked}
+      unstaking={totalUnstaking}
+      readyToClaim={totalReadyToClaim}
+      claimText="Claim All"
+      on:click={() => {
+        dispatch('show-claim-all')
+      }}
+    />
+
+    <ValidatorList
+      validators={validators.then((v) =>
+        v.filter(
+          (v) =>
+            stakes.staked.some((s) => s.validator.address === v.address) ||
+            stakes.unstaking.some((s) => s.validator.address === v.address) ||
+            stakes.readyToClaim.some((s) => s.validator.address === v.address)
+        )
+      )}
+    >
+      <StakedValidatorRow
+        slot="row"
+        let:entry
+        let:columns
+        validator={entry}
+        nbrOfColumns={columns.length}
+        on:click={() => goto(`/network-staking/${entry.address}`)}
+        on:claim-validator={(e) => {
+          dispatch('show-claim-single', e.detail)
+        }}
+      />
+    </ValidatorList>
+  </div>
+{/await}
+
+<Divider --spacing="var(--spacing-xl)" />
+
+<div class="header-section">
+  <h2 class="title">Validator Nodes</h2>
+  <div class="subtext">
+    Full list of validator nodes currently registered on the Radix Network.
+  </div>
+  <div id="filter-btn">
+    <FilterButton
+      on:click={() => {
+        dispatch('show-filters')
+      }}
+    />
+  </div>
+</div>
+
+<ValidatorList
+  {validators}
+  on:click-validator={(e) => {
+    goto(`/network-staking/${e.detail}`)
+  }}
+>
+  <ValidatorRow
+    slot="row"
+    let:entry
+    validator={entry}
+    on:click={() => goto(`/network-staking/${entry.address}`)}
+  >
+    <BookmarkValidator slot="icon" validator={entry} />
+  </ValidatorRow>
+</ValidatorList>
+
 <style lang="scss">
   @use '../../../../../../packages/ui/src/mixins.scss';
-  #validators {
-    padding: var(--spacing-xl);
-  }
-
   .header {
     display: flex;
   }
 
   .title-header {
-    display: grid;
-    grid-template-columns: auto 45rem;
+    max-width: 35rem;
   }
 
   .title {

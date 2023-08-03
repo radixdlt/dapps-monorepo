@@ -1,51 +1,43 @@
 <script lang="ts">
-  import { css, config } from '@styles'
-  import Box from '../box/Box.svelte'
   import Icon from '../icon/Icon.svelte'
-  import SearchIcon from '@icons/search_icon.svg'
+  import SearchIcon from '@icons/search.svg'
 
   export let onSearch: (address: string) => void
   export let placeholder: string = ''
 
   let value: string = ''
 
-  const iconHeight: keyof (typeof config)['theme']['sizes'] = 'sm'
-
   const search = () => {
     onSearch(value)
     value = ''
   }
-
-  const style = css({
-    color: '$onSurface',
-    border: 'none',
-    borderRadius: '$searchBorder',
-    py: '$md',
-    px: '$lg',
-    paddingRight: '$4xl',
-    shadow: true,
-    width: '100%'
-  })()
 </script>
 
-<form on:submit|preventDefault={search}>
-  <Box bgColor="surface" full cx={{ position: 'relative' }} wrapper inline>
-    <input bind:value class={style} {placeholder} type="text" />
-    <Box
-      bgColor="surface"
-      wrapper
-      cx={{
-        position: 'absolute',
-        top: `calc(50% - ${config['theme']['sizes'][iconHeight]} / 2)`,
-        right: 20
-      }}
-    >
-      <Icon
-        on:click={() => onSearch(value)}
-        interactive
-        icon={SearchIcon}
-        height={iconHeight}
-      />
-    </Box>
-  </Box>
+<form class="form" on:submit|preventDefault={search}>
+  <div class="search">
+    <input bind:value {placeholder} type="text" />
+    <Icon on:click={() => onSearch(value)} interactive icon={SearchIcon} />
+  </div>
 </form>
+
+<style lang="scss">
+  .form {
+    width: 100%;
+    height: 100%;
+  }
+  .search {
+    height: 100%;
+    border: var(--border) var(--theme-border);
+    border-radius: 2.75rem;
+    padding: 0 var(--spacing-md) 0 var(--spacing-xl);
+    display: flex;
+    align-items: center;
+
+    input {
+      border-right: var(--border) var(--theme-border);
+      margin-right: var(--spacing-sm);
+      padding-right: var(--spacing-md);
+      width: 100%;
+    }
+  }
+</style>

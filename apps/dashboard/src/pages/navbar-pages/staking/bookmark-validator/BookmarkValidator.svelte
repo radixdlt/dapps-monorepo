@@ -38,7 +38,7 @@
         icon={$bookmarkedValidatorsStore[validator.address]
           ? BookmarkFilledIcon
           : BookmarkEmptyIcon}
-        size="medium"
+        --size="1.3rem"
       />
       {#if withText}<span>Bookmarked</span>{/if}
     </button>

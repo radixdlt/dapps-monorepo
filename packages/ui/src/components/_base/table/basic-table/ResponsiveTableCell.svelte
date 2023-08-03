@@ -10,7 +10,10 @@
       {label}
     </div>
   {/if}
-  <slot />
+
+  <div class="content">
+    <slot />
+  </div>
 </td>
 
 <style lang="scss">
@@ -23,6 +26,7 @@
       width: 100%;
     }
   }
+
   .header-text {
     white-space: nowrap;
     text-overflow: ellipsis;

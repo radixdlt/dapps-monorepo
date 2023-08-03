@@ -2,21 +2,30 @@
   import Address from '@components/_base/address/Address.svelte'
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
-  import StakeDisplay from '../validator-card/StakeDisplay.svelte'
+  import StakeDisplay from './StakeDisplay.svelte'
   import { truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import type { Validator } from '../Validators.svelte'
+  import { connected } from '@stores'
 
   export let validator: Validator
 </script>
 
 <tr class="validator-row">
   <TableRow on:click>
-    <ResponsiveTableCell />
+    {#if $connected}
+      <ResponsiveTableCell width="5rem">
+        <div class="center">
+          <slot name="icon" />
+        </div>
+      </ResponsiveTableCell>
+    {/if}
 
     <ResponsiveTableCell>
-      {validator.name}
+      <div class:left-padded={!$connected}>
+        {validator.name}
+      </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
@@ -28,27 +37,32 @@
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <StakeDisplay stakeInfo={Promise.resolve(validator)} />
-    </ResponsiveTableCell>
-
-    <ResponsiveTableCell>
-      {truncateNumber(validator.percentageOwnerStake)}%
-    </ResponsiveTableCell>
-
-    <ResponsiveTableCell>
-      <div class="apy">
-        {truncateNumber(validator.apy)}%
+      <div class="center">
+        <StakeDisplay stakeInfo={Promise.resolve(validator)} />
       </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <div class="fee">
+      <div class="center bold">
+        {truncateNumber(validator.percentageOwnerStake)}%
+      </div>
+    </ResponsiveTableCell>
+
+    <ResponsiveTableCell>
+      <div class="apy apy-text-box no-overflow bold">
+        {truncateNumber(validator.apy)}%
+        <span class="subtext">per year</span>
+      </div>
+    </ResponsiveTableCell>
+
+    <ResponsiveTableCell>
+      <div class="apy-text-box no-overflow bold">
         {truncateNumber(validator.fee)}%
       </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <div class="uptime">
+      <div class="uptime apy-text-box no-overflow bold">
         {truncateNumber(validator.uptime)}%
       </div>
     </ResponsiveTableCell>
@@ -59,9 +73,16 @@
       </div>
     </ResponsiveTableCell>
 
-    <ResponsiveTableCell>
-      <SelectValidator validator={Promise.resolve(validator)} text="SELECT" />
-    </ResponsiveTableCell>
+    {#if $connected}
+      <ResponsiveTableCell>
+        <div class="select">
+          <SelectValidator
+            validator={Promise.resolve(validator)}
+            text="SELECT"
+          />
+        </div>
+      </ResponsiveTableCell>
+    {/if}
   </TableRow>
 </tr>
 
@@ -71,15 +92,32 @@
     cursor: pointer;
   }
 
+  .bold {
+    font-weight: var(--font-weight-bold-1);
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .left-padded {
+    padding-left: var(--spacing-xl);
+  }
+
+  .no-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .apy {
     border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
     background: var(--theme-surface-1);
     min-width: 10rem;
   }
 
-  .apy,
-  .fee,
-  .uptime {
+  .apy-text-box {
     border: 1px solid #e2e5ed;
     text-align: center;
     padding: var(--spacing-sm) var(--spacing-xl);
@@ -92,5 +130,9 @@
   .accepts-stake {
     display: flex;
     justify-content: center;
+  }
+
+  .select {
+    padding-right: var(--spacing-lg);
   }
 </style>

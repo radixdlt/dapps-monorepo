@@ -2,6 +2,7 @@
   import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
   import type { Validator } from '../Validators.svelte'
   import type { ComponentProps } from 'svelte'
+  import { connected } from '@stores'
 
   export let validators: Promise<Validator[]>
 
@@ -13,7 +14,6 @@
   }
 
   let columns: ComponentProps<BasicTable<Validator>>['columns'] = [
-    {},
     {
       header: {
         label: 'VALIDATOR'
@@ -21,20 +21,23 @@
     },
     {
       header: {
-        label: 'ADDRESS'
+        label: 'ADDRESS',
+        alignment: 'center'
       },
       id: 'address'
     },
     {
       sortBy: 'totalStake',
       header: {
-        label: 'TOTAL STAKE'
+        label: 'TOTAL STAKE',
+        alignment: 'center'
       }
     },
     {
       sortBy: 'ownerStake',
       header: {
-        label: 'OWNER STAKE'
+        label: 'OWNER STAKE',
+        alignment: 'center'
       }
     },
     {
@@ -63,9 +66,10 @@
         label: 'ACCEPTS STAKE',
         alignment: 'center'
       }
-    },
-    {}
+    }
   ]
+
+  $: if ($connected) columns = [{}, ...columns, {}]
 </script>
 
 {#await validators then validators}
@@ -82,7 +86,17 @@
 <style lang="scss">
   @use '../../../../../../../packages/ui/src/components/_base/table/shared.scss';
   .validator-list :global(table) {
-    border-spacing: 0;
+    border-spacing: 0 !important;
+
+    :global(td) {
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
   }
 
   .separator {

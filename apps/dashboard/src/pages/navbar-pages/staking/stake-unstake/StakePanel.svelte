@@ -10,15 +10,16 @@
 
   export let sidePanelHeader: string
   export let stakeButtonDisabled = false
+  export let useBackdrop = false
 
   const dispatch = createEventDispatcher<{
-    close: null
+    close: null | 'invalidate'
   }>()
 
   let rightColumnWidth = '25rem'
 </script>
 
-<SidePanel on:close>
+<SidePanel {useBackdrop} on:close>
   <SidePanelHeader
     text={sidePanelHeader}
     on:closeClick={() => dispatch('close')}
@@ -57,8 +58,7 @@
           on:click
           on:response={(e) => {
             if (e.detail.status === TransactionStatus.CommittedSuccess) {
-              invalidate(_dependency)
-              dispatch('close')
+              dispatch('close', 'invalidate')
             }
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
