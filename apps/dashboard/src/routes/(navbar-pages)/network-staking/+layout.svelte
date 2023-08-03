@@ -85,6 +85,7 @@
   on:show-claim-all={() => goto('/network-staking/claim-multiple')}
   on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
   on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
+  on:show-stake-single={(e) => goto(`/network-staking/${e.detail}/stake`)}
   on:show-filters={() => {
     filterOpen = true
   }}
