@@ -84,6 +84,7 @@
 </script>
 
 <StakePanel
+  useBackdrop
   sidePanelHeader="Add Stake"
   {stakeButtonDisabled}
   on:click={(e) => {

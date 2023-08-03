@@ -10,6 +10,7 @@
 
   export let sidePanelHeader: string
   export let stakeButtonDisabled = false
+  export let useBackdrop = false
 
   const dispatch = createEventDispatcher<{
     close: null
@@ -18,7 +19,7 @@
   let rightColumnWidth = '25rem'
 </script>
 
-<SidePanel on:close>
+<SidePanel {useBackdrop} on:close>
   <SidePanelHeader
     text={sidePanelHeader}
     on:closeClick={() => dispatch('close')}
