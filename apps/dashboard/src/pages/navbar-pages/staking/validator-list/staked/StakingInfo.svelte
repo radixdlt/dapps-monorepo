@@ -42,8 +42,13 @@
     {#await Promise.all([validator, $accumulatedStakes]) then [info, stakes]}
       {#if new BigNumber(stakes[info.address].accumulatedUnstaking).gt(0)}
         <ReadyToClaim validatorAddress={info.address}>
-          <div class="ready-to-claim-text" slot="text" let:amount let:days>
-            (ready to claim {formatXRDValue(amount)} in approx. {days} days)
+          <div
+            class="ready-to-claim-text"
+            slot="text"
+            let:amount
+            let:timeToClaimText
+          >
+            (ready to claim {formatXRDValue(amount)} in approx. {timeToClaimText})
           </div>
         </ReadyToClaim>
       {/if}
@@ -80,9 +85,9 @@
 
   .staking-box-grid {
     display: grid;
-    grid: 1fr/ 1fr 1fr 2fr 3fr;
+    grid: 1fr/ 8rem 8rem auto auto;
     margin-left: 1.5rem;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-lg);
     align-items: center;
   }
 

@@ -25,6 +25,8 @@
       readyToClaim: ReadyToClaimInfo[]
     }>
   >()
+
+  export const currentEpoch = writable<number>(0)
 </script>
 
 <script lang="ts">
@@ -44,8 +46,9 @@
   $: _accumulatedStakes = data.validatorAccumulatedStakes
   $: _stakeInfo = data.stakeInfo
 
-  $: accumulatedStakes.set($_accumulatedStakes)
-  $: stakeInfo.set($_stakeInfo)
+  $: $accumulatedStakes = $_accumulatedStakes
+  $: $stakeInfo = $_stakeInfo
+  $: $currentEpoch = data.currentEpoch
 
   let useFilter = false
   let filterOpen = false

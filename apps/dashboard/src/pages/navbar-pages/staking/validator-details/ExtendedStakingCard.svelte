@@ -54,8 +54,8 @@
             <SkeletonLoader />
           {:then validatorAddress}
             <ReadyToClaim {validatorAddress}>
-              <div slot="text" let:days>
-                Ready to claim in approx. {days} days
+              <div slot="text" let:timeToClaimText>
+                Ready to claim in approx. {timeToClaimText}
               </div>
             </ReadyToClaim>
           {/await}

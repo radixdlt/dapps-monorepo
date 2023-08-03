@@ -34,8 +34,10 @@ export type AccumulatedStakes = {
 
 export type Bookmarked = { [validator: string]: boolean }
 
-export const load: LayoutLoad = ({ fetch, depends }) => {
+export const load: LayoutLoad = async ({ fetch, depends }) => {
   depends(_dependency)
+
+  const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
   const validators = getValidatorsList().then(async (validators) => {
     const stakeUnitTotalSupply = await getEntityDetails(
@@ -190,8 +192,6 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
           $accounts.map((a) => a.address)
         )
 
-        const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
-
         return $accounts.reduce(
           (prev, cur) => {
             const data = accountData.find(
@@ -260,6 +260,7 @@ export const load: LayoutLoad = ({ fetch, depends }) => {
     promises: {
       validators,
       bookmarkedValidators
-    }
+    },
+    currentEpoch
   }
 }

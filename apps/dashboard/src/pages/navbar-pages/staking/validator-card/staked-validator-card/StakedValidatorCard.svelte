@@ -49,9 +49,14 @@
       {#await Promise.all( [validatorInfo, $accumulatedStakes] ) then [info, stakes]}
         {#if new BigNumber(stakes[info.address].accumulatedUnstaking).gt(0)}
           <ReadyToClaim validatorAddress={info.address}>
-            <div class="ready-to-claim-text" slot="text" let:amount let:days>
+            <div
+              class="ready-to-claim-text"
+              slot="text"
+              let:amount
+              let:timeToClaimText
+            >
               (ready to claim {formatTokenValue(amount).displayValue}
-              {XRD_SYMBOL} in approx. {days} days)
+              {XRD_SYMBOL} in approx. {timeToClaimText})
             </div>
           </ReadyToClaim>
         {/if}
