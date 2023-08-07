@@ -117,13 +117,6 @@
       >
         {formatAmount(data)}
       </AwaitedRow>
-      <AwaitedRow
-        text="Server Provider"
-        promise={validator.then(({ uptime }) => uptime)}
-        let:data
-      >
-        N/A ({formatAmount(data)}%)
-      </AwaitedRow>
       <Row text="Accepts Stake">
         <AcceptsStake
           slot="right"
