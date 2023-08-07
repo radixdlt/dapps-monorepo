@@ -23,7 +23,11 @@
     {/if}
 
     <ResponsiveTableCell>
-      <div class:left-padded={!$connected}>
+      <div
+        class:left-padded={!$connected}
+        class="dotted-overflow"
+        style:max-width="15ch"
+      >
         {validator.name}
       </div>
     </ResponsiveTableCell>

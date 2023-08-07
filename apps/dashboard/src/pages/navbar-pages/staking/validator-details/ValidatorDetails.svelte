@@ -35,7 +35,7 @@
     {#await validator}
       <SkeletonLoader />
     {:then validator}
-      <h1>{validator.name}</h1>
+      <h1 class="dotted-overflow">{validator.name}</h1>
     {/await}
     <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
