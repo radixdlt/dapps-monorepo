@@ -16,6 +16,8 @@
   import { removeThousandsSeparator } from '@utils/format-amount'
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
+  import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+  import Success from '@components/success/Success.svelte'
 
   export let validators: Validator[]
   export let currentlyStaked: Promise<{
@@ -101,6 +103,11 @@
     e.detail(manifest)
   }}
   on:close
+  on:tx-response={({ detail: { status } }) => {
+    if (status === TransactionStatus.CommittedSuccess) {
+      $selectedValidators = {}
+    }
+  }}
 >
   <svelte:fragment slot="account-picker" let:rightColumnWidth>
     <AccountSection bind:selectedAccount --width={rightColumnWidth}>

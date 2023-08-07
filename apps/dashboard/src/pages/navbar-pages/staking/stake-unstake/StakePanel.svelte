@@ -13,6 +13,7 @@
 
   const dispatch = createEventDispatcher<{
     close: null | 'invalidate'
+    'tx-response': { status: TransactionStatus }
   }>()
 
   let rightColumnWidth = '15rem'
@@ -59,6 +60,7 @@
             if (e.detail.status === TransactionStatus.CommittedSuccess) {
               dispatch('close', 'invalidate')
             }
+            dispatch('tx-response', e.detail)
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
         >
