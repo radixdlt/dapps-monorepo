@@ -23,7 +23,7 @@
   const dispatch = createEventDispatcher<{ input: string }>()
 </script>
 
-<div>
+<div class="wrapper">
   {#if account}
     <div class="account">
       <Account {account} />
@@ -50,7 +50,7 @@
   >
     <div class="token-amount">
       <div class="name">
-        <IconNew icon={token.iconUrl} --size="2rem" />
+        <IconNew icon={token.iconUrl} --size="1.5rem" />
         {token.name}
       </div>
 
@@ -61,7 +61,6 @@
           dispatch('input', tokenAmount)
         }}
         {readonly}
-        --width="14rem"
         --text-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
       />
     </div>
@@ -91,6 +90,10 @@
   @use '../../../../../../../../../packages/ui/src/mixins.scss';
   @use './shared.scss';
 
+  .wrapper {
+    width: var(--card-width);
+    justify-self: end;
+  }
   .token-amount-card {
     padding: var(--card-padding-top-bottom) var(--card-padding-left-right);
     border-radius: var(--card-border-radius);
@@ -104,7 +107,7 @@
       .name {
         display: flex;
         align-items: center;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-md);
         font-weight: var(--font-weight-bold-2);
 
         img {

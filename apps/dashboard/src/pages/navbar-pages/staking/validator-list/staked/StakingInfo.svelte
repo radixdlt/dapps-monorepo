@@ -53,21 +53,20 @@
         </ReadyToClaim>
       {/if}
     {/await}
-    <div class="claim-button">
-      {#await Promise.all([validator, $accumulatedStakes]) then [info, stakes]}
-        {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
-          <ButtonNew
-            size="small"
-            on:click={() => {
-              dispatch('claim-validator', info.address)
-            }}
-            >ready to claim {formatXRDValue(
-              stakes[info.address].accumulatedReadyToClaim
-            )}</ButtonNew
-          >
-        {/if}
-      {/await}
-    </div>
+
+    {#await Promise.all([validator, $accumulatedStakes]) then [info, stakes]}
+      {#if new BigNumber(stakes[info.address].accumulatedReadyToClaim).gt(0)}
+        <ButtonNew
+          size="small"
+          on:click={() => {
+            dispatch('claim-validator', info.address)
+          }}
+          >ready to claim {formatXRDValue(
+            stakes[info.address].accumulatedReadyToClaim
+          )}</ButtonNew
+        >
+      {/if}
+    {/await}
   </div>
 </div>
 
@@ -85,7 +84,7 @@
 
   .staking-box-grid {
     display: grid;
-    grid: 1fr/ 8rem 8rem auto auto;
+    grid: 1fr / auto auto auto auto;
     margin-left: 1.5rem;
     gap: var(--spacing-lg);
     align-items: center;
@@ -105,10 +104,6 @@
   .amount-value {
     color: var(--color-grey-1);
     font-weight: var(--font-weight-bold-2);
-  }
-
-  .claim-button {
-    width: 15rem;
   }
 
   .ready-to-claim-text {

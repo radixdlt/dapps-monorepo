@@ -13,7 +13,7 @@
     }
 
     transition: var(--transition-hover-card);
-    height: 84px;
+    height: 4rem;
 
     @include mixins.mobile {
       height: auto;

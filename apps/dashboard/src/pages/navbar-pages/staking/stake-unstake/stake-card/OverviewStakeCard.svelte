@@ -24,7 +24,7 @@
 
 <StakeCard>
   <svelte:fragment slot="icon">
-    <IconNew icon={StakingIcon} --size="4rem" />
+    <IconNew icon={StakingIcon} --size="3rem" />
   </svelte:fragment>
 
   <slot name="info" slot="info" />

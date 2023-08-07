@@ -11,13 +11,13 @@
 <style lang="scss">
   #filter-btn {
     background-color: var(--theme-surface-2);
-    border: var(--border) var(--theme-border-strong);
     border-radius: var(--border-radius-lg);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-2xl);
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
     cursor: pointer;
+    box-shadow: var(--shadow);
   }
 
   #text {

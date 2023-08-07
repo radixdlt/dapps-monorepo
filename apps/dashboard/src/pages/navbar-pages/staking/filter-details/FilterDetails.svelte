@@ -60,7 +60,7 @@
   }>()
 </script>
 
-<SidePanel bind:open useBackdrop on:close={onClose}>
+<SidePanel bind:open useBackdrop on:close={onClose} --width="35rem">
   <SidePanelHeader text="Validator Filters" on:closeClick={onClose} />
 
   <div class="cards">
@@ -80,7 +80,7 @@
   <Divider />
 
   <div class="text">
-    <h2>Fee (%)</h2>
+    <h3>Fee (%)</h3>
     <p class="subtext">% of rewards emissions taken by the validator owner</p>
   </div>
 
@@ -96,7 +96,7 @@
   <Divider />
 
   <div class="text">
-    <h2>Total XRD Stake (%)</h2>
+    <h3>Total XRD Stake (%)</h3>
     <p class="subtext">The total amount of stakes made with the validator</p>
   </div>
 
@@ -112,7 +112,7 @@
   <Divider />
 
   <div class="text">
-    <h2>Owner Stake (%)</h2>
+    <h3>Owner Stake (%)</h3>
     <p class="subtext">% of this validator’s stake provided by its owner</p>
   </div>
 

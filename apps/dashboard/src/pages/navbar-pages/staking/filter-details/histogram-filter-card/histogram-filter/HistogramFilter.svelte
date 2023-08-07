@@ -73,9 +73,11 @@
     --track-bg="transparent"
     --thumb-bg="transparent"
   >
-    <IconNew icon={SliderHandleIcon} slot="left" size="large" />
-    <div id="right-handle" slot="right">
-      <IconNew icon={SliderHandleIcon} size="large" />
+    <div class="left-handle" slot="left">
+      <IconNew icon={SliderHandleIcon} --size="2rem" />
+    </div>
+    <div class="right-handle" slot="right">
+      <IconNew icon={SliderHandleIcon} size="large" --size="2rem" />
     </div>
   </Slider>
 </div>
@@ -113,8 +115,12 @@
     }
   }
 
-  #right-handle {
-    transform: translateX(13px);
+  .right-handle {
+    transform: translateX(13px) translateY(-5px);
+  }
+
+  .left-handle {
+    transform: translateY(-5px);
   }
 
   #filter-histogram {

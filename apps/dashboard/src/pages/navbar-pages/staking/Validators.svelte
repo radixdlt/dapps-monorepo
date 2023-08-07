@@ -128,7 +128,7 @@
 <Divider --spacing="var(--spacing-xl)" />
 
 <div id="staked-validators" class="header-section">
-  <h2 class="title">Your Stakes</h2>
+  <h3 class="title">Your Stakes</h3>
   {#await $stakeInfo}
     <div class="subtext">
       Connect your wallet and your accounts containing Radix Network stake pool
@@ -185,7 +185,7 @@
 <Divider --spacing="var(--spacing-xl)" />
 
 <div class="header-section">
-  <h2 class="title">Validator Nodes</h2>
+  <h3 class="title">Validator Nodes</h3>
   <div class="subtext">
     Full list of validator nodes currently registered on the Radix Network.
   </div>
@@ -221,7 +221,7 @@
   }
 
   .title-header {
-    max-width: 35rem;
+    max-width: 25rem;
   }
 
   .title {
@@ -260,7 +260,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
 
     .title {
       margin: 0;

@@ -41,10 +41,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-    border-radius: 12px;
-    min-height: 50px;
-    max-height: 60px;
+    padding: 0 var(--spacing-xl);
+    border-radius: var(--border-radius-xl);
+    min-height: 2.5rem;
+    max-height: 3rem;
     height: 100%;
     width: 100%;
   }

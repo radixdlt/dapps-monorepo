@@ -87,6 +87,7 @@
   @use '../../../../../../../packages/ui/src/components/_base/table/shared.scss';
   .validator-list :global(table) {
     border-spacing: 0 !important;
+    min-width: 60rem;
 
     :global(td) {
       &:first-child {

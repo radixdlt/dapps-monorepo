@@ -36,7 +36,7 @@ export const capitalize = (text: string) =>
 
 export const isSameRoute = (route: string, routeName: string) => {
   const routeArray = route.split('/')
-  return routeArray[1] === routeName
+  return routeArray[1] === routeName.split('/').pop()
 }
 
 export function bufferFromHex(hex: string): Buffer {

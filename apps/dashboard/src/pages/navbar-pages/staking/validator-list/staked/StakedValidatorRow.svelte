@@ -11,7 +11,7 @@
 
 <tr class="validator-row">
   <ValidatorRow {validator} on:click>
-    <IconNew icon={StakingIcon} size="large" slot="icon" />
+    <IconNew icon={StakingIcon} --size="2.5rem" slot="icon" />
   </ValidatorRow>
 </tr>
 

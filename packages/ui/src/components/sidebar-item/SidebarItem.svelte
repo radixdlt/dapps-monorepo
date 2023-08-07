@@ -1,44 +1,49 @@
 <script lang="ts">
   import IconTextItem from '@components/icon-text-item/IconTextItem.svelte'
   import { showSidebar } from '@stores'
-  import { css } from '@styles'
 
   export let isActive = false
   export let icon: string
   export let isHovered = isActive
   export let link: string
-
-  const styles = css({
-    borderStyle: 'solid',
-    borderWidth: '0',
-    borderLeftWidth: '$md',
-    borderLeftColor: 'transparent',
-    borderRadius: '0',
-    cursor: 'pointer',
-    '&.isHovered': {
-      borderLeftWidth: '$md',
-      borderLeftColor: '$grey'
-    }
-  })
 </script>
 
 <div
   on:mouseenter={() => (isHovered = true)}
   on:mouseleave={() => (isHovered = false)}
-  class={styles() + (isHovered || isActive ? ' isHovered' : '')}
+  class="item"
+  class:is-hovered={isHovered || isActive}
 >
   <a
     href={link}
     on:click={() => {
       showSidebar.set(false)
     }}
-    ><IconTextItem bold={isHovered || isActive} {icon}><slot /></IconTextItem
+    ><IconTextItem iconSize="xs" bold={isHovered || isActive} {icon}
+      ><slot /></IconTextItem
     ></a
   >
 </div>
 
-<style>
-  .isHovered :global(img) {
-    filter: grayscale(0);
+<style lang="scss">
+  .is-hovered {
+    background: var(--color-grey-4);
+    transition: all ease-in-out 0.2s;
+    border-radius: var(--border-radius-lg);
+    :global(img) {
+      filter: grayscale(0);
+    }
+  }
+
+  .item {
+    cursor: pointer;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    margin: 0 var(--spacing-md);
+
+    a {
+      margin: 0 var(--spacing-md);
+    }
   }
 </style>

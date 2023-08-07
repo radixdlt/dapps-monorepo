@@ -1,6 +1,6 @@
 <script lang="ts">
   export let on = false
-  export let width = '40px'
+  export let width = '30px'
 </script>
 
 <label class="switch" style:--width={width}>

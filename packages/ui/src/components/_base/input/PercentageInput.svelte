@@ -11,7 +11,7 @@
 <AmountInput
   value={value.toString()}
   format={number('0', '100')}
-  --width="6rem"
+  --input-width="3rem"
   on:input={(e) => {
     value = parseFloat(e.detail.value)
     dispatch('input', { value })
@@ -23,7 +23,7 @@
 <style lang="scss">
   .percentage {
     display: inline-block;
-    font-size: var(--text-3xl);
+    font-size: var(--text-xl);
     font-weight: var(--font-weight-bold-2);
   }
 </style>

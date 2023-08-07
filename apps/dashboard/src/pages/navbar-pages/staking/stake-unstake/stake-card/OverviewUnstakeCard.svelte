@@ -8,6 +8,7 @@
   import BigNumber from 'bignumber.js'
   import { formatTokenValue } from '@utils'
   import { XRDToken } from '@constants'
+  import ValidatorInfo from './ValidatorInfo.svelte'
 
   export let amountToUnstake: string = '0'
   export let validator: {
@@ -33,16 +34,12 @@
 
 <StakeCard>
   <svelte:fragment slot="icon">
-    <IconNew icon={UnstakeIcon} --size="4rem" />
+    <IconNew icon={UnstakeIcon} --size="3rem" />
   </svelte:fragment>
 
-  <div class="info" slot="info">
-    <div class="validator-name dotted-overflow">
-      {validator.name}
-    </div>
-
-    <Address value={validator.address} short />
-  </div>
+  <svelte:fragment slot="info">
+    <ValidatorInfo {...validator} />
+  </svelte:fragment>
 
   <svelte:fragment slot="token-amount-card">
     <TokenAmountCard
@@ -67,12 +64,6 @@
 
   .validator-name {
     font-size: var(--text-lg);
-  }
-
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
   }
 
   .invalid {

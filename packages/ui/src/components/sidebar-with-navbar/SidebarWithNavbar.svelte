@@ -44,6 +44,10 @@
 
   .menu-items {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--spacing-xl);
+    gap: var(--spacing-xl);
   }
   .links {
     padding: 2rem 1.5rem;

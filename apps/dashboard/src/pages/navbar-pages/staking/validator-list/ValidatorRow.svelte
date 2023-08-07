@@ -15,7 +15,7 @@
 <tr class="validator-row">
   <TableRow on:click>
     {#if $connected}
-      <ResponsiveTableCell width="5rem">
+      <ResponsiveTableCell width="4rem">
         <div class="center">
           <slot name="icon" />
         </div>
@@ -114,13 +114,13 @@
   .apy {
     border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
     background: var(--theme-surface-1);
-    min-width: 10rem;
+    min-width: 8rem;
   }
 
   .apy-text-box {
     border: 1px solid #e2e5ed;
     text-align: center;
-    padding: var(--spacing-sm) var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-lg);
   }
 
   .uptime {

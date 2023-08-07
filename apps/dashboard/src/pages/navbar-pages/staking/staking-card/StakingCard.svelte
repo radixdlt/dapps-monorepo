@@ -101,12 +101,14 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: var(--spacing-lg);
     border-right: var(--border-divider) var(--theme-border);
+    padding: 0 var(--spacing-lg);
   }
 
   .last-section {
     border-right: none;
+    display: flex;
+    gap: var(--spacing-xl);
   }
 
   .text-with-icon {
@@ -123,7 +125,7 @@
 
   .amount-text {
     font-weight: var(--font-weight-bold-3);
-    font-size: var(--text-3xl);
+    font-size: var(--text-2xl);
   }
 
   .stake-display {

@@ -42,8 +42,7 @@
 
   #filter-card {
     @include mixins.card();
-    padding: var(--spacing-2xl);
-    width: 100%;
+    padding: var(--spacing-xl);
   }
 
   #value-cards {
@@ -54,8 +53,7 @@
   }
 
   .value-card {
-    @include shared.value-card();
-
+    width: 100%;
     #text {
       font-size: var(--card-text-size);
       color: var(--card-text-color);

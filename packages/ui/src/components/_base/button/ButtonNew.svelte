@@ -30,12 +30,12 @@
   }
 
   .small {
-    height: var(--spacing-xl);
-    padding: var(--spacing-sm) var(--spacing-lg);
+    height: 1.5rem;
+    padding: 0 var(--spacing-lg);
   }
 
   .big {
-    height: var(--spacing-2xl);
+    height: 2rem;
     padding: 0 var(--spacing-2xl);
   }
 </style>
