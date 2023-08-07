@@ -40,6 +40,7 @@
   import { goto } from '$app/navigation'
   import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
+  import { bookmarkedValidatorsStore } from '../../../stores'
 
   export let data: LayoutData
 
@@ -81,7 +82,9 @@
 <Validators
   validators={useFilter
     ? Promise.resolve(filteredValidators)
-    : data.promises.validators}
+    : data.promises.validators.then((v) =>
+        v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
+      )}
   on:show-claim-all={() => goto('/network-staking/claim-multiple')}
   on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
   on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
