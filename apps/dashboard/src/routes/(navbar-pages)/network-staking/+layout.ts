@@ -42,15 +42,15 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
   const validators = getValidatorsList().then(async (validators) => {
     const stakeUnitTotalSupply = await getEntityDetails(
       validators.map(
-        (v) => (v.state as any).value.stake_unit_resource_address as string
+        (v) => (v.state as any)?.stake_unit_resource_address as string
       )
     )
 
     return validators.map((validator, i) => {
       const state: any = validator.state || {}
 
-      const stakeUnitResourceAddress = state.value
-        .stake_unit_resource_address as string
+      const stakeUnitResourceAddress =
+        state.stake_unit_resource_address as string
 
       return {
         name: getEnumStringMetadata('name')(validator.metadata),
@@ -61,8 +61,8 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
         totalStake: validator.stake_vault.balance,
 
         stakeUnitResourceAddress,
-        unstakeClaimResourceAddress: state.value
-          .unstake_claim_token_resource_address as string,
+        unstakeClaimResourceAddress:
+          state.unstake_claim_token_resource_address as string,
 
         stakeUnitsToStakedRatio: new BigNumber(
           validator.stake_vault.balance

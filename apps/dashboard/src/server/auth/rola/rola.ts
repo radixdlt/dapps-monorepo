@@ -35,12 +35,10 @@ export const RolaFactory =
     const verifyProof = verifyProofFactory(signedChallenge)
 
     const getDerivedAddress = () =>
-      deriveVirtualAddress(signedChallenge, networkId)
-        .map(({ value }) => value)
-        .mapErr((jsError) => ({
-          reason: 'couldNotDeriveAddressFromPublicKey',
-          jsError
-        }))
+      deriveVirtualAddress(signedChallenge, networkId).mapErr((jsError) => ({
+        reason: 'couldNotDeriveAddressFromPublicKey',
+        jsError
+      }))
 
     const queryLedger = () =>
       gatewayService

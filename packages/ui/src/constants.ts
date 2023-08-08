@@ -13,9 +13,9 @@ export const Network = {
 export const NETWORK_CONFIG = {
   [Network.HAMMUNET]: {
     id: 34,
-    url: 'https://hammunet-gateway.radixdlt.com:443',
+    url: 'https://hammunet-gateway.radixdlt.com',
     dappDefAddress:
-      'account_tdx_22_128eksrhxcm5chjwkaz5y4mrveqzxg5l96fj6u7hg9pj978c8h4x2ft'
+      'account_tdx_22_16xygyhqp3x3awxlz3c5dzrm7jqghgpgs776v4af0yfr7xljqfw9zgy'
   },
   [Network.ENKINET]: {
     id: 33,
