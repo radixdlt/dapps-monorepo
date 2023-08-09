@@ -1,7 +1,4 @@
-import {
-  InstructionList,
-  TransactionManifest
-} from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import {
   getClaimManifest,
   getMultipleStakeManifest,
@@ -67,10 +64,13 @@ describe('staking manifests', () => {
   fixtures.forEach(({ name, manifest }) => {
     it(`should create ${name} manifest`, async () => {
       await expect(
-        new TransactionManifest(
-          new InstructionList.StringInstructions(manifest),
-          []
-        ).convert(InstructionList.Kind.Parsed, RadixNetwork.RCnetV2)
+        RadixEngineToolkit.Instructions.staticallyValidate(
+          {
+            kind: 'String',
+            value: manifest
+          },
+          RadixNetwork.RCnetV2
+        )
       ).resolves.toBeDefined()
     })
   })

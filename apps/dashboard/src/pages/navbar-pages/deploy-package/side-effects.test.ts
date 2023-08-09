@@ -1,8 +1,6 @@
 import {
-  InstructionList,
-  RadixEngineToolkit,
-  SborValue,
-  TransactionManifest
+  ManifestSborStringRepresentation,
+  RadixEngineToolkit
 } from '@radixdlt/radix-engine-toolkit'
 import {
   getCreateBadgeManifest,
@@ -19,14 +17,15 @@ describe('Deploy Package Transaction Manifests', () => {
       `account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2`
     )
 
-    let manifest = new TransactionManifest(
-      new InstructionList.StringInstructions(stringManifest),
-      []
+    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+      {
+        kind: 'String',
+        value: stringManifest
+      },
+      NETWORK_ID
     )
 
-    await expect(
-      manifest.convert(InstructionList.Kind.Parsed, NETWORK_ID)
-    ).resolves.toBeDefined()
+    await expect(manifest).resolves.toBeDefined()
   })
 
   it('should create deploy package manifest', async () => {
@@ -37,25 +36,28 @@ describe('Deploy Package Transaction Manifests', () => {
       'hex'
     )
 
-    const sborDecodedSchema = (await RadixEngineToolkit.sborDecode(
-      faucetSchema,
-      NETWORK_ID
-    )) as SborValue.ManifestSbor
+    const sborDecodedSchema =
+      await RadixEngineToolkit.ManifestSbor.decodeToString(
+        Buffer.from(faucetSchema, 'hex'),
+        NETWORK_ID,
+        ManifestSborStringRepresentation.ManifestString
+      )
 
     const stringManifest = getDeployPackageManifest(
       faucetWasm,
-      sborDecodedSchema.manifestString,
+      sborDecodedSchema,
       'resource_tdx_d_1tkx7f4tdf9zlqnhvtjrftddxvpjtvwqshjw5p9v0qslka44un68w6k',
       '#65#'
     )
 
-    let manifest = new TransactionManifest(
-      new InstructionList.StringInstructions(stringManifest),
-      [faucetWasm]
+    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+      {
+        kind: 'String',
+        value: stringManifest
+      },
+      34
     )
 
-    await expect(
-      manifest.convert(InstructionList.Kind.Parsed, NETWORK_ID)
-    ).resolves.toBeDefined()
+    await expect(manifest).resolves.toBeDefined()
   })
 })

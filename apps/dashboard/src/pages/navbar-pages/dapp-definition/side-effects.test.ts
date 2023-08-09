@@ -1,7 +1,4 @@
-import {
-  InstructionList,
-  TransactionManifest
-} from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { getTxManifest } from './side-effects'
 
 describe('dApp definition TX manifest', () => {
@@ -12,14 +9,15 @@ describe('dApp definition TX manifest', () => {
       []
     )
 
-    let manifest = new TransactionManifest(
-      new InstructionList.StringInstructions(stringManifest),
-      []
+    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+      {
+        kind: 'String',
+        value: stringManifest
+      },
+      34
     )
 
-    await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 34)
-    ).resolves.toBeDefined()
+    await expect(manifest).resolves.toBeDefined()
   })
 
   it('should create tx manifest', async () => {
@@ -45,13 +43,14 @@ describe('dApp definition TX manifest', () => {
       ]
     )
 
-    let manifest = new TransactionManifest(
-      new InstructionList.StringInstructions(stringManifest),
-      []
+    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+      {
+        kind: 'String',
+        value: stringManifest
+      },
+      34
     )
 
-    await expect(
-      manifest.convert(InstructionList.Kind.Parsed, 34)
-    ).resolves.toBeDefined()
+    await expect(manifest).resolves.toBeDefined()
   })
 })

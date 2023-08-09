@@ -1,4 +1,7 @@
-import { RadixEngineToolkit, SborValue } from '@radixdlt/radix-engine-toolkit'
+import {
+  ManifestSborStringRepresentation,
+  RadixEngineToolkit
+} from '@radixdlt/radix-engine-toolkit'
 import { error, json } from '@sveltejs/kit'
 import { CURRENT_NETWORK } from '@networks'
 import type { RequestEvent } from './$types'
@@ -7,14 +10,15 @@ export const POST = async ({ request }: RequestEvent) => {
   const { hexEncodedSchema } = await request.json()
 
   try {
-    const sborDecodedSchema = (await RadixEngineToolkit.sborDecode(
-      hexEncodedSchema,
-      CURRENT_NETWORK.id
-    )) as SborValue.ManifestSbor
+    const decodedString = await RadixEngineToolkit.ManifestSbor.decodeToString(
+      Buffer.from(hexEncodedSchema, 'hex'),
+      CURRENT_NETWORK.id,
+      ManifestSborStringRepresentation.ManifestString
+    )
 
     return json(
       {
-        decodedString: sborDecodedSchema.manifestString
+        decodedString
       },
       {
         status: 200

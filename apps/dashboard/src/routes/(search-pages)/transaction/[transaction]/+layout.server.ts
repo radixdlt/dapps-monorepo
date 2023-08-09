@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types'
-import { NotarizedTransaction } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { getTransactionDetails } from '@api/gateway'
 import { redirect } from '@sveltejs/kit'
 
@@ -20,9 +20,9 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
     .then((tx) => {
       if (!tx) throw redirect(301, '/not-found')
       tx.encodedManifest
-        ? NotarizedTransaction.decompile(
+        ? RadixEngineToolkit.NotarizedTransaction.decompile(
             Buffer.from(tx.encodedManifest, 'hex')
-          ).then((notarizedTx: any) =>
+          ).then((notarizedTx) =>
             resolveManifest(
               notarizedTx.signedIntent.intent.manifest.instructions
                 .value as string
