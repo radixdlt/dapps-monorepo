@@ -89,16 +89,6 @@
       path: '/transaction-manifest'
     },
     {
-      text: 'Send Tokens',
-      icon: TokensIcon,
-      path: '/send-tokens'
-    },
-    {
-      text: 'Send NFTs',
-      icon: NftsIcon,
-      path: '/send-nft'
-    },
-    {
       text: 'Manage dApp Definition',
       icon: DappMetadataIcon,
       path: '/dapp-metadata'
