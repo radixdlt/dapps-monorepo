@@ -80,6 +80,7 @@
 
   export let entries: T[]
   export let columns: (TableColumn<T> | null)[]
+  export let defaultSortedColumn: number | undefined = undefined
 
   let sortedEntries: T[] = []
   let lastSortedBy: number
@@ -101,6 +102,10 @@
     sortStatus[index] = direction
 
     sortedEntries = sort(entries, column, direction)
+  }
+
+  $: if (defaultSortedColumn) {
+    sortColumn(columns[defaultSortedColumn], defaultSortedColumn)
   }
 </script>
 

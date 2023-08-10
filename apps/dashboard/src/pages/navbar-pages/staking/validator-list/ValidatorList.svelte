@@ -82,7 +82,11 @@
 
 {#await validators then validators}
   <div class="validator-list">
-    <BasicTable {columns} entries={validators}>
+    <BasicTable
+      {columns}
+      entries={validators}
+      defaultSortedColumn={columns.findIndex((c) => c?.sortBy === 'totalStake')}
+    >
       <svelte:fragment slot="row" let:entry>
         <tr><th class="separator" /> </tr>
         <slot name="row" {entry} {columns} />

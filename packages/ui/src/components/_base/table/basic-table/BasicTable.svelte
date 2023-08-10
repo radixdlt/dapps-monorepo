@@ -32,6 +32,7 @@
 
   export let entries: ComponentProps<Table<T>>['entries']
   export let columns: (BasicTableColumn<T> | null)[]
+  export let defaultSortedColumn: number | undefined = undefined
 
   interface $$Slots {
     row: {
@@ -65,7 +66,7 @@
 </script>
 
 <div class="basic-table">
-  <Table {entries} {columns}>
+  <Table {entries} {columns} {defaultSortedColumn}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
 
     <BasicHeader
