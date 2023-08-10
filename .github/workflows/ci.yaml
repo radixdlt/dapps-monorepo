@@ -556,7 +556,7 @@ jobs:
       env_name: pr
       hierarchical_namespace: dashboard-ci-pr
       namespace: dashboard-pr-${{ github.event.number }}
-      restart_pods: false
+      restart_pods: true
       create_subns: true
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-pr-deployer'
@@ -579,7 +579,7 @@ jobs:
     with:
       env_name: dev
       namespace: dashboard-dev
-      restart_pods: false
+      restart_pods: true
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
@@ -602,7 +602,7 @@ jobs:
     with:
       env_name: enkinet
       namespace: dashboard-enkinet
-      restart_pods: false
+      restart_pods: true
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
@@ -627,7 +627,7 @@ jobs:
     with:
       env_name: hammunet
       namespace: dashboard-hammunet
-      restart_pods: false
+      restart_pods: true
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
@@ -651,7 +651,7 @@ jobs:
     with:
       env_name: gilganet
       namespace: dashboard-gilganet
-      restart_pods: false
+      restart_pods: true
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
@@ -675,7 +675,7 @@ jobs:
     with:
       env_name: mardunet
       namespace: dashboard-mardunet
-      restart_pods: false
+      restart_pods: true
       create_subns: false
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::308190735829:role/gh-dashboard-dev-deployer'
@@ -699,7 +699,7 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet
-      restart_pods: false
+      restart_pods: true
       namespace: dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
@@ -724,7 +724,7 @@ jobs:
       - setup-tags
     with:
       env_name: ansharnet
-      restart_pods: false
+      restart_pods: true
       namespace: dashboard-ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
       create_subns: false
       aws_region: eu-west-2
@@ -748,7 +748,7 @@ jobs:
       - setup-tags
     with:
       env_name: kisharnet-internal
-      restart_pods: false
+      restart_pods: true
       namespace: dashboard-kisharnet-internal
       create_subns: false
       aws_region: eu-west-2
@@ -774,7 +774,7 @@ jobs:
       env_name: ansharnet-internal
       namespace: dashboard-ansharnet-internal
       create_subns: false
-      restart_pods: false
+      restart_pods: true
       aws_region: eu-west-2
       role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
       eks_cluster: rtlj-prod
