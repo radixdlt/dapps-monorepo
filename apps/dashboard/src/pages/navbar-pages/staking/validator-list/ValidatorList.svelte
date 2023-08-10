@@ -69,7 +69,15 @@
     }
   ]
 
-  $: if ($connected) columns = [{}, ...columns, {}]
+  const isEmpty = (obj: any) => {
+    return Object.keys(obj).length === 0
+  }
+
+  $: if ($connected) {
+    columns = [{}, ...columns, {}]
+  } else if (isEmpty(columns[0]) && isEmpty(columns[columns.length - 1])) {
+    columns = columns.slice(1, -1)
+  }
 </script>
 
 {#await validators then validators}
