@@ -4,7 +4,7 @@
     account: Account
     validator: Validator
     xrdAmount: string
-    stakeUnitAmount: string
+    stakeUnitsAmount: string
   }
 
   export type StakedInfo = CommonStakeInfo<'staked'>
