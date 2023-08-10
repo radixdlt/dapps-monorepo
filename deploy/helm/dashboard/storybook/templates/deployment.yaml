@@ -13,10 +13,11 @@ spec:
       {{- include "rdxworks-storybook.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.storybook.podAnnotations }}
       annotations:
+      {{- with .Values.storybook.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        timestamp: {{ now | quote }}
       labels:
         {{- include "rdxworks-storybook.selectorLabels" . | nindent 8 }}
     spec:

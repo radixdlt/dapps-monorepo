@@ -13,12 +13,14 @@ spec:
       {{- include "rdxworks-dashboard.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.dashboard.podAnnotations }}
       annotations:
+      {{- with .Values.dashboard.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        timestamp: {{ now | quote }}
       labels:
         {{- include "rdxworks-dashboard.selectorLabels" . | nindent 8 }}
+        timestamp: {{ now | quote }}
     spec:
       {{- with .Values.dashboard.imagePullSecrets }}
       imagePullSecrets:
