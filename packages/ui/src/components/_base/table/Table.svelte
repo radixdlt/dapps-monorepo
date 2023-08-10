@@ -25,7 +25,7 @@
 
     return [...entries].sort((a, b) => {
       const output = sortFn(a, b)
-      return direction === 'descending' ? output : output * -1
+      return direction === 'ascending' ? output : output * -1
     })
   }
 
@@ -80,6 +80,7 @@
 
   export let entries: T[]
   export let columns: (TableColumn<T> | null)[]
+  export let defaultSortedColumn: number | undefined = undefined
 
   let sortedEntries: T[] = []
   let lastSortedBy: number
@@ -101,6 +102,10 @@
     sortStatus[index] = direction
 
     sortedEntries = sort(entries, column, direction)
+  }
+
+  $: if (defaultSortedColumn) {
+    sortColumn(columns[defaultSortedColumn], defaultSortedColumn)
   }
 </script>
 
