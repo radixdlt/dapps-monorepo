@@ -17,7 +17,7 @@ spec:
       {{- with .Values.console.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        timestamp: {{ now | quote }}
+        timestamp: {{ now | date "2006-01-02T15:04:05" | quote }}
       labels:
         {{- include "dapps-console.selectorLabels" . | nindent 8 }}
     spec:

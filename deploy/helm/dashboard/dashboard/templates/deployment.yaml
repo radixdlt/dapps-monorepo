@@ -17,10 +17,9 @@ spec:
       {{- with .Values.dashboard.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        timestamp: {{ now | quote }}
+        timestamp: {{ now | date "2006-01-02T15:04:05" | quote }}
       labels:
         {{- include "rdxworks-dashboard.selectorLabels" . | nindent 8 }}
-        timestamp: {{ now | quote }}
     spec:
       {{- with .Values.dashboard.imagePullSecrets }}
       imagePullSecrets:
