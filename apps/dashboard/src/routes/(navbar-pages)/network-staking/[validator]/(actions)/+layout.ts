@@ -57,7 +57,7 @@ export const load: LayoutLoad = ({ parent }) =>
         const accumulatedStakeUnits = staking
           .filter((entry) => entry.account.address === account.address)
           .reduce(
-            (sum, entry) => sum.plus(entry.stakeUnitAmount),
+            (sum, entry) => sum.plus(entry.stakeUnitsAmount),
             new BigNumber(0)
           )
           .toString()

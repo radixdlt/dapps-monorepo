@@ -42,7 +42,7 @@
 
     <ResponsiveTableCell>
       <div class="center">
-        <StakeDisplay stakeInfo={Promise.resolve(validator)} />
+        <StakeDisplay validator={Promise.resolve(validator)} />
       </div>
     </ResponsiveTableCell>
 
