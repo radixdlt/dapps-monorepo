@@ -35,8 +35,8 @@ COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm ci
 
 COPY --from=builder /app/out/full/ .
-RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
-RUN cat .env.production
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> packages/ui/.env.production
+RUN cat packages/ui/.env.production
 RUN npx turbo run build --filter=ui
 RUN npx turbo run build --filter=dashboard
 RUN npx turbo run build --filter=console

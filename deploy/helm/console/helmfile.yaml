@@ -14,6 +14,8 @@ environments:
   mardunet: {}
   ansharnet: {}
   ansharnet-internal: {}
+  zabanet: {}
+  zabanet-internal: {}
 repositories:
   - name: bitnami
     url: https://charts.bitnami.com/bitnami

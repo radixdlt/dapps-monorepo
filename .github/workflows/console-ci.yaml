@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
   release:
     types:
       - published
@@ -23,7 +21,9 @@ on:
           - gilganet
           - mardunet
           - ansharnet
+          - zabanet
           - rcnet-v2
+          - rcnet-v3
 
 env:
   active_network: 'hammunet'
@@ -598,3 +598,50 @@ jobs:
       github_environment: console-ansharnet-internal
       app_name: 'console'
       step_name: 'deploy-ansharnet'
+
+  deploy_rcnet_v3:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'console') ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v3' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: zabanet
+      restart_pods: false
+      namespace: dapps-console-zabanet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-zabanet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=zabanet
+      github_environment: console-zabanet
+      app_name: 'console'
+      step_name: 'deploy-rcnet-v3'
+
+  deploy_zabanet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'zabanet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: zabanet-internal
+      restart_pods: false
+      namespace: dapps-console-zabanet-internal
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-zabanet-internal-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=zabanet-internal
+      github_environment: console-zabanet-internal
+      app_name: 'console'
+      step_name: 'deploy-zabanet'
