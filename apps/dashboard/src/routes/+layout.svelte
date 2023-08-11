@@ -62,17 +62,21 @@
       DataRequestBuilder.persona().withProof()
     )
 
-    rdt.walletApi.walletData$.subscribe(({ accounts, proofs }) => {
-      updateAccounts(accounts)
-
-      const personaProof = proofs.find((proof) => proof.type === 'persona')
-
-      if (personaProof) authApi.login(personaProof)
-    })
-
     rdt.walletApi.provideChallengeGenerator(() =>
       createChallenge().unwrapOr('')
     )
+
+    rdt.walletApi.dataRequestControl(async ({ proofs }) => {
+      const personaProof = proofs.find((proof) => proof.type === 'persona')
+      if (personaProof) {
+        const result = await authApi.login(personaProof)
+        if (result.isErr()) throw new Error("Couldn't login")
+      }
+    })
+
+    rdt.walletApi.walletData$.subscribe(({ accounts }) => {
+      updateAccounts(accounts)
+    })
 
     resolveRDT(rdt)
   })
