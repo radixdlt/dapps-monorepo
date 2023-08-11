@@ -8,22 +8,20 @@
   export let link: string
 </script>
 
-<div
+<a
   on:mouseenter={() => (isHovered = true)}
   on:mouseleave={() => (isHovered = false)}
   class="item"
   class:is-hovered={isHovered || isActive}
+  href={link}
+  on:click={() => {
+    showSidebar.set(false)
+  }}
 >
-  <a
-    href={link}
-    on:click={() => {
-      showSidebar.set(false)
-    }}
-    ><IconTextItem iconSize="xs" bold={isHovered || isActive} {icon}
-      ><slot /></IconTextItem
-    ></a
+  <IconTextItem iconSize="xs" bold={isHovered || isActive} {icon}
+    ><slot /></IconTextItem
   >
-</div>
+</a>
 
 <style lang="scss">
   .is-hovered {
@@ -41,9 +39,6 @@
     display: flex;
     align-items: center;
     margin: 0 var(--spacing-md);
-
-    a {
-      margin: 0 var(--spacing-md);
-    }
+    padding: 0 var(--spacing-md);
   }
 </style>
