@@ -13,10 +13,11 @@ spec:
       {{- include "dapps-console.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.console.podAnnotations }}
       annotations:
+      {{- with .Values.console.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        timestamp: {{ now | date "2006-01-02T15:04:05" | quote }}
       labels:
         {{- include "dapps-console.selectorLabels" . | nindent 8 }}
     spec:
