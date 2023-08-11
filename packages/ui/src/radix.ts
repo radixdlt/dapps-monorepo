@@ -1,7 +1,7 @@
 import type { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
 import { andThen, pipe } from 'ramda'
 
-type RDT = ReturnType<typeof RadixDappToolkit>
+type RDT = RadixDappToolkit
 
 export let resolveRDT: (rdt: RDT) => void
 
