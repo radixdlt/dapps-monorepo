@@ -135,7 +135,10 @@
     <div class="summary">
       <div class="summary-title">Total unstaking request ({XRD_SYMBOL})</div>
       <div class="summary-value">
-        {formatXRDValue(totalUnstakeAmount)}
+        <!-- This forces it to re-render when invalidInputs changes. For some reason it doesn't re-render otherwise. -->
+        {#key invalidInputs}
+          {formatXRDValue(totalUnstakeAmount)}
+        {/key}
       </div>
     </div>
   </svelte:fragment>
