@@ -50,7 +50,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
       const stakeUnits = await getEntityDetails(
         items.map(
-          (v) => (v.state as any).stake_unit_resource_address as string
+          (v) => (v.state as any).value.stake_unit_resource_address as string
         ),
         undefined,
         { state_version }
@@ -59,8 +59,8 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
       return items.map((validator, i) => {
         const state: any = validator.state || {}
 
-        const stakeUnitResourceAddress =
-          state.stake_unit_resource_address as string
+        const stakeUnitResourceAddress = state.value
+          .stake_unit_resource_address as string
 
         return {
           name: getEnumStringMetadata('name')(validator.metadata),
@@ -71,8 +71,8 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
             validator.active_in_epoch?.stake_percentage || 0,
 
           stakeUnitResourceAddress,
-          unstakeClaimResourceAddress:
-            state.unstake_claim_token_resource_address as string,
+          unstakeClaimResourceAddress: state.value
+            .unstake_claim_token_resource_address as string,
 
           totalStakeUnits: (
             stakeUnits[i]
