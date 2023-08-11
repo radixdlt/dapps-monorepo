@@ -1,7 +1,14 @@
 import { CURRENT_NETWORK } from '../../src/network'
 import {
   GatewayApiClient,
-  type StateNonFungibleDetailsResponseItem
+  StateApi,
+  StreamApi,
+  type StateEntityDetailsOptions,
+  type StateNonFungibleDetailsResponseItem,
+  StatusApi,
+  TransactionApi,
+  type LedgerState,
+  type LedgerStateSelector
 } from '@radixdlt/babylon-gateway-api-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
@@ -14,6 +21,9 @@ export const getRecentTransactions = (address: string, cursor?: string) =>
 export const getValidatorsList = () => {
   return gatewayApi.state.getAllValidators()
 }
+
+export const getValidatorsListWithLedgerState = () =>
+  gatewayApi.state.getAllValidatorsWithLedgerState()
 
 export const getGatewayStatus = () => gatewayApi.status.getCurrent()
 
@@ -47,8 +57,16 @@ export const getNetworkConfiguration = () =>
 export const getSingleEntityDetails = (address: string) =>
   gatewayApi.state.getEntityDetailsVaultAggregated(address)
 
-export const getEntityDetails = (addresses: string[]) =>
-  gatewayApi.state.getEntityDetailsVaultAggregated(addresses)
+export const getEntityDetails = (
+  addresses: string[],
+  options?: StateEntityDetailsOptions,
+  ledgerState?: LedgerStateSelector
+) =>
+  gatewayApi.state.getEntityDetailsVaultAggregated(
+    addresses,
+    options,
+    ledgerState
+  )
 
 export const getEntityNonFungibleIDs = (
   accountAddress: string,

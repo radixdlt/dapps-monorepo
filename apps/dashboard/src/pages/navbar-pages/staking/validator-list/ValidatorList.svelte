@@ -27,7 +27,7 @@
       id: 'address'
     },
     {
-      sortBy: 'totalStake',
+      sortBy: 'totalStakeInXRD',
       header: {
         label: 'TOTAL STAKE',
         alignment: 'center'
@@ -81,18 +81,22 @@
 </script>
 
 {#await validators then validators}
-  <div class="validator-list">
-    <BasicTable
-      {columns}
-      entries={validators}
-      defaultSortedColumn={columns.findIndex((c) => c?.sortBy === 'totalStake')}
-    >
-      <svelte:fragment slot="row" let:entry>
-        <tr><th class="separator" /> </tr>
-        <slot name="row" {entry} {columns} />
-      </svelte:fragment>
-    </BasicTable>
-  </div>
+  {#if validators.length > 0}
+    <div class="validator-list">
+      <BasicTable
+        {columns}
+        entries={validators}
+        defaultSortedColumn={columns.findIndex(
+          (c) => c?.sortBy === 'totalStakeInXRD'
+        )}
+      >
+        <svelte:fragment slot="row" let:entry>
+          <tr><th class="separator" /> </tr>
+          <slot name="row" {entry} {columns} />
+        </svelte:fragment>
+      </BasicTable>
+    </div>
+  {/if}
 {/await}
 
 <style lang="scss">
