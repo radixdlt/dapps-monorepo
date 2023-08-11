@@ -3,7 +3,7 @@ import type { LayoutLoad } from './$types'
 import {
   getEntityDetails,
   getGatewayStatus,
-  getValidatorsList
+  getValidatorsListWithLedgerState
 } from '@api/gateway'
 import { getAccountData, getEnumStringMetadata } from '@api/utils/resources'
 import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
@@ -39,50 +39,58 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
   const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
-  const validators = getValidatorsList().then(async (validators) => {
-    const stakeUnitTotalSupply = await getEntityDetails(
-      validators.map(
-        (v) => (v.state as any).value.stake_unit_resource_address as string
-      )
-    )
+  let resolveStateVersion: (stateVersion: number) => void
+  const validatorsStateVersion = new Promise<number>(
+    (resolve) => (resolveStateVersion = resolve)
+  )
 
-    return validators.map((validator, i) => {
-      const state: any = validator.state || {}
+  const validators = getValidatorsListWithLedgerState().then(
+    async ({ aggregatedEntities: items, ledger_state: { state_version } }) => {
+      resolveStateVersion(state_version)
 
-      const stakeUnitResourceAddress = state.value
-        .stake_unit_resource_address as string
-
-      return {
-        name: getEnumStringMetadata('name')(validator.metadata),
-        website: getEnumStringMetadata('url')(validator.metadata),
-        address: validator.address,
-        fee: (state.validator_fee_factor || 0) * 100,
-        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-        totalStake: validator.stake_vault.balance,
-
-        stakeUnitResourceAddress,
-        unstakeClaimResourceAddress: state.value
-          .unstake_claim_token_resource_address as string,
-
-        stakeUnitsToStakedRatio: new BigNumber(
-          validator.stake_vault.balance
-        ).dividedBy(
-          (
-            stakeUnitTotalSupply[i]
-              .details as StateEntityDetailsResponseFungibleResourceDetails
-          ).total_supply
+      const stakeUnits = await getEntityDetails(
+        items.map(
+          (v) => (v.state as any).stake_unit_resource_address as string
         ),
+        undefined,
+        { state_version }
+      )
 
-        // TODO:
-        ownerAddress: '',
-        ownerStake: '0',
-        percentageOwnerStake: 0,
-        apy: 0,
-        uptime: 0,
-        acceptsStake: true
-      } as Validator
-    })
-  })
+      return items.map((validator, i) => {
+        const state: any = validator.state || {}
+
+        const stakeUnitResourceAddress =
+          state.stake_unit_resource_address as string
+
+        return {
+          name: getEnumStringMetadata('name')(validator.metadata),
+          website: getEnumStringMetadata('url')(validator.metadata),
+          address: validator.address,
+          fee: (state.validator_fee_factor || 0) * 100,
+          percentageTotalStake:
+            validator.active_in_epoch?.stake_percentage || 0,
+
+          stakeUnitResourceAddress,
+          unstakeClaimResourceAddress:
+            state.unstake_claim_token_resource_address as string,
+
+          totalStakeUnits: (
+            stakeUnits[i]
+              .details as StateEntityDetailsResponseFungibleResourceDetails
+          ).total_supply,
+          totalStakeInXRD: validator.stake_vault.balance,
+
+          // TODO:
+          ownerAddress: '',
+          ownerStake: '0',
+          percentageOwnerStake: 0,
+          apy: 0,
+          uptime: 0,
+          acceptsStake: true
+        } as Validator
+      })
+    }
+  )
 
   const getStakedInfo =
     (validators: Validator[]) =>
@@ -96,21 +104,22 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
             (validator) => validator.stakeUnitResourceAddress === token.address
           )
         )
-        .map((token) => {
+        .map((stakeUnitToken) => {
           const validator = validators.find(
-            (validator) => validator.stakeUnitResourceAddress === token.address
+            (validator) =>
+              validator.stakeUnitResourceAddress === stakeUnitToken.address
           )!
 
-          const xrdAmount = new BigNumber(validator.totalStake)
-            .multipliedBy(token.value)
-            .dividedBy(token.totalSupply)
+          const xrdAmount = new BigNumber(validator.totalStakeInXRD)
+            .multipliedBy(stakeUnitToken.value)
+            .dividedBy(stakeUnitToken.totalSupply)
             .toFixed(RET_DECIMAL_PRECISION - 1)
 
           return {
             type: 'staked',
             account,
             validator,
-            stakeUnitAmount: token.value,
+            stakeUnitsAmount: stakeUnitToken.value,
             xrdAmount
           } as StakedInfo
         })
@@ -147,12 +156,16 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
         if (new BigNumber(xrdAmount).eq(0)) continue
 
+        const stakeUnitsAmount = accountData.fungible.find(
+          (token) => token.address === validator.stakeUnitResourceAddress
+        )!.value
+
         const stakeInfo = {
           account,
           validator,
-          stakeUnitAmount: token.unstakeData.unstakeAmount,
           xrdAmount,
-          claimEpoch: token.unstakeData.claimEpoch
+          claimEpoch: token.unstakeData.claimEpoch,
+          stakeUnitsAmount
         }
 
         isClaimable
@@ -185,11 +198,15 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
       bookmarkedValidatorsStore.set(bookmarked)
       return bookmarked
     })
+
   const stakeInfo = derived(accounts, ($accounts) => {
     if ($accounts.length > 0) {
       return validators.then(async (validators) => {
         const accountData = await getAccountData(
-          $accounts.map((a) => a.address)
+          $accounts.map((a) => a.address),
+          {
+            explicitMetadata: ['validator']
+          }
         )
 
         return $accounts.reduce(

@@ -93,7 +93,7 @@
       </AwaitedRow>
       <AwaitedRow text="Total Stake" promise={validator} let:data>
         <div>
-          <span>{formatXRDValue(data.totalStake)}</span>
+          <span>{formatXRDValue(data.totalStakeInXRD)}</span>
           <span>({data.percentageTotalStake.toFixed(1)}%)</span>
         </div>
       </AwaitedRow>
