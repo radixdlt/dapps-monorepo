@@ -37,6 +37,12 @@ RUN npm ci
 COPY --from=builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> .env.production
 RUN cat .env.production
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> packages/ui/.env.production
+RUN cat packages/ui/.env.production
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/dashboard/.env.production
+RUN cat apps/dashboard/.env.production
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/console/.env.production
+RUN cat apps/console/.env.production
 RUN npx turbo run build --filter=ui
 RUN npx turbo run build --filter=dashboard
 RUN npx turbo run build --filter=console
