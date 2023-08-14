@@ -7,7 +7,7 @@ export const load: PageLoad = async ({ parent }) => {
       account: parent()
         .then((data) => data.promises.entityDetails)
         .then((entityDetails) =>
-          transformResources([entityDetails], { nfts: false })
+          transformResources()()([entityDetails], { nfts: false })
         )
     }
   }

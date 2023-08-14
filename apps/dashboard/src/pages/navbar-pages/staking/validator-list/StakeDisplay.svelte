@@ -1,26 +1,24 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { formatTokenValue, truncateNumber } from '@utils'
+  import type { Validator } from '../Validators.svelte'
 
-  export let stakeInfo: Promise<{
-    totalStake: string
-    percentageTotalStake: number
-  }>
+  export let validator: Promise<Validator>
 </script>
 
 <div class="stake-display">
   <div class="total">
-    {#await stakeInfo}
+    {#await validator}
       <div style:display="inline-block">
         <SkeletonLoader width={50} />
       </div>
-    {:then { totalStake }}
-      {formatTokenValue(totalStake).displayValue}
+    {:then { totalStakeInXRD }}
+      {formatTokenValue(totalStakeInXRD).displayValue}
     {/await}
   </div>
 
   <div class="percentage subtext">
-    {#await stakeInfo}
+    {#await validator}
       <SkeletonLoader width={50} />
     {:then { percentageTotalStake }}
       {`(${truncateNumber(percentageTotalStake)}%)`}

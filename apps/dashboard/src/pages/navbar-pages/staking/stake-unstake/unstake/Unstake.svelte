@@ -15,6 +15,33 @@
     stakeUnits: string
   }[]
 
+  const calculateStakeUnitsAmount = (
+    xrdAmountToUnstake: string,
+    stakeUnitsInAccount: string,
+    totalStakeUnits: string,
+    totalXrdStaked: string
+  ) => {
+    const firstPassStakeUnits = new BigNumber(xrdAmountToUnstake)
+      .multipliedBy(totalStakeUnits)
+      .dividedBy(totalXrdStaked)
+
+    const expectedXrdFromFirstPass = firstPassStakeUnits
+      .multipliedBy(totalXrdStaked)
+      .dividedBy(totalStakeUnits)
+
+    const one_atto = new BigNumber(1).dividedBy(10 ** 18)
+
+    const secondPassStakeUnits = expectedXrdFromFirstPass.gte(
+      xrdAmountToUnstake
+    )
+      ? firstPassStakeUnits
+      : firstPassStakeUnits.plus(one_atto)
+
+    return BigNumber.min(stakeUnitsInAccount, secondPassStakeUnits).toFixed(
+      RET_DECIMAL_PRECISION
+    )
+  }
+
   let stakeButtonDisabled = false
 
   let totalUnstakeAmount = '0'
@@ -46,10 +73,12 @@
 
     stakes.forEach((stake, i) => {
       if (amountsToUnstake[i] !== '0') {
-        const stakeUnitsAmount = new BigNumber(amountsToUnstake[i])
-          .dividedBy(stake.amount)
-          .multipliedBy(stake.stakeUnits)
-          .toFixed(RET_DECIMAL_PRECISION, BigNumber.ROUND_DOWN)
+        const stakeUnitsAmount = calculateStakeUnitsAmount(
+          amountsToUnstake[i],
+          stake.stakeUnits,
+          stake.validator.totalStakeUnits,
+          stake.validator.totalStakeInXRD
+        )
 
         unstakes.push({
           accountAddress: stake.account.address,
@@ -106,7 +135,10 @@
     <div class="summary">
       <div class="summary-title">Total unstaking request ({XRD_SYMBOL})</div>
       <div class="summary-value">
-        {formatXRDValue(totalUnstakeAmount)}
+        <!-- This forces it to re-render when invalidInputs changes. For some reason it doesn't re-render otherwise. -->
+        {#key invalidInputs}
+          {formatXRDValue(totalUnstakeAmount)}
+        {/key}
       </div>
     </div>
   </svelte:fragment>

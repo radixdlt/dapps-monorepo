@@ -3,7 +3,7 @@
     name: string
     address: string
     ownerAddress: string
-    totalStake: string
+    totalStakeInXRD: string
     ownerStake: string
     percentageOwnerStake: number
     apy: number
@@ -14,7 +14,7 @@
     percentageTotalStake: number
     stakeUnitResourceAddress: string
     unstakeClaimResourceAddress: string
-    stakeUnitsToStakedRatio: BigNumber
+    totalStakeUnits: string
   }
   import InfoIcon from '@icons/info.svg'
 
