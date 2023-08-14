@@ -15,7 +15,7 @@ const config = {
     adapter: adapter({ out: 'build' }),
     alias: aliases(),
     env: {
-      dir: process.cwd()
+      dir: '../../'
     }
   }
 }
