@@ -12,6 +12,7 @@
     "test:storybook:watch": "test-storybook --no-index-json --watch",
     "storybook": "storybook dev -p 6006",
     "build": "vite build --mode development",
+    "build:prod": "vite build --mode production",
     "build:storybook": "storybook build",
     "test": "vitest run",
     "test:watch": "vitest --watch"
