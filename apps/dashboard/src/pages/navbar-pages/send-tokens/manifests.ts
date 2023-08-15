@@ -19,7 +19,8 @@ TAKE_FROM_WORKTOP
 CALL_METHOD
   Address("${toAccount}") 
   "try_deposit_or_abort"
-  Bucket("bucket");`
+  Bucket("bucket")
+  Enum<0u8>();`
 
 export const getSendNFTManifest = (
   nfts: {
@@ -46,7 +47,8 @@ export const getSendNFTManifest = (
       CALL_METHOD
         Address("${toAccount}")
         "try_deposit_or_abort"
-        Bucket("nft${i}");
+        Bucket("nft${i}")
+        Enum<0u8>();
         ` + prev,
       ``
     )}

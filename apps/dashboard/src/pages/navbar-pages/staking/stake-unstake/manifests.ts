@@ -24,7 +24,8 @@ export const getStakeManifest = (
     CALL_METHOD
       Address("${accountAddress}")
       "try_deposit_batch_or_abort"
-      Expression("ENTIRE_WORKTOP");
+      Expression("ENTIRE_WORKTOP")
+      Enum<0u8>();
   `
 
 export const getMultipleStakeManifest = (
@@ -64,7 +65,8 @@ export const getMultipleStakeManifest = (
         CALL_METHOD
         Address("${accountAddress}")
         "try_deposit_batch_or_abort"
-        Expression("ENTIRE_WORKTOP");
+        Expression("ENTIRE_WORKTOP")
+        Enum<0u8>();
     `
 
 export const getUnstakeManifest = (
@@ -96,7 +98,8 @@ export const getUnstakeManifest = (
         CALL_METHOD
         Address("${accountAddress}")
         "try_deposit_batch_or_abort"
-        Expression("ENTIRE_WORKTOP");
+        Expression("ENTIRE_WORKTOP")
+        Enum<0u8>();
     `
     )
     .join(' ')
@@ -129,7 +132,8 @@ export const getClaimManifest = (
     CALL_METHOD
     Address("${accountAddress}")
     "try_deposit_batch_or_abort"
-    Expression("ENTIRE_WORKTOP");
+    Expression("ENTIRE_WORKTOP")
+    Enum<0u8>();
 `
     )
     .join('')
