@@ -176,10 +176,9 @@ jobs:
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Run Snyk to check for iac vulnerabilities
-        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        uses: snyk/actions/iac@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           args: --org=${{ env.SNYK_PROJECTS_ORG_ID }}
-          command: iac test
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
