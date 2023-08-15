@@ -178,7 +178,7 @@ jobs:
       - name: Run Snyk to check for iac vulnerabilities
         uses: snyk/actions/iac@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          args: --org=${{ env.SNYK_PROJECTS_ORG_ID }}
+          args: --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
