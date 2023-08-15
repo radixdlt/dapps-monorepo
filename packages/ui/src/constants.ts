@@ -4,6 +4,7 @@ export const Network = {
   HAMMUNET: 'hammunet',
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
+  MARDUNET: 'mardunet',
   KISHARNET: 'kisharnet',
   ANSHARNET: 'ansharnet',
   RCNETV2: 'rcnet-v2',
@@ -28,6 +29,12 @@ export const NETWORK_CONFIG = {
     url: 'https://gilganet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6'
+  },
+  [Network.MARDUNET]: {
+    id: 36,
+    url: 'https://mardunet-gateway.radixdlt.com',
+    dappDefAddress:
+      'account_tdx_24_thisdummyvalue12345'
   },
   [Network.KISHARNET]: {
     id: 12,
