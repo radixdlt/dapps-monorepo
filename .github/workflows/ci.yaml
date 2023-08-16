@@ -175,10 +175,23 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
-      - name: Run Snyk to check for iac vulnerabilities
-        uses: snyk/actions/iac@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+#      - name: Run Snyk to check for iac vulnerabilities
+#        uses: snyk/actions/iac@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+#        with:
+#          args: --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
+      - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2.5.1
         with:
-          args: --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
+          node-version: '14'
+      - name: Install snyk
+        shell: bash
+        run: |
+          npm install snyk -g
+          snyk -v
+          snyk auth ${{ env.SNYK_TOKEN }}
+      - name: Snyk IaC scan
+        shell: bash
+        run: |
+          snyk iac test --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
