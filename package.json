@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:prod": "turbo run build:prod",
     "dev": "turbo run dev",
     "prepare": "husky install",
     "svelte:check": "turbo run svelte:check",
