@@ -27,6 +27,8 @@
   >()
 
   export const currentEpoch = writable<number>(0)
+
+  export const validatorNotFound = writable<boolean>(false)
 </script>
 
 <script lang="ts">
@@ -41,6 +43,7 @@
   import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
   import { bookmarkedValidatorsStore } from '../../../stores'
+  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
 
   export let data: LayoutData
 
@@ -79,32 +82,36 @@
     }
 </script>
 
-<Validators
-  validators={useFilter
-    ? Promise.resolve(filteredValidators)
-    : data.promises.validators.then((v) =>
-        v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
-      )}
-  on:show-claim-all={() => goto('/network-staking/claim-multiple')}
-  on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
-  on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
-  on:show-stake-single={(e) => goto(`/network-staking/${e.detail}/stake`)}
-  on:show-filters={() => {
-    filterOpen = true
-  }}
-/>
-
-{#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
-  <FilterDetails
-    bind:open={filterOpen}
-    feeValues={validators.map((v) => v.fee)}
-    totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
-    ownerStakeValues={validators.map((v) => v.percentageOwnerStake)}
-    on:close={(e) => {
-      applyFilter(validators, bookmarked)(e)
-      filterOpen = false
+{#if $validatorNotFound}
+  <NotFound />
+{:else}
+  <Validators
+    validators={useFilter
+      ? Promise.resolve(filteredValidators)
+      : data.promises.validators.then((v) =>
+          v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
+        )}
+    on:show-claim-all={() => goto('/network-staking/claim-multiple')}
+    on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
+    on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
+    on:show-stake-single={(e) => goto(`/network-staking/${e.detail}/stake`)}
+    on:show-filters={() => {
+      filterOpen = true
     }}
   />
-{/await}
 
-<slot />
+  {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
+    <FilterDetails
+      bind:open={filterOpen}
+      feeValues={validators.map((v) => v.fee)}
+      totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
+      ownerStakeValues={validators.map((v) => v.percentageOwnerStake)}
+      on:close={(e) => {
+        applyFilter(validators, bookmarked)(e)
+        filterOpen = false
+      }}
+    />
+  {/await}
+
+  <slot />
+{/if}

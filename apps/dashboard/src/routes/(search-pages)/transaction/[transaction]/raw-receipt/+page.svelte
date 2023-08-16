@@ -2,6 +2,8 @@
   import Raw from '@dashboard-pages/search-pages/transaction/Raw.svelte'
   import type { LayoutData } from '../$types'
   export let data: LayoutData
+
+  $: receipt = data.promises.tx.then((tx) => tx!.receipt)
 </script>
 
-<Raw receipt={data.promises.tx.then((tx) => tx.receipt)} />
+<Raw {receipt} />

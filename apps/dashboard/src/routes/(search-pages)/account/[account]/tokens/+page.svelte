@@ -5,7 +5,6 @@
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
-  import { goto } from '$app/navigation'
 
   export let data: PageData
 
@@ -42,9 +41,6 @@
           )
 
           return { xrd, tokens }
-        })
-        .catch(() => {
-          goto('/not-found')
         })
     : Promise.resolve(undefined)
 </script>

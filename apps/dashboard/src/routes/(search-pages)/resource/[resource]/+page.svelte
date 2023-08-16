@@ -1,19 +1,14 @@
 <script lang="ts">
-  import { getSingleEntityDetails } from '@api/gateway'
   import NonFungible from '@dashboard-pages/search-pages/resource/non-fungible/NonFungible.svelte'
   import Resource from '@dashboard-pages/search-pages/resource/Resource.svelte'
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { PageData } from './$types'
-  import { goto } from '$app/navigation'
+  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
 
   export let data: PageData
-
-  $: details = getSingleEntityDetails(data.address).catch(() => {
-    goto('/not-found') as never
-  })
 </script>
 
-{#await details then resolvedDetails}
+{#await data.promises.details then resolvedDetails}
   {#if resolvedDetails}
     {#if resolvedDetails.details?.type === 'FungibleResource'}
       <SearchPage title="Fungible Resource" address={data.address}>
@@ -29,4 +24,6 @@
       </SearchPage>
     {/if}
   {/if}
+{:catch}
+  <NotFound />
 {/await}
