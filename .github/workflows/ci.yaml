@@ -175,10 +175,21 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
+      - name: Setup helmfile and helm
+        uses: mamezou-tech/setup-helmfile@55ae2a66c5af4883148b7a50cc6ddc9b61042184
+        with:
+          helm-diff-plugin-version: "v3.1.3"
+          helmfile-version: "v0.144.0"
+          helm-version: "v3.11.0"
+          install-kubectl: no
 #      - name: Run Snyk to check for iac vulnerabilities
 #        uses: snyk/actions/iac@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
 #        with:
 #          args: --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
+      - name: Generate helm templates
+        run: |
+          cd deploy/helm/dashboard
+          helmfile --environment dev template > helm_templates.yaml
       - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2.5.1
         with:
           node-version: '14'
@@ -191,7 +202,7 @@ jobs:
       - name: Snyk IaC scan
         shell: bash
         run: |
-          snyk iac test --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d deploy
+          snyk iac test --org=${{ env.SNYK_PROJECTS_ORG_ID }} deploy/helm/dashboard/helm_templates.yaml
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
