@@ -191,7 +191,7 @@ jobs:
       - name: Snyk IaC scan
         shell: bash
         run: |
-          snyk iac test --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d
+          snyk iac test --org=${{ env.SNYK_PROJECTS_ORG_ID }} -d deploy
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
