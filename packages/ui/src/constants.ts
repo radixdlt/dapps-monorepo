@@ -33,8 +33,7 @@ export const NETWORK_CONFIG = {
   [Network.MARDUNET]: {
     id: 36,
     url: 'https://mardunet-gateway.radixdlt.com',
-    dappDefAddress:
-      'account_tdx_24_thisdummyvalue12345'
+    dappDefAddress: 'account_tdx_24_thisdummyvalue12345'
   },
   [Network.KISHARNET]: {
     id: 12,
