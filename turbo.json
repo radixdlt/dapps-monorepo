@@ -5,6 +5,10 @@
       "dependsOn": ["db:generate", "build:storybook"],
       "outputs": [".svelte-kit/**"]
     },
+    "build:prod": {
+      "dependsOn": ["db:generate", "build:storybook"],
+      "outputs": [".svelte-kit/**"]
+    },
     "build:storybook": {
       "dependsOn": [],
       "outputs": ["storybook-static/**"]
