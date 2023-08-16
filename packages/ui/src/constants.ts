@@ -56,7 +56,7 @@ export const NETWORK_CONFIG = {
   },
   [Network.RCNETV3]: {
     id: 14,
-    url: 'https://zabanet-gateway.radixdlt.com',
+    url: 'https://rcnet-v3.radixdlt.com',
     dappDefAddress: 'account_tdx_e_randomtobefilledin12345'
   },
   [Network.RCNETV2]: {
