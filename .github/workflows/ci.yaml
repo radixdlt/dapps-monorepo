@@ -195,6 +195,9 @@ jobs:
         run: |
           cd deploy/helm/dashboard
           helmfile --environment dev template > helm_templates.yaml
+        env:
+          HELM_GH_USER: ${{ env.GH_HELM_GH_USER }}
+          HELM_GH_PASS: ${{ env.GH_HELM_GH_PASS }}
       - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2.5.1
         with:
           node-version: '14'
