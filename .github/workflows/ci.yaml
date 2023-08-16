@@ -194,7 +194,7 @@ jobs:
       - name: Generate helm templates
         run: |
           cd deploy/helm/dashboard
-          helmfile --environment dev template > helm_templates.yaml
+          helmfile --environment dev --state-values-set=ci.tag=snyk-iac-test template > helm_templates.yaml
         env:
           HELM_GH_USER: ${{ env.GH_HELM_GH_USER }}
           HELM_GH_PASS: ${{ env.GH_HELM_GH_PASS }}
