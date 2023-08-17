@@ -1,9 +1,17 @@
 <div class="add-stake-card">
-  <div class="icon">
-    <slot name="icon" />
-  </div>
+  <div class="icon-and-info">
+    {#if $$slots['icon']}
+      <div class="icon">
+        <slot name="icon" />
+      </div>
+    {/if}
 
-  <slot name="info" />
+    {#if $$slots['info']}
+      <div style:padding-left={$$slots['icon'] ? '' : 'var(--spacing-2xl)'}>
+        <slot name="info" />
+      </div>
+    {/if}
+  </div>
 
   <slot name="token-amount-card" />
 </div>
@@ -14,19 +22,22 @@
   .add-stake-card {
     @include mixins.card;
     padding: var(--spacing-xl);
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) var(
-        --token-amount-card-width,
-        1fr
-      );
-    gap: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
     align-items: center;
+    justify-content: space-between;
 
-    .icon {
+    .icon-and-info {
       display: flex;
-      justify-content: center;
+      gap: var(--spacing-md);
       align-items: center;
-      padding: var(--spacing-lg);
+
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-lg);
+      }
     }
   }
 </style>
