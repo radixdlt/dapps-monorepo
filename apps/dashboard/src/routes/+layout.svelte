@@ -23,8 +23,6 @@
   import { authApi } from '../server/auth/auth-api'
   import LayersIcon from '@icons/layers.svg'
   import TransactionsIcon from '@icons/transactions.svg'
-  import TokensIcon from '@icons/tokens.svg'
-  import NftsIcon from '@icons/nfts.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { getNetworkConfiguration } from '@api/gateway'

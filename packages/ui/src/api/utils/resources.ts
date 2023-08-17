@@ -82,8 +82,10 @@ const nonFungibleResourceDisplayLabel = (
 
 export const getEnumStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
-    (metadata?.items.find((item) => item.key === key)?.value?.raw_json as any)
-      ?.fields?.[0].value || ''
+    (
+      metadata?.items.find((item) => item.key === key)?.value
+        ?.programmatic_json as any
+    )?.fields?.[0].value || ''
 
 export const getStringMetadata =
   (key: string) => (metadata?: EntityMetadataCollection) =>
@@ -99,7 +101,9 @@ export const getUnstakeData = (
   nftData: StateNonFungibleDetailsResponseItem
 ) => {
   const { claimEpoch, unstakeAmount } = (
-    nftData.data.raw_json as { fields: { kind: string; value: string }[] }
+    nftData.data?.programmatic_json as {
+      fields: { kind: string; value: string }[]
+    }
   ).fields.reduce(
     (acc, curr) =>
       curr.kind === 'U64'
