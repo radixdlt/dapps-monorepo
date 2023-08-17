@@ -3,13 +3,13 @@
   import InputNew from './InputNew.svelte'
   import { createEventDispatcher } from 'svelte'
   import { removeThousandsSeparator } from '@utils/format-amount'
-  import { formatAmount } from '@utils'
+  import { formatTokenValue } from '@utils'
 
   export let value: string
   export let maxlength: number | undefined = undefined
   export let readonly = false
   export let format = readonly
-    ? formatAmount.bind(value)
+    ? (value: string) => formatTokenValue(value, undefined).displayValue
     : number(undefined, undefined, 10).bind(null)
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
