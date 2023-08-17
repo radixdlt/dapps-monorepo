@@ -20,10 +20,10 @@
 
   $: accumulatedClaims = readyToClaim.reduce((acc, claim) => {
     const existingClaimIndex = acc.findIndex(
-      (c) => c.account.address === claim.account.address
+      (c) => c.validator.address === claim.validator.address
     )
 
-    if (existingClaimIndex > 0) {
+    if (existingClaimIndex >= 0) {
       acc[existingClaimIndex].xrdAmount = new BigNumber(
         acc[existingClaimIndex].xrdAmount
       )
