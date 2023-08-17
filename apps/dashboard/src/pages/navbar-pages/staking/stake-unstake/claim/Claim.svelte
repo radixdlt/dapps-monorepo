@@ -19,19 +19,21 @@
   export let useBackdrop: boolean = false
 
   $: accumulatedClaims = readyToClaim.reduce((acc, claim) => {
-    const existingClaim = acc.find(
+    const existingClaimIndex = acc.findIndex(
       (c) => c.account.address === claim.account.address
     )
 
-    if (existingClaim) {
-      existingClaim.xrdAmount = new BigNumber(existingClaim.xrdAmount)
+    if (existingClaimIndex > 0) {
+      acc[existingClaimIndex].xrdAmount = new BigNumber(
+        acc[existingClaimIndex].xrdAmount
+      )
         .plus(claim.xrdAmount)
         .toString()
-    } else {
-      acc.push({ ...claim })
-    }
 
-    return acc
+      return acc
+    } else {
+      return [...acc, { ...claim }]
+    }
   }, [] as typeof readyToClaim)
 
   let totalClaimAmount = '0'
@@ -66,23 +68,25 @@
   >
 
   <svelte:fragment slot="content" let:rightColumnWidth>
-    {#each accumulatedClaims as { validator, xrdAmount, account }}
-      <StakeCard>
-        <svelte:fragment slot="info">
-          <ValidatorInfo {...validator} />
-        </svelte:fragment>
+    <div class="card-list">
+      {#each accumulatedClaims as { validator, xrdAmount, account }}
+        <StakeCard>
+          <svelte:fragment slot="info">
+            <ValidatorInfo {...validator} />
+          </svelte:fragment>
 
-        <svelte:fragment slot="token-amount-card">
-          <TokenAmountCard
-            token={XRDToken}
-            {account}
-            tokenAmount={xrdAmount}
-            readonly={true}
-            --card-width={rightColumnWidth}
-          />
-        </svelte:fragment>
-      </StakeCard>
-    {/each}
+          <svelte:fragment slot="token-amount-card">
+            <TokenAmountCard
+              token={XRDToken}
+              {account}
+              tokenAmount={xrdAmount}
+              readonly={true}
+              --card-width={rightColumnWidth}
+            />
+          </svelte:fragment>
+        </StakeCard>
+      {/each}
+    </div>
   </svelte:fragment>
 
   <svelte:fragment slot="info-box-title">How Stake Claims Work</svelte:fragment>
