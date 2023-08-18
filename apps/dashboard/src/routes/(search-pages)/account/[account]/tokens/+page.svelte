@@ -2,7 +2,7 @@
   import type { FungibleResource } from '@api/utils/resources'
   import type { PageData } from './$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
-  import FungibleTokensPage from '@dashboard-pages/search-pages/account/FungibleTokensPage.svelte'
+  import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
 

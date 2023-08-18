@@ -1,6 +1,6 @@
 <script lang="ts">
   import Address from '@components/_base/address/Address.svelte'
-  import Tags from '../tags/Tags.svelte'
+  import Tags from '../_base/tags/Tags.svelte'
   import { formatTokenValue } from '@utils'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import 'cooltipz-css'
@@ -40,7 +40,7 @@
 </a>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
+  @use '../../mixins.scss';
 
   .card {
     @include mixins.card;

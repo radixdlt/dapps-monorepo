@@ -1,6 +1,6 @@
 <script lang="ts">
-  import FungibleTokenCard from '@components/_base/fungible-token-card/FungibleTokenCard.svelte'
-  import type { Token } from './types'
+  import FungibleTokenCard from '@components/fungible-token-card/FungibleTokenCard.svelte'
+  import type { Token } from '../types'
 
   export let xrd: Token | undefined = undefined
   export let tokens: Token[] = []
