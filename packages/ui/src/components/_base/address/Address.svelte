@@ -1,11 +1,9 @@
 <script lang="ts">
   import 'cooltipz-css'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
   import { addressToRoute, shortenAddress } from '@utils'
   import { onDestroy, onMount } from 'svelte'
-  import CopyIcon from '@icons/copy.svg'
-  import { copyToClipboard } from '@directives/copy-to-clipboard'
   import { goto } from '$app/navigation'
+  import CopyableText from '../copyable-text/CopyableText.svelte'
 
   export let value = ''
   export let short = false
@@ -44,26 +42,22 @@
 </script>
 
 <div class="address" bind:this={addressElement}>
-  <!-- svelte-ignore a11y-missing-attribute -->
-  <button class="text" on:click|stopPropagation={handleAddressClick}>
-    {short ? shortenAddress(value) : value}
-  </button>
-  <button use:copyToClipboard={value}>
-    <IconNew size="medium" icon={CopyIcon} />
-  </button>
+  <CopyableText text={value}>
+    <button class="text" on:click|stopPropagation={handleAddressClick}>
+      {short ? shortenAddress(value) : value}
+    </button>
+  </CopyableText>
 </div>
 
-<style>
+<style lang="scss">
   .address {
-    display: inline-flex;
-    align-items: center;
-    background: var(--background);
     padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--background);
+    width: fit-content;
     border-radius: var(--border-radius-lg);
-  }
 
-  .text {
-    margin-right: var(--spacing-sm);
-    color: var(--color-radix-blue-2);
+    .text {
+      color: var(--color-radix-blue-2);
+    }
   }
 </style>
