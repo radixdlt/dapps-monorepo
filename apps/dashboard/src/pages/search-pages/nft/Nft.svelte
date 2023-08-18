@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getNonFungibleData, getSingleEntityDetails } from '@api/gateway'
   import { getStringMetadata } from '@api/utils/resources'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
@@ -7,21 +6,21 @@
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { goto } from '$app/navigation'
+  import type {
+    StateEntityDetailsVaultResponseItem,
+    StateNonFungibleDetailsResponseItem
+  } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let address: string
 
-  const [resourceAddress = '', nftId = ''] = address.includes(':')
-    ? address.split(':')
-    : [address, '']
+  export let nftData: Promise<
+    | StateNonFungibleDetailsResponseItem[]
+    | {
+        non_fungible_id: string
+      }[]
+  >
 
-  $: nftData = getNonFungibleData(resourceAddress, [nftId]).catch(() => [
-    { non_fungible_id: '' }
-  ])
-
-  $: details = getSingleEntityDetails(resourceAddress).catch(() => {
-    goto('/not-found') as never
-  })
+  export let details: Promise<void | StateEntityDetailsVaultResponseItem>
 </script>
 
 <Box>

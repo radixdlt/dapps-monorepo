@@ -12,12 +12,11 @@ export const load: LayoutLoad = ({ params, route }) => {
     'recent-transactions'
   ])
 
-  const entityDetails = getSingleEntityDetails(params.account)
   return {
     address: params.account,
     activeTab: route.id.split('/').pop(),
     promises: {
-      entityDetails
+      entityDetails: getSingleEntityDetails(params.account)
     }
   }
 }

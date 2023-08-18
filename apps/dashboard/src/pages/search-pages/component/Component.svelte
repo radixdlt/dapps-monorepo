@@ -5,29 +5,20 @@
   import Row from '@components/info-box/Row.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import LoadingInfoBox from '@components/info-box/LoadingInfoBox.svelte'
-  import { getSingleEntityDetails } from '@api/gateway'
   import type {
     StateEntityDetailsResponseComponentDetails,
     StateEntityDetailsResponseItem,
     ReplaceProperty
   } from '@radixdlt/babylon-gateway-api-sdk'
   import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
-  import { goto } from '$app/navigation'
 
-  export let address: string
-
-  $: details = getSingleEntityDetails(address)
-    .then(
-      (details) =>
-        details as ReplaceProperty<
-          StateEntityDetailsResponseItem,
-          'details',
-          StateEntityDetailsResponseComponentDetails
-        >
-    )
-    .catch(() => {
-      goto('/not-found') as never
-    })
+  export let details: Promise<
+    ReplaceProperty<
+      StateEntityDetailsResponseItem,
+      'details',
+      StateEntityDetailsResponseComponentDetails
+    >
+  >
 </script>
 
 <Card>

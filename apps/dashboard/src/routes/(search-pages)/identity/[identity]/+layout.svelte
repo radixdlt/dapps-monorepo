@@ -2,21 +2,26 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
+  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
 
   export let data: LayoutData
 
-  data.promises.entityDetails.catch((_) => {
-    goto('/not-found')
-  })
+  let notFound = false
+
+  data.promises.entityDetails.catch(() => (notFound = true))
 </script>
 
-<SearchPage
-  --border="var(--theme-border-separator)"
-  title="Identity"
-  address={data.address}
-  activeTab={data.activeTab || 'metadata'}
-  menuItems={[[{ id: 'metadata', label: 'Metadata' }]]}
-  on:navigate={({ detail }) => goto(detail)}
->
-  <slot />
-</SearchPage>
+{#if notFound}
+  <NotFound />
+{:else}
+  <SearchPage
+    --border="var(--theme-border-separator)"
+    title="Identity"
+    address={data.address}
+    activeTab={data.activeTab || 'metadata'}
+    menuItems={[[{ id: 'metadata', label: 'Metadata' }]]}
+    on:navigate={({ detail }) => goto(detail)}
+  >
+    <slot />
+  </SearchPage>
+{/if}

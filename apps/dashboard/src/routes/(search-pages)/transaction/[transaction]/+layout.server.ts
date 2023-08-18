@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from './$types'
 import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { getTransactionDetails } from '@api/gateway'
-import { redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
@@ -16,9 +16,7 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
   )
 
   const tx = getTransactionDetails(params.transaction)
-    .catch(() => undefined)
     .then((tx) => {
-      if (!tx) throw redirect(301, '/not-found')
       tx.encodedManifest
         ? RadixEngineToolkit.NotarizedTransaction.decompile(
             Buffer.from(tx.encodedManifest, 'hex')
@@ -31,6 +29,7 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
         : resolveManifest('')
       return tx
     })
+    .catch(() => undefined)
 
   return {
     address: params.transaction,

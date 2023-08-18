@@ -1,8 +1,9 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import CodeBox from '@components/code-box/CodeBox.svelte'
+  import type { TransactionReceipt } from '@radixdlt/babylon-gateway-api-sdk'
 
-  export let receipt: Promise<any>
+  export let receipt: Promise<TransactionReceipt | undefined>
 </script>
 
 <div class="wrapper surface-2" style:--code-box-min-height="500px">

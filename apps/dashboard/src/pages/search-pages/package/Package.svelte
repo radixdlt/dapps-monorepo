@@ -1,17 +1,10 @@
 <script lang="ts">
   import Box from '@components/_base/box/Box.svelte'
   import Card from '@components/_base/card/Card.svelte'
-  import { getSingleEntityDetails } from '@api/gateway'
   import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
-  import { goto } from '$app/navigation'
+  import type { EntityMetadataItem } from '@radixdlt/babylon-gateway-api-sdk'
 
-  export let address: string
-
-  $: metadata = getSingleEntityDetails(address)
-    .then(({ metadata }) => metadata.items)
-    .catch(() => {
-      goto('/not-found') as never
-    })
+  export let metadata: Promise<EntityMetadataItem[]>
 </script>
 
 <Box>
