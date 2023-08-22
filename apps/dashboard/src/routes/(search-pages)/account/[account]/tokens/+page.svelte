@@ -1,12 +1,16 @@
 <script lang="ts">
   import type { FungibleResource } from '@api/utils/resources'
-  import type { PageData } from './$types'
+  import type { LayoutData } from '../$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
+  import { context } from '../+layout.svelte'
 
-  export let data: PageData
+  export let data: LayoutData
+
+  const activeTab = context.get('activeTab')
+  $activeTab = 'tokens'
 
   const transformFungibleTokenResource = ({
     address,
@@ -26,22 +30,18 @@
   $: xrdAddress = $xrdAddressStore
 
   $: promise = xrdAddress
-    ? data.promises.account
-        .then((arr) => arr[0])
-        .then((details) => {
-          const { [xrdAddress!]: xrdRaw, ...tokensRaw } = indexBy(
-            prop('address'),
-            details.fungible
-          )
-          const xrd = xrdRaw
-            ? transformFungibleTokenResource(xrdRaw)
-            : undefined
-          const tokens = Object.values(tokensRaw).map(
-            transformFungibleTokenResource
-          )
+    ? data.promises.accountData.then(({ fungible }) => {
+        const { [xrdAddress!]: xrdRaw, ...tokensRaw } = indexBy(
+          prop('address'),
+          fungible
+        )
+        const xrd = xrdRaw ? transformFungibleTokenResource(xrdRaw) : undefined
+        const tokens = Object.values(tokensRaw).map(
+          transformFungibleTokenResource
+        )
 
-          return { xrd, tokens }
-        })
+        return { xrd, tokens }
+      })
     : Promise.resolve(undefined)
 </script>
 
