@@ -132,11 +132,15 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
       accountData: Awaited<ReturnType<typeof getAccountData>>[number],
       currentEpoch: number
     ) => {
-      const unstakeTokens = accountData.nonFungible.filter((token) =>
-        validators.some(
-          (validator) => validator.unstakeClaimResourceAddress === token.address
+      const unstakeTokens = accountData.nonFungible
+        .filter(({ resource }) =>
+          validators.some(
+            (validator) =>
+              validator.unstakeClaimResourceAddress === resource.address
+          )
         )
-      )
+        .map(({ nonFungibles }) => nonFungibles)
+        .flat()
 
       let unstaking: UnstakingInfo[] = []
       let readyToClaim: ReadyToClaimInfo[] = []
@@ -147,7 +151,9 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
         )
 
         const validator = validators.find(
-          (validator) => validator.unstakeClaimResourceAddress === token.address
+          (validator) =>
+            validator.unstakeClaimResourceAddress ===
+            token.nonFungibleResource.resource_address
         )!
 
         const xrdAmount = new BigNumber(

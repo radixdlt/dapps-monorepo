@@ -13,22 +13,27 @@
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
 
-  let selected: Array<Awaited<typeof resources>[number]> = []
-
   $: options = resources.then((resources) =>
-    resources.map((resource) => ({
-      ...resource,
-      label: resource.label,
-      checked: false
-    }))
+    resources
+      .map(({ nonFungibles }) => nonFungibles)
+      .flat()
+      .map((nft) => ({
+        label: nft.name ?? nft.address,
+        address: nft.address,
+        resourceAddress: nft.nonFungibleResource.resource_address,
+        id: nft.id as string,
+        checked: false
+      }))
   )
+
+  let selected: Awaited<typeof options> = []
 
   $: setResourceSelected(selected.length > 0)
 
   $: setTransactionManifest(
     getSendNFTManifest(
       selected.map((nft) => ({
-        resourceAddress: nft.address,
+        resourceAddress: nft.resourceAddress,
         id: nft.id as string
       })),
       selectedFromAccount,

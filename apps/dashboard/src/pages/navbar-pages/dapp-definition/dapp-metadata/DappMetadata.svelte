@@ -62,7 +62,9 @@
         await entity.validation!(
           $selectedAccount!.address,
           entityLinkedFromDapp(entity.address)!,
-          $selectedAccount!.resources.nonFungible
+          $selectedAccount!.resources.nonFungible.map(
+            ({ resource }) => resource
+          )
         )
       )
     }
@@ -185,7 +187,7 @@
     $entities[i]!.validation?.(
       $selectedAccount!.address,
       entityLinkedFromDapp($entities[i]!.address)!,
-      $selectedAccount!.resources.nonFungible
+      $selectedAccount!.resources.nonFungible.map(({ resource }) => resource)
     )
   }
 

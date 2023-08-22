@@ -19,9 +19,9 @@
   const { response } = query('sendTransaction')
 
   $: resourceList = resources.then((r) =>
-    r.map(({ label, address, value }) => ({
+    r.map(({ name, address, value }) => ({
       address,
-      label,
+      label: name,
       value
     }))
   )
