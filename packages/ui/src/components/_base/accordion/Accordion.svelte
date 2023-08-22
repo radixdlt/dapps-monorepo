@@ -25,7 +25,7 @@
     </div>
   </div>
   {#if isOpened}
-    <div class="content" transition:slide>
+    <div class="content" transition:slide|local>
       <slot name="content" />
     </div>
   {/if}
@@ -80,7 +80,7 @@
     align-items: center;
 
     :global(.header-text) {
-      font-size: 1.2rem;
+      font-size: var(--text-lg);
       white-space: nowrap;
       font-weight: var(--font-weight-bold-2);
     }

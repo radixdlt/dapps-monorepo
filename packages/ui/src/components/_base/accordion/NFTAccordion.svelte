@@ -19,11 +19,7 @@
       <div class="header {tags.length > 0 ? 'has-tags' : ''}">
         <span class="header-text">{name}</span>
         <div class={name ? 'address-spacing' : ''}>
-          <Address
-            value={address}
-            autoShorten
-            --background="var(--color-grey-4)"
-          />
+          <Address value={address} short --background="var(--color-grey-4)" />
         </div>
       </div>
 
