@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
+  import { Meta, Story } from '@storybook/addon-svelte-csf'
   import FungibleTokenCard from './FungibleTokenCard.svelte'
+
   const tokens = [
     {
       symbol: 'XRD',
@@ -64,7 +65,7 @@
 
 <Meta title="FungibleTokenCard" />
 
-<Template>
+<Story name="Primary">
   {#each tokens as token, index}
     <div style:margin-bottom="10px">
       <FungibleTokenCard
@@ -78,6 +79,8 @@
       />
     </div>
   {/each}
-</Template>
+</Story>
 
-<Story name="Primary" />
+<Story name="Loading" args={{ tokens }}>
+  <FungibleTokenCard loading />
+</Story>

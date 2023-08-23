@@ -4,14 +4,15 @@
   import { formatTokenValue } from '@utils'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import 'cooltipz-css'
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
 
   export let isXrd = false
   export let numberOfTags = 0
-  export let address: string | undefined
-  export let amount: string | undefined
-  export let symbol: string | undefined
-  export let iconUrl: string | undefined
-  export let linksTo: string | undefined
+  export let address: string | undefined = undefined
+  export let amount: string | undefined = undefined
+  export let symbol: string | undefined = undefined
+  export let iconUrl: string | undefined = undefined
+  export let linksTo: string | undefined = undefined
   export let loading = false
 
   $: formatted = formatTokenValue(amount ?? '0')
@@ -21,21 +22,32 @@
   <TokenIcon {isXrd} {iconUrl} />
   <div>
     <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
-      {#if symbol}<span class="token-symbol">{symbol.slice(0, 5)}</span>{/if}
-      <Address short value={address} --background="var(--color-grey-5)" />
+      {#if symbol}
+        <span class="token-symbol">{symbol.slice(0, 5)}</span>
+      {/if}
+
+      {#if address}
+        <Address short value={address} --background="var(--color-grey-5)" />
+      {:else if loading}
+        <SkeletonLoader width={200} height={20} />
+      {/if}
     </div>
 
     <Tags showNetworkTag={isXrd} {numberOfTags} />
   </div>
   <div style="text-align: right">
-    <button
-      on:click|preventDefault|stopPropagation={() => {
-        navigator.clipboard.writeText(amount ?? '0')
-      }}
-      class:cooltipz--top={formatted.suffix}
-      class="token-amount"
-      aria-label={formatted.value}>{formatted.displayValue}</button
-    >
+    {#if amount}
+      <button
+        on:click|preventDefault|stopPropagation={() => {
+          navigator.clipboard.writeText(amount ?? '0')
+        }}
+        class:cooltipz--top={formatted.suffix}
+        class="token-amount"
+        aria-label={formatted.value}>{formatted.displayValue}</button
+      >
+    {:else if loading}
+      <SkeletonLoader width={100} height={20} />
+    {/if}
   </div>
 </a>
 
@@ -45,7 +57,7 @@
   .card {
     @include mixins.card;
     user-select: none;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
     display: grid;
     grid-template-columns: 44px 1fr 1fr;
     grid-gap: var(--spacing-md);

@@ -3,31 +3,66 @@
   import Address from '../address/Address.svelte'
   import Tags from '../tags/Tags.svelte'
   import NftImage from '../nft-image/NftImage.svelte'
-  export let name = ''
-  export let imageUrl = ''
-  export let tags: string[] = []
-  export let address: string
-  export let count: number
-  export let totalCount: number
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+
+  type Data = {
+    name?: string
+    address: string
+    imageUrl?: string
+    count: number
+    totalCount: number
+    tags?: string[]
+  }
+
+  export let data: Promise<Data> | Data
+
+  const _data = Promise.resolve(data)
+
+  let hasTags: boolean
+  let hasName: boolean
+
+  _data.then(({ tags, name }) => {
+    hasTags = !!(tags && tags.length > 0)
+    hasName = !!name
+  })
 </script>
 
 <Accordion>
   <div class="wrapper" slot="header">
-    <NftImage url={imageUrl} />
+    {#await _data}
+      <NftImage />
+    {:then { imageUrl }}
+      <NftImage url={imageUrl} />
+    {/await}
 
     <div class="content">
-      <div class="header {tags.length > 0 ? 'has-tags' : ''}">
-        <span class="header-text">{name}</span>
-        <div class={name ? 'address-spacing' : ''}>
-          <Address value={address} short --background="var(--color-grey-4)" />
+      <div class="header" class:has-tags={hasTags}>
+        <span class="header-text">
+          {#await _data}
+            <SkeletonLoader width={100} height={20} />
+          {:then { name }}
+            {name}
+          {/await}
+        </span>
+        <div class:address-spacing={hasName}>
+          {#await _data then { address }}
+            <Address value={address} short --background="var(--color-grey-4)" />
+          {/await}
         </div>
       </div>
 
-      <Tags {tags} showNetworkTag={false} />
+      {#await _data then { tags }}
+        <Tags {tags} showNetworkTag={false} />
+      {/await}
     </div>
   </div>
 
-  <svelte:fragment slot="subheader">{count} of {totalCount}</svelte:fragment>
+  <svelte:fragment slot="subheader">
+    {#await _data then { count, totalCount }}
+      {count} of {totalCount}
+    {/await}
+  </svelte:fragment>
+
   <svelte:fragment slot="content">
     <slot />
   </svelte:fragment>

@@ -45,12 +45,9 @@
     : Promise.resolve(undefined)
 </script>
 
-{#await promise}
-  <FungibleTokensPage loading={true} />
-{:then value}
-  {#if value}
-    <FungibleTokensPage xrd={value.xrd} tokens={value.tokens} />
-  {/if}
-{:catch}
-  <!-- INVALID ACCOUNT -->
-{/await}
+<FungibleTokensPage
+  data={promise.then((value) => ({
+    tokens: value?.tokens ?? [],
+    xrd: value?.xrd
+  }))}
+/>

@@ -13,16 +13,20 @@
 </script>
 
 {#await nonFungibleResources}
-  loading...
+  {#each Array(3) as _}
+    <NFTAccordion data={new Promise(() => {})} />
+  {/each}
 {:then nonFungibleResources}
   {#each nonFungibleResources as { resource, nonFungibles, totalNonFungibles }}
     <NFTAccordion
-      name={resource.name}
-      address={resource.address}
-      imageUrl={resource.iconUrl}
-      count={nonFungibles.length}
-      tags={resource.tags}
-      totalCount={totalNonFungibles}
+      data={{
+        name: resource.name,
+        address: resource.address,
+        imageUrl: resource.iconUrl,
+        count: nonFungibles.length,
+        tags: resource.tags,
+        totalCount: totalNonFungibles
+      }}
     >
       <div class="nft-cards">
         {#each nonFungibles as nft}
