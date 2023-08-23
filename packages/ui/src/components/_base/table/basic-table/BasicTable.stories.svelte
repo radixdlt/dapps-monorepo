@@ -2,7 +2,7 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Table from '../Table.svelte'
   import Address from '../../address/Address.svelte'
-  import { formatAmount } from '../../../../utils'
+  import { formatTokenValue } from '../../../../utils'
   import Pagination from './Pagination.svelte'
   import TableRow from './TableRow.svelte'
   import Checkmark from '@icons/checkmark.svg'
@@ -61,7 +61,7 @@
       header: {
         label: 'Total Stake'
       },
-      renderAs: ({ totalStake }) => formatAmount(totalStake.toString()),
+      renderAs: ({ totalStake }) => formatTokenValue(totalStake).displayValue,
       sortBy: 'totalStake'
     },
     {

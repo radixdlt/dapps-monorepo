@@ -99,19 +99,6 @@ export const useContext = <
 export const accountLabel = (account: Omit<Account, 'displayed'>) =>
   `${account.label} (${shortenAddress(account.address)})`
 
-export const formatAmount = (amount: string | number) => {
-  let _amount = new BigNumber(amount)
-
-  const suffixes = ['', 'K', 'M']
-  let suffixNum = 0
-  let shortValue = _amount ?? new BigNumber(0)
-  while (shortValue.gte(1000) && suffixNum < 2) {
-    shortValue = shortValue.dividedBy(1000)
-    suffixNum++
-  }
-  return shortValue.toFixed(2) + suffixes[suffixNum]
-}
-
 export const truncateNumber = (num: number) => num.toFixed(2)
 
 export type Deferred<T> = Promise<T> & {
@@ -178,7 +165,7 @@ export const fetchWrapper = <R = any, ER = unknown>(
   )
 
 export const formatTokenValue = (
-  input: string,
+  input: string | number | BigNumber,
   options?: Partial<{ maxPlaces: number; thousandsSeparator: string }>
 ) => {
   const stringToBigInt = (input: string) => new BigNumber(input)
@@ -243,10 +230,12 @@ export const formatTokenValue = (
         .join('.')
     }
 
+  const strInput = new BigNumber(input).toString()
+
   return pipe(
     stringToBigInt,
-    round(input, options?.maxPlaces),
-    addSuffix(input, options?.maxPlaces),
+    round(strInput, options?.maxPlaces),
+    addSuffix(strInput, options?.maxPlaces),
     ({ value, suffix, rounded }) => ({
       rounded: thousandsSeparator(options?.thousandsSeparator)(rounded),
       value: thousandsSeparator(options?.thousandsSeparator)(value),
@@ -255,7 +244,7 @@ export const formatTokenValue = (
         rounded
       )}${suffix}`
     })
-  )(input)
+  )(strInput)
 }
 
 export const formatXRDValue = (value: string) =>

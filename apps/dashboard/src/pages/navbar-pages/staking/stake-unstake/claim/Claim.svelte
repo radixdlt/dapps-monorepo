@@ -1,6 +1,5 @@
 <script lang="ts">
   import StakePanel from '../StakePanel.svelte'
-  import Address from '@components/_base/address/Address.svelte'
   import TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
