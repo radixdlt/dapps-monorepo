@@ -10,6 +10,8 @@
       nonFungibles: NonFungible[]
     }[]
   >
+
+  let width: number
 </script>
 
 {#await nonFungibleResources}
@@ -28,14 +30,16 @@
         totalCount: totalNonFungibles
       }}
     >
-      <div class="nft-cards">
-        {#each nonFungibles as nft}
-          <NonFungibleTokenCard
-            imgUrl={nft.iconUrl}
-            name={nft.name}
-            id={nft.id}
-          />
-        {/each}
+      <div bind:clientWidth={width}>
+        <div class="nft-cards" class:center={width < 500}>
+          {#each nonFungibles as nft}
+            <NonFungibleTokenCard
+              imgUrl={nft.iconUrl}
+              name={nft.name}
+              id={nft.id}
+            />
+          {/each}
+        </div>
       </div>
     </NFTAccordion>
   {/each}
@@ -46,5 +50,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-2xl);
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
   }
 </style>
