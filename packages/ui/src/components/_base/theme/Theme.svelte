@@ -6,9 +6,14 @@
   <slot />
 </div>
 
-<style>
+<style lang="scss">
+  @use '../../../mixins.scss';
   .common {
     height: 100vh;
+
+    @include mixins.mobile {
+      height: 100svh; // for mobile safari
+    }
   }
 
   .light {
