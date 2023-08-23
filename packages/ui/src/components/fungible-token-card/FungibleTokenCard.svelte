@@ -18,38 +18,40 @@
   $: formatted = formatTokenValue(amount ?? '0')
 </script>
 
-<a class="card" href={linksTo}>
-  <TokenIcon {isXrd} {iconUrl} />
-  <div>
-    <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
-      {#if symbol}
-        <span class="token-symbol">{symbol.slice(0, 5)}</span>
-      {/if}
+<div style:min-width="18rem">
+  <a class="card" href={linksTo}>
+    <TokenIcon {isXrd} {iconUrl} />
+    <div>
+      <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
+        {#if symbol}
+          <span class="token-symbol">{symbol.slice(0, 5)}</span>
+        {/if}
 
-      {#if address}
-        <Address short value={address} --background="var(--color-grey-5)" />
+        {#if address}
+          <Address short value={address} --background="var(--color-grey-5)" />
+        {:else if loading}
+          <SkeletonLoader width={200} height={20} />
+        {/if}
+      </div>
+
+      <Tags showNetworkTag={isXrd} {numberOfTags} />
+    </div>
+    <div style="text-align: right">
+      {#if amount}
+        <button
+          on:click|preventDefault|stopPropagation={() => {
+            navigator.clipboard.writeText(amount ?? '0')
+          }}
+          class:cooltipz--top={formatted.suffix}
+          class="token-amount"
+          aria-label={formatted.value}>{formatted.displayValue}</button
+        >
       {:else if loading}
-        <SkeletonLoader width={200} height={20} />
+        <SkeletonLoader width={100} height={20} />
       {/if}
     </div>
-
-    <Tags showNetworkTag={isXrd} {numberOfTags} />
-  </div>
-  <div style="text-align: right">
-    {#if amount}
-      <button
-        on:click|preventDefault|stopPropagation={() => {
-          navigator.clipboard.writeText(amount ?? '0')
-        }}
-        class:cooltipz--top={formatted.suffix}
-        class="token-amount"
-        aria-label={formatted.value}>{formatted.displayValue}</button
-      >
-    {:else if loading}
-      <SkeletonLoader width={100} height={20} />
-    {/if}
-  </div>
-</a>
+  </a>
+</div>
 
 <style lang="scss">
   @use '../../mixins.scss';
