@@ -165,7 +165,7 @@ export const fetchWrapper = <R = any, ER = unknown>(
   )
 
 export const formatTokenValue = (
-  input: string,
+  input: string | number | BigNumber,
   options?: Partial<{ maxPlaces: number; thousandsSeparator: string }>
 ) => {
   const stringToBigInt = (input: string) => new BigNumber(input)
@@ -230,10 +230,12 @@ export const formatTokenValue = (
         .join('.')
     }
 
+  const strInput = new BigNumber(input).toString()
+
   return pipe(
     stringToBigInt,
-    round(input, options?.maxPlaces),
-    addSuffix(input, options?.maxPlaces),
+    round(strInput, options?.maxPlaces),
+    addSuffix(strInput, options?.maxPlaces),
     ({ value, suffix, rounded }) => ({
       rounded: thousandsSeparator(options?.thousandsSeparator)(rounded),
       value: thousandsSeparator(options?.thousandsSeparator)(value),
@@ -242,7 +244,7 @@ export const formatTokenValue = (
         rounded
       )}${suffix}`
     })
-  )(input)
+  )(strInput)
 }
 
 export const formatXRDValue = (value: string) =>

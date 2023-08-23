@@ -61,8 +61,7 @@
       header: {
         label: 'Total Stake'
       },
-      renderAs: ({ totalStake }) =>
-        formatTokenValue(totalStake.toString()).displayValue,
+      renderAs: ({ totalStake }) => formatTokenValue(totalStake).displayValue,
       sortBy: 'totalStake'
     },
     {

@@ -108,14 +108,14 @@
         promise={validator.then(({ fee }) => fee)}
         let:data
       >
-        {formatTokenValue(data.toString()).displayValue}
+        {formatTokenValue(data).displayValue}
       </AwaitedRow>
       <AwaitedRow
         text="Apy"
         promise={validator.then(({ apy }) => apy)}
         let:data
       >
-        {formatTokenValue(data.toString()).displayValue}
+        {formatTokenValue(data).displayValue}
       </AwaitedRow>
       <Row text="Accepts Stake">
         <AcceptsStake
