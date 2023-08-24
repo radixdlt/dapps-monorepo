@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
 
   export let value: string
+  export let copyableValue: string = value
   export let shorten:
     | {
         fn: (text: string) => string
@@ -34,7 +35,6 @@
 
   onMount(() => {
     if (shorten?.behavior === 'responsive') {
-      console.log('got here')
       window.addEventListener('resize', handleResize)
       handleResize()
     }
@@ -49,7 +49,7 @@
       {displayText}
     </slot>
   </div>
-  <button use:copyToClipboard={value}>
+  <button use:copyToClipboard={copyableValue}>
     <IconNew size="medium" icon={CopyIcon} />
   </button>
 </div>

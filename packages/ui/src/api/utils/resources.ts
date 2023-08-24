@@ -39,8 +39,17 @@ export type FungibleResource = _Resource<'fungible'> & {
 
 export type NonFungibleResource = _Resource<'non-fungible'>
 
+export type NonFungibleAddress<
+  R extends string = string,
+  I extends string = string
+> = {
+  resourceAddress: R
+  id: I
+  nonFungibleAddress: `${R}:${I}`
+}
+
 export type NonFungible = {
-  address: string
+  address: NonFungibleAddress
   id: string
   unstakeData: {
     claimEpoch: string
@@ -202,7 +211,11 @@ const transformNonFungible = async (
 
     for (const singleNftData of nftData) {
       transformedNonFungibles[length - 1].nonFungibles.push({
-        address: `${entity.address}:${singleNftData.non_fungible_id}`,
+        address: {
+          resourceAddress: nonFungible.resource_address,
+          id: singleNftData.non_fungible_id,
+          nonFungibleAddress: `${entity.address}:${singleNftData.non_fungible_id}`
+        },
         id: singleNftData.non_fungible_id,
         unstakeData: getUnstakeData(singleNftData) ?? [],
         nonFungibleResource: nonFungible,

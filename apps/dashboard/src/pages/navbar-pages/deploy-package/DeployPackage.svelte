@@ -94,7 +94,7 @@
     const manifest = getDeployPackageManifest(
       wasm,
       sborDecodedSchema,
-      badge?.address,
+      badge?.address.nonFungibleAddress,
       badge?.id
     )
 

@@ -36,7 +36,7 @@
             <NonFungibleTokenCard
               imgUrl={nft.iconUrl}
               name={nft.name}
-              id={nft.id}
+              address={nft.address}
             />
           {/each}
         </div>

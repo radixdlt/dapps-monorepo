@@ -18,8 +18,8 @@
       .map(({ nonFungibles }) => nonFungibles)
       .flat()
       .map((nft) => ({
-        label: nft.name ?? nft.address,
-        address: nft.address,
+        label: nft.name ?? nft.address.nonFungibleAddress,
+        address: nft.address.nonFungibleAddress,
         resourceAddress: nft.nonFungibleResource.resource_address,
         id: nft.id as string,
         checked: false

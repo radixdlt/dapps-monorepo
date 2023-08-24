@@ -1,10 +1,11 @@
 <script lang="ts">
+  import type { NonFungibleAddress } from '@api/utils/resources'
   import CopyableText from '@components/_base/copyable-text/CopyableText.svelte'
   import { shortenNftID } from '@utils'
 
   export let imgUrl: string | undefined
   export let name: string | undefined
-  export let id: string
+  export let address: NonFungibleAddress
 </script>
 
 <div class="card">
@@ -20,7 +21,8 @@
 
   <div class="text-area">
     <CopyableText
-      value={id}
+      value={address.id}
+      copyableValue={address.nonFungibleAddress}
       shorten={{
         fn: shortenNftID,
         behavior: 'always'
