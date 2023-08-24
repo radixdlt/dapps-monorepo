@@ -13,7 +13,7 @@
       "confirmed_at": "2022-11-23T15:32:52.449641+00:00"
     },
     "payload_hash_hex": "0617e513d01c2676dd23382e7dfa595bc3963591a05de4b0c049e18402aaccee",
-    "intent_hash_hex": "63ff84859fccb586e6c711295a1c68fabf0ab166888c0ee1528efc320fe3e849",
+    "intent_hash": "63ff84859fccb586e6c711295a1c68fabf0ab166888c0ee1528efc320fe3e849",
     "fee_paid": {
       "value": "0.0607505",
       "address": "resource_tdx_22_1qzxcrac59cy2v9lpcpmf82qel3cjj25v3k5m09rxurgqfpm3gw"

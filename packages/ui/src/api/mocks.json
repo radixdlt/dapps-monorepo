@@ -132,7 +132,7 @@
       "transaction_status": "CommittedFailure",
       "payload_hash_hex": "ullamco incididunt aliqua",
       "error_message": "laboris dolore do Lorem mollit",
-      "intent_hash_hex": "sint in",
+      "intent_hash": "sint in",
       "confirmed_at": "1999-02-13T01:17:03.0Z",
       "fee_paid": {
         "value": "fugiat culpa labore magna laboris",
@@ -219,7 +219,7 @@
           "value": "Excepteur",
           "address": "adipisicing reprehenderit et aliquip in"
         },
-        "intent_hash_hex": "nisi ipsum dolor in",
+        "intent_hash": "nisi ipsum dolor in",
         "confirmed_at": "1961-11-19T02:11:55.0Z"
       },
       {
@@ -227,7 +227,7 @@
         "transaction_status": "Unknown",
         "error_message": "sint do",
         "confirmed_at": "1961-10-17T21:15:01.0Z",
-        "intent_hash_hex": "nostrud enim proident",
+        "intent_hash": "nostrud enim proident",
         "fee_paid": {
           "value": "ipsum et in veniam elit",
           "address": "Ut consequat dolore incididunt"
@@ -241,13 +241,13 @@
         "payload_hash_hex": "reprehenderit",
         "fee_paid": { "value": "velit", "address": "officia fugiat veniam" },
         "confirmed_at": "1954-10-22T02:18:15.0Z",
-        "intent_hash_hex": "consectetur Ut magna velit"
+        "intent_hash": "consectetur Ut magna velit"
       },
       {
         "state_version": 40499157,
         "transaction_status": "Rejected",
         "payload_hash_hex": "pariatur cupidatat",
-        "intent_hash_hex": "in",
+        "intent_hash": "in",
         "confirmed_at": "1984-08-08T14:37:37.0Z",
         "error_message": "nulla reprehenderit nisi",
         "fee_paid": { "value": "aliquip", "address": "aute fugiat" }

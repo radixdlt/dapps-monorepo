@@ -1,7 +1,8 @@
+import { CURRENT_NETWORK } from './../../../../../../../packages/ui/src/network'
 import type { LayoutServerLoad } from './$types'
 import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { getTransactionDetails } from '@api/gateway'
-import { error, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
@@ -20,12 +21,17 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
       tx.encodedManifest
         ? RadixEngineToolkit.NotarizedTransaction.decompile(
             Buffer.from(tx.encodedManifest, 'hex')
-          ).then((notarizedTx) =>
-            resolveManifest(
-              notarizedTx.signedIntent.intent.manifest.instructions
-                .value as string
-            )
           )
+            .then((notarizedTx) =>
+              RadixEngineToolkit.Instructions.convert(
+                notarizedTx.signedIntent.intent.manifest.instructions,
+                CURRENT_NETWORK.id,
+                'String'
+              )
+            )
+            .then((instructions) => {
+              resolveManifest(instructions.value as string)
+            })
         : resolveManifest('')
       return tx
     })

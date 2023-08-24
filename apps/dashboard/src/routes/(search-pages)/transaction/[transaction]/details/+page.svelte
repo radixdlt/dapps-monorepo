@@ -4,7 +4,7 @@
 
   export let data: LayoutData
 
-  $: tx = data.promises.tx.then((tx) => tx!)
+  $: tx = data.promises.tx.then((tx: any) => tx!)
 </script>
 
 <Overview {tx} manifest={data.promises.manifest} />
