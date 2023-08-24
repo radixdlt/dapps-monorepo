@@ -17,10 +17,7 @@
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import { getTransactionDetails } from '@api/gateway'
-  import {
-    getAccountData,
-    type NonFungibleResource
-  } from '@api/utils/resources'
+  import { getAccountData, type NonFungible } from '@api/utils/resources'
   import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
   import type { ComponentEvents } from 'svelte'
 
@@ -54,7 +51,9 @@
   const selectedAccount = writable<(Account & { label: string }) | undefined>(
     undefined
   )
-  const selectedBadge = writable<NonFungibleResource | undefined>(undefined)
+  const selectedBadge = writable<(NonFungible & { label: string }) | undefined>(
+    undefined
+  )
   const badgeCreated = writable<string>()
 
   const packageDeployed = writable<{
@@ -65,11 +64,18 @@
 
   const nonFungibleResources = derived<
     typeof selectedAccount,
-    Awaited<ReturnType<typeof getAccountData>>[number]['nonFungible']
+    Awaited<
+      ReturnType<typeof getAccountData>
+    >[number]['nonFungible'][number]['resource'][]
   >(selectedAccount, ($selectedAccount, set) => {
     if ($selectedAccount)
       getAccountData([$selectedAccount.address]).then((resources) =>
-        set(resources[0]!.nonFungible)
+        set(
+          resources[0]!.nonFungible.map(({ resource }) => ({
+            ...resource,
+            label: resource.name
+          }))
+        )
       )
   })
 
@@ -88,7 +94,7 @@
     const manifest = getDeployPackageManifest(
       wasm,
       sborDecodedSchema,
-      badge?.address,
+      badge?.address.nonFungibleAddress,
       badge?.id
     )
 

@@ -1,6 +1,7 @@
 import {
   getEntityDetails,
   getEntityNonFungibleIDs,
+  getNonFungibleIDs,
   getSingleEntityDetails
 } from '@api/gateway'
 import type {
@@ -23,7 +24,6 @@ import { getNonFungibleData } from '@api/gateway'
 type _Resource<T extends 'fungible' | 'non-fungible'> = {
   type: T
   address: string
-  label: string
   name?: string
   symbol?: string
   iconUrl?: string
@@ -37,12 +37,28 @@ export type FungibleResource = _Resource<'fungible'> & {
   value: string
 }
 
-export type NonFungibleResource = _Resource<'non-fungible'> & {
+export type NonFungibleResource = _Resource<'non-fungible'>
+
+export type NonFungibleAddress<
+  R extends string = string,
+  I extends string = string
+> = {
+  resourceAddress: R
+  id: I
+  nonFungibleAddress: `${R}:${I}`
+}
+
+export type NonFungible = {
+  address: NonFungibleAddress
   id: string
   unstakeData: {
     claimEpoch: string
     unstakeAmount: string
   }
+  nonFungibleResource: NonFungibleResourcesCollectionItemVaultAggregated
+  name?: string
+  iconUrl?: string
+  description?: string
 }
 
 export type Resource = FungibleResource | NonFungibleResource
@@ -65,7 +81,7 @@ const fungibleResourceDisplayLabel = (
         : symbol || name || resource.address
   )()
 
-const nonFungibleResourceDisplayLabel = (
+const nonFungibleDisplayLabel = (
   resource: StateEntityDetailsResponseItem,
   id: string
 ) =>
@@ -119,6 +135,14 @@ export const getUnstakeData = (
   }
 }
 
+const getNftData = (
+  nftData: StateNonFungibleDetailsResponseItem,
+  key: string
+) =>
+  ((nftData.data?.programmatic_json as any).fields as any[]).find(
+    ({ field_name }) => field_name === key
+  )?.value
+
 const getNonFungibleIds = async (
   accountAddress: string,
   nonFungibleResource: NonFungibleResourcesCollectionItemVaultAggregated
@@ -148,7 +172,11 @@ const transformNonFungible = async (
     return []
   }
 
-  const transformedNonFungibles: NonFungibleResource[] = []
+  const transformedNonFungibles: {
+    resource: NonFungibleResource
+    totalNonFungibles: number
+    nonFungibles: NonFungible[]
+  }[] = []
 
   const nonFungibleEntities = await getEntityDetails(
     nonFungibles.items.map(({ resource_address }) => resource_address),
@@ -164,21 +192,36 @@ const transformNonFungible = async (
 
     const nftData = await getNonFungibleData(nonFungible.resource_address, ids)
 
-    for (const singleNftData of nftData) {
-      transformedNonFungibles.push({
+    let length = transformedNonFungibles.push({
+      resource: {
         type: 'non-fungible',
-        label: nonFungibleResourceDisplayLabel(
-          entity,
-          singleNftData.non_fungible_id
-        ),
-        id: singleNftData.non_fungible_id,
         address: `${entity.address}`,
         name: getStringMetadata('name')(entity.metadata),
-        unstakeData: getUnstakeData(singleNftData) ?? [],
         totalSupply: (
           entity.details as StateEntityDetailsResponseFungibleResourceDetails
         ).total_supply,
+        iconUrl: getStringMetadata('icon_url')(entity.metadata),
+        tags: getVectorMetadata('tags')(entity.metadata),
         explicitMetadata: entity.explicit_metadata
+      },
+      totalNonFungibles: (await getNonFungibleIDs(nonFungible.resource_address))
+        .length,
+      nonFungibles: []
+    })
+
+    for (const singleNftData of nftData) {
+      transformedNonFungibles[length - 1].nonFungibles.push({
+        address: {
+          resourceAddress: nonFungible.resource_address,
+          id: singleNftData.non_fungible_id,
+          nonFungibleAddress: `${entity.address}:${singleNftData.non_fungible_id}`
+        },
+        id: singleNftData.non_fungible_id,
+        unstakeData: getUnstakeData(singleNftData) ?? [],
+        nonFungibleResource: nonFungible,
+        name: getNftData(singleNftData, 'name'),
+        description: getNftData(singleNftData, 'description'),
+        iconUrl: getNftData(singleNftData, 'key_image_url')
       })
     }
   }
@@ -186,7 +229,7 @@ const transformNonFungible = async (
   return transformedNonFungibles
 }
 
-const transformFungible = async (
+export const transformFungible = async (
   fungibles: FungibleResourcesVaultCollection,
   stateOptions?: StateEntityDetailsOptions,
   ledgerState?: LedgerStateSelector

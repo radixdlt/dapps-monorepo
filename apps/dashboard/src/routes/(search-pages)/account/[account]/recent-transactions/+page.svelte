@@ -1,11 +1,15 @@
 <script lang="ts">
-  import type { PageData } from './$types'
+  import type { LayoutData } from './$types'
   import DateAndTxIdColumn from './DateAndTxIdColumn.svelte'
   import { getRecentTransactions } from '@api/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
+  import { context } from '../+layout.svelte'
 
-  export let data: PageData
+  export let data: LayoutData
+
+  const activeTab = context.get('activeTab')
+  $activeTab = 'recent-transactions'
 
   const queryFunction = (cursor?: string) =>
     getRecentTransactions(data.account, cursor)
