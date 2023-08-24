@@ -1,5 +1,6 @@
 <script lang="ts">
   import CopyableText from '@components/_base/copyable-text/CopyableText.svelte'
+  import { shortenNftID } from '@utils'
 
   export let imgUrl: string | undefined
   export let name: string | undefined
@@ -18,8 +19,15 @@
   {/if}
 
   <div class="text-area">
-    <CopyableText value={id}>
-      <div class="subtext">{id}</div>
+    <CopyableText
+      value={id}
+      shorten={{
+        fn: shortenNftID,
+        behavior: 'always'
+      }}
+      let:displayText
+    >
+      <div class="subtext">{displayText}</div>
     </CopyableText>
 
     {#if name}

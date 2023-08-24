@@ -25,6 +25,11 @@ export const shortenAddress = (address?: string) =>
       )}`
     : ''
 
+export const shortenNftID = (id: string) =>
+  id.length > 10
+    ? `${id.slice(0, 4)}...${id.slice(id.length - 6, id.length)}`
+    : id
+
 export const toWholeUnits = (tokenValue: string) =>
   BigNumber(tokenValue)
     .div(10 ** XRD_DECIMALS)
