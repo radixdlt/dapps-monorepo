@@ -67,10 +67,10 @@ developerAccess:
       enabled: true
 
 alertmanager:
-  env: "prod"
+  env: "dev"
   nameOverride: "dashboard-amcfg"
   slackConfig:
-    channel: "feed--alerts-ansharnet-dashboard"
+    channel: "feed--alerts-dapps-dev"
   secrets:
     region: eu-west-2
-    name: "rtlj-prod/eks/dashboard/ansharnet/alertmanager-integration-keys"
+    name: "rtlj-prod/eks/dapps/dev/alertmanager-integration-keys"
