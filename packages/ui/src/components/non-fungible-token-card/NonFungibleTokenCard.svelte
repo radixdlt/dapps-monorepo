@@ -18,7 +18,7 @@
   {/if}
 
   <div class="text-area">
-    <CopyableText text={id}>
+    <CopyableText value={id}>
       <div class="subtext">{id}</div>
     </CopyableText>
 
