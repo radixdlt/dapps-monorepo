@@ -34,10 +34,10 @@ developerAccess:
       enabled: true
 
 alertmanager:
-  env: "non-prod"
+  env: "dev"
   nameOverride: "console-amcfg"
   slackConfig:
-    channel: "feed--alerts-dev-dapps-console"
+    channel: "feed--alerts-dapps-dev"
   secrets:
     region: eu-west-2
-    name: "rdx-works-main-dev/eks/dapps-console/dev/alertmanager-integration-keys"
+    name: "rdx-works-main-dev/eks/dapps/dev/alertmanager-integration-keys"
