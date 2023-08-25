@@ -1,7 +1,8 @@
 <script lang="ts">
-  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
+  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
   import type { LayoutData } from '../$types'
   import { context } from '../+layout.svelte'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
 
   export let data: LayoutData
 
@@ -14,5 +15,7 @@
 </script>
 
 <div class="card">
-  <MetadataInfoBox {metadata} />
+  <InfoBox>
+    <MetadataTable {metadata} />
+  </InfoBox>
 </div>

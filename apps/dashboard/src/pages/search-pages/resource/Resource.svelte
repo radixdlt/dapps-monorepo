@@ -8,6 +8,7 @@
   import ExternalLinkIcon from '@icons/external.svg'
   import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
   import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
 
   export let details: Promise<StateEntityDetailsVaultResponseItem>
 
@@ -45,7 +46,9 @@
       {/await}
     </Box>
     <svelte:fragment slot="body">
-      <MetadataInfoBox metadata={metadata.then(({ items }) => items)} />
+      <InfoBox>
+        <MetadataInfoBox metadata={metadata.then(({ items }) => items)} />
+      </InfoBox>
     </svelte:fragment>
   </Card>
   <slot />
