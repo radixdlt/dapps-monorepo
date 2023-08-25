@@ -12,7 +12,7 @@
   export let percentage = 0
 </script>
 
-<div id="manual-filter-card">
+<div class="card manual-filter-card">
   <div class="value-card">
     <div class="row">
       <div id="text">MIN UPTIME (%)</div>
@@ -23,11 +23,9 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
   @use '../shared.scss';
 
-  #manual-filter-card {
-    @include mixins.card();
+  .manual-filter-card {
     padding: var(--spacing-2xl);
     width: 100%;
   }

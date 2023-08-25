@@ -9,14 +9,6 @@
   )
 </script>
 
-<div class="surface-2">
+<div class="card">
   <MetadataInfoBox {metadata} />
 </div>
-
-<style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
-  .surface-2 {
-    @include mixins.card();
-  }
-</style>

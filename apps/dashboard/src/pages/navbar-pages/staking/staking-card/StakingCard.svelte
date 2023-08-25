@@ -19,7 +19,7 @@
     !!$$slots['claim-section']
 </script>
 
-<div class="staking-card">
+<div class="card staking-card">
   <div class="section">
     <div class="stake-display">
       <div class="text-with-icon">
@@ -86,9 +86,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
   .staking-card {
-    @include mixins.card;
     display: grid;
     grid: 1fr / auto auto auto;
     gap: var(--spacing-lg);

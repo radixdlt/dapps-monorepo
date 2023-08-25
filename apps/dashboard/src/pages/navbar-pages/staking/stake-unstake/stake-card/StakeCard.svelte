@@ -1,4 +1,4 @@
-<div class="add-stake-card">
+<div class="card add-stake-card">
   <div class="icon-and-info">
     {#if $$slots['icon']}
       <div class="icon">
@@ -17,10 +17,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
   .add-stake-card {
-    @include mixins.card;
     padding: var(--spacing-xl);
     display: flex;
     gap: var(--spacing-md);

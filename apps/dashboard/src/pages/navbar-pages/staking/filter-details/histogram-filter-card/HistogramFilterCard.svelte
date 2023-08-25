@@ -12,24 +12,24 @@
   $: range = [parseFloat(range[0].toFixed(2)), parseFloat(range[1].toFixed(2))]
 </script>
 
-<div id="filter-card">
+<div class="card filter-card">
   <HistogramFilter bind:range {values} {min} {max} />
 
-  <div id="value-cards">
+  <div class="value-cards">
     <div class="value-card">
-      <div id="text">
+      <div class="text">
         {minText}
       </div>
-      <div id="value">
+      <div class="value">
         <PercentageInput bind:value={range[0]} />
       </div>
     </div>
 
-    <div class="value-card">
-      <div id="text">
+    <div class="card value-card">
+      <div class="text">
         {maxText}
       </div>
-      <div id="value">
+      <div class="value">
         <PercentageInput bind:value={range[1]} />
       </div>
     </div>
@@ -37,15 +37,13 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
   @use '../shared.scss';
 
-  #filter-card {
-    @include mixins.card();
+  .filter-card {
     padding: var(--spacing-xl);
   }
 
-  #value-cards {
+  .value-cards {
     display: flex;
     gap: var(--spacing-2xl);
     justify-content: space-between;
@@ -54,12 +52,12 @@
 
   .value-card {
     width: 100%;
-    #text {
+    .text {
       font-size: var(--card-text-size);
       color: var(--card-text-color);
     }
 
-    #value {
+    .value {
       display: flex;
       align-items: center;
       font-size: var(--card-value-size);
