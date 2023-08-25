@@ -26,7 +26,7 @@ on:
           - rcnet-v3
 
 env:
-  active_network: 'hammunet'
+  active_network: 'enkinet'
   release_network: 'rcnet-v2'
 
 permissions:
@@ -461,7 +461,8 @@ jobs:
 
   deploy_enkinet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) || 
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
@@ -484,8 +485,7 @@ jobs:
 
   deploy_hammunet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' ) || 
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console

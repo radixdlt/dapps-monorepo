@@ -21,7 +21,7 @@
       },
       component: DateAndTxIdColumn,
       componentProps: {
-        id: '$$intent_hash_hex',
+        id: '$$intent_hash',
         date: '$$confirmed_at'
       }
     },

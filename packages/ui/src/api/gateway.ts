@@ -39,7 +39,7 @@ export const getTransactionDetails = (
       status: res.transaction.transaction_status,
       date: res.transaction.confirmed_at,
       fee: res.transaction.fee_paid,
-      message: res.transaction.message_hex,
+      message: (res.transaction.message as any)?.content?.value,
       encodedManifest: res.transaction.raw_hex,
       receipt: res.transaction.receipt,
       events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),

@@ -1,5 +1,5 @@
 import type { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { PublicKey, RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { ResultAsync, errAsync } from 'neverthrow'
 
 const deriveVirtualEddsaEd25519AccountAddress = (
@@ -8,7 +8,7 @@ const deriveVirtualEddsaEd25519AccountAddress = (
 ) =>
   ResultAsync.fromPromise(
     RadixEngineToolkit.Derive.virtualAccountAddressFromPublicKey(
-      { kind: 'Ed25519', publicKey: Buffer.from(publicKey, 'hex') },
+      new PublicKey.Ed25519(publicKey),
       networkId
     ),
     (error: any): Error => error
@@ -20,7 +20,7 @@ const deriveVirtualEcdsaSecp256k1AccountAddress = (
 ) =>
   ResultAsync.fromPromise(
     RadixEngineToolkit.Derive.virtualAccountAddressFromPublicKey(
-      { kind: 'Secp256k1', publicKey: Buffer.from(publicKey, 'hex') },
+      new PublicKey.Secp256k1(publicKey),
       networkId
     ),
     (error: any): Error => error
