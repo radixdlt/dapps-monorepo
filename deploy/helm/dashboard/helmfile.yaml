@@ -49,7 +49,7 @@ releases:
   - name: alertmanager
     namespace: {{ $DASHBOARD_NS }}
     chart: rdx-works/alertmanager-configs
-    version: 1.0.0
+    version: 1.1.0
     installed: {{ ne .Environment.Name "pr" }}
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
