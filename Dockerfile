@@ -53,6 +53,7 @@ ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
+COPY --from=installer /app/apps/dashboard/prisma/ prisma
 COPY --from=installer /app/apps/ apps
 COPY --from=installer /app/packages/ packages
 COPY --from=installer /app/node_modules node_modules
