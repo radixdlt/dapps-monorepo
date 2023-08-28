@@ -53,15 +53,14 @@ ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
-COPY --from=installer /app/apps/dashboard/build build
-COPY --from=installer /app/apps/dashboard/prisma prisma
-COPY --from=installer /app/apps/dashboard/package.json package.json
+COPY --from=installer /app/apps/ apps
+COPY --from=installer /app/packages/ packages
 COPY --from=installer /app/node_modules node_modules
 
 RUN npm install pm2 -g && \
     pm2 install pm2-metrics
 
-CMD ["pm2-runtime","build/index.js"]
+CMD ["pm2-runtime","apps/dashboard/build/index.js"]
 
 FROM nginx:alpine AS storybook
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
@@ -77,8 +76,8 @@ ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /app
 
-COPY --from=installer /app/apps/console/build build
-COPY --from=installer /app/apps/console/package.json package.json
+COPY --from=installer /app/apps/ apps
+COPY --from=installer /app/packages/ packages
 COPY --from=installer /app/node_modules node_modules
 
 RUN npm install pm2 -g && \
@@ -86,4 +85,4 @@ RUN npm install pm2 -g && \
 
 EXPOSE 3000
 
-CMD ["pm2-runtime","build/index.js"]
+CMD ["pm2-runtime","apps/console/build/index.js"]
