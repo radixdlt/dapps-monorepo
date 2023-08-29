@@ -32,46 +32,50 @@
   )
 </script>
 
-{#await entries}
-  <SkeletonLoader />
-{:then resolvedEntries}
-  {#each Object.entries(expectedEntries) as [key, config]}
-    {#if resolvedEntries[key]}
-      <Row text={config?.label || key}>
-        <svelte:fragment slot="right">
-          {#if config?.component}
-            {#if config?.componentProperties}
-              <svelte:component
-                this={config.component}
-                {...config.componentProperties(resolvedEntries[key].value)}
-              />
-            {:else}
-              <svelte:component this={config.component} />
+<div>
+  {#await entries}
+    <SkeletonLoader />
+  {:then resolvedEntries}
+    {#each Object.entries(expectedEntries) as [key, config]}
+      {#if resolvedEntries[key]}
+        <Row text={config?.label || key}>
+          <svelte:fragment slot="right">
+            {#if config?.component}
+              {#if config?.componentProperties}
+                <svelte:component
+                  this={config.component}
+                  {...config.componentProperties(resolvedEntries[key].value)}
+                />
+              {:else}
+                <svelte:component this={config.component} />
+              {/if}
+            {:else if config?.renderAs}
+              {config.renderAs(resolvedEntries[key].value)}
             {/if}
-          {:else if config?.renderAs}
-            {config.renderAs(resolvedEntries[key].value)}
-          {/if}
-        </svelte:fragment>
-      </Row>
-    {/if}
-  {/each}
+          </svelte:fragment>
+        </Row>
+      {/if}
+    {/each}
 
-  {#each Object.entries(resolvedEntries) as [key, { value }]}
-    {#if !expectedEntries[key]}
-      <Row>
-        <div slot="left" class="label">
-          {key}
-          {#if resolvedEntries[key].is_locked}
-            <IconNew icon={PadlockIcon} />
-          {/if}
-        </div>
-        <div slot="right" class="right-slot">
-          <TypedMetadataRenderer metadataTypedValue={value.typed} />
-        </div>
-      </Row>
-    {/if}
-  {/each}
-{/await}
+    {#each Object.entries(resolvedEntries) as [key, { value }]}
+      {#if !expectedEntries[key]}
+        <Row>
+          <div slot="left" class="label">
+            {key}
+            {#if resolvedEntries[key].is_locked}
+              <IconNew icon={PadlockIcon} />
+            {/if}
+          </div>
+          <div slot="right" class="right-slot">
+            <TypedMetadataRenderer metadataTypedValue={value.typed} />
+          </div>
+        </Row>
+      {/if}
+    {/each}
+
+    <slot name="extra-rows" />
+  {/await}
+</div>
 
 <style lang="scss">
   @use '../../mixins.scss';
