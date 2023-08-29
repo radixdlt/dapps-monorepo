@@ -32,6 +32,7 @@
 </div>
 
 <style lang="scss">
+  @use '../../../../src/mixins.scss';
   .wrapper {
     background: var(--theme-surface-2);
     padding: 0.25rem;
@@ -43,9 +44,16 @@
     max-height: 100%;
 
     &.large {
-      width: 26rem;
-      height: 26rem;
+      width: 19rem;
+      height: 19rem;
       padding: 1rem;
+    }
+
+    @include mixins.desktop {
+      &.large {
+        width: 26rem;
+        height: 26rem;
+      }
     }
   }
   .token-icon {
