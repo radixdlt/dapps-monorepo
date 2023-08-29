@@ -20,7 +20,7 @@
       .map((nft) => ({
         label: nft.name ?? nft.address.nonFungibleAddress,
         address: nft.address.nonFungibleAddress,
-        resourceAddress: nft.nonFungibleResource.resource_address,
+        resourceAddress: nft.address.resourceAddress,
         id: nft.id as string,
         checked: false
       }))
@@ -60,7 +60,7 @@
   {:then options}
     <CheckedList {options} bind:selected let:option loading={!resources}>
       <Text inline bold underlined>
-        <a href="/nft/{option.address}">{option.label}</a>
+        <a href="/nft/{encodeURIComponent(option.address)}">{option.label}</a>
       </Text>
     </CheckedList>
   {/await}

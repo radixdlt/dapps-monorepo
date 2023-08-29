@@ -8,17 +8,18 @@
 
   let notFound = false
 
-  data.promises.details.catch(() => (notFound = true))
+  data.promises.nftData.catch(() => (notFound = true))
+  data.promises.resource.catch(() => (notFound = true))
 </script>
 
 {#if notFound}
   <NotFound />
 {:else}
-  <SearchPage title="Non-fungible" address={data.nftAddress}>
+  <SearchPage title="Non Fungible" address={data.nftAddress}>
     <NonFungible
-      address={data.nftAddress}
-      nftData={data.promises.nftData}
-      details={data.promises.details}
+      nft={data.promises.nftData}
+      resource={data.promises.resource}
+      associatedDapps={data.promises.associatedDapps}
     />
   </SearchPage>
 {/if}

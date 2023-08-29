@@ -1,55 +1,127 @@
-<script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import Box from '@components/_base/box/Box.svelte'
-  import Icon from '@components/_base/icon/Icon.svelte'
-  import Card from '@components/_base/card/Card.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { getStringMetadata } from '@api/utils/resources'
-  import ExternalLinkIcon from '@icons/external.svg'
-  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
-  import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-
-  export let details: Promise<StateEntityDetailsVaultResponseItem>
-
-  $: metadata = details.then(({ metadata }) => metadata)
-
-  $: name = metadata.then(getStringMetadata('name'))
-  $: symbol = metadata.then(getStringMetadata('symbol'))
-  $: url = metadata.then(getStringMetadata('url'))
+<script lang="ts" context="module">
+  export const metadataItem = (
+    key: string,
+    value: string,
+    type: MetadataTypedValue['type']
+  ) =>
+    ({
+      key,
+      value: {
+        typed: {
+          type,
+          value
+        }
+      }
+    } as EntityMetadataItem)
 </script>
 
-<Box>
-  <Card>
-    <Box bgColor="surface" wrapper slot="header" flex="row" items="center">
-      <Text size="large" bold>
-        {#await Promise.all([name, symbol])}
-          <SkeletonLoader />
-        {:then [name, symbol]}
-          {#if !name}
-            [NO-NAME]
-          {:else}
-            {name}
-            {symbol ? `(${symbol})` : ''}
-          {/if}
-        {/await}
-      </Text>
-      {#await url then url}
-        {#if url}
-          <Text color="link" ml="auto" pointer items="center">
-            <Icon icon={ExternalLinkIcon} width="xs" height="xs" />
-            <Text ml="small">
-              <a href={url} target="_blank">{url}</a>
-            </Text>
-          </Text>
+<script lang="ts">
+  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import type {
+    FungibleResource,
+    NonFungibleResource
+  } from '@api/utils/resources'
+  import NftImage from '@components/_base/nft-image/NftImage.svelte'
+  import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
+  import CardRow from '@components/info-box/CardRow.svelte'
+  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
+  import type {
+    EntityMetadataItem,
+    MetadataTypedValue
+  } from '@radixdlt/babylon-gateway-api-sdk'
+
+  export let resource: Promise<NonFungibleResource | FungibleResource>
+  export let associatedDapps: Promise<
+    {
+      name: string
+      iconUrl: string
+    }[]
+  >
+
+  let activeTab = 'summary'
+
+  const tabs = [
+    [
+      {
+        id: 'summary',
+        label: 'Summary'
+      },
+      {
+        id: 'metadata',
+        label: 'Metadata'
+      }
+    ]
+  ]
+
+  $: metadata =
+    activeTab === 'summary'
+      ? resource.then(({ address, totalSupply, metadata }) =>
+          [
+            metadataItem('address', address, 'GlobalAddress'),
+            metadataItem('total supply', totalSupply, 'U64')
+          ]
+            .concat(metadata.explicit)
+            .concat(metadata.nonStandard)
+        )
+      : resource.then(({ metadata }) => metadata.all)
+</script>
+
+<div class="card info-card">
+  <PillsMenu items={tabs} bind:active={activeTab} />
+
+  {#if activeTab === 'summary'}
+    <div class="resource-title">
+      {#await resource}
+        <SkeletonLoader />
+      {:then { name, iconUrl, symbol }}
+        <NftImage url={iconUrl} />
+
+        {#if name}
+          <h2>
+            {`${name} ${symbol ? `(${symbol})` : ''}`}
+          </h2>
         {/if}
       {/await}
-    </Box>
-    <svelte:fragment slot="body">
-      <InfoBox>
-        <MetadataInfoBox metadata={metadata.then(({ items }) => items)} />
-      </InfoBox>
+    </div>
+
+    {#await resource}
+      <SkeletonLoader count={3} />
+    {:then { description }}
+      {#if description}
+        {description}
+      {/if}
+    {/await}
+  {/if}
+
+  <MetadataTable {metadata}>
+    <svelte:fragment slot="extra-rows">
+      {#await associatedDapps then dapps}
+        {#if dapps.length > 0}
+          <CardRow
+            title="Associated Dapps"
+            cardInfo={dapps.map(({ name, iconUrl }) => ({
+              text: name,
+              iconUrl
+            }))}
+          />
+        {/if}
+      {/await}
     </svelte:fragment>
-  </Card>
-  <slot />
-</Box>
+  </MetadataTable>
+</div>
+
+<style>
+  .resource-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+  }
+
+  .info-card {
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    margin: var(--spacing-2xl) 0;
+  }
+</style>

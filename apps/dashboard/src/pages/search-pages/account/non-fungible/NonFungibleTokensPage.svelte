@@ -2,6 +2,7 @@
   import type { NonFungible, NonFungibleResource } from '@api/utils/resources'
   import NFTAccordion from '@components/_base/accordion/NFTAccordion.svelte'
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
+  import { createEventDispatcher } from 'svelte'
 
   export let nonFungibleResources: Promise<
     {
@@ -12,6 +13,10 @@
   >
 
   let width: number
+
+  const dispatch = createEventDispatcher<{
+    'click-nft': { address: string }
+  }>()
 </script>
 
 {#await nonFungibleResources}
@@ -37,6 +42,10 @@
               imgUrl={nft.iconUrl}
               name={nft.name}
               address={nft.address}
+              on:click={() =>
+                dispatch('click-nft', {
+                  address: nft.address.nonFungibleAddress
+                })}
             />
           {/each}
         </div>

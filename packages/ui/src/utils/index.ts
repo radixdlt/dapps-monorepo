@@ -82,7 +82,7 @@ export const addressToRoute = (address: string) =>
   ({
     account: `/account/${address}`,
     resource: isNFTAddress(address)
-      ? `/nft/${address}`
+      ? `/nft/${encodeURIComponent(address)}`
       : `/resource/${address}`,
     package: `/package/${address}`,
     component: `/component/${address}`,

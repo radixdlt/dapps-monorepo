@@ -1,14 +1,27 @@
 import { getSingleEntityDetails } from '@api/gateway'
 import type { PageLoad } from './$types'
-import { error } from '@sveltejs/kit'
+import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
+import { getStringMetadata } from '@api/utils/resources'
 
 export const prerender = false
 
 export const load: PageLoad = async ({ params }) => {
+  const resource = getSingleEntityDetails(params.resource)
+
+  const associatedDapps = resource
+    .then(getLinkedDappDefinitions)
+    .then((entities) =>
+      entities.map(({ metadata }) => ({
+        name: getStringMetadata('name')(metadata),
+        iconUrl: getStringMetadata('icon_url')(metadata)
+      }))
+    )
+
   return {
     address: params.resource,
     promises: {
-      details: getSingleEntityDetails(params.resource)
+      resource,
+      associatedDapps
     }
   }
 }
