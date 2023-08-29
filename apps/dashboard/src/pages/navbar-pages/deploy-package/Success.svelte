@@ -44,7 +44,11 @@
       <Text slot="left" align="right" bold>Owner badge</Text>
       <Text slot="right" align="left">
         <Text color="link">
-          <a href={`/nft/${encodeURIComponent(`${badgeInfo.address}:${badgeInfo.id}`)}`}>
+          <a
+            href={`/nft/${encodeURIComponent(
+              `${badgeInfo.address}:${badgeInfo.id}`
+            )}`}
+          >
             {badgeInfo.name ? `${badgeInfo.name} (${NFTAddress})` : NFTAddress}
           </a>
         </Text>

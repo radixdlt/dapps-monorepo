@@ -24,7 +24,7 @@
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import CardRow from '@components/info-box/CardRow.svelte'
-  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
   import type {
     EntityMetadataItem,
     MetadataTypedValue
@@ -93,7 +93,7 @@
     {/await}
   {/if}
 
-  <MetadataTable {metadata}>
+  <Metadata {metadata}>
     <svelte:fragment slot="extra-rows">
       {#await associatedDapps then dapps}
         {#if dapps.length > 0}
@@ -107,7 +107,7 @@
         {/if}
       {/await}
     </svelte:fragment>
-  </MetadataTable>
+  </Metadata>
 </div>
 
 <style>

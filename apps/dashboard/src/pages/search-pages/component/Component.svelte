@@ -10,7 +10,7 @@
     StateEntityDetailsResponseItem,
     ReplaceProperty
   } from '@radixdlt/babylon-gateway-api-sdk'
-  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
 
   export let details: Promise<
     ReplaceProperty<
@@ -51,9 +51,7 @@
   <Text bold slot="header">Metadata</Text>
   <Box wrapper slot="body">
     <InfoBox>
-      <MetadataTable
-        metadata={details.then((value) => value?.metadata?.items)}
-      />
+      <Metadata metadata={details.then((value) => value?.metadata?.items)} />
     </InfoBox>
   </Box>
 </Card>

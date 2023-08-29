@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
   import type { LayoutData } from '../$types'
   import { context } from '../+layout.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
@@ -16,6 +16,6 @@
 
 <div class="card">
   <InfoBox>
-    <MetadataTable {metadata} />
+    <Metadata {metadata} />
   </InfoBox>
 </div>

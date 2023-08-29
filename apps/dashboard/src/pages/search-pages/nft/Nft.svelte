@@ -2,7 +2,7 @@
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type { NonFungible, NonFungibleResource } from '@api/utils/resources'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import MetadataTable from '@components/metadata-table/MetadataTable.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
   import type {
     EntityMetadataItem,
     MetadataTypedValue
@@ -70,7 +70,7 @@
     {/if}
   {/await}
 
-  <MetadataTable metadata={nonStandardData} />
+  <Metadata metadata={nonStandardData} />
 </div>
 
 <h2 class="resource-card-header">Belongs To:</h2>
