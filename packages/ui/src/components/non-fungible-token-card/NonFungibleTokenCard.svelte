@@ -9,7 +9,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="card non-fungible-card" on:click>
+<button class="card non-fungible-card" on:click>
   {#if imgUrl}
     <img
       class="image"
@@ -39,7 +39,7 @@
       </div>
     {/if}
   </div>
-</div>
+</button>
 
 <style lang="scss">
   .non-fungible-card {
