@@ -26,8 +26,8 @@ on:
           - rcnet-v3
 
 env:
-  active_network: 'enkinet'
-  release_network: 'rcnet-v2'
+  active_network: 'zabanet'
+  release_network: 'rcnet-v3'
 
 permissions:
   id-token: write
@@ -461,8 +461,7 @@ jobs:
 
   deploy_enkinet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' ) || 
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
@@ -625,7 +624,8 @@ jobs:
 
   deploy_zabanet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'zabanet' && github.event_name == 'workflow_dispatch' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'zabanet' && github.event_name == 'workflow_dispatch' ) || 
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
