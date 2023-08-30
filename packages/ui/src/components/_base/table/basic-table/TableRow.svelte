@@ -1,4 +1,4 @@
-<tr class="table-row" on:click>
+<tr class="card table-row" on:click>
   <slot />
 </tr>
 
@@ -6,8 +6,6 @@
   @use '../../../../mixins.scss';
 
   .table-row {
-    @include mixins.card;
-
     &:hover {
       box-shadow: var(--shadow-hover);
     }

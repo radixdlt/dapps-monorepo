@@ -19,7 +19,7 @@
 </script>
 
 <div style:min-width="18rem">
-  <a class="card" href={linksTo}>
+  <a class="card token-card" href={linksTo}>
     <TokenIcon {isXrd} {iconUrl} />
     <div>
       <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
@@ -54,10 +54,7 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins.scss';
-
-  .card {
-    @include mixins.card;
+  .token-card {
     user-select: none;
     padding: var(--spacing-xl);
     display: grid;

@@ -11,9 +11,8 @@
 </script>
 
 <script lang="ts">
-  import { indexBy, prop, type } from 'ramda'
+  import { indexBy, prop } from 'ramda'
   import Row from '@components/info-box/Row.svelte'
-  import InfoBox from '@components/info-box/InfoBox.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import PadlockIcon from '@icons/validators-menu.svg'
   import type {
@@ -33,10 +32,10 @@
   )
 </script>
 
-{#await entries}
-  <SkeletonLoader />
-{:then resolvedEntries}
-  <InfoBox>
+<div>
+  {#await entries}
+    <SkeletonLoader />
+  {:then resolvedEntries}
     {#each Object.entries(expectedEntries) as [key, config]}
       {#if resolvedEntries[key]}
         <Row text={config?.label || key}>
@@ -73,8 +72,10 @@
         </Row>
       {/if}
     {/each}
-  </InfoBox>
-{/await}
+
+    <slot name="extra-rows" />
+  {/await}
+</div>
 
 <style lang="scss">
   @use '../../mixins.scss';

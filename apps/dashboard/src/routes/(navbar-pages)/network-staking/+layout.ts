@@ -153,7 +153,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
         const validator = validators.find(
           (validator) =>
             validator.unstakeClaimResourceAddress ===
-            token.nonFungibleResource.resource_address
+            token.address.resourceAddress
         )!
 
         const xrdAmount = new BigNumber(

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import MetadataInfoBox from '@components/metadata-info-box/MetadataInfoBox.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
   import type { LayoutData } from '../$types'
   import { context } from '../+layout.svelte'
+  import InfoBox from '@components/info-box/InfoBox.svelte'
 
   export let data: LayoutData
 
@@ -13,14 +14,8 @@
   $activeTab = 'metadata'
 </script>
 
-<div class="surface-2">
-  <MetadataInfoBox {metadata} />
+<div class="card">
+  <InfoBox>
+    <Metadata {metadata} />
+  </InfoBox>
 </div>
-
-<style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
-  .surface-2 {
-    @include mixins.card();
-  }
-</style>

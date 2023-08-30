@@ -6,6 +6,8 @@ import {
 } from '@api/gateway'
 import type {
   EntityMetadataCollection,
+  EntityMetadataItem,
+  FungibleResourcesCollectionItemVaultAggregated,
   FungibleResourcesVaultCollection,
   LedgerStateSelector,
   NonFungibleResourcesCollectionItemVaultAggregated,
@@ -30,7 +32,11 @@ type _Resource<T extends 'fungible' | 'non-fungible'> = {
   description?: string
   tags?: string[]
   totalSupply: string
-  explicitMetadata?: EntityMetadataCollection
+  metadata: {
+    explicit: EntityMetadataItem[]
+    nonStandard: EntityMetadataItem[]
+    all: EntityMetadataItem[]
+  }
 }
 
 export type FungibleResource = _Resource<'fungible'> & {
@@ -55,10 +61,10 @@ export type NonFungible = {
     claimEpoch: string
     unstakeAmount: string
   }
-  nonFungibleResource: NonFungibleResourcesCollectionItemVaultAggregated
   name?: string
   iconUrl?: string
   description?: string
+  nonStandardData: any[]
 }
 
 export type Resource = FungibleResource | NonFungibleResource
@@ -104,20 +110,22 @@ export const getEnumStringMetadata =
     )?.fields?.[0].value || ''
 
 export const getStringMetadata =
-  (key: string) => (metadata?: EntityMetadataCollection) =>
+  (key: string) =>
+  (metadata?: EntityMetadataCollection): string =>
     (metadata?.items.find((item) => item.key === key)?.value?.typed as any)
       ?.value || ''
 
 export const getVectorMetadata =
-  (key: string) => (metadata?: EntityMetadataCollection) =>
+  (key: string) =>
+  (metadata?: EntityMetadataCollection): any[] =>
     (metadata?.items.find((item) => item.key === key)?.value.typed as any)
       ?.values || []
 
 export const getUnstakeData = (
-  nftData: StateNonFungibleDetailsResponseItem
+  data: StateNonFungibleDetailsResponseItem['data']
 ) => {
   const { claimEpoch, unstakeAmount } = (
-    nftData.data?.programmatic_json as {
+    data?.programmatic_json as {
       fields: { kind: string; value: string }[]
     }
   ).fields.reduce(
@@ -136,10 +144,10 @@ export const getUnstakeData = (
 }
 
 const getNftData = (
-  nftData: StateNonFungibleDetailsResponseItem,
+  data: StateNonFungibleDetailsResponseItem['data'],
   key: string
 ) =>
-  ((nftData.data?.programmatic_json as any).fields as any[]).find(
+  ((data?.programmatic_json as any).fields as any[]).find(
     ({ field_name }) => field_name === key
   )?.value
 
@@ -161,6 +169,83 @@ const getNonFungibleIds = async (
 
   return ids
 }
+
+export const transformNft = (
+  resource_address: NonFungibleResourcesCollectionItemVaultAggregated['resource_address'],
+  { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
+): NonFungible =>
+  ({
+    address: {
+      resourceAddress: resource_address,
+      id: non_fungible_id,
+      nonFungibleAddress: `${resource_address}:${non_fungible_id}`
+    },
+    id: non_fungible_id,
+    unstakeData: getUnstakeData(data) ?? [],
+    name: getNftData(data, 'name'),
+    description: getNftData(data, 'description'),
+    iconUrl: getNftData(data, 'key_image_url'),
+    nonStandardData: ((data?.programmatic_json as any).fields as any[]).filter(
+      ({ field_name }) =>
+        field_name !== 'name' &&
+        field_name !== 'description' &&
+        field_name !== 'key_image_url'
+    )
+  } as const)
+
+export const transformNonFungibleResource = (
+  entity: StateEntityDetailsVaultResponseItem
+): NonFungibleResource =>
+  ({
+    type: 'non-fungible',
+    address: `${entity.address}`,
+    name: getStringMetadata('name')(entity.metadata),
+    totalSupply: (
+      entity.details as StateEntityDetailsResponseFungibleResourceDetails
+    ).total_supply,
+    iconUrl: getStringMetadata('icon_url')(entity.metadata),
+    tags: getVectorMetadata('tags')(entity.metadata),
+    metadata: {
+      explicit: entity.explicit_metadata?.items ?? [],
+      nonStandard: (entity.metadata?.items || []).filter(
+        ({ key }) => key !== 'name' && key !== 'icon_url' && key !== 'tags'
+      ),
+      all: entity.metadata?.items ?? []
+    }
+  } as const)
+
+export const transformFungibleResource = (
+  entity: StateEntityDetailsResponseItem,
+  fungible?: FungibleResourcesCollectionItemVaultAggregated
+): FungibleResource =>
+  ({
+    type: 'fungible',
+    value:
+      fungible?.vaults.items
+        .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
+        .toString() || '0',
+    address: entity.address,
+    name: getStringMetadata('name')(entity.metadata),
+    symbol: getStringMetadata('symbol')(entity.metadata),
+    iconUrl: getStringMetadata('icon_url')(entity.metadata),
+    description: getStringMetadata('description')(entity.metadata),
+    tags: getVectorMetadata('tags')(entity.metadata),
+    totalSupply: (
+      entity.details as StateEntityDetailsResponseFungibleResourceDetails
+    ).total_supply,
+    metadata: {
+      explicit: entity.explicit_metadata?.items ?? [],
+      nonStandard: ((entity.metadata?.items as any[]) || []).filter(
+        ({ key }) =>
+          key !== 'name' &&
+          key !== 'symbol' &&
+          key !== 'icon_url' &&
+          key !== 'description' &&
+          key !== 'tags'
+      ),
+      all: entity.metadata?.items ?? []
+    }
+  } as const)
 
 const transformNonFungible = async (
   nonFungibles: NonFungibleResourcesVaultCollection,
@@ -193,36 +278,16 @@ const transformNonFungible = async (
     const nftData = await getNonFungibleData(nonFungible.resource_address, ids)
 
     let length = transformedNonFungibles.push({
-      resource: {
-        type: 'non-fungible',
-        address: `${entity.address}`,
-        name: getStringMetadata('name')(entity.metadata),
-        totalSupply: (
-          entity.details as StateEntityDetailsResponseFungibleResourceDetails
-        ).total_supply,
-        iconUrl: getStringMetadata('icon_url')(entity.metadata),
-        tags: getVectorMetadata('tags')(entity.metadata),
-        explicitMetadata: entity.explicit_metadata
-      },
+      resource: transformNonFungibleResource(entity),
       totalNonFungibles: (await getNonFungibleIDs(nonFungible.resource_address))
         .length,
       nonFungibles: []
     })
 
     for (const singleNftData of nftData) {
-      transformedNonFungibles[length - 1].nonFungibles.push({
-        address: {
-          resourceAddress: nonFungible.resource_address,
-          id: singleNftData.non_fungible_id,
-          nonFungibleAddress: `${entity.address}:${singleNftData.non_fungible_id}`
-        },
-        id: singleNftData.non_fungible_id,
-        unstakeData: getUnstakeData(singleNftData) ?? [],
-        nonFungibleResource: nonFungible,
-        name: getNftData(singleNftData, 'name'),
-        description: getNftData(singleNftData, 'description'),
-        iconUrl: getNftData(singleNftData, 'key_image_url')
-      })
+      transformedNonFungibles[length - 1].nonFungibles.push(
+        transformNft(nonFungible.resource_address, singleNftData)
+      )
     }
   }
 
@@ -245,28 +310,11 @@ export const transformFungible = async (
   )
 
   return fungibleEntities.map((entity) => {
-    const vaults = fungibles.items.find(
+    const fungible = fungibles.items.find(
       ({ resource_address }) => resource_address === entity.address
-    )?.vaults
+    )!
 
-    return {
-      type: 'fungible',
-      label: fungibleResourceDisplayLabel(entity),
-      value:
-        vaults?.items
-          .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
-          .toString() || '0',
-      address: entity.address,
-      name: getStringMetadata('name')(entity.metadata),
-      symbol: getStringMetadata('symbol')(entity.metadata),
-      iconUrl: getStringMetadata('icon_url')(entity.metadata),
-      description: getStringMetadata('description')(entity.metadata),
-      tags: getVectorMetadata('tags')(entity.metadata),
-      totalSupply: (
-        entity.details as StateEntityDetailsResponseFungibleResourceDetails
-      ).total_supply,
-      explicitMetadata: entity.explicit_metadata
-    }
+    return transformFungibleResource(entity, fungible)
   })
 }
 

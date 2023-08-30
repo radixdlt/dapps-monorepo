@@ -1,5 +1,3 @@
-@use '../../../../../../../packages/ui/src/mixins.scss';
-
 .card {
   border-radius: var(--border-radius-lg);
   background: var(--background);
@@ -10,8 +8,6 @@
 }
 
 .value-card {
-  @include mixins.card();
-
   --card-text-size: var(--text-sm);
   --card-text-color: var(--theme-subtext);
   --card-value-weight: var(--font-weight-bold-2);

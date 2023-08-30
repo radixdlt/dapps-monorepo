@@ -187,6 +187,13 @@ body {
   pointer-events: none;
 }
 
+.card {
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius-lg);
+  background: var(--theme-surface-2);
+  border: var(--border) var(--theme-border);
+}
+
 .mobile-only {
   @include mixins.desktop {
     display: none;

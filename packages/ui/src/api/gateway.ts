@@ -55,8 +55,10 @@ export const getTransactionDetails = (
 export const getNetworkConfiguration = () =>
   gatewayApi.status.getNetworkConfiguration()
 
-export const getSingleEntityDetails = (address: string) =>
-  gatewayApi.state.getEntityDetailsVaultAggregated(address)
+export const getSingleEntityDetails = (
+  address: string,
+  options?: StateEntityDetailsOptions
+) => gatewayApi.state.getEntityDetailsVaultAggregated(address, options)
 
 export const getEntityDetails = (
   addresses: string[],

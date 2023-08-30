@@ -8,7 +8,8 @@
   export let address: NonFungibleAddress
 </script>
 
-<div class="card">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<button class="card non-fungible-card" on:click>
   {#if imgUrl}
     <img
       class="image"
@@ -38,14 +39,10 @@
       </div>
     {/if}
   </div>
-</div>
+</button>
 
 <style lang="scss">
-  @use '../../../../../packages/ui/src/mixins.scss';
-
-  .card {
-    @include mixins.card;
-
+  .non-fungible-card {
     display: grid;
     grid: 5fr / 1fr;
     width: 15rem;

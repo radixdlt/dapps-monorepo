@@ -9,7 +9,7 @@
   ).length
 </script>
 
-<div class="selected-validators">
+<div class="card selected-validators">
   <IconNew icon={MultipleStaking} --size="3.5rem" />
   <div class="text">
     You've selected {count} validators
@@ -23,7 +23,6 @@
   @use '../../../../../../../packages/ui/src/mixins.scss';
 
   .selected-validators {
-    @include mixins.card;
     display: grid;
     grid: auto / auto auto auto;
     align-items: center;

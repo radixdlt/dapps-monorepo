@@ -108,20 +108,7 @@
 </StakePanel>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
   @use '../shared.scss';
-
-  .validator-card {
-    @include mixins.card;
-    padding: var(--spacing-lg);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .validator {
-      margin-left: var(--spacing-lg);
-    }
-  }
 
   .card-list {
     display: flex;

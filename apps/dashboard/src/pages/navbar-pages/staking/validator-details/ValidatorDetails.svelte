@@ -75,7 +75,7 @@
     <Divider />
   {/if}
 
-  <div class="surface-2">
+  <div class="card">
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
       <AwaitedRow
         text="Owner address"
@@ -131,12 +131,6 @@
 </SidePanel>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
-
-  .surface-2 {
-    @include mixins.card();
-  }
-
   .validator-name {
     display: flex;
     justify-content: space-between;

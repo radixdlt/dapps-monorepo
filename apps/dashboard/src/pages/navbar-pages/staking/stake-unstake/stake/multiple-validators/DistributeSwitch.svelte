@@ -4,7 +4,7 @@
   export let on: boolean
 </script>
 
-<div class="distribute-switch">
+<div class="card distribute-switch">
   <div class="text">Distribute equally between validators</div>
   <Switch bind:on />
 </div>
@@ -13,7 +13,6 @@
   @use '../../../../../../../../../packages/ui/src/mixins.scss';
 
   .distribute-switch {
-    @include mixins.card;
     box-shadow: none;
     display: flex;
     align-items: center;
