@@ -10,6 +10,9 @@ const json = {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+  console.log('REQUEST URL:', event.url.pathname)
+  console.log('REQUEST:', event.request)
+
   if (event.url.pathname.endsWith('/.well-known/radix.json')) {
     return new Response(JSON.stringify(json), {
       headers: {
@@ -19,9 +22,18 @@ export const handle: Handle = async ({ event, resolve }) => {
     })
   }
 
-  const response = await resolve(event)
+  let response
+
+  try {
+    response = await resolve(event)
+  } catch (e) {
+    console.error('ERROR:', e)
+    throw e
+  }
 
   response.headers.set('Cache-Control', 'no-cache')
+
+  console.log('RESPONSE:', response)
 
   return response
 }
