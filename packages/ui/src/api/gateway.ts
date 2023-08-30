@@ -12,6 +12,7 @@ import {
 } from '@radixdlt/babylon-gateway-api-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
+  applicationName: 'Radix Dashboard',
   basePath: CURRENT_NETWORK?.url
 })
 
