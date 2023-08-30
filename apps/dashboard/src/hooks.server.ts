@@ -10,6 +10,15 @@ const json = {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+  if (event.url.pathname.includes('/api')) {
+    return new Response(JSON.stringify({}), {
+      headers: {
+        'content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+  }
+
   console.log('REQUEST URL:', event.url.pathname)
   console.log('REQUEST:', event.request)
 
