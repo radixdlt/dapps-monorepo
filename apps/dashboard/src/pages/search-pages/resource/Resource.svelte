@@ -23,12 +23,12 @@
   } from '@api/utils/resources'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
-  import CardRow from '@components/info-box/CardRow.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type {
     EntityMetadataItem,
     MetadataTypedValue
   } from '@radixdlt/babylon-gateway-api-sdk'
+  import SummaryMetadata from '../SummaryMetadata.svelte'
 
   export let resource: Promise<NonFungibleResource | FungibleResource>
   export let associatedDapps: Promise<
@@ -53,22 +53,18 @@
     ]
   ]
 
-  $: metadata =
-    activeTab === 'summary'
-      ? resource.then(({ address, totalSupply, metadata }) =>
-          [
-            metadataItem('address', address, 'GlobalAddress'),
-            metadataItem('total supply', totalSupply, 'U64')
-          ]
-            .concat(metadata.explicit)
-            .concat(metadata.nonStandard)
-        )
-      : resource.then(({ metadata }) => metadata.all)
+  $: nonMetadataItems = resource.then(
+    ({ address, totalSupply }) =>
+      [
+        ['address', address, 'GlobalAddress'],
+        ['total supply', totalSupply, 'U64']
+      ] as Parameters<typeof metadataItem>[]
+  )
 </script>
 
-<div class="card info-card">
-  <PillsMenu items={tabs} bind:active={activeTab} />
+<PillsMenu items={tabs} bind:active={activeTab} />
 
+<div class="card info-card">
   {#if activeTab === 'summary'}
     <div class="resource-title">
       {#await resource}
@@ -93,21 +89,16 @@
     {/await}
   {/if}
 
-  <Metadata {metadata}>
-    <svelte:fragment slot="extra-rows">
-      {#await associatedDapps then dapps}
-        {#if dapps.length > 0}
-          <CardRow
-            title="Associated Dapps"
-            cardInfo={dapps.map(({ name, iconUrl }) => ({
-              text: name,
-              iconUrl
-            }))}
-          />
-        {/if}
-      {/await}
-    </svelte:fragment>
-  </Metadata>
+  {#if activeTab === 'summary'}
+    <SummaryMetadata
+      metadata={resource.then(({ metadata }) => metadata)}
+      {nonMetadataItems}
+      {associatedDapps}
+    />
+  {/if}
+  {#if activeTab === 'metadata'}
+    <Metadata metadata={resource.then(({ metadata: { all } }) => all)} />
+  {/if}
 </div>
 
 <style>
@@ -118,7 +109,7 @@
   }
 
   .info-card {
-    padding: var(--spacing-3xl) var(--spacing-2xl);
+    padding: var(--spacing-2xl);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2xl);

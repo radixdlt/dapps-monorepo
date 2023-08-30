@@ -24,5 +24,14 @@
       --margin="2rem 0"
     />
   {/if}
-  <slot />
+
+  <div class="content">
+    <slot />
+  </div>
 </section>
+
+<style>
+  .content {
+    margin-top: var(--spacing-2xl);
+  }
+</style>
