@@ -62,22 +62,30 @@
     address: string
   }>()
 
-  const nonFungibleResources = derived<
-    typeof selectedAccount,
-    Awaited<
-      ReturnType<typeof getAccountData>
-    >[number]['nonFungible'][number]['resource'][]
-  >(selectedAccount, ($selectedAccount, set) => {
-    if ($selectedAccount)
-      getAccountData([$selectedAccount.address]).then((resources) =>
-        set(
-          resources[0]!.nonFungible.map(({ resource }) => ({
-            ...resource,
-            label: resource.metadata.standard.name
-          }))
+  const nfts = derived<typeof selectedAccount, NonFungible[]>(
+    selectedAccount,
+    ($selectedAccount, set) => {
+      if ($selectedAccount)
+        getAccountData([$selectedAccount.address]).then((resources) =>
+          set(
+            resources[0]!.nonFungible
+              .map(({ resource, nonFungibles }) =>
+                nonFungibles.map((nft) => ({
+                  ...nft,
+                  resource: resource
+                }))
+              )
+              .flat()
+              .map((nft) => ({
+                ...nft,
+                label: `${
+                  nft.resource.metadata.standard.name ?? nft.resource.address
+                } (${nft.id})`
+              }))
+          )
         )
-      )
-  })
+    }
+  )
 
   const deployButtonEnabled = derived(
     [requiredUploadedFiles, selectedBadge],
@@ -95,7 +103,7 @@
       $selectedAccount?.address || '',
       wasm,
       sborDecodedSchema,
-      badge?.address.nonFungibleAddress,
+      badge?.address.resourceAddress,
       badge?.id
     )
 
@@ -169,11 +177,11 @@
       />
     </Box>
     <Box>
-      {#if $nonFungibleResources && $nonFungibleResources.length > 0}
+      {#if $nfts && $nfts.length > 0}
         <Select
           placeholder="Select Badge NFT"
           bind:selected={$selectedBadge}
-          options={$nonFungibleResources}
+          options={$nfts}
         />
       {:else}
         <Select placeholder="Select Badge NFT" />
