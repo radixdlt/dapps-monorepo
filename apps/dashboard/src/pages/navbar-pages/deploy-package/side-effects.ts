@@ -75,6 +75,7 @@ CALL_METHOD
 `
 
 export const getDeployPackageManifest = (
+  account: string,
   wasm: string,
   schema: string,
   nftAddress: string,
@@ -83,12 +84,31 @@ export const getDeployPackageManifest = (
   const wasmHash: string = hash(wasm).toString('hex')
 
   return `
-      PUBLISH_PACKAGE_ADVANCED
-        Enum<AccessRule::AllowAll>() # Owner AccessRule
-        ${schema}                    # Package Definition
-        Blob("${wasmHash}")          # Package Code
-        Map<String, Tuple>()         # Metadata
-        None;                        # Address Reservation
+CALL_METHOD
+    Address("${account}")
+    "create_proof_of_non_fungibles"
+    Address("${nftAddress}")
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("${nftId}")
+    )
+;
+PUBLISH_PACKAGE_ADVANCED
+     Enum<OwnerRole::Fixed>(     # Owner Role
+        Enum<AccessRule::Protected>(
+            Enum<AccessRuleNode::ProofRule>(
+                Enum<ProofRule::Require>(
+                    Enum<0u8>(   # ResourceOrNonFungible::NonFungible
+                        NonFungibleGlobalId("${nftAddress}:${nftId}")
+                    )
+                )
+            )
+        )
+    )
+    ${schema}                    # Package Definition
+    Blob("${wasmHash}")          # Package Code
+    Map<String, Tuple>()         # Metadata
+    None                         # Address Reservation
+;
       `
 }
 
