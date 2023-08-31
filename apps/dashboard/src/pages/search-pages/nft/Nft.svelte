@@ -33,8 +33,8 @@
       }
     } as EntityMetadataItem)
 
-  $: nonStandardData = nft.then(({ nonStandardData }) =>
-    nonStandardData.map(({ kind, field_name, value }) =>
+  $: nonStandardData = nft.then(({ nftData: { nonStandard } }) =>
+    nonStandard.map(({ kind, field_name, value }) =>
       metadataItem(field_name, value, kind)
     )
   )
@@ -45,7 +45,7 @@
 <div class="card nft-image">
   {#await nft}
     <NftImage size={imageSize} />
-  {:then { iconUrl }}
+  {:then { nftData: { standard: { iconUrl } } }}
     <NftImage url={iconUrl} size={imageSize} />
   {/await}
 </div>
@@ -54,7 +54,7 @@
   <h2>
     {#await nft}
       <SkeletonLoader />
-    {:then { name, id }}
+    {:then { id, nftData: { standard: { name } } }}
       {#if name}
         {name}
       {/if}
@@ -64,7 +64,7 @@
 
   {#await nft}
     <SkeletonLoader count={3} />
-  {:then { description }}
+  {:then { nftData: { standard: { description } } }}
     {#if description}
       {description}
     {/if}

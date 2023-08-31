@@ -27,24 +27,24 @@
   {#each nonFungibleResources as { resource, nonFungibles, totalNonFungibles }}
     <NFTAccordion
       data={{
-        name: resource.name,
+        name: resource.metadata.standard.name,
         address: resource.address,
-        imageUrl: resource.iconUrl,
+        imageUrl: resource.metadata.standard.iconUrl,
         count: nonFungibles.length,
-        tags: resource.tags,
+        tags: resource.metadata.standard.tags,
         totalCount: totalNonFungibles
       }}
     >
       <div bind:clientWidth={width}>
         <div class="nft-cards" class:center={width < 500}>
-          {#each nonFungibles as nft}
+          {#each nonFungibles as { address, nftData: { standard: { iconUrl, name } } }}
             <NonFungibleTokenCard
-              imgUrl={nft.iconUrl}
-              name={nft.name}
-              address={nft.address}
+              imgUrl={iconUrl}
+              {name}
+              {address}
               on:click={() =>
                 dispatch('click-nft', {
-                  address: nft.address.nonFungibleAddress
+                  address: address.nonFungibleAddress
                 })}
             />
           {/each}

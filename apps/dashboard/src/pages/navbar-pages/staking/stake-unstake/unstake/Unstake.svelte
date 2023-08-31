@@ -4,7 +4,7 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import type { Validator } from '../../Validators.svelte'
+  import type { Validator } from '@api/utils/validators'
   import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
   import { formatXRDValue } from '@utils'
 
@@ -110,7 +110,10 @@
       {#each stakes as stake, i}
         <div class="add-stake-card">
           <OverviewUnstakeCard
-            validator={stake.validator}
+            validator={{
+              address: stake.validator.address,
+              name: stake.validator.metadata.standard.name
+            }}
             account={stake.account}
             stakedAmount={stake.amount.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}

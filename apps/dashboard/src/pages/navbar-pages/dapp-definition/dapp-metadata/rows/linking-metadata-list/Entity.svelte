@@ -15,13 +15,13 @@
 <script lang="ts">
   import { getSingleEntityDetails } from '@api/gateway'
   import { getSetMetadataAuth } from '@api/utils/auth'
-  import { getStringMetadata } from '@api/utils/resources'
   import Icon from '@components/_base/icon/Icon.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import type { StateEntityDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
   import { ValidationResult } from '../../DappMetadata.svelte'
   import LinkingMetadataList from './LinkingMetadataList.svelte'
   import GreenCheckIcon from '@icons/checked-checkbox.svg'
+  import { getStringMetadata } from '@api/utils/metadata'
 
   export let entity: EntityT
   export let disabled: boolean

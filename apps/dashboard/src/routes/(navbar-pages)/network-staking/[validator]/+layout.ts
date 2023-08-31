@@ -1,4 +1,4 @@
-import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
+import type { Validator } from '@api/utils/validators'
 import type { LayoutLoad } from './$types'
 
 export const prerender = false

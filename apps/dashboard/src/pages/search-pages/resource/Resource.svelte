@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   export const metadataItem = (
     key: string,
-    value: string,
+    value: any,
     type: MetadataTypedValue['type']
   ) =>
     ({
@@ -73,7 +73,7 @@
     <div class="resource-title">
       {#await resource}
         <SkeletonLoader />
-      {:then { name, iconUrl, symbol }}
+      {:then { metadata: { standard: { name, iconUrl, symbol } } }}
         <NftImage url={iconUrl} />
 
         {#if name}
@@ -86,7 +86,7 @@
 
     {#await resource}
       <SkeletonLoader count={3} />
-    {:then { description }}
+    {:then { metadata: { standard: { description } } }}
       {#if description}
         {description}
       {/if}

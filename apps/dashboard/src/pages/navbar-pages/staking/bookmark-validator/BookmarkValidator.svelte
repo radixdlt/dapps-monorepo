@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Validator } from '../Validators.svelte'
   import { connected } from '@stores'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { bookmarkedValidatorsStore } from '../../../../stores'
@@ -7,6 +6,7 @@
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import type { Validator } from '@api/utils/validators'
 
   export let validator: Promise<Validator> | Validator
   export let withText = false

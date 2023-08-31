@@ -32,9 +32,7 @@
 </script>
 
 <script lang="ts">
-  import Validators, {
-    type Validator
-  } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
+  import Validators from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
   import type { LayoutData } from './$types'
   import type { Account } from '@stores'
   import { writable } from 'svelte/store'
@@ -44,6 +42,7 @@
   import type { ComponentEvents } from 'svelte'
   import { bookmarkedValidatorsStore } from '../../../stores'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
+  import type { Validator } from '@api/utils/validators'
 
   export let data: LayoutData
 

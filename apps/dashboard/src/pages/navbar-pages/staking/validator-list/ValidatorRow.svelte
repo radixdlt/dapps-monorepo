@@ -6,7 +6,7 @@
   import { truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
-  import type { Validator } from '../Validators.svelte'
+  import type { Validator } from '@api/utils/validators'
   import { connected } from '@stores'
 
   export let validator: Validator
@@ -28,7 +28,7 @@
         class="dotted-overflow"
         style:max-width="15ch"
       >
-        {validator.name}
+        {validator.metadata.standard.name ?? ''}
       </div>
     </ResponsiveTableCell>
 

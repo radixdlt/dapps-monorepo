@@ -5,7 +5,6 @@ import {
   getSingleEntityDetails
 } from '@api/gateway'
 import type {
-  EntityMetadataCollection,
   EntityMetadataItem,
   FungibleResourcesCollectionItemVaultAggregated,
   FungibleResourcesVaultCollection,
@@ -18,23 +17,25 @@ import type {
   StateEntityDetailsVaultResponseItem,
   StateNonFungibleDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { accountLabel, getNFTAddress } from '@utils'
 import { andThen, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
+import { getStringMetadata, getVectorMetadata } from './metadata'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = {
   type: T
   address: string
-  name?: string
-  symbol?: string
-  iconUrl?: string
-  description?: string
-  tags?: string[]
   totalSupply: string
   metadata: {
-    explicit: EntityMetadataItem[]
+    standard: {
+      name?: string
+      symbol?: string
+      iconUrl?: string
+      description?: string
+      tags?: string[]
+    }
     nonStandard: EntityMetadataItem[]
+    explicit: EntityMetadataItem[]
     all: EntityMetadataItem[]
   }
 }
@@ -57,14 +58,18 @@ export type NonFungibleAddress<
 export type NonFungible = {
   address: NonFungibleAddress
   id: string
-  unstakeData: {
-    claimEpoch: string
-    unstakeAmount: string
+  nftData: {
+    standard: {
+      unstakeData?: {
+        claimEpoch: string
+        unstakeAmount: string
+      }
+      name?: string
+      iconUrl?: string
+      description?: string
+    }
+    nonStandard: any[]
   }
-  name?: string
-  iconUrl?: string
-  description?: string
-  nonStandardData: any[]
 }
 
 export type Resource = FungibleResource | NonFungibleResource
@@ -72,54 +77,6 @@ export type Resource = FungibleResource | NonFungibleResource
 export type DecoratedAccount = Awaited<
   ReturnType<typeof getAccountData>
 >[number]
-
-const fungibleResourceDisplayLabel = (
-  resource: StateEntityDetailsResponseItem
-) =>
-  pipe(
-    () => [
-      getStringMetadata('symbol')(resource.metadata),
-      getStringMetadata('name')(resource.metadata)
-    ],
-    ([symbol, name]) =>
-      symbol && name
-        ? `${name} (${symbol})`
-        : symbol || name || resource.address
-  )()
-
-const nonFungibleDisplayLabel = (
-  resource: StateEntityDetailsResponseItem,
-  id: string
-) =>
-  pipe(
-    () => getStringMetadata('name')(resource.metadata),
-    (name) =>
-      name
-        ? `${accountLabel({
-            address: getNFTAddress(resource.address, id),
-            label: name || ''
-          })}`
-        : `${getNFTAddress(resource.address, id)}`
-  )()
-
-export const getEnumStringMetadata =
-  (key: string) => (metadata?: EntityMetadataCollection) =>
-    (
-      metadata?.items.find((item) => item.key === key)?.value
-        ?.programmatic_json as any
-    )?.fields?.[0].value || ''
-
-export const getStringMetadata =
-  (key: string) =>
-  (metadata?: EntityMetadataCollection): string =>
-    (metadata?.items.find((item) => item.key === key)?.value?.typed as any)
-      ?.value || ''
-
-export const getVectorMetadata =
-  (key: string) =>
-  (metadata?: EntityMetadataCollection): any[] =>
-    (metadata?.items.find((item) => item.key === key)?.value.typed as any)
-      ?.values || []
 
 export const getUnstakeData = (
   data: StateNonFungibleDetailsResponseItem['data']
@@ -181,16 +138,20 @@ export const transformNft = (
       nonFungibleAddress: `${resource_address}:${non_fungible_id}`
     },
     id: non_fungible_id,
-    unstakeData: getUnstakeData(data) ?? [],
-    name: getNftData(data, 'name'),
-    description: getNftData(data, 'description'),
-    iconUrl: getNftData(data, 'key_image_url'),
-    nonStandardData: ((data?.programmatic_json as any).fields as any[]).filter(
-      ({ field_name }) =>
-        field_name !== 'name' &&
-        field_name !== 'description' &&
-        field_name !== 'key_image_url'
-    )
+    nftData: {
+      standard: {
+        unstakeData: getUnstakeData(data) ?? [],
+        name: getNftData(data, 'name'),
+        description: getNftData(data, 'description'),
+        iconUrl: getNftData(data, 'key_image_url')
+      },
+      nonStandard: ((data?.programmatic_json as any).fields as any[]).filter(
+        ({ field_name }) =>
+          field_name !== 'name' &&
+          field_name !== 'description' &&
+          field_name !== 'key_image_url'
+      )
+    }
   } as const)
 
 export const transformNonFungibleResource = (
@@ -199,17 +160,20 @@ export const transformNonFungibleResource = (
   ({
     type: 'non-fungible',
     address: `${entity.address}`,
-    name: getStringMetadata('name')(entity.metadata),
     totalSupply: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).total_supply,
-    iconUrl: getStringMetadata('icon_url')(entity.metadata),
-    tags: getVectorMetadata('tags')(entity.metadata),
     metadata: {
-      explicit: entity.explicit_metadata?.items ?? [],
+      standard: {
+        name: getStringMetadata('name')(entity.metadata),
+        description: getStringMetadata('description')(entity.metadata),
+        iconUrl: getStringMetadata('icon_url')(entity.metadata),
+        tags: getVectorMetadata('tags')(entity.metadata)
+      },
       nonStandard: (entity.metadata?.items || []).filter(
         ({ key }) => key !== 'name' && key !== 'icon_url' && key !== 'tags'
       ),
+      explicit: entity.explicit_metadata?.items ?? [],
       all: entity.metadata?.items ?? []
     }
   } as const)
@@ -225,16 +189,17 @@ export const transformFungibleResource = (
         .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
         .toString() || '0',
     address: entity.address,
-    name: getStringMetadata('name')(entity.metadata),
-    symbol: getStringMetadata('symbol')(entity.metadata),
-    iconUrl: getStringMetadata('icon_url')(entity.metadata),
-    description: getStringMetadata('description')(entity.metadata),
-    tags: getVectorMetadata('tags')(entity.metadata),
     totalSupply: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).total_supply,
     metadata: {
-      explicit: entity.explicit_metadata?.items ?? [],
+      standard: {
+        name: getStringMetadata('name')(entity.metadata),
+        symbol: getStringMetadata('symbol')(entity.metadata),
+        iconUrl: getStringMetadata('icon_url')(entity.metadata),
+        description: getStringMetadata('description')(entity.metadata),
+        tags: getVectorMetadata('tags')(entity.metadata)
+      },
       nonStandard: ((entity.metadata?.items as any[]) || []).filter(
         ({ key }) =>
           key !== 'name' &&
@@ -243,6 +208,7 @@ export const transformFungibleResource = (
           key !== 'description' &&
           key !== 'tags'
       ),
+      explicit: entity.explicit_metadata?.items ?? [],
       all: entity.metadata?.items ?? []
     }
   } as const)

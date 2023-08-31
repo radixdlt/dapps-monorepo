@@ -1,7 +1,6 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakeCard from './StakeCard.svelte'
-  import Address from '@components/_base/address/Address.svelte'
   import type { Account } from '@stores'
   import UnstakeIcon from '@icons/unstaking.svg'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
@@ -12,7 +11,7 @@
 
   export let amountToUnstake: string = '0'
   export let validator: {
-    name: string
+    name?: string
     address: string
   }
   export let invalid: boolean

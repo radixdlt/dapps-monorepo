@@ -5,8 +5,9 @@ import {
   getGatewayStatus,
   getValidatorsListWithLedgerState
 } from '@api/gateway'
-import { getAccountData, getEnumStringMetadata } from '@api/utils/resources'
-import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
+import { getAccountData } from '@api/utils/resources'
+import { getEnumStringMetadata } from '@api/utils/metadata'
+import type { Validator } from '@api/utils/validators'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { derived } from 'svelte/store'
@@ -63,8 +64,6 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
           state.stake_unit_resource_address as string
 
         return {
-          name: getEnumStringMetadata('name')(validator.metadata),
-          website: getEnumStringMetadata('url')(validator.metadata),
           address: validator.address,
           fee: (state.validator_fee_factor || 0) * 100,
           percentageTotalStake:
@@ -79,6 +78,17 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
               .details as StateEntityDetailsResponseFungibleResourceDetails
           ).total_supply,
           totalStakeInXRD: validator.stake_vault.balance,
+
+          metadata: {
+            standard: {
+              name: getEnumStringMetadata('name')(validator.metadata),
+              website: getEnumStringMetadata('url')(validator.metadata)
+            },
+            nonStandard: ((validator.metadata?.items as any[]) || []).filter(
+              ({ key }) => key !== 'name' && key !== 'url'
+            ),
+            all: validator.metadata?.items ?? []
+          },
 
           // TODO:
           ownerAddress: '',
@@ -146,9 +156,9 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
       let readyToClaim: ReadyToClaimInfo[] = []
 
       for (const token of unstakeTokens) {
-        const isClaimable = new BigNumber(token.unstakeData.claimEpoch).lte(
-          currentEpoch
-        )
+        const isClaimable = new BigNumber(
+          token.nftData.standard.unstakeData!.claimEpoch
+        ).lte(currentEpoch)
 
         const validator = validators.find(
           (validator) =>
@@ -157,7 +167,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
         )!
 
         const xrdAmount = new BigNumber(
-          token.unstakeData.unstakeAmount
+          token.nftData.standard.unstakeData!.unstakeAmount
         ).toFixed(RET_DECIMAL_PRECISION - 1)
 
         if (new BigNumber(xrdAmount).eq(0)) continue
@@ -170,7 +180,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
           account,
           validator,
           xrdAmount,
-          claimEpoch: token.unstakeData.claimEpoch,
+          claimEpoch: token.nftData.standard.unstakeData!.claimEpoch,
           stakeUnitsAmount
         }
 

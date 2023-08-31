@@ -17,13 +17,21 @@
     resources
       .map(({ nonFungibles }) => nonFungibles)
       .flat()
-      .map((nft) => ({
-        label: nft.name ?? nft.address.nonFungibleAddress,
-        address: nft.address.nonFungibleAddress,
-        resourceAddress: nft.address.resourceAddress,
-        id: nft.id as string,
-        checked: false
-      }))
+      .map(
+        ({
+          address,
+          id,
+          nftData: {
+            standard: { name }
+          }
+        }) => ({
+          label: name ?? address.nonFungibleAddress,
+          address: address.nonFungibleAddress,
+          resourceAddress: address.resourceAddress,
+          id: id as string,
+          checked: false
+        })
+      )
   )
 
   let selected: Awaited<typeof options> = []

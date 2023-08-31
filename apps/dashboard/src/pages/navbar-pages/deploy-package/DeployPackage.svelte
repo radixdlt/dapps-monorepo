@@ -73,7 +73,7 @@
         set(
           resources[0]!.nonFungible.map(({ resource }) => ({
             ...resource,
-            label: resource.name
+            label: resource.metadata.standard.name
           }))
         )
       )
@@ -121,7 +121,7 @@
         `txID=${$packageDeployed.txID}&` +
         `txStatus=${$packageDeployed.txStatus}&` +
         `packageAddress=${$packageDeployed.address}&` +
-        `badgeName=${$selectedBadge.name}&` +
+        `badgeName=${$selectedBadge.nftData.standard.name}&` +
         `badgeAddress=${$selectedBadge.address}&` +
         `badgeId=${encodeURIComponent($selectedBadge.id)}`
     )

@@ -19,7 +19,6 @@
   const validators = Array(50)
     .fill(undefined)
     .map((_, i) => ({
-      name: 'RADNODE🔥',
       address: validatorAddresses[i % 10],
       totalStake: '100000000',
       percentageOwnerStake: Math.random() * 30,
@@ -28,7 +27,7 @@
       uptime: Math.random() * 0.9,
       acceptsStake: Math.random() > 0.5 ? true : false,
       percentageTotalStake: Math.random() * 50,
-      website: 'https://radnode.io',
+
       ownerAddress: 'account_1234567890',
       ownerStake: '23000',
       bookmarked: false,
@@ -37,7 +36,15 @@
       unstakeClaimResourceAddress: 'resource_1234567890',
       stakeUnitsToStakedRatio: new BigNumber(1),
       totalStakeUnits: '',
-      totalStakeInXRD: ''
+      totalStakeInXRD: '',
+      metadata: {
+        standard: {
+          name: 'RADNODE🔥',
+          url: 'https://radnode.io'
+        },
+        nonStandard: [],
+        all: []
+      }
     }))
 </script>
 

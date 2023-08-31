@@ -15,9 +15,9 @@
   const transformFungibleTokenResource = ({
     address,
     value: amount,
-    symbol,
-    iconUrl,
-    tags
+    metadata: {
+      standard: { symbol, iconUrl, tags }
+    }
   }: FungibleResource): Token => ({
     linksTo: `/resource/${address}`,
     numberOfTags: tags?.length ?? 0,

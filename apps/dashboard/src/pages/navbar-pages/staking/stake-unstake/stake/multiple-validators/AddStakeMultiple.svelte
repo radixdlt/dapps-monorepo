@@ -1,9 +1,6 @@
 <script lang="ts">
   import StakePanel from '../../StakePanel.svelte'
-  import {
-    selectedValidators,
-    type Validator
-  } from '../../../Validators.svelte'
+  import { selectedValidators } from '../../../Validators.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
@@ -17,7 +14,7 @@
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
-  import Success from '@components/success/Success.svelte'
+  import type { Validator } from '@api/utils/validators'
 
   export let validators: Validator[]
   export let currentlyStaked: Promise<{
