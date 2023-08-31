@@ -92,6 +92,7 @@
     const badge = $selectedBadge!
 
     const manifest = getDeployPackageManifest(
+      $selectedAccount?.address || '',
       wasm,
       sborDecodedSchema,
       badge?.address.nonFungibleAddress,

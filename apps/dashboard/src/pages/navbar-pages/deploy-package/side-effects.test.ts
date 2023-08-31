@@ -44,6 +44,7 @@ describe('Deploy Package Transaction Manifests', () => {
       )
 
     const stringManifest = getDeployPackageManifest(
+      'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
       faucetWasm,
       sborDecodedSchema,
       'resource_tdx_d_1tkx7f4tdf9zlqnhvtjrftddxvpjtvwqshjw5p9v0qslka44un68w6k',
