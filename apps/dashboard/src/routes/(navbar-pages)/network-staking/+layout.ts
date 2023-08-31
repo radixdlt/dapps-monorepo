@@ -72,7 +72,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
           stakeUnitResourceAddress,
           unstakeClaimResourceAddress:
-            state.unstake_claim_token_resource_address as string,
+            state.claim_token_resource_address as string,
 
           totalStakeUnits: (
             stakeUnits[i]
