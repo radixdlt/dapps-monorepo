@@ -130,8 +130,8 @@
         `txID=${$packageDeployed.txID}&` +
         `txStatus=${$packageDeployed.txStatus}&` +
         `packageAddress=${$packageDeployed.address}&` +
-        `badgeName=${$selectedBadge.nftData.standard.name}&` +
-        `badgeAddress=${$selectedBadge.address}&` +
+        `badgeName=${$selectedBadge.nftData.standard.name ?? ''}&` +
+        `badgeAddress=${$selectedBadge.address.resourceAddress}&` +
         `badgeId=${encodeURIComponent($selectedBadge.id)}`
     )
   }
