@@ -84,7 +84,7 @@ export const getDeployPackageManifest = (
   const wasmHash: string = hash(wasm).toString('hex')
 
   return `
-      CALL_METHOD
+CALL_METHOD
     Address("${account}")
     "create_proof_of_non_fungibles"
     Address("${nftAddress}")
@@ -93,7 +93,7 @@ export const getDeployPackageManifest = (
     )
 ;
 PUBLISH_PACKAGE_ADVANCED
-     Enum<OwnerRule::Fixed>(     # Owner AccessRule
+     Enum<OwnerRole::Fixed>(     # Owner Role
         Enum<AccessRule::Protected>(
             Enum<AccessRuleNode::ProofRule>(
                 Enum<ProofRule::Require>(
