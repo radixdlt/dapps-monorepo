@@ -52,12 +52,14 @@ export const NETWORK_CONFIG = {
   [Network.ZABANET]: {
     id: 14,
     url: 'https://zabanet-gateway.radixdlt.com',
-    dappDefAddress: ''
+    dappDefAddress:
+      'account_tdx_e_16xygyhqp3x3awxlz3c5dzrm7jqghgpgs776v4af0yfr7xljqmna3ha'
   },
   [Network.RCNETV3]: {
     id: 14,
     url: 'https://rcnet-v3.radixdlt.com',
-    dappDefAddress: 'account_tdx_e_randomtobefilledin12345'
+    dappDefAddress:
+      'account_tdx_e_16xygyhqp3x3awxlz3c5dzrm7jqghgpgs776v4af0yfr7xljqmna3ha'
   },
   [Network.RCNETV2]: {
     id: 13,
