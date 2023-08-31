@@ -5,10 +5,10 @@
   import BigNumber from 'bignumber.js'
   import type { Account } from '@stores'
   import { XRDToken } from '@constants'
-  import type { Validator } from '../../Validators.svelte'
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
+  import type { Validator } from '@api/utils/validators'
 
   export let readyToClaim: {
     validator: Validator

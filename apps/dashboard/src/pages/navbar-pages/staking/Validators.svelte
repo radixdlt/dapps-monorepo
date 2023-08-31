@@ -1,21 +1,4 @@
 <script lang="ts" context="module">
-  export type Validator = {
-    name: string
-    address: string
-    ownerAddress: string
-    totalStakeInXRD: string
-    ownerStake: string
-    percentageOwnerStake: number
-    apy: number
-    fee: number
-    uptime: number
-    acceptsStake: boolean
-    website: string
-    percentageTotalStake: number
-    stakeUnitResourceAddress: string
-    unstakeClaimResourceAddress: string
-    totalStakeUnits: string
-  }
   import InfoIcon from '@icons/info.svg'
 
   export type AccountWithStakes = Account & {
@@ -57,6 +40,7 @@
   import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
   import ValidatorRow from './validator-list/ValidatorRow.svelte'
   import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
+  import type { Validator } from '@api/utils/validators'
 
   export let validators: Promise<Validator[]>
 

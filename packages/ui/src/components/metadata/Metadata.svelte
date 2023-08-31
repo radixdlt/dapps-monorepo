@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
   type ValueRendererConfig = {
-    component: any
-    componentProperties: (value: EntityMetadataItemValue) => Record<string, any>
+    component?: any
+    componentProperties?: (
+      value: EntityMetadataItemValue
+    ) => Record<string, any>
   }
 
   export type MetadataInfoBoxConfig = {

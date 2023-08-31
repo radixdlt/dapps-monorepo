@@ -1,9 +1,9 @@
 import { derived } from 'svelte/store'
 import type { LayoutLoad } from './$types'
 import type { Account } from '@stores'
-import type { Validator } from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
 import type { StakeInfo } from '../../+layout.svelte'
 import BigNumber from 'bignumber.js'
+import type { Validator } from '@api/utils/validators'
 
 export const load: LayoutLoad = ({ parent }) =>
   parent().then((data) => {

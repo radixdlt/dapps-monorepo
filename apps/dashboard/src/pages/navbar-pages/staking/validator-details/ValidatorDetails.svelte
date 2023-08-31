@@ -1,22 +1,20 @@
 <script lang="ts">
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import { formatTokenValue, formatXRDValue } from '@utils'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/proxy+layout'
   import InfoBox from '@components/info-box/InfoBox.svelte'
-  import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import Address from '@components/_base/address/Address.svelte'
-  import Row from '@components/info-box/Row.svelte'
-  import Link from '@components/_base/link/Link.svelte'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
-  import type { Validator } from '../Validators.svelte'
   import { createEventDispatcher } from 'svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
+  import type { Validator } from '@api/utils/validators'
+  import { metadataItem } from '@dashboard-pages/search-pages/resource/Resource.svelte'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -34,8 +32,8 @@
   <div class="validator-name">
     {#await validator}
       <SkeletonLoader />
-    {:then validator}
-      <h1 class="dotted-overflow">{validator.name}</h1>
+    {:then { metadata: { standard: name } }}
+      <h1 class="dotted-overflow">{name}</h1>
     {/await}
     <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
@@ -77,55 +75,38 @@
 
   <div class="card">
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
-      <AwaitedRow
-        text="Owner address"
-        promise={validator.then(({ ownerAddress }) => ownerAddress)}
-        let:data
-      >
-        <Address short value={data} />
-      </AwaitedRow>
-      <AwaitedRow
-        text="Website"
-        promise={validator.then(({ website }) => website)}
-        let:data
-      >
-        <Link url={data} external />
-      </AwaitedRow>
-      <AwaitedRow text="Total Stake" promise={validator} let:data>
-        <div>
-          <span>{formatXRDValue(data.totalStakeInXRD)}</span>
-          <span>({data.percentageTotalStake.toFixed(1)}%)</span>
-        </div>
-      </AwaitedRow>
-      <AwaitedRow text="Owner Stake" promise={validator} let:data>
-        <div>
-          <span>{formatXRDValue(data.ownerStake)}</span>
-          <span>({data.percentageOwnerStake.toFixed(1)}%)</span>
-        </div>
-      </AwaitedRow>
-      <AwaitedRow
-        text="Fee (%)"
-        promise={validator.then(({ fee }) => fee)}
-        let:data
-      >
-        {formatTokenValue(data).displayValue}
-      </AwaitedRow>
-      <AwaitedRow
-        text="Apy"
-        promise={validator.then(({ apy }) => apy)}
-        let:data
-      >
-        {formatTokenValue(data).displayValue}
-      </AwaitedRow>
-      <Row text="Accepts Stake">
-        <AcceptsStake
-          slot="right"
-          value={validator.then(({ acceptsStake }) => acceptsStake)}
-        />
-      </Row>
-      <Row text="Registration Status">
-        <span slot="right">N/A</span>
-      </Row>
+      <Metadata
+        metadata={validator.then(
+          ({
+            totalStakeInXRD,
+            acceptsStake,
+            fee,
+            metadata: {
+              nonStandard,
+              standard: { website }
+            }
+          }) => {
+            const extraData = [
+              metadataItem('total stake', totalStakeInXRD, 'U64'),
+              metadataItem('accepts stake', acceptsStake, 'Bool'),
+              metadataItem('fee (%)', `${fee} %`, 'String')
+            ]
+            if (website) extraData.push(metadataItem('website', website, 'Url'))
+
+            return extraData.concat(nonStandard)
+          }
+        )}
+        expectedEntries={{
+          'accepts stake': {
+            label: 'Accepts Stake',
+            component: AcceptsStake,
+            componentProperties: () => ({
+              slot: 'right',
+              value: validator.then(({ acceptsStake }) => acceptsStake)
+            })
+          }
+        }}
+      />
     </InfoBox>
   </div>
 </SidePanel>

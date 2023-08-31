@@ -1,7 +1,7 @@
 import { getSingleEntityDetails } from '@api/gateway'
 import type { PageLoad } from './$types'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import { getStringMetadata } from '@api/utils/resources'
+import { getStringMetadata } from '@api/utils/metadata'
 
 export const prerender = false
 

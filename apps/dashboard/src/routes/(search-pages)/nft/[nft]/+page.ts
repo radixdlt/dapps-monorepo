@@ -1,11 +1,11 @@
 import { getNonFungibleData, getSingleEntityDetails } from '@api/gateway'
 import type { PageLoad } from './$types'
 import {
-  getStringMetadata,
   transformNft,
   transformNonFungibleResource
 } from '@api/utils/resources'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
+import { getStringMetadata } from '@api/utils/metadata'
 
 export const prerender = false
 

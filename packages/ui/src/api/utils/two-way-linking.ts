@@ -1,6 +1,6 @@
 import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
-import { getVectorMetadata } from './resources'
 import { getEntityDetails } from '@api/gateway'
+import { getVectorMetadata } from './metadata'
 
 export const getLinkedEntities = async (
   dappDefinition: StateEntityDetailsVaultResponseItem

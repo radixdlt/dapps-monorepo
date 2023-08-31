@@ -1,11 +1,7 @@
-import {
-  getStringMetadata,
-  getAccountData,
-  getVectorMetadata,
-  type DecoratedAccount
-} from '@api/utils/resources'
+import { getAccountData, type DecoratedAccount } from '@api/utils/resources'
 import type { Account } from '@stores'
 import type { EntityT } from './dapp-metadata/rows/linking-metadata-list/Entity.svelte'
+import { getStringMetadata, getVectorMetadata } from '@api/utils/metadata'
 
 export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>

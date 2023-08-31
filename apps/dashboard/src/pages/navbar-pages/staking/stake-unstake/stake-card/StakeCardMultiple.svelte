@@ -4,7 +4,7 @@
   import ValidatorInfo from './ValidatorInfo.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { createEventDispatcher } from 'svelte'
-  import type { Validator } from '../../Validators.svelte'
+  import type { Validator } from '@api/utils/validators'
   import TrashIcon from '@icons/trash.svg'
   import { XRDToken } from '@constants'
 
@@ -33,7 +33,7 @@
 
   <div class="info" slot="info">
     <ValidatorInfo
-      name={validator.name}
+      name={validator.metadata.standard.name}
       address={validator.address}
       {currentlyStakingAmount}
     />

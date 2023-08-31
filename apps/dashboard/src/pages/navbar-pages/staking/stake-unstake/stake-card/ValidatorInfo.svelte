@@ -3,7 +3,7 @@
   import Address from '@components/_base/address/Address.svelte'
   import { formatTokenValue } from '@utils'
 
-  export let name: string
+  export let name: string | undefined = undefined
   export let address: string
   export let currentlyStakingAmount: Promise<string | undefined> | undefined =
     undefined

@@ -13,7 +13,7 @@
   <AddStakeSingle
     validator={{
       address: validator.address,
-      name: validator.name,
+      name: validator.metadata.standard.name,
       currentlyStakingAmount: $stakes.then((stakes) =>
         stakes
           .reduce((sum, { staked }) => sum.plus(staked), new BigNumber(0))
