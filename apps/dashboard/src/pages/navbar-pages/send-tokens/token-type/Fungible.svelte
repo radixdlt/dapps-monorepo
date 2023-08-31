@@ -19,11 +19,19 @@
   const { response } = query('sendTransaction')
 
   $: resourceList = resources.then((r) =>
-    r.map(({ name, address, value }) => ({
-      address,
-      label: name,
-      value
-    }))
+    r.map(
+      ({
+        metadata: {
+          standard: { name }
+        },
+        address,
+        value
+      }) => ({
+        address,
+        label: name,
+        value
+      })
+    )
   )
 
   let selectedResource: { address: string; label: string } | undefined
