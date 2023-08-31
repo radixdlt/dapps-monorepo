@@ -32,8 +32,8 @@
   <div class="validator-name">
     {#await validator}
       <SkeletonLoader />
-    {:then { metadata: { standard: name } }}
-      <h1 class="dotted-overflow">{name}</h1>
+    {:then { metadata: { standard: { name } } }}
+      <h1 class="dotted-overflow">{name ?? '<no-name>'}</h1>
     {/await}
     <SelectValidator {validator} text="SELECT VALIDATOR" />
   </div>
