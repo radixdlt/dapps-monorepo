@@ -38,7 +38,7 @@ export const getLinkedDappDefinitions = async (
   for (const dappDefinition of dappDefinitionDetails) {
     const linked = (
       getVectorMetadata('claimed_entities')(dappDefinition.metadata) as string[]
-    ).some((address) => address === dappDefinition.address)
+    ).some((address) => address === entity.address)
 
     if (linked) linkedDappDefinitions.push(dappDefinition)
   }
