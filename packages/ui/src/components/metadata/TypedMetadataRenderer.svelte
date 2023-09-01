@@ -9,19 +9,19 @@
 
 {#if metadataTypedValue}
   {#if metadataTypedValue.type === 'GlobalAddress'}
-    <AddressesList short addresses={[metadataTypedValue.value]} />
+    <AddressesList autoShorten addresses={[metadataTypedValue.value]} />
   {:else if metadataTypedValue.type === 'GlobalAddressArray'}
-    <AddressesList short addresses={metadataTypedValue.values} />
+    <AddressesList autoShorten addresses={metadataTypedValue.values} />
   {:else if metadataTypedValue.type === 'NonFungibleGlobalId'}
     <AddressesList
-      short
+      autoShorten
       addresses={[
         `${metadataTypedValue.resource_address}:${metadataTypedValue.non_fungible_id}`
       ]}
     />
   {:else if metadataTypedValue.type === 'NonFungibleGlobalIdArray'}
     <AddressesList
-      short
+      autoShorten
       addresses={metadataTypedValue.values.map(
         (value) => `${value.resource_address}:${value.non_fungible_id}`
       )}

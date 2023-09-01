@@ -20,16 +20,55 @@
 
   $: if (shorten) displayText = short ? shorten.fn(value) : value
 
-  let element: HTMLElement | undefined
-  let elementMaxWidth = 0
+  let element: HTMLElement
+  let boundingContainer: HTMLElement | undefined
+
+  let resizeToLongThreshold: {
+    left: number
+    right: number
+  } = {
+    left: 0,
+    right: 0
+  }
+
+  const checkOverflow = (child: HTMLElement, ancestor: HTMLElement) => {
+    const { left: leftThreshold, right: rightThreshold } =
+      child.getBoundingClientRect()
+
+    const { left, right } = ancestor.getBoundingClientRect()
+
+    return left > leftThreshold || right < rightThreshold
+  }
+
+  const doesElementOverflow = (element: HTMLElement) => {
+    let currentElement: HTMLElement | null = element.parentElement
+
+    if (boundingContainer) {
+      return checkOverflow(element, boundingContainer)
+    } else {
+      while (currentElement) {
+        if (checkOverflow(element, currentElement)) {
+          boundingContainer = currentElement
+          return true
+        }
+        currentElement = currentElement.parentElement
+      }
+    }
+
+    return false
+  }
 
   const handleResize = () => {
-    if (elementMaxWidth < element?.clientWidth!) {
-      const { left } = element!.getBoundingClientRect()
-      elementMaxWidth = element?.clientWidth! + left
-    }
-    if (elementMaxWidth && element) {
-      short = window.innerWidth < elementMaxWidth
+    if (short) {
+      const { left, right } = boundingContainer!.getBoundingClientRect()
+      short =
+        left > resizeToLongThreshold.left || right < resizeToLongThreshold.right
+    } else {
+      const overflows = doesElementOverflow(element)
+      if (overflows) {
+        resizeToLongThreshold = element.getBoundingClientRect()
+        short = true
+      }
     }
   }
 
