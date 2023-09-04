@@ -30,7 +30,10 @@
   </div>
 </section>
 
-<style>
+<style lang="scss">
+  .search-page :global(.card) {
+    padding: var(--spacing-2xl);
+  }
   .content {
     margin-top: var(--spacing-2xl);
   }
