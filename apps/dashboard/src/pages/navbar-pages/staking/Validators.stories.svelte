@@ -39,11 +39,18 @@
       totalStakeInXRD: '',
       metadata: {
         standard: {
-          name: 'RADNODE🔥',
-          url: 'https://radnode.io'
+          name: {
+            item: {} as any,
+            value: 'RADNODE🔥'
+          },
+          url: {
+            item: {} as any,
+            value: 'https://radnode.io'
+          }
         },
         nonStandard: [],
-        all: []
+        all: [],
+        explicit: []
       }
     }))
 </script>

@@ -20,11 +20,11 @@
     }
   }: FungibleResource): Token => ({
     linksTo: `/resource/${address}`,
-    numberOfTags: tags?.length ?? 0,
+    numberOfTags: tags?.value.length ?? 0,
     amount,
-    symbol,
+    symbol: symbol?.value,
     address,
-    iconUrl
+    iconUrl: iconUrl?.value
   })
 
   $: xrdAddress = $xrdAddressStore

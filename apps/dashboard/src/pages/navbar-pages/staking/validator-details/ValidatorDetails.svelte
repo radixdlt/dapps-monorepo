@@ -14,7 +14,7 @@
   import { createEventDispatcher } from 'svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { Validator } from '@api/utils/validators'
-  import { metadataItem } from '@dashboard-pages/search-pages/resource/Resource.svelte'
+  import { metadataItem } from '@dashboard-pages/search-pages/utils'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -91,7 +91,8 @@
               metadataItem('accepts stake', acceptsStake, 'Bool'),
               metadataItem('fee (%)', `${fee} %`, 'String')
             ]
-            if (website) extraData.push(metadataItem('website', website, 'Url'))
+            if (website)
+              extraData.push(metadataItem('website', website.value, 'Url'))
 
             return extraData.concat(nonStandard)
           }

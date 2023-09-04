@@ -20,23 +20,26 @@ import type {
 import { andThen, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
-import { getStringMetadata, getVectorMetadata } from './metadata'
+import {
+  getStandardMetadataEntry,
+  getStringMetadata,
+  getVectorMetadata
+} from './metadata'
+import type { _Entity } from './entity'
 
-type _Resource<T extends 'fungible' | 'non-fungible'> = {
+type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
+  [
+    ['name', string],
+    ['symbol', string],
+    ['iconUrl', string],
+    ['description', string],
+    ['tags', string[]]
+  ]
+> & {
   type: T
-  address: string
   totalSupply: string
   metadata: {
-    standard: {
-      name?: string
-      symbol?: string
-      iconUrl?: string
-      description?: string
-      tags?: string[]
-    }
-    nonStandard: EntityMetadataItem[]
     explicit: EntityMetadataItem[]
-    all: EntityMetadataItem[]
   }
 }
 
@@ -63,7 +66,7 @@ export type NonFungible = {
       unstakeData?: {
         claimEpoch: string
         unstakeAmount: string
-      },
+      }
       name?: string
       iconUrl?: string
       description?: string
@@ -90,8 +93,8 @@ export const getUnstakeData = (
       curr.kind === 'U64'
         ? { ...acc, claimEpoch: curr.value }
         : curr.kind === 'Decimal'
-          ? { ...acc, unstakeAmount: curr.value }
-          : acc,
+        ? { ...acc, unstakeAmount: curr.value }
+        : acc,
     { claimEpoch: '', unstakeAmount: '' }
   )
   return {
@@ -131,28 +134,28 @@ export const transformNft = (
   resource_address: NonFungibleResourcesCollectionItemVaultAggregated['resource_address'],
   { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
 ): NonFungible =>
-({
-  address: {
-    resourceAddress: resource_address,
-    id: non_fungible_id,
-    nonFungibleAddress: `${resource_address}:${non_fungible_id}`
-  },
-  id: non_fungible_id,
-  nftData: {
-    standard: {
-      unstakeData: getUnstakeData(data) ?? [],
-      name: getNftData(data, 'name'),
-      description: getNftData(data, 'description'),
-      iconUrl: getNftData(data, 'key_image_url'),
+  ({
+    address: {
+      resourceAddress: resource_address,
+      id: non_fungible_id,
+      nonFungibleAddress: `${resource_address}:${non_fungible_id}`
     },
-    nonStandard: ((data?.programmatic_json as any).fields as any[]).filter(
-      ({ field_name }) =>
-        field_name !== 'name' &&
-        field_name !== 'description' &&
-        field_name !== 'key_image_url'
-    )
-  },
-} as const)
+    id: non_fungible_id,
+    nftData: {
+      standard: {
+        unstakeData: getUnstakeData(data) ?? [],
+        name: getNftData(data, 'name'),
+        description: getNftData(data, 'description'),
+        iconUrl: getNftData(data, 'key_image_url')
+      },
+      nonStandard: ((data?.programmatic_json as any).fields as any[]).filter(
+        ({ field_name }) =>
+          field_name !== 'name' &&
+          field_name !== 'description' &&
+          field_name !== 'key_image_url'
+      )
+    }
+  } as const)
 
 export const transformNonFungibleResource = (
   entity: StateEntityDetailsVaultResponseItem
@@ -165,13 +168,29 @@ export const transformNonFungibleResource = (
     ).total_supply,
     metadata: {
       standard: {
-        name: getStringMetadata('name')(entity.metadata),
-        description: getStringMetadata('description')(entity.metadata),
-        iconUrl: getStringMetadata('icon_url')(entity.metadata),
-        tags: getVectorMetadata('tags')(entity.metadata)
+        name: getStandardMetadataEntry(
+          'name',
+          getStringMetadata
+        )(entity.metadata),
+        description: getStandardMetadataEntry(
+          'description',
+          getStringMetadata
+        )(entity.metadata),
+        iconUrl: getStandardMetadataEntry(
+          'icon_url',
+          getStringMetadata
+        )(entity.metadata),
+        tags: getStandardMetadataEntry(
+          'tags',
+          getVectorMetadata
+        )(entity.metadata)
       },
       nonStandard: (entity.metadata?.items || []).filter(
-        ({ key }) => key !== 'name' && key !== 'icon_url' && key !== 'tags'
+        ({ key }) =>
+          key !== 'name' &&
+          key !== 'icon_url' &&
+          key !== 'tags' &&
+          key !== 'description'
       ),
       explicit: entity.explicit_metadata?.items ?? [],
       all: entity.metadata?.items ?? []
@@ -194,11 +213,26 @@ export const transformFungibleResource = (
     ).total_supply,
     metadata: {
       standard: {
-        name: getStringMetadata('name')(entity.metadata),
-        symbol: getStringMetadata('symbol')(entity.metadata),
-        iconUrl: getStringMetadata('icon_url')(entity.metadata),
-        description: getStringMetadata('description')(entity.metadata),
-        tags: getVectorMetadata('tags')(entity.metadata)
+        name: getStandardMetadataEntry(
+          'name',
+          getStringMetadata
+        )(entity.metadata),
+        symbol: getStandardMetadataEntry(
+          'symbol',
+          getStringMetadata
+        )(entity.metadata),
+        iconUrl: getStandardMetadataEntry(
+          'icon_url',
+          getStringMetadata
+        )(entity.metadata),
+        description: getStandardMetadataEntry(
+          'description',
+          getStringMetadata
+        )(entity.metadata),
+        tags: getStandardMetadataEntry(
+          'tags',
+          getVectorMetadata
+        )(entity.metadata)
       },
       nonStandard: ((entity.metadata?.items as any[]) || []).filter(
         ({ key }) =>
@@ -286,50 +320,50 @@ export const transformFungible = async (
 
 export const transformResources =
   (stateOptions?: StateEntityDetailsOptions) =>
-    (ledgerState?: LedgerStateSelector) =>
-      (
-        items: StateEntityDetailsVaultResponseItem[],
-        options?: Partial<{ fungibles: boolean; nfts: boolean }>
-      ) => {
-        const { fungibles = true, nfts = true } = options || {}
-        return Promise.all(
-          items.map(async (item) => {
-            const {
-              non_fungible_resources = { items: [] },
-              fungible_resources = { items: [] },
-              address
-            } = item
+  (ledgerState?: LedgerStateSelector) =>
+  (
+    items: StateEntityDetailsVaultResponseItem[],
+    options?: Partial<{ fungibles: boolean; nfts: boolean }>
+  ) => {
+    const { fungibles = true, nfts = true } = options || {}
+    return Promise.all(
+      items.map(async (item) => {
+        const {
+          non_fungible_resources = { items: [] },
+          fungible_resources = { items: [] },
+          address
+        } = item
 
-            const fungible = fungibles
-              ? await transformFungible(
-                fungible_resources,
-                stateOptions,
-                ledgerState
-              )
-              : []
-            const nonFungible = nfts
-              ? await transformNonFungible(
-                non_fungible_resources,
-                address,
-                stateOptions
-              )
-              : []
-            return {
-              accountAddress: item.address,
-              details: item,
-              fungible,
-              nonFungible
-            }
-          })
-        )
-      }
+        const fungible = fungibles
+          ? await transformFungible(
+              fungible_resources,
+              stateOptions,
+              ledgerState
+            )
+          : []
+        const nonFungible = nfts
+          ? await transformNonFungible(
+              non_fungible_resources,
+              address,
+              stateOptions
+            )
+          : []
+        return {
+          accountAddress: item.address,
+          details: item,
+          fungible,
+          nonFungible
+        }
+      })
+    )
+  }
 
 const getResource =
   (type: 'fungible' | 'nonFungible') =>
-    (name: string) =>
-      (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
-        // @ts-ignore
-        resources[type].find((resource: Resource) => resource.name === name)
+  (name: string) =>
+  (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
+    // @ts-ignore
+    resources[type].find((resource: Resource) => resource.name === name)
 
 export type Resources = Awaited<ReturnType<typeof getAccountData>>
 

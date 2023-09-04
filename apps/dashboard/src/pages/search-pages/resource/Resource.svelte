@@ -1,20 +1,3 @@
-<script lang="ts" context="module">
-  export const metadataItem = (
-    key: string,
-    value: any,
-    type: MetadataTypedValue['type']
-  ) =>
-    ({
-      key,
-      value: {
-        typed: {
-          type,
-          value
-        }
-      }
-    } as EntityMetadataItem)
-</script>
-
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type {
@@ -24,11 +7,8 @@
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
-  import type {
-    EntityMetadataItem,
-    MetadataTypedValue
-  } from '@radixdlt/babylon-gateway-api-sdk'
   import SummaryMetadata from '../SummaryMetadata.svelte'
+  import type { metadataItem } from '../utils'
 
   export let resource: Promise<NonFungibleResource | FungibleResource>
   export let associatedDapps: Promise<
@@ -70,11 +50,11 @@
       {#await resource}
         <SkeletonLoader />
       {:then { metadata: { standard: { name, iconUrl, symbol } } }}
-        <NftImage url={iconUrl} />
+        <NftImage url={iconUrl?.value} />
 
-        {#if name}
+        {#if name?.value}
           <h2>
-            {`${name} ${symbol ? `(${symbol})` : ''}`}
+            {`${name.value} ${symbol?.value ? `(${symbol.value})` : ''}`}
           </h2>
         {/if}
       {/await}
@@ -83,15 +63,15 @@
     {#await resource}
       <SkeletonLoader count={3} />
     {:then { metadata: { standard: { description } } }}
-      {#if description}
-        {description}
+      {#if description?.value}
+        {description.value}
       {/if}
     {/await}
   {/if}
 
   {#if activeTab === 'summary'}
     <SummaryMetadata
-      metadata={resource.then(({ metadata }) => metadata)}
+      standardMetadata={resource.then(({ metadata }) => metadata.standard)}
       {nonMetadataItems}
       {associatedDapps}
     />

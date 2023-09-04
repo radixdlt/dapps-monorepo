@@ -6,7 +6,10 @@ import {
   getValidatorsListWithLedgerState
 } from '@api/gateway'
 import { getAccountData } from '@api/utils/resources'
-import { getEnumStringMetadata } from '@api/utils/metadata'
+import {
+  getEnumStringMetadata,
+  getStandardMetadataEntry
+} from '@api/utils/metadata'
 import type { Validator } from '@api/utils/validators'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
@@ -81,8 +84,14 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
           metadata: {
             standard: {
-              name: getEnumStringMetadata('name')(validator.metadata),
-              website: getEnumStringMetadata('url')(validator.metadata)
+              name: getStandardMetadataEntry(
+                'name',
+                getEnumStringMetadata
+              )(validator.metadata),
+              website: getStandardMetadataEntry(
+                'website',
+                getEnumStringMetadata
+              )(validator.metadata)
             },
             nonStandard: ((validator.metadata?.items as any[]) || []).filter(
               ({ key }) => key !== 'name' && key !== 'url'
@@ -104,102 +113,102 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
   const getStakedInfo =
     (validators: Validator[]) =>
-      (
-        account: Account,
-        accountData: Awaited<ReturnType<typeof getAccountData>>[number]
-      ) =>
-        accountData.fungible
-          .filter((token) =>
-            validators.some(
-              (validator) => validator.stakeUnitResourceAddress === token.address
-            )
+    (
+      account: Account,
+      accountData: Awaited<ReturnType<typeof getAccountData>>[number]
+    ) =>
+      accountData.fungible
+        .filter((token) =>
+          validators.some(
+            (validator) => validator.stakeUnitResourceAddress === token.address
           )
-          .map((stakeUnitToken) => {
-            const validator = validators.find(
-              (validator) =>
-                validator.stakeUnitResourceAddress === stakeUnitToken.address
-            )!
+        )
+        .map((stakeUnitToken) => {
+          const validator = validators.find(
+            (validator) =>
+              validator.stakeUnitResourceAddress === stakeUnitToken.address
+          )!
 
-            const xrdAmount = new BigNumber(validator.totalStakeInXRD)
-              .multipliedBy(stakeUnitToken.value)
-              .dividedBy(stakeUnitToken.totalSupply)
-              .toFixed(RET_DECIMAL_PRECISION - 1)
+          const xrdAmount = new BigNumber(validator.totalStakeInXRD)
+            .multipliedBy(stakeUnitToken.value)
+            .dividedBy(stakeUnitToken.totalSupply)
+            .toFixed(RET_DECIMAL_PRECISION - 1)
 
-            return {
-              type: 'staked',
-              account,
-              validator,
-              stakeUnitsAmount: stakeUnitToken.value,
-              xrdAmount
-            } as StakedInfo
-          })
-          .filter((stakeInfo) => !new BigNumber(stakeInfo.xrdAmount).eq(0))
+          return {
+            type: 'staked',
+            account,
+            validator,
+            stakeUnitsAmount: stakeUnitToken.value,
+            xrdAmount
+          } as StakedInfo
+        })
+        .filter((stakeInfo) => !new BigNumber(stakeInfo.xrdAmount).eq(0))
 
   const getUnstakeAndClaimInfo =
     (validators: Validator[]) =>
-      (
-        account: Account,
-        accountData: Awaited<ReturnType<typeof getAccountData>>[number],
-        currentEpoch: number
-      ) => {
-        const unstakeTokens = accountData.nonFungible
-          .filter(({ resource }) =>
-            validators.some(
-              (validator) =>
-                validator.unstakeClaimResourceAddress === resource.address
-            )
-          )
-          .map(({ nonFungibles }) => nonFungibles)
-          .flat()
-
-        let unstaking: UnstakingInfo[] = []
-        let readyToClaim: ReadyToClaimInfo[] = []
-
-        for (const token of unstakeTokens) {
-          const isClaimable = new BigNumber(
-            token.nftData.standard.unstakeData!.claimEpoch
-          ).lte(currentEpoch)
-
-          const validator = validators.find(
+    (
+      account: Account,
+      accountData: Awaited<ReturnType<typeof getAccountData>>[number],
+      currentEpoch: number
+    ) => {
+      const unstakeTokens = accountData.nonFungible
+        .filter(({ resource }) =>
+          validators.some(
             (validator) =>
-              validator.unstakeClaimResourceAddress ===
-              token.address.resourceAddress
-          )!
+              validator.unstakeClaimResourceAddress === resource.address
+          )
+        )
+        .map(({ nonFungibles }) => nonFungibles)
+        .flat()
 
-          const xrdAmount = new BigNumber(
-            token.nftData.standard.unstakeData!.unstakeAmount
-          ).toFixed(RET_DECIMAL_PRECISION - 1)
+      let unstaking: UnstakingInfo[] = []
+      let readyToClaim: ReadyToClaimInfo[] = []
 
-          if (new BigNumber(xrdAmount).eq(0)) continue
+      for (const token of unstakeTokens) {
+        const isClaimable = new BigNumber(
+          token.nftData.standard.unstakeData!.claimEpoch
+        ).lte(currentEpoch)
 
-          const stakeUnitsAmount = accountData.fungible.find(
-            (token) => token.address === validator.stakeUnitResourceAddress
-          )!.value
+        const validator = validators.find(
+          (validator) =>
+            validator.unstakeClaimResourceAddress ===
+            token.address.resourceAddress
+        )!
 
-          const stakeInfo = {
-            account,
-            validator,
-            xrdAmount,
-            claimEpoch: token.nftData.standard.unstakeData!.claimEpoch,
-            stakeUnitsAmount
-          }
+        const xrdAmount = new BigNumber(
+          token.nftData.standard.unstakeData!.unstakeAmount
+        ).toFixed(RET_DECIMAL_PRECISION - 1)
 
-          isClaimable
-            ? readyToClaim.push({
+        if (new BigNumber(xrdAmount).eq(0)) continue
+
+        const stakeUnitsAmount = accountData.fungible.find(
+          (token) => token.address === validator.stakeUnitResourceAddress
+        )!.value
+
+        const stakeInfo = {
+          account,
+          validator,
+          xrdAmount,
+          claimEpoch: token.nftData.standard.unstakeData!.claimEpoch,
+          stakeUnitsAmount
+        }
+
+        isClaimable
+          ? readyToClaim.push({
               ...stakeInfo,
               type: 'readyToClaim'
             })
-            : unstaking.push({
+          : unstaking.push({
               ...stakeInfo,
               type: 'unstaking'
             })
-        }
-
-        return {
-          unstaking,
-          readyToClaim
-        }
       }
+
+      return {
+        unstaking,
+        readyToClaim
+      }
+    }
 
   const bookmarkedValidators = bookmarkedValidatorsApi
     .getAll(fetch)
@@ -254,7 +263,7 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
         staked: StakedInfo[]
         unstaking: UnstakingInfo[]
         readyToClaim: ReadyToClaimInfo[]
-      }>(() => { })
+      }>(() => {})
     }
   })
 
