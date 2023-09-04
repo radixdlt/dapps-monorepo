@@ -23,7 +23,7 @@ describe('AuthController', () => {
       logger: appLogger,
       authModel: AuthModel(ctx.prisma),
       userModel: UserModel(ctx.prisma),
-      gatewayService: ctx.gatewayService,
+      gatewayApiClient: ctx.gatewayApi,
       expectedOrigin: 'http://localhost:5173',
       dAppDefinitionAddress:
         'account_tdx_21_12x4zx09f8962a9wesfqvxaue0qn6m39r3cpysrjd6dtqppzhrkjrsr',
@@ -68,11 +68,19 @@ describe('AuthController', () => {
       }) as any
     )
 
-    mockCtx.gatewayService.getEntityOwnerKeys.mockReturnValue(
-      okAsync(
-        `5c228f01202202010120071dc519481efeb8703f2e47d7449f5f28493a1d255da95ef9973e27286347010120071db2a14734cca4ba4304d1e40787a112f8d682a548f6551d81a715574fca`
-      ) as any
-    )
+    mockCtx.gatewayApi.state.getEntityDetailsVaultAggregated.mockResolvedValue({
+      metadata: {
+        items: [
+          {
+            key: 'owner_keys',
+            value: {
+              raw_hex:
+                '5c228f01202202010120071dc519481efeb8703f2e47d7449f5f28493a1d255da95ef9973e27286347010120071db2a14734cca4ba4304d1e40787a112f8d682a548f6551d81a715574fca'
+            }
+          }
+        ]
+      }
+    } as any)
 
     mockCtx.prisma.user.upsert.mockResolvedValue(
       Promise.resolve({

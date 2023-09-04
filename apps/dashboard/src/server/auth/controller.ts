@@ -2,9 +2,8 @@ import { appLogger, type AppLogger } from '../helpers/logger'
 import type { ControllerOutput } from '../_types'
 import { AuthModel } from './model'
 import { hasChallengeExpired } from './helpers/has-challenge-expired'
-import { GatewayService } from './gateway'
-import { RolaFactory } from './rola/rola'
-import { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
+import { Rola } from '@radixdlt/rola'
+import { SignedChallenge, GatewayApiClient } from '@radixdlt/radix-dapp-toolkit'
 import { CURRENT_NETWORK } from '@networks'
 import { err, errAsync } from 'neverthrow'
 import { OAuth2 } from './oauth2'
@@ -15,27 +14,28 @@ export type AuthController = ReturnType<typeof AuthController>
 export const AuthController = ({
   authModel = AuthModel(),
   userModel = UserModel(),
-  gatewayService = GatewayService(),
   oAuth2 = OAuth2(),
   logger,
   expectedOrigin = 'http://localhost:5173',
   dAppDefinitionAddress = CURRENT_NETWORK.dappDefAddress,
-  networkId = CURRENT_NETWORK.id
+  networkId = CURRENT_NETWORK.id,
+  gatewayApiClient
 }: Partial<{
   authModel: AuthModel
   userModel: UserModel
-  gatewayService: GatewayService
+  gatewayApiClient: GatewayApiClient
   oAuth2: OAuth2
   logger: AppLogger
   expectedOrigin: string
   dAppDefinitionAddress: string
   networkId: number
 }>) => {
-  const rola = RolaFactory({
-    gatewayService,
+  const { verifySignedChallenge } = Rola({
+    applicationName: 'Radix Dashboard',
     expectedOrigin,
     dAppDefinitionAddress,
-    networkId
+    networkId,
+    gatewayApiClient
   })
 
   const createChallenge = (): ControllerOutput<{ challenge: string }> =>
@@ -61,7 +61,7 @@ export const AuthController = ({
     return authModel
       .getAndDelete(signedChallenge.challenge)
       .andThen(hasChallengeExpired)
-      .andThen(() => rola(signedChallenge))
+      .andThen(() => verifySignedChallenge(signedChallenge))
       .mapErr(({ reason, jsError }) => ({
         httpResponseCode: 400,
         reason,

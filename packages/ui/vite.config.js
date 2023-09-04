@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite'
+globalThis.self = globalThis
 
 /** @type {import('vite').UserConfigFn} */
 const config = ({ command }) => ({
