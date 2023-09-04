@@ -1,10 +1,10 @@
 <script lang="ts">
   import CardRow from '@components/info-box/CardRow.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
-  import { metadataItem } from './resource/Resource.svelte'
-  import type { Resource } from '@api/utils/resources'
+  import { metadataItem } from './utils'
+  import type { Entity } from '@api/utils'
 
-  export let metadata: Promise<Resource['metadata']>
+  export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
     {
@@ -13,11 +13,13 @@
     }[]
   >
 
-  $: combined = Promise.all([metadata, nonMetadataItems]).then(
+  $: combined = Promise.all([standardMetadata, nonMetadataItems]).then(
     ([metadata, nonMetadata]) => [
       ...nonMetadata.map((args) => metadataItem(...args)),
-      ...metadata.explicit,
-      ...metadata.nonStandard
+      ...Object.entries(metadata)
+        .map(([_, value]) => value.item)
+        .filter((item) => item !== undefined)
+        .flat()
     ]
   )
 </script>
