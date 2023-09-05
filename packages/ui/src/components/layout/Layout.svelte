@@ -4,6 +4,7 @@
   import { page } from '$app/stores'
 
   export let routes: { text: string; icon: string; path: string }[] = []
+  export let hideSearch: boolean | undefined
 
   let sidebarWidth: number
 
@@ -14,7 +15,7 @@
 
 <div class="layout">
   <div class="header">
-    <Header />
+    <Header {hideSearch} />
   </div>
   <div class="content">
     <div
