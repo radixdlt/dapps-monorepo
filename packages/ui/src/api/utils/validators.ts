@@ -1,11 +1,17 @@
-import type {
-  EntityMetadataCollection,
-  EntityMetadataItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+import type { EntityMetadataCollection } from '@radixdlt/babylon-gateway-api-sdk'
 import { getStringMetadata } from './metadata'
+import type { _Entity } from './entity'
 
-export type Validator = {
-  address: string
+export type Validator = _Entity<
+  [
+    ['name', string],
+    ['symbol', string],
+    ['iconUrl', string],
+    ['description', string],
+    ['tags', string[]],
+    ['website', string]
+  ]
+> & {
   ownerAddress: string
   totalStakeInXRD: string
   ownerStake: string
@@ -18,14 +24,6 @@ export type Validator = {
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
   totalStakeUnits: string
-  metadata: {
-    standard: {
-      name?: string
-      website?: string
-    }
-    nonStandard: EntityMetadataItem[]
-    all: EntityMetadataItem[]
-  }
 }
 
 export const ownerOfOwnerBadge = (metadata: EntityMetadataCollection) => {

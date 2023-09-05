@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LayoutData } from './$types'
+  import type { LayoutData } from '../$types'
   import { getRecentTransactions } from '@api/gateway'
   import { context } from '../+layout.svelte'
   import RecentTransactions from '../../../RecentTransactions.svelte'
@@ -10,7 +10,7 @@
   $activeTab = 'recent-transactions'
 
   const queryFunction = (cursor?: string) =>
-    getRecentTransactions(data.account, cursor)
+    getRecentTransactions(data.address, cursor)
 </script>
 
 <RecentTransactions {queryFunction} />

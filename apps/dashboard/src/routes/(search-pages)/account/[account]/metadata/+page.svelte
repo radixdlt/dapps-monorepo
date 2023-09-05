@@ -2,7 +2,6 @@
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { LayoutData } from '../$types'
   import { context } from '../+layout.svelte'
-  import InfoBox from '@components/info-box/InfoBox.svelte'
 
   export let data: LayoutData
 
@@ -15,7 +14,5 @@
 </script>
 
 <div class="card">
-  <InfoBox>
-    <Metadata {metadata} />
-  </InfoBox>
+  <Metadata {metadata} />
 </div>

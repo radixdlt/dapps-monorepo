@@ -6,7 +6,10 @@ import {
   getValidatorsListWithLedgerState
 } from '@api/gateway'
 import { getAccountData } from '@api/utils/resources'
-import { getEnumStringMetadata } from '@api/utils/metadata'
+import {
+  getEnumStringMetadata,
+  getStandardMetadataEntry
+} from '@api/utils/metadata'
 import type { Validator } from '@api/utils/validators'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
@@ -81,8 +84,14 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
           metadata: {
             standard: {
-              name: getEnumStringMetadata('name')(validator.metadata),
-              website: getEnumStringMetadata('url')(validator.metadata)
+              name: getStandardMetadataEntry(
+                'name',
+                getEnumStringMetadata
+              )(validator.metadata),
+              website: getStandardMetadataEntry(
+                'website',
+                getEnumStringMetadata
+              )(validator.metadata)
             },
             nonStandard: ((validator.metadata?.items as any[]) || []).filter(
               ({ key }) => key !== 'name' && key !== 'url'

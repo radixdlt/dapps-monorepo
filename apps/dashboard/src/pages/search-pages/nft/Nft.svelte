@@ -42,7 +42,7 @@
   const imageSize = 'large'
 </script>
 
-<div class="card nft-image">
+<div class="nft-image">
   {#await nft}
     <NftImage size={imageSize} />
   {:then { nftData: { standard: { iconUrl } } }}

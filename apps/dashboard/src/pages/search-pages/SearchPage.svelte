@@ -24,5 +24,17 @@
       --margin="2rem 0"
     />
   {/if}
-  <slot />
+
+  <div class="content">
+    <slot />
+  </div>
 </section>
+
+<style lang="scss">
+  .search-page :global(.card) {
+    padding: var(--spacing-2xl);
+  }
+  .content {
+    margin-top: var(--spacing-2xl);
+  }
+</style>

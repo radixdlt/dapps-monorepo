@@ -27,11 +27,11 @@
   {#each nonFungibleResources as { resource, nonFungibles, totalNonFungibles }}
     <NFTAccordion
       data={{
-        name: resource.metadata.standard.name,
+        name: resource.metadata.standard.name?.value,
         address: resource.address,
-        imageUrl: resource.metadata.standard.iconUrl,
+        imageUrl: resource.metadata.standard.iconUrl?.value,
         count: nonFungibles.length,
-        tags: resource.metadata.standard.tags,
+        tags: resource.metadata.standard.tags?.value,
         totalCount: totalNonFungibles
       }}
     >

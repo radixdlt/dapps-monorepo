@@ -20,23 +20,26 @@ import type {
 import { andThen, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
-import { getStringMetadata, getVectorMetadata } from './metadata'
+import {
+  getStandardMetadataEntry,
+  getStringMetadata,
+  getVectorMetadata
+} from './metadata'
+import type { _Entity } from './entity'
 
-type _Resource<T extends 'fungible' | 'non-fungible'> = {
+type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
+  [
+    ['name', string],
+    ['symbol', string],
+    ['iconUrl', string],
+    ['description', string],
+    ['tags', string[]]
+  ]
+> & {
   type: T
-  address: string
   totalSupply: string
   metadata: {
-    standard: {
-      name?: string
-      symbol?: string
-      iconUrl?: string
-      description?: string
-      tags?: string[]
-    }
-    nonStandard: EntityMetadataItem[]
     explicit: EntityMetadataItem[]
-    all: EntityMetadataItem[]
   }
 }
 
@@ -165,13 +168,29 @@ export const transformNonFungibleResource = (
     ).total_supply,
     metadata: {
       standard: {
-        name: getStringMetadata('name')(entity.metadata),
-        description: getStringMetadata('description')(entity.metadata),
-        iconUrl: getStringMetadata('icon_url')(entity.metadata),
-        tags: getVectorMetadata('tags')(entity.metadata)
+        name: getStandardMetadataEntry(
+          'name',
+          getStringMetadata
+        )(entity.metadata),
+        description: getStandardMetadataEntry(
+          'description',
+          getStringMetadata
+        )(entity.metadata),
+        iconUrl: getStandardMetadataEntry(
+          'icon_url',
+          getStringMetadata
+        )(entity.metadata),
+        tags: getStandardMetadataEntry(
+          'tags',
+          getVectorMetadata
+        )(entity.metadata)
       },
       nonStandard: (entity.metadata?.items || []).filter(
-        ({ key }) => key !== 'name' && key !== 'icon_url' && key !== 'tags'
+        ({ key }) =>
+          key !== 'name' &&
+          key !== 'icon_url' &&
+          key !== 'tags' &&
+          key !== 'description'
       ),
       explicit: entity.explicit_metadata?.items ?? [],
       all: entity.metadata?.items ?? []
@@ -194,11 +213,26 @@ export const transformFungibleResource = (
     ).total_supply,
     metadata: {
       standard: {
-        name: getStringMetadata('name')(entity.metadata),
-        symbol: getStringMetadata('symbol')(entity.metadata),
-        iconUrl: getStringMetadata('icon_url')(entity.metadata),
-        description: getStringMetadata('description')(entity.metadata),
-        tags: getVectorMetadata('tags')(entity.metadata)
+        name: getStandardMetadataEntry(
+          'name',
+          getStringMetadata
+        )(entity.metadata),
+        symbol: getStandardMetadataEntry(
+          'symbol',
+          getStringMetadata
+        )(entity.metadata),
+        iconUrl: getStandardMetadataEntry(
+          'icon_url',
+          getStringMetadata
+        )(entity.metadata),
+        description: getStandardMetadataEntry(
+          'description',
+          getStringMetadata
+        )(entity.metadata),
+        tags: getStandardMetadataEntry(
+          'tags',
+          getVectorMetadata
+        )(entity.metadata)
       },
       nonStandard: ((entity.metadata?.items as any[]) || []).filter(
         ({ key }) =>
