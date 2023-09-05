@@ -17,7 +17,7 @@
     ([metadata, nonMetadata]) => [
       ...nonMetadata.map((args) => metadataItem(...args)),
       ...Object.entries(metadata)
-        .map(([_, value]) => value.item)
+        .map(([_, value]) => value?.item)
         .filter((item) => item !== undefined)
         .flat()
     ]
