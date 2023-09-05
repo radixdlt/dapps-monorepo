@@ -109,6 +109,8 @@
   }
 
   navigating
+
+  let hideSearch = false
 </script>
 
 <svelte:head>
@@ -133,7 +135,7 @@
 
 <Theme theme="light">
   {#if mounted}
-    <Layout {routes}><slot /></Layout>
+    <Layout {hideSearch} {routes}><slot /></Layout>
   {/if}
 </Theme>
 

@@ -5,6 +5,8 @@
   import LogoIcon from '@images/dashboard-logo.svg'
   import { showSidebar } from '@stores'
   import { isMobile } from '@utils'
+
+  export let hideSearch: boolean | undefined
 </script>
 
 <header>
@@ -19,7 +21,7 @@
     <!-- svelte-ignore a11y-missing-content -->
     <a href="/" class="logo" style={`background-image: url(${LogoIcon})`} />
   </div>
-  <div class="search"><NetworkLookupSearch /></div>
+  {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
   {#if !isMobile()}
     <div class="connect-button"><ConnectButton /></div>
   {/if}

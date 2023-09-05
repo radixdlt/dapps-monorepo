@@ -1,20 +1,27 @@
 <script lang="ts">
-  import Header from '@components/header/Header.svelte'
   import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
   import { accounts, selectedAccount, storage } from '@stores'
-  import SidebarWithNavbar from '@components/sidebar-with-navbar/SidebarWithNavbar.svelte'
-  import Box from '@components/_base/box/Box.svelte'
-  // import '../fonts.css'
-  import { RadixDappToolkit, Account } from '@radixdlt/radix-dapp-toolkit'
+  import {
+    RadixDappToolkit,
+    Account,
+    DataRequestBuilder
+  } from '@radixdlt/radix-dapp-toolkit'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { accountLabel } from '@utils'
+  import Layout from '@components/layout/Layout.svelte'
+  import LayersIcon from '@icons/layers.svg'
+  import TransactionsIcon from '@icons/transactions.svg'
+  import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import { resolveRDT } from '../../../../packages/ui/src/radix'
 
   let mounted = false
+
+  $: hideSearch = true
 
   onMount(() => {
     const updateAccounts = (value?: Account[]) => {
@@ -37,9 +44,13 @@
       onDisconnect: () => updateAccounts([])
     })
 
+    rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
+
     rdt.walletApi.walletData$.subscribe((state) => {
       updateAccounts(state.accounts)
     })
+
+    resolveRDT(rdt)
   })
 
   $: if (mounted) {
@@ -49,6 +60,24 @@
   }
 
   navigating
+
+  const routes: { text: string; icon: string; path: string }[] = [
+    {
+      text: 'Deploy Package',
+      icon: LayersIcon,
+      path: '/deploy-package'
+    },
+    {
+      text: 'Send Raw Transaction',
+      icon: TransactionsIcon,
+      path: '/transaction-manifest'
+    },
+    {
+      text: 'Manage dApp Definition',
+      icon: DappMetadataIcon,
+      path: '/dapp-metadata'
+    }
+  ]
 </script>
 
 <svelte:head>
@@ -72,36 +101,18 @@
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
-  <Box
-    p="none"
-    cx={{
-      display: 'grid',
-      gridTemplateColumns: '250px auto',
-      gridTemplateRows: '100px auto',
-      gridTemplateAreas: `
-    "header header"
-    "nav content"`
-    }}
-  >
-    {#if mounted}
-      <Header />
-      <SidebarWithNavbar page={$page} />
-      <Box
-        cx={{
-          gridArea: 'content',
-          backgroundColor: '$background',
-          display: 'flex',
-          flexDirection: 'column',
-          paddingBottom: '$6xl'
-        }}
-      >
-        <slot />
-      </Box>
-      <center />
-    {/if}
-  </Box>
+  {#if mounted}
+    <Layout {routes} {hideSearch}><slot /></Layout>
+  {/if}
 </Theme>
 
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.scss';
+
+  .main-content {
+    background: var(--theme-surface-1);
+    grid-area: content;
+    padding-bottom: var(--spacing-lg);
+    position: relative;
+  }
 </style>
