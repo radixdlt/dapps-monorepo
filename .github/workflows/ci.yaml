@@ -20,10 +20,8 @@ on:
           - hammunet
           - gilganet
           - mardunet
-          - kisharnet
           - ansharnet
           - zabanet
-          - rcnet
           - rcnet-v2
           - rcnet-v3
 
@@ -687,31 +685,6 @@ jobs:
       app_name: 'dashboard'
       step_name: 'deploy-mardunet'
 
-  deploy_rcnet:
-    if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: kisharnet
-      restart_pods: true
-      namespace: dashboard-kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=kisharnet
-      github_environment: kisharnet # Not changing this yet as this will disturb existing rcnet dashboard
-      app_name: 'dashboard'
-      step_name: 'deploy-rcnet'
-
   deploy_rcnet_v2:
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
@@ -761,30 +734,6 @@ jobs:
       github_environment: zabanet
       app_name: 'dashboard'
       step_name: 'deploy-rcnet-v3'
-
-  deploy_kisharnet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'kisharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: kisharnet-internal
-      restart_pods: true
-      namespace: dashboard-kisharnet-internal
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-kisharnet-internal-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
-        ci.environment=kisharnet-internal
-      github_environment: kisharnet-internal
-      app_name: 'dashboard'
-      step_name: 'deploy-kisharnet'
 
   deploy_ansharnet:
     if: >

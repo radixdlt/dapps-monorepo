@@ -12,8 +12,6 @@ environments:
   hammunet: {}
   gilganet: {}
   mardunet: {}
-  kisharnet: {}
-  kisharnet-internal: {}
   ansharnet: {}
   ansharnet-internal: {}
 repositories:
