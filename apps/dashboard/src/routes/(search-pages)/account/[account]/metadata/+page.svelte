@@ -1,7 +1,7 @@
 <script lang="ts">
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { LayoutData } from '../$types'
-  import { context } from '../+layout.svelte'
+  import { activeTab } from '../+layout.svelte'
 
   export let data: LayoutData
 
@@ -9,7 +9,6 @@
     ({ details: { metadata } }) => metadata.items
   )
 
-  const activeTab = context.get('activeTab')
   $activeTab = 'metadata'
 </script>
 

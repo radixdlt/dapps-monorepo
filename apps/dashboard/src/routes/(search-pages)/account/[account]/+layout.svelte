@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
-  export const context = useContext<{
-    activeTab: Writable<string>
-  }>()
+  export const activeTab = writable('tokens')
 </script>
 
 <script lang="ts">
@@ -9,19 +7,15 @@
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
-  import { useContext } from '@utils'
-  import { writable, type Writable } from 'svelte/store'
+  import { writable } from 'svelte/store'
 
   export let data: LayoutData
-
-  context.set('activeTab', writable('tokens'))
-  const activeTab = context.get('activeTab')
 
   let notFound = false
 
   data.promises.accountData.catch(() => (notFound = true))
 
-  goto(`/account/${data.address}/${$activeTab}`)
+  $: goto(`/account/${data.address}/${$activeTab}`)
 </script>
 
 {#if notFound}
@@ -35,14 +29,17 @@
     menuItems={[
       [
         { id: 'tokens', label: 'Tokens' },
-        { id: 'nfts', label: 'NFTs' }
+        { id: 'nfts', label: 'NFTs' },
+        { id: 'pool-units', label: 'Pool Units' }
       ],
       [
         { id: 'recent-transactions', label: 'Recent Transactions' },
         { id: 'metadata', label: 'Metadata' }
       ]
     ]}
-    on:navigate={({ detail }) => goto(detail)}
+    on:navigate={({ detail }) => {
+      $activeTab = detail
+    }}
   >
     <slot />
   </SearchPage>
