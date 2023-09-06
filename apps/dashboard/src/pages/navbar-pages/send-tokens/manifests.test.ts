@@ -12,7 +12,7 @@ describe('send tokens manifests', () => {
       500
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -20,7 +20,7 @@ describe('send tokens manifests', () => {
       NETWORK_ID
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    await expect(manifest.kind).toEqual('Valid')
   })
 
   it('should create a send NFT manifest', async () => {
@@ -41,7 +41,7 @@ describe('send tokens manifests', () => {
       'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2'
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -49,6 +49,6 @@ describe('send tokens manifests', () => {
       NETWORK_ID
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    await expect(manifest.kind).toEqual('Valid')
   })
 })

@@ -17,7 +17,7 @@ describe('Deploy Package Transaction Manifests', () => {
       `account_tdx_e_129rwaggxwsvgr5vm4zyx7nw2wj77zg9l88ke09jcpr3ge0h44mejz2`
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -25,16 +25,12 @@ describe('Deploy Package Transaction Manifests', () => {
       NETWORK_ID
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    await expect(manifest.kind).toEqual('Valid')
   })
 
   it('should create deploy package manifest', async () => {
-    const schema = readFileSync(
-      join(__dirname, 'sugar_price_oracle.rpd')
-    ).toString('hex')
-    const wasm = readFileSync(
-      join(__dirname, 'sugar_price_oracle.wasm')
-    ).toString('hex')
+    const schema = readFileSync(join(__dirname, 'faucet.rpd')).toString('hex')
+    const wasm = readFileSync(join(__dirname, 'faucet.wasm')).toString('hex')
 
     const sborDecodedSchema =
       await RadixEngineToolkit.ManifestSbor.decodeToString(
@@ -51,7 +47,7 @@ describe('Deploy Package Transaction Manifests', () => {
       '#65#'
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -59,6 +55,6 @@ describe('Deploy Package Transaction Manifests', () => {
       NETWORK_ID
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    await expect(manifest.kind).toEqual('Valid')
   })
 })

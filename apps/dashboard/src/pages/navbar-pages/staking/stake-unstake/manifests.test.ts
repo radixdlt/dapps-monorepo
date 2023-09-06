@@ -63,15 +63,17 @@ const fixtures = [
 describe('staking manifests', () => {
   fixtures.forEach(({ name, manifest }) => {
     it(`should create ${name} manifest`, async () => {
-      await expect(
-        RadixEngineToolkit.Instructions.staticallyValidate(
-          {
-            kind: 'String',
-            value: manifest
-          },
-          RadixNetwork.RCnetV2
-        )
-      ).resolves.toBeDefined()
+      expect(
+        (
+          await RadixEngineToolkit.Instructions.staticallyValidate(
+            {
+              kind: 'String',
+              value: manifest
+            },
+            RadixNetwork.RCnetV2
+          )
+        ).kind
+      ).toEqual('Valid')
     })
   })
 })

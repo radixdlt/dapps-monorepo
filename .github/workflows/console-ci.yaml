@@ -26,7 +26,7 @@ on:
           - rcnet-v3
 
 env:
-  active_network: 'zabanet'
+  active_network: 'hammunet'
   release_network: 'rcnet-v3'
 
 permissions:
