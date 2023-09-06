@@ -5,11 +5,10 @@
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
-  import { context } from '../+layout.svelte'
+  import { activeTab } from '../+layout.svelte'
 
   export let data: LayoutData
 
-  const activeTab = context.get('activeTab')
   $activeTab = 'tokens'
 
   const transformFungibleTokenResource = ({
