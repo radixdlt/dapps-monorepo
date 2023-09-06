@@ -6,7 +6,7 @@ CREATE_NON_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
     Enum<0u8>()
     Enum<1u8>()
     true
-    Tuple(
+    Enum<NonFungibleDataSchema::Local>(
         Enum<0u8>(
             Tuple(
                 Array<Enum>(),
