@@ -5,12 +5,10 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   MARDUNET: 'mardunet',
-  KISHARNET: 'kisharnet',
   ANSHARNET: 'ansharnet',
   ZABANET: 'zabanet',
   RCNETV3: 'rcnet-v3',
-  RCNETV2: 'rcnet-v2',
-  RCNET: 'rcnet'
+  RCNETV2: 'rcnet-v2'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -37,12 +35,6 @@ export const NETWORK_CONFIG = {
     url: 'https://mardunet-gateway.radixdlt.com',
     dappDefAddress: 'account_tdx_24_thisdummyvalue12345'
   },
-  [Network.KISHARNET]: {
-    id: 12,
-    url: 'https://kisharnet-gateway.radixdlt.com',
-    dappDefAddress:
-      'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
-  },
   [Network.ANSHARNET]: {
     id: 13,
     url: 'https://ansharnet-gateway.radixdlt.com',
@@ -66,12 +58,6 @@ export const NETWORK_CONFIG = {
     url: 'https://ansharnet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
-  },
-  [Network.RCNET]: {
-    id: 12,
-    url: 'https://kisharnet-gateway.radixdlt.com',
-    dappDefAddress:
-      'account_tdx_c_1p9v4tvz7uske6ts02hpjqr9q8enatw3wfw6mcmf699nqz3wfdl'
   }
 } as const
 
