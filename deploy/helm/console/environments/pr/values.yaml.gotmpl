@@ -5,8 +5,8 @@ console:
       tag: {{$IMAGE_TAG}}
 
   params:
-    PUBLIC_NETWORK_NAME: "enkinet"
-    URL: https://console-pr-{{ .StateValues.ci.prNumber }}.rdx-works-main.extratools.works
+    PUBLIC_NETWORK_NAME: "stokenet"
+    URL: https://console-babylon-stokenet.radixdlt.com
 
   secrets:
 
@@ -15,7 +15,7 @@ console:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: console-pr-{{ .StateValues.ci.prNumber }}.rdx-works-main.extratools.works
+      - host: console-babylon-stokenet.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific

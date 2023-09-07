@@ -8,7 +8,8 @@ export const Network = {
   ANSHARNET: 'ansharnet',
   ZABANET: 'zabanet',
   RCNETV3: 'rcnet-v3',
-  RCNETV2: 'rcnet-v2'
+  RCNETV2: 'rcnet-v2',
+  STOKENET: 'stokenet'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -58,6 +59,12 @@ export const NETWORK_CONFIG = {
     url: 'https://ansharnet-gateway.radixdlt.com',
     dappDefAddress:
       'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
+  },
+  [Network.STOKENET]: {
+    id: 2,
+    url: 'https://babylon-stokenet-gateway.radixdlt.com',
+    dappDefAddress:
+      ''
   }
 } as const
 
