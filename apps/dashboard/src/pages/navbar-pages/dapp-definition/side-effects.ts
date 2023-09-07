@@ -26,7 +26,7 @@ export const getTxManifest = (
     if (entity.requiredProof && entity.requiredProof !== 'AllowAll') {
       manifest += `CALL_METHOD
           Address("${address}")
-          "create_proof_by_ids"
+          "create_proof_of_non_fungibles"
           Address("${entity.requiredProof.split(':')[0]}")
           Array<NonFungibleLocalId>(NonFungibleLocalId("${
             entity.requiredProof.split(':')[1]
