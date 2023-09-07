@@ -9,7 +9,7 @@ describe('dApp definition TX manifest', () => {
       []
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -17,7 +17,7 @@ describe('dApp definition TX manifest', () => {
       34
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    await expect(manifest.kind).toEqual('Valid')
   })
 
   it('should create tx manifest', async () => {
@@ -43,7 +43,7 @@ describe('dApp definition TX manifest', () => {
       ]
     )
 
-    const manifest = RadixEngineToolkit.Instructions.staticallyValidate(
+    const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {
         kind: 'String',
         value: stringManifest
@@ -51,6 +51,10 @@ describe('dApp definition TX manifest', () => {
       34
     )
 
-    await expect(manifest).resolves.toBeDefined()
+    if (manifest.kind === 'Invalid') {
+      console.log(manifest.error)
+    }
+
+    await expect(manifest.kind).toEqual('Valid')
   })
 })
