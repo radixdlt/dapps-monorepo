@@ -6,7 +6,7 @@
   import {
     transformFungibleResource,
     transformNonFungibleResource
-  } from '@api/utils/resources'
+  } from '@api/utils/entities/resource'
 
   export let data: PageData
 </script>

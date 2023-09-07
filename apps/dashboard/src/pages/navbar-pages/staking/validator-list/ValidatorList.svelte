@@ -1,6 +1,6 @@
 <script lang="ts">
   import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
   import type { ComponentProps } from 'svelte'
   import { connected } from '@stores'
 

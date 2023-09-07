@@ -3,7 +3,7 @@
   import type {
     FungibleResource,
     NonFungibleResource
-  } from '@api/utils/resources'
+  } from '@api/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'

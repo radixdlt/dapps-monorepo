@@ -1,4 +1,4 @@
-import type { Validator } from '@api/utils/validators'
+import type { Validator } from '@api/utils/entities/validator'
 import type { LayoutLoad } from './$types'
 
 export const prerender = false

@@ -14,7 +14,7 @@
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
 
   export let validators: Validator[]
   export let currentlyStaked: Promise<{

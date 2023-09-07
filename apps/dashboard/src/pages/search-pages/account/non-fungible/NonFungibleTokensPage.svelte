@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { NonFungible, NonFungibleResource } from '@api/utils/resources'
+  import type {
+    NonFungible,
+    NonFungibleResource
+  } from '@api/utils/entities/resource'
   import NFTAccordion from '@components/_base/accordion/NFTAccordion.svelte'
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
   import { createEventDispatcher } from 'svelte'

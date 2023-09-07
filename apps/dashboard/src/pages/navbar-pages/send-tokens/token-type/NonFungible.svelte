@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { Resources } from '@api/utils/resources'
+  import type { Resources } from '@api/utils/entities/resource'
   import Box from '@components/_base/box/Box.svelte'
   import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
   import Text from '@components/_base/text/Text.svelte'

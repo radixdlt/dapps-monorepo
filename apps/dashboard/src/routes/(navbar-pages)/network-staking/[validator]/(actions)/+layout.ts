@@ -1,9 +1,9 @@
 import { derived } from 'svelte/store'
 import type { LayoutLoad } from './$types'
 import type { Account } from '@stores'
-import type { StakeInfo } from '../../+layout.svelte'
 import BigNumber from 'bignumber.js'
-import type { Validator } from '@api/utils/validators'
+import type { Validator } from '@api/utils/entities/validator'
+import type { LoggedInStakeInfo } from '../../proxy+layout'
 
 export const load: LayoutLoad = ({ parent }) =>
   parent().then((data) => {
@@ -47,7 +47,7 @@ export const load: LayoutLoad = ({ parent }) =>
           staking,
           unstaking,
           readyToClaim
-        ].map((arr: StakeInfo[]) =>
+        ].map((arr: LoggedInStakeInfo[]) =>
           arr
             .filter((entry) => entry.account.address === account.address)
             .reduce((sum, entry) => sum.plus(entry.xrdAmount), new BigNumber(0))

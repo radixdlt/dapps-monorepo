@@ -4,7 +4,7 @@
   import ValidatorInfo from './ValidatorInfo.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { createEventDispatcher } from 'svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
   import TrashIcon from '@icons/trash.svg'
   import { XRDToken } from '@constants'
 
