@@ -79,7 +79,8 @@
               .map((nft) => ({
                 ...nft,
                 label: `${
-                  nft.resource.metadata.standard.name ?? nft.resource.address
+                  nft.resource.metadata.standard.name?.value ??
+                  nft.resource.address
                 } (${nft.id})`
               }))
           )
