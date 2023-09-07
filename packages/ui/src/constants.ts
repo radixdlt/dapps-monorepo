@@ -64,7 +64,7 @@ export const NETWORK_CONFIG = {
     id: 2,
     url: 'https://babylon-stokenet-gateway.radixdlt.com',
     dappDefAddress:
-      ''
+      'account_tdx_2_12y0yfxerx3jhl20csxlz3nu8hamm5yyluxwvquv9uqrzzfj7y2kp0c'
   }
 } as const
 
