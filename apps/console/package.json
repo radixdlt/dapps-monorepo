@@ -110,5 +110,8 @@
     "svelte-local-storage-store": "^0.3.1",
     "tslog": "^4.8.2",
     "zod": "^3.21.4"
+  },
+  "overrides": {
+    "@radixdlt/babylon-gateway-api-sdk": "1.0.0-rc.3.1.1"
   }
 }
