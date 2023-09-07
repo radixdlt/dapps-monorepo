@@ -12,12 +12,14 @@
       iconUrl: string
     }[]
   >
+  export let omittedKeys = ['name', 'symbol', 'iconUrl', 'description']
 
   $: combined = Promise.all([standardMetadata, nonMetadataItems]).then(
     ([metadata, nonMetadata]) => [
       ...nonMetadata.map((args) => metadataItem(...args)),
       ...Object.entries(metadata)
         .map(([_, value]) => value?.item)
+        .filter((item) => !omittedKeys.includes(item?.key))
         .filter((item) => item !== undefined)
         .flat()
     ]

@@ -28,7 +28,7 @@
         class="dotted-overflow"
         style:max-width="15ch"
       >
-        {validator.metadata.standard.name ?? ''}
+        {validator.metadata.standard.name?.value ?? ''}
       </div>
     </ResponsiveTableCell>
 

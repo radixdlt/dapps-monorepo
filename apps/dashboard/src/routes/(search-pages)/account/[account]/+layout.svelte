@@ -29,8 +29,7 @@
     menuItems={[
       [
         { id: 'tokens', label: 'Tokens' },
-        { id: 'nfts', label: 'NFTs' },
-        { id: 'pool-units', label: 'Pool Units' }
+        { id: 'nfts', label: 'NFTs' }
       ],
       [
         { id: 'recent-transactions', label: 'Recent Transactions' },
