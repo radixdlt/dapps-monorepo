@@ -9,7 +9,7 @@ storybook:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: stokenet-dashboard-storybook.radixdlt.com
+      - host: stokenet-test-dashboard-storybook.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -19,7 +19,7 @@ dashboard:
       tag: {{$IMAGE_TAG}}
 
   params:
-    URL: https://stokenet-dashboard.radixdlt.com
+    URL: https://stokenet-test-dashboard.radixdlt.com
     NETWORK_GATEWAY_API: https://babylon-stokenet-gateway.radixdlt.com
     PUBLIC_NETWORK_NAME: "stokenet"
   secrets:
@@ -42,7 +42,7 @@ dashboard:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: stokenet-dashboard.radixdlt.com
+      - host: stokenet-test-dashboard.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
