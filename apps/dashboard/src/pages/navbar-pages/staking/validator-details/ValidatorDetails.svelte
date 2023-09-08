@@ -15,6 +15,7 @@
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { Validator } from '@api/utils/entities/validator'
   import { metadataItem } from '@dashboard-pages/search-pages/utils'
+  import RecentUptimeDetail from './RecentUptimeDetail.svelte'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -84,12 +85,14 @@
             metadata: {
               nonStandard,
               standard: { website }
-            }
+            },
+            uptimePercentages
           }) => {
             const extraData = [
               metadataItem('total stake', totalStakeInXRD, 'U64'),
               metadataItem('accepts stake', acceptsStake, 'Bool'),
-              metadataItem('fee (%)', `${fee} %`, 'String')
+              metadataItem('fee (%)', `${fee} %`, 'String'),
+              metadataItem('recent uptime', uptimePercentages, 'String')
             ]
             if (website)
               extraData.push(metadataItem('website', website.value, 'Url'))
@@ -101,9 +104,16 @@
           'accepts stake': {
             label: 'Accepts Stake',
             component: AcceptsStake,
-            componentProperties: () => ({
+            componentProperties: (item) => ({
               slot: 'right',
-              value: validator.then(({ acceptsStake }) => acceptsStake)
+              value: item.typed.type === 'Bool' ? item.typed.value : false
+            })
+          },
+          'recent uptime': {
+            label: 'Recent Uptime',
+            component: RecentUptimeDetail,
+            componentProperties: (item) => ({
+              uptimes: item.typed.type === 'String' ? item.typed.value : []
             })
           }
         }}

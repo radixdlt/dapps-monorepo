@@ -1,4 +1,7 @@
-import { getAccountData, type DecoratedAccount } from '@api/utils/resources'
+import {
+  getAccountData,
+  type DecoratedAccount
+} from '@api/utils/entities/resource'
 import type { Account } from '@stores'
 import type { EntityT } from './dapp-metadata/rows/linking-metadata-list/Entity.svelte'
 import { getStringMetadata, getVectorMetadata } from '@api/utils/metadata'

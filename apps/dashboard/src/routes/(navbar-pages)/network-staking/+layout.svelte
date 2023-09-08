@@ -48,7 +48,7 @@
       validators: Awaited<typeof data.promises.validators>,
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
-    (e: ComponentEvents<FilterDetails>['applyFilter']) => {
+    (e: ComponentEvents<FilterDetails>['close']) => {
       filteredValidators = validators.filter((v) => {
         return (
           v.fee >= e.detail.feeFilter[0] &&
@@ -58,7 +58,9 @@
           v.percentageOwnerStake >= e.detail.ownerStakeFilter[0] &&
           v.percentageOwnerStake <= e.detail.ownerStakeFilter[1] &&
           (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true)
+          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
+          v.uptimePercentages[e.detail.uptimeFilter.timeframe] >=
+            e.detail.uptimeFilter.percentage
         )
       })
 

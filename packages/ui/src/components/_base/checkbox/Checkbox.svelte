@@ -32,7 +32,7 @@
 
 <style lang="scss">
   $border-width: 2px;
-  $box-size: 0.7rem;
+  $box-size: 14px;
 
   .wrapper {
     display: flex;
@@ -61,7 +61,5 @@
 
   .checked {
     border: none;
-    width: calc($box-size + $border-width * 2);
-    height: calc($box-size + $border-width * 2);
   }
 </style>

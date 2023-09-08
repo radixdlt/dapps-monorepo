@@ -104,7 +104,8 @@ export const useContext = <
 export const accountLabel = (account: Omit<Account, 'displayed'>) =>
   `${account.label} (${shortenAddress(account.address)})`
 
-export const truncateNumber = (num: number) => num.toFixed(2)
+export const truncateNumber = (num: number) =>
+  new BigNumber(num).toFixed(2, BigNumber.ROUND_DOWN)
 
 export type Deferred<T> = Promise<T> & {
   resolve: (value: T) => void

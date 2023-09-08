@@ -116,6 +116,7 @@ input,
 button,
 select {
   all: unset;
+  box-sizing: border-box;
 }
 
 button {

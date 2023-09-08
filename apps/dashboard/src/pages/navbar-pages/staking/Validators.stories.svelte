@@ -24,10 +24,17 @@
       percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
       fee: Math.random() * 5,
-      uptime: Math.random() * 0.9,
+      uptimePercentages: {
+        '1day': Math.random() * 100,
+        '1week': Math.random() * 100,
+        '1month': Math.random() * 100,
+        '3months': Math.random() * 100,
+        '6months': Math.random() * 100,
+        '1year': Math.random() * 100,
+        alltime: Math.random() * 100
+      },
       acceptsStake: Math.random() > 0.5 ? true : false,
       percentageTotalStake: Math.random() * 50,
-
       ownerAddress: 'account_1234567890',
       ownerStake: '23000',
       bookmarked: false,

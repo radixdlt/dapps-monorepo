@@ -6,10 +6,12 @@
   import { truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
-  import type { Validator } from '@api/utils/entities/validator'
   import { connected } from '@stores'
+  import type { UptimeValue } from './UptimeHeader.svelte'
+  import type { TransformedValidator } from './ValidatorList.svelte'
 
-  export let validator: Validator
+  export let validator: TransformedValidator
+  export let selectedUptime: UptimeValue
 </script>
 
 <tr class="validator-row">
@@ -67,7 +69,7 @@
 
     <ResponsiveTableCell>
       <div class="uptime apy-text-box no-overflow bold">
-        {truncateNumber(validator.uptime)}%
+        {truncateNumber(validator[selectedUptime])}%
       </div>
     </ResponsiveTableCell>
 
