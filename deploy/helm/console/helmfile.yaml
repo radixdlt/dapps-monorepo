@@ -15,6 +15,7 @@ environments:
   ansharnet: {}
   ansharnet-internal: {}
   zabanet: {}
+  stokenet: {}
   zabanet-internal: {}
 repositories:
   - name: bitnami

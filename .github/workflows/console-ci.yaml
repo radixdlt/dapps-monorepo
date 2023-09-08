@@ -22,6 +22,7 @@ on:
           - mardunet
           - ansharnet
           - zabanet
+          - stokenet
           - rcnet-v2
           - rcnet-v3
 
@@ -645,3 +646,26 @@ jobs:
       github_environment: console-zabanet-internal
       app_name: 'console'
       step_name: 'deploy-zabanet'
+
+  deploy_stokenet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: stokenet
+      restart_pods: false
+      namespace: dapps-console-stokenet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-stokenet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=stokenet
+      github_environment: console-stokenet
+      app_name: 'console'
+      step_name: 'deploy-stokenet'

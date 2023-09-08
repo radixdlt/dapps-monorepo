@@ -22,6 +22,7 @@ on:
           - mardunet
           - ansharnet
           - zabanet
+          - stokenet
           - rcnet-v2
           - rcnet-v3
 
@@ -783,6 +784,30 @@ jobs:
       github_environment: zabanet-internal
       app_name: 'dashboard'
       step_name: 'deploy-zabanet'
+
+  deploy_stokenet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: stokenet
+      namespace: dashboard-stoknet
+      create_subns: false
+      restart_pods: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-stokenet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=stokenet
+      github_environment: stokenet
+      app_name: 'dashboard'
+      step_name: 'deploy-stokenet'
 
   # storybook-tests:
   #   runs-on: ubuntu-latest

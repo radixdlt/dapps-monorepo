@@ -1,0 +1,77 @@
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+storybook:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: babylon-stokenet-dashboard-storybook.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+dashboard:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  params:
+    URL: https://babylon-stokenet-dashboard.radixdlt.com
+    NETWORK_GATEWAY_API: https://babylon-stokenet-gateway.radixdlt.com
+    PUBLIC_NETWORK_NAME: "babylon-stokenet"
+  secrets:
+  - name: database-url
+    variable: "DATABASE_URL"
+    path: "rtlj-prod/eks/dashboard/babylon-stokenet/postgres"
+    secretProperty: "database-url"
+    secretName: "database-url"
+    region: "eu-west-2"
+  - name: jwt-secret
+    variable: "JWT_SECRET"
+    path: "rtlj-prod/eks/dashboard/jwt"
+    secretProperty: "jwt-secret"
+    secretName: "jwt-secret"
+    region: "eu-west-2"
+
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: babylon-stokenet-dashboard.radixdlt.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 475m
+      memory: 256Mi
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true
+
+alertmanager:
+  env: "prod"
+  nameOverride: "dashboard-amcfg"
+  slackConfig:
+    channel: "feed--alerts-dapps-prod"
+  secrets:
+    region: eu-west-2
+    name: "rtlj-prod/eks/dapps/prod/alertmanager-integration-keys"
+  enable_pagerduty_notifications: true
