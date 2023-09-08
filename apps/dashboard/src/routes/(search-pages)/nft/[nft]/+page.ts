@@ -3,7 +3,7 @@ import type { PageLoad } from './$types'
 import {
   transformNft,
   transformNonFungibleResource
-} from '@api/utils/resources'
+} from '@api/utils/entities/resource'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import { getStringMetadata } from '@api/utils/metadata'
 

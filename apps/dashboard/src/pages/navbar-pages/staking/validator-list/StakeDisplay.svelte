@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
   import { formatTokenValue, truncateNumber } from '@utils'
 
   export let validator: Promise<Validator>

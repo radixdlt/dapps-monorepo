@@ -1,6 +1,9 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type { NonFungible, NonFungibleResource } from '@api/utils/resources'
+  import type {
+    NonFungible,
+    NonFungibleResource
+  } from '@api/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type {

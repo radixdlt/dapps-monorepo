@@ -6,7 +6,7 @@
   import { truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
   import { connected } from '@stores'
 
   export let validator: Validator

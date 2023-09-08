@@ -24,8 +24,8 @@ import {
   getStandardMetadataEntry,
   getStringMetadata,
   getVectorMetadata
-} from './metadata'
-import type { _Entity } from './entity'
+} from '../metadata'
+import type { _Entity } from '.'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
   [

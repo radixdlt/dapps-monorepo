@@ -1,6 +1,6 @@
 import { getSingleEntityDetails } from '@api/gateway'
 import type { LayoutLoad } from './$types'
-import { transformPackage } from '@api/utils/package'
+import { transformPackage } from '@api/utils/entities/package'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import { getDappDefinitionData } from '../../utils'
 import { map } from 'ramda'

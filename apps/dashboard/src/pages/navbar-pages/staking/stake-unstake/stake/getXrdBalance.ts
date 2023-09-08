@@ -1,4 +1,4 @@
-import { getAccountData } from '@api/utils/resources'
+import { getAccountData } from '@api/utils/entities/resource'
 import { xrdAddress } from '@stores'
 
 let xrd: string | undefined

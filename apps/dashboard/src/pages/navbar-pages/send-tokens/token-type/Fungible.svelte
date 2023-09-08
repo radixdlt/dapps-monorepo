@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { query } from '@api/query'
-  import type { FungibleResource } from '@api/utils/resources'
+  import type { FungibleResource } from '@api/utils/entities/resource'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/_base/input/Input.svelte'
   import Select from '@components/_base/select/Select.svelte'

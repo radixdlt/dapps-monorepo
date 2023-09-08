@@ -21,7 +21,7 @@
     type FormattedAccount,
     getTxManifest
   } from '../side-effects'
-  import { getFungibleResource } from '@api/utils/resources'
+  import { getFungibleResource } from '@api/utils/entities/resource'
   import { XRD_NAME } from '@constants'
   import Text from '@components/_base/text/Text.svelte'
   import StackList from '@components/stack-list/StackList.svelte'

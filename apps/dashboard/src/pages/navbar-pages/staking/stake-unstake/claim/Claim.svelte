@@ -8,7 +8,7 @@
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
 
   export let readyToClaim: {
     validator: Validator

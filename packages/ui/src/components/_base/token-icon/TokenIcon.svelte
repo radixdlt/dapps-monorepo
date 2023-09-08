@@ -2,7 +2,7 @@
   import TokenPlaceholderIcon from '@icons/token-placeholder.svg'
   import XrdTokenIcon from '@icons/xrd-token-icon.svg'
   export let iconUrl = ''
-  export let isXrd: boolean
+  export let isXrd: boolean = false
   let imageNotFound = false
   let imageLoaded = false
 

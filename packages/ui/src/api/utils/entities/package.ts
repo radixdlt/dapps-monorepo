@@ -1,11 +1,10 @@
 import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
-import type { _Entity } from './entity'
+import type { _Entity } from '.'
 import {
-  getMetadataItem,
   getStandardMetadataEntry,
   getStringMetadata,
   getVectorMetadata
-} from './metadata'
+} from '../metadata'
 
 export type Package = _Entity<
   [['name', string], ['description', string], ['tags', string[]]]

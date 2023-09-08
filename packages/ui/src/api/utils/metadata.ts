@@ -31,7 +31,7 @@ export const getStringMetadata =
 
 export const getVectorMetadata =
   (key: string) =>
-  (metadata?: EntityMetadataCollection): any[] =>
+  (metadata?: EntityMetadataCollection): string[] =>
     pipe(
       () => getMetadataItem(key)(metadata),
       (item) => (item?.value.typed as any)?.values || []

@@ -18,7 +18,7 @@
   import { goto } from '$app/navigation'
   import RadioTab from '@components/_base/tabs/types/RadioTab.svelte'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import { getAccountData, type Resources } from '@api/utils/resources'
+  import { getAccountData, type Resources } from '@api/utils/entities/resource'
 
   type OptionsType = Option<{ address: string }>
 

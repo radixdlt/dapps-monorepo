@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FungibleResource } from '@api/utils/resources'
+  import type { FungibleResource } from '@api/utils/entities/resource'
   import type { LayoutData } from '../$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'

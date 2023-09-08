@@ -13,7 +13,7 @@
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { createEventDispatcher } from 'svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
   import { metadataItem } from '@dashboard-pages/search-pages/utils'
 
   export let validator: Promise<Validator>

@@ -2,7 +2,7 @@
   import CardRow from '@components/info-box/CardRow.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import { metadataItem } from './utils'
-  import type { Entity } from '@api/utils'
+  import type { Entity } from '@api/utils/entities'
 
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>

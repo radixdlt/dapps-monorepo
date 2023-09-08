@@ -30,17 +30,15 @@
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import { goto } from '$app/navigation'
-  import {
-    stakeInfo,
-    type StakeInfo
-  } from '../../../routes/(navbar-pages)/network-staking/+layout.svelte'
+  import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/+layout.svelte'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
   import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
   import ValidatorRow from './validator-list/ValidatorRow.svelte'
   import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
-  import type { Validator } from '@api/utils/validators'
+  import type { Validator } from '@api/utils/entities/validator'
+  import type { StakeInfo } from '@api/utils/staking'
 
   export let validators: Promise<Validator[]>
 

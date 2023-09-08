@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NonFungibleAddress } from '@api/utils/resources'
+  import type { NonFungibleAddress } from '@api/utils/entities/resource'
   import CopyableText from '@components/_base/copyable-text/CopyableText.svelte'
   import { shortenNftID } from '@utils'
 
