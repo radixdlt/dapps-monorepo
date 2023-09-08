@@ -1,4 +1,5 @@
 <script lang="ts">
+  import '@fonts'
   import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
   import { navigating, page } from '$app/stores'
