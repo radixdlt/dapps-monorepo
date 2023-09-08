@@ -18,24 +18,27 @@
 
   let ownerStakeFilter: [number, number] = [0, 100]
 
-  let uptimeFilter = {
-    days: 1,
-    percentage: 0
-  }
-
   let acceptsStakeFilter = false
   let bookmarkedFilter = false
 
   const recentUptimeOptions = [
-    { label: '1 day', value: 1 },
-    { label: '1 week', value: 7 },
-    { label: '1 month', value: 30 },
-    { label: '3 months', value: 90 },
-    { label: '6 months', value: 180 },
-    { label: '1 year', value: 365 }
+    { label: '1 day', value: '1day' } as const,
+    { label: '1 week', value: '1week' } as const,
+    { label: '1 month', value: '1month' } as const,
+    { label: '3 months', value: '3months' } as const,
+    { label: '6 months', value: '6months' } as const,
+    { label: '1 year', value: '1year' } as const,
+    { label: 'All time', value: 'alltime' } as const
   ]
 
   let selectedUptime = recentUptimeOptions[0]
+
+  let uptimeFilterPercentage = 0
+
+  $: uptimeFilter = {
+    timeframe: selectedUptime.value,
+    percentage: uptimeFilterPercentage
+  }
 
   const onClose = () => {
     dispatch('close', {
@@ -84,7 +87,7 @@
     <p class="subtext">% of rewards emissions taken by the validator owner</p>
   </div>
 
-  <div class="cards">
+  <div class="card">
     <HistogramFilterCard
       values={feeValues}
       minText="MIN FEE (%)"
@@ -100,7 +103,7 @@
     <p class="subtext">The total amount of stakes made with the validator</p>
   </div>
 
-  <div class="cards">
+  <div class="card">
     <HistogramFilterCard
       values={totalXRDStakeValues}
       minText="MIN AMOUNT (%)"
@@ -116,12 +119,27 @@
     <p class="subtext">% of this validator’s stake provided by its owner</p>
   </div>
 
-  <div class="cards">
+  <div class="card">
     <HistogramFilterCard
       values={ownerStakeValues}
       minText="MIN STAKE (%)"
       maxText="MAX STAKE (%)"
       bind:range={ownerStakeFilter}
+    />
+  </div>
+
+  <Divider />
+
+  <div class="text">
+    <h3>Recent Uptime (%)</h3>
+    <p class="subtext">The amount of time the validator has been active</p>
+  </div>
+
+  <div class="card">
+    <ManualFilterCard
+      options={recentUptimeOptions}
+      bind:selected={selectedUptime}
+      bind:percentage={uptimeFilterPercentage}
     />
   </div>
 </SidePanel>
@@ -135,7 +153,6 @@
 
   .cards {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     gap: var(--spacing-lg);
   }
