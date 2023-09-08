@@ -1,19 +1,43 @@
+<script lang="ts" context="module">
+  export type TransformedValidator = Validator & Validator['uptimePercentages']
+</script>
+
 <script lang="ts">
   import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
   import type { Validator } from '@api/utils/entities/validator'
   import type { ComponentProps } from 'svelte'
   import { connected } from '@stores'
+  import UptimeHeader, { type UptimeValue } from './UptimeHeader.svelte'
+  import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
 
   export let validators: Promise<Validator[]>
 
+  let selectedUptime: { label: string; value: UptimeValue }
+
+  let transformedValidators: Promise<TransformedValidator[]>
+
+  $: transformedValidators = validators.then((resolved) =>
+    resolved.map((validator) => ({
+      ...validator,
+      '1day': validator.uptimePercentages['1day'],
+      '1week': validator.uptimePercentages['1week'],
+      '1month': validator.uptimePercentages['1month'],
+      '3months': validator.uptimePercentages['3months'],
+      '6months': validator.uptimePercentages['6months'],
+      '1year': validator.uptimePercentages['1year'],
+      alltime: validator.uptimePercentages['alltime']
+    }))
+  )
+
   interface $$Slots {
     row: {
-      entry: Validator
-      columns: ComponentProps<BasicTable<Validator>>['columns']
+      entry: TransformedValidator
+      columns: ComponentProps<BasicTable<TransformedValidator>>['columns']
+      selectedUptime: UptimeValue
     }
   }
 
-  let columns: ComponentProps<BasicTable<Validator>>['columns'] = [
+  let columns: ComponentProps<BasicTable<TransformedValidator>>['columns'] = [
     {
       header: {
         label: 'VALIDATOR'
@@ -23,8 +47,7 @@
       header: {
         label: 'ADDRESS',
         alignment: 'center'
-      },
-      id: 'address'
+      }
     },
     {
       sortBy: 'totalStakeInXRD',
@@ -55,11 +78,11 @@
       }
     },
     {
-      sortBy: 'uptime',
       header: {
         label: 'UPTIME',
         alignment: 'center'
-      }
+      },
+      id: 'uptime'
     },
     {
       header: {
@@ -78,9 +101,22 @@
   } else if (isEmpty(columns[0]) && isEmpty(columns[columns.length - 1])) {
     columns = columns.slice(1, -1)
   }
+
+  $: if (selectedUptime) {
+    columns = columns.map((column) => {
+      if (column?.id === 'uptime') {
+        return {
+          ...column,
+          sortBy: selectedUptime.value
+        }
+      }
+
+      return column
+    })
+  }
 </script>
 
-{#await validators then validators}
+{#await transformedValidators then validators}
   {#if validators.length > 0}
     <div class="validator-list">
       <BasicTable
@@ -90,9 +126,33 @@
           (c) => c?.sortBy === 'totalStakeInXRD'
         )}
       >
+        <svelte:fragment slot="header-cell" let:column let:sort let:sortStatus>
+          {#if column?.id === 'uptime'}
+            <UptimeHeader
+              on:click={sort}
+              sorting={column?.sortBy ? sortStatus : undefined}
+              bind:selected={selectedUptime}
+            />
+          {:else}
+            <BasicHeader
+              on:click={sort}
+              sorting={column?.sortBy ? sortStatus : undefined}
+            >
+              {#if column?.header?.label}
+                {column.header.label}
+              {/if}
+            </BasicHeader>
+          {/if}
+        </svelte:fragment>
+
         <svelte:fragment slot="row" let:entry>
           <tr><th class="separator" /> </tr>
-          <slot name="row" {entry} {columns} />
+          <slot
+            name="row"
+            {entry}
+            {columns}
+            selectedUptime={selectedUptime?.value}
+          />
         </svelte:fragment>
       </BasicTable>
     </div>
