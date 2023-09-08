@@ -103,3 +103,26 @@ export const getNonFungibleData = (
 
 export const getNonFungibleIDs = (address: string) =>
   gatewayApi.state.getAllNonFungibleIds(address)
+
+export const getValidatorUptime = (
+  addresses: string[],
+  from?: Date | number,
+  to?: Date | number
+) =>
+  gatewayApi.statistics.innerClient.validatorsUptime({
+    validatorsUptimeRequest: {
+      validator_addresses: addresses,
+      from_ledger_state:
+        from !== undefined
+          ? from instanceof Date
+            ? { timestamp: from }
+            : { epoch: from }
+          : undefined,
+      at_ledger_state:
+        to !== undefined
+          ? to instanceof Date
+            ? { timestamp: to }
+            : { epoch: to }
+          : undefined
+    }
+  })
