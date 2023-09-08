@@ -5,7 +5,7 @@ console:
       tag: {{$IMAGE_TAG}}
 
   params:
-    URL: https://babylon-stokenet-console.radixdlt.com
+    URL: https://stokenet-console.radixdlt.com
     NETWORK_GATEWAY_API: https://babylon-stokenet-gateway.radixdlt.com
 
   secrets:
@@ -15,7 +15,7 @@ console:
     annotations:
       kubernetes.io/ingress.class: nginx
     hosts:
-      - host: babylon-stokenet-console.radixdlt.com
+      - host: stokenet-console.radixdlt.com
         paths:
           - path: /
             pathType: ImplementationSpecific
