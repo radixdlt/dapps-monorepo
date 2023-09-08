@@ -28,9 +28,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="option" let:option>
-    <Account account={option.value}>
-      <Radio selected={option.value === selected} />
-    </Account>
+    <Account account={option.value} />
   </svelte:fragment>
 </Picker>
 
