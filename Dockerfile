@@ -10,6 +10,7 @@ ARG NPM_LOCAL_CACHE=.cache
 FROM base AS builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
+
 RUN apt-get update && apt-get install -y libc6
 WORKDIR /app
 
