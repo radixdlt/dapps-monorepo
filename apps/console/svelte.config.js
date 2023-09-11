@@ -12,6 +12,12 @@ const config = {
     alias: aliases(),
     env: {
       dir: process.cwd()
+    },
+    csp: {
+      mode: 'auto',
+      directives: {
+        'default-src': ['self']
+      }
     }
   }
 }
