@@ -39,11 +39,7 @@ const config = {
           'https://cdn-ukwest.onetrust.com',
           'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location'
         ],
-        'script-src': [
-          'self',
-          'unsafe-inline',
-          'https://cdn-ukwest.onetrust.com'
-        ]
+        'script-src': ['self', 'https://cdn-ukwest.onetrust.com']
       }
     }
   }
