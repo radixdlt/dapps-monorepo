@@ -7,6 +7,7 @@ import {
 } from '../metadata'
 
 export type Pool = _Entity<
+  'pool',
   [
     ['owner_badge', string],
     ['pool_vault_number', string],
@@ -18,6 +19,7 @@ export type Pool = _Entity<
 export const transformPool = (
   entity: StateEntityDetailsVaultResponseItem
 ): Pool => ({
+  type: 'pool',
   address: entity.address,
   metadata: {
     standard: {

@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import type {
     FungibleResource,
     NonFungibleResource
   } from '@api/utils/entities/resource'
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import SummaryMetadata from '../SummaryMetadata.svelte'
   import type { metadataItem } from '../utils'
+  import SummaryTab from '../SummaryTab.svelte'
 
   export let resource: Promise<NonFungibleResource | FungibleResource>
   export let associatedDapps: Promise<
@@ -46,31 +45,8 @@
 
 <div class="card info-card">
   {#if activeTab === 'summary'}
-    <div class="resource-title">
-      {#await resource}
-        <SkeletonLoader />
-      {:then { metadata: { standard: { name, iconUrl, symbol } } }}
-        <NftImage url={iconUrl?.value} />
-
-        {#if name?.value}
-          <h2>
-            {`${name.value} ${symbol?.value ? `(${symbol.value})` : ''}`}
-          </h2>
-        {/if}
-      {/await}
-    </div>
-
-    {#await resource}
-      <SkeletonLoader count={3} />
-    {:then { metadata: { standard: { description } } }}
-      {#if description?.value}
-        {description.value}
-      {/if}
-    {/await}
-  {/if}
-
-  {#if activeTab === 'summary'}
-    <SummaryMetadata
+    <SummaryTab
+      entity={resource}
       standardMetadata={resource.then(({ metadata }) => metadata.standard)}
       {nonMetadataItems}
       {associatedDapps}
@@ -82,17 +58,10 @@
 </div>
 
 <style>
-  .resource-title {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xl);
-  }
-
   .info-card {
     padding: var(--spacing-2xl);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2xl);
     margin: var(--spacing-2xl) 0;
   }
 </style>

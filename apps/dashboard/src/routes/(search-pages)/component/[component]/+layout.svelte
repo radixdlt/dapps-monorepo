@@ -39,10 +39,7 @@
       ]
     ]}
     activeTab={$activeTab}
-    on:navigate={({ detail }) => {
-        console.log('activeTab', detail);
-      $activeTab = detail
-    }}
+    on:navigate={({ detail }) => ($activeTab = detail)}
   >
     <slot />
   </SearchPage>

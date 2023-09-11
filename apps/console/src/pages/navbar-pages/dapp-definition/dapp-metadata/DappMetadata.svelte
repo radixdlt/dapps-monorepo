@@ -148,14 +148,11 @@
   $: if ($selectedAccount) $setAsDAppDefinition = $isDappDefinition
   $: faded.set(!$setAsDAppDefinition)
 
-  let XRDAmount: Promise<string | undefined> = new Promise((_) => {})
+  let XRDAmount: string | undefined
 
   let showNotEnoughXRDError = false
 
-  $: if (XRDAmount?.then)
-    XRDAmount.then((amount) => {
-      showNotEnoughXRDError = !amount || Number(amount) < 10
-    })
+  $: if (XRDAmount) showNotEnoughXRDError = !XRDAmount || Number(XRDAmount) < 10
 
   $: if ($selectedAccount)
     XRDAmount = getFungibleResource(XRD_NAME)($selectedAccount.resources)?.value

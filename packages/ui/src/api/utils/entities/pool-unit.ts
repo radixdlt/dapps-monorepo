@@ -2,10 +2,12 @@ import type { _Entity } from '.'
 import { getStandardMetadataEntry, getStringMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
 
-export type PoolUnit = FungibleResource & _Entity<[['pool', string]]>
+export type PoolUnit = Omit<FungibleResource, 'type'> &
+  _Entity<'poolUnit', [['pool', string]]>
 
 const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   ...resource,
+  type: 'poolUnit',
   metadata: {
     ...resource.metadata,
     standard: {
@@ -14,7 +16,7 @@ const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
         'pool',
         getStringMetadata
       )({ items: resource.metadata.all })
-    }
+    } as any // svelte-check complains otherwise
   }
 })
 
