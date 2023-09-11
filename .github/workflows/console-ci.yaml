@@ -23,6 +23,7 @@ on:
           - ansharnet
           - zabanet
           - stokenet
+          - mainnet
           - rcnet-v2
           - rcnet-v3
 
@@ -669,3 +670,27 @@ jobs:
       github_environment: console-stokenet
       app_name: 'console'
       step_name: 'deploy-stokenet'
+
+  deploy_mainnet:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-console
+      - setup-tags
+    with:
+      env_name: mainnet
+      restart_pods: false
+      namespace: dapps-console-mainnet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-mainnet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/console
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=mainnet
+      github_environment: console-mainnet
+      app_name: 'console'
+      step_name: 'deploy-mainnet'
