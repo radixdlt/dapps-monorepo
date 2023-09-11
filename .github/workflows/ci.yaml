@@ -795,7 +795,7 @@ jobs:
       - setup-tags
     with:
       env_name: stokenet
-      namespace: dashboard-stoknet
+      namespace: dashboard-stokenet
       create_subns: false
       restart_pods: false
       aws_region: eu-west-2
