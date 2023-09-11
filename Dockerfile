@@ -10,8 +10,6 @@ ARG NPM_LOCAL_CACHE=.cache
 FROM base AS builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
-RUN apk add --no-cache libc6-compat
-RUN apk update
 WORKDIR /app
 
 RUN npm install -g turbo
@@ -21,8 +19,6 @@ RUN turbo prune --scope=dashboard --scope=console --scope=ui --docker
 FROM base AS installer
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
-RUN apk add --no-cache libc6-compat
-RUN apk update
 COPY .npmrc.docker      /app/.npmrc
 COPY aliases.js /app/aliases.js
 # COPY ${NPM_LOCAL_CACHE} /usr/local/share/.cache
