@@ -68,9 +68,8 @@ CREATE_NON_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
 ;
 CALL_METHOD
     Address("${accountAddress}")
-    "try_deposit_batch_or_abort"
+    "deposit_batch"
     Expression("ENTIRE_WORKTOP")
-    Enum<0u8>()
 ;
 `
 
