@@ -14,6 +14,7 @@ import BigNumber from 'bignumber.js'
 import { andThen, map, pipe } from 'ramda'
 
 export type Validator = _Entity<
+  'validator',
   [
     ['name', string],
     ['symbol', string],
@@ -128,6 +129,7 @@ export const transformValidatorResponse = async ({
     const stakeUnitResourceAddress = state.stake_unit_resource_address as string
 
     return {
+      type: 'validator',
       address: validator.address,
       fee: (state.validator_fee_factor || 0) * 100,
       percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,

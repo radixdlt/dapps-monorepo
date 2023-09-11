@@ -19,6 +19,7 @@
   const validators = Array(50)
     .fill(undefined)
     .map((_, i) => ({
+      type: 'validator' as const,
       address: validatorAddresses[i % 10],
       totalStake: '100000000',
       percentageOwnerStake: Math.random() * 30,

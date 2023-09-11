@@ -1,20 +1,28 @@
-import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import BigNumber from 'bignumber.js'
 import type { _Entity } from '.'
+import type {
+  StateEntityDetailsResponseComponentDetails,
+  StateEntityDetailsVaultResponseItem
+} from '@radixdlt/babylon-gateway-api-sdk'
 import {
   getStandardMetadataEntry,
   getStringMetadata,
   getVectorMetadata
 } from '../metadata'
 
-export type Package = _Entity<
-  'package',
+export type Component = _Entity<
+  'component',
   [['name', string], ['description', string]]
->
+> & {
+  packageAddress: string
+  blueprintName: string
+  royalty: BigNumber
+}
 
-export let transformPackage = (
+export const transformComponent = (
   entity: StateEntityDetailsVaultResponseItem
-): Package => ({
-  type: 'package',
+): Component => ({
+  type: 'component',
   address: entity.address,
   metadata: {
     standard: {
@@ -33,5 +41,11 @@ export let transformPackage = (
     ),
     explicit: entity.explicit_metadata?.items ?? [],
     all: entity.metadata?.items ?? []
-  }
+  },
+  packageAddress:
+    (entity.details as StateEntityDetailsResponseComponentDetails)!
+      .package_address!,
+  blueprintName: (entity.details as StateEntityDetailsResponseComponentDetails)!
+    .blueprint_name!,
+  royalty: new BigNumber(0)
 })
