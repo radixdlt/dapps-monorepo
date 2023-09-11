@@ -28,6 +28,7 @@ import {
 import type { _Entity } from '.'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
+  'resource',
   [
     ['name', string],
     ['symbol', string],
@@ -36,7 +37,7 @@ type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
     ['tags', string[]]
   ]
 > & {
-  type: T
+  resourceType: T
   totalSupply: string
   metadata: {
     explicit: EntityMetadataItem[]
@@ -161,7 +162,8 @@ export const transformNonFungibleResource = (
   entity: StateEntityDetailsVaultResponseItem
 ): NonFungibleResource =>
   ({
-    type: 'non-fungible',
+    type: 'resource',
+    resourceType: 'non-fungible',
     address: `${entity.address}`,
     totalSupply: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
@@ -202,7 +204,8 @@ export const transformFungibleResource = (
   fungible?: FungibleResourcesCollectionItemVaultAggregated
 ): FungibleResource =>
   ({
-    type: 'fungible',
+    type: 'resource',
+    resourceType: 'fungible',
     value:
       fungible?.vaults.items
         .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
@@ -359,9 +362,11 @@ export const transformResources =
   }
 
 const getResource =
-  (type: 'fungible' | 'nonFungible') =>
+  <T extends 'fungible' | 'nonFungible'>(type: T) =>
   (name: string) =>
-  (resources: Omit<Resources[number], 'details' | 'accountAddress'>) =>
+  (
+    resources: Omit<Resources[number], 'details' | 'accountAddress'>
+  ): T extends 'fungible' ? FungibleResource : NonFungibleResource =>
     // @ts-ignore
     resources[type].find((resource: Resource) => resource.name === name)
 
