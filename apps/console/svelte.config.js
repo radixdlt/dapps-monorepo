@@ -17,7 +17,7 @@ const config = {
       mode: 'auto',
       directives: {
         'default-src': ['self'],
-        'style-src-elem': [
+        'style-src': [
           'self',
           'unsafe-inline',
           'https://fonts.googleapis.com/css2',
