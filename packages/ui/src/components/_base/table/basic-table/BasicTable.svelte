@@ -35,6 +35,11 @@
   export let defaultSortedColumn: number | undefined = undefined
 
   interface $$Slots {
+    'header-cell': {
+      column: BasicTableColumn<T> | null
+      sort: () => void
+      sortStatus: 'ascending' | 'descending' | 'unsorted'
+    }
     row: {
       entry: T
     }
@@ -69,18 +74,25 @@
   <Table {entries} {columns} {defaultSortedColumn}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
 
-    <BasicHeader
+    <slot
+      name="header-cell"
       slot="header-cell"
       let:column
       let:sort
       let:sortStatus
-      on:click={sort}
-      sorting={column?.sortBy ? sortStatus : undefined}
+      {column}
+      {sort}
+      {sortStatus}
     >
-      {#if column?.header?.label}
-        {column.header.label}
-      {/if}
-    </BasicHeader>
+      <BasicHeader
+        on:click={sort}
+        sorting={column?.sortBy ? sortStatus : undefined}
+      >
+        {#if column?.header?.label}
+          {column.header.label}
+        {/if}
+      </BasicHeader>
+    </slot>
 
     <svelte:fragment slot="empty-row" let:entry>
       <slot name="row" {entry}>

@@ -1,10 +1,17 @@
-import type { StateEntityDetailsResponseFungibleResourceDetails } from '@radixdlt/babylon-gateway-api-sdk'
+import type {
+  StateEntityDetailsResponseFungibleResourceDetails,
+  ValidatorCollectionItem,
+  ValidatorUptimeCollectionItem
+} from '@radixdlt/babylon-gateway-api-sdk'
 import { getEnumStringMetadata, getStandardMetadataEntry } from '../metadata'
 import type { _Entity } from '.'
 import {
   getEntityDetails,
+  getValidatorUptime,
   getValidatorsListWithLedgerState
 } from '@api/gateway'
+import BigNumber from 'bignumber.js'
+import { andThen, map, pipe } from 'ramda'
 
 export type Validator = _Entity<
   [
@@ -22,13 +29,82 @@ export type Validator = _Entity<
   percentageOwnerStake: number
   apy: number
   fee: number
-  uptime: number
+  uptimePercentages: {
+    '1day': number
+    '1week': number
+    '1month': number
+    '3months': number
+    '6months': number
+    '1year': number
+    alltime: number
+  }
   acceptsStake: boolean
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
   totalStakeUnits: string
 }
+
+const ONE_DAY_MS = 1000 * 60 * 60 * 24
+const ONE_WEEK_MS = ONE_DAY_MS * 7
+const ONE_MONTH_MS = ONE_DAY_MS * 30
+const THREE_MONTHS_MS = ONE_DAY_MS * 90
+const SIX_MONTHS_MS = ONE_DAY_MS * 180
+const ONE_YEAR_MS = ONE_DAY_MS * 365
+
+const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
+
+const getValidatorUptimeSinceDate =
+  (addresses: string[]) => (timestamp: Date | number) =>
+    getValidatorUptime(addresses, timestamp)
+      .then(({ validators: { items } }) => items)
+      .catch(() => [])
+
+const calculateUptimePercentage = ({
+  proposals_made,
+  proposals_missed
+}: ValidatorUptimeCollectionItem) => {
+  let total_proposals = proposals_made! + proposals_missed!
+
+  let uptimePercentage = 100
+
+  if (total_proposals > 0) {
+    uptimePercentage = new BigNumber(proposals_made!)
+      .multipliedBy(100)
+      .dividedBy(total_proposals)
+      .toNumber()
+  }
+
+  return uptimePercentage
+}
+
+const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
+  pipe(
+    () => [
+      ONE_DAY_MS,
+      ONE_WEEK_MS,
+      ONE_MONTH_MS,
+      THREE_MONTHS_MS,
+      SIX_MONTHS_MS,
+      ONE_YEAR_MS
+    ],
+    map(dateMsAgo),
+    (timestamps) => [...timestamps, 1], // 1 is the first epoch
+    map(getValidatorUptimeSinceDate(validators.map(({ address }) => address))),
+    (items) => Promise.all(items),
+    andThen(map(map(calculateUptimePercentage))),
+    andThen((uptimes) =>
+      validators.map((_, i) => ({
+        '1day': uptimes[0][i],
+        '1week': uptimes[1][i],
+        '1month': uptimes[2][i],
+        '3months': uptimes[3][i],
+        '6months': uptimes[4][i],
+        '1year': uptimes[5][i],
+        alltime: uptimes[6][i]
+      }))
+    )
+  )()
 
 export const transformValidatorResponse = async ({
   aggregatedEntities,
@@ -43,6 +119,8 @@ export const transformValidatorResponse = async ({
     undefined,
     { state_version }
   )
+
+  const uptimes = await getUptimePercentages(aggregatedEntities)
 
   return aggregatedEntities.map((validator, i) => {
     const state: any = validator.state || {}
@@ -81,7 +159,7 @@ export const transformValidatorResponse = async ({
         explicit: []
       },
 
-      uptime: 0,
+      uptimePercentages: uptimes[i],
       ownerAddress: '',
       ownerStake: '0',
       percentageOwnerStake: 0,

@@ -153,8 +153,10 @@
         slot="row"
         let:entry
         let:columns
+        let:selectedUptime
         validator={entry}
         nbrOfColumns={columns.length}
+        {selectedUptime}
         on:click={() => goto(`/network-staking/${entry.address}`)}
         on:claim-validator={(e) => {
           dispatch('show-claim-single', e.detail)
@@ -188,8 +190,10 @@
 >
   <ValidatorRow
     slot="row"
+    let:selectedUptime
     let:entry
     validator={entry}
+    {selectedUptime}
     on:click={() => goto(`/network-staking/${entry.address}`)}
   >
     <BookmarkValidator slot="icon" validator={entry} />

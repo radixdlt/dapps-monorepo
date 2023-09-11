@@ -4,13 +4,15 @@
   import StakingInfo from './StakingInfo.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
+  import type { UptimeValue } from '../UptimeHeader.svelte'
 
   export let validator: ComponentProps<ValidatorRow>['validator']
+  export let selectedUptime: UptimeValue
   export let nbrOfColumns: number
 </script>
 
 <tr class="validator-row">
-  <ValidatorRow {validator} on:click>
+  <ValidatorRow {validator} {selectedUptime} on:click>
     <IconNew icon={StakingIcon} --size="2.5rem" slot="icon" />
   </ValidatorRow>
 </tr>

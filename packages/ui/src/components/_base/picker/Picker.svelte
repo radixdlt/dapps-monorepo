@@ -1,92 +1,81 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
-  import { fly } from 'svelte/transition'
+  import type { ComponentProps } from 'svelte'
+  import RawPicker from './RawPicker.svelte'
 
-  type T = $$Generic
-  export let options: {
-    label: string
-    value: T
-  }[]
+  export let selectionText: string | undefined = undefined
+  export let options: ComponentProps<RawPicker<T>>['options']
   export let open = false
 
-  let selected: (typeof options)[number]
+  type T = $$Generic
 
-  let picker: HTMLElement
-
-  onMount(() => {
-    picker.addEventListener('clickoutside', () => (open = false))
-
-    const handleClick = (event: any) => {
-      if (!picker.contains(event.target)) {
-        picker.dispatchEvent(new CustomEvent('clickoutside'))
+  type $$Slots = {
+    selected: {
+      open: boolean
+      selected: (typeof options)[number]
+    }
+    option: {
+      option: {
+        label: string
+        value: T
       }
     }
+  }
 
-    document.addEventListener('click', handleClick, true)
-
-    return () => document.removeEventListener('click', handleClick, true)
-  })
-
-  const dispatch = createEventDispatcher<{
-    selected: (typeof options)[number]
-  }>()
-
-  let offset: number
-  let width: number
+  type $$Events = {
+    selected: {
+      detail: (typeof options)[number]
+    }
+  }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="picker" bind:clientWidth={width} bind:this={picker}>
-  <div
-    class="option selected"
-    on:click={() => (open = !open)}
-    bind:clientHeight={offset}
-  >
-    <slot name="selected" {selected} />
-  </div>
-
-  {#if open}
-    <div
-      class="drawer"
-      style:transform={`translateY(${offset}px)`}
-      style:max-height={`${offset * 7}px`}
-      in:fly={{ y: -10, duration: 150 }}
-    >
-      <slot name="options-header" />
-      {#each options as option}
-        <div
-          class="option"
-          on:click={() => {
-            dispatch('selected', option)
-            selected = option
-            open = false
-          }}
-        >
-          <slot name="option" {option} />
-        </div>
-      {/each}
+<div class="picker">
+  <RawPicker {options} on:selected bind:open>
+    <div slot="selected" class="selected-wrapper" let:selected>
+      <div class="selected" class:open>
+        <slot name="selected" {open} {selected} />
+      </div>
     </div>
-  {/if}
+
+    <svelte:fragment slot="options-header">
+      {#if selectionText}
+        <div class="options-header">{selectionText}</div>
+      {/if}
+    </svelte:fragment>
+
+    <div slot="option" let:option class="option-wrapper">
+      <slot name="option" {option} />
+    </div>
+  </RawPicker>
 </div>
 
 <style lang="scss">
-  .picker {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
+  .picker :global(.picker .drawer) {
+    background: var(--theme-surface-2);
+    border-radius: var(--border-radius-xl);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-hover);
+    margin-top: var(--spacing-lg);
   }
 
-  .drawer {
-    position: absolute;
-    width: 100%;
-    overflow-y: auto;
+  .selected-wrapper {
+    overflow-y: clip;
   }
 
-  .option {
-    cursor: pointer;
+  .icon {
+    transition: transform 0.3s ease;
+  }
 
-    &.selected {
-      z-index: 1;
+  .options-header {
+    font-weight: var(--font-weight-bold-3);
+    font-size: var(--text-md);
+    color: var(--theme-subtext);
+  }
+
+  .option-wrapper {
+    margin-top: var(--spacing-lg);
+    transition: opacity 300ms ease;
+    &:hover {
+      opacity: 50%;
     }
   }
 </style>

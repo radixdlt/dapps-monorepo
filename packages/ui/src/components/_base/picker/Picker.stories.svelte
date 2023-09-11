@@ -1,6 +1,6 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import Picker from './Picker.svelte'
+  import Picker from './RawPicker.svelte'
 
   let options = [
     {

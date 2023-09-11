@@ -12,61 +12,48 @@
     value: T
   }[]
   export let open = false
+  export let selectionText: string | undefined = undefined
 </script>
 
-<div
-  id="simple-picker"
-  style:border-radius={open
-    ? 'var(--border-radius-lg) var(--border-radius-lg) 0 0'
-    : 'var(--border-radius-lg)'}
+<Picker
+  {options}
+  {selectionText}
+  on:selected={(e) => {
+    selected = e.detail
+  }}
+  bind:open
 >
-  <Picker {options} on:selected={({ detail }) => (selected = detail)} bind:open>
-    <button slot="selected" class="selected option">
-      {selected.label}
-      <div id="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
-        <IconNew icon={PickerExpandIcon} size="small" />
-      </div>
-    </button>
-
-    <div slot="option" let:option class="option-background">
-      <button class="option">
-        {option.label}
-        {#if option === selected}
-          <IconNew icon={SelectedOptionIcon} size="small" />
-        {/if}
-      </button>
+  <button slot="selected" class="selected option">
+    {selected.label}
+    <div class="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
+      <IconNew icon={PickerExpandIcon} size="small" />
     </div>
-  </Picker>
-</div>
+  </button>
+
+  <div slot="option" let:option class="option-background">
+    <button class="option">
+      {option.label}
+      {#if option.value === selected.value}
+        <IconNew icon={SelectedOptionIcon} size="small" />
+      {/if}
+    </button>
+  </div>
+</Picker>
 
 <style lang="scss">
-  #simple-picker :global(.picker .drawer) {
-    background: var(--color-light);
-    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-  }
-  #simple-picker {
-    border-radius: var(--border-radius-lg);
-    width: fit-content;
-    background-color: var(--color-light);
-  }
   .selected {
+    width: 100%;
     background-color: var(--color-grey-4);
-    border: var(--border-strong);
-    display: flex;
-    gap: var(--spacing-md);
-    justify-content: space-between;
-    align-items: center;
   }
 
   .option {
-    margin: var(--spacing-md);
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--border-radius-lg);
     cursor: pointer;
-    width: var(--width, 15rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 
     &:hover {
       background-color: var(--color-grey-4);
@@ -74,7 +61,7 @@
     }
   }
 
-  #icon {
+  .icon {
     transition: transform 0.3s ease;
   }
 </style>
