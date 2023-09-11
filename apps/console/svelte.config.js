@@ -41,8 +41,8 @@ const config = {
         ],
         'script-src': [
           'self',
-          'https://cdn-ukwest.onetrust.com',
-          'sha256-sk0iIQli9YGfhwrJFHurkbv5hqBs+BsyGKzjsaUAokM='
+          'unsafe-inline',
+          'https://cdn-ukwest.onetrust.com'
         ]
       }
     }
