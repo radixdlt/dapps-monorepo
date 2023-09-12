@@ -76,39 +76,24 @@ CALL_METHOD
 export const getDeployPackageManifest = (
   account: string,
   wasm: string,
-  schema: string,
-  nftAddress: string,
-  nftId: string
+  schema: string
 ) => {
   const wasmHash: string = hash(wasm).toString('hex')
 
-  return `
-CALL_METHOD
-    Address("${account}")
-    "create_proof_of_non_fungibles"
-    Address("${nftAddress}")
-    Array<NonFungibleLocalId>(
-        NonFungibleLocalId("${nftId}")
-    )
-;
-PUBLISH_PACKAGE_ADVANCED
-     Enum<OwnerRole::Fixed>(     # Owner Role
-        Enum<AccessRule::Protected>(
-            Enum<AccessRuleNode::ProofRule>(
-                Enum<ProofRule::Require>(
-                    Enum<0u8>(   # ResourceOrNonFungible::NonFungible
-                        NonFungibleGlobalId("${nftAddress}:${nftId}")
-                    )
-                )
-            )
-        )
-    )
-    ${schema}                    # Package Definition
-    Blob("${wasmHash}")          # Package Code
-    Map<String, Tuple>()         # Metadata
-    None                         # Address Reservation
-;
-      `
+  const transactionManifest = `
+    PUBLISH_PACKAGE
+      ${schema}                    
+      Blob("${wasmHash}")          
+      Map<String, Tuple>()         
+    ;
+
+    CALL_METHOD
+      Address("${account}")
+      "deposit_batch"
+      Expression("ENTIRE_WORKTOP")
+    ;
+    `
+  return transactionManifest
 }
 
 export const sborDecodeSchema = (schema: string) => {
