@@ -1,4 +1,5 @@
 import type {
+  EntityMetadataCollection,
   StateEntityDetailsResponseFungibleResourceDetails,
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
@@ -107,6 +108,21 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
     )
   )()
 
+export const getMetadata = (metadata?: EntityMetadataCollection) => ({
+  standard: {
+    name: getStandardMetadataEntry('name', getEnumStringMetadata)(metadata),
+    website: getStandardMetadataEntry(
+      'website',
+      getEnumStringMetadata
+    )(metadata)
+  },
+  nonStandard: ((metadata?.items as any[]) || []).filter(
+    ({ key }) => key !== 'name' && key !== 'url'
+  ),
+  all: metadata?.items ?? [],
+  explicit: []
+})
+
 export const transformValidatorResponse = async ({
   aggregatedEntities,
   ledger_state: { state_version }
@@ -143,23 +159,7 @@ export const transformValidatorResponse = async ({
       ).total_supply,
       totalStakeInXRD: validator.stake_vault.balance,
 
-      metadata: {
-        standard: {
-          name: getStandardMetadataEntry(
-            'name',
-            getEnumStringMetadata
-          )(validator.metadata),
-          website: getStandardMetadataEntry(
-            'website',
-            getEnumStringMetadata
-          )(validator.metadata)
-        },
-        nonStandard: ((validator.metadata?.items as any[]) || []).filter(
-          ({ key }) => key !== 'name' && key !== 'url'
-        ),
-        all: validator.metadata?.items ?? [],
-        explicit: []
-      },
+      metadata: getMetadata(validator.metadata),
 
       uptimePercentages: uptimes[i],
       ownerAddress: '',
