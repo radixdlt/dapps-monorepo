@@ -1,13 +1,8 @@
 import { CURRENT_NETWORK } from '../../src/network'
 import {
   GatewayApiClient,
-  StateApi,
-  StreamApi,
   type StateEntityDetailsOptions,
   type StateNonFungibleDetailsResponseItem,
-  StatusApi,
-  TransactionApi,
-  type LedgerState,
   type LedgerStateSelector
 } from '@radixdlt/babylon-gateway-api-sdk'
 
@@ -21,6 +16,14 @@ export const getRecentTransactions = (address: string, cursor?: string) =>
 
 export const getValidatorsList = () => {
   return gatewayApi.state.getAllValidators()
+}
+
+export type GetNonFungibleIdsPageWithDataRequest = {
+  componentAddress: string
+  resourceAddress: string
+  vaultAddress: string
+  cursor?: string
+  stateVersion?: number
 }
 
 export const getValidatorsListWithLedgerState = () =>
@@ -100,6 +103,33 @@ export const getNonFungibleData = (
   ids: string[]
 ): Promise<StateNonFungibleDetailsResponseItem[]> =>
   gatewayApi.state.getNonFungibleData(address, ids)
+
+export const getNonFungiblesIdsPageWithData = ({
+  componentAddress,
+  resourceAddress,
+  vaultAddress,
+  cursor,
+  stateVersion
+}: GetNonFungibleIdsPageWithDataRequest) => {
+  return gatewayApi.state.innerClient
+    .entityNonFungibleIdsPage({
+      stateEntityNonFungibleIdsPageRequest: {
+        address: componentAddress,
+        vault_address: vaultAddress,
+        resource_address: resourceAddress,
+        at_ledger_state: {
+          state_version: stateVersion
+        },
+        cursor
+      }
+    })
+    .then((res) =>
+      Promise.all([
+        Promise.resolve(res),
+        getNonFungibleData(resourceAddress, res.items)
+      ])
+    )
+}
 
 export const getNonFungibleIDs = (address: string) =>
   gatewayApi.state.getAllNonFungibleIds(address)

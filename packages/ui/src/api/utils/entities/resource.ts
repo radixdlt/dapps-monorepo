@@ -1,7 +1,6 @@
 import {
   getEntityDetails,
   getEntityNonFungibleIDs,
-  getNonFungibleIDs,
   getSingleEntityDetails
 } from '@api/gateway'
 import type {
@@ -250,6 +249,14 @@ export const transformFungibleResource = (
     }
   } as const)
 
+export type TransformedNonFungible = {
+  resource: NonFungibleResource
+  ownedNonFungibles: number
+  nonFungibles: NonFungible[]
+  nextCursor?: string
+  vaultAddress: string
+}
+
 const transformNonFungible = async (
   nonFungibles: NonFungibleResourcesVaultCollection,
   accountAddress: string,
@@ -260,11 +267,7 @@ const transformNonFungible = async (
     return []
   }
 
-  const transformedNonFungibles: {
-    resource: NonFungibleResource
-    totalNonFungibles: number
-    nonFungibles: NonFungible[]
-  }[] = []
+  const transformedNonFungibles: TransformedNonFungible[] = []
 
   const nonFungibleEntities = await getEntityDetails(
     nonFungibles.items.map(({ resource_address }) => resource_address),
@@ -281,10 +284,13 @@ const transformNonFungible = async (
     const nftData = await getNonFungibleData(nonFungible.resource_address, ids)
 
     let length = transformedNonFungibles.push({
+      ownedNonFungibles: nonFungible.vaults.items.reduce((sum, vault) => {
+        return sum + vault.total_count
+      }, 0),
       resource: transformNonFungibleResource(entity),
-      totalNonFungibles: (await getNonFungibleIDs(nonFungible.resource_address))
-        .length,
-      nonFungibles: []
+      nonFungibles: [],
+      nextCursor: nonFungible.vaults.items[0].next_cursor || undefined,
+      vaultAddress: nonFungible.vaults.items[0].vault_address
     })
 
     for (const singleNftData of nftData) {
