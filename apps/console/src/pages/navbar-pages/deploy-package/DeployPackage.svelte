@@ -9,20 +9,12 @@
   import type { Account } from '@stores'
   import Select from '@components/_base/select/Select.svelte'
   import { derived, writable } from 'svelte/store'
-  import {
-    createBadge,
-    getDeployPackageManifest,
-    sborDecodeSchema
-  } from './side-effects'
+  import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import { getTransactionDetails } from '@api/gateway'
   import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
   import type { ComponentEvents } from 'svelte'
-  import {
-    getAccountData,
-    type NonFungible
-  } from '@api/utils/entities/resource'
 
   export let accounts: Account[]
 
@@ -54,10 +46,6 @@
   const selectedAccount = writable<(Account & { label: string }) | undefined>(
     undefined
   )
-  const selectedBadge = writable<(NonFungible & { label: string }) | undefined>(
-    undefined
-  )
-  const badgeCreated = writable<string>()
 
   const packageDeployed = writable<{
     txStatus: TransactionStatus
@@ -65,35 +53,9 @@
     address: string
   }>()
 
-  const nfts = derived<typeof selectedAccount, NonFungible[]>(
-    selectedAccount,
-    ($selectedAccount, set) => {
-      if ($selectedAccount)
-        getAccountData([$selectedAccount.address]).then((resources) =>
-          set(
-            resources[0]!.nonFungible
-              .map(({ resource, nonFungibles }) =>
-                nonFungibles.map((nft) => ({
-                  ...nft,
-                  resource: resource
-                }))
-              )
-              .flat()
-              .map((nft) => ({
-                ...nft,
-                label: `${
-                  nft.resource.metadata.standard.name?.value ??
-                  nft.resource.address
-                } (${nft.id})`
-              }))
-          )
-        )
-    }
-  )
-
   const deployButtonEnabled = derived(
-    [requiredUploadedFiles, selectedBadge],
-    ([{ wasm, rpd }, badge]) => !!rpd && !!wasm && badge !== undefined,
+    [requiredUploadedFiles, selectedAccount],
+    ([{ wasm, rpd }, selectedAccount]) => !!rpd && !!wasm && !!selectedAccount,
     false
   )
 
@@ -101,14 +63,11 @@
     const wasm = await $requiredUploadedFiles.wasm
     const rpd = await $requiredUploadedFiles.rpd
     const sborDecodedSchema = await sborDecodeSchema(rpd)
-    const badge = $selectedBadge!
 
     const manifest = getDeployPackageManifest(
-      $selectedAccount?.address || '',
+      $selectedAccount?.address!,
       wasm,
-      sborDecodedSchema,
-      badge?.address.resourceAddress,
-      badge?.id
+      sborDecodedSchema
     )
 
     e.detail(manifest, [wasm])
@@ -128,15 +87,12 @@
     })
   }
 
-  $: if ($packageDeployed && $selectedBadge) {
+  $: if ($packageDeployed) {
     goto(
       `deploy-package/success?` +
         `txID=${$packageDeployed.txID}&` +
         `txStatus=${$packageDeployed.txStatus}&` +
-        `packageAddress=${$packageDeployed.address}&` +
-        `badgeName=${$selectedBadge.nftData.standard.name ?? ''}&` +
-        `badgeAddress=${$selectedBadge.address.resourceAddress}&` +
-        `badgeId=${encodeURIComponent($selectedBadge.id)}`
+        `packageAddress=${$packageDeployed.address}&`
     )
   }
 </script>
@@ -164,6 +120,7 @@
       maxFiles={1}
     />
   </Box>
+
   <Box>
     <Text
       >To control aspects of the package you deploy, like setting metadata or
@@ -180,37 +137,6 @@
         options={accounts}
       />
     </Box>
-    <Box>
-      {#if $nfts && $nfts.length > 0}
-        <Select
-          placeholder="Select Badge NFT"
-          bind:selected={$selectedBadge}
-          options={$nfts}
-        />
-      {:else}
-        <Select placeholder="Select Badge NFT" />
-      {/if}
-    </Box>
-  </Box>
-
-  <Box hidden={!$selectedAccount}>
-    <Text>
-      <Text
-        on:click={() => {
-          if (!$selectedAccount) return
-          createBadge($selectedAccount.address).then((result) => {
-            badgeCreated.set(result.transactionIntentHash)
-            selectedAccount.set($selectedAccount)
-            return
-          })
-        }}
-        cx={{ display: 'inline', cursor: 'pointer' }}
-        underlined
-      >
-        Click here
-      </Text>
-      to create a simple badge NFT.
-    </Text>
   </Box>
 
   <Box px="none" mx="none">

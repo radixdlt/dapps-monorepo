@@ -42,9 +42,7 @@ describe('Deploy Package Transaction Manifests', () => {
     const stringManifest = getDeployPackageManifest(
       'account_tdx_e_129rwaggxwsvgr5vm4zyx7nw2wj77zg9l88ke09jcpr3ge0h44mejz2',
       wasm,
-      sborDecodedSchema,
-      'resource_tdx_e_1nta7wc8jw3f7njv2uuhe898nwll45edm2q5nnzvgga8x2flslcyywf',
-      '#65#'
+      sborDecodedSchema
     )
 
     const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
