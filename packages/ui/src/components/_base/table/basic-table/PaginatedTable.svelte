@@ -81,6 +81,9 @@
 
 {#if mode === 'infiniteScroll'}
   <InfiniteScroll
+    on:noScrollableParent={() => {
+      fetchMore()
+    }}
     on:thresholdReached={() => {
       fetchMore()
     }}

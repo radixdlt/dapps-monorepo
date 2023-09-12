@@ -34,6 +34,9 @@
   const assignScrollableParent = () => {
     scrollableParent = findParentWithScroll(component)
     scrollableParent?.addEventListener('scroll', onScroll)
+    if (!scrollableParent) {
+      dispatch('noScrollableParent')
+    }
   }
 
   onMount(() => {
