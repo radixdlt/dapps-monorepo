@@ -130,13 +130,21 @@ export const load: LayoutLoad = ({ params }) => {
 
     if (!poolAddress) return
 
-    const pool = await getSingleEntityDetails(poolAddress).then(transformPool)
+    const poolEntityDetails = await getSingleEntityDetails(poolAddress)
+    const pool = transformPool(poolEntityDetails)
 
     if (!pool.metadata.standard.pool_unit) return
 
     const poolResources = await getEntityDetails(
       pool.metadata.standard.pool_resources?.value || []
-    ).then(map(transformFungibleResource))
+    ).then((resources) =>
+      resources.map((resource, index) =>
+        transformFungibleResource(
+          resource,
+          poolEntityDetails.fungible_resources.items[index]
+        )
+      )
+    )
 
     return {
       poolUnit: {
