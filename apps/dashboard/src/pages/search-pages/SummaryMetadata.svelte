@@ -8,6 +8,7 @@
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
     {
+      address: string
       name: string
       iconUrl: string
     }[]
@@ -32,7 +33,8 @@
       {#if dapps.length > 0}
         <CardRow
           title="Associated Dapps"
-          cardInfo={dapps.map(({ name, iconUrl }) => ({
+          cardInfo={dapps.map(({ name, iconUrl, address }) => ({
+            address,
             text: name,
             iconUrl
           }))}

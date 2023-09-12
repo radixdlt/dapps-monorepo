@@ -1,17 +1,27 @@
 <script lang="ts">
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Row from './Row.svelte'
+  import { addressToRoute } from '@utils'
+  import { goto } from '$app/navigation'
 
   export let title: string
-  export let cardInfo: { iconUrl: string; text: string }[]
+  export let cardInfo: { iconUrl: string; text: string; address: string }[]
+
+  const goToAddress = (address: string) => () => {
+    goto(addressToRoute(address))
+  }
 </script>
 
 <div class="card-row">
   <Row text={title}>
     <svelte:fragment slot="right">
       <div class="cards">
-        {#each cardInfo as { iconUrl, text }}
-          <div class="card dapp-card">
+        {#each cardInfo as { iconUrl, text, address }}
+          <div
+            class="card dapp-card"
+            on:click={goToAddress(address)}
+            on:keypress={goToAddress(address)}
+          >
             <NftImage url={iconUrl} />
 
             <span class="card-text">{text}</span>
@@ -58,6 +68,7 @@
     gap: var(--spacing-lg);
 
     .dapp-card {
+      cursor: pointer;
       display: flex;
       flex-direction: row;
       align-items: center;

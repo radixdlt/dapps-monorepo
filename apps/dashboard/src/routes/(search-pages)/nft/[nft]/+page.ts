@@ -5,7 +5,8 @@ import {
   transformNonFungibleResource
 } from '@api/utils/entities/resource'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import { getStringMetadata } from '@api/utils/metadata'
+import { getDappDefinitionData } from '../../utils'
+import { map } from 'ramda'
 
 export const prerender = false
 
@@ -20,12 +21,7 @@ export const load: PageLoad = async ({ params }) => {
 
   const associatedDapps = resourceEntity
     .then(getLinkedDappDefinitions)
-    .then((entities) =>
-      entities.map(({ metadata }) => ({
-        name: getStringMetadata('name')(metadata),
-        iconUrl: getStringMetadata('icon_url')(metadata)
-      }))
-    )
+    .then(map(getDappDefinitionData))
 
   return {
     nftAddress: params.nft,
