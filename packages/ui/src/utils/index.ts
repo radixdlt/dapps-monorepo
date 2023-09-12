@@ -87,7 +87,7 @@ export const addressToRoute = (address: string) =>
     package: `/package/${address}`,
     component: `/component/${address}`,
     txid: `/transaction/${address}`,
-    validator: `/network-staking/${address}`,
+    validator: `/validator/${address}`,
     identity: `/identity/${address}`
   }[getAddressPrefix(address)])
 
