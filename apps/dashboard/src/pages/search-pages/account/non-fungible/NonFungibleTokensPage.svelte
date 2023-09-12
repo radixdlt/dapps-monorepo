@@ -46,11 +46,12 @@
       if (!loadedLaterNfts[data.resourceAddress]) {
         loadedLaterNfts[data.resourceAddress] = []
       }
-      loadedLaterNfts[data.resourceAddress].push(
+      loadedLaterNfts[data.resourceAddress] = [
+        ...loadedLaterNfts[data.resourceAddress],
         ...nftDataResponse.map((singleNftData) =>
           transformNft(data.resourceAddress, singleNftData)
         )
-      )
+      ]
       isLoading = false
     })
   }
