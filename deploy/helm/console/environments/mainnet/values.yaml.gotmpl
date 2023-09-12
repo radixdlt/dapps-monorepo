@@ -22,18 +22,17 @@ console:
 
   autoscaling:
     enabled: true
-    minReplicas: 2
+    minReplicas: 5
     maxReplicas: 20
     targetCPUUtilizationPercentage: 70
     targetMemoryUtilizationPercentage: 70
 
   resources:
     limits:
-      cpu: 475m
-      memory: 256Mi
+      memory: 1Gi
     requests:
-      cpu: 475m
-      memory: 256Mi
+      cpu: 100m
+      memory: 1Gi
 
 developerAccess:
   pod:
