@@ -71,7 +71,10 @@
       {#each accumulatedClaims as { validator, xrdAmount, account }}
         <StakeCard>
           <svelte:fragment slot="info">
-            <ValidatorInfo {...validator} />
+            <ValidatorInfo
+              name={validator.metadata.standard.name?.value}
+              {...validator}
+            />
           </svelte:fragment>
 
           <svelte:fragment slot="token-amount-card">
