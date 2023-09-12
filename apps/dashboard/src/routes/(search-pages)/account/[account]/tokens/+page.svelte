@@ -35,7 +35,7 @@
           fungible
         )
         const xrd = xrdRaw ? transformFungibleTokenResource(xrdRaw) : undefined
-        const tokens = Object.values(tokensRaw).map(
+        const tokens = Object.values(tokensRaw).filter((fungibleResource) => !fungibleResource.metadata.all.find((metadata) => metadata.key === 'pool')).map(
           transformFungibleTokenResource
         )
 
