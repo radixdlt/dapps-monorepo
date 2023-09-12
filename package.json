@@ -17,6 +17,7 @@
     "lint": "eslint --cache apps/*/src packages/*/src",
     "lint:fix": "eslint --cache --fix apps/*/src packages/*/src",
     "format": "npm run prettier:fix && npm run lint:fix",
+    "dev:dashboard": "turbo run dev --filter=dashboard",
     "dev:console": "turbo run dev --filter=console"
   },
   "devDependencies": {
