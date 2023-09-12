@@ -16,6 +16,7 @@
   export let resource: Promise<NonFungibleResource>
   export let associatedDapps: Promise<
     {
+      address: string
       name: string
       iconUrl: string
     }[]

@@ -7,6 +7,7 @@
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
     {
+      address: string
       name: string
       iconUrl: string
     }[]

@@ -5,6 +5,7 @@
   export let component: Promise<Component>
   export let associatedDapps: Promise<
     {
+      address: string
       name: string
       iconUrl: string
     }[]

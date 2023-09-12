@@ -5,13 +5,13 @@
   } from '@api/utils/entities/resource'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
-  import SummaryMetadata from '../SummaryMetadata.svelte'
   import type { metadataItem } from '../utils'
   import SummaryTab from '../SummaryTab.svelte'
 
   export let resource: Promise<NonFungibleResource | FungibleResource>
   export let associatedDapps: Promise<
     {
+      address: string
       name: string
       iconUrl: string
     }[]
