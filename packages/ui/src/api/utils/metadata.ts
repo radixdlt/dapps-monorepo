@@ -9,6 +9,7 @@ import type {
   StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { isNil, pipe } from 'ramda'
+import sanitizeHtml from 'sanitize-html'
 
 export type KnownStandardTypes = {
   name: MetadataStringValueTypeEnum
@@ -43,25 +44,28 @@ export const getEnumStringMetadataValue = (item: EntityMetadataItem): string =>
 export const getStringMetadataValue = (item: EntityMetadataItem): string =>
   (item?.value?.typed as any)?.value || ''
 
-export const getVectorMetadataValue = (item: EntityMetadataItem): unknown[] =>
+export const getVectorMetadataValue = (item: EntityMetadataItem): string[] =>
   (item?.value.typed as any)?.values || []
 
 export const getEnumStringMetadata = (key: string) =>
   pipe(
     (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? '' : getStringMetadataValue(item))
+    (item) => (isNil(item) ? '' : getStringMetadataValue(item)),
+    sanitizeHtml
   )
 
 export const getStringMetadata = (key: string) =>
   pipe(
     (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? '' : getStringMetadataValue(item))
+    (item) => (isNil(item) ? '' : getStringMetadataValue(item)),
+    sanitizeHtml
   )
 
 export const getVectorMetadata = (key: string) =>
   pipe(
     (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? [] : getVectorMetadataValue(item))
+    (item) => (isNil(item) ? [] : getVectorMetadataValue(item)),
+    (items) => items.map((value) => sanitizeHtml(value))
   )
 
 const getValue = (typedValue: MetadataTypedValue) => {

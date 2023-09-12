@@ -1,12 +1,13 @@
 <script lang="ts">
   import NftPlaceholder from '@icons/nft-placeholder.svg'
+  import sanitizeHtml from 'sanitize-html'
   export let url = ''
   export let size: 'small' | 'large' = 'small'
 
   let imageNotFound = false
   let imageLoaded = false
 
-  $: resolvedIconUrl = imageNotFound ? NftPlaceholder : url
+  $: resolvedIconUrl = imageNotFound ? NftPlaceholder : sanitizeHtml(url)
 </script>
 
 <div class="wrapper {size}">
@@ -17,7 +18,7 @@
   >
     {#if !imageNotFound || !imageLoaded}
       <img
-        src={url}
+        src={sanitizeHtml(url)}
         style="display: none;"
         alt="fungible token icon"
         on:load={() => {
