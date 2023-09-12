@@ -39,7 +39,8 @@
           .filter(
             (fungibleResource) =>
               !fungibleResource.metadata.all.find(
-                (metadata) => metadata.key === 'pool'
+                (metadata) =>
+                  metadata.key === 'pool' || metadata.key === 'validator'
               )
           )
           .map(transformFungibleTokenResource)
