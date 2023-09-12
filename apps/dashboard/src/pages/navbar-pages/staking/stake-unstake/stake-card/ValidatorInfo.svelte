@@ -11,7 +11,7 @@
 
 <div class="staking-info">
   <div class="validator-name dotted-overflow">
-    {name}
+    {name || ''}
   </div>
   <div>
     <Address --background="var(--theme-surface-3)" value={address} short />
