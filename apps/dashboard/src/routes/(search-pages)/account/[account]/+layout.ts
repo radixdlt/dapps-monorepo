@@ -26,9 +26,11 @@ export const load: LayoutLoad = ({ params }) => {
   }).then((data) => data[0])
 
   const validators = getValidators()
+  const gatewayStatus = getGatewayStatus()
+  const currentEpoch = gatewayStatus.then((status) => status.ledger_state.epoch)
 
-  const currentEpoch = getGatewayStatus().then(
-    (status) => status.ledger_state.epoch
+  const stateVersion = gatewayStatus.then(
+    (status) => status.ledger_state.state_version
   )
 
   const stakeInfo = Promise.all([validators, accountData, currentEpoch])
@@ -160,6 +162,7 @@ export const load: LayoutLoad = ({ params }) => {
   return {
     address: params.account,
     promises: {
+      stateVersion,
       accountData,
       stakeInfo,
       poolUnits

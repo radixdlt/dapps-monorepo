@@ -10,6 +10,10 @@
 </script>
 
 <NonFungibleTokensPage
+  accountAddress={data.promises.accountData.then(
+    ({ accountAddress }) => accountAddress
+  )}
+  stateVersion={data.promises.stateVersion}
   nonFungibleResources={data.promises.accountData.then(
     ({ nonFungible }) => nonFungible
   )}
