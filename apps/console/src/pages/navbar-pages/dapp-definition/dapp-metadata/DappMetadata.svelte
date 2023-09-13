@@ -8,12 +8,11 @@
 </script>
 
 <script lang="ts">
-  import Button from '@components/_base/button/Button.svelte'
+  import Button from '@components/_base/button/ButtonNew.svelte'
   import { writable } from 'svelte/store'
   import type { Account } from '@stores'
   import { query } from '@api/query'
   import SelectAccount from './rows/SelectAccount.svelte'
-  import SetAsDApp from './rows/SetAsDApp.svelte'
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
   import {
@@ -25,15 +24,14 @@
   import { XRD_NAME } from '@constants'
   import Text from '@components/_base/text/Text.svelte'
   import StackList from '@components/stack-list/StackList.svelte'
-  import Entity, {
-    type EntityT
-  } from './rows/linking-metadata-list/Entity.svelte'
+  import type { EntityT } from './rows/linking-metadata-list/Entity.svelte'
   import Website, {
     type WebsiteT
   } from './rows/linking-metadata-list/Website.svelte'
   import Icon from '@components/_base/icon/Icon.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import TrashIcon from '@icons/trash.svg'
+  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
 
   export let accounts: Account[]
 
@@ -150,10 +148,6 @@
 
   let XRDAmount: string | undefined
 
-  let showNotEnoughXRDError = false
-
-  $: if (XRDAmount) showNotEnoughXRDError = !XRDAmount || Number(XRDAmount) < 10
-
   $: if ($selectedAccount)
     XRDAmount = getFungibleResource(XRD_NAME)($selectedAccount.resources)?.value
 
@@ -198,17 +192,25 @@
     Select an Account
   </div>
 
-  <div>
+  <div style:width="32rem">
     <SelectAccount
       accounts={$formattedAccounts}
       bind:selectedAccount={$selectedAccount}
-      bind:showError={showNotEnoughXRDError}
     />
 
-    <SetAsDApp
-      isDappDefinition={$isDappDefinition}
-      bind:isChecked={$setAsDAppDefinition}
-    />
+    <div class="dapp-definition-checkbox">
+      <Checkbox
+        bind:checked={$isDappDefinition}
+        on:checked={() => {
+          $setAsDAppDefinition = true
+        }}
+        on:unchecked={() => {
+          $setAsDAppDefinition = false
+        }}
+      >
+        This account is a dApp definition
+      </Checkbox>
+    </div>
 
     <div
       style:margin-top="var(--space-xl)"
@@ -238,7 +240,7 @@
 
   <div class="left-column-text" class:faded={$faded}>Linked Websites</div>
 
-  <div class:faded={$faded}>
+  <div class:faded={$faded} style:width="32rem">
     <Text size="small" cx={{ marginBottom: '1rem' }}>
       Configuring your dApp Definition with the websites your dApp uses is a
       requirement of the Radix Wallet so that it it can catch “fake” websites
@@ -250,11 +252,7 @@
       on:add={() => ($websites = [...$websites, { url: '' }])}
       bind:inputs={$websites}
     >
-      <Website
-        bind:website={$websites[i]}
-        disabled={i < $claimedWebsites.length}
-        faded={$faded}
-      />
+      <Website bind:website={$websites[i]} faded={$faded} />
       <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
         <Text pointer color="link">+ Add a Linked Website</Text>
       </div>
@@ -267,7 +265,8 @@
     </StackList>
   </div>
 
-  <div class="left-column-text" class:faded={$faded}>Linked Entities</div>
+  <!-- TODO: Fix entity linking -->
+  <!-- <div class="left-column-text" class:faded={$faded}>Linked Entities</div>
 
   <div>
     <StackList
@@ -288,10 +287,10 @@
         {/if}
       </div>
     </StackList>
-  </div>
+  </div> -->
 </div>
 <div class="update-button">
-  <Button on:click={update}>
+  <Button on:click={update} size="big">
     {#if $loading}
       <div style:height="60%" style:aspect-ratio="1/1">
         <LoadingSpinner />
@@ -323,5 +322,9 @@
     display: flex;
     justify-content: flex-end;
     margin-top: var(--space-xl);
+  }
+
+  .dapp-definition-checkbox {
+    margin-top: var(--space-md);
   }
 </style>

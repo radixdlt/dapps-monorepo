@@ -5,7 +5,6 @@
   type Validation = $$Generic
 
   export let input: string
-  export let disabled: boolean
   export let placeholder: string
   export let showPopover: boolean
   export let popoverStatus: 'error' | 'success'
@@ -19,7 +18,7 @@
 >
   <div>
     <div class="input">
-      <Input on:input {disabled} type="text" bind:value={input} {placeholder} />
+      <Input on:input type="text" bind:value={input} {placeholder} />
     </div>
   </div>
 
