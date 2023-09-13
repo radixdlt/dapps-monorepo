@@ -66,6 +66,8 @@ const calculateUptimePercentage = ({
   proposals_made,
   proposals_missed
 }: ValidatorUptimeCollectionItem) => {
+  if (!proposals_made || !proposals_missed) return 0
+
   let total_proposals = proposals_made! + proposals_missed!
 
   let uptimePercentage = 100
@@ -91,7 +93,7 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
       ONE_YEAR_MS
     ],
     map(dateMsAgo),
-    (timestamps) => [...timestamps, 1], // 1 is the first epoch
+    (timestamps) => [...timestamps, 1], // 1 is the first state version
     map(getValidatorUptimeSinceDate(validators.map(({ address }) => address))),
     (items) => Promise.all(items),
     andThen(map(map(calculateUptimePercentage))),

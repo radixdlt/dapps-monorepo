@@ -146,13 +146,13 @@ export const getValidatorUptime = (
         from !== undefined
           ? from instanceof Date
             ? { timestamp: from }
-            : { epoch: from }
+            : { state_version: from }
           : undefined,
       at_ledger_state:
         to !== undefined
           ? to instanceof Date
             ? { timestamp: to }
-            : { epoch: to }
+            : { state_version: to }
           : undefined
     }
   })
