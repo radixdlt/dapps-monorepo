@@ -1,37 +1,13 @@
 import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
 import type { _Entity } from '.'
-import {
-  getStandardMetadataEntry,
-  getStringMetadata,
-  getVectorMetadata
-} from '../metadata'
+import { transformMetadata } from '../metadata'
 
-export type Package = _Entity<
-  'package',
-  [['name', string], ['description', string]]
->
+export type Package = _Entity<'package', ['name', 'description']>
 
 export let transformPackage = (
   entity: StateEntityDetailsVaultResponseItem
 ): Package => ({
   type: 'package',
   address: entity.address,
-  metadata: {
-    standard: {
-      name: getStandardMetadataEntry(
-        'name',
-        getStringMetadata
-      )(entity.metadata),
-      description: getStandardMetadataEntry(
-        'description',
-        getStringMetadata
-      )(entity.metadata),
-      tags: getStandardMetadataEntry('tags', getVectorMetadata)(entity.metadata)
-    },
-    nonStandard: (entity.metadata?.items || []).filter(
-      ({ key }) => key !== 'name' && key !== 'tags' && key !== 'description'
-    ),
-    explicit: entity.explicit_metadata?.items ?? [],
-    all: entity.metadata?.items ?? []
-  }
+  metadata: transformMetadata(entity, ['name', 'description', 'tags'])
 })

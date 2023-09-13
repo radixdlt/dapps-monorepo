@@ -1,7 +1,7 @@
 import { getSingleEntityDetails } from '@api/gateway'
 import type { LayoutLoad } from './$types'
 import { getAssociatedDapps } from '../../utils'
-import { getMetadata } from '@api/utils/entities/validator'
+import { transformMetadata } from '@api/utils/metadata'
 
 export const prerender = false
 
@@ -12,7 +12,7 @@ export const load: LayoutLoad = ({ params }) => {
     address: params.validator,
     promises: {
       entity,
-      metadata: entity.then((e) => e.metadata).then(getMetadata),
+      metadata: entity.then((entity) => transformMetadata(entity, []).all),
       associatedDapps: getAssociatedDapps(entity)
     }
   }

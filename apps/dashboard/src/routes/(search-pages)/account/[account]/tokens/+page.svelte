@@ -12,7 +12,7 @@
     address,
     value: amount,
     metadata: {
-      standard: { symbol, iconUrl, tags }
+      standard: { symbol, icon_url, tags }
     }
   }: FungibleResource): Token => ({
     linksTo: `/resource/${address}`,
@@ -20,7 +20,7 @@
     amount,
     symbol: symbol?.value,
     address,
-    iconUrl: iconUrl?.value
+    iconUrl: icon_url?.value.href
   })
 
   $: xrdAddress = $xrdAddressStore

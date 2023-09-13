@@ -116,8 +116,12 @@ export const getFormattedAccounts = async (accounts: Account[]) => {
         name: getStringMetadata('name')(metadata),
         description: getStringMetadata('description')(metadata),
         domain: getStringMetadata('domain')(metadata),
-        claimedWebsites: getVectorMetadata('claimed_websites')(metadata),
-        claimedEntities: getVectorMetadata('claimed_entities')(metadata)
+        claimedWebsites: getVectorMetadata('claimed_websites')(
+          metadata
+        ) as string[],
+        claimedEntities: getVectorMetadata('claimed_entities')(
+          metadata
+        ) as string[]
       }
     })
   )

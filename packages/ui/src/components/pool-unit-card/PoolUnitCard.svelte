@@ -7,12 +7,12 @@
   export let poolUnit: {
     poolUnit: {
       name?: string
-      icon?: string
+      icon?: URL
       address: string
     }
     poolTokens: {
       name?: string
-      icon?: string
+      icon?: URL
       amount: BigNumber
     }[]
   }
@@ -21,7 +21,7 @@
 <div class="pool-unit-card">
   <div class="pool-unit-resource row card">
     <div class="icon-and-name">
-      <NftImage url={poolUnit.poolUnit.icon} />
+      <NftImage url={poolUnit.poolUnit.icon?.href} />
       <div class="name-and-address">
         <div class="bold-text">
           {poolUnit.poolUnit.name}
@@ -38,7 +38,7 @@
   {#each poolUnit.poolTokens as token}
     <div class="pool-token row card">
       <div class="icon-and-name">
-        <TokenIcon iconUrl={token.icon} />
+        <TokenIcon iconUrl={token.icon?.href} />
         {token.name}
       </div>
       <div class="bold-text">{token.amount.toString()}</div>
