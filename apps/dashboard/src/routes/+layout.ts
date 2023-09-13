@@ -1,4 +1,4 @@
-import { PUBLIC_APP_ENV } from "$env/static/public"
+import { PUBLIC_APP_ENV } from '$env/static/public'
 
 export const prerender = true
 
