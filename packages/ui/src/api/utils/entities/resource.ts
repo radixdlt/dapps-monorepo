@@ -38,6 +38,7 @@ type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
 > & {
   resourceType: T
   totalSupply: string
+  divisibility: number
   metadata: {
     explicit: EntityMetadataItem[]
   }
@@ -167,6 +168,9 @@ export const transformNonFungibleResource = (
     totalSupply: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).total_supply,
+    divisibility: (
+      entity.details as StateEntityDetailsResponseFungibleResourceDetails
+    ).divisibility,
     metadata: {
       standard: {
         name: getStandardMetadataEntry(
@@ -213,6 +217,9 @@ export const transformFungibleResource = (
     totalSupply: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).total_supply,
+    divisibility: (
+      entity.details as StateEntityDetailsResponseFungibleResourceDetails
+    ).divisibility,
     metadata: {
       standard: {
         name: getStandardMetadataEntry(
