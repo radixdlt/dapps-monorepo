@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import type { _Entity } from '.'
 import { getStandardMetadataEntry, getStringMetadata } from '../metadata'
 import { getEntityDetails, getSingleEntityDetails } from '@api/gateway'
-import { getPoolTokens, transformPool } from './pool'
+import { transformPool } from './pool'
 import { transformFungibleResource, type FungibleResource } from './resource'
 
 export type PoolUnit = Omit<FungibleResource, 'type'> &

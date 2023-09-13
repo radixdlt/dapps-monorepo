@@ -56,13 +56,3 @@ export const transformPool = (
     all: entity.metadata.items
   }
 })
-
-export const getPoolTokens = async (pool: Pool) => {
-  if (!pool.metadata.standard.pool_unit) return
-
-  const poolResources = await getEntityDetails(
-    pool.metadata.standard.pool_resources?.value || []
-  ).then(map(transformFungibleResource))
-
-  return poolResources
-}
