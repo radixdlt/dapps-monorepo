@@ -21,7 +21,7 @@
   <SearchPage
     title="Transaction"
     address={data ? data.address : ''}
-    activeTab={data.tab}
+    activeTab={data.pageName}
     menuItems={[
       [
         { id: 'details', label: 'Details' },

@@ -30,7 +30,7 @@
         }
       ]
     ]}
-    activeTab={data.tab}
+    activeTab={data.pageName}
     on:navigate={({ detail }) => detail}
   >
     <slot />

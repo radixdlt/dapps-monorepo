@@ -18,7 +18,7 @@
     --border="var(--theme-border-separator)"
     title="Account"
     address={data.address}
-    activeTab={data.tab}
+    activeTab={data.pageName}
     menuItems={[
       [
         { id: 'tokens', label: 'Tokens' },
