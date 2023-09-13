@@ -1,8 +1,6 @@
 import { getSingleEntityDetails } from '@api/gateway'
 import type { LayoutLoad } from './$types'
-import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import { getDappDefinitionData } from '../../utils'
-import { map } from 'ramda'
+import { getAssociatedDapps } from '../../utils'
 import { transformComponent } from '@api/utils/entities/component'
 
 export const prerender = false
@@ -15,9 +13,7 @@ export const load: LayoutLoad = ({ params }) => {
     promises: {
       entity,
       component: entity.then(transformComponent),
-      associatedDapps: entity
-        .then(getLinkedDappDefinitions)
-        .then(map(getDappDefinitionData))
+      associatedDapps: getAssociatedDapps(entity)
     }
   }
 }
