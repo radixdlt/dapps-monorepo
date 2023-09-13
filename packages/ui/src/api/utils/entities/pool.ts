@@ -5,6 +5,9 @@ import {
   getStringMetadata,
   getVectorMetadata
 } from '../metadata'
+import { getEntityDetails } from '@api/gateway'
+import { map } from 'ramda'
+import { transformFungibleResource } from './resource'
 
 export type Pool = _Entity<
   'pool',

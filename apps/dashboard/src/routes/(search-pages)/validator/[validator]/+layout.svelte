@@ -1,7 +1,6 @@
 <script lang="ts">
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
-  import { goto } from '$app/navigation'
   import type { LayoutData } from './$types'
 
   export let data: LayoutData
@@ -9,10 +8,6 @@
   let notFound = false
 
   data.promises.entity.catch(() => (notFound = true))
-
-  let activeTab = 'summary'
-
-  $: goto(`/validator/${data.address}/${activeTab}`)
 
   data.promises.entity.catch(() => (notFound = true))
 </script>
@@ -35,8 +30,8 @@
         }
       ]
     ]}
-    {activeTab}
-    on:navigate={({ detail }) => (activeTab = detail)}
+    activeTab={data.pageName}
+    on:navigate={({ detail }) => detail}
   >
     <slot />
   </SearchPage>

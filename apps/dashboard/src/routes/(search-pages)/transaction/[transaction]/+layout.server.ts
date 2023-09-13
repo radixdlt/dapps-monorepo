@@ -39,7 +39,6 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
 
   return {
     address: params.transaction,
-    activeTab: route.id.split('/').pop(),
     promises: {
       tx,
       manifest

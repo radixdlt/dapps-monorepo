@@ -5,8 +5,11 @@ import BigNumber from 'bignumber.js'
 import { Buffer } from 'buffer'
 import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
-import { pipe } from 'ramda'
+import { andThen, otherwise, pipe } from 'ramda'
 import { XRD_SYMBOL } from '@constants'
+import { getSingleEntityDetails } from '@api/gateway'
+import { getStringMetadata } from '@api/utils/metadata'
+import { isStakeUnit } from '@api/utils/entities/stake-unit'
 
 const XRD_DECIMALS = 18
 
@@ -72,18 +75,23 @@ export const getAddressPrefix = (address: string): AddressPrefix => {
   return parts[0] as AddressPrefix
 }
 
+const getResourceUrl = async (address: string) =>
+  isNFTAddress(address)
+    ? `/nft/${encodeURIComponent(address)}`
+    : (await isStakeUnit(address))
+    ? `/stake_unit/${address}`
+    : `/resource/${address}`
+
 export const getNFTAddress = (resourceAddress: string, nftID: string) =>
   `${shortenAddress(resourceAddress)}:${nftID}`
 
 export const isNFTAddress = (address: string) =>
   getAddressPrefix(address) === 'resource' && address.split(':').length > 1
 
-export const addressToRoute = (address: string) =>
+export const addressToRoute = async (address: string) =>
   ({
     account: `/account/${address}`,
-    resource: isNFTAddress(address)
-      ? `/nft/${encodeURIComponent(address)}`
-      : `/resource/${address}`,
+    resource: await getResourceUrl(address),
     package: `/package/${address}`,
     component: `/component/${address}`,
     txid: `/transaction/${address}`,

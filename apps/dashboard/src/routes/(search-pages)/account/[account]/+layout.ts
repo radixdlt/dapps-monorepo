@@ -1,22 +1,16 @@
 import { getAccountData } from '@api/utils/entities/resource'
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
-import { getPoolUnits, type PoolUnit } from '@api/utils/entities/pool-unit'
+import { getPoolUnitData, getPoolUnits } from '@api/utils/entities/pool-unit'
 import {
   getStakedInfo,
   getUnstakeAndClaimInfo,
   type StakeInfo
 } from '@api/utils/staking'
 import BigNumber from 'bignumber.js'
-import {
-  getEntityDetails,
-  getGatewayStatus,
-  getSingleEntityDetails
-} from '@api/gateway'
+import { getGatewayStatus } from '@api/gateway'
 import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/proxy+layout'
 import { filter, map } from 'ramda'
-import { transformPool } from '@api/utils/entities/pool'
-import { transformFungibleResource } from '@api/utils/entities/resource'
 
 export const prerender = false
 
@@ -108,57 +102,6 @@ export const load: LayoutLoad = ({ params }) => {
         })
       )
     })
-
-  const getPoolUnitData = async (
-    poolUnit: PoolUnit
-  ): Promise<
-    | {
-        poolUnit: {
-          name?: string
-          icon?: string
-          address: string
-        }
-        poolTokens: {
-          name?: string
-          icon?: string
-          amount: BigNumber
-        }[]
-      }
-    | undefined
-  > => {
-    const poolAddress = poolUnit.metadata.standard.pool?.value
-
-    if (!poolAddress) return
-
-    const poolEntityDetails = await getSingleEntityDetails(poolAddress)
-    const pool = transformPool(poolEntityDetails)
-
-    if (!pool.metadata.standard.pool_unit) return
-
-    const poolResources = await getEntityDetails(
-      pool.metadata.standard.pool_resources?.value || []
-    ).then((resources) =>
-      resources.map((resource, index) =>
-        transformFungibleResource(
-          resource,
-          poolEntityDetails.fungible_resources.items[index]
-        )
-      )
-    )
-
-    return {
-      poolUnit: {
-        address: poolUnit.address,
-        name: poolUnit.metadata.standard.name?.value,
-        icon: poolUnit.metadata.standard.iconUrl?.value
-      },
-      poolTokens: poolResources.map((resource) => ({
-        name: resource.metadata.standard.name?.value,
-        icon: resource.metadata.standard.iconUrl?.value,
-        amount: new BigNumber(resource.value)
-      }))
-    }
-  }
 
   const poolUnits = accountData
     .then(({ fungible }) => getPoolUnits(fungible))

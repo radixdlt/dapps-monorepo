@@ -1,23 +1,21 @@
 <script lang="ts">
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
-  import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
+  import type { LayoutData } from './$types'
 
   export let data: LayoutData
 
   let notFound = false
 
-  data.promises.entity.catch(() => (notFound = true))
-
-  data.promises.entity.catch(() => (notFound = true))
+  data.promises.stakeUnit.catch(() => (notFound = true))
 </script>
 
 {#if notFound}
   <NotFound />
 {:else}
   <SearchPage
-    title="Component"
+    title="Radix Network Liquid Stake Units"
     address={data.address}
     menuItems={[
       [
@@ -28,10 +26,6 @@
         {
           id: 'metadata',
           label: 'Metadata'
-        },
-        {
-          id: 'recent-transactions',
-          label: 'Recent Transactions'
         }
       ]
     ]}
