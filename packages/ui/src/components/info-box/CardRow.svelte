@@ -7,8 +7,8 @@
   export let title: string
   export let cardInfo: { iconUrl: string; text: string; address: string }[]
 
-  const goToAddress = (address: string) => () => {
-    goto(addressToRoute(address))
+  const goToAddress = (address: string) => async () => {
+    goto(await addressToRoute(address))
   }
 </script>
 
