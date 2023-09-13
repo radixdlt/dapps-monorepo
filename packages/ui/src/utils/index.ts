@@ -8,7 +8,7 @@ import { getContext, setContext } from 'svelte'
 import { andThen, otherwise, pipe } from 'ramda'
 import { XRD_SYMBOL } from '@constants'
 import { getSingleEntityDetails } from '@api/gateway'
-import { getStringMetadata } from '@api/utils/metadata'
+import { getStringMetadataValue } from '@api/utils/metadata'
 import { isStakeUnit } from '@api/utils/entities/stake-unit'
 
 const XRD_DECIMALS = 18

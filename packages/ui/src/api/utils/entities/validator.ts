@@ -1,10 +1,9 @@
 import type {
-  EntityMetadataCollection,
   StateEntityDetailsResponseFungibleResourceDetails,
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { getEnumStringMetadata, getStandardMetadataEntry } from '../metadata'
+import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import {
   getEntityDetails,
@@ -16,14 +15,7 @@ import { andThen, map, pipe } from 'ramda'
 
 export type Validator = _Entity<
   'validator',
-  [
-    ['name', string],
-    ['symbol', string],
-    ['iconUrl', string],
-    ['description', string],
-    ['tags', string[]],
-    ['website', string]
-  ]
+  ['name', 'symbol', 'icon_url', 'description', 'website']
 > & {
   ownerAddress: string
   totalStakeInXRD: string
@@ -110,21 +102,6 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
     )
   )()
 
-export const getMetadata = (metadata?: EntityMetadataCollection) => ({
-  standard: {
-    name: getStandardMetadataEntry('name', getEnumStringMetadata)(metadata),
-    website: getStandardMetadataEntry(
-      'website',
-      getEnumStringMetadata
-    )(metadata)
-  },
-  nonStandard: ((metadata?.items as any[]) || []).filter(
-    ({ key }) => key !== 'name' && key !== 'url'
-  ),
-  all: metadata?.items ?? [],
-  explicit: []
-})
-
 export const transformValidatorResponse = async ({
   aggregatedEntities,
   ledger_state: { state_version }
@@ -161,7 +138,14 @@ export const transformValidatorResponse = async ({
       ).total_supply,
       totalStakeInXRD: validator.stake_vault.balance,
 
-      metadata: getMetadata(validator.metadata),
+      metadata: transformMetadata(validator, [
+        'name',
+        'symbol',
+        'icon_url',
+        'description',
+        'tags',
+        'website'
+      ]),
 
       uptimePercentages: uptimes[i],
       ownerAddress: '',

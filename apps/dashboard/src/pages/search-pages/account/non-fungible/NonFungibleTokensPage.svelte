@@ -80,7 +80,7 @@
       data={{
         name: resource.metadata.standard.name?.value,
         address: resource.address,
-        imageUrl: resource.metadata.standard.iconUrl?.value,
+        imageUrl: resource.metadata.standard.icon_url?.value.href,
         count: ownedNonFungibles,
         tags: resource.metadata.standard.tags?.value,
         totalCount: Number(resource.totalSupply)

@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js'
 import type { _Entity } from '.'
-import { getStandardMetadataEntry, getStringMetadata } from '../metadata'
+import { getMetadataItem, transformMetadata } from '../metadata'
 import { getEntityDetails, getSingleEntityDetails } from '@api/gateway'
 import { transformPool } from './pool'
 import { transformFungibleResource, type FungibleResource } from './resource'
 
 export type PoolUnit = Omit<FungibleResource, 'type'> &
-  _Entity<'poolUnit', [['pool', string]]>
+  _Entity<'poolUnit', ['pool']>
 
 const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   ...resource,
@@ -15,16 +15,20 @@ const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
     ...resource.metadata,
     standard: {
       ...resource.metadata.standard,
-      pool: getStandardMetadataEntry(
-        'pool',
-        getStringMetadata
-      )({ items: resource.metadata.all })
-    } as any // svelte-check complains otherwise
+      ...transformMetadata(
+        {
+          metadata: {
+            items: resource.metadata.all
+          }
+        },
+        ['pool']
+      ).standard
+    }
   }
 })
 
 export const isPoolUnit = (resource: FungibleResource) =>
-  getStringMetadata('pool')({ items: resource.metadata.all }) !== ''
+  !!getMetadataItem('pool')({ items: resource.metadata.all })
 
 export const getPoolUnits = (resources: FungibleResource[]) =>
   resources.filter(isPoolUnit).map(resourceToPoolUnit)
@@ -35,12 +39,12 @@ export const getPoolUnitData = async (
   | {
       poolUnit: {
         name?: string
-        icon?: string
+        icon?: URL
         address: string
       }
       poolTokens: {
         name?: string
-        icon?: string
+        icon?: URL
         amount: BigNumber
       }[]
     }
@@ -70,11 +74,11 @@ export const getPoolUnitData = async (
     poolUnit: {
       address: poolUnit.address,
       name: poolUnit.metadata.standard.name?.value,
-      icon: poolUnit.metadata.standard.iconUrl?.value
+      icon: poolUnit.metadata.standard.icon_url?.value
     },
     poolTokens: poolResources.map((resource) => ({
       name: resource.metadata.standard.name?.value,
-      icon: resource.metadata.standard.iconUrl?.value,
+      icon: resource.metadata.standard.icon_url?.value,
       amount: new BigNumber(resource.value)
     }))
   }

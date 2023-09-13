@@ -4,16 +4,9 @@ import type {
   StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import {
-  getStandardMetadataEntry,
-  getStringMetadata,
-  getVectorMetadata
-} from '../metadata'
+import { transformMetadata } from '../metadata'
 
-export type Component = _Entity<
-  'component',
-  [['name', string], ['description', string]]
-> & {
+export type Component = _Entity<'component', ['name', 'description']> & {
   packageAddress: string
   blueprintName: string
   royalty: BigNumber
@@ -24,24 +17,7 @@ export const transformComponent = (
 ): Component => ({
   type: 'component',
   address: entity.address,
-  metadata: {
-    standard: {
-      name: getStandardMetadataEntry(
-        'name',
-        getStringMetadata
-      )(entity.metadata),
-      description: getStandardMetadataEntry(
-        'description',
-        getStringMetadata
-      )(entity.metadata),
-      tags: getStandardMetadataEntry('tags', getVectorMetadata)(entity.metadata)
-    },
-    nonStandard: (entity.metadata?.items || []).filter(
-      ({ key }) => key !== 'name' && key !== 'tags' && key !== 'description'
-    ),
-    explicit: entity.explicit_metadata?.items ?? [],
-    all: entity.metadata?.items ?? []
-  },
+  metadata: transformMetadata(entity, ['name', 'description', 'tags']),
   packageAddress:
     (entity.details as StateEntityDetailsResponseComponentDetails)!
       .package_address!,

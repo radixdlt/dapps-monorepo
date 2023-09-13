@@ -19,22 +19,12 @@ import type {
 import { andThen, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
-import {
-  getStandardMetadataEntry,
-  getStringMetadata,
-  getVectorMetadata
-} from '../metadata'
+import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
   'resource',
-  [
-    ['name', string],
-    ['symbol', string],
-    ['iconUrl', string],
-    ['description', string],
-    ['tags', string[]]
-  ]
+  ['name', 'symbol', 'icon_url', 'description', 'tags']
 > & {
   resourceType: T
   totalSupply: string
@@ -171,35 +161,13 @@ export const transformNonFungibleResource = (
     divisibility: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).divisibility,
-    metadata: {
-      standard: {
-        name: getStandardMetadataEntry(
-          'name',
-          getStringMetadata
-        )(entity.metadata),
-        description: getStandardMetadataEntry(
-          'description',
-          getStringMetadata
-        )(entity.metadata),
-        iconUrl: getStandardMetadataEntry(
-          'icon_url',
-          getStringMetadata
-        )(entity.metadata),
-        tags: getStandardMetadataEntry(
-          'tags',
-          getVectorMetadata
-        )(entity.metadata)
-      },
-      nonStandard: (entity.metadata?.items || []).filter(
-        ({ key }) =>
-          key !== 'name' &&
-          key !== 'icon_url' &&
-          key !== 'tags' &&
-          key !== 'description'
-      ),
-      explicit: entity.explicit_metadata?.items ?? [],
-      all: entity.metadata?.items ?? []
-    }
+    metadata: transformMetadata(entity, [
+      'name',
+      'symbol',
+      'icon_url',
+      'description',
+      'tags'
+    ])
   } as const)
 
 export const transformFungibleResource = (
@@ -220,40 +188,13 @@ export const transformFungibleResource = (
     divisibility: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).divisibility,
-    metadata: {
-      standard: {
-        name: getStandardMetadataEntry(
-          'name',
-          getStringMetadata
-        )(entity.metadata),
-        symbol: getStandardMetadataEntry(
-          'symbol',
-          getStringMetadata
-        )(entity.metadata),
-        iconUrl: getStandardMetadataEntry(
-          'icon_url',
-          getStringMetadata
-        )(entity.metadata),
-        description: getStandardMetadataEntry(
-          'description',
-          getStringMetadata
-        )(entity.metadata),
-        tags: getStandardMetadataEntry(
-          'tags',
-          getVectorMetadata
-        )(entity.metadata)
-      },
-      nonStandard: ((entity.metadata?.items as any[]) || []).filter(
-        ({ key }) =>
-          key !== 'name' &&
-          key !== 'symbol' &&
-          key !== 'icon_url' &&
-          key !== 'description' &&
-          key !== 'tags'
-      ),
-      explicit: entity.explicit_metadata?.items ?? [],
-      all: entity.metadata?.items ?? []
-    }
+    metadata: transformMetadata(entity, [
+      'name',
+      'symbol',
+      'icon_url',
+      'description',
+      'tags'
+    ])
   } as const)
 
 export type TransformedNonFungible = {

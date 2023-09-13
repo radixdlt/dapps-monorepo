@@ -21,13 +21,13 @@
     {
       poolUnit: {
         name?: string
-        icon?: string
+        icon?: URL
         address: string
       }
       poolTokens:
         | {
             name?: string
-            icon?: string
+            icon?: URL
             amount: BigNumber
           }[]
     }[]
