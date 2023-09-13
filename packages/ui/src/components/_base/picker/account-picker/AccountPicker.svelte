@@ -4,7 +4,6 @@
   import AccountPickerExpandIcon from '@icons/account-picker-expand.svg'
   import { accounts, type Account as AccountType } from '@stores'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import Radio from '@components/_base/radio/Radio.svelte'
 
   export let selected: AccountType
 
@@ -17,7 +16,9 @@
 <Picker
   {options}
   selectionText="Select Account"
-  on:selected={(e) => (selected = e.detail.value)}
+  on:selected={(e) => {
+    selected = e.detail.value
+  }}
 >
   <svelte:fragment slot="selected" let:open let:selected>
     <Account account={selected.value}>

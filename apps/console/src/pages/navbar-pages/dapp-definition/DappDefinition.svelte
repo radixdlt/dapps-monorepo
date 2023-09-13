@@ -2,7 +2,6 @@
   import type { Account } from '@stores'
   import DappMetadata from './dapp-metadata/DappMetadata.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import Box from '@components/_base/box/Box.svelte'
 
   export let accounts: Account[]
 </script>
@@ -15,6 +14,14 @@
   an account in the Radix Wallet, here you can set it as a dApp Definition and
   configure it.
 </Text>
-<Box my="medium" bgColor="surface">
+<div class="content">
   <DappMetadata {accounts} />
-</Box>
+</div>
+
+<style>
+  .content {
+    background: var(--theme-surface-2);
+    padding: var(--space-xl);
+    margin-top: var(--space-xl);
+  }
+</style>
