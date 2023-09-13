@@ -5,6 +5,9 @@ import {
   getStringMetadata,
   getVectorMetadata
 } from '../metadata'
+import { getEntityDetails } from '@api/gateway'
+import { map } from 'ramda'
+import { transformFungibleResource } from './resource'
 
 export type Pool = _Entity<
   'pool',
@@ -53,3 +56,13 @@ export const transformPool = (
     all: entity.metadata.items
   }
 })
+
+export const getPoolTokens = async (pool: Pool) => {
+  if (!pool.metadata.standard.pool_unit) return
+
+  const poolResources = await getEntityDetails(
+    pool.metadata.standard.pool_resources?.value || []
+  ).then(map(transformFungibleResource))
+
+  return poolResources
+}
