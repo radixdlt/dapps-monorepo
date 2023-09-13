@@ -5,34 +5,20 @@
 
   export let entity: Promise<Entity>
 
-  $: iconUrl = entity.then((entity) =>
-    entity.type === 'resource' || entity.type === 'validator'
-      ? entity.metadata.standard.iconUrl?.value
-      : undefined
+  $: iconUrl = entity.then(
+    (entity) => (entity.metadata.standard as any).iconUrl?.value as string
   )
 
-  $: name = entity.then((entity) =>
-    entity.type === 'resource' ||
-    entity.type === 'validator' ||
-    entity.type === 'package' ||
-    entity.type === 'component'
-      ? entity.metadata.standard.name?.value
-      : undefined
+  $: name = entity.then(
+    (entity) => (entity.metadata.standard as any).name?.value as string
   )
 
-  $: description = entity.then((entity) =>
-    entity.type === 'resource' ||
-    entity.type === 'validator' ||
-    entity.type === 'package' ||
-    entity.type === 'component'
-      ? entity.metadata.standard.description?.value
-      : undefined
+  $: description = entity.then(
+    (entity) => (entity.metadata.standard as any).description?.value as string
   )
 
-  $: symbol = entity.then((entity) =>
-    entity.type === 'resource'
-      ? entity.metadata.standard.symbol?.value
-      : undefined
+  $: symbol = entity.then(
+    (entity) => (entity.metadata.standard as any).symbol?.value as string
   )
 </script>
 

@@ -7,11 +7,17 @@
   export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata']
   export let nonMetadataItems: ComponentProps<SummaryMetadata>['nonMetadataItems']
   export let associatedDapps: ComponentProps<SummaryMetadata>['associatedDapps']
+  export let omittedKeys: ComponentProps<SummaryMetadata>['omittedKeys'] = []
 </script>
 
 <div class="summary-tab">
   <SummaryTabHeading {entity} />
-  <SummaryMetadata {standardMetadata} {nonMetadataItems} {associatedDapps} />
+  <SummaryMetadata
+    {standardMetadata}
+    {nonMetadataItems}
+    {associatedDapps}
+    {omittedKeys}
+  />
 </div>
 
 <style>
