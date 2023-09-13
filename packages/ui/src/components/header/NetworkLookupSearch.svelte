@@ -3,7 +3,7 @@
   import Search from '@components/_base/search/Search.svelte'
   import { addressToRoute } from '../../utils'
 
-  const search = (address: string) => goto(addressToRoute(address))
+  const search = async (address: string) => goto(await addressToRoute(address))
 </script>
 
 <Search

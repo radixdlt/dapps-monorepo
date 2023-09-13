@@ -9,10 +9,10 @@
   export let autoShorten = false
   export let preventNavigation = false
 
-  const handleAddressClick = () => {
+  const handleAddressClick = async () => {
     if (preventNavigation) return
 
-    goto(addressToRoute(value))
+    goto(await addressToRoute(value))
   }
 </script>
 
