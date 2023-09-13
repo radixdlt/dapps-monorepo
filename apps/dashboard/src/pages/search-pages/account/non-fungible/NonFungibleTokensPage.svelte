@@ -55,9 +55,22 @@
       isLoading = false
     })
   }
+
+  const filterOutClaimNfts = (
+    nonFungibleResources: Promise<TransformedNonFungible[]>
+  ) => {
+    return nonFungibleResources.then((nonFungibleResources) => {
+      return nonFungibleResources.filter(
+        ({ resource }) =>
+          !resource.metadata.nonStandard.find(
+            (metadata) => metadata.key === 'validator'
+          )
+      )
+    })
+  }
 </script>
 
-{#await nonFungibleResources}
+{#await filterOutClaimNfts(nonFungibleResources)}
   {#each Array(3) as _}
     <NFTAccordion data={new Promise(() => {})} />
   {/each}
