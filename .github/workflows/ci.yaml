@@ -29,7 +29,7 @@ on:
 
 env:
   active_network: 'stokenet'
-  release_network: 'rcnet-v3'
+  release_network: 'mainnet'
 
 permissions:
   id-token: write
