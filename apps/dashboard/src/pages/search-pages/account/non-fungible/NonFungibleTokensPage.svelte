@@ -4,11 +4,9 @@
     getNonFungiblesIdsPageWithData,
     type GetNonFungibleIdsPageWithDataRequest
   } from '@api/gateway'
-  import {
-    transformNft,
-    type TransformedNonFungible,
-    type NonFungible
-  } from '@api/utils/entities/resource'
+  import type { TransformedNonFungible } from '@api/utils/entities/resource'
+  import { transformNft } from '@api/utils/nfts'
+  import type { GeneralNft } from '@api/utils/nfts/general-nft'
   import NFTAccordion from '@components/_base/accordion/NFTAccordion.svelte'
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
@@ -19,7 +17,7 @@
   export let stateVersion: Promise<number>
   export let accountAddress: Promise<string>
 
-  const loadedLaterNfts: Record<string, NonFungible[]> = {}
+  const loadedLaterNfts: Record<string, GeneralNft[]> = {}
   let isLoading = false
 
   let currentCursor: string | null | undefined = null
@@ -48,24 +46,33 @@
       }
       loadedLaterNfts[data.resourceAddress] = [
         ...loadedLaterNfts[data.resourceAddress],
-        ...nftDataResponse.map((singleNftData) =>
-          transformNft(data.resourceAddress, singleNftData)
+        ...nftDataResponse.map(
+          (singleNftData) =>
+            transformNft(data.resourceAddress, singleNftData) as GeneralNft
         )
       ]
       isLoading = false
     })
   }
 
+  type GeneralNonFungibleResource = TransformedNonFungible & {
+    nonFungibles: GeneralNft[]
+  }
+
+  const isClaimNftResource = (
+    resource: TransformedNonFungible
+  ): resource is GeneralNonFungibleResource =>
+    resource.resource.metadata.nonStandard.some(
+      (metadata) => metadata.key === 'validator'
+    )
+
   const filterOutClaimNfts = (
     nonFungibleResources: Promise<TransformedNonFungible[]>
-  ) => {
+  ): Promise<GeneralNonFungibleResource[]> => {
     return nonFungibleResources.then((nonFungibleResources) => {
       return nonFungibleResources.filter(
-        ({ resource }) =>
-          !resource.metadata.nonStandard.find(
-            (metadata) => metadata.key === 'validator'
-          )
-      )
+        (resource) => !isClaimNftResource(resource)
+      ) as GeneralNonFungibleResource[]
     })
   }
 </script>
@@ -89,10 +96,10 @@
       {#await data then [stateVersion, accountAddress]}
         <div bind:clientWidth={width}>
           <div class="nft-cards" class:center={width < 500}>
-            {#each nonFungibles as { address, nftData: { standard: { iconUrl, name } } }}
+            {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
               <NonFungibleTokenCard
-                imgUrl={iconUrl}
-                {name}
+                imgUrl={key_image_url.value.href}
+                name={name.value}
                 {address}
                 on:click={() =>
                   dispatch('click-nft', {
@@ -101,10 +108,10 @@
               />
             {/each}
             {#if loadedLaterNfts[resource.address]}
-              {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { iconUrl, name } } }}
+              {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
                 <NonFungibleTokenCard
-                  imgUrl={iconUrl}
-                  {name}
+                  imgUrl={key_image_url.value.href}
+                  name={name.value}
                   {address}
                   on:click={() =>
                     dispatch('click-nft', {

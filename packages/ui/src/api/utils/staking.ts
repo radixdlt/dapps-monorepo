@@ -2,6 +2,7 @@ import type { Validator } from './entities/validator'
 import type { getAccountData } from './entities/resource'
 import BigNumber from 'bignumber.js'
 import { RET_DECIMAL_PRECISION } from '@constants'
+import type { ClaimNft } from './nfts/claim-nft'
 
 type CommonStakeInfo<T extends string> = {
   type: T
@@ -34,7 +35,7 @@ export const getUnstakeAndClaimInfo =
             validator.unstakeClaimResourceAddress === resource.address
         )
       )
-      .map(({ nonFungibles }) => nonFungibles)
+      .map(({ nonFungibles }) => nonFungibles as ClaimNft[])
       .flat()
 
     let unstaking: UnstakingInfo[] = []
@@ -42,7 +43,7 @@ export const getUnstakeAndClaimInfo =
 
     for (const token of unstakeTokens) {
       const isClaimable = new BigNumber(
-        token.nftData.standard.unstakeData!.claimEpoch
+        token.nftData.standard['claim_epoch'].value
       ).lte(currentEpoch)
 
       const validator = validators.find(
@@ -52,7 +53,7 @@ export const getUnstakeAndClaimInfo =
       )!
 
       const xrdAmount = new BigNumber(
-        token.nftData.standard.unstakeData!.unstakeAmount
+        token.nftData.standard['claim_amount'].value
       ).toFixed(RET_DECIMAL_PRECISION - 1)
 
       if (new BigNumber(xrdAmount).eq(0)) continue
@@ -65,7 +66,7 @@ export const getUnstakeAndClaimInfo =
         account: accountData.accountAddress,
         validator,
         xrdAmount,
-        claimEpoch: token.nftData.standard.unstakeData!.claimEpoch,
+        claimEpoch: token.nftData.standard['claim_epoch'].value,
         stakeUnitsAmount
       }
 

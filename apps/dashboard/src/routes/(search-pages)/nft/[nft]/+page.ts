@@ -1,12 +1,10 @@
 import { getNonFungibleData, getSingleEntityDetails } from '@api/gateway'
 import type { PageLoad } from './$types'
-import {
-  transformNft,
-  transformNonFungibleResource
-} from '@api/utils/entities/resource'
+import { transformNonFungibleResource } from '@api/utils/entities/resource'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import { getDappDefinitionData } from '../../utils'
 import { map } from 'ramda'
+import { transformNft } from '@api/utils/nfts'
 
 export const prerender = false
 

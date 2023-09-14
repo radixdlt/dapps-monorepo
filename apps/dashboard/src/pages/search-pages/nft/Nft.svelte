@@ -1,9 +1,6 @@
 <script lang="ts">
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
-  import type {
-    NonFungible,
-    NonFungibleResource
-  } from '@api/utils/entities/resource'
+  import type { NonFungibleResource } from '@api/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type {
@@ -11,6 +8,7 @@
     MetadataTypedValue
   } from '@radixdlt/babylon-gateway-api-sdk'
   import Resource from '../resource/Resource.svelte'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let nft: Promise<NonFungible>
   export let resource: Promise<NonFungibleResource>
@@ -24,7 +22,7 @@
 
   const metadataItem = (
     key: string,
-    value: string,
+    value: unknown,
     type: MetadataTypedValue['type']
   ) =>
     ({
@@ -43,14 +41,26 @@
     )
   )
 
+  $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
+    nft.type === 'generalNft'
+      ? nft.nftData.standard.key_image_url.value.href
+      : resource.metadata.standard.icon_url?.value?.href
+  )
+
+  $: description = Promise.all([nft, resource]).then(([nft, resource]) =>
+    nft.type === 'generalNft'
+      ? nft.nftData.standard.description?.value
+      : resource.metadata.standard.description?.value
+  )
+
   const imageSize = 'large'
 </script>
 
 <div class="nft-image">
-  {#await nft}
+  {#await imageUrl}
     <NftImage size={imageSize} />
-  {:then { nftData: { standard: { iconUrl } } }}
-    <NftImage url={iconUrl} size={imageSize} />
+  {:then url}
+    <NftImage {url} size={imageSize} />
   {/await}
 </div>
 
@@ -66,9 +76,9 @@
     {/await}
   </h2>
 
-  {#await nft}
+  {#await description}
     <SkeletonLoader count={3} />
-  {:then { nftData: { standard: { description } } }}
+  {:then description}
     {#if description}
       {description}
     {/if}

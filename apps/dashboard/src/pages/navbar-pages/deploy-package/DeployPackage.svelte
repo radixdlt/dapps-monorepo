@@ -19,10 +19,8 @@
   import { getTransactionDetails } from '@api/gateway'
   import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
   import type { ComponentEvents } from 'svelte'
-  import {
-    getAccountData,
-    type NonFungible
-  } from '@api/utils/entities/resource'
+  import { getAccountData } from '@api/utils/entities/resource'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let accounts: Account[]
 

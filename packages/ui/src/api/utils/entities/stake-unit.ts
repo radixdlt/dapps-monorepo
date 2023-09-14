@@ -1,10 +1,6 @@
 import { andThen, otherwise, pipe } from 'ramda'
 import type { _Entity } from '.'
-import {
-  getMetadataItem,
-  getStringMetadataValue,
-  transformMetadata
-} from '../metadata'
+import { getStringMetadata, transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
 import { getSingleEntityDetails } from '@api/gateway'
 
@@ -32,19 +28,8 @@ export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => ({
 
 export const isStakeUnit = pipe(
   getSingleEntityDetails,
-  andThen(
-    pipe(
-      (entity) => getMetadataItem('validator')(entity.metadata)!,
-      getStringMetadataValue
-    )
-  ),
+  andThen((entity) => getStringMetadata('validator')(entity.metadata)),
   andThen(getSingleEntityDetails),
-  andThen(
-    pipe(
-      (entity) => getMetadataItem('pool_unit')(entity.metadata)!,
-      getStringMetadataValue
-    )
-  ),
-  andThen((result) => !!result),
+  andThen((entity) => !!getStringMetadata('pool_unit')(entity.metadata)),
   otherwise(() => false)
 )
