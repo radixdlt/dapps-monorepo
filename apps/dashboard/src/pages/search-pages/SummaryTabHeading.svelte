@@ -6,7 +6,7 @@
   export let entity: Promise<Entity>
 
   $: iconUrl = entity.then(
-    (entity) => (entity.metadata.standard as any).iconUrl?.value as string
+    (entity) => (entity.metadata.standard as any).icon_url?.value as string
   )
 
   $: name = entity.then(
