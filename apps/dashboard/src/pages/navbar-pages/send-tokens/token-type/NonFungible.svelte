@@ -25,7 +25,7 @@
             standard: { name }
           }
         }) => ({
-          label: name.value ?? address.nonFungibleAddress,
+          label: name?.value ?? address.nonFungibleAddress,
           address: address.nonFungibleAddress,
           resourceAddress: address.resourceAddress,
           id: id as string,

@@ -49,7 +49,7 @@
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
-      ? nft.nftData.standard.key_image_url.value.href
+      ? nft.nftData.standard.key_image_url?.value.href
       : resource.metadata.standard.icon_url?.value?.href
   )
 
@@ -75,8 +75,8 @@
     {#await nft}
       <SkeletonLoader />
     {:then { nftData: { standard: { name } } }}
-      {#if name.value}
-        {name.value}
+      {#if name?.value}
+        {name?.value}
       {/if}
     {/await}
   </h2>

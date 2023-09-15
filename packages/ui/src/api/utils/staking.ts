@@ -43,7 +43,7 @@ export const getUnstakeAndClaimInfo =
 
     for (const token of unstakeTokens) {
       const isClaimable = new BigNumber(
-        token.nftData.standard['claim_epoch'].value
+        token.nftData.standard['claim_epoch']!.value
       ).lte(currentEpoch)
 
       const validator = validators.find(
@@ -53,7 +53,7 @@ export const getUnstakeAndClaimInfo =
       )!
 
       const xrdAmount = new BigNumber(
-        token.nftData.standard['claim_amount'].value
+        token.nftData.standard['claim_amount']!.value
       ).toFixed(RET_DECIMAL_PRECISION - 1)
 
       if (new BigNumber(xrdAmount).eq(0)) continue
@@ -66,7 +66,7 @@ export const getUnstakeAndClaimInfo =
         account: accountData.accountAddress,
         validator,
         xrdAmount,
-        claimEpoch: token.nftData.standard['claim_epoch'].value,
+        claimEpoch: token.nftData.standard['claim_epoch']!.value,
         stakeUnitsAmount
       }
 

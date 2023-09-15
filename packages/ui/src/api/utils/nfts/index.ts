@@ -18,7 +18,7 @@ export type _NonFungible<
   address: NonFungibleAddress
   id: string
   nftData: {
-    standard: { [K in StandardNftData[number]]: NftDataItem<K> }
+    standard: Partial<{ [K in StandardNftData[number]]: NftDataItem<K> }>
     nonStandard: NftDataItem[]
     all: NftDataItem[]
   }
