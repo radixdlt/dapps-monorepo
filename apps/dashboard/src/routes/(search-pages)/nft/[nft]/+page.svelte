@@ -15,11 +15,18 @@
 {#if notFound}
   <NotFound />
 {:else}
-  <SearchPage title="Non Fungible" address={data.nftAddress}>
+  {#await data.promises.nftData then nftData}
+    <SearchPage
+      title={nftData.type === 'generalNft'
+        ? 'Non Fungible'
+        : 'Radix Network Stake Claim Non-fungible'}
+      address={data.nftAddress}
+    >
     <NonFungible
       nft={data.promises.nftData}
       resource={data.promises.resource}
       associatedDapps={data.promises.associatedDapps}
     />
   </SearchPage>
+  {/await}
 {/if}

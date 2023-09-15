@@ -35,9 +35,15 @@
       }
     } as EntityMetadataItem)
 
-  $: nonStandardData = nft.then(({ nftData: { nonStandard } }) =>
-    nonStandard.map(({ kind, field_name, value }) =>
-      metadataItem(field_name, value, kind)
+  $: metadata = nft.then(({ id, type, nftData }) =>
+    [metadataItem('id', id, 'String')].concat(
+      type === 'generalNft'
+        ? nftData.nonStandard.map(({ kind, field_name, value }) =>
+            metadataItem(field_name, value, kind)
+          )
+        : Object.values(nftData.standard).map(({ field_name, value, kind }) =>
+            metadataItem(field_name, value, kind)
+          )
     )
   )
 
@@ -68,11 +74,10 @@
   <h2>
     {#await nft}
       <SkeletonLoader />
-    {:then { id, nftData: { standard: { name } } }}
-      {#if name}
-        {name}
+    {:then { nftData: { standard: { name } } }}
+      {#if name.value}
+        {name.value}
       {/if}
-      <span class="subtext">{id}</span>
     {/await}
   </h2>
 
@@ -84,7 +89,7 @@
     {/if}
   {/await}
 
-  <Metadata metadata={nonStandardData} />
+  <Metadata {metadata} />
 </div>
 
 <h2 class="resource-card-header">Belongs To:</h2>
