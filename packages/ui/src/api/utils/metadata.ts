@@ -100,9 +100,8 @@ export const transformMetadata = <T extends (keyof KnownStandardTypes)[]>(
   const explicit: EntityMetadataItem[] = metadata.explicit_metadata?.items ?? []
 
   for (const item of metadata.metadata?.items) {
-    let value = getValue(item.value.typed)
-
     if (isStandardEntry(standardEntries, item)) {
+      let value = getValue(item.value.typed)
       // @ts-ignore
       standard[item.key] = {
         item,
