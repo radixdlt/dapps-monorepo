@@ -22,11 +22,11 @@
         : 'Radix Network Stake Claim Non-fungible'}
       address={data.nftAddress}
     >
-    <NonFungible
-      nft={data.promises.nftData}
-      resource={data.promises.resource}
-      associatedDapps={data.promises.associatedDapps}
-    />
-  </SearchPage>
+      <NonFungible
+        nft={data.promises.nftData}
+        resource={data.promises.resource}
+        associatedDapps={data.promises.associatedDapps}
+      />
+    </SearchPage>
   {/await}
 {/if}
