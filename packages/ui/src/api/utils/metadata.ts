@@ -23,6 +23,7 @@ export type KnownStandardTypes = {
   icon_url: MetadataUrlValueTypeEnum
   website: MetadataUrlValueTypeEnum
   pool: MetadataGlobalAddressValueTypeEnum
+  key_image_url: MetadataUrlValueTypeEnum
 }
 
 export type MetadataTypeToNativeType = {

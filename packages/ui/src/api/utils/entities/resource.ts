@@ -13,14 +13,14 @@ import type {
   StateEntityDetailsOptions,
   StateEntityDetailsResponseFungibleResourceDetails,
   StateEntityDetailsResponseItem,
-  StateEntityDetailsVaultResponseItem,
-  StateNonFungibleDetailsResponseItem
+  StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import { andThen, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
 import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
+import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
   'resource',
@@ -40,67 +40,11 @@ export type FungibleResource = _Resource<'fungible'> & {
 
 export type NonFungibleResource = _Resource<'non-fungible'>
 
-export type NonFungibleAddress<
-  R extends string = string,
-  I extends string = string
-> = {
-  resourceAddress: R
-  id: I
-  nonFungibleAddress: `${R}:${I}`
-}
-
-export type NonFungible = {
-  address: NonFungibleAddress
-  id: string
-  nftData: {
-    standard: {
-      unstakeData?: {
-        claimEpoch: string
-        unstakeAmount: string
-      }
-      name?: string
-      iconUrl?: string
-      description?: string
-    }
-    nonStandard: any[]
-  }
-}
-
 export type Resource = FungibleResource | NonFungibleResource
 
 export type DecoratedAccount = Awaited<
   ReturnType<typeof getAccountData>
 >[number]
-
-export const getUnstakeData = (
-  data: StateNonFungibleDetailsResponseItem['data']
-) => {
-  const { claimEpoch, unstakeAmount } = (
-    data?.programmatic_json as {
-      fields: { kind: string; value: string }[]
-    }
-  ).fields.reduce(
-    (acc, curr) =>
-      curr.kind === 'U64'
-        ? { ...acc, claimEpoch: curr.value }
-        : curr.kind === 'Decimal'
-        ? { ...acc, unstakeAmount: curr.value }
-        : acc,
-    { claimEpoch: '', unstakeAmount: '' }
-  )
-  return {
-    claimEpoch,
-    unstakeAmount
-  }
-}
-
-const getNftData = (
-  data: StateNonFungibleDetailsResponseItem['data'],
-  key: string
-) =>
-  ((data?.programmatic_json as any).fields as any[]).find(
-    ({ field_name }) => field_name === key
-  )?.value
 
 const getNonFungibleIds = async (
   accountAddress: string,
@@ -120,33 +64,6 @@ const getNonFungibleIds = async (
 
   return ids
 }
-
-export const transformNft = (
-  resource_address: NonFungibleResourcesCollectionItemVaultAggregated['resource_address'],
-  { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
-): NonFungible =>
-  ({
-    address: {
-      resourceAddress: resource_address,
-      id: non_fungible_id,
-      nonFungibleAddress: `${resource_address}:${non_fungible_id}`
-    },
-    id: non_fungible_id,
-    nftData: {
-      standard: {
-        unstakeData: getUnstakeData(data) ?? [],
-        name: getNftData(data, 'name'),
-        description: getNftData(data, 'description'),
-        iconUrl: getNftData(data, 'key_image_url')
-      },
-      nonStandard: ((data?.programmatic_json as any).fields as any[]).filter(
-        ({ field_name }) =>
-          field_name !== 'name' &&
-          field_name !== 'description' &&
-          field_name !== 'key_image_url'
-      )
-    }
-  } as const)
 
 export const transformNonFungibleResource = (
   entity: StateEntityDetailsVaultResponseItem

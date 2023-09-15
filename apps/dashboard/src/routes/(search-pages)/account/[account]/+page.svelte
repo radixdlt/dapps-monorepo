@@ -4,5 +4,5 @@
 
   export let data: LayoutData
 
-  goto(`${data.address}/tokens`)
+  goto(`${data.address}/tokens`, { replaceState: true })
 </script>
