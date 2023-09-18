@@ -7,8 +7,12 @@
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { metadataItem } from '../utils'
   import SummaryTab from '../SummaryTab.svelte'
+  import type { PoolUnit } from '@api/utils/entities/pool-unit'
+  import type { ComponentProps } from 'svelte'
 
-  export let resource: Promise<NonFungibleResource | FungibleResource>
+  export let resource: Promise<
+    NonFungibleResource | FungibleResource | PoolUnit
+  >
   export let associatedDapps: Promise<
     {
       address: string
@@ -16,6 +20,8 @@
       iconUrl: string
     }[]
   >
+  export let redeemableTokens: ComponentProps<SummaryTab>['redeemableTokens'] =
+    Promise.resolve(undefined)
 
   let activeTab = 'summary'
 
@@ -32,13 +38,25 @@
     ]
   ]
 
-  $: nonMetadataItems = resource.then(
-    ({ address, totalSupply }) =>
-      [
-        ['address', address, 'GlobalAddress'],
-        ['total supply', totalSupply, 'U64']
-      ] as Parameters<typeof metadataItem>[]
-  )
+  $: nonMetadataItems = resource.then((resource) => {
+    let metadata: Parameters<typeof metadataItem>[] = [
+      ['total supply', resource.totalSupply, 'U64']
+    ]
+
+    if (resource.resourceType === 'fungible') {
+      metadata.push(['divisibility', resource.divisibility, 'U8'])
+
+      if (resource.type === 'poolUnit') {
+        metadata.push([
+          'associated pool component',
+          resource.metadata.standard.pool?.value,
+          'GlobalAddress'
+        ])
+      }
+    }
+
+    return metadata
+  })
 </script>
 
 <PillsMenu items={tabs} bind:active={activeTab} />
@@ -50,6 +68,8 @@
       standardMetadata={resource.then(({ metadata }) => metadata.standard)}
       {nonMetadataItems}
       {associatedDapps}
+      omittedKeys={['pool']}
+      {redeemableTokens}
     />
   {/if}
   {#if activeTab === 'metadata'}

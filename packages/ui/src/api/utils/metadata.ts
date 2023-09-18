@@ -68,6 +68,9 @@ const getValue = (typedValue: MetadataTypedValue) => {
   if ('values' in typedValue) {
     return typedValue.values
   } else if ('value' in typedValue) {
+    if (typedValue.type === 'Url') {
+      return new URL(typedValue.value)
+    }
     return typedValue.value
   } else {
     throw Error('Unexpected metadata structure')

@@ -3,28 +3,28 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { PageData } from './$types'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
-  import {
-    transformFungibleResource,
-    transformNonFungibleResource
-  } from '@api/utils/entities/resource'
 
   export let data: PageData
 </script>
 
 {#await data.promises.resource then resource}
   <SearchPage
-    title={resource.details?.type === 'FungibleResource'
+    title={resource.resourceType === 'non-fungible'
+      ? 'Non Fungible Resource'
+      : resource.type === 'resource'
       ? 'Fungible Resource'
-      : 'Non Fungible Resource'}
+      : 'Pool Unit'}
     address={data.address}
   >
     <Resource
-      resource={data.promises.resource.then((resource) =>
-        resource.details?.type === 'FungibleResource'
-          ? transformFungibleResource(resource)
-          : transformNonFungibleResource(resource)
-      )}
+      resource={data.promises.resource}
       associatedDapps={data.promises.associatedDapps}
+      redeemableTokens={data.promises.redeemableTokens.then((tokens) =>
+        tokens?.map((token) => ({
+          iconUrl: token.icon?.href,
+          name: token.name
+        }))
+      )}
     />
   </SearchPage>
 {:catch}

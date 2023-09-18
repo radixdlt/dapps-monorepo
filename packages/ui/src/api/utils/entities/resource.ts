@@ -15,12 +15,13 @@ import type {
   StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { andThen, pipe } from 'ramda'
+import { andThen, ifElse, pipe } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
 import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
+import { isPoolUnit, resourceToPoolUnit } from './pool-unit'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
   'resource',
@@ -66,7 +67,7 @@ const getNonFungibleIds = async (
 }
 
 export const transformNonFungibleResource = (
-  entity: StateEntityDetailsVaultResponseItem
+  entity: StateEntityDetailsResponseItem
 ): NonFungibleResource =>
   ({
     type: 'resource',
@@ -190,6 +191,18 @@ export const transformFungible = async (
 
     return transformFungibleResource(entity, fungible)
   })
+}
+
+export const transformResource = (entity: StateEntityDetailsResponseItem) => {
+  if (entity.details?.type === 'FungibleResource') {
+    const fungible = transformFungibleResource(entity)
+    if (isPoolUnit(fungible)) {
+      return resourceToPoolUnit(fungible)
+    }
+    return fungible
+  }
+
+  return transformNonFungibleResource(entity)
 }
 
 export const transformResources =

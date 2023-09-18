@@ -8,6 +8,8 @@
   export let nonMetadataItems: ComponentProps<SummaryMetadata>['nonMetadataItems']
   export let associatedDapps: ComponentProps<SummaryMetadata>['associatedDapps']
   export let omittedKeys: ComponentProps<SummaryMetadata>['omittedKeys'] = []
+  export let redeemableTokens: ComponentProps<SummaryMetadata>['redeemableTokens'] =
+    undefined
 </script>
 
 <div class="summary-tab">
@@ -17,6 +19,7 @@
     {nonMetadataItems}
     {associatedDapps}
     {omittedKeys}
+    {redeemableTokens}
   />
 </div>
 
