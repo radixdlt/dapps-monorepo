@@ -2,7 +2,7 @@
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
   import MenuIcon from '@icons/menu.svg'
-  import LogoIcon from '@images/dashboard-logo.svg'
+
   import { showSidebar } from '@stores'
   import { isMobile } from '@utils'
 
@@ -18,8 +18,7 @@
       style={`background-image: url(${MenuIcon});`}
       class="mobile-menu"
     />
-    <!-- svelte-ignore a11y-missing-content -->
-    <a href="/" class="logo" style={`background-image: url(${LogoIcon})`} />
+    <slot name="logo" />
   </div>
   {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
   {#if !isMobile()}
@@ -64,16 +63,6 @@
 
     button {
       flex: 0 0 auto;
-    }
-
-    .logo {
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-      width: 10.125rem;
-      height: 1.5rem;
-      display: inline-flex;
-      margin-left: var(--spacing-lg);
     }
   }
 

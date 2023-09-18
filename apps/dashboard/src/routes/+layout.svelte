@@ -27,6 +27,7 @@
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { getNetworkConfiguration } from '@api/gateway'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
+  import LogoIcon from '@images/dashboard-logo.svg'
 
   let mounted = false
 
@@ -135,7 +136,15 @@
 
 <Theme theme="light">
   {#if mounted}
-    <Layout {hideSearch} {routes}><slot /></Layout>
+    <Layout {hideSearch} {routes}>
+      <!-- svelte-ignore a11y-missing-content -->
+      <a
+        slot="logo"
+        href="/"
+        class="logo"
+        style={`background-image: url(${LogoIcon})`}
+      /><slot /></Layout
+    >
   {/if}
 </Theme>
 
@@ -147,5 +156,15 @@
     grid-area: content;
     padding-bottom: var(--spacing-lg);
     position: relative;
+  }
+
+  .logo {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 10.125rem;
+    height: 1.5rem;
+    display: inline-flex;
+    margin-left: var(--spacing-lg);
   }
 </style>
