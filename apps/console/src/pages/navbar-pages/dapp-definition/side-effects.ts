@@ -3,7 +3,6 @@ import {
   type DecoratedAccount
 } from '@api/utils/entities/resource'
 import type { Account } from '@stores'
-import type { EntityT } from './dapp-metadata/rows/linking-metadata-list/Entity.svelte'
 import { getStringMetadata, getVectorMetadata } from '@api/utils/metadata'
 
 export type FormattedAccount = Awaited<
@@ -18,77 +17,178 @@ const hasDAppDefinitionMetadata = (account: DecoratedAccount) =>
       item.value.typed.value === 'dapp definition'
   )
 
-export const getTxManifest = (
-  address: string,
-  entities: EntityT[],
-  metadata: { key: string; value: unknown }[]
-) => {
-  let manifest = ''
+const removeMetadata = (address: string, key: string) => `
+        REMOVE_METADATA
+          Address("${address}")
+          "${key}"
+        ;
+      `
 
-  for (const entity of entities) {
-    if (entity.requiredProof && entity.requiredProof !== 'AllowAll') {
-      manifest += `CALL_METHOD
+const setOrRemoveMetadata = ({
+  address,
+  key,
+  value
+}:
+  | {
+      key: 'dAppDefinition'
+      address: string
+      value: boolean
+    }
+  | {
+      key: 'name' | 'description'
+      address: string
+      value?: string
+    }
+  | {
+      key: 'claimed_websites' | 'claimed_entities'
+      address: string
+      value: string[]
+    }) => {
+  switch (key) {
+    case 'dAppDefinition':
+      return value
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "account_type"
+          Enum<Metadata::String>("dapp definition")
+        ;
+        `
+        : removeMetadata(address, key)
+    case 'name':
+    case 'description':
+      return value
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "${key}"
+          Enum<Metadata::String>("${value}")
+        ;
+        `
+        : removeMetadata(address, key)
+
+    case 'claimed_websites':
+      return value.length
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "${key}"
+          Enum<Metadata::OriginArray>(Array<String>(${value
+            .map((item) => `"${item}"`)
+            .join(', ')}))
+        ;
+        `
+        : removeMetadata(address, key)
+
+    case 'claimed_entities':
+      return value.length
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "${key}"
+          Enum<Metadata::AddressArray>(Array<Address>(${value
+            .map((address) => `Address("${address}")`)
+            .join(', ')}))
+        ;
+
+        ${value.map(
+          (entity) => `
+        SET_METADATA
+          Address("${entity}")
+          "dapp_definitions"
+          Enum<136u8>(
+            Array<Address>(
+              Address("${address}")
+            )
+          )
+        ;
+        `
+        )}
+        `
+        : removeMetadata(address, key)
+
+    default:
+      throw new Error('Invalid metadata key')
+  }
+}
+
+const createBadgeProof = (badgeAddresses: string[], address: string) => {
+  const transactionManifest: string[] = []
+
+  for (const badgeAddress of badgeAddresses) {
+    const isNonFungible = badgeAddress.includes(':')
+    const [resourceAddress, id] = badgeAddress.split(':')
+
+    transactionManifest.push(
+      isNonFungible
+        ? `
+        CALL_METHOD
           Address("${address}")
           "create_proof_of_non_fungibles"
-          Address("${entity.requiredProof.split(':')[0]}")
-          Array<NonFungibleLocalId>(NonFungibleLocalId("${
-            entity.requiredProof.split(':')[1]
-          }"));`
-    }
-  }
-
-  for (const { key, value } of metadata) {
-    if (value === undefined) {
-      manifest += `
-        REMOVE_METADATA
-        Address("${address}")
-        "${key}";
+          Address("${resourceAddress}")
+          Array<NonFungibleLocalId>(NonFungibleLocalId("${id}"))
+        ;
         `
-    } else {
-      let manifestValue: string = ''
-
-      if (Array.isArray(value)) {
-        if (key === 'claimed_websites')
-          manifestValue = `
-        Enum<Metadata::OriginArray>(
-          Array<String>(${value.map((v) => `"${v.url}"`).join(', ')})
-        );`
-        else if (key === 'claimed_entities')
-          manifestValue = `
-        Enum<Metadata::AddressArray>(
-          Array<Address>(${value
-            .map((v) => `"Address(${v.address})"`)
-            .join(', ')})
-        );`
-      }
-
-      if (typeof value === 'string') {
-        manifestValue = `Enum<Metadata::String>("${value}");`
-        try {
-          new URL(value)
-          manifestValue = `Enum<Metadata::Url>("${value}");`
-        } catch {}
-      }
-
-      manifest += `
-          SET_METADATA
-            Address("${address}")
-            "${key}"
-            ${manifestValue}
-          `
-    }
+        : `
+        CALL_METHOD
+          Address("${address}")
+          "create_proof_of_amount"
+          Address("${badgeAddress}")
+          Decimal("1")
+        ;
+        `
+    )
   }
+  return transactionManifest.join(' ')
+}
 
-  for (const entity of entities) {
-    manifest += `
-        SET_METADATA
-          Address("${entity.address}")
-          "dapp_definition"
-          Enum<Metadata::Address>(Address("${address}"));
-      `
-  }
+export const getTxManifest = ({
+  isDappDefinitionAccount,
+  dAppDefinitionAddress,
+  name,
+  description,
+  claimedWebsites,
+  claimedEntities,
+  badges
+}: {
+  isDappDefinitionAccount: boolean
+  dAppDefinitionAddress: string
+  name: string
+  description: string
+  claimedWebsites: string[]
+  claimedEntities: string[]
+  badges: string[]
+}) => {
+  const transactionManifest = [
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'dAppDefinition',
+      value: isDappDefinitionAccount
+    }),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'name',
+      value: name
+    }),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'description',
+      value: description
+    }),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'claimed_websites',
+      value: claimedWebsites
+    }),
+    createBadgeProof(badges, dAppDefinitionAddress),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'claimed_entities',
+      value: claimedEntities
+    })
+  ].join(' ')
 
-  return manifest
+  return transactionManifest
 }
 
 export const getFormattedAccounts = async (accounts: Account[]) => {
