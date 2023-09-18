@@ -1,4 +1,3 @@
-import { andThen, otherwise, pipe } from 'ramda'
 import type { _Entity } from '.'
 import { getStringMetadata, transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
