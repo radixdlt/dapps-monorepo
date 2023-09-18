@@ -75,13 +75,6 @@ export const getAddressPrefix = (address: string): AddressPrefix => {
   return parts[0] as AddressPrefix
 }
 
-const getResourceUrl = async (address: string) =>
-  isNFTAddress(address)
-    ? `/nft/${encodeURIComponent(address)}`
-    : (await isStakeUnit(address))
-    ? `/stake_unit/${address}`
-    : `/resource/${address}`
-
 export const getNFTAddress = (resourceAddress: string, nftID: string) =>
   `${shortenAddress(resourceAddress)}:${nftID}`
 
@@ -90,13 +83,13 @@ export const isNFTAddress = (address: string) =>
 
 export const addressToRoute = async (address: string) =>
   ({
-    account: `/account/${address}`,
-    resource: await getResourceUrl(address),
-    package: `/package/${address}`,
-    component: `/component/${address}`,
-    txid: `/transaction/${address}`,
-    validator: `/validator/${address}`,
-    identity: `/identity/${address}`
+    account: `/account/${encodeURIComponent(address)}`,
+    resource: `/resource/${encodeURIComponent(address)}`,
+    package: `/package/${encodeURIComponent(address)}`,
+    component: `/component/${encodeURIComponent(address)}`,
+    txid: `/transaction/${encodeURIComponent(address)}`,
+    validator: `/validator/${encodeURIComponent(address)}`,
+    identity: `/identity/${encodeURIComponent(address)}`
   }[getAddressPrefix(address)])
 
 export const useContext = <
