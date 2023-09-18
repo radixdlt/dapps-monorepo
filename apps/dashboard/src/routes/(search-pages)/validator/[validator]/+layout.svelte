@@ -2,12 +2,11 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
   import type { LayoutData } from './$types'
+  import { goto } from '$app/navigation'
 
   export let data: LayoutData
 
   let notFound = false
-
-  data.promises.entity.catch(() => (notFound = true))
 
   data.promises.entity.catch(() => (notFound = true))
 </script>
@@ -31,7 +30,7 @@
       ]
     ]}
     activeTab={data.pageName}
-    on:navigate={({ detail }) => detail}
+    on:navigate={({ detail }) => goto(detail)}
   >
     <slot />
   </SearchPage>
