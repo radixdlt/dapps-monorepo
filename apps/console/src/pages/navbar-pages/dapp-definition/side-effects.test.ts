@@ -9,7 +9,8 @@ describe('dApp definition TX manifest', () => {
       description: '',
       claimedWebsites: [],
       claimedEntities: [],
-      badges: []
+      badges: [],
+      isDappDefinitionAccount: true
     })
 
     const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
@@ -34,7 +35,8 @@ describe('dApp definition TX manifest', () => {
       ],
       badges: [
         'resource_tdx_22_1nf5w888fzvwe4syy7xf6fcuk6z5ce7l87ghkz0zx2c9886vatp3fwh:#1#'
-      ]
+      ],
+      isDappDefinitionAccount: true
     })
 
     const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
