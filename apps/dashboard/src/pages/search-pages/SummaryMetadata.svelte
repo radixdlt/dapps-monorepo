@@ -4,6 +4,8 @@
   import type { Entity } from '@api/utils/entities'
   import RedeemableTokens from './RedeemableTokens.svelte'
   import AssociatedDapps from './AssociatedDapps.svelte'
+  import Tags from '@components/_base/tags/Tags.svelte'
+  import Row from '@components/info-box/Row.svelte'
 
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
@@ -23,7 +25,7 @@
   > = Promise.resolve(undefined)
   export let omittedKeys: string[] = []
 
-  const omitted = ['name', 'symbol', 'icon_url', 'description']
+  const omitted = ['name', 'symbol', 'icon_url', 'description', 'tags']
 
   $: combined = Promise.all([standardMetadata, nonMetadataItems]).then(
     ([metadata, nonMetadata]) => [
@@ -39,6 +41,12 @@
 
 <Metadata metadata={combined}>
   <svelte:fragment slot="extra-rows">
+    {#await standardMetadata then metadata}
+      <Row text="Tags">
+        <Tags showNetworkTag={false} slot="right" tags={metadata.tags?.value} />
+      </Row>
+    {/await}
+
     {#await associatedDapps then dapps}
       {#if dapps.length > 0}
         <AssociatedDapps
