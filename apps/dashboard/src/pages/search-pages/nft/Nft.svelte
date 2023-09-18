@@ -41,9 +41,11 @@
         ? nftData.nonStandard.map(({ kind, field_name, value }) =>
             metadataItem(field_name, value, kind)
           )
-        : Object.values(nftData.standard).map(({ field_name, value, kind }) =>
-            metadataItem(field_name, value, kind)
-          )
+        : Object.values(nftData.standard)
+            .filter((data) => data.field_name !== 'name')
+            .map(({ field_name, value, kind }) =>
+              metadataItem(field_name, value, kind)
+            )
     )
   )
 
