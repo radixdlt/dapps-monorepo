@@ -8,7 +8,7 @@ import { transformFungibleResource, type FungibleResource } from './resource'
 export type PoolUnit = Omit<FungibleResource, 'type'> &
   _Entity<'poolUnit', ['pool']>
 
-const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
+export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   ...resource,
   type: 'poolUnit',
   metadata: {
