@@ -15,7 +15,7 @@
 
 <div class="layout">
   <div class="header">
-    <Header {hideSearch} />
+    <Header {hideSearch}><slot slot="logo" name="logo" /></Header>
   </div>
   <div class="content">
     <div
