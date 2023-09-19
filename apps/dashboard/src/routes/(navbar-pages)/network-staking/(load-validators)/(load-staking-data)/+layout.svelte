@@ -21,7 +21,7 @@
   import { goto } from '$app/navigation'
   import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
-  import { bookmarkedValidatorsStore } from '../../../stores'
+  import { bookmarkedValidatorsStore } from '../../../../../stores'
   import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
   import type {
     StakedInfo,

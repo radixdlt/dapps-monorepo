@@ -5,7 +5,6 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { connected } from '@stores'
-  import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/proxy+layout'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Address from '@components/_base/address/Address.svelte'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
@@ -16,6 +15,7 @@
   import type { Validator } from '@api/utils/entities/validator'
   import { metadataItem } from '@dashboard-pages/search-pages/utils'
   import RecentUptimeDetail from './RecentUptimeDetail.svelte'
+  import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
