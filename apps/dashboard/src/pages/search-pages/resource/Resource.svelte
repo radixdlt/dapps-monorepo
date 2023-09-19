@@ -23,6 +23,8 @@
   export let redeemableTokens: ComponentProps<SummaryTab>['redeemableTokens'] =
     Promise.resolve(undefined)
 
+  export let showAddressInMetadata = false
+
   let activeTab = 'summary'
 
   const tabs = [
@@ -42,6 +44,10 @@
     let metadata: Parameters<typeof metadataItem>[] = [
       ['total supply', resource.totalSupply, 'U64']
     ]
+
+    if (showAddressInMetadata) {
+      metadata.push(['address', resource.address, 'GlobalAddress'])
+    }
 
     if (resource.resourceType === 'fungible') {
       metadata.push(['divisibility', resource.divisibility, 'U8'])

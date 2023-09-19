@@ -21,7 +21,7 @@
       >
         <NftImage url={iconUrl} />
 
-        <span class="card-text">{text}</span>
+        <span class="card-text dotted-overflow">{text}</span>
       </div>
     {/each}
   </div>
@@ -40,7 +40,6 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
       padding: var(--spacing-xl);
       gap: var(--spacing-lg);
       width: 15rem;

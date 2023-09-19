@@ -96,7 +96,7 @@
 
 <h2 class="resource-card-header">Belongs To:</h2>
 
-<Resource {resource} {associatedDapps} />
+<Resource {resource} {associatedDapps} showAddressInMetadata />
 
 <style lang="scss">
   .nft-image {
