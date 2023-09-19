@@ -15,7 +15,16 @@ import type {
   StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { andThen, ifElse, pipe } from 'ramda'
+import {
+  andThen,
+  filter,
+  flatten,
+  ifElse,
+  isNil,
+  map,
+  pipe,
+  reject
+} from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
 import { transformMetadata } from '../metadata'
@@ -125,7 +134,6 @@ export type TransformedNonFungible = {
 
 const transformNonFungible = async (
   nonFungibles: NonFungibleResourcesVaultCollection,
-  accountAddress: string,
   stateOptions?: StateEntityDetailsOptions,
   ledgerState?: LedgerStateSelector
 ) => {
@@ -142,7 +150,13 @@ const transformNonFungible = async (
   )
 
   for (const nonFungible of nonFungibles.items) {
-    const ids = await getNonFungibleIds(accountAddress, nonFungible)
+    const ids = pipe(
+      () => nonFungible.vaults.items,
+      map(({ items }) => items),
+      (items) => reject(isNil, items),
+      flatten
+    )()
+
     const entity = nonFungibleEntities.find(
       ({ address }) => address === nonFungible.resource_address
     )!
@@ -229,11 +243,7 @@ export const transformResources =
             )
           : []
         const nonFungible = nfts
-          ? await transformNonFungible(
-              non_fungible_resources,
-              address,
-              stateOptions
-            )
+          ? await transformNonFungible(non_fungible_resources, stateOptions)
           : []
         return {
           accountAddress: item.address,
