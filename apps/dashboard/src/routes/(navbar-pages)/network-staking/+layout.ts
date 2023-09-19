@@ -52,11 +52,6 @@ export const load: LayoutLoad = async ({ fetch, depends }) => {
 
   const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
-  let resolveStateVersion: (stateVersion: number) => void
-  const validatorsStateVersion = new Promise<number>(
-    (resolve) => (resolveStateVersion = resolve)
-  )
-
   const validators = getValidators()
 
   const bookmarkedValidators = bookmarkedValidatorsApi
