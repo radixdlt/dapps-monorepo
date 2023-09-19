@@ -1,8 +1,3 @@
-import type {
-  ReadyToClaimInfo,
-  StakedInfo,
-  UnstakingInfo
-} from '@api/utils/staking'
 import { bookmarkedValidatorsApi } from '../../../../server/validators/validators-api'
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
