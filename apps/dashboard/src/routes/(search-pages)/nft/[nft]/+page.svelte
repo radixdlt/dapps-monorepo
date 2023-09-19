@@ -2,18 +2,24 @@
   import NonFungible from '@dashboard-pages/search-pages/nft/Nft.svelte'
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { PageData } from './$types'
-  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
+  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
+  import type { ComponentProps } from 'svelte'
 
   export let data: PageData
 
-  let notFound = false
+  let error: ComponentProps<ErrorPage>['status']
 
-  data.promises.nftData.catch(() => (notFound = true))
-  data.promises.resource.catch(() => (notFound = true))
+  data.promises.nftData.catch((e) => {
+    error = e.status
+  })
+
+  data.promises.resource.catch((e) => {
+    error = e.status
+  })
 </script>
 
-{#if notFound}
-  <NotFound />
+{#if error}
+  <ErrorPage status={error} />
 {:else}
   {#await data.promises.nftData then nftData}
     <SearchPage

@@ -1,9 +1,27 @@
+<script lang="ts">
+  export let status: 400 | 404
+
+  const errorMessages = {
+    400: {
+      title: 'Bad Request',
+      description: 'That address was not valid.'
+    },
+    404: {
+      title: 'Not Found',
+      description: 'The requested entity could not be found.'
+    }
+  }
+
+  $: title = errorMessages[status]?.title || 'Oops!'
+
+  $: description = errorMessages[status]?.description || 'An error occured.'
+</script>
+
 <div class="box">
-  <div class="header">No results found</div>
+  <div class="header">{title}</div>
 
   <div class="subtext">
-    Sorry, but it seems that no results were found for your search. Try a new
-    search.
+    {description}
   </div>
 </div>
 

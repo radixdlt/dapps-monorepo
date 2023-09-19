@@ -2,21 +2,22 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
-  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
+  import type { ComponentProps } from 'svelte'
+  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
 
   export let data: LayoutData
 
-  let notFound = false
+  let error: ComponentProps<ErrorPage>['status']
 
   data.promises.tx
     .then((tx) => {
-      if (!tx) notFound = true
+      if (!tx) error = 404
     })
-    .catch(() => (notFound = true))
+    .catch((e) => (error = e.status))
 </script>
 
-{#if notFound}
-  <NotFound />
+{#if error}
+  <ErrorPage status={error} />
 {:else}
   <SearchPage
     title="Transaction"

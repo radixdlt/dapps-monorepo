@@ -2,7 +2,7 @@
   import Resource from '@dashboard-pages/search-pages/resource/Resource.svelte'
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { PageData } from './$types'
-  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
+  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
 
   export let data: PageData
 </script>
@@ -27,6 +27,6 @@
       )}
     />
   </SearchPage>
-{:catch}
-  <NotFound />
+{:catch e}
+  <ErrorPage status={e.status} />
 {/await}
