@@ -110,4 +110,4 @@ export const RET_DECIMAL_PRECISION = 18
 export const YEARLY_XRD_EMISSIONS = 300_000_000
 
 export const SAFE_IMAGE_SERVICE_URL =
-  'https://image-service-dev.extratools.works'
+  'https://safe-image-default.radixdlt.workers.dev'
