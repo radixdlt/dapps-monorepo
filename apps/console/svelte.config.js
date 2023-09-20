@@ -32,7 +32,12 @@ const config = {
           'https://fonts.cdnfonts.com/s/16184/Hack-BoldItalic.woff',
           'data:'
         ],
-        'img-src': ['self', 'data:', 'https://cdn-ukwest.onetrust.com'],
+        'img-src': [
+          'self',
+          'data:',
+          'https://cdn-ukwest.onetrust.com',
+          'https://image-service-dev.extratools.works'
+        ],
         'connect-src': [
           'self',
           'https://*.radixdlt.com',

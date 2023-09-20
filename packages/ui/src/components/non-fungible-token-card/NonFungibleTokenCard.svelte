@@ -58,8 +58,8 @@
     width: 15rem;
 
     .image {
-      width: 15rem;
-      height: 15rem;
+      width: 100%;
+      height: 100%;
       border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
     }
 
