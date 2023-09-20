@@ -2,6 +2,8 @@ import { bookmarkedValidatorsApi } from '../../../../server/validators/validator
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
 import { bookmarkedValidatorsStore } from '../../../../stores'
+import type { NetworkConfigurationResponse } from '@radixdlt/babylon-gateway-api-sdk'
+import { networkConfiguration } from '@stores'
 
 export const prerender = false
 
@@ -26,7 +28,20 @@ export const load: LayoutLoad = async ({ depends }) => {
       return bookmarked
     })
 
-  const validators = getValidators()
+  const networkConfig = await new Promise<NetworkConfigurationResponse>(
+    (resolve) => {
+      let unsub = networkConfiguration.subscribe((config) => {
+        if (config) {
+          resolve(config)
+          unsub()
+        }
+      })
+    }
+  )
+
+  const validators = getValidators(
+    networkConfig.well_known_addresses.validator_owner_badge
+  )
 
   return {
     promises: {
