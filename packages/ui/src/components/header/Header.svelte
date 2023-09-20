@@ -1,4 +1,5 @@
 <script lang="ts">
+  import '@radixdlt/dapps-dropdown'
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
   import MenuIcon from '@icons/menu.svg'
@@ -19,15 +20,23 @@
       class="mobile-menu"
     />
     <slot name="logo" />
+    <radix-dapps-dropdown class="mobile-only mobile-dapps-dropdown" />
   </div>
   {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
-  {#if !isMobile()}
-    <div class="connect-button"><ConnectButton /></div>
-  {/if}
+  <div class="right-wrapper">
+    {#if !isMobile()}
+      <div class="connect-button"><ConnectButton /></div>
+    {/if}
+    <radix-dapps-dropdown class="desktop-only" />
+  </div>
 </header>
 
 <style lang="scss">
   @use '../../mixins.scss';
+
+  .mobile-dapps-dropdown {
+    justify-self: end;
+  }
 
   header {
     background-color: var(--color-light);
@@ -46,8 +55,15 @@
     @include mixins.desktop {
       gap: var(--spacing-xl);
       flex-direction: row;
-      padding: 0 var(--spacing-lg);
+      padding: 0 var(--spacing-2xl) 0 var(--spacing-lg);
     }
+  }
+
+  .right-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
   }
 
   .logo-wrapper {
