@@ -3,21 +3,22 @@ import type {
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import { transformMetadata } from '../metadata'
+import { getEnumStringMetadata, transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import {
   getEntityDetails,
+  getNonFungibleLocation,
   getValidatorUptime,
   getValidatorsListWithLedgerState
 } from '@api/gateway'
 import BigNumber from 'bignumber.js'
-import { andThen, map, pipe } from 'ramda'
+import { andThen, isNil, map, pick, pipe, prop, reject } from 'ramda'
 
 export type Validator = _Entity<
   'validator',
   ['name', 'symbol', 'icon_url', 'description', 'website']
 > & {
-  ownerAddress: string
+  ownerAddress?: string
   totalStakeInXRD: string
   ownerStake: string
   percentageOwnerStake: number
@@ -103,7 +104,11 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
   )()
 
 export const transformValidatorResponse =
-  (withStakeUnits = true, withUptime = true) =>
+  (
+    validatorOwnerBadgeResource?: string,
+    withStakeUnits = true,
+    withUptime = true
+  ) =>
   async ({
     aggregatedEntities,
     ledger_state: { state_version }
@@ -123,6 +128,49 @@ export const transformValidatorResponse =
     const uptimes = withUptime
       ? await getUptimePercentages(aggregatedEntities)
       : []
+
+    let owners: { owner?: string; vaultAddress: string }[] = []
+    let ownerVaultAddresses: {
+      owning_vault_address?: string
+      non_fungible_id: string
+    }[] = []
+    let ownerBadgeIds: string[] = []
+
+    if (validatorOwnerBadgeResource) {
+      ownerBadgeIds = aggregatedEntities.map((validator) =>
+        getEnumStringMetadata('owner_badge')(validator.metadata)
+      )
+
+      const ownerData = (
+        await getNonFungibleLocation(validatorOwnerBadgeResource, ownerBadgeIds)
+      ).non_fungible_ids
+
+      ownerVaultAddresses = pipe(
+        () => ownerData,
+        map(pick(['owning_vault_address', 'non_fungible_id']))
+      )()
+
+      owners = await pipe(
+        () =>
+          getEntityDetails(
+            pipe(
+              () => ownerVaultAddresses,
+              map(prop('owning_vault_address')),
+              (address) => reject(isNil, address)
+            )(),
+            { ancestorIdentities: true },
+            { state_version }
+          ),
+        andThen(
+          pipe(
+            map((detail) => ({
+              owner: detail.ancestor_identities?.owner_address,
+              vaultAddress: detail.address
+            }))
+          )
+        )
+      )()
+    }
 
     return aggregatedEntities.map((validator, i) => {
       const state: any = validator.state || {}
@@ -156,7 +204,13 @@ export const transformValidatorResponse =
         ]),
 
         uptimePercentages: uptimes[i],
-        ownerAddress: '',
+        ownerAddress: owners.find(
+          (owner) =>
+            owner.vaultAddress ===
+            ownerVaultAddresses.find(
+              ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
+            )?.owning_vault_address
+        )?.owner,
         ownerStake: '0',
         percentageOwnerStake: 0,
         apy: 0,
@@ -165,7 +219,11 @@ export const transformValidatorResponse =
     })
   }
 
-export const getValidators = (withStakeUnits = true, withUptime = true) =>
+export const getValidators = (
+  validatorOwnerBadge?: string,
+  withStakeUnits = true,
+  withUptime = true
+) =>
   getValidatorsListWithLedgerState().then(
-    transformValidatorResponse(withStakeUnits, withUptime)
+    transformValidatorResponse(validatorOwnerBadge, withStakeUnits, withUptime)
   )

@@ -156,3 +156,11 @@ export const getValidatorUptime = (
           : undefined
     }
   })
+
+export const getNonFungibleLocation = (resource: string, ids: string[]) =>
+  gatewayApi.state.innerClient.nonFungibleLocation({
+    stateNonFungibleLocationRequest: {
+      resource_address: resource,
+      non_fungible_ids: ids
+    }
+  })

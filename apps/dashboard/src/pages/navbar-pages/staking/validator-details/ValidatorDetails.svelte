@@ -79,6 +79,7 @@
       <Metadata
         metadata={validator.then(
           ({
+            ownerAddress,
             totalStakeInXRD,
             acceptsStake,
             fee,
@@ -96,6 +97,11 @@
             ]
             if (website)
               extraData.push(metadataItem('website', website.value, 'Url'))
+
+            if (ownerAddress)
+              extraData.push(
+                metadataItem('owner address', ownerAddress, 'GlobalAddress')
+              )
 
             return extraData.concat(nonStandard)
           }
