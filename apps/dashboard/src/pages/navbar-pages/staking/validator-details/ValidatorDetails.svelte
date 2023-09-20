@@ -77,35 +77,38 @@
   <div class="card">
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
       <Metadata
-        metadata={validator.then(
-          ({
-            ownerAddress,
-            totalStakeInXRD,
-            acceptsStake,
-            fee,
-            metadata: {
-              nonStandard,
-              standard: { website }
-            },
-            uptimePercentages
-          }) => {
-            const extraData = [
-              metadataItem('total stake', totalStakeInXRD, 'U64'),
-              metadataItem('accepts stake', acceptsStake, 'Bool'),
-              metadataItem('fee (%)', `${fee} %`, 'String'),
-              metadataItem('recent uptime', uptimePercentages, 'String')
-            ]
-            if (website)
-              extraData.push(metadataItem('website', website.value, 'Url'))
-
-            if (ownerAddress)
-              extraData.push(
-                metadataItem('owner address', ownerAddress, 'GlobalAddress')
+        metadata={validator.then((validator) => {
+          const extraData = [
+            metadataItem('total stake', validator.totalStakeInXRD, 'U64'),
+            metadataItem('accepts stake', validator.acceptsStake, 'Bool'),
+            metadataItem('fee (%)', `${validator.fee} %`, 'String'),
+            metadataItem(
+              'recent uptime',
+              validator.uptimePercentages,
+              'String'
+            ),
+            metadataItem('owner stake', validator.ownerStake, 'U64')
+          ]
+          if (validator.metadata.standard.website)
+            extraData.push(
+              metadataItem(
+                'website',
+                validator.metadata.standard.website.value,
+                'Url'
               )
+            )
 
-            return extraData.concat(nonStandard)
-          }
-        )}
+          if (validator.ownerAddress)
+            extraData.push(
+              metadataItem(
+                'owner address',
+                validator.ownerAddress,
+                'GlobalAddress'
+              )
+            )
+
+          return extraData.concat(validator.metadata.nonStandard)
+        })}
         expectedEntries={{
           'accepts stake': {
             label: 'Accepts Stake',

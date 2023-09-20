@@ -192,7 +192,9 @@ export const transformValidatorResponse =
           stakeUnits[i]
             .details as StateEntityDetailsResponseFungibleResourceDetails
         ).total_supply,
-        totalStakeInXRD: validator.stake_vault.balance,
+        totalStakeInXRD: new BigNumber(validator.stake_vault.balance)
+          .plus(validator.locked_owner_stake_unit_vault.balance)
+          .toString(),
 
         metadata: transformMetadata(validator, [
           'name',
@@ -211,8 +213,18 @@ export const transformValidatorResponse =
               ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
             )?.owning_vault_address
         )?.owner,
-        ownerStake: '0',
-        percentageOwnerStake: 0,
+        ownerStake: validator.locked_owner_stake_unit_vault.balance,
+        percentageOwnerStake:
+          validator.stake_vault.balance === '0'
+            ? 0
+            : new BigNumber(validator.locked_owner_stake_unit_vault.balance)
+                .dividedBy(
+                  new BigNumber(validator.stake_vault.balance).plus(
+                    validator.locked_owner_stake_unit_vault.balance
+                  )
+                )
+                .multipliedBy(100)
+                .toNumber(),
         apy: 0,
         acceptsStake: state.accepts_delegated_stake
       }
