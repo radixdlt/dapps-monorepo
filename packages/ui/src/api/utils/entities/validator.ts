@@ -160,7 +160,7 @@ export const transformValidatorResponse =
         ownerStake: '0',
         percentageOwnerStake: 0,
         apy: 0,
-        acceptsStake: true
+        acceptsStake: state.accepts_delegated_stake
       }
     })
   }
