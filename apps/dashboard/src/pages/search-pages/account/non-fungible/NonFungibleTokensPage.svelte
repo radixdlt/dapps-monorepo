@@ -75,6 +75,8 @@
       ) as GeneralNonFungibleResource[]
     })
   }
+
+  $: filterOutClaimNfts(nonFungibleResources).then(console.log)
 </script>
 
 {#await filterOutClaimNfts(nonFungibleResources)}

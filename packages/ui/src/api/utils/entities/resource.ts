@@ -171,7 +171,7 @@ const transformNonFungible = async (
         return sum + vault.total_count
       }, 0),
       resource: transformNonFungibleResource(entity),
-      nonFungibles: ids,
+      nonFungibles: [],
       nextCursor: nonFungible.vaults.items[0].next_cursor || undefined,
       vaultAddress: nonFungible.vaults.items[0].vault_address
     })
@@ -188,6 +188,8 @@ const transformNonFungible = async (
           transformNft(nonFungible.resource_address, singleNftData)
         )
       }
+    } else {
+      transformedNonFungibles[length - 1].nonFungibles = ids
     }
   }
 

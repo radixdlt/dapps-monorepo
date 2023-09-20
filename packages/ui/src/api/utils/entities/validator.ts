@@ -123,7 +123,7 @@ export const transformValidatorResponse =
           undefined,
           { state_version }
         )
-      : []
+      : undefined
 
     const uptimes = withUptime
       ? await getUptimePercentages(aggregatedEntities)
@@ -188,10 +188,13 @@ export const transformValidatorResponse =
         unstakeClaimResourceAddress:
           state.claim_token_resource_address as string,
 
-        totalStakeUnits: (
-          stakeUnits[i]
-            .details as StateEntityDetailsResponseFungibleResourceDetails
-        ).total_supply,
+        totalStakeUnits: stakeUnits
+          ? (
+              stakeUnits[i]
+                .details as StateEntityDetailsResponseFungibleResourceDetails
+            ).total_supply
+          : '0',
+
         totalStakeInXRD: new BigNumber(validator.stake_vault.balance)
           .plus(validator.locked_owner_stake_unit_vault.balance)
           .toString(),
