@@ -1,12 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher, type ComponentProps } from 'svelte'
   import type ValidatorRow from '../ValidatorRow.svelte'
-  import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/+layout.svelte'
   import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
   import { formatTokenValue, formatXRDValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
   export let validator: ComponentProps<ValidatorRow>['validator']
 

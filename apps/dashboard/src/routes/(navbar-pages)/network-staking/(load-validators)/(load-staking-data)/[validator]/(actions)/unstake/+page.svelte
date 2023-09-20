@@ -2,7 +2,7 @@
   import type { LayoutData } from '../$types'
   import BigNumber from 'bignumber.js'
   import Unstake from '@dashboard-pages/navbar-pages/staking/stake-unstake/unstake/Unstake.svelte'
-  import { goto } from '$app/navigation'
+  import { goto, invalidate } from '$app/navigation'
   import { _dependency } from '../../../+layout'
 
   export let data: LayoutData
@@ -21,9 +21,8 @@
       }))
       .filter(({ amount }) => !new BigNumber(amount).eq(0))}
     on:close={(e) => {
-      goto(`/network-staking/${data.validatorAddress}`, {
-        invalidateAll: e.detail === 'invalidate' ? true : false
-      })
+      if (e.detail === 'invalidate') invalidate(_dependency)
+      goto(`/network-staking/${data.validatorAddress}`)
     }}
   />
 {/await}

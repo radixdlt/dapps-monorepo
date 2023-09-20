@@ -9,8 +9,8 @@ import {
 } from '@api/utils/staking'
 import BigNumber from 'bignumber.js'
 import { getGatewayStatus } from '@api/gateway'
-import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/proxy+layout'
 import { filter, map } from 'ramda'
+import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
 
 export const prerender = false
 
@@ -19,7 +19,7 @@ export const load: LayoutLoad = ({ params }) => {
     explicitMetadata: ['name', 'tags', 'icon_url']
   }).then((data) => data[0])
 
-  const validators = getValidators()
+  const validators = getValidators(false, false)
   const gatewayStatus = getGatewayStatus()
   const currentEpoch = gatewayStatus.then((status) => status.ledger_state.epoch)
 

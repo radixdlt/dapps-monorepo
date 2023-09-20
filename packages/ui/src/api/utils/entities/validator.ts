@@ -102,60 +102,70 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
     )
   )()
 
-export const transformValidatorResponse = async ({
-  aggregatedEntities,
-  ledger_state: { state_version }
-}: Awaited<ReturnType<typeof getValidatorsListWithLedgerState>>): Promise<
-  Validator[]
-> => {
-  const stakeUnits = await getEntityDetails(
-    aggregatedEntities.map(
-      (v) => (v.state as any).stake_unit_resource_address as string
-    ),
-    undefined,
-    { state_version }
+export const transformValidatorResponse =
+  (withStakeUnits = true, withUptime = true) =>
+  async ({
+    aggregatedEntities,
+    ledger_state: { state_version }
+  }: Awaited<ReturnType<typeof getValidatorsListWithLedgerState>>): Promise<
+    Validator[]
+  > => {
+    const stakeUnits = withStakeUnits
+      ? await getEntityDetails(
+          aggregatedEntities.map(
+            (v) => (v.state as any).stake_unit_resource_address as string
+          ),
+          undefined,
+          { state_version }
+        )
+      : []
+
+    const uptimes = withUptime
+      ? await getUptimePercentages(aggregatedEntities)
+      : []
+
+    return aggregatedEntities.map((validator, i) => {
+      const state: any = validator.state || {}
+
+      const stakeUnitResourceAddress =
+        state.stake_unit_resource_address as string
+
+      return {
+        type: 'validator',
+        address: validator.address,
+        fee: (state.validator_fee_factor || 0) * 100,
+        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
+
+        stakeUnitResourceAddress,
+        unstakeClaimResourceAddress:
+          state.claim_token_resource_address as string,
+
+        totalStakeUnits: (
+          stakeUnits[i]
+            .details as StateEntityDetailsResponseFungibleResourceDetails
+        ).total_supply,
+        totalStakeInXRD: validator.stake_vault.balance,
+
+        metadata: transformMetadata(validator, [
+          'name',
+          'symbol',
+          'icon_url',
+          'description',
+          'tags',
+          'website'
+        ]),
+
+        uptimePercentages: uptimes[i],
+        ownerAddress: '',
+        ownerStake: '0',
+        percentageOwnerStake: 0,
+        apy: 0,
+        acceptsStake: true
+      }
+    })
+  }
+
+export const getValidators = (withStakeUnits = true, withUptime = true) =>
+  getValidatorsListWithLedgerState().then(
+    transformValidatorResponse(withStakeUnits, withUptime)
   )
-
-  const uptimes = await getUptimePercentages(aggregatedEntities)
-
-  return aggregatedEntities.map((validator, i) => {
-    const state: any = validator.state || {}
-
-    const stakeUnitResourceAddress = state.stake_unit_resource_address as string
-
-    return {
-      type: 'validator',
-      address: validator.address,
-      fee: (state.validator_fee_factor || 0) * 100,
-      percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-
-      stakeUnitResourceAddress,
-      unstakeClaimResourceAddress: state.claim_token_resource_address as string,
-
-      totalStakeUnits: (
-        stakeUnits[i]
-          .details as StateEntityDetailsResponseFungibleResourceDetails
-      ).total_supply,
-      totalStakeInXRD: validator.stake_vault.balance,
-
-      metadata: transformMetadata(validator, [
-        'name',
-        'symbol',
-        'icon_url',
-        'description',
-        'tags',
-        'website'
-      ]),
-
-      uptimePercentages: uptimes[i],
-      ownerAddress: '',
-      ownerStake: '0',
-      percentageOwnerStake: 0,
-      apy: 0,
-      acceptsStake: true
-    }
-  })
-}
-
-export const getValidators = () =>
-  getValidatorsListWithLedgerState().then(transformValidatorResponse)
