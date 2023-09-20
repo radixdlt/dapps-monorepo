@@ -59,7 +59,7 @@ const calculateUptimePercentage = ({
   proposals_made,
   proposals_missed
 }: ValidatorUptimeCollectionItem) => {
-  if (!proposals_made || !proposals_missed) return 0
+  if (proposals_made === undefined || proposals_missed === undefined) return 0
 
   let total_proposals = proposals_made! + proposals_missed!
 
