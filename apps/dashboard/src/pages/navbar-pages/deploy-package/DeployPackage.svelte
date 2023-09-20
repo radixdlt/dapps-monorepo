@@ -72,7 +72,7 @@
             resources[0]!.nonFungible
               .map(({ resource, nonFungibles }) =>
                 nonFungibles.map((nft) => ({
-                  ...nft,
+                  ...(nft as NonFungible),
                   resource: resource
                 }))
               )

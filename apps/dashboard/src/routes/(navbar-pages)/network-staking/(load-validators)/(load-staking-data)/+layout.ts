@@ -56,7 +56,9 @@ export const load: LayoutLoad = async ({ depends, parent }) =>
             $accounts.map((a) => a.address),
             {
               explicitMetadata: ['validator']
-            }
+            },
+            undefined,
+            validators.map((v) => v.unstakeClaimResourceAddress)
           )
 
           return $accounts.reduce(

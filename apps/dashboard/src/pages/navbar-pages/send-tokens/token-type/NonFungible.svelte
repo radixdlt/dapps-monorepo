@@ -6,6 +6,7 @@
   import Text from '@components/_base/text/Text.svelte'
   import { boxStyle } from '../SendTokens.svelte'
   import { getSendNFTManifest } from '../manifests'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''
@@ -15,7 +16,7 @@
 
   $: options = resources.then((resources) =>
     resources
-      .map(({ nonFungibles }) => nonFungibles)
+      .map(({ nonFungibles }) => nonFungibles as NonFungible[])
       .flat()
       .map(
         ({

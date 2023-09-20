@@ -13,7 +13,8 @@ import type {
   StateEntityDetailsOptions,
   StateEntityDetailsResponseFungibleResourceDetails,
   StateEntityDetailsResponseItem,
-  StateEntityDetailsVaultResponseItem
+  StateEntityDetailsVaultResponseItem,
+  StateNonFungibleDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
 import {
   andThen,
@@ -128,7 +129,7 @@ export const transformFungibleResource = (
 export type TransformedNonFungible = {
   resource: NonFungibleResource
   ownedNonFungibles: number
-  nonFungibles: NonFungible[]
+  nonFungibles: (NonFungible | NonFungible['id'])[]
   nextCursor?: string
   vaultAddress: string
 }
@@ -136,7 +137,8 @@ export type TransformedNonFungible = {
 const transformNonFungible = async (
   items: NonFungibleResourcesVaultCollection['items'],
   stateOptions?: StateEntityDetailsOptions,
-  ledgerState?: LedgerStateSelector
+  ledgerState?: LedgerStateSelector,
+  getNonFungiblesForResources?: string[]
 ) => {
   if (items.length === 0) {
     return []
@@ -162,22 +164,30 @@ const transformNonFungible = async (
       ({ address }) => address === nonFungible.resource_address
     )!
 
-    const nftData = await getNonFungibleData(nonFungible.resource_address, ids)
+    let nftData: StateNonFungibleDetailsResponseItem[] = []
 
     let length = transformedNonFungibles.push({
       ownedNonFungibles: nonFungible.vaults.items.reduce((sum, vault) => {
         return sum + vault.total_count
       }, 0),
       resource: transformNonFungibleResource(entity),
-      nonFungibles: [],
+      nonFungibles: ids,
       nextCursor: nonFungible.vaults.items[0].next_cursor || undefined,
       vaultAddress: nonFungible.vaults.items[0].vault_address
     })
 
-    for (const singleNftData of nftData) {
-      transformedNonFungibles[length - 1].nonFungibles.push(
-        transformNft(nonFungible.resource_address, singleNftData)
-      )
+    if (
+      !getNonFungiblesForResources ||
+      (getNonFungiblesForResources &&
+        getNonFungiblesForResources.includes(nonFungible.resource_address))
+    ) {
+      nftData = await getNonFungibleData(nonFungible.resource_address, ids)
+
+      for (const singleNftData of nftData) {
+        transformedNonFungibles[length - 1].nonFungibles.push(
+          transformNft(nonFungible.resource_address, singleNftData)
+        )
+      }
     }
   }
 
@@ -221,8 +231,11 @@ export const transformResource = (entity: StateEntityDetailsResponseItem) => {
 }
 
 export const transformResources =
-  (stateOptions?: StateEntityDetailsOptions) =>
-  (ledgerState?: LedgerStateSelector) =>
+  (
+    stateOptions?: StateEntityDetailsOptions,
+    ledgerState?: LedgerStateSelector,
+    getNonFungiblesForResources?: string[]
+  ) =>
   async (
     items: StateEntityDetailsVaultResponseItem[],
     options?: Partial<{ fungibles: boolean; nfts: boolean }>
@@ -245,7 +258,12 @@ export const transformResources =
       : []
 
     const nonFungible = nfts
-      ? await transformNonFungible(nonFungibleItems, stateOptions)
+      ? await transformNonFungible(
+          nonFungibleItems,
+          stateOptions,
+          ledgerState,
+          getNonFungiblesForResources
+        )
       : []
 
     return items.map((item) => ({
@@ -281,18 +299,21 @@ export const getNonFungibleResource = getResource('nonFungible')
 export const getAccountData = (
   accounts: string[],
   options?: StateEntityDetailsOptions,
-  ledgerState?: LedgerStateSelector
+  ledgerState?: LedgerStateSelector,
+  getNonFungiblesForResources?: string[]
 ) =>
   pipe(
     () => getEntityDetails(accounts, options, ledgerState),
-    andThen(transformResources(options)(ledgerState))
+    andThen(
+      transformResources(options, ledgerState, getNonFungiblesForResources)
+    )
   )()
 
 export const getAccountFungibleTokens = (accounts: string) =>
   pipe(
     () => getSingleEntityDetails(accounts),
     andThen((data) =>
-      transformResources()()([data], { nfts: false, fungibles: true })
+      transformResources()([data], { nfts: false, fungibles: true })
     ),
     andThen((data) => data[0])
   )()
