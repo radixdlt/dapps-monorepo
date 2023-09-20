@@ -178,6 +178,25 @@ export const transformValidatorResponse =
       const stakeUnitResourceAddress =
         state.stake_unit_resource_address as string
 
+      let totalStakeUnits = '0'
+      let ownerStake = '0'
+
+      const totalStakeInXRD = validator.stake_vault.balance
+
+      if (stakeUnits) {
+        totalStakeUnits = (
+          stakeUnits[i]
+            .details as StateEntityDetailsResponseFungibleResourceDetails
+        ).total_supply
+
+        ownerStake = new BigNumber(
+          validator.locked_owner_stake_unit_vault.balance
+        )
+          .multipliedBy(totalStakeInXRD)
+          .dividedBy(totalStakeUnits)
+          .toString()
+      }
+
       return {
         type: 'validator',
         address: validator.address,
@@ -188,16 +207,9 @@ export const transformValidatorResponse =
         unstakeClaimResourceAddress:
           state.claim_token_resource_address as string,
 
-        totalStakeUnits: stakeUnits
-          ? (
-              stakeUnits[i]
-                .details as StateEntityDetailsResponseFungibleResourceDetails
-            ).total_supply
-          : '0',
+        totalStakeUnits,
 
-        totalStakeInXRD: new BigNumber(validator.stake_vault.balance)
-          .plus(validator.locked_owner_stake_unit_vault.balance)
-          .toString(),
+        totalStakeInXRD,
 
         metadata: transformMetadata(validator, [
           'name',
@@ -216,16 +228,12 @@ export const transformValidatorResponse =
               ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
             )?.owning_vault_address
         )?.owner,
-        ownerStake: validator.locked_owner_stake_unit_vault.balance,
+        ownerStake,
         percentageOwnerStake:
           validator.stake_vault.balance === '0'
             ? 0
-            : new BigNumber(validator.locked_owner_stake_unit_vault.balance)
-                .dividedBy(
-                  new BigNumber(validator.stake_vault.balance).plus(
-                    validator.locked_owner_stake_unit_vault.balance
-                  )
-                )
+            : new BigNumber(ownerStake)
+                .dividedBy(new BigNumber(validator.stake_vault.balance))
                 .multipliedBy(100)
                 .toNumber(),
         apy: 0,
