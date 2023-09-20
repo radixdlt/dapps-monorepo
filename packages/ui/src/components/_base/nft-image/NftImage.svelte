@@ -10,8 +10,8 @@
 
   const safeUrl = getSafeImageUrl({
     url: sanitizeHtml(url),
-    width: 1092,
-    height: 1092
+    width: 1024,
+    height: 1024
   })
 
   $: resolvedIconUrl =
