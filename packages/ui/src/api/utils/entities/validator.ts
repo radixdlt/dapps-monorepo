@@ -12,7 +12,8 @@ import {
   getValidatorsListWithLedgerState
 } from '@api/gateway'
 import BigNumber from 'bignumber.js'
-import { andThen, isNil, map, pick, pipe, prop, reject } from 'ramda'
+import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
+import { YEARLY_XRD_EMISSIONS } from '@constants'
 
 export type Validator = _Entity<
   'validator',
@@ -162,15 +163,21 @@ export const transformValidatorResponse =
             { state_version }
           ),
         andThen(
-          pipe(
-            map((detail) => ({
-              owner: detail.ancestor_identities?.owner_address,
-              vaultAddress: detail.address
-            }))
-          )
+          map((detail) => ({
+            owner: detail.ancestor_identities?.owner_address,
+            vaultAddress: detail.address
+          }))
         )
       )()
     }
+
+    const totalAmountStaked = pipe(
+      () => aggregatedEntities,
+      reduce(
+        (prev, cur) => prev.plus(cur.stake_vault.balance),
+        new BigNumber(0)
+      )
+    )()
 
     return aggregatedEntities.map((validator, i) => {
       const state: any = validator.state || {}
@@ -197,6 +204,13 @@ export const transformValidatorResponse =
               .multipliedBy(totalStakeInXRD)
               .dividedBy(totalStakeUnits)
       }
+
+      const apy = new BigNumber(YEARLY_XRD_EMISSIONS)
+        .multipliedBy(
+          ((1 - state.validator_fee_factor) * uptimes[i].alltime) / 100
+        )
+        .dividedBy(totalAmountStaked)
+        .toNumber()
 
       return {
         type: 'validator',
@@ -229,7 +243,9 @@ export const transformValidatorResponse =
               ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
             )?.owning_vault_address
         )?.owner,
+
         ownerStake,
+
         percentageOwnerStake:
           validator.stake_vault.balance === '0'
             ? 0
@@ -237,7 +253,8 @@ export const transformValidatorResponse =
                 .dividedBy(new BigNumber(validator.stake_vault.balance))
                 .multipliedBy(100)
                 .toNumber(),
-        apy: 0,
+
+        apy,
         acceptsStake: state.accepts_delegated_stake
       }
     })
