@@ -135,89 +135,121 @@ export type TransformedNonFungible = {
 }
 
 const transformNonFungible = async (
-  items: NonFungibleResourcesVaultCollection['items'],
+  accountResourceItems: {
+    account: string
+    items: NonFungibleResourcesVaultCollection['items']
+  }[],
   stateOptions?: StateEntityDetailsOptions,
   ledgerState?: LedgerStateSelector,
   getNonFungiblesForResources?: string[]
 ) => {
-  if (items.length === 0) {
+  if (accountResourceItems.length === 0) {
     return []
   }
 
-  const transformedNonFungibles: TransformedNonFungible[] = []
+  const allNonFungibleAddresses = pipe(
+    () => accountResourceItems,
+    map(({ items }) => items),
+    flatten,
+    map(({ resource_address }) => resource_address)
+  )()
 
   const nonFungibleEntities = await getEntityDetails(
-    items.map(({ resource_address }) => resource_address),
+    allNonFungibleAddresses,
     stateOptions,
     ledgerState
   )
 
-  for (const nonFungible of items) {
-    const ids = pipe(
-      () => nonFungible.vaults.items,
-      map(({ items }) => items),
-      (items) => reject(isNil, items),
-      flatten
-    )()
+  return Promise.all(
+    accountResourceItems.map(async ({ account, items }) => ({
+      account,
+      items: await Promise.all(
+        items.map(async (item) => {
+          const ids = pipe(
+            () => item.vaults.items,
+            map(({ items }) => items),
+            (items) => reject(isNil, items),
+            flatten
+          )()
 
-    const entity = nonFungibleEntities.find(
-      ({ address }) => address === nonFungible.resource_address
-    )!
+          const entity = nonFungibleEntities.find(
+            ({ address }) => address === item.resource_address
+          )!
 
-    let nftData: StateNonFungibleDetailsResponseItem[] = []
+          let nftData: StateNonFungibleDetailsResponseItem[] = []
 
-    let length = transformedNonFungibles.push({
-      ownedNonFungibles: nonFungible.vaults.items.reduce((sum, vault) => {
-        return sum + vault.total_count
-      }, 0),
-      resource: transformNonFungibleResource(entity),
-      nonFungibles: [],
-      nextCursor: nonFungible.vaults.items[0].next_cursor || undefined,
-      vaultAddress: nonFungible.vaults.items[0].vault_address
-    })
+          const transformedNonFungible: TransformedNonFungible = {
+            ownedNonFungibles: item.vaults.items.reduce((sum, vault) => {
+              return sum + vault.total_count
+            }, 0),
+            resource: transformNonFungibleResource(entity),
+            nonFungibles: [],
+            nextCursor: item.vaults.items[0].next_cursor || undefined,
+            vaultAddress: item.vaults.items[0].vault_address
+          }
 
-    if (
-      !getNonFungiblesForResources ||
-      (getNonFungiblesForResources &&
-        getNonFungiblesForResources.includes(nonFungible.resource_address))
-    ) {
-      nftData = await getNonFungibleData(nonFungible.resource_address, ids)
+          if (
+            !getNonFungiblesForResources ||
+            (getNonFungiblesForResources &&
+              getNonFungiblesForResources.includes(item.resource_address))
+          ) {
+            nftData = await getNonFungibleData(item.resource_address, ids)
 
-      for (const singleNftData of nftData) {
-        transformedNonFungibles[length - 1].nonFungibles.push(
-          transformNft(nonFungible.resource_address, singleNftData)
-        )
-      }
-    } else {
-      transformedNonFungibles[length - 1].nonFungibles = ids
-    }
-  }
-
-  return transformedNonFungibles
+            for (const singleNftData of nftData) {
+              transformedNonFungible.nonFungibles.push(
+                transformNft(item.resource_address, singleNftData)
+              )
+            }
+          } else {
+            transformedNonFungible.nonFungibles = ids
+          }
+          return transformedNonFungible
+        })
+      )
+    }))
+  )
 }
 
 export const transformFungible = async (
-  items: FungibleResourcesVaultCollection['items'],
+  accountResourceItems: {
+    account: string
+    items: FungibleResourcesVaultCollection['items']
+  }[],
   stateOptions?: StateEntityDetailsOptions,
   ledgerState?: LedgerStateSelector
-): Promise<FungibleResource[]> => {
-  if (items.length === 0) {
+): Promise<
+  {
+    account: string
+    items: FungibleResource[]
+  }[]
+> => {
+  if (accountResourceItems.length === 0) {
     return []
   }
 
+  const allFungibleAddresses = pipe(
+    () => accountResourceItems,
+    map(({ items }) => items),
+    flatten,
+    map(({ resource_address }) => resource_address)
+  )()
+
   const fungibleEntities = await getEntityDetails(
-    items.map(({ resource_address }) => resource_address),
+    allFungibleAddresses,
     stateOptions,
     ledgerState
   )
 
-  return fungibleEntities.map((entity) => {
-    const fungible = items.find(
-      ({ resource_address }) => resource_address === entity.address
-    )!
+  return accountResourceItems.map((item) => ({
+    account: item.account,
+    items: item.items.map((fungible) => {
+      const entity = fungibleEntities.find(
+        ({ address }) => address === fungible.resource_address
+      )!
 
-    return transformFungibleResource(entity, fungible)
-  })
+      return transformFungibleResource(entity, fungible)
+    })
+  }))
 }
 
 export const transformResource = (entity: StateEntityDetailsResponseItem) => {
@@ -239,21 +271,28 @@ export const transformResources =
     getNonFungiblesForResources?: string[]
   ) =>
   async (
-    items: StateEntityDetailsVaultResponseItem[],
+    accountEntities: StateEntityDetailsVaultResponseItem[],
     options?: Partial<{ fungibles: boolean; nfts: boolean }>
   ) => {
     const { fungibles = true, nfts = true } = options || {}
 
-    const resources = items.map(
-      pick(['fungible_resources', 'non_fungible_resources'])
+    const resources = accountEntities.map(
+      pick(['address', 'fungible_resources', 'non_fungible_resources'])
     )
 
-    const fungibleItems = resources
-      .map(({ fungible_resources: { items } }) => items)
-      .flat()
-    const nonFungibleItems = resources
-      .map(({ non_fungible_resources: { items } }) => items)
-      .flat()
+    const fungibleItems = resources.map(
+      ({ address, fungible_resources: { items } }) => ({
+        account: address,
+        items
+      })
+    )
+
+    const nonFungibleItems = resources.map(
+      ({ address, non_fungible_resources: { items } }) => ({
+        account: address,
+        items
+      })
+    )
 
     const fungible = fungibles
       ? await transformFungible(fungibleItems, stateOptions, ledgerState)
@@ -268,19 +307,15 @@ export const transformResources =
         )
       : []
 
-    return items.map((item) => ({
-      accountAddress: item.address,
-      details: item,
-      fungible: fungible.filter(({ address }) =>
-        item.fungible_resources.items.some(
-          ({ resource_address }) => resource_address === address
-        )
-      ),
-      nonFungible: nonFungible.filter(({ resource: { address } }) =>
-        item.non_fungible_resources.items.some(
-          ({ resource_address }) => resource_address === address
-        )
-      )
+    return accountEntities.map((accountEntity) => ({
+      accountAddress: accountEntity.address,
+      details: accountEntity,
+      fungible: fungible.find(
+        ({ account }) => account === accountEntity.address
+      )!.items,
+      nonFungible: nonFungible.find(
+        ({ account }) => account === accountEntity.address
+      )!.items
     }))
   }
 
