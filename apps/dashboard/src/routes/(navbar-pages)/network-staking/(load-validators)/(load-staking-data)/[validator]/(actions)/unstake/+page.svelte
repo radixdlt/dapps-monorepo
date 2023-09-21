@@ -21,8 +21,9 @@
       }))
       .filter(({ amount }) => !new BigNumber(amount).eq(0))}
     on:close={(e) => {
-      if (e.detail === 'invalidate') invalidate(_dependency)
-      goto(`/network-staking/${data.validatorAddress}`)
+      goto(`/network-staking/${data.validatorAddress}`, {
+        invalidateAll: e.detail === 'invalidate' ? true : false
+      })
     }}
   />
 {/await}
