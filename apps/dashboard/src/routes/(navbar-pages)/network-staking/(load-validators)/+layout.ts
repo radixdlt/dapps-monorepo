@@ -39,13 +39,14 @@ export const load: LayoutLoad = async ({ depends }) => {
     }
   )
 
-  const validators = getValidators(
+  const validatorsResponse = getValidators(
     networkConfig.well_known_addresses.validator_owner_badge
   )
 
   return {
     promises: {
-      validators,
+      validators: validatorsResponse.then(({ validators }) => validators),
+      ledger_state: validatorsResponse.then(({ ledger_state }) => ledger_state),
       bookmarkedValidators
     }
   }

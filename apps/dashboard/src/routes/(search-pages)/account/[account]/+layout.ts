@@ -19,20 +19,17 @@ export const load: LayoutLoad = ({ params }) => {
     explicitMetadata: ['name', 'tags', 'icon_url']
   }).then((data) => data[0])
 
-  const validators = getValidators(undefined, false, false)
-  const gatewayStatus = getGatewayStatus()
-  const currentEpoch = gatewayStatus.then((status) => status.ledger_state.epoch)
+  const validatorResponse = getValidators(undefined, false, false)
 
-  const stateVersion = gatewayStatus.then(
-    (status) => status.ledger_state.state_version
-  )
-
-  const stakeInfo = Promise.all([validators, accountData, currentEpoch])
+  const stakeInfo = Promise.all([validatorResponse, accountData])
     .then(
-      ([validators, accountData, currentEpoch]) =>
+      ([response, accountData]) =>
         [
-          getStakedInfo(validators)(accountData),
-          getUnstakeAndClaimInfo(validators)(accountData, currentEpoch)
+          getStakedInfo(response.validators)(accountData),
+          getUnstakeAndClaimInfo(response.validators)(
+            accountData,
+            response.ledger_state.epoch
+          )
         ] as const
     )
     .then(([staked, unstakeAndClaim]) => {
@@ -113,7 +110,9 @@ export const load: LayoutLoad = ({ params }) => {
   return {
     address: params.account,
     promises: {
-      stateVersion,
+      stateVersion: validatorResponse.then(
+        (response) => response.ledger_state.state_version
+      ),
       accountData,
       stakeInfo,
       poolUnits
