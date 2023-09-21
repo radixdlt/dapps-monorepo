@@ -4,7 +4,7 @@ import { CURRENT_NETWORK } from '@networks'
 const json = {
   dApps: [
     {
-      dAppDefinitionAddress: CURRENT_NETWORK.dashboardDappAddress
+      dAppDefinitionAddress: CURRENT_NETWORK.consoleDappAddress
     }
   ]
 }

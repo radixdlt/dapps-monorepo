@@ -39,7 +39,7 @@
     }
     mounted = true
     const rdt = RadixDappToolkit({
-      dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
+      dAppDefinitionAddress: CURRENT_NETWORK.consoleDappAddress,
       networkId: CURRENT_NETWORK.id,
       gatewayBaseUrl: CURRENT_NETWORK.url,
       logger: createLogger(0),
