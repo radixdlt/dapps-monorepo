@@ -4,7 +4,6 @@
   import AccountPickerExpandIcon from '@icons/account-picker-expand.svg'
   import { accounts, type Account as AccountType } from '@stores'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import Radio from '@components/_base/radio/Radio.svelte'
 
   export let selected: AccountType
 
