@@ -2,6 +2,7 @@
   import Header from '@components/header/Header.svelte'
   import SidebarWithNavbar from '../sidebar-with-navbar/SidebarWithNavbar.svelte'
   import { page } from '$app/stores'
+  import { isMobileDevice, showSidebar } from '@stores'
 
   export let routes: { text: string; icon: string; path: string }[] = []
   export let hideSearch: boolean | undefined
@@ -15,7 +16,7 @@
 
 <div class="layout">
   <div class="header">
-    <Header {hideSearch}><slot slot="logo" name="logo" /></Header>
+    <Header {routes} {hideSearch}><slot slot="logo" name="logo" /></Header>
   </div>
   <div class="content">
     <div
@@ -25,6 +26,7 @@
     >
       <SidebarWithNavbar page={$page} {routes} />
     </div>
+
     <main class="page">
       <div class="margin">
         <div class="page-content">
@@ -69,10 +71,6 @@
       height: 100%;
       position: relative;
       overflow: hidden;
-
-      @include mixins.desktop {
-        grid: 'navbar page' auto / 11rem auto;
-      }
 
       .navbar {
         grid-area: navbar;

@@ -82,21 +82,6 @@
 
   const routes = [
     {
-      text: 'Deploy Package',
-      icon: LayersIcon,
-      path: '/deploy-package'
-    },
-    {
-      text: 'Send Raw Transaction',
-      icon: TransactionsIcon,
-      path: '/transaction-manifest'
-    },
-    {
-      text: 'Manage dApp Definition',
-      icon: DappMetadataIcon,
-      path: '/dapp-metadata'
-    },
-    {
       text: 'Network Staking',
       icon: ValidatorsIcon,
       path: '/network-staking'
@@ -142,7 +127,8 @@
         slot="logo"
         href="/"
         class="logo"
-        style={`background-image: url(${LogoIcon})`}
+        style:background-image="url({LogoIcon})"
+        style:margin-bottom="var(--spacing-lg)"
       /><slot /></Layout
     >
   {/if}
