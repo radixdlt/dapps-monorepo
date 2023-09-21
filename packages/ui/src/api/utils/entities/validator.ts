@@ -19,8 +19,8 @@ export type Validator = _Entity<
   ['name', 'symbol', 'icon_url', 'description', 'website']
 > & {
   ownerAddress?: string
-  totalStakeInXRD: string
-  ownerStake: string
+  totalStakeInXRD: BigNumber
+  ownerStake: BigNumber
   percentageOwnerStake: number
   apy: number
   fee: number
@@ -37,7 +37,7 @@ export type Validator = _Entity<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
-  totalStakeUnits: string
+  totalStakeUnits: BigNumber
 }
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24
@@ -178,23 +178,24 @@ export const transformValidatorResponse =
       const stakeUnitResourceAddress =
         state.stake_unit_resource_address as string
 
-      let totalStakeUnits = '0'
-      let ownerStake = '0'
+      let totalStakeUnits = new BigNumber(0)
+      let ownerStake = new BigNumber(0)
 
-      const totalStakeInXRD = validator.stake_vault.balance
+      const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
 
       if (stakeUnits) {
-        totalStakeUnits = (
-          stakeUnits[i]
-            .details as StateEntityDetailsResponseFungibleResourceDetails
-        ).total_supply
-
-        ownerStake = new BigNumber(
-          validator.locked_owner_stake_unit_vault.balance
+        totalStakeUnits = new BigNumber(
+          (
+            stakeUnits[i]
+              .details as StateEntityDetailsResponseFungibleResourceDetails
+          ).total_supply
         )
-          .multipliedBy(totalStakeInXRD)
-          .dividedBy(totalStakeUnits)
-          .toString()
+
+        ownerStake = totalStakeUnits.isZero()
+          ? new BigNumber(0)
+          : new BigNumber(validator.locked_owner_stake_unit_vault.balance)
+              .multipliedBy(totalStakeInXRD)
+              .dividedBy(totalStakeUnits)
       }
 
       return {
