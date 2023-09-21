@@ -35,10 +35,6 @@
   >
     <slot />
   </nav>
-{:else if isDesktopViewport}
-  <nav>
-    <slot />
-  </nav>
 {/if}
 
 <style lang="scss">
