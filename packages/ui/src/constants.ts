@@ -81,3 +81,5 @@ export const XRDToken = {
 export const EXPECTED_EPOCH_TIME_MINUTES = 5
 
 export const RET_DECIMAL_PRECISION = 18
+
+export const YEARLY_XRD_EMISSIONS = 300_000_000
