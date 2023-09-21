@@ -34,10 +34,10 @@
   </div>
   {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
   <div class="right-wrapper">
+    <radix-dapps-dropdown class="desktop-only" />
     {#if !$isMobileDevice}
       <div class="connect-button"><ConnectButton /></div>
     {/if}
-    <radix-dapps-dropdown class="desktop-only" />
   </div>
 </header>
 
