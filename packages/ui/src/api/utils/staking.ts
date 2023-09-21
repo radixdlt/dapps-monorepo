@@ -97,7 +97,7 @@ export const getStakedInfo =
             validator.stakeUnitResourceAddress === stakeUnitToken.address
         )!
 
-        const xrdAmount = new BigNumber(validator.totalStakeInXRD)
+        const xrdAmount = validator.totalStakeInXRD
           .multipliedBy(stakeUnitToken.value)
           .dividedBy(stakeUnitToken.totalSupply)
           .toFixed(RET_DECIMAL_PRECISION - 1)

@@ -18,8 +18,8 @@
   const calculateStakeUnitsAmount = (
     xrdAmountToUnstake: string,
     stakeUnitsInAccount: string,
-    totalStakeUnits: string,
-    totalXrdStaked: string
+    totalStakeUnits: BigNumber,
+    totalXrdStaked: BigNumber
   ) => {
     const firstPassStakeUnits = new BigNumber(xrdAmountToUnstake)
       .multipliedBy(totalStakeUnits)

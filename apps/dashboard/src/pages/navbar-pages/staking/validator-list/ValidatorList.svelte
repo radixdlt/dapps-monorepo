@@ -57,7 +57,7 @@
       }
     },
     {
-      sortBy: 'ownerStake',
+      sortBy: 'percentageOwnerStake',
       header: {
         label: 'OWNER STAKE',
         alignment: 'center'

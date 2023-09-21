@@ -84,7 +84,7 @@
 
   let sortedEntries: T[] = []
   let lastSortedBy: number
-  let ascendingSort = true
+  let ascendingSort = false
   let sortStatus: ('ascending' | 'descending' | 'unsorted')[] = Array(
     columns.length
   ).fill('unsorted')
@@ -97,6 +97,7 @@
     }
 
     ascendingSort = index === lastSortedBy ? !ascendingSort : false
+
     lastSortedBy = index
     const direction = ascendingSort ? 'ascending' : 'descending'
     sortStatus[index] = direction
@@ -104,7 +105,7 @@
     sortedEntries = sort(entries, column, direction)
   }
 
-  $: if (defaultSortedColumn) {
+  if (defaultSortedColumn) {
     sortColumn(columns[defaultSortedColumn], defaultSortedColumn)
   }
 </script>
