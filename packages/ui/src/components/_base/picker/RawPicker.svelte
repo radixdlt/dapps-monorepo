@@ -8,6 +8,7 @@
     {
       label: string
       value: V
+      default?: boolean
     }[]
   >
 
@@ -24,7 +25,7 @@
     selected: (typeof options)[number]
   }>()
 
-  $: selected = options[0]
+  $: selected = options.find((option) => option.default) || options[0]
 
   onMount(() => {
     dispatch('selected', selected)

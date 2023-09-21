@@ -12,6 +12,7 @@
   const options: {
     label: string
     value: UptimeValue
+    default?: boolean
   }[] = [
     { label: '1 Day', value: '1day' },
     { label: '1 Week', value: '1week' },
@@ -19,10 +20,10 @@
     { label: '3 Months', value: '3months' },
     { label: '6 Months', value: '6months' },
     { label: '1 Year', value: '1year' },
-    { label: 'All Time', value: 'alltime' }
+    { label: 'All Time', value: 'alltime', default: true }
   ]
 
-  export let selected: (typeof options)[number] = options[6]
+  export let selected: (typeof options)[number]
   export let sorting: ComponentProps<BasicHeader>['sorting'] = undefined
 </script>
 
