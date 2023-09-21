@@ -50,7 +50,7 @@
     }
     mounted = true
     const rdt = RadixDappToolkit({
-      dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress,
+      dAppDefinitionAddress: CURRENT_NETWORK.dashboardDappAddress,
       networkId: CURRENT_NETWORK?.id,
       logger: createLogger(0),
       onDisconnect: () => updateAccounts([])

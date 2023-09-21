@@ -17,7 +17,7 @@ export const AuthController = ({
   oAuth2 = OAuth2(),
   logger,
   expectedOrigin = 'http://localhost:5173',
-  dAppDefinitionAddress = CURRENT_NETWORK.dappDefAddress,
+  dAppDefinitionAddress = CURRENT_NETWORK.dashboardDappAddress,
   networkId = CURRENT_NETWORK.id,
   gatewayApiClient
 }: Partial<{
@@ -100,7 +100,7 @@ export const AuthController = ({
 const options = {
   expectedOrigin: process.env.URL || 'http://localhost:5173',
   networkId: CURRENT_NETWORK.id,
-  dAppDefinitionAddress: CURRENT_NETWORK.dappDefAddress
+  dAppDefinitionAddress: CURRENT_NETWORK.dashboardDappAddress
 }
 
 appLogger.debug('authController', options)
