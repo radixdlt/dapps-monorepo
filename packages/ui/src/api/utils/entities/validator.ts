@@ -112,17 +112,18 @@ export const transformValidatorResponse =
   ) =>
   async ({
     aggregatedEntities,
-    ledger_state: { state_version }
-  }: Awaited<ReturnType<typeof getValidatorsListWithLedgerState>>): Promise<
-    Validator[]
-  > => {
+    ledger_state
+  }: Awaited<ReturnType<typeof getValidatorsListWithLedgerState>>): Promise<{
+    validators: Validator[]
+    ledger_state: typeof ledger_state
+  }> => {
     const stakeUnits = withStakeUnits
       ? await getEntityDetails(
           aggregatedEntities.map(
             (v) => (v.state as any).stake_unit_resource_address as string
           ),
           undefined,
-          { state_version }
+          { state_version: ledger_state.state_version }
         )
       : undefined
 
@@ -160,7 +161,7 @@ export const transformValidatorResponse =
               (address) => reject(isNil, address)
             )(),
             { ancestorIdentities: true },
-            { state_version }
+            { state_version: ledger_state.state_version }
           ),
         andThen(
           map((detail) => ({
@@ -179,7 +180,7 @@ export const transformValidatorResponse =
       )
     )()
 
-    return aggregatedEntities.map((validator, i) => {
+    const validators = aggregatedEntities.map((validator, i) => {
       const state: any = validator.state || {}
 
       const stakeUnitResourceAddress =
@@ -205,15 +206,17 @@ export const transformValidatorResponse =
               .dividedBy(totalStakeUnits)
       }
 
-      const apy = new BigNumber(YEARLY_XRD_EMISSIONS)
-        .multipliedBy(
-          ((1 - state.validator_fee_factor) * uptimes[i].alltime) / 100
-        )
-        .dividedBy(totalAmountStaked)
-        .toNumber()
+      const apy = withUptime
+        ? new BigNumber(YEARLY_XRD_EMISSIONS)
+            .multipliedBy(
+              ((1 - state.validator_fee_factor) * uptimes[i].alltime) / 100
+            )
+            .dividedBy(totalAmountStaked)
+            .toNumber()
+        : 0
 
       return {
-        type: 'validator',
+        type: 'validator' as const,
         address: validator.address,
         fee: (state.validator_fee_factor || 0) * 100,
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
@@ -258,6 +261,11 @@ export const transformValidatorResponse =
         acceptsStake: state.accepts_delegated_stake
       }
     })
+
+    return {
+      validators,
+      ledger_state
+    }
   }
 
 export const getValidators = (

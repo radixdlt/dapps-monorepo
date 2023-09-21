@@ -44,11 +44,11 @@ export const _dependency = 'load:staking-data'
 
 export const load: LayoutLoad = async ({ depends, parent }) =>
   parent()
-    .then((data) => data.promises.validators)
-    .then(async (validators) => {
+    .then((data) =>
+      Promise.all([data.promises.validators, data.promises.ledger_state])
+    )
+    .then(async ([validators, ledger_state]) => {
       depends(_dependency)
-
-      const currentEpoch = (await getGatewayStatus()).ledger_state.epoch
 
       const stakeInfo = derived(accounts, async ($accounts) => {
         if ($accounts.length > 0) {
@@ -57,7 +57,9 @@ export const load: LayoutLoad = async ({ depends, parent }) =>
             {
               explicitMetadata: ['validator']
             },
-            undefined,
+            {
+              state_version: ledger_state.state_version
+            },
             validators.map((v) => v.unstakeClaimResourceAddress)
           )
 
@@ -74,7 +76,7 @@ export const load: LayoutLoad = async ({ depends, parent }) =>
 
               const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
                 validators
-              )(data, currentEpoch)
+              )(data, ledger_state.epoch)
 
               return {
                 staked: prev.staked.concat(staked),
@@ -139,6 +141,6 @@ export const load: LayoutLoad = async ({ depends, parent }) =>
       return {
         validatorAccumulatedStakes,
         stakeInfo,
-        currentEpoch
+        currentEpoch: ledger_state.epoch
       }
     })
