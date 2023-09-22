@@ -9,6 +9,7 @@
   import SummaryTab from '../SummaryTab.svelte'
   import type { PoolUnit } from '@api/utils/entities/pool-unit'
   import type { ComponentProps } from 'svelte'
+  import { formatTokenValue } from '@utils'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit
@@ -42,7 +43,11 @@
 
   $: nonMetadataItems = resource.then((resource) => {
     let metadata: Parameters<typeof metadataItem>[] = [
-      ['total supply', resource.totalSupply, 'U64']
+      [
+        'total supply',
+        formatTokenValue(resource.totalSupply).displayValue,
+        'String'
+      ]
     ]
 
     if (showAddressInMetadata) {
