@@ -6,6 +6,7 @@
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
+  import type { Validator } from '@api/utils/entities/validator'
 
   export let open: boolean
   export let feeValues: number[]
@@ -21,7 +22,11 @@
   let acceptsStakeFilter = false
   let bookmarkedFilter = false
 
-  const recentUptimeOptions = [
+  const recentUptimeOptions: {
+    label: string
+    value: keyof Validator['uptimePercentages']
+    default?: boolean
+  }[] = [
     { label: '1 day', value: '1day' },
     { label: '1 week', value: '1week' },
     { label: '1 month', value: '1month' },
