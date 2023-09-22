@@ -8,11 +8,9 @@
 
   $: accumulatedStakes = data.validatorAccumulatedStakes
 
-  data.promises.validator
-    .then((validator) => {
-      if (!validator) $validatorNotFound = true
-    })
-    .catch(() => ($validatorNotFound = true))
+  data.promises.validator.then((validator) => {
+    if (!validator) $validatorNotFound = true
+  })
 </script>
 
 <ValidatorDetails

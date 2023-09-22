@@ -22,12 +22,12 @@
   import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
   import type { ComponentEvents } from 'svelte'
   import { bookmarkedValidatorsStore } from '../../../../../stores'
-  import NotFound from '@dashboard-pages/not-found/NotFound.svelte'
   import type {
     StakedInfo,
     UnstakingInfo,
     ReadyToClaimInfo
   } from '@api/utils/staking'
+  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
 
   export let data: LayoutData
 
@@ -69,7 +69,7 @@
 </script>
 
 {#if $validatorNotFound}
-  <NotFound />
+  <ErrorPage status={404} />
 {:else}
   <Validators
     validators={useFilter
