@@ -69,6 +69,8 @@ type AddressPrefix =
   | 'txid'
   | 'component'
   | 'identity'
+  | 'pool'
+  | 'validator'
 
 export const getAddressPrefix = (address: string): AddressPrefix => {
   const parts = address.split('_')
@@ -89,7 +91,8 @@ export const addressToRoute = async (address: string) =>
     component: `/component/${encodeURIComponent(address)}`,
     txid: `/transaction/${encodeURIComponent(address)}`,
     validator: `/validator/${encodeURIComponent(address)}`,
-    identity: `/identity/${encodeURIComponent(address)}`
+    identity: `/identity/${encodeURIComponent(address)}`,
+    pool: `/pool/${encodeURIComponent(address)}`
   }[getAddressPrefix(address)])
 
 export const useContext = <
