@@ -1,5 +1,4 @@
 import type { LayoutLoad } from './$types'
-import { getGatewayStatus } from '@api/gateway'
 import { getAccountData } from '@api/utils/entities/resource'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
@@ -42,105 +41,104 @@ export type LoggedInStakeInfo =
 
 export const _dependency = 'load:staking-data'
 
-export const load: LayoutLoad = async ({ depends, parent }) =>
-  parent()
-    .then((data) =>
-      Promise.all([data.promises.validators, data.promises.ledger_state])
-    )
-    .then(async ([validators, ledger_state]) => {
-      depends(_dependency)
+export const load: LayoutLoad = async ({ depends, parent }) => {
+  const parentData = parent()
 
-      const stakeInfo = derived(accounts, async ($accounts) => {
-        if ($accounts.length > 0) {
-          const accountData = await getAccountData(
-            $accounts.map((a) => a.address),
-            {
-              explicitMetadata: ['validator']
-            },
-            {
-              state_version: ledger_state.state_version
-            },
-            validators.map((v) => v.unstakeClaimResourceAddress)
-          )
+  depends(_dependency)
 
-          return $accounts.reduce(
-            (prev, cur) => {
-              const data = accountData.find(
-                (d) => d.accountAddress === cur.address
-              )!
+  const stakeInfo = derived(accounts, async ($accounts) => {
+    const _validators = await (await parentData).promises.validators
+    const _ledger_state = await (await parentData).promises.ledger_state
 
-              const staked = getStakedInfo(validators)(data).map((stake) => ({
-                ...stake,
-                account: cur
-              })) as LoggedInStakedInfo[]
-
-              const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
-                validators
-              )(data, ledger_state.epoch)
-
-              return {
-                staked: prev.staked.concat(staked),
-                unstaking: prev.unstaking.concat(
-                  unstaking.map((unstake) => ({
-                    ...unstake,
-                    account: cur
-                  })) as LoggedInUnstakingInfo[]
-                ),
-                readyToClaim: prev.readyToClaim.concat(
-                  readyToClaim.map((claim) => ({
-                    ...claim,
-                    account: cur
-                  })) as LoggedInReadyToClaimInfo[]
-                )
-              }
-            },
-            {
-              staked: [] as LoggedInStakedInfo[],
-              unstaking: [] as LoggedInUnstakingInfo[],
-              readyToClaim: [] as LoggedInReadyToClaimInfo[]
-            }
-          )
-        } else {
-          return new Promise<{
-            staked: LoggedInStakedInfo[]
-            unstaking: LoggedInUnstakingInfo[]
-            readyToClaim: LoggedInReadyToClaimInfo[]
-          }>(() => {})
-        }
-      })
-
-      const validatorAccumulatedStakes = derived(stakeInfo, ($info) =>
-        $info.then(async ({ staked, unstaking, readyToClaim }) => {
-          const _validators = await validators
-
-          return _validators.reduce<AccumulatedStakes>((prev, cur) => {
-            const [
-              accumulatedStakes,
-              accumulatedUnstaking,
-              accumulatedReadyToClaim
-            ] = ([staked, unstaking, readyToClaim] as StakeInfo[][]).map((s) =>
-              s
-                .filter((s) => s.validator.address === cur.address)
-                .reduce(
-                  (acc, { xrdAmount }) => acc.plus(xrdAmount),
-                  new BigNumber(0)
-                )
-                .toString()
-            )
-
-            prev[cur.address] = {
-              accumulatedStakes,
-              accumulatedUnstaking,
-              accumulatedReadyToClaim
-            }
-            return prev
-          }, {})
-        })
+    if ($accounts.length > 0) {
+      const accountData = await getAccountData(
+        $accounts.map((a) => a.address),
+        {
+          explicitMetadata: ['validator']
+        },
+        {
+          state_version: _ledger_state.state_version
+        },
+        _validators.map((v) => v.unstakeClaimResourceAddress)
       )
 
-      return {
-        validatorAccumulatedStakes,
-        stakeInfo,
-        currentEpoch: ledger_state.epoch
-      }
+      return $accounts.reduce(
+        (prev, cur) => {
+          const data = accountData.find(
+            (d) => d.accountAddress === cur.address
+          )!
+
+          const staked = getStakedInfo(_validators)(data).map((stake) => ({
+            ...stake,
+            account: cur
+          })) as LoggedInStakedInfo[]
+
+          const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
+            _validators
+          )(data, _ledger_state.epoch)
+
+          return {
+            staked: prev.staked.concat(staked),
+            unstaking: prev.unstaking.concat(
+              unstaking.map((unstake) => ({
+                ...unstake,
+                account: cur
+              })) as LoggedInUnstakingInfo[]
+            ),
+            readyToClaim: prev.readyToClaim.concat(
+              readyToClaim.map((claim) => ({
+                ...claim,
+                account: cur
+              })) as LoggedInReadyToClaimInfo[]
+            )
+          }
+        },
+        {
+          staked: [] as LoggedInStakedInfo[],
+          unstaking: [] as LoggedInUnstakingInfo[],
+          readyToClaim: [] as LoggedInReadyToClaimInfo[]
+        }
+      )
+    } else {
+      return new Promise<{
+        staked: LoggedInStakedInfo[]
+        unstaking: LoggedInUnstakingInfo[]
+        readyToClaim: LoggedInReadyToClaimInfo[]
+      }>(() => {})
+    }
+  })
+
+  const validatorAccumulatedStakes = derived(stakeInfo, ($info) =>
+    $info.then(async ({ staked, unstaking, readyToClaim }) => {
+      const _validators = await (await parentData).promises.validators
+
+      return _validators.reduce<AccumulatedStakes>((prev, cur) => {
+        const [
+          accumulatedStakes,
+          accumulatedUnstaking,
+          accumulatedReadyToClaim
+        ] = ([staked, unstaking, readyToClaim] as StakeInfo[][]).map((s) =>
+          s
+            .filter((s) => s.validator.address === cur.address)
+            .reduce(
+              (acc, { xrdAmount }) => acc.plus(xrdAmount),
+              new BigNumber(0)
+            )
+            .toString()
+        )
+
+        prev[cur.address] = {
+          accumulatedStakes,
+          accumulatedUnstaking,
+          accumulatedReadyToClaim
+        }
+        return prev
+      }, {})
     })
+  )
+
+  return {
+    validatorAccumulatedStakes,
+    stakeInfo
+  }
+}

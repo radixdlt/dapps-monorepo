@@ -7,13 +7,9 @@ import { networkConfiguration } from '@stores'
 
 export const prerender = false
 
-export const _dependency = 'load:validators'
-
 export type Bookmarked = { [validator: string]: boolean }
 
-export const load: LayoutLoad = async ({ depends }) => {
-  depends(_dependency)
-
+export const load: LayoutLoad = () => {
   const bookmarkedValidators = bookmarkedValidatorsApi
     .getAll(fetch)
     .unwrapOr([] as string[])
@@ -28,19 +24,17 @@ export const load: LayoutLoad = async ({ depends }) => {
       return bookmarked
     })
 
-  const networkConfig = await new Promise<NetworkConfigurationResponse>(
-    (resolve) => {
-      let unsub = networkConfiguration.subscribe((config) => {
-        if (config) {
-          resolve(config)
-          unsub()
-        }
-      })
-    }
-  )
+  const networkConfig = new Promise<NetworkConfigurationResponse>((resolve) => {
+    let unsub = networkConfiguration.subscribe((config) => {
+      if (config) {
+        resolve(config)
+        unsub()
+      }
+    })
+  })
 
-  const validatorsResponse = getValidators(
-    networkConfig.well_known_addresses.validator_owner_badge
+  const validatorsResponse = networkConfig.then((config) =>
+    getValidators(config.well_known_addresses.validator_owner_badge)
   )
 
   return {
