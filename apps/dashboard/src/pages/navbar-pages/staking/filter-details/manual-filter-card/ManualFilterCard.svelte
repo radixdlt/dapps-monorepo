@@ -15,12 +15,13 @@
 <div class="manual-filter-card">
   <div class="value-card">
     <div class="row">
-      <div id="text">MIN UPTIME (%)</div>
-      <div class="picker">
-        <SimplePicker {options} bind:selected />
-      </div>
+      <div class="text">MIN UPTIME (%)</div>
+      <PercentageInput bind:value={percentage} />
     </div>
-    <PercentageInput bind:value={percentage} />
+    <span class="text"> OVER THE PAST </span>
+    <div class="picker">
+      <SimplePicker {options} bind:selected />
+    </div>
   </div>
 </div>
 
@@ -35,18 +36,16 @@
   .value-card {
     .row {
       display: flex;
-      gap: var(--spacing-md);
+      gap: var(--spacing-lg);
       align-items: center;
-      min-width: 15rem;
+    }
+    .text {
+      font-size: var(--card-text-size);
+      color: var(--card-text-color);
+    }
 
-      #text {
-        font-size: var(--card-text-size);
-        color: var(--card-text-color);
-      }
-
-      .picker {
-        width: 8rem;
-      }
+    .picker {
+      width: 7rem;
     }
   }
 </style>

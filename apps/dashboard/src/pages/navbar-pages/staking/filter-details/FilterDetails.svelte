@@ -6,6 +6,7 @@
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
+  import type { Validator } from '@api/utils/entities/validator'
 
   export let open: boolean
   export let feeValues: number[]
@@ -21,17 +22,33 @@
   let acceptsStakeFilter = false
   let bookmarkedFilter = false
 
-  const recentUptimeOptions = [
-    { label: '1 day', value: '1day' } as const,
-    { label: '1 week', value: '1week' } as const,
-    { label: '1 month', value: '1month' } as const,
-    { label: '3 months', value: '3months' } as const,
-    { label: '6 months', value: '6months' } as const,
-    { label: '1 year', value: '1year' } as const,
-    { label: 'All time', value: 'alltime' } as const
+  const recentUptimeOptions: {
+    label: string
+    value: keyof Validator['uptimePercentages']
+    default?: boolean
+  }[] = [
+    { label: '1 day', value: '1day' },
+    { label: '1 week', value: '1week' },
+    { label: '1 month', value: '1month' },
+    { label: '3 months', value: '3months' },
+    { label: '6 months', value: '6months' },
+    { label: '1 year', value: '1year' },
+    { label: 'All time', value: 'alltime', default: true }
   ]
 
-  let selectedUptime = recentUptimeOptions[0]
+  const changeDefaultUptime = (
+    uptime: (typeof recentUptimeOptions)[number]['value']
+  ) => {
+    recentUptimeOptions.forEach((option) => {
+      option.default = option.value === uptime
+    })
+  }
+
+  $: changeDefaultUptime(selectedUptime.value)
+
+  let selectedUptime =
+    recentUptimeOptions.find((option) => option.default) ||
+    recentUptimeOptions[0]
 
   let uptimeFilterPercentage = 0
 
@@ -132,7 +149,7 @@
 
   <div class="text">
     <h3>Recent Uptime (%)</h3>
-    <p class="subtext">The amount of time the validator has been active</p>
+    <p class="subtext">Minimum validator uptime over a recent period of time</p>
   </div>
 
   <div class="card">
