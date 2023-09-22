@@ -22,16 +22,28 @@
   let bookmarkedFilter = false
 
   const recentUptimeOptions = [
-    { label: '1 day', value: '1day' } as const,
-    { label: '1 week', value: '1week' } as const,
-    { label: '1 month', value: '1month' } as const,
-    { label: '3 months', value: '3months' } as const,
-    { label: '6 months', value: '6months' } as const,
-    { label: '1 year', value: '1year' } as const,
-    { label: 'All time', value: 'alltime' } as const
+    { label: '1 day', value: '1day' },
+    { label: '1 week', value: '1week' },
+    { label: '1 month', value: '1month' },
+    { label: '3 months', value: '3months' },
+    { label: '6 months', value: '6months' },
+    { label: '1 year', value: '1year' },
+    { label: 'All time', value: 'alltime', default: true }
   ]
 
-  let selectedUptime = recentUptimeOptions[0]
+  const changeDefaultUptime = (
+    uptime: (typeof recentUptimeOptions)[number]['value']
+  ) => {
+    recentUptimeOptions.forEach((option) => {
+      option.default = option.value === uptime
+    })
+  }
+
+  $: changeDefaultUptime(selectedUptime.value)
+
+  let selectedUptime =
+    recentUptimeOptions.find((option) => option.default) ||
+    recentUptimeOptions[0]
 
   let uptimeFilterPercentage = 0
 
