@@ -3,8 +3,6 @@ import type { LayoutLoad } from './$types'
 import { transformPackage } from '@api/utils/entities/package'
 import { getAssociatedDapps } from '../../utils'
 
-export const prerender = false
-
 export const load: LayoutLoad = ({ params }) => {
   const entity = getSingleEntityDetails(params.package)
 

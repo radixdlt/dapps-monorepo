@@ -12,8 +12,6 @@ import { getGatewayStatus } from '@api/gateway'
 import { filter, map } from 'ramda'
 import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
 
-export const prerender = false
-
 export const load: LayoutLoad = ({ params }) => {
   const accountData = getAccountData([params.account], {
     explicitMetadata: ['name', 'tags', 'icon_url']

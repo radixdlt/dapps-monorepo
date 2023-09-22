@@ -12,8 +12,6 @@ import {
   getStakedInfo
 } from '@api/utils/staking'
 
-export const prerender = false
-
 export type AccumulatedStakes = {
   [validator: string]: {
     accumulatedStakes: string
