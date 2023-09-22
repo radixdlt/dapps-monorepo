@@ -17,7 +17,7 @@ import { YEARLY_XRD_EMISSIONS } from '@constants'
 
 export type Validator = _Entity<
   'validator',
-  ['name', 'symbol', 'icon_url', 'description', 'website']
+  ['name', 'icon_url', 'description', 'info_url']
 > & {
   ownerAddress?: string
   totalStakeInXRD: BigNumber
@@ -231,11 +231,10 @@ export const transformValidatorResponse =
 
         metadata: transformMetadata(validator, [
           'name',
-          'symbol',
           'icon_url',
           'description',
           'tags',
-          'website'
+          'info_url'
         ]),
 
         uptimePercentages: uptimes[i],

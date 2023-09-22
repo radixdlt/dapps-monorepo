@@ -11,11 +11,13 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { createEventDispatcher } from 'svelte'
-  import Metadata from '@components/metadata/Metadata.svelte'
   import type { Validator } from '@api/utils/entities/validator'
-  import { metadataItem } from '@dashboard-pages/search-pages/utils'
   import RecentUptimeDetail from './RecentUptimeDetail.svelte'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
+  import SummaryMetadata from '@dashboard-pages/search-pages/SummaryMetadata.svelte'
+  import { formatXRDValue, truncateNumber } from '@utils'
+  import { isNil, pipe, reject } from 'ramda'
+  import type { metadataItem } from '@dashboard-pages/search-pages/utils'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -23,6 +25,29 @@
   const dispatch = createEventDispatcher<{
     close: null
   }>()
+
+  const getNonMetadataItems = pipe(
+    (validator: Validator) => [
+      validator.ownerAddress
+        ? ['owner addres', validator.ownerAddress, 'GlobalAddress']
+        : undefined,
+      validator.metadata.standard.info_url
+        ? ['website', validator.metadata.standard.info_url.value, 'Url']
+        : undefined,
+      [
+        'total stake',
+        formatXRDValue(validator.totalStakeInXRD.toString()),
+        'String'
+      ],
+      ['accepts stake', validator.acceptsStake, 'Bool'],
+      ['fee (%)', `${truncateNumber(validator.fee)} %`, 'String'],
+      ['apy', `${truncateNumber(validator.apy)} %`, 'String'],
+      ['recent uptime', validator.uptimePercentages, 'String'],
+      ['owner stake', formatXRDValue(validator.ownerStake.toString()), 'String']
+    ],
+    reject((item) => isNil(item)),
+    (items) => items as Parameters<typeof metadataItem>[]
+  )
 </script>
 
 <SidePanel useBackdrop on:close>
@@ -76,39 +101,11 @@
 
   <div class="card">
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
-      <Metadata
-        metadata={validator.then((validator) => {
-          const extraData = [
-            metadataItem('total stake', validator.totalStakeInXRD, 'U64'),
-            metadataItem('accepts stake', validator.acceptsStake, 'Bool'),
-            metadataItem('fee (%)', `${validator.fee} %`, 'String'),
-            metadataItem(
-              'recent uptime',
-              validator.uptimePercentages,
-              'String'
-            ),
-            metadataItem('owner stake', validator.ownerStake, 'U64')
-          ]
-          if (validator.metadata.standard.website)
-            extraData.push(
-              metadataItem(
-                'website',
-                validator.metadata.standard.website.value,
-                'Url'
-              )
-            )
-
-          if (validator.ownerAddress)
-            extraData.push(
-              metadataItem(
-                'owner address',
-                validator.ownerAddress,
-                'GlobalAddress'
-              )
-            )
-
-          return extraData.concat(validator.metadata.nonStandard)
-        })}
+      <SummaryMetadata
+        standardMetadata={validator.then(
+          ({ metadata: { standard } }) => standard
+        )}
+        nonMetadataItems={validator.then(getNonMetadataItems)}
         expectedEntries={{
           'accepts stake': {
             label: 'Accepts Stake',
@@ -126,6 +123,7 @@
             })
           }
         }}
+        omittedKeys={['info_url']}
       />
     </InfoBox>
   </div>

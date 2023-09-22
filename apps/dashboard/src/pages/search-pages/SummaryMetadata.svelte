@@ -6,6 +6,7 @@
   import AssociatedDapps from './AssociatedDapps.svelte'
   import Tags from '@components/_base/tags/Tags.svelte'
   import Row from '@components/info-box/Row.svelte'
+  import type { ComponentProps } from 'svelte'
 
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
@@ -15,7 +16,7 @@
       name: string
       iconUrl: string
     }[]
-  >
+  > = Promise.resolve([])
   export let redeemableTokens: Promise<
     | {
         iconUrl?: string
@@ -24,6 +25,7 @@
     | undefined
   > = Promise.resolve(undefined)
   export let omittedKeys: string[] = []
+  export let expectedEntries: ComponentProps<Metadata>['expectedEntries'] = {}
 
   const omitted = ['name', 'symbol', 'icon_url', 'description', 'tags']
 
@@ -39,7 +41,7 @@
   )
 </script>
 
-<Metadata metadata={combined}>
+<Metadata {expectedEntries} metadata={combined}>
   <svelte:fragment slot="extra-rows">
     {#await standardMetadata then metadata}
       <Row text="Tags">

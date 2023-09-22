@@ -21,7 +21,7 @@ export type KnownStandardTypes = {
   validator: MetadataStringValueTypeEnum
   symbol: MetadataStringValueTypeEnum
   icon_url: MetadataUrlValueTypeEnum
-  website: MetadataUrlValueTypeEnum
+  info_url: MetadataUrlValueTypeEnum
   pool: MetadataGlobalAddressValueTypeEnum
   key_image_url: MetadataUrlValueTypeEnum
 }
