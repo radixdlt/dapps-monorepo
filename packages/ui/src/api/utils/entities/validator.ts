@@ -208,9 +208,7 @@ export const transformValidatorResponse =
 
       const apy = withUptime
         ? new BigNumber(YEARLY_XRD_EMISSIONS)
-            .multipliedBy(
-              ((1 - state.validator_fee_factor) * uptimes[i].alltime) / 100
-            )
+            .multipliedBy((1 - state.validator_fee_factor) * uptimes[i].alltime)
             .dividedBy(totalAmountStaked)
             .toNumber()
         : 0
