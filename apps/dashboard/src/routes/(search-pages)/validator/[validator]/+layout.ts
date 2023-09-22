@@ -3,8 +3,6 @@ import type { LayoutLoad } from './$types'
 import { getAssociatedDapps } from '../../utils'
 import { transformMetadata } from '@api/utils/metadata'
 
-export const prerender = false
-
 export const load: LayoutLoad = ({ params }) => {
   const entity = getSingleEntityDetails(params.validator)
 

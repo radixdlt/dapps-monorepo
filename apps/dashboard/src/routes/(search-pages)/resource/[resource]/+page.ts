@@ -7,8 +7,6 @@ import { isNFTAddress } from '@utils'
 import { isStakeUnit } from '@api/utils/entities/stake-unit'
 import { redirect } from '@sveltejs/kit'
 
-export const prerender = false
-
 export const load: PageLoad = async ({ params }) => {
   if (isNFTAddress(params.resource)) {
     throw redirect(308, `/nft/${encodeURIComponent(params.resource)}`)

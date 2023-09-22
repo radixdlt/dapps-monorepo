@@ -6,8 +6,6 @@ import { getDappDefinitionData } from '../../utils'
 import { map } from 'ramda'
 import { transformNft } from '@api/utils/nfts'
 
-export const prerender = false
-
 export const load: PageLoad = async ({ params }) => {
   const [resourceAddress, nftId] = decodeURIComponent(params.nft).split(':')
 

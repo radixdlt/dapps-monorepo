@@ -1,8 +1,6 @@
 import type { Validator } from '@api/utils/entities/validator'
 import type { LayoutLoad } from './$types'
 
-export const prerender = false
-
 export const load: LayoutLoad = ({ params, parent }) => {
   const validator = parent().then(
     (data) =>

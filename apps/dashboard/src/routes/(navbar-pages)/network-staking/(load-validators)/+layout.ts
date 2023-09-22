@@ -5,8 +5,6 @@ import { bookmarkedValidatorsStore } from '../../../../stores'
 import type { NetworkConfigurationResponse } from '@radixdlt/babylon-gateway-api-sdk'
 import { networkConfiguration } from '@stores'
 
-export const prerender = false
-
 export type Bookmarked = { [validator: string]: boolean }
 
 export const load: LayoutLoad = () => {
