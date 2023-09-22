@@ -7,12 +7,9 @@
   import { isMobileDevice, showSidebar } from '@stores'
   import PageNavigation from './PageNavigation.svelte'
   import type { ComponentProps } from 'svelte'
-  import { goto } from '$app/navigation'
 
   export let hideSearch: boolean | undefined
   export let routes: ComponentProps<PageNavigation>['routes']
-
-  goto(`${routes[0].path}`)
 </script>
 
 <header>
