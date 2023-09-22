@@ -144,7 +144,7 @@
 
   <div class="text">
     <h3>Recent Uptime (%)</h3>
-    <p class="subtext">The amount of time the validator has been active</p>
+    <p class="subtext">Minimum validator uptime over a recent period of time</p>
   </div>
 
   <div class="card">
