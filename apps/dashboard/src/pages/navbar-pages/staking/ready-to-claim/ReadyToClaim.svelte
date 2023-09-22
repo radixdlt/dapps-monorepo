@@ -14,8 +14,8 @@
   const HOURS_DAY = 24
   const MINUTES_DAY = MINUTES_HOUR * HOURS_DAY
 
-  const timeToClaim = (claimEpoch: string) => {
-    const diff = new BigNumber(claimEpoch).minus($currentEpoch)
+  const timeToClaim = async (claimEpoch: string) => {
+    const diff = new BigNumber(claimEpoch).minus(await $currentEpoch)
     const daysToClaim = diff
       .multipliedBy(EXPECTED_EPOCH_TIME_MINUTES)
       .dividedBy(MINUTES_DAY)
@@ -36,31 +36,37 @@
     return `${daysToClaim.toFixed(0)} days`
   }
 
-  $: nearestClaim = $stakeInfo.then((info) => {
-    let nearestClaim = {
-      claimEpoch: '-1',
-      amount: '0'
-    }
+  let nearestClaim: Promise<{
+    amount: string
+    timeToClaim: string
+  }>
 
-    info.unstaking
-      .filter((u) => u.validator.address === validatorAddress)
-      .forEach((unstake) => {
-        if (
-          new BigNumber(nearestClaim.claimEpoch).eq(-1) ||
-          new BigNumber(unstake.claimEpoch).lt(nearestClaim.claimEpoch)
-        ) {
-          nearestClaim = {
-            claimEpoch: unstake.claimEpoch,
-            amount: unstake.xrdAmount
+  $: if ($stakeInfo)
+    nearestClaim = $stakeInfo.then(async (info) => {
+      let nearestClaim = {
+        claimEpoch: '-1',
+        amount: '0'
+      }
+
+      info.unstaking
+        .filter((u) => u.validator.address === validatorAddress)
+        .forEach((unstake) => {
+          if (
+            new BigNumber(nearestClaim.claimEpoch).eq(-1) ||
+            new BigNumber(unstake.claimEpoch).lt(nearestClaim.claimEpoch)
+          ) {
+            nearestClaim = {
+              claimEpoch: unstake.claimEpoch,
+              amount: unstake.xrdAmount
+            }
           }
-        }
-      })
+        })
 
-    return {
-      amount: nearestClaim.amount,
-      timeToClaim: timeToClaim(nearestClaim.claimEpoch)
-    }
-  })
+      return {
+        amount: nearestClaim.amount,
+        timeToClaim: await timeToClaim(nearestClaim.claimEpoch)
+      }
+    })
 </script>
 
 {#await nearestClaim}

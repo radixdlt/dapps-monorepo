@@ -8,7 +8,7 @@
     }>
   >()
 
-  export const currentEpoch = writable<number>(0)
+  export const currentEpoch = writable<Promise<number>>(Promise.resolve(0))
 
   export const validatorNotFound = writable<boolean>(false)
 </script>
@@ -36,7 +36,7 @@
 
   $: $accumulatedStakes = $_accumulatedStakes
   $: $stakeInfo = $_stakeInfo
-  $: $currentEpoch = data.currentEpoch
+  $: $currentEpoch = data.promises.ledger_state.then((ls) => ls.epoch)
 
   let useFilter = false
   let filterOpen = false
