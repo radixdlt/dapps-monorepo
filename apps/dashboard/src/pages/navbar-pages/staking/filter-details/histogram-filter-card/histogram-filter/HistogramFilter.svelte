@@ -68,7 +68,7 @@
     order
     {min}
     {max}
-    step={max / 100}
+    step={0.1}
     --progress-bg="transparent"
     --track-bg="transparent"
     --thumb-bg="transparent"

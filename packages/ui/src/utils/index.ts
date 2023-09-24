@@ -93,7 +93,7 @@ export const addressToRoute = async (address: string) =>
     validator: `/validator/${encodeURIComponent(address)}`,
     identity: `/identity/${encodeURIComponent(address)}`,
     pool: `/pool/${encodeURIComponent(address)}`
-  }[getAddressPrefix(address)])
+  }[getAddressPrefix(address)] ?? `/component/${encodeURIComponent(address)}`)
 
 export const useContext = <
   Contexts extends Record<string, Values>,

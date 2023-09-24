@@ -88,6 +88,7 @@
 
 <StakePanel
   useBackdrop
+  learnMoreUrl="https://learn.radixdlt.com/article/how-should-i-choose-validators-to-stake-to"
   sidePanelHeader="Add Stake"
   {stakeButtonDisabled}
   on:click={(e) => {

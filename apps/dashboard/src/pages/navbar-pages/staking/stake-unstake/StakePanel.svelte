@@ -9,6 +9,7 @@
   export let sidePanelHeader: string
   export let stakeButtonDisabled = false
   export let useBackdrop = false
+  export let learnMoreUrl = ''
 
   const dispatch = createEventDispatcher<{
     close: null | 'invalidate'
@@ -45,7 +46,7 @@
 
   <div class="stake flex">
     <div class="info">
-      <InfoBox link={{ href: '', text: 'Learn more' }}>
+      <InfoBox link={{ href: learnMoreUrl, text: 'Learn more' }}>
         <slot name="info-box-title" slot="title" />
         <slot name="info-box-explanation" slot="explanation" />
       </InfoBox>

@@ -30,6 +30,7 @@
 </script>
 
 <StakePanel
+  learnMoreUrl="https://learn.radixdlt.com/article/how-should-i-choose-validators-to-stake-to"
   bind:stakeButtonDisabled
   sidePanelHeader="Add Stake"
   on:click={(e) => {
