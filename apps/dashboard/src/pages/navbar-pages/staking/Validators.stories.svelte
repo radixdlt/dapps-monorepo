@@ -2,6 +2,7 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
   import BigNumber from 'bignumber.js'
+  import { promise } from 'zod'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -66,5 +67,8 @@
 <Meta title="Navbar Pages / Validators" />
 
 <Story name="Connected">
-  <Validators validators={Promise.resolve(validators)} />
+  <Validators
+    validators={Promise.resolve(validators)}
+    filteredValidators={Promise.resolve([])}
+  />
 </Story>

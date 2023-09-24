@@ -38,10 +38,9 @@
   $: $stakeInfo = $_stakeInfo
   $: $currentEpoch = data.promises.ledger_state.then((ls) => ls.epoch)
 
-  let useFilter = false
   let filterOpen = false
 
-  let filteredValidators: Awaited<typeof data.promises.validators> = []
+  let filteredValidators: typeof data.promises.validators
 
   const applyFilter =
     (
@@ -49,22 +48,22 @@
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
-      filteredValidators = validators.filter((v) => {
-        return (
-          v.fee >= e.detail.feeFilter[0] &&
-          v.fee <= e.detail.feeFilter[1] &&
-          v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
-          v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
-          v.percentageOwnerStake >= e.detail.ownerStakeFilter[0] &&
-          v.percentageOwnerStake <= e.detail.ownerStakeFilter[1] &&
-          (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
-          v.uptimePercentages[e.detail.uptimeFilter.timeframe] >=
-            e.detail.uptimeFilter.percentage
-        )
-      })
-
-      useFilter = true
+      filteredValidators = Promise.resolve(
+        validators.filter((v) => {
+          return (
+            v.fee >= e.detail.feeFilter[0] &&
+            v.fee <= e.detail.feeFilter[1] &&
+            v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
+            v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
+            v.percentageOwnerStake >= e.detail.ownerStakeFilter[0] &&
+            v.percentageOwnerStake <= e.detail.ownerStakeFilter[1] &&
+            (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
+            (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
+            v.uptimePercentages[e.detail.uptimeFilter.timeframe] >=
+              e.detail.uptimeFilter.percentage
+          )
+        })
+      )
     }
 </script>
 
@@ -72,11 +71,10 @@
   <ErrorPage status={404} />
 {:else}
   <Validators
-    validators={useFilter
-      ? Promise.resolve(filteredValidators)
-      : data.promises.validators.then((v) =>
-          v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
-        )}
+    validators={data.promises.validators.then((v) =>
+      v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
+    )}
+    {filteredValidators}
     on:show-claim-all={() => goto('/network-staking/claim-multiple')}
     on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
     on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}

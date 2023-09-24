@@ -41,6 +41,7 @@
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
   export let validators: Promise<Validator[]>
+  export let filteredValidators: Promise<Validator[]>
 
   context.set('validators', writable([]))
 
@@ -183,7 +184,7 @@
 </div>
 
 <ValidatorList
-  {validators}
+  validators={filteredValidators || validators}
   on:click-validator={(e) => {
     goto(`/network-staking/${e.detail}`)
   }}
