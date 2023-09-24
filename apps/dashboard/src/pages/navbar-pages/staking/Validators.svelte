@@ -108,7 +108,7 @@
   {/if}
 </div>
 
-<Divider --spacing="var(--spacing-xl)" />
+<Divider --spacing="var(--spacing-2xl)" />
 
 <div id="staked-validators" class="header-section">
   <h3 class="title">Your Stakes</h3>

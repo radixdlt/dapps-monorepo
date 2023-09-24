@@ -98,7 +98,7 @@
         .page-content {
           max-width: 80rem;
           margin: 0 auto;
-          padding: var(--spacing-xl) var(--spacing-2xl);
+          padding: var(--spacing-2xl);
         }
       }
     }
