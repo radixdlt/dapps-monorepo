@@ -9,6 +9,7 @@
   import { connected } from '@stores'
   import UptimeHeader, { type UptimeValue } from './UptimeHeader.svelte'
   import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
+  import SkeletonRow from './SkeletonRow.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -116,7 +117,13 @@
   }
 </script>
 
-{#await transformedValidators then validators}
+{#await transformedValidators}
+  <BasicTable {columns} entries={Array(15).fill(undefined)}>
+    <svelte:fragment slot="row">
+      <SkeletonRow columns={columns.length} />
+    </svelte:fragment>
+  </BasicTable>
+{:then validators}
   {#if validators.length > 0}
     <div class="validator-list">
       <BasicTable
