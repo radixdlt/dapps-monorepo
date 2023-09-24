@@ -6,7 +6,7 @@
       unstaking: UnstakingInfo[]
       readyToClaim: ReadyToClaimInfo[]
     }>
-  >()
+  >(new Promise(() => {}))
 
   export const currentEpoch = writable<Promise<number>>(Promise.resolve(0))
 
