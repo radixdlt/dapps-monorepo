@@ -54,7 +54,7 @@ const setOrRemoveMetadata = ({
           Enum<Metadata::String>("dapp definition")
         ;
         `
-        : removeMetadata(address, key)
+        : removeMetadata(address, 'account_type')
     case 'name':
     case 'description':
       return value
