@@ -25,7 +25,7 @@
   <div />
 
   <div class="link">
-    <a href={link.href}>{link.text}</a>
+    <a href={link.href} target="_blank">{link.text}</a>
   </div>
 </div>
 
