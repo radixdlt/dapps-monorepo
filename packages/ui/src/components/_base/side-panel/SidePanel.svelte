@@ -12,7 +12,7 @@
   let panel: HTMLDivElement
 
   function handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') dispatch('close')
+    if (open && event.key === 'Escape') dispatch('close')
   }
 </script>
 
