@@ -1,19 +1,9 @@
-<script lang="ts" context="module">
-  export enum ValidationResult {
-    LINKED,
-    CANT_LINK,
-    WILL_BE_LINKED,
-    INVALID_INPUT
-  }
-</script>
-
 <script lang="ts">
-  import Button from '@components/_base/button/Button.svelte'
+  import Button from '@components/_base/button/ButtonNew.svelte'
   import { writable } from 'svelte/store'
   import type { Account } from '@stores'
   import { query } from '@api/query'
   import SelectAccount from './rows/SelectAccount.svelte'
-  import SetAsDApp from './rows/SetAsDApp.svelte'
   import Name from './rows/Name.svelte'
   import Description from './rows/Description.svelte'
   import {
@@ -21,26 +11,15 @@
     type FormattedAccount,
     getTxManifest
   } from '../side-effects'
-  import { getFungibleResource } from '@api/utils/entities/resource'
-  import { XRD_NAME } from '@constants'
   import Text from '@components/_base/text/Text.svelte'
   import StackList from '@components/stack-list/StackList.svelte'
-  import Entity, {
-    type EntityT
-  } from './rows/linking-metadata-list/Entity.svelte'
-  import Website, {
-    type WebsiteT
-  } from './rows/linking-metadata-list/Website.svelte'
   import Icon from '@components/_base/icon/Icon.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import TrashIcon from '@icons/trash.svg'
+  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Input from '@components/_base/input/Input.svelte'
 
   export let accounts: Account[]
-
-  const transactionManifest = (
-    address: string,
-    metadata: { key: string; value: unknown }[]
-  ) => getTxManifest(address, $entities, metadata)
 
   const { send, response, loading } = query('sendTransaction')
 
@@ -55,59 +34,17 @@
   $: if ($response) refreshAccounts()
 
   const update = async () => {
-    let validationResults: ValidationResult[] = []
-
-    for (const entity of $entities) {
-      validationResults.push(
-        await entity.validation!(
-          $selectedAccount!.address,
-          entityLinkedFromDapp(entity.address)!,
-          $selectedAccount!.resources.nonFungible.map(
-            ({ resource }) => resource
-          )
-        )
-      )
-    }
-
-    for (const website of $websites) {
-      validationResults.push(
-        await website.validation!(
-          $selectedAccount!.address,
-          websiteLinkedFromDapp(website.url)!
-        )
-      )
-    }
-
-    if (
-      validationResults.some((result) => result === ValidationResult.CANT_LINK)
-    ) {
-      return
-    }
-
     if ($selectedAccount)
       send(
-        transactionManifest($selectedAccount.address, [
-          {
-            key: 'name',
-            value: $setAsDAppDefinition ? $dAppName : undefined
-          },
-          {
-            key: 'description',
-            value: $setAsDAppDefinition ? $dAppDescription : undefined
-          },
-          {
-            key: 'claimed_websites',
-            value: $setAsDAppDefinition ? $websites : undefined
-          },
-          {
-            key: 'claimed_entities',
-            value: $setAsDAppDefinition ? $entities : undefined
-          },
-          {
-            key: 'account_type',
-            value: $setAsDAppDefinition ? 'dapp definition' : 'account'
-          }
-        ])
+        getTxManifest({
+          isDappDefinitionAccount: $isDappDefinition,
+          dAppDefinitionAddress: $selectedAccount.address,
+          name: $dAppName,
+          description: $dAppDescription,
+          claimedWebsites: $websites,
+          claimedEntities: $entities,
+          badges: $badges
+        })
       )
   }
 
@@ -119,8 +56,9 @@
   const claimedWebsites = writable<string[]>([])
   const claimedEntities = writable<string[]>([])
 
-  const websites = writable<WebsiteT[]>([])
-  const entities = writable<EntityT[]>([])
+  const websites = writable<string[]>([])
+  const entities = writable<string[]>([])
+  const badges = writable<string[]>([])
 
   let faded = writable(false)
   let isDappDefinition = writable(false)
@@ -131,66 +69,19 @@
       $dAppDescription = $selectedAccount.description || ''
       $claimedWebsites = $selectedAccount.claimedWebsites || []
       $claimedEntities = $selectedAccount.claimedEntities || []
+      $badges = []
     }
   }
 
-  $: $websites = $claimedWebsites.map((website) => ({
-    url: website
-  }))
+  $: $websites = $claimedWebsites
 
-  $: $entities = $claimedEntities.map((entity) => ({
-    address: entity
-  }))
+  $: $entities = $claimedEntities
 
   $: if ($selectedAccount)
     isDappDefinition.set(!!$selectedAccount.dappDefinition)
 
   $: if ($selectedAccount) $setAsDAppDefinition = $isDappDefinition
   $: faded.set(!$setAsDAppDefinition)
-
-  let XRDAmount: string | undefined
-
-  let showNotEnoughXRDError = false
-
-  $: if (XRDAmount) showNotEnoughXRDError = !XRDAmount || Number(XRDAmount) < 10
-
-  $: if ($selectedAccount)
-    XRDAmount = getFungibleResource(XRD_NAME)($selectedAccount.resources)?.value
-
-  const entityLinkedFromDapp = (entity: string) =>
-    $selectedAccount?.claimedEntities?.includes(entity)
-
-  const websiteLinkedFromDapp = (website: string) =>
-    $selectedAccount?.claimedWebsites?.includes(website)
-
-  const validateWebsite = async (i: number) => {
-    // desparate hack, need to refactor
-    await setTimeout(() => {}, 1000)
-
-    $websites[i]!.validation?.(
-      $selectedAccount!.address,
-      websiteLinkedFromDapp($websites[i]!.url)!
-    )
-  }
-
-  $claimedWebsites.forEach((_, i) => {
-    validateWebsite(i)
-  })
-
-  const validateEntity = async (i: number) => {
-    // desparate hack, need to refactor
-    await setTimeout(() => {}, 1000)
-
-    $entities[i]!.validation?.(
-      $selectedAccount!.address,
-      entityLinkedFromDapp($entities[i]!.address)!,
-      $selectedAccount!.resources.nonFungible.map(({ resource }) => resource)
-    )
-  }
-
-  $: $claimedEntities.forEach((_, i) => {
-    validateEntity(i)
-  })
 </script>
 
 <div class="grid">
@@ -198,21 +89,29 @@
     Select an Account
   </div>
 
-  <div>
+  <div style:width="32rem">
     <SelectAccount
       accounts={$formattedAccounts}
       bind:selectedAccount={$selectedAccount}
-      bind:showError={showNotEnoughXRDError}
     />
 
-    <SetAsDApp
-      isDappDefinition={$isDappDefinition}
-      bind:isChecked={$setAsDAppDefinition}
-    />
+    <div class="dapp-definition-checkbox">
+      <Checkbox
+        bind:checked={$isDappDefinition}
+        on:checked={() => {
+          $setAsDAppDefinition = true
+        }}
+        on:unchecked={() => {
+          $setAsDAppDefinition = false
+        }}
+      >
+        This account is a dApp definition
+      </Checkbox>
+    </div>
 
     <div
-      style:margin-top="var(--space-xl)"
-      style:margin-bottom="var(--space-sm)"
+      style:margin-top="var(--spacing-xl)"
+      style:margin-bottom="var(--spacing-sm)"
       style:font-weight="bold"
       class:faded={$faded}
     >
@@ -238,7 +137,7 @@
 
   <div class="left-column-text" class:faded={$faded}>Linked Websites</div>
 
-  <div class:faded={$faded}>
+  <div class:faded={$faded} style:width="32rem">
     <Text size="small" cx={{ marginBottom: '1rem' }}>
       Configuring your dApp Definition with the websites your dApp uses is a
       requirement of the Radix Wallet so that it it can catch “fake” websites
@@ -247,14 +146,20 @@
 
     <StackList
       let:i
-      on:add={() => ($websites = [...$websites, { url: '' }])}
+      on:add={() => {
+        if ($isDappDefinition) $websites = [...$websites, '']
+      }}
       bind:inputs={$websites}
     >
-      <Website
-        bind:website={$websites[i]}
-        disabled={i < $claimedWebsites.length}
-        faded={$faded}
-      />
+      <div class="input">
+        <Input
+          type="text"
+          on:input
+          bind:value={$websites[i]}
+          placeholder="Example: https://www.radixdlt.com"
+        />
+      </div>
+
       <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
         <Text pointer color="link">+ Add a Linked Website</Text>
       </div>
@@ -272,13 +177,20 @@
   <div>
     <StackList
       let:i
-      on:add={() => ($entities = [...$entities, { address: '' }])}
+      on:add={() => {
+        if ($isDappDefinition) $entities = [...$entities, '']
+      }}
       bind:inputs={$entities}
     >
-      <Entity
-        bind:entity={$entities[i]}
-        disabled={i < $claimedEntities.length}
-      />
+      <div class="input">
+        <Input
+          type="text"
+          on:input
+          bind:value={$entities[i]}
+          placeholder="Account, package, resource or component address"
+        />
+      </div>
+
       <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
         <Text pointer color="link">+ Add a Linked Entity</Text>
       </div>
@@ -289,9 +201,38 @@
       </div>
     </StackList>
   </div>
+
+  <div class="left-column-text" class:faded={$faded}>Present badges</div>
+
+  <div>
+    <StackList
+      let:i
+      on:add={() => {
+        if ($isDappDefinition) $badges = [...$badges, '']
+      }}
+      bind:inputs={$badges}
+    >
+      <div class="input">
+        <Input
+          type="text"
+          on:input
+          bind:value={$badges[i]}
+          placeholder="Resource address"
+        />
+      </div>
+      <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
+        <Text pointer color="link">+ Add a Badge</Text>
+      </div>
+      <div slot="remove-button">
+        {#if !$faded}
+          <Icon icon={TrashIcon} width="xs" height="xs" interactive filter="" />
+        {/if}
+      </div>
+    </StackList>
+  </div>
 </div>
 <div class="update-button">
-  <Button on:click={update}>
+  <Button on:click={update} size="big">
     {#if $loading}
       <div style:height="60%" style:aspect-ratio="1/1">
         <LoadingSpinner />
@@ -310,7 +251,7 @@
   .grid {
     display: grid;
     grid-template-columns: 10rem 4fr;
-    gap: var(--space-md);
+    gap: var(--spacing-md);
     height: 100%;
   }
 
@@ -322,6 +263,13 @@
   .update-button {
     display: flex;
     justify-content: flex-end;
-    margin-top: var(--space-xl);
+    margin-top: var(--spacing-xl);
+  }
+
+  .dapp-definition-checkbox {
+    margin-top: var(--spacing-md);
+  }
+  .input {
+    width: var(--sizes-6xl);
   }
 </style>

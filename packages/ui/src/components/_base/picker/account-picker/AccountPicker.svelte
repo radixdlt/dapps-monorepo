@@ -16,7 +16,9 @@
 <Picker
   {options}
   selectionText="Select Account"
-  on:selected={(e) => (selected = e.detail.value)}
+  on:selected={(e) => {
+    selected = e.detail.value
+  }}
 >
   <svelte:fragment slot="selected" let:open let:selected>
     <Account account={selected.value}>
