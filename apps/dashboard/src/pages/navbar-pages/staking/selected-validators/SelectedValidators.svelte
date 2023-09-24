@@ -12,7 +12,8 @@
 <div class="card selected-validators">
   <IconNew icon={MultipleStaking} --size="3.5rem" />
   <div class="text">
-    You've selected {count} validators
+    You've selected {count}
+    {` ${count === 1 ? 'validator' : 'validators'}`}
   </div>
   <ButtonNew on:click size="big" disabled={count === 0}
     >Stake to Selected</ButtonNew
