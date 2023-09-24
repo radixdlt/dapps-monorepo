@@ -117,10 +117,14 @@
       Connect your wallet and your accounts containing Radix Network stake pool
       units to see the status of your current validators and stakes.
     </div>
-    <div class="info-text">
+    <a
+      href="https://learn.radixdlt.com/article/start-here-radix-staking-introduction"
+      target="_blank"
+      class="info-text"
+    >
       <Icon icon={InfoIcon} />
       What is staking?
-    </div>
+    </a>
   {:then}
     <div class="subtext">
       Summary of your current stakes and requested unstakes for the accounts you
@@ -240,7 +244,6 @@
     font-size: var(--text-sm);
     color: var(--theme-button-primary);
     gap: var(--spacing-md);
-    cursor: pointer;
   }
 
   .header-section {
