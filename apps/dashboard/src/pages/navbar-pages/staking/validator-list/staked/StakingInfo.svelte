@@ -61,7 +61,7 @@
           on:click={() => {
             dispatch('claim-validator', info.address)
           }}
-          >ready to claim {formatXRDValue(
+          >Ready to Claim {formatXRDValue(
             stakes[info.address].accumulatedReadyToClaim
           )}</ButtonNew
         >
