@@ -3,6 +3,7 @@ import type { getAccountData } from './entities/resource'
 import BigNumber from 'bignumber.js'
 import { RET_DECIMAL_PRECISION } from '@constants'
 import type { ClaimNft } from './nfts/claim-nft'
+import { filter, flatten, isNil, map, pipe, reject } from 'ramda'
 
 type CommonStakeInfo<T extends string> = {
   type: T
@@ -31,7 +32,10 @@ export const getUnstakeAndClaimInfo =
     const unstakeTokens = accountData.nonFungible
       .map((resource) => resource.nonFungibles)
       .flat()
-      .filter((nft) => typeof nft !== 'string') as ClaimNft[]
+      .filter(
+        (nft): nft is ClaimNft =>
+          typeof nft !== 'string' && nft.type === 'claimNft'
+      )
 
     let unstaking: UnstakingInfo[] = []
     let readyToClaim: ReadyToClaimInfo[] = []
