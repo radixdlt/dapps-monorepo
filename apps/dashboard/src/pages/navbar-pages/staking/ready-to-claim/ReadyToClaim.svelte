@@ -39,7 +39,7 @@
   let nearestClaim: Promise<{
     amount: string
     timeToClaim: string
-  }>
+  }> = new Promise(() => {})
 
   $: if ($stakeInfo)
     nearestClaim = $stakeInfo.then(async (info) => {
