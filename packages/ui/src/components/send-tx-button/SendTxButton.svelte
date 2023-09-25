@@ -12,13 +12,25 @@
     response: Awaited<ReturnType<typeof sendTransaction>>
   }>()
 
-  const { send, loading, response } = query('sendTransaction')
+  let loading = false
 
-  $: if ($response) dispatch('response', $response)
+  const { send, response } = query('sendTransaction')
+
+  $: if ($response) {
+    dispatch('response', $response)
+    loading = false
+  }
 </script>
 
-<ButtonNew {...buttonProps} on:click={() => dispatch('click', send)}>
-  {#if $loading}
+<ButtonNew
+  {...buttonProps}
+  on:click={() => {
+    if (loading) return
+    loading = true
+    dispatch('click', send)
+  }}
+>
+  {#if loading}
     <div style:height="60%" style:aspect-ratio="1/1">
       <LoadingSpinner />
     </div>
