@@ -35,6 +35,6 @@
       <LoadingSpinner />
     </div>
   {:else}
-    <slot>Send</slot>
+    <slot>Send to the Radix Wallet</slot>
   {/if}
 </ButtonNew>
