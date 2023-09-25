@@ -81,15 +81,17 @@ export const NETWORK_CONFIG = {
     id: 2,
     url: 'https://babylon-stokenet-gateway.radixdlt.com',
     consoleDappAddress:
-      'account_tdx_2_12y0yfxerx3jhl20csxlz3nu8hamm5yyluxwvquv9uqrzzfj7y2kp0c',
+      'account_tdx_2_128evrrwfp8gj9240qq0m06ukhwaj2cmejluxxreanzjwq62vmlf8r4',
     dashboardDappAddress:
-      'account_tdx_2_12y0yfxerx3jhl20csxlz3nu8hamm5yyluxwvquv9uqrzzfj7y2kp0c'
+      'account_tdx_2_12xdm5g7xdhh73zkh7xkty0dsxw4rw0jl0sq4lr3erpc3xdn54zx0le'
   },
   [Network.MAINNET]: {
     id: RadixNetwork.Mainnet,
     url: 'https://dashboard.radixdlt.com',
-    consoleDappAddress: '',
-    dashboardDappAddress: ''
+    consoleDappAddress:
+      'account_rdx12xe5q56q0cen0vunfsh352tslz6vyfwf4qujcez5vdjmlm0rzcngs8',
+    dashboardDappAddress:
+      'account_rdx12x0xfz2yumu2qsh6yt0v8xjfc7et04vpsz775kc3yd3xvle4w5d5k5'
   }
 } as const
 
