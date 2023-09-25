@@ -4,7 +4,7 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import type { Validator } from '@api/utils/entities/validator'
+  import { getValidators, type Validator } from '@api/utils/entities/validator'
   import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
   import { formatXRDValue } from '@utils'
 
@@ -59,7 +59,7 @@
     )
     .toString()
 
-  const unstake = (
+  const unstake = async (
     e: CustomEvent<
       (transactionManifest: string, blobs?: string[] | undefined) => void
     >
@@ -71,13 +71,17 @@
       amount: string
     }[] = []
 
+    const validators = (await getValidators(undefined, true, false)).validators
+
     stakes.forEach((stake, i) => {
       if (amountsToUnstake[i] !== '0') {
         const stakeUnitsAmount = calculateStakeUnitsAmount(
           amountsToUnstake[i],
           stake.stakeUnits,
-          stake.validator.totalStakeUnits,
-          stake.validator.totalStakeInXRD
+          validators.find((v) => stake.validator.address === v.address)!
+            .totalStakeUnits,
+          validators.find((v) => stake.validator.address === v.address)!
+            .totalStakeInXRD
         )
 
         unstakes.push({
