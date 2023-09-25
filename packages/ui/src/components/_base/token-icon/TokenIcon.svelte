@@ -1,16 +1,28 @@
 <script lang="ts">
   import TokenPlaceholderIcon from '@icons/token-placeholder.svg'
   import XrdTokenIcon from '@icons/xrd-token-icon.svg'
+  import { getSafeImageUrl } from '@utils/safe-image'
+  import sanitizeHtml from 'sanitize-html'
   export let iconUrl = ''
   export let isXrd: boolean = false
   let imageNotFound = false
   let imageLoaded = false
 
+  let sanitizedIconUrl = iconUrl ? sanitizeHtml(iconUrl) : ''
+
+  const result = getSafeImageUrl({
+    url: sanitizedIconUrl,
+    width: 132,
+    height: 132
+  })
+
+  const safeUrl = result.valid ? result.url : undefined
+
   $: resolvedIconUrl = isXrd
     ? XrdTokenIcon
     : imageNotFound
     ? TokenPlaceholderIcon
-    : iconUrl
+    : safeUrl
 </script>
 
 <div
@@ -20,7 +32,7 @@
 >
   {#if !imageNotFound || !imageLoaded}
     <img
-      src={iconUrl}
+      src={safeUrl}
       style="display: none;"
       alt="fungible token icon"
       on:load={() => {

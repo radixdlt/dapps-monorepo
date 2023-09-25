@@ -2,22 +2,32 @@
   import type { NonFungibleAddress } from '@api/utils/nfts'
   import CopyableText from '@components/_base/copyable-text/CopyableText.svelte'
   import { shortenNftID } from '@utils'
+  import { getSafeImageUrl } from '@utils/safe-image'
 
   export let imgUrl: string | undefined
   export let name: string | undefined
   export let address: NonFungibleAddress
+
+  const dimension = 420
+
+  const result = getSafeImageUrl({
+    url: imgUrl,
+    width: dimension,
+    height: dimension
+  })
+  const placeholder = getSafeImageUrl({
+    url: `https://via.placeholder.com/${dimension}x${dimension}?text=No+image`,
+    width: dimension,
+    height: dimension
+  })
+
+  const safeUrl = result.valid ? result.url : placeholder.url
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <button class="card non-fungible-card" on:click>
-  {#if imgUrl}
-    <img
-      class="image"
-      src={imgUrl
-        ? imgUrl
-        : 'https://via.placeholder.com/300x300?text=No+image'}
-      alt="nft"
-    />
+  {#if safeUrl}
+    <img class="image" src={safeUrl} alt="nft" />
   {/if}
 
   <div class="text-area">
@@ -48,8 +58,8 @@
     width: 15rem;
 
     .image {
-      width: 15rem;
-      height: 15rem;
+      width: 100%;
+      height: 100%;
       border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
     }
 

@@ -17,7 +17,8 @@
     },
     {
       icon: 'https://picsum.photos/44'
-    }
+    },
+    { icon: 'javascript:alert(xss)' }
   ]
 </script>
 
