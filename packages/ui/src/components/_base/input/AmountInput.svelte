@@ -10,7 +10,7 @@
   export let readonly = false
   export let format = readonly
     ? (value: string) => formatTokenValue(value, undefined).displayValue
-    : number(undefined, undefined, 10).bind(null)
+    : number().bind(null)
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
 </script>
