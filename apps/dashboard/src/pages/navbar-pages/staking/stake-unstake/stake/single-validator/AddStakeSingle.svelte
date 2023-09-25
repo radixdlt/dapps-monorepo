@@ -61,7 +61,7 @@
       {xrdBalance}
       bind:stakeAmount
       bind:tokenAmountInvalid={stakeButtonDisabled}
-      --token-amount-card-width={rightColumnWidth}
+      --card-width={rightColumnWidth}
     />
   </svelte:fragment>
 

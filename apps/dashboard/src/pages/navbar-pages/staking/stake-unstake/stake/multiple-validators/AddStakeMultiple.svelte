@@ -124,7 +124,7 @@
       bind:amountToStake={totalXRDAmount}
       bind:tokenAmountInvalid
       tokenAmountDisabled={!distributeEqually}
-      --token-amount-card-width={rightColumnWidth}
+      --card-width={rightColumnWidth}
     />
 
     <Divider />

@@ -5,7 +5,7 @@
   import UnstakeIcon from '@icons/unstaking.svg'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import BigNumber from 'bignumber.js'
-  import { formatTokenValue } from '@utils'
+  import { formatXRDValue } from '@utils'
   import { XRDToken } from '@constants'
   import ValidatorInfo from './ValidatorInfo.svelte'
 
@@ -47,9 +47,10 @@
       bind:tokenAmount={amountToUnstake}
       bind:invalid
     >
+      <div slot="header" class="subtext">Liquid Stake Units worth:</div>
       <div slot="footer" class:invalid class="footer">
-        <div class="subtext">
-          Staked {formatTokenValue(stakedAmount).displayValue}
+        <div class="subtext dotted-overflow">
+          Current staked value: {formatXRDValue(stakedAmount)}
         </div>
         <button class="max-button subtext" on:click={() => setMax()}>Max</button
         >
@@ -77,5 +78,6 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+    justify-content: space-between;
   }
 </style>

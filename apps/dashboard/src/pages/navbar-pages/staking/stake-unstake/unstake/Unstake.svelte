@@ -5,7 +5,7 @@
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
   import { getValidators, type Validator } from '@api/utils/entities/validator'
-  import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
+  import { RET_DECIMAL_PRECISION } from '@constants'
   import { formatXRDValue } from '@utils'
 
   export let stakes: {
@@ -104,6 +104,7 @@
   on:click={unstake}
   sidePanelHeader="Request Unstake"
   on:close
+  rightColumnWidth="20rem"
 >
   <svelte:fragment slot="heading-text">
     Validator to request unstake from:
@@ -122,7 +123,7 @@
             stakedAmount={stake.amount.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
-            --token-amount-card-width={rightColumnWidth}
+            --card-width={rightColumnWidth}
           />
         </div>
       {/each}
@@ -140,7 +141,11 @@
 
   <svelte:fragment slot="summary">
     <div class="summary">
-      <div class="summary-title">Total unstaking request ({XRD_SYMBOL})</div>
+      <div class="summary-title">
+        Requesting unstake using Liquid Stake Units currently worth an <span
+          style:font-weight="var(--font-weight-bold-1)">estimated</span
+        >:
+      </div>
       <div class="summary-value">
         <!-- This forces it to re-render when invalidInputs changes. For some reason it doesn't re-render otherwise. -->
         {#key invalidInputs}
