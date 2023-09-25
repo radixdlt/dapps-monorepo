@@ -9,6 +9,7 @@
   import { connected } from '@stores'
   import type { UptimeValue } from './UptimeHeader.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
+  import NftImage from '@components/_base/nft-image/NftImage.svelte'
 
   export let validator: TransformedValidator
   export let selectedUptime: UptimeValue
@@ -25,12 +26,11 @@
     {/if}
 
     <ResponsiveTableCell>
-      <div
-        class:left-padded={!$connected}
-        class="dotted-overflow"
-        style:max-width="15ch"
-      >
-        {validator.metadata.standard.name?.value ?? ''}
+      <div class="name-and-icon" class:left-padded={!$connected}>
+        <NftImage url={validator.metadata.standard.icon_url?.value.href} />
+        <div class="dotted-overflow" style:max-width="15ch">
+          {validator.metadata.standard.name?.value ?? ''}
+        </div>
       </div>
     </ResponsiveTableCell>
 
@@ -140,5 +140,11 @@
 
   .select {
     padding-right: var(--spacing-lg);
+  }
+
+  .name-and-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
   }
 </style>
