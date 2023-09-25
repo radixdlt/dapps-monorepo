@@ -7,8 +7,6 @@
   export let hideSearch: boolean | undefined
   export let showDesktopSidebar: boolean | undefined = undefined
 
-  let sidebarWidth: number
-
   let scrollOffset: number
 </script>
 
@@ -20,12 +18,8 @@
       ><slot slot="logo" name="logo" /></Header
     >
   </div>
-  <div class="content">
-    <div
-      class="navbar"
-      style:top={`${scrollOffset}px`}
-      bind:clientWidth={sidebarWidth}
-    >
+  <div class="content" class:has-sidebar={showDesktopSidebar}>
+    <div class="navbar" style:top={`${scrollOffset}px`}>
       <SidebarWithNavbar page={$page} {routes} {showDesktopSidebar} />
     </div>
 
@@ -74,8 +68,10 @@
       position: relative;
       overflow: hidden;
 
-      @include mixins.desktop {
-        grid: 'navbar page' auto / 11rem auto;
+      &.has-sidebar {
+        @include mixins.desktop {
+          grid: 'navbar page' auto / 11rem auto;
+        }
       }
 
       .navbar {
