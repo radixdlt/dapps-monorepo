@@ -61,7 +61,7 @@
     },
     {
       header: {
-        label: 'Staking'
+        label: 'Staked'
       },
       sortBy: 'staking',
       renderAs: ({ staking }) => formatXRDValue(staking)
