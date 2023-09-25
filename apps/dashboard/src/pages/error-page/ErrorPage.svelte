@@ -1,16 +1,18 @@
 <script lang="ts">
-  export let status: 400 | 404
+  export let status: number
+  export let traceId: string | undefined = undefined
 
-  const errorMessages = {
-    400: {
-      title: 'Bad Request',
-      description: 'That address was not valid.'
-    },
-    404: {
-      title: 'Not Found',
-      description: 'The requested entity could not be found.'
+  const errorMessages: Record<number, { title: string; description: string }> =
+    {
+      400: {
+        title: 'Bad Request',
+        description: 'That address was not valid.'
+      },
+      404: {
+        title: 'Not Found',
+        description: 'The requested entity could not be found.'
+      }
     }
-  }
 
   $: title = errorMessages[status]?.title || 'Oops!'
 
@@ -22,6 +24,12 @@
 
   <div class="subtext">
     {description}
+  </div>
+
+  <div class="subtext">
+    {traceId && errorMessages[status] === undefined
+      ? `Trace ID: ${traceId}`
+      : ''}
   </div>
 </div>
 
