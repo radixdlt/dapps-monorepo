@@ -30,6 +30,21 @@
     </div>
   {/if}
 
+  {#if $$slots.header}
+    <div
+      class="slot-content header"
+      class:disabled
+      style:background={`${
+        invalid ? 'var(--invalid-background-color)' : 'var(--theme-surface-1)'
+      }`}
+      style:border-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
+    >
+      <div class="content">
+        <slot name="header" />
+      </div>
+    </div>
+  {/if}
+
   <div
     class="token-amount-card"
     class:disabled
@@ -68,7 +83,7 @@
 
   {#if $$slots.footer}
     <div
-      class="footer"
+      class="slot-content footer"
       class:disabled
       style:background={`${
         invalid ? 'var(--invalid-background-color)' : 'var(--theme-surface-1)'
@@ -103,6 +118,7 @@
       display: flex;
       justify-content: space-between;
       gap: var(--spacing-lg);
+      padding: var(--spacing-md) 0;
 
       .name {
         display: flex;
@@ -126,15 +142,28 @@
     }
   }
 
-  .footer {
+  .slot-content {
     background-color: var(--surface);
     padding: 0 var(--card-padding-left-right);
-    border-radius: 0 0 var(--card-border-radius) var(--card-border-radius);
+
+    .content {
+      padding: var(--spacing-lg) 0;
+    }
+  }
+
+  .header {
     border: var(--border) var(--theme-border);
+    border-bottom: none;
     border-top: none;
 
     .content {
-      padding: var(--spacing-sm) 0;
+      padding-bottom: 0;
     }
+  }
+
+  .footer {
+    border-radius: 0 0 var(--card-border-radius) var(--card-border-radius);
+    border: var(--border) var(--theme-border);
+    border-top: none;
   }
 </style>
