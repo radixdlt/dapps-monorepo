@@ -2,6 +2,7 @@
   import type { ComponentProps } from 'svelte'
   import SummaryTab from '../SummaryTab.svelte'
   import type { StakeUnit } from '@api/utils/entities/stake-unit'
+  import { formatTokenValue } from '@utils'
 
   export let stakeUnit: Promise<StakeUnit>
   export let associatedDapps: ComponentProps<SummaryTab>['associatedDapps']
@@ -17,7 +18,11 @@
         stakeUnit.metadata.standard.validator?.value,
         'GlobalAddress'
       ],
-      ['current supply', stakeUnit.totalSupply, 'U64'],
+      [
+        'current supply',
+        formatTokenValue(stakeUnit.totalSupply).displayValue,
+        'String'
+      ],
       ['divisibility', stakeUnit.divisibility, 'U32']
     ])}
     {associatedDapps}
