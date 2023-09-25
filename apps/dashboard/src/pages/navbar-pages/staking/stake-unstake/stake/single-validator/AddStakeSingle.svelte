@@ -72,6 +72,4 @@
     the Radix Network. If they maintain their performance, you can share in the
     XRD emissions rewards that result.
   </svelte:fragment>
-
-  <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>
 </StakePanel>

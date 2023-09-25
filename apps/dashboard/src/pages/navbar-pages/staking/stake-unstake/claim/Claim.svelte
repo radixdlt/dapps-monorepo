@@ -106,8 +106,6 @@
       </div>
     </div>
   </svelte:fragment>
-
-  <svelte:fragment slot="button-text">Claim</svelte:fragment>
 </StakePanel>
 
 <style lang="scss">

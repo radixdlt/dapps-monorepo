@@ -149,8 +149,6 @@
       </div>
     </div>
   </svelte:fragment>
-
-  <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>
 </StakePanel>
 
 <style lang="scss">

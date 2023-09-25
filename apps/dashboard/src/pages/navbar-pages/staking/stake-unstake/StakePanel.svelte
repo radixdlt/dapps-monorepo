@@ -63,9 +63,7 @@
             dispatch('tx-response', e.detail)
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
-        >
-          <slot name="button-text" />
-        </SendTxButton>
+        />
       </div>
     </div>
   </div>
