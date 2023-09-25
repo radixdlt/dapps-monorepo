@@ -3,19 +3,18 @@
   import { goto } from '$app/navigation'
   import type { LayoutData } from './$types'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
-  import type { ComponentProps } from 'svelte'
 
   export let data: LayoutData
 
-  let error: ComponentProps<ErrorPage>['status']
+  let error: any
 
   data.promises.stakeUnit.catch((e) => {
-    error = e.status
+    error = e.errorResponse
   })
 </script>
 
 {#if error}
-  <ErrorPage status={error} />
+  <ErrorPage status={error.status} traceId={error.traceId} />
 {:else}
   <SearchPage
     title="Radix Network Liquid Stake Units"

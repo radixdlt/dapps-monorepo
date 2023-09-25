@@ -28,5 +28,8 @@
     />
   </SearchPage>
 {:catch e}
-  <ErrorPage status={e.status} />
+  <ErrorPage
+    status={e.errorResponse.status}
+    traceId={e.errorResponse.traceId}
+  />
 {/await}

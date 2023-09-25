@@ -2,22 +2,21 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
-  import type { ComponentProps } from 'svelte'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
 
   export let data: LayoutData
 
-  let error: ComponentProps<ErrorPage>['status']
+  let error: any
 
   data.promises.tx
     .then((tx) => {
       if (!tx) error = 404
     })
-    .catch((e) => (error = e.status))
+    .catch((e) => (error = e.errorResponse))
 </script>
 
 {#if error}
-  <ErrorPage status={error} />
+  <ErrorPage status={error.status} traceId={error.traceId} />
 {:else}
   <SearchPage
     title="Transaction"
