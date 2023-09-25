@@ -131,7 +131,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="info-box-title"
-    >How Unstake Request Works</svelte:fragment
+    >How Unstake Requests Work</svelte:fragment
   >
 
   <svelte:fragment slot="info-box-explanation">
