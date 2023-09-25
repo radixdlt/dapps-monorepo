@@ -24,8 +24,8 @@
     </div>
 
     <main class="page">
-      <div class="margin">
-        <div class="page-content">
+      <div class="margin" style:height="100%">
+        <div class="page-content" style:height="100%">
           <slot />
         </div>
       </div>
@@ -96,6 +96,7 @@
         background: var(--theme-surface-1);
         padding-bottom: var(--spacing-lg);
         overflow-y: scroll;
+        height: 100%;
 
         .page-content {
           max-width: 80rem;

@@ -21,13 +21,11 @@
   import { accountLabel } from '@utils'
   import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { authApi } from '../server/auth/auth-api'
-  import LayersIcon from '@icons/layers.svg'
-  import TransactionsIcon from '@icons/transactions.svg'
-  import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { getNetworkConfiguration } from '@api/gateway'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/dashboard-logo.svg'
+  import Footer from '@components/footer/Footer.svelte'
 
   let mounted = false
 
@@ -126,19 +124,23 @@
         class="logo"
         style:background-image="url({LogoIcon})"
         style:margin-bottom="var(--spacing-lg)"
-      /><slot /></Layout
-    >
+      />
+      <div class="page">
+        <slot />
+        <Footer />
+      </div>
+    </Layout>
   {/if}
 </Theme>
 
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.scss';
 
-  .main-content {
-    background: var(--theme-surface-1);
-    grid-area: content;
-    padding-bottom: var(--spacing-lg);
-    position: relative;
+  .page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
   }
 
   .logo {
