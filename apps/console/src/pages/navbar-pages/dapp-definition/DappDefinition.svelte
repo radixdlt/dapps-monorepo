@@ -14,8 +14,6 @@
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import TrashIcon from '@icons/trash.svg'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
-  import Input from '@components/_base/input/Input.svelte'
-  import Textarea from '@components/_base/textarea/Textarea.svelte'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import type { Account as AccountType } from '@stores'
 
@@ -41,6 +39,9 @@
           dAppDefinitionAddress: $selectedAccount.address,
           name: $dAppName,
           description: $dAppDescription,
+          icon_url: $dAppIcon,
+          dapp_definitions: $dAppDefinitions,
+          tags: $dAppTags.split(','),
           claimedWebsites: $websites,
           claimedEntities: $entities,
           badges: $badges
@@ -50,8 +51,11 @@
 
   const selectedAccount = writable<FormattedAccount | undefined>(undefined)
   const setAsDAppDefinition = writable(false)
+
   const dAppName = writable('')
   const dAppDescription = writable('')
+  const dAppIcon = writable('')
+  const dAppTags = writable('')
 
   const claimedWebsites = writable<string[]>([])
   const claimedEntities = writable<string[]>([])
@@ -59,6 +63,7 @@
   const websites = writable<string[]>([])
   const entities = writable<string[]>([])
   const badges = writable<string[]>([])
+  const dAppDefinitions = writable<string[]>([])
 
   let faded = writable(false)
   let isDappDefinition = writable(false)
@@ -67,8 +72,10 @@
     if ($selectedAccount) {
       $dAppName = $selectedAccount.name || ''
       $dAppDescription = $selectedAccount.description || ''
+      $dAppIcon = $selectedAccount.iconUrl || ''
       $claimedWebsites = $selectedAccount.claimedWebsites || []
       $claimedEntities = $selectedAccount.claimedEntities || []
+      $dAppDefinitions = $selectedAccount.dAppDefinitions || []
       $badges = []
     }
   }
@@ -171,12 +178,13 @@
       class:faded={$faded}
       class="left-column-text"
     >
-      dApp name
+      name
     </div>
 
     <div>
-      <Input
+      <input
         disabled={$faded}
+        on:input
         type="text"
         bind:value={$dAppName}
         placeholder="dApp name (may be truncated after 32 characters)"
@@ -188,29 +196,62 @@
       class:faded={$faded}
       class="left-column-text"
     >
-      dApp description
+      description
     </div>
 
     <div>
-      <Textarea
+      <textarea
         disabled={$faded}
-        transparent={false}
         bind:value={$dAppDescription}
-        size="md"
         placeholder="dApp description (may be truncated after 256 characters)"
         maxlength={258}
       />
     </div>
 
+    <div
+      style:padding-top="0.5rem"
+      class:faded={$faded}
+      class="left-column-text"
+    >
+      icon_url
+    </div>
+
+    <div>
+      <input
+        disabled={$faded}
+        on:input
+        type="text"
+        bind:value={$dAppIcon}
+        placeholder="jpg, png, gif (will be cropped to 1:1 square)"
+      />
+    </div>
+
+    <div style:padding-top="0.5rem" class="left-column-text" />
+
+    <div
+      style:margin-top="var(--spacing-xl)"
+      style:margin-bottom="var(--spacing-sm)"
+      class:faded={$faded}
+    >
+      <div style:font-weight="bold" class:faded={$faded}>
+        Metadata for Verification
+      </div>
+      <div class:faded={$faded}>
+        These metadata fields let the Radix Wallet show packages, components,
+        and resources as parts of your dApp. To verify the association, a
+        similar metadata field must also be set on each entity linking it back
+        to this dApp Definition.
+      </div>
+      <a
+        class:faded={$faded}
+        href="https://docs-babylon.radixdlt.com/main/standards/metadata-for-verification.html"
+        target="_blank">More information</a
+      >
+    </div>
+
     <div class="left-column-text" class:faded={$faded}>Linked Websites</div>
 
     <div class:faded={$faded}>
-      <Text size="small" cx={{ marginBottom: '1rem' }}>
-        Configuring your dApp Definition with the websites your dApp uses is a
-        requirement of the Radix Wallet so that it it can catch “fake” websites
-        claiming to be part of your dApp.
-      </Text>
-
       <StackList
         let:i
         on:add={() => {
@@ -219,7 +260,7 @@
         bind:inputs={$websites}
       >
         <div class="input">
-          <Input
+          <input
             type="text"
             on:input
             bind:value={$websites[i]}
@@ -245,7 +286,7 @@
       </StackList>
     </div>
 
-    <div class="left-column-text" class:faded={$faded}>Linked Entities</div>
+    <div class="left-column-text" class:faded={$faded}>claimed_entitites</div>
 
     <div>
       <StackList
@@ -256,7 +297,7 @@
         bind:inputs={$entities}
       >
         <div class="input">
-          <Input
+          <input
             type="text"
             on:input
             bind:value={$entities[i]}
@@ -265,7 +306,7 @@
         </div>
 
         <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
-          <Text pointer color="link">+ Add a Linked Entity</Text>
+          <Text pointer color="link">+ Add a claimed entity</Text>
         </div>
         <div slot="remove-button">
           {#if !$faded}
@@ -281,6 +322,61 @@
       </StackList>
     </div>
 
+    <div class="left-column-text" class:faded={$faded}>dapp_definitions</div>
+
+    <div>
+      <StackList
+        let:i
+        on:add={() => {
+          if ($isDappDefinition) $dAppDefinitions = [...$dAppDefinitions, '']
+        }}
+        bind:inputs={$dAppDefinitions}
+      >
+        <div class="input">
+          <input
+            type="text"
+            on:input
+            bind:value={$dAppDefinitions[i]}
+            placeholder="dApp definition address"
+          />
+        </div>
+
+        <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
+          <Text pointer color="link">+ Add an associated dApp Definition</Text>
+        </div>
+        <div slot="remove-button">
+          {#if !$faded}
+            <Icon
+              icon={TrashIcon}
+              width="xs"
+              height="xs"
+              interactive
+              filter=""
+            />
+          {/if}
+        </div>
+      </StackList>
+    </div>
+
+    <div style:padding-top="0.5rem" class="left-column-text" />
+
+    <div
+      style:margin-top="var(--spacing-xl)"
+      style:margin-bottom="var(--spacing-sm)"
+      class:faded={$faded}
+    >
+      <div style:font-weight="bold" class:faded={$faded}>
+        Metadata for Verification
+      </div>
+      <div class:faded={$faded}>
+        Claimed Entity Verification Badges This dApp will attempt to set
+        corresponding metadata on any claimed_entities above to complete the
+        2-way linking. Please enter the full resource address of any badges that
+        you hold that will be needed in the transaction to set metadata on these
+        entities.
+      </div>
+    </div>
+
     <div class="left-column-text" class:faded={$faded}>Present badges</div>
 
     <div>
@@ -292,7 +388,7 @@
         bind:inputs={$badges}
       >
         <div class="input">
-          <Input
+          <input
             type="text"
             on:input
             bind:value={$badges[i]}
@@ -300,7 +396,9 @@
           />
         </div>
         <div slot="add-button" style:opacity={$faded ? '0%' : '100%'}>
-          <Text pointer color="link">+ Add a Badge</Text>
+          <Text pointer color="link"
+            >+ Add a badge to present in this transaction</Text
+          >
         </div>
         <div slot="remove-button">
           {#if !$faded}
@@ -324,7 +422,7 @@
         <LoadingSpinner />
       </div>
     {:else}
-      Update Account
+      Send Update Transaction to the Radix Wallet
     {/if}
   </Button>
 </div>
@@ -356,7 +454,7 @@
   .grid {
     display: grid;
     grid-template-columns: 10rem 4fr;
-    gap: var(--spacing-md);
+    gap: 0.85rem;
     height: 100%;
   }
 
@@ -377,5 +475,13 @@
   }
   .input {
     width: var(--sizes-6xl);
+  }
+  input,
+  textarea {
+    background-color: var(--theme-surface-1);
+    border: none;
+    padding: 0.5rem;
+    width: 100%;
+    border-bottom: 1px solid var(--theme-surface-3);
   }
 </style>

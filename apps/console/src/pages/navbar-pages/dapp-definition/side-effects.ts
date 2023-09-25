@@ -9,6 +9,35 @@ export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>
 >[number]
 
+export const sortEntities = (entities: string[]) =>
+  entities.reduce<{
+    packages: string[]
+    components: string[]
+    resources: string[]
+  }>(
+    (acc, curr) => {
+      const isPackage = curr.startsWith('package')
+      const isComponent = curr.startsWith('component')
+      const isResource = curr.startsWith('resource')
+
+      if (isPackage) return { ...acc, packages: [...acc.packages, curr] }
+      else if (isComponent)
+        return { ...acc, components: [...acc.components, curr] }
+      else if (isResource) {
+        return {
+          ...acc,
+          resources: [...acc.components, curr]
+        }
+      }
+      return acc
+    },
+    {
+      packages: [],
+      components: [],
+      resources: []
+    }
+  )
+
 const hasDAppDefinitionMetadata = (account: DecoratedAccount) =>
   account.details.metadata.items.some(
     (item) =>
@@ -35,12 +64,12 @@ const setOrRemoveMetadata = ({
       value: boolean
     }
   | {
-      key: 'name' | 'description'
+      key: 'name' | 'description' | 'icon_url'
       address: string
       value?: string
     }
   | {
-      key: 'claimed_websites' | 'claimed_entities'
+      key: 'claimed_websites' | 'claimed_entities' | 'dapp_definitions'
       address: string
       value: string[]
     }) => {
@@ -80,7 +109,18 @@ const setOrRemoveMetadata = ({
         `
         : removeMetadata(address, key)
 
-    case 'claimed_entities':
+    case 'icon_url':
+      return value
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "${key}"
+          Enum<13u8>("${value}")
+        ;
+        `
+        : removeMetadata(address, key)
+
+    case 'dapp_definitions':
       return value.length
         ? `
         SET_METADATA
@@ -90,9 +130,53 @@ const setOrRemoveMetadata = ({
             .map((address) => `Address("${address}")`)
             .join(', ')}))
         ;
+            ${value.map(
+              (entity) => `
+        SET_METADATA
+          Address("${entity}")
+          "${key}"
+          Enum<136u8>(
+            Array<Address>(
+              Address("${address}")
+            )
+          )
+        ;`
+            )}
+            `
+        : removeMetadata(address, key)
 
-        ${value.map(
-          (entity) => `
+    case 'claimed_entities':
+      const { components, packages, resources } = sortEntities(value)
+      const componentsAndPackages = [...components, ...packages]
+
+      return value.length
+        ? `
+        SET_METADATA
+          Address("${address}")
+          "claimed_entities"
+          Enum<Metadata::AddressArray>(Array<Address>(${value
+            .map((address) => `Address("${address}")`)
+            .join(', ')}))
+        ;
+
+        ${
+          componentsAndPackages.length
+            ? componentsAndPackages.map(
+                (entity) => `
+        SET_METADATA
+          Address("${entity}")
+          "dapp_definition"
+          Enum<Metadata::Address>(Address("${address}"))
+        ;
+        `
+              )
+            : ''
+        }
+
+        ${
+          resources.length
+            ? resources.map(
+                (entity) => `
         SET_METADATA
           Address("${entity}")
           "dapp_definitions"
@@ -103,7 +187,9 @@ const setOrRemoveMetadata = ({
           )
         ;
         `
-        )}
+              )
+            : ''
+        } 
         `
         : removeMetadata(address, key)
 
@@ -147,17 +233,22 @@ export const getTxManifest = ({
   dAppDefinitionAddress,
   name,
   description,
+  icon_url,
   claimedWebsites,
   claimedEntities,
-  badges
+  badges,
+  dapp_definitions
 }: {
   isDappDefinitionAccount: boolean
   dAppDefinitionAddress: string
   name: string
   description: string
+  icon_url: string
+  tags: string[]
   claimedWebsites: string[]
   claimedEntities: string[]
   badges: string[]
+  dapp_definitions: string[]
 }) => {
   const transactionManifest = [
     setOrRemoveMetadata({
@@ -177,8 +268,18 @@ export const getTxManifest = ({
     }),
     setOrRemoveMetadata({
       address: dAppDefinitionAddress,
+      key: 'icon_url',
+      value: icon_url
+    }),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
       key: 'claimed_websites',
       value: claimedWebsites
+    }),
+    setOrRemoveMetadata({
+      address: dAppDefinitionAddress,
+      key: 'dapp_definitions',
+      value: dapp_definitions
     }),
     createBadgeProof(badges, dAppDefinitionAddress),
     setOrRemoveMetadata({
@@ -187,7 +288,6 @@ export const getTxManifest = ({
       value: claimedEntities
     })
   ].join(' ')
-
   return transactionManifest
 }
 
@@ -216,10 +316,14 @@ export const getFormattedAccounts = async (accounts: Account[]) => {
         name: getStringMetadata('name')(metadata),
         description: getStringMetadata('description')(metadata),
         domain: getStringMetadata('domain')(metadata),
+        iconUrl: getStringMetadata('icon_url')(metadata),
         claimedWebsites: getVectorMetadata('claimed_websites')(
           metadata
         ) as string[],
         claimedEntities: getVectorMetadata('claimed_entities')(
+          metadata
+        ) as string[],
+        dAppDefinitions: getVectorMetadata('dapp_definitions')(
           metadata
         ) as string[]
       }
