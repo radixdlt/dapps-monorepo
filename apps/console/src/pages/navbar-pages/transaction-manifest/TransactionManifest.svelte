@@ -1,7 +1,12 @@
 <script lang="ts">
-  import Textarea from '@components/_base/textarea/Textarea.svelte'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+
+  let component: HTMLTextAreaElement
+  const adjustHeight = () => {
+    component.style.height = ''
+    component.style.height = component.scrollHeight + 'px'
+  }
 
   let transactionManifest = ''
 </script>
@@ -24,9 +29,12 @@
   </div>
 </div>
 <div class="card">
-  <Textarea
+  <textarea
+    bind:this={component}
+    on:input={adjustHeight}
     bind:value={transactionManifest}
     placeholder="Enter a raw transaction manifest"
+    rows="20"
   />
 </div>
 
@@ -43,7 +51,7 @@
 <style lang="scss">
   .card {
     margin-top: 1rem;
-    padding: 2rem;
+    padding: 1rem;
     margin-bottom: 1rem;
   }
   .description {
@@ -51,8 +59,14 @@
       margin-bottom: 0.5rem;
     }
   }
-  .description,
-  .textarea {
-    margin-bottom: 1rem;
+
+  textarea {
+    border-radius: var(--border-radius-lg);
+    background: var(--background);
+    border: 0;
+    width: 100%;
+    padding: var(--spacing-xl);
+    outline: none;
+    resize: vertical;
   }
 </style>

@@ -17,7 +17,6 @@
   import Input from '@components/_base/input/Input.svelte'
   import Textarea from '@components/_base/textarea/Textarea.svelte'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
-  import Card from '@components/_base/card/Card.svelte'
   import type { Account as AccountType } from '@stores'
 
   export let accounts: Account[]
