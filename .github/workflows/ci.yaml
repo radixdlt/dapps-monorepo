@@ -206,6 +206,7 @@ jobs:
     needs:
       - snyk-scan-deps-licences
       - snyk-scan-code
+    permissions: write-all
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
@@ -227,6 +228,7 @@ jobs:
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.event.release.tag_name }}
 
   snyk-monitor:
     runs-on: ubuntu-latest
