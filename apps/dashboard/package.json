@@ -93,7 +93,7 @@
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
     "@radixdlt/babylon-gateway-api-sdk": "1.0.1",
-    "@radixdlt/dapps-dropdown": "^0.2.1",
+    "@radixdlt/dapps-dropdown": "1.0.1",
     "@radixdlt/radix-dapp-toolkit": "1.0.0",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
     "@radixdlt/rola": "1.0.0",
