@@ -118,13 +118,6 @@
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.scss';
 
-  .main-content {
-    background: var(--theme-surface-1);
-    grid-area: content;
-    padding-bottom: var(--spacing-lg);
-    position: relative;
-  }
-
   .logo {
     background-size: contain;
     background-repeat: no-repeat;
