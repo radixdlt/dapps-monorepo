@@ -689,7 +689,6 @@ jobs:
 
   deploy_rcnet_v2:
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
@@ -714,7 +713,6 @@ jobs:
 
   deploy_rcnet_v3:
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v3' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
