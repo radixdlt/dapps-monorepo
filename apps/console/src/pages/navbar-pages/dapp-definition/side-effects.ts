@@ -225,6 +225,7 @@ const createBadgeProof = (badgeAddresses: string[], address: string) => {
         `
     )
   }
+  console.log(transactionManifest)
   return transactionManifest.join(' ')
 }
 
