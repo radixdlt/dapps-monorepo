@@ -19,6 +19,11 @@ console:
         paths:
           - path: /
             pathType: ImplementationSpecific
+    basic_auth: true
+    annotations:
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: dapps-console-basic-auth
+      nginx.ingress.kubernetes.io/auth-realm: 'Auth Required - Mainnet'
 
   autoscaling:
     enabled: true
