@@ -2,7 +2,7 @@
   import Divider from '@components/_base/divider/Divider.svelte'
 </script>
 
-<div>
+<footer>
   <Divider />
 
   <div class="footer">
@@ -10,7 +10,7 @@
       >Privacy Notice</a
     >
   </div>
-</div>
+</footer>
 
 <style>
   .footer {
