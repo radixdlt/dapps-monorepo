@@ -31,7 +31,11 @@
   }>()
 
   const fetchMore = (data: GetNonFungibleIdsPageWithDataRequest) => {
-    if (isLoading || currentCursor === undefined) {
+    if (
+      isLoading ||
+      currentCursor === undefined ||
+      (data.cursor === undefined && currentCursor === null)
+    ) {
       return
     }
     isLoading = true
