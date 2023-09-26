@@ -190,6 +190,7 @@ jobs:
 
   snyk-sbom:
     runs-on: ubuntu-latest
+    permissions: write-all
     needs:
       - snyk-scan-deps-licences
       - snyk-scan-code
@@ -214,6 +215,7 @@ jobs:
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.event.release.tag_name }}
 
   snyk-monitor:
     runs-on: ubuntu-latest
