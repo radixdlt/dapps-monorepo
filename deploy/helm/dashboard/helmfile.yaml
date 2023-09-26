@@ -15,6 +15,7 @@ environments:
   ansharnet: {}
   ansharnet-internal: {}
   stokenet: {}
+  mainnet: {}
 repositories:
   - name: bitnami
     url: https://charts.bitnami.com/bitnami

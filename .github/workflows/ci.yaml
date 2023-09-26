@@ -23,12 +23,13 @@ on:
           - ansharnet
           - zabanet
           - stokenet
+          - mainnet
           - rcnet-v2
           - rcnet-v3
 
 env:
   active_network: 'stokenet'
-  release_network: 'rcnet-v3'
+  release_network: 'mainnet'
 
 permissions:
   id-token: write
@@ -808,6 +809,31 @@ jobs:
       github_environment: stokenet
       app_name: 'dashboard'
       step_name: 'deploy-stokenet'
+
+  deploy_mainnet:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: mainnet
+      namespace: dashboard-mainnet
+      create_subns: false
+      restart_pods: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-mainnet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=mainnet
+      github_environment: mainnet
+      app_name: 'dashboard'
+      step_name: 'deploy-mainnet'
 
   # storybook-tests:
   #   runs-on: ubuntu-latest
