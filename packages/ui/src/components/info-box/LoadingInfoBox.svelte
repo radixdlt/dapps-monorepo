@@ -1,5 +1,5 @@
 <script>
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import InfoBox from './InfoBox.svelte'
   import Row from './Row.svelte'
 </script>

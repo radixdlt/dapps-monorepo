@@ -3,7 +3,7 @@
   import Address from '../address/Address.svelte'
   import Tags from '../tags/Tags.svelte'
   import NftImage from '../nft-image/NftImage.svelte'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
 
   type Data = {
     name?: string

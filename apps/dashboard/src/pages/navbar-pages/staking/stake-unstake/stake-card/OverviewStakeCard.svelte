@@ -5,7 +5,7 @@
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { XRDToken } from '@constants'
 
   export let amountToStake: string
