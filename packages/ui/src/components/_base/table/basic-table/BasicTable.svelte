@@ -1,11 +1,6 @@
 <script lang="ts" context="module">
   export type BasicTableColumn<Entry = any> = TableColumn<Entry> & {
     /**
-     * The id of the column. This is used to identify the column when rendering a custom component using slots.
-     */
-    id?: string
-
-    /**
      * For rendering a simple value. Returns data that will be displayed in the cell.
      */
     renderAs?: (entry: Entry) => string | number
@@ -32,7 +27,9 @@
 
   export let entries: ComponentProps<Table<T>>['entries']
   export let columns: (BasicTableColumn<T> | null)[]
-  export let defaultSortedColumn: number | undefined = undefined
+  export let defaultSortedColumn: ComponentProps<
+    Table<T>
+  >['defaultSortedColumn'] = undefined
 
   interface $$Slots {
     'header-cell': {

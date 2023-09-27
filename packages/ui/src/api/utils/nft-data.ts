@@ -4,15 +4,12 @@ import type {
   MetadataUrlValueTypeEnum,
   StateNonFungibleDetailsResponseItem
 } from '@radixdlt/babylon-gateway-api-sdk'
-import type { MetadataTypeToNativeType } from './metadata'
 
 export type NftDataItem<N extends keyof KnownStandardTypes | string = string> =
   {
     kind: MetadataTypedValue['type']
     field_name: N
-    value: N extends keyof KnownStandardTypes
-      ? MetadataTypeToNativeType[KnownStandardTypes[N]]
-      : unknown
+    value: string
     type_name?: string
   }
 

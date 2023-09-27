@@ -71,9 +71,7 @@
   <ErrorPage status={404} />
 {:else}
   <Validators
-    validators={data.promises.validators.then((v) =>
-      v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
-    )}
+    validators={data.promises.validators}
     {filteredValidators}
     on:show-claim-all={() => goto('/network-staking/claim-multiple')}
     on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
