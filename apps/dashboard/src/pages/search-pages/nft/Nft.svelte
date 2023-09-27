@@ -51,7 +51,7 @@
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
-      ? nft.nftData.standard.key_image_url?.value.href
+      ? nft.nftData.standard.key_image_url?.value
       : resource.metadata.standard.icon_url?.value?.href
   )
 

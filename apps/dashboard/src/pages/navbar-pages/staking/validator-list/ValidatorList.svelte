@@ -10,6 +10,13 @@
   import UptimeHeader, { type UptimeValue } from './UptimeHeader.svelte'
   import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
   import SkeletonRow from './SkeletonRow.svelte'
+  import { bookmarkedValidatorsStore } from '../../../../stores'
+  import {
+    sortBigNumber,
+    type SortableValues,
+    sortBasic,
+    type Direction
+  } from '@components/_base/table/Table.svelte'
 
   export let validators: Promise<Validator[]>
 
@@ -29,6 +36,32 @@
       alltime: validator.uptimePercentages['alltime']
     }))
   )
+
+  const sort =
+    (
+      key: NonNullable<SortableValues<TransformedValidator>>,
+      sortFn: typeof sortBasic | typeof sortBigNumber
+    ) =>
+    (
+      v1: TransformedValidator,
+      v2: TransformedValidator,
+      direction: Direction
+    ) => {
+      if (
+        $bookmarkedValidatorsStore[v1.address] &&
+        !$bookmarkedValidatorsStore[v2.address]
+      ) {
+        return -1
+      } else if (
+        !$bookmarkedValidatorsStore[v1.address] &&
+        $bookmarkedValidatorsStore[v2.address]
+      ) {
+        return 1
+      } else {
+        // @ts-ignore
+        return sortFn(v1[key], v2[key], direction)
+      }
+    }
 
   interface $$Slots {
     row: {
@@ -51,28 +84,29 @@
       }
     },
     {
-      sortBy: 'totalStakeInXRD',
+      id: 'totalStake',
+      sortBy: sort('totalStakeInXRD', sortBigNumber),
       header: {
         label: 'TOTAL STAKE',
         alignment: 'center'
       }
     },
     {
-      sortBy: 'percentageOwnerStake',
+      sortBy: sort('percentageOwnerStake', sortBasic),
       header: {
         label: 'OWNER STAKE',
         alignment: 'center'
       }
     },
     {
-      sortBy: 'apy',
+      sortBy: sort('apy', sortBasic),
       header: {
         label: 'APY',
         alignment: 'center'
       }
     },
     {
-      sortBy: 'fee',
+      sortBy: sort('fee', sortBasic),
       header: {
         label: 'FEE',
         alignment: 'center'
@@ -108,7 +142,7 @@
       if (column?.id === 'uptime') {
         return {
           ...column,
-          sortBy: selectedUptime.value
+          sortBy: sort(selectedUptime.value, sortBasic)
         }
       }
 
@@ -129,9 +163,7 @@
       <BasicTable
         {columns}
         entries={validators}
-        defaultSortedColumn={columns.findIndex(
-          (c) => c?.sortBy === 'totalStakeInXRD'
-        )}
+        defaultSortedColumn={'totalStake'}
       >
         <svelte:fragment slot="header-cell" let:column let:sort let:sortStatus>
           {#if column?.id === 'uptime'}

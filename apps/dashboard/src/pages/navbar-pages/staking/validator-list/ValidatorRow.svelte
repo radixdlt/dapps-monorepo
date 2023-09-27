@@ -27,7 +27,6 @@
 
     <ResponsiveTableCell>
       <div class="name-and-icon" class:left-padded={!$connected}>
-        <NftImage url={validator.metadata.standard.icon_url?.value.href} />
         <div class="dotted-overflow" style:max-width="15ch">
           {validator.metadata.standard.name?.value ?? ''}
         </div>

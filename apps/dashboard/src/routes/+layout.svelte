@@ -135,12 +135,17 @@
 
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.scss';
+  @use '../../../../packages/ui/src/mixins.scss';
 
   .page {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    min-height: calc(100vh - 211px);
+    @include mixins.desktop {
+      min-height: calc(100vh - 135px);
+    }
   }
 
   .logo {
