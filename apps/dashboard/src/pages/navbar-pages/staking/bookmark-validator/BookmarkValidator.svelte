@@ -1,6 +1,6 @@
 <script lang="ts">
   import { connected } from '@stores'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { bookmarkedValidatorsStore } from '../../../../stores'
   import { setFavoriteValidator } from '../../../../server/validators/validators-api'
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
