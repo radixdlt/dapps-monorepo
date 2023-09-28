@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { query } from '@api/query'
   import type { FungibleResource } from '@api/utils/entities/resource'
   import Box from '@components/_base/box/Box.svelte'

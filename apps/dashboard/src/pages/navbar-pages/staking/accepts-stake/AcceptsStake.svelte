@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import CheckMarkIcon from '@icons/checkmark.svg'
   import CrossIcon from '@icons/cross.svg'

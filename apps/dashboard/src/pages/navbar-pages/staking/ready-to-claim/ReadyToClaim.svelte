@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import BigNumber from 'bignumber.js'
   import { EXPECTED_EPOCH_TIME_MINUTES } from '@constants'
   import { formatTokenValue } from '@utils'
