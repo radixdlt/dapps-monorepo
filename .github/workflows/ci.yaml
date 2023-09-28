@@ -429,11 +429,11 @@ jobs:
           secret_prefix: 'GH'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
           parse_json: true
-      - name: Restore yarn cache
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          node-version: 20.3.0
-          cache: npm
+      # - name: Restore yarn cache
+      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      #   with:
+      #     node-version: 20.3.0
+      #     cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
@@ -507,11 +507,11 @@ jobs:
           secret_prefix: 'GH'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
           parse_json: true
-      - name: Restore yarn cache
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          node-version: 20.3.0
-          cache: npm
+      # - name: Restore yarn cache
+      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      #   with:
+      #     node-version: 20.3.0
+      #     cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
