@@ -42,8 +42,8 @@
           icon_url: $dAppIcon,
           dapp_definitions: $dAppDefinitions,
           tags: $dAppTags.split(','),
-          claimedWebsites: $websites,
-          claimedEntities: $entities,
+          claimedWebsites: $websites.filter((website) => website !== ''),
+          claimedEntities: $entities.filter((entity) => entity !== ''),
           badges: $badges
         })
       )
