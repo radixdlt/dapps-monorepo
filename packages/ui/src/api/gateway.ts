@@ -134,74 +134,12 @@ export const getNonFungiblesIdsPageWithData = ({
 export const getNonFungibleIDs = (address: string) =>
   gatewayApi.state.getAllNonFungibleIds(address)
 
-export const getValidatorUptimeRaw = (
-  addresses: string[],
-  from?: Date | number,
-  to?: Date | number
-) =>
-  gatewayApi.statistics.innerClient.validatorsUptime({
-    validatorsUptimeRequest: {
-      validator_addresses: addresses,
-      from_ledger_state:
-        from !== undefined
-          ? from instanceof Date
-            ? { timestamp: from }
-            : { state_version: from }
-          : undefined,
-      at_ledger_state:
-        to !== undefined
-          ? to instanceof Date
-            ? { timestamp: to }
-            : { state_version: to }
-          : undefined
-    }
-  })
-
-const chunk = <T>(array: T[], chunkSize: number): T[][] => {
-  const chunks = []
-  for (let i = 0, length = array.length; i < length; i += chunkSize)
-    chunks.push(array.slice(i, i + chunkSize))
-  return chunks
-}
-
 export const getValidatorUptime = (
   addresses: string[],
   from?: Date | number,
   to?: Date | number
-) => {
-  const maxValidatorsCount = 200
+) => gatewayApi.statistics.getValidatorsUptimeFromTo(addresses, from, to)
 
-  if (addresses.length > maxValidatorsCount) {
-    const chunks = chunk(addresses, maxValidatorsCount)
-    return Promise.all(
-      chunks.map((chunk) => getValidatorUptimeRaw(chunk, from, to))
-    ).then((results) => results.map((r) => r.validators.items).flat())
-  }
+export const getNonFungibleLocation = (resource: string, ids: string[]) =>
+  gatewayApi.state.getNonFungibleLocation(resource, ids)
 
-  return getValidatorUptimeRaw(addresses, from, to).then(
-    (data) => data.validators.items
-  )
-}
-
-export const getNonFungibleLocation = (resource: string, ids: string[]) => {
-  const maxIdsCount = 29
-  if (ids.length > maxIdsCount) {
-    const chunks = chunk(ids, maxIdsCount)
-    return Promise.all(
-      chunks.map((chunk) => getNonFungibleLocationRaw(resource, chunk))
-    ).then((results) => results.map((r) => r.non_fungible_ids).flat())
-  }
-
-  return getNonFungibleLocationRaw(resource, ids).then(
-    (data) => data.non_fungible_ids
-  )
-}
-
-export const getNonFungibleLocationRaw = (resource: string, ids: string[]) => {
-  return gatewayApi.state.innerClient.nonFungibleLocation({
-    stateNonFungibleLocationRequest: {
-      resource_address: resource,
-      non_fungible_ids: ids
-    }
-  })
-}
