@@ -192,7 +192,7 @@ export const transformValidatorResponse =
       if (stakeUnits) {
         totalStakeUnits = new BigNumber(
           (
-            stakeUnits[i]
+            stakeUnits.find((s) => s.address === stakeUnitResourceAddress)!
               .details as StateEntityDetailsResponseFungibleResourceDetails
           ).total_supply
         )
