@@ -85,7 +85,7 @@
     "@prisma/client": "^4.15.0",
     "@radixdlt/babylon-gateway-api-sdk": "1.0.1",
     "@radixdlt/dapps-dropdown": "1.0.1",
-    "@radixdlt/radix-dapp-toolkit": "1.1.0",
+    "@radixdlt/radix-dapp-toolkit": "1.1.1",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
     "@radixdlt/svelte-skeleton-loader": "^1.0.1",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
