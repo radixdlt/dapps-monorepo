@@ -87,7 +87,7 @@ export const NETWORK_CONFIG = {
   },
   [Network.MAINNET]: {
     id: RadixNetwork.Mainnet,
-    url: 'https://dashboard.radixdlt.com',
+    url: 'https://mainnet.radixdlt.com',
     consoleDappAddress:
       'account_rdx12xe5q56q0cen0vunfsh352tslz6vyfwf4qujcez5vdjmlm0rzcngs8',
     dashboardDappAddress:
