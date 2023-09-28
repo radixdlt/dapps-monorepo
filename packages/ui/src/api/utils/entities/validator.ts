@@ -143,9 +143,10 @@ export const transformValidatorResponse =
         getEnumStringMetadata('owner_badge')(validator.metadata)
       )
 
-      const ownerData = (
-        await getNonFungibleLocation(validatorOwnerBadgeResource, ownerBadgeIds)
-      ).non_fungible_ids
+      const ownerData = await getNonFungibleLocation(
+        validatorOwnerBadgeResource,
+        ownerBadgeIds
+      )
 
       ownerVaultAddresses = pipe(
         () => ownerData,
