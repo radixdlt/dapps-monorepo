@@ -91,7 +91,7 @@
   "dependencies": {
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
-    "@radixdlt/babylon-gateway-api-sdk": "^1.1.0",
+    "@radixdlt/babylon-gateway-api-sdk": "1.1.0",
     "@radixdlt/dapps-dropdown": "1.0.1",
     "@radixdlt/radix-dapp-toolkit": "1.1.1",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
@@ -115,5 +115,8 @@
     "svelte-local-storage-store": "^0.3.1",
     "tslog": "^4.8.2",
     "zod": "^3.21.4"
+  },
+  "overrides": {
+    "@radixdlt/babylon-gateway-api-sdk": "1.1.0"
   }
 }
