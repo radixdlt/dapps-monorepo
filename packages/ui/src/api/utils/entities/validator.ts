@@ -52,9 +52,7 @@ const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
 
 const getValidatorUptimeSinceDate =
   (addresses: string[]) => (timestamp: Date | number) =>
-    getValidatorUptime(addresses, timestamp)
-      .then(({ validators: { items } }) => items)
-      .catch(() => [])
+    getValidatorUptime(addresses, timestamp).catch(() => [])
 
 const calculateUptimePercentage = ({
   proposals_made,

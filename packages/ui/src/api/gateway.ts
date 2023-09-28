@@ -134,7 +134,7 @@ export const getNonFungiblesIdsPageWithData = ({
 export const getNonFungibleIDs = (address: string) =>
   gatewayApi.state.getAllNonFungibleIds(address)
 
-export const getValidatorUptime = (
+export const getValidatorUptimeRaw = (
   addresses: string[],
   from?: Date | number,
   to?: Date | number
@@ -164,13 +164,32 @@ const chunk = <T>(array: T[], chunkSize: number): T[][] => {
   return chunks
 }
 
+export const getValidatorUptime = (
+  addresses: string[],
+  from?: Date | number,
+  to?: Date | number
+) => {
+  const maxValidatorsCount = 200
+
+  if (addresses.length > maxValidatorsCount) {
+    const chunks = chunk(addresses, maxValidatorsCount)
+    return Promise.all(
+      chunks.map((chunk) => getValidatorUptimeRaw(chunk, from, to))
+    ).then((results) => results.map((r) => r.validators.items).flat())
+  }
+
+  return getValidatorUptimeRaw(addresses, from, to).then(
+    (data) => data.validators.items
+  )
+}
+
 export const getNonFungibleLocation = (resource: string, ids: string[]) => {
   const maxIdsCount = 29
   if (ids.length > maxIdsCount) {
     const chunks = chunk(ids, maxIdsCount)
     return Promise.all(
       chunks.map((chunk) => getNonFungibleLocationRaw(resource, chunk))
-    ).then((results) => results.flat())
+    ).then((results) => results.map((r) => r.non_fungible_ids).flat())
   }
 
   return getNonFungibleLocationRaw(resource, ids).then(
