@@ -10,7 +10,10 @@
 
   data.promises.tx
     .then((tx) => {
-      if (!tx) error = 404
+      if (!tx)
+        error = {
+          status: 404
+        }
     })
     .catch((e) => (error = e.errorResponse))
 </script>
