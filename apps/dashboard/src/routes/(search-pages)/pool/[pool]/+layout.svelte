@@ -8,9 +8,13 @@
 
   let error: any
 
-  data.promises.entity.catch((e) => {
-    error = e.errorResponse
-  })
+  data.promises.entity
+    .then((entity) => {
+      if (!entity) error = { status: 404 }
+    })
+    .catch((e) => {
+      error = e.errorResponse
+    })
 </script>
 
 {#if error}
