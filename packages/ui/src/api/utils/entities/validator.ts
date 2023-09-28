@@ -22,7 +22,6 @@ export type Validator = _Entity<
   ownerAddress?: string
   totalStakeInXRD: BigNumber
   ownerStake: BigNumber
-  percentageOwnerStake: number
   apy: number
   fee: number
   uptimePercentages: {
@@ -244,14 +243,6 @@ export const transformValidatorResponse =
         )?.owner,
 
         ownerStake,
-
-        percentageOwnerStake:
-          validator.stake_vault.balance === '0'
-            ? 0
-            : new BigNumber(ownerStake)
-                .dividedBy(new BigNumber(validator.stake_vault.balance))
-                .multipliedBy(100)
-                .toNumber(),
 
         apy,
         acceptsStake: state.accepts_delegated_stake

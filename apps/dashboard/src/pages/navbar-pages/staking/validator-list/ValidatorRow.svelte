@@ -3,7 +3,7 @@
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
   import StakeDisplay from './StakeDisplay.svelte'
-  import { truncateNumber } from '@utils'
+  import { formatXRDValue, truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { connected } from '@stores'
@@ -49,7 +49,7 @@
 
     <ResponsiveTableCell>
       <div class="center bold">
-        {truncateNumber(validator.percentageOwnerStake)}%
+        {formatXRDValue(validator.ownerStake.toString())}
       </div>
     </ResponsiveTableCell>
 

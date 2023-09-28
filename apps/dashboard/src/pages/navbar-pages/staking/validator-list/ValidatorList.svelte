@@ -92,7 +92,7 @@
       }
     },
     {
-      sortBy: sort('percentageOwnerStake', sortBasic),
+      sortBy: sort('ownerStake', sortBigNumber),
       header: {
         label: 'OWNER STAKE',
         alignment: 'center'
