@@ -157,10 +157,32 @@ export const getValidatorUptime = (
     }
   })
 
-export const getNonFungibleLocation = (resource: string, ids: string[]) =>
-  gatewayApi.state.innerClient.nonFungibleLocation({
+const chunk = <T>(array: T[], chunkSize: number): T[][] => {
+  const chunks = []
+  for (let i = 0, length = array.length; i < length; i += chunkSize)
+    chunks.push(array.slice(i, i + chunkSize))
+  return chunks
+}
+
+export const getNonFungibleLocation = (resource: string, ids: string[]) => {
+  const maxIdsCount = 29
+  if (ids.length > maxIdsCount) {
+    const chunks = chunk(ids, maxIdsCount)
+    return Promise.all(
+      chunks.map((chunk) => getNonFungibleLocationRaw(resource, chunk))
+    ).then((results) => results.flat())
+  }
+
+  return getNonFungibleLocationRaw(resource, ids).then(
+    (data) => data.non_fungible_ids
+  )
+}
+
+export const getNonFungibleLocationRaw = (resource: string, ids: string[]) => {
+  return gatewayApi.state.innerClient.nonFungibleLocation({
     stateNonFungibleLocationRequest: {
       resource_address: resource,
       non_fungible_ids: ids
     }
   })
+}
