@@ -23,7 +23,6 @@
       type: 'validator' as const,
       address: validatorAddresses[i % 10],
       totalStake: new BigNumber(100000000),
-      percentageOwnerStake: Math.random() * 30,
       apy: Math.random() * 10,
       fee: Math.random() * 5,
       uptimePercentages: {
