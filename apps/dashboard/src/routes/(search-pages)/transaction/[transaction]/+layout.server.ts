@@ -2,7 +2,8 @@ import { CURRENT_NETWORK } from './../../../../../../../packages/ui/src/network'
 import type { LayoutServerLoad } from './$types'
 import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { getTransactionDetails } from '@api/gateway'
-import { redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
+import type { ErrorResponse } from '@radixdlt/babylon-gateway-api-sdk'
 
 export const load: LayoutServerLoad = async ({ params, route }) => {
   if (!route.id.includes('raw-receipt') && !route.id.includes('details')) {
@@ -33,7 +34,11 @@ export const load: LayoutServerLoad = async ({ params, route }) => {
         : resolveManifest('')
       return tx
     })
-    .catch(() => undefined)
+    .catch((e) => {
+      return {
+        error: e.errorResponse as ErrorResponse
+      }
+    })
 
   return {
     address: params.transaction,
