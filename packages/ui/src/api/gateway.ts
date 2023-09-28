@@ -142,4 +142,3 @@ export const getValidatorUptime = (
 
 export const getNonFungibleLocation = (resource: string, ids: string[]) =>
   gatewayApi.state.getNonFungibleLocation(resource, ids)
-
