@@ -85,7 +85,7 @@
   let contentWidth: number
 </script>
 
-<Accordion>
+<Accordion isOpened={true}>
   <div class="radix-staking-header" slot="header">
     <TokenIcon isXrd />
     <span class="header-text">Radix Network XRD Stake</span>
@@ -101,7 +101,7 @@
     {/await}
   </svelte:fragment>
 </Accordion>
-<Accordion>
+<Accordion isOpened={true}>
   <div class="header-text" slot="header">Pool Units</div>
 
   <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
