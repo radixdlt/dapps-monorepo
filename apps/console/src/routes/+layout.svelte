@@ -18,6 +18,7 @@
   import LayersIcon from '@icons/layers.svg'
   import TransactionsIcon from '@icons/transactions.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
 
@@ -79,6 +80,11 @@
       text: 'Manage dApp Definition',
       icon: DappMetadataIcon,
       path: '/dapp-metadata'
+    },
+    {
+      text: 'Convert Olympia Address',
+      icon: NetworkTagIcon,
+      path: '/convert-olympia-address'
     }
   ]
 </script>
