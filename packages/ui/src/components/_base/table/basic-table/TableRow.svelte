@@ -10,6 +10,7 @@
 
     transition: var(--transition-hover-card);
     height: 4rem;
+    background: none;
 
     @include mixins.mobile {
       height: auto;
@@ -22,6 +23,8 @@
 
     :global(td) {
       border: var(--border) var(--theme-border);
+      background: var(--theme-surface-2);
+
       @include mixins.mobile {
         border-top: none;
         padding: 16px 24px;
