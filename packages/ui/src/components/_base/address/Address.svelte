@@ -1,18 +1,25 @@
 <script lang="ts">
   import 'cooltipz-css'
   import { addressToRoute, shortenAddress } from '@utils'
-  import { goto } from '$app/navigation'
   import CopyableText from '../copyable-text/CopyableText.svelte'
+  import { writable } from 'svelte/store'
+  import { CURRENT_NETWORK } from '@networks'
+  import { RadixNetworkConfigById } from '@radixdlt/babylon-gateway-api-sdk'
 
   export let value = ''
   export let short = false
   export let autoShorten = false
   export let preventNavigation = false
+  export let includeDashboardHost = false
 
-  const handleAddressClick = async () => {
-    if (preventNavigation) return
+  const currentDashboardUrl =
+    RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
+  let href = writable('')
 
-    goto(await addressToRoute(value))
+  $: {
+    addressToRoute(value).then((route) => {
+      href.set(includeDashboardHost ? `${currentDashboardUrl}${route}` : route)
+    })
   }
 </script>
 
@@ -27,9 +34,13 @@
       : undefined}
     let:displayText
   >
-    <button class="text" on:click|stopPropagation={handleAddressClick}>
-      {displayText}
-    </button>
+    {#if preventNavigation}
+      <button class="text normal-cursor">
+        {displayText}
+      </button>
+    {:else}
+      <a href={$href} class="text">{displayText}</a>
+    {/if}
   </CopyableText>
 </div>
 
@@ -42,6 +53,11 @@
 
     .text {
       color: var(--color-radix-blue-2);
+      font-weight: var(--font-weight-light);
+    }
+
+    .normal-cursor {
+      cursor: default;
     }
   }
 </style>

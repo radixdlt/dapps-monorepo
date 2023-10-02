@@ -45,7 +45,7 @@
       <div class="babylon-content">
         <Text size="medium">Babylon address</Text>
         <Address
-          preventNavigation={true}
+          includeDashboardHost={true}
           value={$babylonAddress}
           short={false}
           --background="var(--theme-surface-3)"
