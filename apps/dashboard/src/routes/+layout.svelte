@@ -126,7 +126,9 @@
         style:margin-bottom="var(--spacing-lg)"
       />
       <div class="page">
-        <slot />
+        <div>
+          <slot />
+        </div>
         <Footer />
       </div>
     </Layout>
