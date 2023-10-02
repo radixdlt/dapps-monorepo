@@ -32,7 +32,7 @@ const removeLeadingZeros = (value: string) => {
 }
 
 export const number =
-  (min?: string, max?: string, maxChars?: number, decimalPlaces = 2) =>
+  (min?: string, max?: string, maxChars?: number, decimalPlaces = 18) =>
   (value: string) => {
     if (value === '') value = '0'
     const numericValue = removeNonNumericCharacters(value)

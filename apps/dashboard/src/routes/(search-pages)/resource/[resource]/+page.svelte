@@ -8,25 +8,32 @@
 </script>
 
 {#await data.promises.resource then resource}
-  <SearchPage
-    title={resource.resourceType === 'non-fungible'
-      ? 'Non Fungible Resource'
-      : resource.type === 'resource'
-      ? 'Fungible Resource'
-      : 'Pool Unit'}
-    address={data.address}
-  >
-    <Resource
-      resource={data.promises.resource}
-      associatedDapps={data.promises.associatedDapps}
-      redeemableTokens={data.promises.redeemableTokens.then((tokens) =>
-        tokens?.map((token) => ({
-          iconUrl: token.icon?.href,
-          name: token.name
-        }))
-      )}
-    />
-  </SearchPage>
+  {#if !resource}
+    <ErrorPage status={404} />
+  {:else}
+    <SearchPage
+      title={resource.resourceType === 'non-fungible'
+        ? 'Non Fungible Resource'
+        : resource.type === 'resource'
+        ? 'Fungible Resource'
+        : 'Pool Unit'}
+      address={data.address}
+    >
+      <Resource
+        resource={data.promises.resource}
+        associatedDapps={data.promises.associatedDapps}
+        redeemableTokens={data.promises.redeemableTokens.then((tokens) =>
+          tokens?.map((token) => ({
+            iconUrl: token.icon?.href,
+            name: token.name
+          }))
+        )}
+      />
+    </SearchPage>
+  {/if}
 {:catch e}
-  <ErrorPage status={e.status} />
+  <ErrorPage
+    status={e.errorResponse.status}
+    traceId={e.errorResponse.traceId}
+  />
 {/await}

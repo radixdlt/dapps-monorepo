@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import {
     getNonFungiblesIdsPageWithData,
     type GetNonFungibleIdsPageWithDataRequest
@@ -31,7 +31,11 @@
   }>()
 
   const fetchMore = (data: GetNonFungibleIdsPageWithDataRequest) => {
-    if (isLoading || currentCursor === undefined) {
+    if (
+      isLoading ||
+      currentCursor === undefined ||
+      (data.cursor === undefined && currentCursor === null)
+    ) {
       return
     }
     isLoading = true
@@ -98,7 +102,7 @@
           <div class="nft-cards" class:center={width < 500}>
             {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
               <NonFungibleTokenCard
-                imgUrl={key_image_url?.value.href}
+                imgUrl={key_image_url?.value}
                 name={name?.value}
                 {address}
                 on:click={() =>
@@ -110,7 +114,7 @@
             {#if loadedLaterNfts[resource.address]}
               {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
                 <NonFungibleTokenCard
-                  imgUrl={key_image_url?.value.href}
+                  imgUrl={key_image_url?.value}
                   name={name?.value}
                   {address}
                   on:click={() =>

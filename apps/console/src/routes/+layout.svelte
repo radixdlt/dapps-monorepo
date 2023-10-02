@@ -23,7 +23,8 @@
 
   let mounted = false
 
-  $: hideSearch = true
+  const hideSearch = true
+  const showDesktopSidebar = true
 
   onMount(() => {
     const updateAccounts = (value?: Account[]) => {
@@ -101,7 +102,7 @@
 
 <Theme theme="light">
   {#if mounted}
-    <Layout {routes} {hideSearch}>
+    <Layout {routes} {hideSearch} {showDesktopSidebar}>
       <!-- svelte-ignore a11y-missing-content -->
       <a
         slot="logo"
@@ -116,13 +117,6 @@
 
 <style lang="scss" global>
   @use '../../../../packages/ui/src/global.scss';
-
-  .main-content {
-    background: var(--theme-surface-1);
-    grid-area: content;
-    padding-bottom: var(--spacing-lg);
-    position: relative;
-  }
 
   .logo {
     background-size: contain;

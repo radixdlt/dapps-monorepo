@@ -4,8 +4,8 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import type { Validator } from '@api/utils/entities/validator'
-  import { RET_DECIMAL_PRECISION, XRD_SYMBOL } from '@constants'
+  import { getValidators, type Validator } from '@api/utils/entities/validator'
+  import { RET_DECIMAL_PRECISION } from '@constants'
   import { formatXRDValue } from '@utils'
 
   export let stakes: {
@@ -59,7 +59,7 @@
     )
     .toString()
 
-  const unstake = (
+  const unstake = async (
     e: CustomEvent<
       (transactionManifest: string, blobs?: string[] | undefined) => void
     >
@@ -71,13 +71,17 @@
       amount: string
     }[] = []
 
+    const validators = (await getValidators(undefined, true, false)).validators
+
     stakes.forEach((stake, i) => {
       if (amountsToUnstake[i] !== '0') {
         const stakeUnitsAmount = calculateStakeUnitsAmount(
           amountsToUnstake[i],
           stake.stakeUnits,
-          stake.validator.totalStakeUnits,
-          stake.validator.totalStakeInXRD
+          validators.find((v) => stake.validator.address === v.address)!
+            .totalStakeUnits,
+          validators.find((v) => stake.validator.address === v.address)!
+            .totalStakeInXRD
         )
 
         unstakes.push({
@@ -100,6 +104,7 @@
   on:click={unstake}
   sidePanelHeader="Request Unstake"
   on:close
+  rightColumnWidth="20rem"
 >
   <svelte:fragment slot="heading-text">
     Validator to request unstake from:
@@ -118,7 +123,7 @@
             stakedAmount={stake.amount.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
-            --token-amount-card-width={rightColumnWidth}
+            --card-width={rightColumnWidth}
           />
         </div>
       {/each}
@@ -126,7 +131,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="info-box-title"
-    >How Unstake Requests Works</svelte:fragment
+    >How Unstake Requests Work</svelte:fragment
   >
 
   <svelte:fragment slot="info-box-explanation">
@@ -136,7 +141,11 @@
 
   <svelte:fragment slot="summary">
     <div class="summary">
-      <div class="summary-title">Total unstaking request ({XRD_SYMBOL})</div>
+      <div class="summary-title">
+        Requesting unstake using Liquid Stake Units currently worth an <span
+          style:font-weight="var(--font-weight-bold-1)">estimated</span
+        >:
+      </div>
       <div class="summary-value">
         <!-- This forces it to re-render when invalidInputs changes. For some reason it doesn't re-render otherwise. -->
         {#key invalidInputs}
@@ -145,8 +154,6 @@
       </div>
     </div>
   </svelte:fragment>
-
-  <svelte:fragment slot="button-text">Send to Radix Wallet</svelte:fragment>
 </StakePanel>
 
 <style lang="scss">

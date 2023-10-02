@@ -5,6 +5,7 @@
   import { isSameRoute } from '../../utils'
 
   export let page: Page
+  export let showDesktopSidebar: boolean | undefined
 
   export let routes: {
     text: string
@@ -13,7 +14,7 @@
   }[] = []
 </script>
 
-<Sidebar>
+<Sidebar {showDesktopSidebar}>
   <div class="sidebar-wrapper">
     <div class="menu-items">
       {#each routes as route (route.path)}

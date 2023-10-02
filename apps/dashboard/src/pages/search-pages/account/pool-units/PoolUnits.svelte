@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
@@ -61,7 +61,7 @@
     },
     {
       header: {
-        label: 'Staking'
+        label: 'Staked'
       },
       sortBy: 'staking',
       renderAs: ({ staking }) => formatXRDValue(staking)

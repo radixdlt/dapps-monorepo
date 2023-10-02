@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import type { Validator } from '@api/utils/entities/validator'
   import { formatTokenValue, truncateNumber } from '@utils'
 

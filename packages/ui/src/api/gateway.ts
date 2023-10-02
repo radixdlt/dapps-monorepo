@@ -138,29 +138,7 @@ export const getValidatorUptime = (
   addresses: string[],
   from?: Date | number,
   to?: Date | number
-) =>
-  gatewayApi.statistics.innerClient.validatorsUptime({
-    validatorsUptimeRequest: {
-      validator_addresses: addresses,
-      from_ledger_state:
-        from !== undefined
-          ? from instanceof Date
-            ? { timestamp: from }
-            : { state_version: from }
-          : undefined,
-      at_ledger_state:
-        to !== undefined
-          ? to instanceof Date
-            ? { timestamp: to }
-            : { state_version: to }
-          : undefined
-    }
-  })
+) => gatewayApi.statistics.getValidatorsUptimeFromTo(addresses, from, to)
 
 export const getNonFungibleLocation = (resource: string, ids: string[]) =>
-  gatewayApi.state.innerClient.nonFungibleLocation({
-    stateNonFungibleLocationRequest: {
-      resource_address: resource,
-      non_fungible_ids: ids
-    }
-  })
+  gatewayApi.state.getNonFungibleLocation(resource, ids)

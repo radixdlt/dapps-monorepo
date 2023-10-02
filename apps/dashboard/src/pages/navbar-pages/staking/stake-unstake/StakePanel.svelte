@@ -10,13 +10,12 @@
   export let stakeButtonDisabled = false
   export let useBackdrop = false
   export let learnMoreUrl = ''
+  export let rightColumnWidth = '15rem'
 
   const dispatch = createEventDispatcher<{
     close: null | 'invalidate'
     'tx-response': { status: TransactionStatus }
   }>()
-
-  let rightColumnWidth = '15rem'
 </script>
 
 <SidePanel {useBackdrop} on:close>
@@ -63,9 +62,7 @@
             dispatch('tx-response', e.detail)
           }}
           buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
-        >
-          <slot name="button-text" />
-        </SendTxButton>
+        />
       </div>
     </div>
   </div>

@@ -46,8 +46,8 @@
     background: var(--theme-surface-2);
     padding: 0.25rem;
     border-radius: var(--border-radius-lg);
-    width: 3.25rem;
-    height: 3.25rem;
+    width: var(--size, 3.25rem);
+    height: var(--size, 3.25rem);
     box-shadow: var(--shadow);
     max-width: 100%;
     max-height: 100%;

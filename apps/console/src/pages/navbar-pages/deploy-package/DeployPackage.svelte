@@ -1,13 +1,10 @@
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
   import { Buffer } from 'buffer'
   import FileUpload, {
     type FileItem
   } from '@components/file-upload/FileUpload.svelte'
   import { pipe } from 'ramda'
   import type { Account } from '@stores'
-  import Select from '@components/_base/select/Select.svelte'
   import { derived, writable } from 'svelte/store'
   import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
   import { goto } from '$app/navigation'
@@ -15,8 +12,7 @@
   import { getTransactionDetails } from '@api/gateway'
   import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
   import type { ComponentEvents } from 'svelte'
-
-  export let accounts: Account[]
+  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
 
   const files = pipe(
     () => writable<FileItem[]>([]),
@@ -43,9 +39,7 @@
     }
   })
 
-  const selectedAccount = writable<(Account & { label: string }) | undefined>(
-    undefined
-  )
+  let selected: Account
 
   const packageDeployed = writable<{
     txStatus: TransactionStatus
@@ -54,8 +48,8 @@
   }>()
 
   const deployButtonEnabled = derived(
-    [requiredUploadedFiles, selectedAccount],
-    ([{ wasm, rpd }, selectedAccount]) => !!rpd && !!wasm && !!selectedAccount,
+    [requiredUploadedFiles],
+    ([{ wasm, rpd }]) => !!rpd && !!wasm && !!selected,
     false
   )
 
@@ -65,7 +59,7 @@
     const sborDecodedSchema = await sborDecodeSchema(rpd)
 
     const manifest = getDeployPackageManifest(
-      $selectedAccount?.address!,
+      selected?.address!,
       wasm,
       sborDecodedSchema
     )
@@ -97,53 +91,70 @@
   }
 </script>
 
-<Box>
-  <Text>
-    Deploy a new blueprint package to the Radix RCnet by attaching your WASM and
-    rpd files to a deploy transaction.
-  </Text>
-</Box>
-<center>
-  <Box cx={{ maxWidth: '50%', minWidth: '450px' }}>
+<div class="description">
+  Deploy a new blueprint package to the current network by attaching your WASM
+  and RPD files and submitting a transaction using your Radix Wallet.
+</div>
+
+<div class="card">
+  <div class="file-inputs">
     <FileUpload
       acceptedFileTypes={['.wasm', 'wasm']}
       onRemoveFile={(_, file) => files.removeFile(file)}
       onAddFile={files.addFile}
-      labelIdle="Drop the package WASM file here, or <span class='filepond--label-action'>Browse</span>"
+      labelIdle="Drop the package WASM file here - or <span class='filepond--label-action'>browse</span>"
       maxFiles={1}
     />
     <FileUpload
       acceptedFileTypes={['.rpd', 'rpd']}
       onRemoveFile={(_, file) => files.removeFile(file)}
       onAddFile={files.addFile}
-      labelIdle="Drop the package rpd file here, <span class='filepond--label-action'>Browse</span>"
+      labelIdle="Drop the package RPD file here - or <span class='filepond--label-action'>browse</span>"
       maxFiles={1}
     />
-  </Box>
+  </div>
 
-  <Box>
-    <Text
-      >To control aspects of the package you deploy, like setting metadata or
-      claiming royalties, you must specify a badge NFT for authorization. Choose
-      one of your accounts where you have a badge, or where you’d like to hold
-      one.</Text
-    >
-  </Box>
-  <Box cx={{ width: '30%' }}>
-    <Box>
-      <Select
-        placeholder="Select Account"
-        bind:selected={$selectedAccount}
-        options={accounts}
-      />
-    </Box>
-  </Box>
+  <div class="account-description">
+    Please choose an account to receive an owner badge that will be minted and
+    set to control this package's metadata and royalties.
+  </div>
 
-  <Box px="none" mx="none">
-    <SendTxButton
-      buttonProps={{ disabled: !$deployButtonEnabled, size: 'big' }}
-      on:click={deployPackage}
-      on:response={handleResponse}
-    />
-  </Box>
-</center>
+  <div class="account-picker">
+    <AccountPicker bind:selected />
+  </div>
+</div>
+<div class="send-button">
+  <SendTxButton
+    buttonProps={{ disabled: !$deployButtonEnabled, size: 'big' }}
+    on:click={deployPackage}
+    on:response={handleResponse}
+  />
+</div>
+
+<style lang="scss">
+  .account-picker {
+    p {
+      margin-bottom: 1rem;
+    }
+    max-width: 25rem;
+  }
+  .card {
+    margin-top: 1rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .description {
+    margin-bottom: 1rem;
+  }
+
+  .account-description {
+    margin-bottom: 1rem;
+    align-self: center;
+  }
+  .account-picker {
+    width: 25rem;
+    align-self: center;
+  }
+</style>

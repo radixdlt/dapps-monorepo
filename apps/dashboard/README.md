@@ -72,4 +72,6 @@ We use [stitches](https://stitches.dev/) to implement and organize our css. This
 
 For theming and other repo-wide style config, there's a `src/styles.ts` file with definitions for things like colors and spacing. Having a robust style config, and always referring to it when creating styles helps us keep the look and feel of the UI consistent.
 
+# License
 
+The Radix Dashboard code is released under [Apache 2.0 license](LICENSE).

@@ -81,13 +81,13 @@
   },
   "type": "module",
   "dependencies": {
-    "@aleworm/svelte-skeleton-loader": "^0.0.2",
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
-    "@radixdlt/babylon-gateway-api-sdk": "1.0.1",
-    "@radixdlt/dapps-dropdown": "^0.2.1",
-    "@radixdlt/radix-dapp-toolkit": "^1.0.0",
+    "@radixdlt/babylon-gateway-api-sdk": "1.1.0",
+    "@radixdlt/dapps-dropdown": "1.0.1",
+    "@radixdlt/radix-dapp-toolkit": "1.1.1",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
+    "@radixdlt/svelte-skeleton-loader": "^1.0.1",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@vitest/coverage-v8": "^0.32.0",
     "bignumber.js": "^9.1.0",
@@ -107,5 +107,8 @@
     "tslog": "^4.8.2",
     "vite-tsconfig-paths": "^4.2.0",
     "zod": "^3.21.4"
+  },
+  "overrides": {
+    "@radixdlt/babylon-gateway-api-sdk": "1.1.0"
   }
 }

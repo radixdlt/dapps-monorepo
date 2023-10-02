@@ -3,12 +3,13 @@
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
   import StakeDisplay from './StakeDisplay.svelte'
-  import { truncateNumber } from '@utils'
+  import { formatXRDValue, truncateNumber } from '@utils'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { connected } from '@stores'
   import type { UptimeValue } from './UptimeHeader.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
+  import NftImage from '@components/_base/nft-image/NftImage.svelte'
 
   export let validator: TransformedValidator
   export let selectedUptime: UptimeValue
@@ -25,12 +26,10 @@
     {/if}
 
     <ResponsiveTableCell>
-      <div
-        class:left-padded={!$connected}
-        class="dotted-overflow"
-        style:max-width="15ch"
-      >
-        {validator.metadata.standard.name?.value ?? ''}
+      <div class="name-and-icon" class:left-padded={!$connected}>
+        <div class="dotted-overflow" style:max-width="15ch">
+          {validator.metadata.standard.name?.value ?? ''}
+        </div>
       </div>
     </ResponsiveTableCell>
 
@@ -50,7 +49,7 @@
 
     <ResponsiveTableCell>
       <div class="center bold">
-        {truncateNumber(validator.percentageOwnerStake)}%
+        {formatXRDValue(validator.ownerStake.toString())}
       </div>
     </ResponsiveTableCell>
 
@@ -140,5 +139,11 @@
 
   .select {
     padding-right: var(--spacing-lg);
+  }
+
+  .name-and-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
   }
 </style>

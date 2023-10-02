@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import Checkbox from '../checkbox/Checkbox.svelte'
 
   type G = $$Generic

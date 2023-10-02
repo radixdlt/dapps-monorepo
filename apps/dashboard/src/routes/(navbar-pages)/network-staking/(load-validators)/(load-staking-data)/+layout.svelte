@@ -55,8 +55,6 @@
             v.fee <= e.detail.feeFilter[1] &&
             v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
             v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
-            v.percentageOwnerStake >= e.detail.ownerStakeFilter[0] &&
-            v.percentageOwnerStake <= e.detail.ownerStakeFilter[1] &&
             (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
             (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
             v.uptimePercentages[e.detail.uptimeFilter.timeframe] >=
@@ -71,9 +69,7 @@
   <ErrorPage status={404} />
 {:else}
   <Validators
-    validators={data.promises.validators.then((v) =>
-      v.sort((v1) => ($bookmarkedValidatorsStore[v1.address] ? -1 : 1))
-    )}
+    validators={data.promises.validators}
     {filteredValidators}
     on:show-claim-all={() => goto('/network-staking/claim-multiple')}
     on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
@@ -89,7 +85,6 @@
       bind:open={filterOpen}
       feeValues={validators.map((v) => v.fee)}
       totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
-      ownerStakeValues={validators.map((v) => v.percentageOwnerStake)}
       on:close={(e) => {
         applyFilter(validators, bookmarked)(e)
         filterOpen = false

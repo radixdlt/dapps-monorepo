@@ -22,7 +22,6 @@ export type Validator = _Entity<
   ownerAddress?: string
   totalStakeInXRD: BigNumber
   ownerStake: BigNumber
-  percentageOwnerStake: number
   apy: number
   fee: number
   uptimePercentages: {
@@ -52,9 +51,7 @@ const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
 
 const getValidatorUptimeSinceDate =
   (addresses: string[]) => (timestamp: Date | number) =>
-    getValidatorUptime(addresses, timestamp)
-      .then(({ validators: { items } }) => items)
-      .catch(() => [])
+    getValidatorUptime(addresses, timestamp).catch(() => [])
 
 const calculateUptimePercentage = ({
   proposals_made,
@@ -143,9 +140,10 @@ export const transformValidatorResponse =
         getEnumStringMetadata('owner_badge')(validator.metadata)
       )
 
-      const ownerData = (
-        await getNonFungibleLocation(validatorOwnerBadgeResource, ownerBadgeIds)
-      ).non_fungible_ids
+      const ownerData = await getNonFungibleLocation(
+        validatorOwnerBadgeResource,
+        ownerBadgeIds
+      )
 
       ownerVaultAddresses = pipe(
         () => ownerData,
@@ -194,7 +192,7 @@ export const transformValidatorResponse =
       if (stakeUnits) {
         totalStakeUnits = new BigNumber(
           (
-            stakeUnits[i]
+            stakeUnits.find((s) => s.address === stakeUnitResourceAddress)!
               .details as StateEntityDetailsResponseFungibleResourceDetails
           ).total_supply
         )
@@ -245,14 +243,6 @@ export const transformValidatorResponse =
         )?.owner,
 
         ownerStake,
-
-        percentageOwnerStake:
-          validator.stake_vault.balance === '0'
-            ? 0
-            : new BigNumber(ownerStake)
-                .dividedBy(new BigNumber(validator.stake_vault.balance))
-                .multipliedBy(100)
-                .toNumber(),
 
         apy,
         acceptsStake: state.accepts_delegated_stake

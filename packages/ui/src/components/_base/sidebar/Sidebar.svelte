@@ -7,6 +7,8 @@
   let width: number
   let windowWidth: number
 
+  export let showDesktopSidebar: boolean | undefined
+
   $: showMobileSidebar = $showSidebar
   $: isDesktopViewport = (windowWidth ?? 0) > VIEW_PORTS.desktop
 
@@ -33,6 +35,10 @@
     bind:clientWidth={width}
     transition:fly={{ x: -width, opacity: 1, duration: 300 }}
   >
+    <slot />
+  </nav>
+{:else if isDesktopViewport && showDesktopSidebar}
+  <nav>
     <slot />
   </nav>
 {/if}

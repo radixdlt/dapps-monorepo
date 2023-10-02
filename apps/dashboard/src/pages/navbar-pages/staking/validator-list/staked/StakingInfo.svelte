@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, type ComponentProps } from 'svelte'
   import type ValidatorRow from '../ValidatorRow.svelte'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { formatTokenValue, formatXRDValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'

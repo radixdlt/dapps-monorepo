@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
   // @ts-ignore no type definitions available
   import FileUpload, { registerPlugin } from 'svelte-filepond'
   import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
@@ -38,19 +37,17 @@
   }
 </script>
 
-<Box>
-  <FileUpload
-    {maxFiles}
-    {name}
-    fileValidateTypeDetectType={validation}
-    allowMultiple={maxFiles > 1 ? true : false}
-    {acceptedFileTypes}
-    onaddfile={handleAddFile}
-    credits={false}
-    {labelIdle}
-    onremovefile={onRemoveFile}
-  />
-</Box>
+<FileUpload
+  {maxFiles}
+  {name}
+  fileValidateTypeDetectType={validation}
+  allowMultiple={maxFiles > 1 ? true : false}
+  {acceptedFileTypes}
+  onaddfile={handleAddFile}
+  credits={false}
+  {labelIdle}
+  onremovefile={onRemoveFile}
+/>
 
 <style global>
   @import 'filepond/dist/filepond.css';

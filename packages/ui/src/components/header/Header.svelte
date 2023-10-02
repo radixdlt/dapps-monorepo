@@ -9,6 +9,7 @@
   import type { ComponentProps } from 'svelte'
 
   export let hideSearch: boolean | undefined
+  export let showDesktopSidebar: boolean | undefined
   export let routes: ComponentProps<PageNavigation>['routes']
 </script>
 
@@ -23,9 +24,11 @@
     />
     <slot name="logo" />
 
-    <div class="desktop-only">
-      <PageNavigation {routes} />
-    </div>
+    {#if !showDesktopSidebar}
+      <div class="desktop-only">
+        <PageNavigation {routes} />
+      </div>
+    {/if}
 
     <radix-dapps-dropdown class="mobile-only mobile-dapps-dropdown" />
   </div>

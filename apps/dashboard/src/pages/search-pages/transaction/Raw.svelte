@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import CodeBox from '@components/code-box/CodeBox.svelte'
   import type { TransactionReceipt } from '@radixdlt/babylon-gateway-api-sdk'
 

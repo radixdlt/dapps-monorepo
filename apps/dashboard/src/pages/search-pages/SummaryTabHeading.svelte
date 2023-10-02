@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import type { Entity } from '@api/utils/entities'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
 

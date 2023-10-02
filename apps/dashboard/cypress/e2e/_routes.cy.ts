@@ -4,8 +4,4 @@ describe('load all routes', () => {
   it('should load root page', () => {
     cy.visit('/', { failOnStatusCode: true })
   })
-
-  it('should load deploy package page', () => {
-    cy.visit('/deploy-package', { failOnStatusCode: true })
-  })
 })

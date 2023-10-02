@@ -11,13 +11,10 @@
   export let open: boolean
   export let feeValues: number[]
   export let totalXRDStakeValues: number[]
-  export let ownerStakeValues: number[]
 
   let feeFilter: [number, number] = [0, 100]
 
   let totalXRDStakeFilter: [number, number] = [0, 100]
-
-  let ownerStakeFilter: [number, number] = [0, 100]
 
   let acceptsStakeFilter = false
   let bookmarkedFilter = false
@@ -61,7 +58,6 @@
     dispatch('close', {
       feeFilter,
       totalXRDStakeFilter,
-      ownerStakeFilter,
       uptimeFilter,
       acceptsStakeFilter,
       bookmarkedFilter
@@ -72,7 +68,6 @@
     close: {
       feeFilter: typeof feeFilter
       totalXRDStakeFilter: typeof totalXRDStakeFilter
-      ownerStakeFilter: typeof ownerStakeFilter
       uptimeFilter: typeof uptimeFilter
       acceptsStakeFilter: boolean
       bookmarkedFilter: boolean
@@ -126,22 +121,6 @@
       minText="MIN AMOUNT (%)"
       maxText="MAX AMOUNT (%)"
       bind:range={totalXRDStakeFilter}
-    />
-  </div>
-
-  <Divider />
-
-  <div class="text">
-    <h3>Owner Stake (%)</h3>
-    <p class="subtext">% of this validator’s stake provided by its owner</p>
-  </div>
-
-  <div class="card">
-    <HistogramFilterCard
-      values={ownerStakeValues}
-      minText="MIN STAKE (%)"
-      maxText="MAX STAKE (%)"
-      bind:range={ownerStakeFilter}
     />
   </div>
 

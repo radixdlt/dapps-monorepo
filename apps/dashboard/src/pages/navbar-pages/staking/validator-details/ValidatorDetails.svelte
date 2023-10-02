@@ -3,7 +3,7 @@
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import { SkeletonLoader } from '@aleworm/svelte-skeleton-loader'
+  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { connected } from '@stores'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Address from '@components/_base/address/Address.svelte'
@@ -18,6 +18,7 @@
   import { formatXRDValue, truncateNumber } from '@utils'
   import { isNil, pipe, reject } from 'ramda'
   import type { metadataItem } from '@dashboard-pages/search-pages/utils'
+  import NftImage from '@components/_base/nft-image/NftImage.svelte'
 
   export let validator: Promise<Validator>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -55,20 +56,25 @@
     <BookmarkValidator {validator} withText />
   </SidePanelHeader>
 
-  <div class="validator-name">
-    {#await validator}
-      <SkeletonLoader />
-    {:then { metadata: { standard: { name } } }}
-      <h1 class="dotted-overflow">{name?.value ?? '<no-name>'}</h1>
-    {/await}
-    <SelectValidator {validator} text="SELECT VALIDATOR" />
-  </div>
-  <div class="subheader">
-    {#await validator}
-      <SkeletonLoader />
-    {:then { address }}
-      <Address value={address} --background="var(--theme-surface-3)" />
-    {/await}
+  <div class="header">
+    <div class="validator-name">
+      {#await validator}
+        <SkeletonLoader />
+      {:then { metadata: { standard: { name, icon_url } } }}
+        <div class="icon-and-name">
+          <NftImage url={icon_url?.value.href} />
+          <h1 class="dotted-overflow">{name?.value ?? '<no-name>'}</h1>
+        </div>
+      {/await}
+      <SelectValidator {validator} text="SELECT VALIDATOR" />
+    </div>
+    <div class="subheader">
+      {#await validator}
+        <SkeletonLoader />
+      {:then { address }}
+        <Address value={address} --background="var(--theme-surface-3)" />
+      {/await}
+    </div>
   </div>
 
   {#if $connected}
@@ -133,11 +139,24 @@
   .validator-name {
     display: flex;
     justify-content: space-between;
+    gap: var(--spacing-lg);
+  }
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  .subheader {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .icon-and-name {
+    display: flex;
     align-items: center;
     gap: var(--spacing-lg);
   }
 
-  .subheader {
-    margin-bottom: var(--spacing-xl);
+  h1 {
+    margin: 0;
   }
 </style>

@@ -45,3 +45,8 @@ npm run pre-push
 ```bash
 npm run test
 ```
+
+# License
+
+* [Radix Dashboard](apps/dashboard/README.md#license) 
+* [Radix Console](apps/console/README.md#license)

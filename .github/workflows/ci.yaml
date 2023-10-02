@@ -23,12 +23,13 @@ on:
           - ansharnet
           - zabanet
           - stokenet
+          - mainnet
           - rcnet-v2
           - rcnet-v3
 
 env:
   active_network: 'stokenet'
-  release_network: 'rcnet-v3'
+  release_network: 'mainnet'
 
 permissions:
   id-token: write
@@ -205,6 +206,7 @@ jobs:
     needs:
       - snyk-scan-deps-licences
       - snyk-scan-code
+    permissions: write-all
     steps:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
@@ -226,6 +228,7 @@ jobs:
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.event.release.tag_name }}
 
   snyk-monitor:
     runs-on: ubuntu-latest
@@ -426,11 +429,11 @@ jobs:
           secret_prefix: 'GH'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
           parse_json: true
-      - name: Restore yarn cache
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          node-version: 20.3.0
-          cache: npm
+      # - name: Restore yarn cache
+      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      #   with:
+      #     node-version: 20.3.0
+      #     cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
@@ -504,11 +507,11 @@ jobs:
           secret_prefix: 'GH'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
           parse_json: true
-      - name: Restore yarn cache
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          node-version: 20.3.0
-          cache: npm
+      # - name: Restore yarn cache
+      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+      #   with:
+      #     node-version: 20.3.0
+      #     cache: npm
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
@@ -688,7 +691,6 @@ jobs:
 
   deploy_rcnet_v2:
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
@@ -713,7 +715,6 @@ jobs:
 
   deploy_rcnet_v3:
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v3' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
@@ -808,6 +809,31 @@ jobs:
       github_environment: stokenet
       app_name: 'dashboard'
       step_name: 'deploy-stokenet'
+
+  deploy_mainnet:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    with:
+      env_name: mainnet
+      namespace: dashboard-mainnet
+      create_subns: false
+      restart_pods: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-mainnet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/dashboard
+      helmfile_extra_vars: >-
+        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.environment=mainnet
+      github_environment: mainnet
+      app_name: 'dashboard'
+      step_name: 'deploy-mainnet'
 
   # storybook-tests:
   #   runs-on: ubuntu-latest
