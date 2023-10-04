@@ -111,7 +111,7 @@ jobs:
         run: |
           echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
       - run: |
-          echo ${{ $GITHUB_OUTPUT }}
+          echo "${{ $GITHUB_OUTPUT }}"
     outputs:
       console-tags: ${{ steps.console-tags.outputs.tags }}
       console-labels: ${{ steps.console-tags.outputs.labels }}
