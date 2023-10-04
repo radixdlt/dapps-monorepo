@@ -105,6 +105,8 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
+      - run: |
+          echo ${{ steps.dashboard-tags.outputs.tags }}
     outputs:
       dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
       dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
@@ -442,7 +444,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
+          tags: ${{github.sha}}-${{ env.NETWORK_NAME }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
           sbom: true
@@ -520,7 +522,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-tags.outputs.storybook-tags }}
+          tags: ${{github.sha}}-${{ env.NETWORK_NAME }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
           sbom: true
