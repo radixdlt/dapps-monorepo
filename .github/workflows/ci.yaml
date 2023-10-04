@@ -787,8 +787,7 @@ jobs:
 
   deploy_stokenet:
     if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/main' && github.event_name == 'push' )
+      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-dashboard
