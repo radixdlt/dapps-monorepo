@@ -411,7 +411,7 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: ${{ needs.setup-tags.outputs.console-tags }}
+          image: docker.io/radixdlt/dapps-console:${{github.sha}}-${{ env.NETWORK_NAME }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
