@@ -95,14 +95,29 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
-      - id: tag-with-network 
+      - name: Define network name
+        id: network
+        run: |
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "published" ]; then
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
+          fi
+
+          echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - id: tag-with-network
         run: |
           echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - run: |
+          echo ${{ $GITHUB_OUTPUT }}
     outputs:
       console-tags: ${{ steps.console-tags.outputs.tags }}
       console-labels: ${{ steps.console-tags.outputs.labels }}
       console-json: ${{ steps.console-tags.outputs.json }}
       tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
+      network-name: ${{steps.network.outputs.network-name}}
 
   lint:
     runs-on: ubuntu-latest
@@ -353,15 +368,6 @@ jobs:
       - snyk-scan-code
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
-          fi
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
@@ -402,7 +408,7 @@ jobs:
           sbom: true
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
-            NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
@@ -421,7 +427,7 @@ jobs:
         run: docker images
       - name: Output job summary
         run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "Network that will be deployed: ${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
