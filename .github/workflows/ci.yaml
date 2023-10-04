@@ -571,7 +571,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
       app_name: 'dashboard'
@@ -594,7 +594,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=dev
       app_name: 'dashboard'
       step_name: 'deploy-dev'
