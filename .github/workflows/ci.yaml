@@ -107,7 +107,6 @@ jobs:
             type=semver,pattern={{version}}
 
       - name: Define network name
-        id: network
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
@@ -116,7 +115,8 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
           fi
-
+      - id: network
+        run: |
           echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
       - id: tag-with-network
         run: |
