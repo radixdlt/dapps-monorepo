@@ -107,6 +107,9 @@ jobs:
             type=semver,pattern={{version}}
       - run: |
           echo ${{ steps.dashboard-tags.outputs.tags }}
+      - id: tag-with-network
+        run: |
+          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
     outputs:
       dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
       dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
@@ -114,6 +117,7 @@ jobs:
       storybook-tags: ${{ steps.storybook-tags.outputs.tags }}
       storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
       storybook-json: ${{ steps.storybook-tags.outputs.json }}
+      tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
 
   lint:
     runs-on: ubuntu-latest
@@ -444,7 +448,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: docker.io/radixdlt/dapps-dashboard:${{github.sha}}-${{ env.NETWORK_NAME }}
+          tags: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
           sbom: true
@@ -463,7 +467,7 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: docker.io/radixdlt/dapps-dashboard:${{github.sha}}-${{ env.NETWORK_NAME }}
+          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
@@ -522,7 +526,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: docker.io/radixdlt/dapps-dashboard-storybook:${{github.sha}}-${{ env.NETWORK_NAME }}
+          tags: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
           sbom: true
@@ -541,7 +545,7 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: docker.io/radixdlt/dapps-dashboard-storybook:${{github.sha}}-${{ env.NETWORK_NAME }}
+          image: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
@@ -613,7 +617,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=enkinet
       github_environment: enkinet
       app_name: 'dashboard'
@@ -637,7 +641,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=hammunet
       github_environment: hammunet
       app_name: 'dashboard'
@@ -661,7 +665,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=gilganet
       github_environment: gilganet
       app_name: 'dashboard'
@@ -685,7 +689,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mardunet
       github_environment: mardunet
       app_name: 'dashboard'
@@ -709,7 +713,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet
       github_environment: ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
       app_name: 'dashboard'
@@ -733,7 +737,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet
       github_environment: zabanet
       app_name: 'dashboard'
@@ -757,7 +761,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet-internal
       github_environment: ansharnet-internal
       app_name: 'dashboard'
@@ -781,7 +785,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet-internal
       github_environment: zabanet-internal
       app_name: 'dashboard'
@@ -806,7 +810,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=stokenet
       github_environment: stokenet
       app_name: 'dashboard'
@@ -831,7 +835,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mainnet
       github_environment: mainnet
       app_name: 'dashboard'

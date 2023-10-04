@@ -95,10 +95,14 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
+      - id: tag-with-network 
+        run: |
+          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
     outputs:
       console-tags: ${{ steps.console-tags.outputs.tags }}
       console-labels: ${{ steps.console-tags.outputs.labels }}
       console-json: ${{ steps.console-tags.outputs.json }}
+      tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
 
   lint:
     runs-on: ubuntu-latest
@@ -392,7 +396,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: docker.io/radixdlt/dapps-console:${{github.sha}}-${{ env.NETWORK_NAME }}
+          tags: docker.io/radixdlt/dapps-console:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.console-labels }}
           target: 'console'
           sbom: true
@@ -411,7 +415,7 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: docker.io/radixdlt/dapps-console:${{github.sha}}-${{ env.NETWORK_NAME }}
+          image: docker.io/radixdlt/dapps-console:${{ needs.setup-tags.outputs.tag-with-network }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
@@ -436,7 +440,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
       app_name: 'console'
@@ -458,7 +462,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=dev
       app_name: 'console'
       step_name: 'deploy-dev'
@@ -480,7 +484,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=enkinet
       github_environment: console-enkinet
       app_name: 'console'
@@ -503,7 +507,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=hammunet
       github_environment: console-hammunet
       app_name: 'console'
@@ -526,7 +530,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=gilganet
       github_environment: console-gilganet
       app_name: 'console'
@@ -549,7 +553,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mardunet
       github_environment: console-mardunet
       app_name: 'console'
@@ -572,7 +576,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet
       github_environment: console-ansharnet
       app_name: 'console'
@@ -595,7 +599,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet-internal
       github_environment: console-ansharnet-internal
       app_name: 'console'
@@ -618,7 +622,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet
       github_environment: console-zabanet
       app_name: 'console'
@@ -641,7 +645,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet-internal
       github_environment: console-zabanet-internal
       app_name: 'console'
@@ -665,7 +669,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=stokenet
       github_environment: console-stokenet
       app_name: 'console'
@@ -689,7 +693,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.console-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mainnet
       github_environment: console-mainnet
       app_name: 'console'
