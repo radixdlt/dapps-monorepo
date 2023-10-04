@@ -444,7 +444,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{github.sha}}-${{ env.NETWORK_NAME }}
+          tags: docker.io/radixdlt/dapps-dashboard:${{github.sha}}-${{ env.NETWORK_NAME }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
           sbom: true
@@ -522,7 +522,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{github.sha}}-${{ env.NETWORK_NAME }}
+          tags: docker.io/radixdlt/dapps-dashboard-storybook:${{github.sha}}-${{ env.NETWORK_NAME }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
           sbom: true

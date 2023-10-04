@@ -392,7 +392,7 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-tags.outputs.console-tags }}
+          tags: docker.io/radixdlt/dapps-console:${{github.sha}}-${{ env.NETWORK_NAME }}
           labels: ${{ needs.setup-tags.outputs.console-labels }}
           target: 'console'
           sbom: true
