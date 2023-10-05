@@ -1,36 +1,19 @@
 <script lang="ts">
-  export let status: number
+  export let status: number | undefined = undefined
+  export let message: string
   export let traceId: string | undefined = undefined
-
-  const errorMessages: Record<number, { title: string; description: string }> =
-    {
-      400: {
-        title: 'Bad Request',
-        description: 'That address was not valid.'
-      },
-      404: {
-        title: 'Not Found',
-        description: 'The requested entity could not be found.'
-      }
-    }
-
-  $: title = errorMessages[status]?.title || 'Oops!'
-
-  $: description = errorMessages[status]?.description || 'An error occured.'
 </script>
 
 <div class="box">
-  <div class="header">{title}</div>
+  <header class="header">Error {status ?? ''}</header>
 
-  <div class="subtext">
-    {description}
-  </div>
+  <p class="text">
+    {message}
+  </p>
 
-  <div class="subtext">
-    {traceId && errorMessages[status] === undefined
-      ? `Trace ID: ${traceId}`
-      : ''}
-  </div>
+  <p class="subtext">
+    {traceId ? `Trace ID: ${traceId}` : ''}
+  </p>
 </div>
 
 <style lang="scss">
@@ -58,15 +41,7 @@
     }
   }
 
-  .subtext {
-    color: var(--theme-subtext);
+  .text {
     font-size: 1rem;
-    text-align: center;
-    font-weight: var(--font-weight-bold-1);
-    line-height: 30px;
-
-    @include mixins.desktop {
-      max-width: 470px;
-    }
   }
 </style>

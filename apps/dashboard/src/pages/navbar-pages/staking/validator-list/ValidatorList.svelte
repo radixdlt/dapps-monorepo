@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
-  export type TransformedValidator = Validator &
-    Validator['uptimePercentages'] & { feePercentage: number }
+  export type TransformedValidator = Validator<true, true, true> &
+    Validator<unknown, true, unknown>['uptimePercentages'] & {
+      feePercentage: number
+    }
 </script>
 
 <script lang="ts">
@@ -19,7 +21,7 @@
     type Direction
   } from '@components/_base/table/Table.svelte'
 
-  export let validators: Promise<Validator[]>
+  export let validators: Promise<Validator<true, true, true>[]>
 
   let selectedUptime: { label: string; value: UptimeValue }
 

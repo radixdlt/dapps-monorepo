@@ -4,8 +4,15 @@ import { getValidators } from '@api/utils/entities/validator'
 import { bookmarkedValidatorsStore } from '../../../../stores'
 import type { NetworkConfigurationResponse } from '@common/gateway-sdk'
 import { networkConfiguration } from '@stores'
+import { ResultAsync } from 'neverthrow'
+import { handleGatewayResult } from '../../../../utils'
+import { pipe } from 'ramda'
 
 export type Bookmarked = { [validator: string]: boolean }
+
+const ERROR_MSG = 'Failed to load validators.'
+
+const handleGatewayWithErrorMessage = handleGatewayResult((_) => ERROR_MSG)
 
 export const load: LayoutLoad = () => {
   const bookmarkedValidators = bookmarkedValidatorsApi
@@ -31,9 +38,17 @@ export const load: LayoutLoad = () => {
     })
   })
 
-  const validatorsResponse = networkConfig.then((config) =>
-    getValidators(config.well_known_addresses.validator_owner_badge)
-  )
+  const validatorsResponse = pipe(
+    () =>
+      ResultAsync.fromSafePromise(networkConfig).andThen((config) =>
+        getValidators(
+          config.well_known_addresses.validator_owner_badge,
+          true,
+          true
+        )
+      ),
+    handleGatewayWithErrorMessage
+  )()
 
   return {
     promises: {

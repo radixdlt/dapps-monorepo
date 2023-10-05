@@ -1,10 +1,9 @@
-import { getSingleEntityDetails } from '@api/gateway'
 import type { LayoutLoad } from './$types'
 import { transformPackage } from '@api/utils/entities/package'
-import { getAssociatedDapps } from '../../utils'
+import { getAssociatedDapps, getLookupEntity } from '../../utils'
 
 export const load: LayoutLoad = ({ params }) => {
-  const entity = getSingleEntityDetails(params.package)
+  const entity = getLookupEntity(params.package)
 
   return {
     address: params.package,

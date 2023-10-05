@@ -71,7 +71,9 @@
       amount: string
     }[] = []
 
-    const validators = (await getValidators(undefined, true, false)).validators
+    const validators = (
+      await getValidators(undefined, true, false)
+    )._unsafeUnwrap().validators
 
     stakes.forEach((stake, i) => {
       if (amountsToUnstake[i] !== '0') {

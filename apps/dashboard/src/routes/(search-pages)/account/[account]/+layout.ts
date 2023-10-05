@@ -1,4 +1,4 @@
-import { getAccountData } from '@api/utils/entities/resource'
+import { getAccountDataNew } from '@api/utils/entities/resource'
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
 import { getPoolUnitData, getPoolUnits } from '@api/utils/entities/pool-unit'
@@ -8,16 +8,26 @@ import {
   type StakeInfo
 } from '@api/utils/staking'
 import BigNumber from 'bignumber.js'
-import { getGatewayStatus } from '@api/gateway'
-import { filter, map } from 'ramda'
+import { filter, map, pipe } from 'ramda'
 import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
+import { handleGatewayResult } from '../../../../utils'
+import { handleLookupGatewayResult } from '../../utils'
+
+const ERROR_MSG = 'Failed to load account data.'
 
 export const load: LayoutLoad = ({ params }) => {
-  const accountData = getAccountData([params.account], {
-    explicitMetadata: ['name', 'tags', 'icon_url']
-  }).then((data) => data[0])
+  const accountData = pipe(
+    () =>
+      getAccountDataNew([params.account], {
+        explicitMetadata: ['name', 'tags', 'icon_url']
+      }),
+    handleLookupGatewayResult
+  )().then((accountData) => accountData[0])
 
-  const validatorResponse = getValidators(undefined, false, false)
+  const validatorResponse = pipe(
+    () => getValidators(undefined, false, false),
+    (result) => handleGatewayResult((_) => ERROR_MSG)(result)
+  )()
 
   const stakeInfo = Promise.all([validatorResponse, accountData])
     .then(
@@ -100,7 +110,11 @@ export const load: LayoutLoad = ({ params }) => {
 
   const poolUnits = accountData
     .then(({ fungible }) => getPoolUnits(fungible))
-    .then(map(getPoolUnitData))
+    .then(
+      map((poolUnits) =>
+        handleGatewayResult((_) => ERROR_MSG)(getPoolUnitData(poolUnits))
+      )
+    )
     .then(filter((poolUnit) => poolUnit !== undefined))
     .then((poolUnits) => Promise.all(poolUnits))
     .then((poolUnits) => poolUnits as NonNullable<(typeof poolUnits)[number]>[])
