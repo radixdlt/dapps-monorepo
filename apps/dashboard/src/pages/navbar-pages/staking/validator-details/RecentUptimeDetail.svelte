@@ -4,7 +4,7 @@
   import type { UptimeValue } from '../validator-list/UptimeHeader.svelte'
   import { truncateNumber } from '@utils'
 
-  export let uptimes: Validator['uptimePercentages']
+  export let uptimes: Validator<unknown, true, unknown>['uptimePercentages']
 
   const options: {
     label: string

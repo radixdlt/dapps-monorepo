@@ -21,7 +21,7 @@
 
   const recentUptimeOptions: {
     label: string
-    value: keyof Validator['uptimePercentages']
+    value: keyof Validator<true, true, true>['uptimePercentages']
     default?: boolean
   }[] = [
     { label: '1 day', value: '1day' },

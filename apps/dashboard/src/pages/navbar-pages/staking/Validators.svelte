@@ -40,8 +40,8 @@
   import type { StakeInfo } from '@api/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
-  export let validators: Promise<Validator[]>
-  export let filteredValidators: Promise<Validator[]>
+  export let validators: Promise<Validator<true, true, true>[]>
+  export let filteredValidators: Promise<Validator<true, true, true>[]>
 
   context.set('validators', writable([]))
 

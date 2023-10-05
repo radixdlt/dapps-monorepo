@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { query } from '@api/query'
   import type { sendTransaction } from '@api/wallet'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import { createEventDispatcher, type ComponentProps } from 'svelte'
   import ExternalLink from '@icons/external.svg'
+  import { query } from '@api/query'
 
   export let buttonProps: ComponentProps<ButtonNew>
 
@@ -16,10 +16,14 @@
 
   let loading = false
 
-  const { send, response } = query('sendTransaction')
+  const { send, response, error } = query('sendTransaction')
 
   $: if ($response) {
     dispatch('response', $response)
+    loading = false
+  }
+
+  $: if ($error) {
     loading = false
   }
 </script>

@@ -1,7 +1,7 @@
+import { callApi } from '@api/gateway'
 import type { _Entity } from '.'
 import { getStringMetadata, transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
-import { getSingleEntityDetails } from '@api/gateway'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 
 export type StakeUnit = Omit<FungibleResource, 'type'> &
@@ -26,19 +26,18 @@ export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => ({
   } as any // svelte-check complains otherwise
 })
 
-export const isStakeUnit = async (address: string) => {
-  const entity = await getSingleEntityDetails(address)
+export const isStakeUnit = async (
+  entity: StateEntityDetailsVaultResponseItem
+) => {
   const validator = await getStringMetadata('validator')(entity.metadata)
-
   if (!validator) return false
-
-  let validatorEntity: StateEntityDetailsVaultResponseItem
-
-  try {
-    validatorEntity = await getSingleEntityDetails(validator)
-  } catch {
-    return false
-  }
-
-  return !!getStringMetadata('pool_unit')(validatorEntity.metadata)
+  const validatorEntityResult = await callApi(
+    'getEntityDetailsVaultAggregated',
+    [validator]
+  )
+  return validatorEntityResult.match(
+    (validatorEntity) =>
+      !!getStringMetadata('pool_unit')(validatorEntity[0].metadata),
+    () => false
+  )
 }

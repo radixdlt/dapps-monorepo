@@ -1,16 +1,14 @@
-import type { Validator } from '@api/utils/entities/validator'
 import type { LayoutLoad } from './$types'
 
 export const load: LayoutLoad = ({ params, parent }) => {
-  const validator = parent().then(
-    (data) =>
-      data.promises.validators.then((validators) => {
-        const validator = validators.find(
-          (validator) => validator.address === params.validator
-        )
+  const validator = parent().then((data) =>
+    data.promises.validators.then((validators) => {
+      const validator = validators.find(
+        (validator) => validator.address === params.validator
+      )!
 
-        return validator
-      }) as Promise<Validator>
+      return validator
+    })
   )
 
   return {

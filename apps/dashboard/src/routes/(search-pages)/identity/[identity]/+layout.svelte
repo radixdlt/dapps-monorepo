@@ -2,32 +2,17 @@
   import SearchPage from '@dashboard-pages/search-pages/SearchPage.svelte'
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
-  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
 
   export let data: LayoutData
-
-  let error: any
-
-  data.promises.entityDetails
-    .then((entity) => {
-      if (!entity) error = { status: 404 }
-    })
-    .catch((e) => {
-      error = e.errorResponse
-    })
 </script>
 
-{#if error}
-  <ErrorPage status={error.status} traceId={error.traceId} />
-{:else}
-  <SearchPage
-    --border="var(--theme-border-separator)"
-    title="Identity"
-    address={data.address}
-    activeTab={data.activeTab || 'metadata'}
-    menuItems={[[{ id: 'metadata', label: 'Metadata' }]]}
-    on:navigate={({ detail }) => goto(detail)}
-  >
-    <slot />
-  </SearchPage>
-{/if}
+<SearchPage
+  --border="var(--theme-border-separator)"
+  title="Identity"
+  address={data.address}
+  activeTab={data.activeTab || 'metadata'}
+  menuItems={[[{ id: 'metadata', label: 'Metadata' }]]}
+  on:navigate={({ detail }) => goto(detail)}
+>
+  <slot />
+</SearchPage>

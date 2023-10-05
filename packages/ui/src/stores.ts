@@ -30,4 +30,3 @@ export const xrdAddress = derived(networkConfiguration, (config) =>
 )
 
 export const showSidebar = writable(false)
-export const isMobileDevice = writable(isMobileFn())

@@ -2,8 +2,8 @@
   import '@fonts'
   import Layout from '@components/layout/Layout.svelte'
   import { featureFlags } from '@featureFlags'
-  import { darkTheme, getCssText } from '@styles'
-  import { navigating } from '$app/stores'
+  import { darkTheme } from '@styles'
+  import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
   import {
     accounts,
@@ -22,19 +22,34 @@
   import { accountLabel } from '@utils'
   import { authApi } from '../server/auth/auth-api'
   import ValidatorsIcon from '@icons/validators-menu.svg'
-  import { getNetworkConfiguration } from '@api/gateway'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/dashboard-logo.svg'
   import Footer from '@components/footer/Footer.svelte'
+  import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
+  import { callApi } from '@api/gateway'
+  import { errorPage } from '../stores'
 
   let mounted = false
 
-  const { createChallenge, login } = authApi
+  const { createChallenge } = authApi
+
+  $: {
+    $page
+    $errorPage = undefined
+  }
 
   onMount(() => {
-    getNetworkConfiguration().then((res) => {
-      networkConfiguration.set(res)
-    })
+    callApi('getNetworkConfiguration').then((res) =>
+      res.match(
+        networkConfiguration.set,
+        (e) =>
+          ($errorPage = {
+            ...e,
+            message: 'Something happened while loading network.'
+          })
+      )
+    )
+
     const updateAccounts = (value?: Account[]) => {
       if (value) {
         let _accounts = value.map((account) => ({
@@ -110,10 +125,6 @@
   {/if}
 </svelte:head>
 
-<!-- enables SSR of css -->
-<!-- eslint-disable-next-line -->
-{@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
-
 <Theme theme="light">
   {#if mounted}
     <Layout {hideSearch} {routes}>
@@ -127,7 +138,15 @@
       />
       <div class="page">
         <div>
-          <slot />
+          {#if $errorPage}
+            <ErrorPage
+              status={$errorPage.status}
+              message={$errorPage.message}
+              traceId={$errorPage.traceId}
+            />
+          {:else}
+            <slot />
+          {/if}
         </div>
         <Footer />
       </div>

@@ -1,7 +1,11 @@
 <script lang="ts" context="module">
   import type { Validator } from '@api/utils/entities/validator'
 
-  export type UptimeValue = keyof Validator['uptimePercentages']
+  export type UptimeValue = keyof Validator<
+    unknown,
+    true,
+    unknown
+  >['uptimePercentages']
 </script>
 
 <script lang="ts">

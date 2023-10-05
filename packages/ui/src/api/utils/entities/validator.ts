@@ -1,4 +1,5 @@
 import type {
+  LedgerState,
   StateEntityDetailsResponseFungibleResourceDetails,
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
@@ -6,43 +7,53 @@ import type {
 import { getEnumStringMetadata, transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import {
+  callApi,
   getEntityDetails,
   getNonFungibleLocation,
-  getValidatorUptime,
-  getValidatorsListWithLedgerState
+  type GatewayError
 } from '@api/gateway'
 import BigNumber from 'bignumber.js'
 import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
 import { YEARLY_XRD_EMISSIONS } from '@constants'
 import { timeToEpoch } from '@utils'
+import { Result, ResultAsync, errAsync, okAsync } from 'neverthrow'
 
-export type Validator = _Entity<
-  'validator',
-  ['name', 'icon_url', 'description', 'info_url']
-> & {
-  ownerAddress?: string
+export type Validator<
+  WithOwner = false,
+  WithUptime = false,
+  WithStakeUnits = false
+> = _Entity<'validator', ['name', 'icon_url', 'description', 'info_url']> & {
   totalStakeInXRD: BigNumber
   ownerStake: BigNumber
-  apy: number
   fee: {
     percentage: number
     tooltip?: string
-  }
-  uptimePercentages: {
-    '1day': number
-    '1week': number
-    '1month': number
-    '3months': number
-    '6months': number
-    '1year': number
-    alltime: number
   }
   acceptsStake: boolean
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
-  totalStakeUnits: BigNumber
-}
+} & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
+  (WithUptime extends true
+    ? {
+        uptimePercentages: {
+          '1day': number
+          '1week': number
+          '1month': number
+          '3months': number
+          '6months': number
+          '1year': number
+          alltime: number
+        }
+        apy: number
+      }
+    : {}) &
+  (WithStakeUnits extends true
+    ? {
+        totalStakeUnits: BigNumber
+        ownerStake: BigNumber
+      }
+    : {})
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24
 const ONE_WEEK_MS = ONE_DAY_MS * 7
@@ -55,7 +66,12 @@ const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
 
 const getValidatorUptimeSinceDate =
   (addresses: string[]) => (timestamp: Date | number) =>
-    getValidatorUptime(addresses, timestamp).catch(() => [])
+    callApi('getValidatorsUptimeFromTo', addresses, timestamp).map((uptimes) =>
+      uptimes.reduce((acc, cur) => {
+        acc[cur.address] = calculateUptimePercentage(cur)
+        return acc
+      }, {} as Record<string, number>)
+    )
 
 const calculateUptimePercentage = ({
   proposals_made,
@@ -90,19 +106,22 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
     map(dateMsAgo),
     (timestamps) => [...timestamps, 1], // 1 is the first state version
     map(getValidatorUptimeSinceDate(validators.map(({ address }) => address))),
-    (items) => Promise.all(items),
-    andThen(map(map(calculateUptimePercentage))),
-    andThen((uptimes) =>
-      validators.map((_, i) => ({
-        '1day': uptimes[0][i],
-        '1week': uptimes[1][i],
-        '1month': uptimes[2][i],
-        '3months': uptimes[3][i],
-        '6months': uptimes[4][i],
-        '1year': uptimes[5][i],
-        alltime: uptimes[6][i]
-      }))
-    )
+    (results) => ResultAsync.combine(results),
+    (result) =>
+      result.map((uptimes) =>
+        validators.map(({ address }) => ({
+          address: address,
+          uptimes: {
+            '1day': uptimes[0][address],
+            '1week': uptimes[1][address],
+            '1month': uptimes[2][address],
+            '3months': uptimes[3][address],
+            '6months': uptimes[4][address],
+            '1year': uptimes[5][address],
+            alltime: uptimes[6][address]
+          }
+        }))
+      )
   )()
 
 function calculateFee(
@@ -143,164 +162,248 @@ function calculateFee(
 }
 
 export const transformValidatorResponse =
-  (
-    validatorOwnerBadgeResource?: string,
-    withStakeUnits = true,
-    withUptime = true
+  <T extends string | undefined, K extends boolean, V extends boolean>(
+    validatorOwnerBadgeResource: T,
+    withStakeUnits: K,
+    withUptime: V
   ) =>
-  async ({
+  ({
     aggregatedEntities,
     ledger_state
-  }: Awaited<ReturnType<typeof getValidatorsListWithLedgerState>>): Promise<{
-    validators: Validator[]
-    ledger_state: typeof ledger_state
-  }> => {
-    const stakeUnits = withStakeUnits
-      ? await getEntityDetails(
-          aggregatedEntities.map(
-            (v) => (v.state as any).stake_unit_resource_address as string
-          ),
-          undefined,
-          { state_version: ledger_state.state_version }
+  }: {
+    aggregatedEntities: ValidatorCollectionItem[]
+    ledger_state: LedgerState
+  }): ResultAsync<
+    {
+      validators: Validator<T extends string ? true : false, K, V>[]
+      ledger_state: LedgerState
+    },
+    GatewayError
+  > =>
+    ResultAsync.fromPromise(
+      (async () => {
+        const validators = await transformValidators(
+          aggregatedEntities,
+          ledger_state
         )
-      : undefined
 
-    const uptimes = withUptime
-      ? await getUptimePercentages(aggregatedEntities)
-      : []
+        let returnedValidators = [...validators]
 
-    let owners: { owner?: string; vaultAddress: string }[] = []
-    let ownerVaultAddresses: {
-      owning_vault_address?: string
-      non_fungible_id: string
-    }[] = []
-    let ownerBadgeIds: string[] = []
+        if (withStakeUnits)
+          returnedValidators = await appendStakeUnits(
+            validators,
+            ledger_state
+          )(aggregatedEntities)
 
-    if (validatorOwnerBadgeResource) {
-      ownerBadgeIds = aggregatedEntities.map((validator) =>
-        getEnumStringMetadata('owner_badge')(validator.metadata)
-      )
+        if (withUptime) {
+          const result = await appendUptime(returnedValidators)(
+            aggregatedEntities
+          )
 
-      const ownerData = await getNonFungibleLocation(
-        validatorOwnerBadgeResource,
-        ownerBadgeIds
-      )
+          if (result.isErr()) throw result.error
 
-      ownerVaultAddresses = pipe(
-        () => ownerData,
-        map(pick(['owning_vault_address', 'non_fungible_id']))
-      )()
+          returnedValidators = result.value
+        }
 
-      owners = await pipe(
-        () =>
-          getEntityDetails(
-            pipe(
-              () => ownerVaultAddresses,
-              map(prop('owning_vault_address')),
-              (address) => reject(isNil, address)
-            )(),
-            { ancestorIdentities: true },
-            { state_version: ledger_state.state_version }
-          ),
-        andThen(
-          map((detail) => ({
-            owner: detail.ancestor_identities?.owner_address,
-            vaultAddress: detail.address
-          }))
-        )
-      )()
+        if (validatorOwnerBadgeResource) {
+          returnedValidators = await appendOwner(
+            returnedValidators,
+            validatorOwnerBadgeResource
+          )(aggregatedEntities)
+        }
+
+        return {
+          validators: returnedValidators as Validator<
+            T extends string ? true : false,
+            K,
+            V
+          >[],
+          ledger_state
+        }
+      })(),
+      (e) => e as GatewayError
+    )
+
+const transformValidators = async (
+  aggregatedEntities: ValidatorCollectionItem[],
+  ledger_state: LedgerState
+): Promise<Validator[]> => {
+  return aggregatedEntities.map((validator, i) => {
+    const state: any = validator.state || {}
+
+    const stakeUnitResourceAddress = state.stake_unit_resource_address as string
+
+    let totalStakeUnits = new BigNumber(0)
+    let ownerStake = new BigNumber(0)
+
+    const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
+
+    return {
+      type: 'validator' as const,
+      address: validator.address,
+      fee: calculateFee(validator, ledger_state.epoch),
+      percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
+      stakeUnitResourceAddress,
+      unstakeClaimResourceAddress: state.claim_token_resource_address as string,
+      totalStakeUnits,
+      totalStakeInXRD,
+      metadata: transformMetadata(validator, [
+        'name',
+        'icon_url',
+        'description',
+        'tags',
+        'info_url'
+      ]),
+      ownerStake,
+      acceptsStake: state.accepts_delegated_stake
     }
+  })
+}
+
+const appendUptime =
+  <T, K>(validators: Validator<T, false, K>[]) =>
+  async (
+    entities: ValidatorCollectionItem[]
+  ): Promise<Result<Validator<T, true, K>[], GatewayError>> => {
+    const result = await getUptimePercentages(entities)
+
+    if (result.isErr()) return errAsync(result.error)
+
+    const uptimes = result.value
 
     const totalAmountStaked = pipe(
-      () => aggregatedEntities,
+      () => entities,
       reduce(
         (prev, cur) => prev.plus(cur.stake_vault.balance),
         new BigNumber(0)
       )
     )()
 
-    const validators = aggregatedEntities.map((validator, i) => {
-      const state: any = validator.state || {}
+    return okAsync(
+      validators.map((validator, i) => {
+        const { uptimes: _uptimes } = uptimes.find(
+          (u) => u.address === validator.address
+        )!
+        const entity = entities.find((e) => e.address === validator.address)!
 
-      const stakeUnitResourceAddress =
-        state.stake_unit_resource_address as string
-
-      let totalStakeUnits = new BigNumber(0)
-      let ownerStake = new BigNumber(0)
-
-      const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
-
-      if (stakeUnits) {
-        totalStakeUnits = new BigNumber(
-          (
-            stakeUnits.find((s) => s.address === stakeUnitResourceAddress)!
-              .details as StateEntityDetailsResponseFungibleResourceDetails
-          ).total_supply
-        )
-
-        ownerStake = totalStakeUnits.isZero()
-          ? new BigNumber(0)
-          : new BigNumber(validator.locked_owner_stake_unit_vault.balance)
-              .multipliedBy(totalStakeInXRD)
-              .dividedBy(totalStakeUnits)
-      }
-
-      const apy = withUptime
-        ? new BigNumber(YEARLY_XRD_EMISSIONS)
-            .multipliedBy((1 - state.validator_fee_factor) * uptimes[i].alltime)
+        return {
+          ...validator,
+          uptimePercentages: _uptimes,
+          apy: new BigNumber(YEARLY_XRD_EMISSIONS)
+            .multipliedBy(
+              (1 - (entity.state as any).validator_fee_factor) *
+                _uptimes.alltime
+            )
             .dividedBy(totalAmountStaked)
             .toNumber()
-        : 0
-
-      return {
-        type: 'validator' as const,
-        address: validator.address,
-        fee: calculateFee(validator, ledger_state.epoch),
-        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-
-        stakeUnitResourceAddress,
-        unstakeClaimResourceAddress:
-          state.claim_token_resource_address as string,
-
-        totalStakeUnits,
-
-        totalStakeInXRD,
-
-        metadata: transformMetadata(validator, [
-          'name',
-          'icon_url',
-          'description',
-          'tags',
-          'info_url'
-        ]),
-
-        uptimePercentages: uptimes[i],
-        ownerAddress: owners.find(
-          (owner) =>
-            owner.vaultAddress ===
-            ownerVaultAddresses.find(
-              ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
-            )?.owning_vault_address
-        )?.owner,
-
-        ownerStake,
-
-        apy,
-        acceptsStake: state.accepts_delegated_stake
-      }
-    })
-
-    return {
-      validators,
-      ledger_state
-    }
+        }
+      })
+    )
   }
 
-export const getValidators = (
-  validatorOwnerBadge?: string,
-  withStakeUnits = true,
-  withUptime = true
+const appendStakeUnits =
+  <T, K>(validators: Validator<T, K>[], ledger_state: LedgerState) =>
+  async (
+    entities: ValidatorCollectionItem[]
+  ): Promise<Validator<T, K, true>[]> => {
+    const stakeUnits = await getEntityDetails(
+      validators.map((v) => v.stakeUnitResourceAddress),
+      undefined,
+      { state_version: ledger_state.state_version }
+    )
+
+    return validators.map((validator) => {
+      const entity = entities.find((e) => e.address === validator.address)!
+
+      const stakeUnitResourceAddress = (entity.state as any)
+        .stake_unit_resource_address as string
+
+      const totalStakeUnits = new BigNumber(
+        (
+          stakeUnits.find((s) => s.address === stakeUnitResourceAddress)!
+            .details as StateEntityDetailsResponseFungibleResourceDetails
+        ).total_supply
+      )
+
+      const ownerStake = totalStakeUnits.isZero()
+        ? new BigNumber(0)
+        : new BigNumber(entity.locked_owner_stake_unit_vault.balance)
+            .multipliedBy(validator.totalStakeInXRD)
+            .dividedBy(totalStakeUnits)
+
+      return {
+        ...validator,
+        totalStakeUnits,
+        ownerStake
+      }
+    })
+  }
+
+const appendOwner =
+  <T, K>(
+    validators: Validator<false, T, K>[],
+    validatorOwnerBadgeResource: string
+  ) =>
+  async (
+    entities: ValidatorCollectionItem[]
+  ): Promise<Validator<true, T, K>[]> => {
+    const ownerBadgeIds = entities.map((entity) =>
+      getEnumStringMetadata('owner_badge')(entity.metadata)
+    )
+
+    const ownerData = await getNonFungibleLocation(
+      validatorOwnerBadgeResource,
+      ownerBadgeIds
+    )
+
+    const ownerVaultAddresses = pipe(
+      () => ownerData,
+      map(pick(['owning_vault_address', 'non_fungible_id']))
+    )()
+
+    const owners = await pipe(
+      () =>
+        getEntityDetails(
+          pipe(
+            () => ownerVaultAddresses,
+            map(prop('owning_vault_address')),
+            (address) => reject(isNil, address)
+          )(),
+          { ancestorIdentities: true }
+        ),
+      andThen(
+        map((detail) => ({
+          owner: detail.ancestor_identities?.owner_address,
+          vaultAddress: detail.address
+        }))
+      )
+    )()
+
+    return validators.map((validator, i) => ({
+      ...validator,
+      ownerAddress: owners.find(
+        (owner) =>
+          owner.vaultAddress ===
+          ownerVaultAddresses.find(
+            ({ non_fungible_id }) => non_fungible_id === ownerBadgeIds[i]
+          )?.owning_vault_address
+      )?.owner
+    }))
+  }
+
+export const getValidators = <
+  T extends string | undefined,
+  K extends boolean,
+  V extends boolean
+>(
+  validatorOwnerBadge: T,
+  withUptime: V,
+  withStakeUnits: K
 ) =>
-  getValidatorsListWithLedgerState().then(
-    transformValidatorResponse(validatorOwnerBadge, withStakeUnits, withUptime)
+  callApi('getAllValidatorsWithLedgerState').andThen(
+    transformValidatorResponse<T, typeof withStakeUnits, typeof withUptime>(
+      validatorOwnerBadge,
+      withStakeUnits,
+      withUptime
+    )
   )

@@ -1,12 +1,11 @@
-import { error } from '@sveltejs/kit'
 import { routerRedirect } from '../../../router-redirect'
 import type { LayoutLoad } from './$types'
-import { getSingleEntityDetails } from '@api/gateway'
+import { getLookupEntity } from '../../utils'
 
 export const load: LayoutLoad = ({ params, route }) => {
   routerRedirect(route, `/identity/${params.identity}/metadata`, ['metadata'])
 
-  const entityDetails = getSingleEntityDetails(params.identity)
+  const entityDetails = getLookupEntity(params.identity)
 
   return {
     address: params.identity,

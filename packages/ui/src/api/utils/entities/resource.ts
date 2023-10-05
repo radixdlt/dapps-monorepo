@@ -1,4 +1,5 @@
 import {
+  callApi,
   getEntityDetails,
   getEntityNonFungibleIDs,
   getSingleEntityDetails
@@ -353,4 +354,24 @@ export const getAccountFungibleTokens = (accounts: string) =>
       transformResources()([data], { nfts: false, fungibles: true })
     ),
     andThen((data) => data[0])
+  )()
+
+export const getAccountDataNew = (
+  accounts: string[],
+  options?: StateEntityDetailsOptions,
+  ledgerState?: LedgerStateSelector,
+  getNonFungiblesForResources?: string[]
+) =>
+  pipe(
+    () =>
+      callApi(
+        'getEntityDetailsVaultAggregated',
+        accounts,
+        options,
+        ledgerState
+      ),
+    (result) =>
+      result.map(
+        transformResources(options, ledgerState, getNonFungiblesForResources)
+      )
   )()

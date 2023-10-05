@@ -1,10 +1,9 @@
-import { getSingleEntityDetails } from '@api/gateway'
 import type { LayoutLoad } from './$types'
-import { getAssociatedDapps } from '../../utils'
+import { getAssociatedDapps, getLookupEntity } from '../../utils'
 import { transformMetadata } from '@api/utils/metadata'
 
 export const load: LayoutLoad = ({ params }) => {
-  const entity = getSingleEntityDetails(params.validator)
+  const entity = getLookupEntity(params.validator)
 
   return {
     address: params.validator,

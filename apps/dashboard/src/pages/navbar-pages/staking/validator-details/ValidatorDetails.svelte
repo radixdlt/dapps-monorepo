@@ -20,7 +20,7 @@
   import type { metadataItem } from '@dashboard-pages/search-pages/utils'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
 
-  export let validator: Promise<Validator>
+  export let validator: Promise<Validator<true, true, true>>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
 
   const dispatch = createEventDispatcher<{
@@ -28,7 +28,7 @@
   }>()
 
   const getNonMetadataItems = pipe(
-    (validator: Validator) => [
+    (validator: Validator<true, true, true>) => [
       validator.ownerAddress
         ? ['owner addres', validator.ownerAddress, 'GlobalAddress']
         : undefined,

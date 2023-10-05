@@ -5,11 +5,8 @@ import BigNumber from 'bignumber.js'
 import { Buffer } from 'buffer'
 import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
-import { andThen, otherwise, pipe } from 'ramda'
 import { EXPECTED_EPOCH_TIME_MINUTES, XRD_SYMBOL } from '@constants'
-import { getSingleEntityDetails } from '@api/gateway'
-import { getStringMetadataValue } from '@api/utils/metadata'
-import { isStakeUnit } from '@api/utils/entities/stake-unit'
+import { pipe } from 'ramda'
 
 const XRD_DECIMALS = 18
 
