@@ -23,7 +23,6 @@ on:
           - zabanet
           - stokenet
           - mainnet
-          - rcnet-v2
           - rcnet-v3
 
 env:
