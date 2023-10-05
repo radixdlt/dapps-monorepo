@@ -105,6 +105,24 @@ jobs:
             type=sha,event=pr
             type=sha,event=branch
             type=semver,pattern={{version}}
+
+      - name: Define network name
+        run: |
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "published" ]; then
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
+          fi
+      - id: network
+        run: |
+          echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - id: tag-with-network
+        run: |
+          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - run: |
+          echo "$GITHUB_OUTPUT"
     outputs:
       dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
       dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
@@ -112,6 +130,8 @@ jobs:
       storybook-tags: ${{ steps.storybook-tags.outputs.tags }}
       storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
       storybook-json: ${{ steps.storybook-tags.outputs.json }}
+      tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
+      network-name: ${{steps.network.outputs.network-name}}
 
   lint:
     runs-on: ubuntu-latest
@@ -399,15 +419,6 @@ jobs:
       - snyk-scan-code
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
-          fi
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
@@ -442,13 +453,13 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-tags.outputs.dashboard-tags }}
+          tags: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
           sbom: true
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
-            NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
@@ -461,13 +472,13 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: ${{ needs.setup-tags.outputs.dashboard-tags }}
+          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
       - name: Output job summary
         run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "Network that will be deployed: ${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
 
   push-storybook:
     runs-on: ubuntu-latest
@@ -477,15 +488,6 @@ jobs:
       - snyk-scan-code
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - name: Define network name
-        run: |
-          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" ]; then
-            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
-          fi
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
@@ -520,13 +522,13 @@ jobs:
           file: ./Dockerfile
           push: true
           context: .
-          tags: ${{ needs.setup-tags.outputs.storybook-tags }}
+          tags: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
           sbom: true
           build-args: |
             NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
-            NETWORK_NAME=${{ env.NETWORK_NAME }}
+            NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
@@ -539,13 +541,13 @@ jobs:
       - name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
-          image: ${{ needs.setup-tags.outputs.storybook-tags }}
+          image: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
           args: --file=Dockerfile --severity-threshold=critical
       - name: Docker Image output
         run: docker images
       - name: Output job summary
         run: |
-          echo "Network that will be deployed: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "Network that will be deployed:${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
@@ -565,7 +567,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.prNumber=${{ github.event.number }},
         ci.environment=pr
       app_name: 'dashboard'
@@ -588,7 +590,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=dev
       app_name: 'dashboard'
       step_name: 'deploy-dev'
@@ -611,7 +613,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=enkinet
       github_environment: enkinet
       app_name: 'dashboard'
@@ -635,7 +637,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=hammunet
       github_environment: hammunet
       app_name: 'dashboard'
@@ -659,7 +661,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=gilganet
       github_environment: gilganet
       app_name: 'dashboard'
@@ -683,7 +685,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mardunet
       github_environment: mardunet
       app_name: 'dashboard'
@@ -707,7 +709,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet
       github_environment: ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
       app_name: 'dashboard'
@@ -731,7 +733,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet
       github_environment: zabanet
       app_name: 'dashboard'
@@ -755,7 +757,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=ansharnet-internal
       github_environment: ansharnet-internal
       app_name: 'dashboard'
@@ -779,7 +781,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=zabanet-internal
       github_environment: zabanet-internal
       app_name: 'dashboard'
@@ -803,7 +805,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=stokenet
       github_environment: stokenet
       app_name: 'dashboard'
@@ -828,7 +830,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/dashboard
       helmfile_extra_vars: >-
-        ci.tag=${{ fromJSON(needs.setup-tags.outputs.dashboard-json).labels['org.opencontainers.image.version'] }},
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
         ci.environment=mainnet
       github_environment: mainnet
       app_name: 'dashboard'
