@@ -12,8 +12,6 @@ environments:
   hammunet: {}
   gilganet: {}
   mardunet: {}
-  ansharnet: {}
-  ansharnet-internal: {}
   zabanet: {}
   stokenet: {}
   mainnet: {}

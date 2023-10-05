@@ -13,18 +13,16 @@ on:
       ENVIRONMENT_NAME:
         description: 'Environment Name'
         required: true
-        default: ansharnet
+        default: enkinet
         type: choice
         options:
           - enkinet
           - hammunet
           - gilganet
           - mardunet
-          - ansharnet
           - zabanet
           - stokenet
           - mainnet
-          - rcnet-v2
           - rcnet-v3
 
 env:
@@ -691,30 +689,6 @@ jobs:
       app_name: 'dashboard'
       step_name: 'deploy-mardunet'
 
-  deploy_rcnet_v2:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: ansharnet
-      restart_pods: true
-      namespace: dashboard-ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=ansharnet
-      github_environment: ansharnet # Not changing this yet as this will disturb existing rcnet dashboard
-      app_name: 'dashboard'
-      step_name: 'deploy-rcnet-v2'
-
   deploy_rcnet_v3:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v3' && github.event_name == 'workflow_dispatch' )
@@ -739,31 +713,7 @@ jobs:
       app_name: 'dashboard'
       step_name: 'deploy-rcnet-v3'
 
-  deploy_ansharnet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: ansharnet-internal
-      namespace: dashboard-ansharnet-internal
-      create_subns: false
-      restart_pods: true
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-ansharnet-internal-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=ansharnet-internal
-      github_environment: ansharnet-internal
-      app_name: 'dashboard'
-      step_name: 'deploy-ansharnet'
-
-  deploy_zabanet:
+ansh  deploy_zabanet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'zabanet' && github.event_name == 'workflow_dispatch' )
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0

@@ -20,11 +20,9 @@ on:
           - hammunet
           - gilganet
           - mardunet
-          - ansharnet
           - zabanet
           - stokenet
           - mainnet
-          - rcnet-v2
           - rcnet-v3
 
 env:
@@ -564,52 +562,6 @@ jobs:
       github_environment: console-mardunet
       app_name: 'console'
       step_name: 'deploy-mardunet'
-
-  deploy_rcnet_v2:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v2' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-console
-      - setup-tags
-    with:
-      env_name: ansharnet
-      restart_pods: false
-      namespace: dapps-console-ansharnet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-ansharnet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/console
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=ansharnet
-      github_environment: console-ansharnet
-      app_name: 'console'
-      step_name: 'deploy-rcnet-v2'
-
-  deploy_ansharnet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'ansharnet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-console
-      - setup-tags
-    with:
-      env_name: ansharnet-internal
-      restart_pods: false
-      namespace: dapps-console-ansharnet-internal
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-console-ansharnet-internal-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/console
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=ansharnet-internal
-      github_environment: console-ansharnet-internal
-      app_name: 'console'
-      step_name: 'deploy-ansharnet'
 
   deploy_rcnet_v3:
     if: >

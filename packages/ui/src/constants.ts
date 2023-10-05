@@ -7,11 +7,9 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   MARDUNET: 'mardunet',
-  ANSHARNET: 'ansharnet',
   ZABANET: 'zabanet',
   STOKENET: 'stokenet',
-  RCNETV3: 'rcnet-v3',
-  RCNETV2: 'rcnet-v2'
+  RCNETV3: 'rcnet-v3'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -45,14 +43,6 @@ export const NETWORK_CONFIG = {
     consoleDappAddress: 'account_tdx_24_thisdummyvalue12345',
     dashboardDappAddress: 'account_tdx_24_thisdummyvalue12345'
   },
-  [Network.ANSHARNET]: {
-    id: 13,
-    url: 'https://ansharnet-gateway.radixdlt.com',
-    consoleDappAddress:
-      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf',
-    dashboardDappAddress:
-      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
-  },
   [Network.ZABANET]: {
     id: 14,
     url: 'https://zabanet-gateway.radixdlt.com',
@@ -68,14 +58,6 @@ export const NETWORK_CONFIG = {
       'account_tdx_e_12yw8fmgdt7w3xapc22389t8vuzr9yxgvlvrn9zmnkyg6zr42t5han6',
     dashboardDappAddress:
       'account_tdx_e_12978f5k05j63le94deyya95rxwsrd26mdstvxctudl3hxjgjqhksrj'
-  },
-  [Network.RCNETV2]: {
-    id: 13,
-    url: 'https://ansharnet-gateway.radixdlt.com',
-    consoleDappAddress:
-      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf',
-    dashboardDappAddress:
-      'account_tdx_d_12x649lyv286g8krpfthv6ne9rw06njn6yp95n303jn5qxq06sznekf'
   },
   [Network.STOKENET]: {
     id: 2,
