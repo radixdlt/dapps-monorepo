@@ -9,7 +9,7 @@ export const Network = {
   MARDUNET: 'mardunet',
   ZABANET: 'zabanet',
   STOKENET: 'stokenet',
-  RCNETV3: 'rcnet-v3',
+  RCNETV3: 'rcnet-v3'
 } as const
 
 export const NETWORK_CONFIG = {
