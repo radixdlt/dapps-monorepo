@@ -24,7 +24,9 @@
       address: validatorAddresses[i % 10],
       totalStake: new BigNumber(100000000),
       apy: Math.random() * 10,
-      fee: Math.random() * 5,
+      fee: {
+        percentage: Math.random() * 5
+      },
       uptimePercentages: {
         '1day': Math.random() * 100,
         '1week': Math.random() * 100,

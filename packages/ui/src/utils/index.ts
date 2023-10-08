@@ -6,7 +6,7 @@ import { Buffer } from 'buffer'
 import blake from 'blakejs'
 import { getContext, setContext } from 'svelte'
 import { andThen, otherwise, pipe } from 'ramda'
-import { XRD_SYMBOL } from '@constants'
+import { EXPECTED_EPOCH_TIME_MINUTES, XRD_SYMBOL } from '@constants'
 import { getSingleEntityDetails } from '@api/gateway'
 import { getStringMetadataValue } from '@api/utils/metadata'
 import { isStakeUnit } from '@api/utils/entities/stake-unit'
@@ -264,3 +264,29 @@ export const isMobile = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     globalThis.navigator ? globalThis.navigator.userAgent : ''
   )
+
+export const timeToEpoch = (currentEpoch: number, toEpoch: number) => {
+  const MINUTES_HOUR = 60
+  const HOURS_DAY = 24
+  const MINUTES_DAY = MINUTES_HOUR * HOURS_DAY
+
+  const diff = new BigNumber(toEpoch).minus(currentEpoch)
+  const daysToClaim = diff
+    .multipliedBy(EXPECTED_EPOCH_TIME_MINUTES)
+    .dividedBy(MINUTES_DAY)
+
+  if (daysToClaim.isLessThan(1)) {
+    const hoursToClaim = daysToClaim.multipliedBy(HOURS_DAY)
+
+    if (hoursToClaim.isLessThan(1)) {
+      const minutesToClaim = hoursToClaim.multipliedBy(MINUTES_HOUR)
+
+      if (minutesToClaim.lt(EXPECTED_EPOCH_TIME_MINUTES)) {
+        return `less than ${EXPECTED_EPOCH_TIME_MINUTES} minutes`
+      }
+      return `${minutesToClaim.toFixed(0)} minutes`
+    }
+    return `${hoursToClaim.toFixed(0)} hours`
+  }
+  return `${daysToClaim.toFixed(0)} days`
+}

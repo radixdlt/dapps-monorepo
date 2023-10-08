@@ -51,8 +51,8 @@
       filteredValidators = Promise.resolve(
         validators.filter((v) => {
           return (
-            v.fee >= e.detail.feeFilter[0] &&
-            v.fee <= e.detail.feeFilter[1] &&
+            v.fee.percentage >= e.detail.feeFilter[0] &&
+            v.fee.percentage <= e.detail.feeFilter[1] &&
             v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
             v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
             (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
@@ -83,7 +83,7 @@
   {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
     <FilterDetails
       bind:open={filterOpen}
-      feeValues={validators.map((v) => v.fee)}
+      feeValues={validators.map((v) => v.fee.percentage)}
       totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
       on:close={(e) => {
         applyFilter(validators, bookmarked)(e)

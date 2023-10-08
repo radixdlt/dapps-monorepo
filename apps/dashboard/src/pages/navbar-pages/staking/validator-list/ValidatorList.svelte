@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
-  export type TransformedValidator = Validator & Validator['uptimePercentages']
+  export type TransformedValidator = Validator &
+    Validator['uptimePercentages'] & { feePercentage: number }
 </script>
 
 <script lang="ts">
@@ -33,7 +34,8 @@
       '3months': validator.uptimePercentages['3months'],
       '6months': validator.uptimePercentages['6months'],
       '1year': validator.uptimePercentages['1year'],
-      alltime: validator.uptimePercentages['alltime']
+      alltime: validator.uptimePercentages['alltime'],
+      feePercentage: validator.fee.percentage
     }))
   )
 
@@ -106,7 +108,7 @@
       }
     },
     {
-      sortBy: sort('fee', sortBasic),
+      sortBy: sort('feePercentage', sortBasic),
       header: {
         label: 'FEE',
         alignment: 'center'

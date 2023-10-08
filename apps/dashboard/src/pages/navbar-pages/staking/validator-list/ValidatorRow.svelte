@@ -62,7 +62,7 @@
 
     <ResponsiveTableCell>
       <div class="apy-text-box no-overflow bold">
-        {truncateNumber(validator.fee)}%
+        {truncateNumber(validator.fee.percentage)}%
       </div>
     </ResponsiveTableCell>
 

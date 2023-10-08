@@ -14,6 +14,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
 import { YEARLY_XRD_EMISSIONS } from '@constants'
+import { timeToEpoch } from '@utils'
 
 export type Validator = _Entity<
   'validator',
@@ -23,7 +24,10 @@ export type Validator = _Entity<
   totalStakeInXRD: BigNumber
   ownerStake: BigNumber
   apy: number
-  fee: number
+  fee: {
+    percentage: number
+    tooltip?: string
+  }
   uptimePercentages: {
     '1day': number
     '1week': number
@@ -100,6 +104,43 @@ const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
       }))
     )
   )()
+
+function calculateFee(
+  validator: ValidatorCollectionItem,
+  current_epoch: number
+) {
+  const state = validator.state as any
+  const change_request = state.validator_fee_change_request as
+    | { epoch_effective: number; new_fee_factor: string }
+    | undefined
+
+  const proportionToPercentage = (proportion: string) =>
+    parseFloat(proportion) * 100
+
+  if (!change_request) {
+    // There is no fee change request, so the current fee factor is correct
+    return {
+      percentage: proportionToPercentage(state.validator_fee_factor || 0)
+    }
+  }
+  if (current_epoch >= change_request.epoch_effective) {
+    // The pending fee change request is now effective
+    return {
+      percentage: proportionToPercentage(change_request.new_fee_factor)
+    }
+  }
+  // Otherwise - the fee change request is pending.
+  // We display the _new/pending_ fee factor in this case, colour the fee factor in, and show a tooltip explaining the current/old factor.
+  return {
+    percentage: proportionToPercentage(change_request.new_fee_factor),
+    toolTip: `This validator's fee is currently ${proportionToPercentage(
+      state.validator_fee_factor
+    )}%. The value shown will take effect in ${timeToEpoch(
+      current_epoch,
+      change_request.epoch_effective
+    )}.`
+  }
+}
 
 export const transformValidatorResponse =
   (
@@ -214,7 +255,7 @@ export const transformValidatorResponse =
       return {
         type: 'validator' as const,
         address: validator.address,
-        fee: (state.validator_fee_factor || 0) * 100,
+        fee: calculateFee(validator, ledger_state.epoch),
         percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
 
         stakeUnitResourceAddress,
