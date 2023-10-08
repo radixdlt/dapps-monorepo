@@ -76,7 +76,7 @@
 />
 
 {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
-  <FilterDetails  
+  <FilterDetails
     bind:open={filterOpen}
     feeValues={validators.map((v) => v.fee.percentage)}
     totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}

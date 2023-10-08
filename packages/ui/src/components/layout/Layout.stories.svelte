@@ -8,9 +8,10 @@
   import NftsIcon from '@icons/nfts.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
-  import { isMobileDevice } from '@stores'
+  import { isMobile } from '@utils'
+
   RadixDappToolkit({ dAppDefinitionAddress: '', networkId: 12 })
-  const routes = $isMobileDevice
+  const routes = isMobile()
     ? []
     : [
         {

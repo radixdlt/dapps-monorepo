@@ -3,10 +3,11 @@
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
   import MenuIcon from '@icons/menu.svg'
 
-  import { isMobileDevice, showSidebar } from '@stores'
+  import { showSidebar } from '@stores'
   import PageNavigation from './PageNavigation.svelte'
   import type { ComponentProps } from 'svelte'
   import DappsDropdown from '@components/dapps-dropdown/DappsDropdown.svelte'
+  import { isMobile } from '@utils'
 
   export let hideSearch: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
@@ -38,7 +39,7 @@
       <DappsDropdown />
     </div>
 
-    {#if !$isMobileDevice}
+    {#if !isMobile()}
       <div class="connect-button"><ConnectButton /></div>
     {/if}
   </div>

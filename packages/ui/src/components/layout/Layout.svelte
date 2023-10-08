@@ -4,7 +4,7 @@
   import { page } from '$app/stores'
 
   export let routes: { text: string; icon: string; path: string }[] = []
-  export let hideSearch: boolean | undefined
+  export let hideSearch: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
 
   let scrollOffset: number
