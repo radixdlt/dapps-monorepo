@@ -41,7 +41,7 @@
         'String'
       ],
       ['accepts stake', validator.acceptsStake, 'Bool'],
-      ['fee (%)', `${truncateNumber(validator.fee)} %`, 'String'],
+      ['fee (%)', `${truncateNumber(validator.fee.percentage)} %`, 'String'],
       ['apy', `${truncateNumber(validator.apy)} %`, 'String'],
       ['recent uptime', validator.uptimePercentages, 'String'],
       ['owner stake', formatXRDValue(validator.ownerStake.toString()), 'String']
