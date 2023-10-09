@@ -46,7 +46,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: var(--width, 45rem);
+    width: var(--width, 50rem);
     background: var(--color-grey-5);
     z-index: 3;
     overflow-y: scroll;
