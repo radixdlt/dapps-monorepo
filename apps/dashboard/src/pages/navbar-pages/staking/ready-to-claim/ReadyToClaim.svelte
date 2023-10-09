@@ -43,6 +43,7 @@
 
   $: if ($stakeInfo)
     nearestClaim = $stakeInfo.then(async (info) => {
+      console.log('stakeInfo', info)
       let nearestClaim = {
         claimEpoch: '-1',
         amount: '0'
@@ -61,6 +62,8 @@
             }
           }
         })
+
+      console.log('amount', nearestClaim.amount)
 
       return {
         amount: nearestClaim.amount,

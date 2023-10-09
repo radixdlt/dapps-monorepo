@@ -23,9 +23,9 @@ export const getTxIdFromMessage = (message: string): string | undefined => {
 export const shortenAddress = (address?: string) =>
   address
     ? `${address.slice(0, 4)}...${address.slice(
-        address.length - 6,
-        address.length
-      )}`
+      address.length - 6,
+      address.length
+    )}`
     : ''
 
 export const shortenNftID = (id: string) =>
@@ -84,16 +84,16 @@ export const isNFTAddress = (address: string) =>
   getAddressPrefix(address) === 'resource' && address.split(':').length > 1
 
 export const addressToRoute = async (address: string) =>
-  ({
-    account: `/account/${encodeURIComponent(address)}`,
-    resource: `/resource/${encodeURIComponent(address)}`,
-    package: `/package/${encodeURIComponent(address)}`,
-    component: `/component/${encodeURIComponent(address)}`,
-    txid: `/transaction/${encodeURIComponent(address)}`,
-    validator: `/validator/${encodeURIComponent(address)}`,
-    identity: `/identity/${encodeURIComponent(address)}`,
-    pool: `/pool/${encodeURIComponent(address)}`
-  }[getAddressPrefix(address)] ?? `/component/${encodeURIComponent(address)}`)
+({
+  account: `/account/${encodeURIComponent(address)}`,
+  resource: `/resource/${encodeURIComponent(address)}`,
+  package: `/package/${encodeURIComponent(address)}`,
+  component: `/component/${encodeURIComponent(address)}`,
+  txid: `/transaction/${encodeURIComponent(address)}`,
+  validator: `/validator/${encodeURIComponent(address)}`,
+  identity: `/identity/${encodeURIComponent(address)}`,
+  pool: `/pool/${encodeURIComponent(address)}`
+}[getAddressPrefix(address)] ?? `/component/${encodeURIComponent(address)}`)
 
 export const useContext = <
   Contexts extends Record<string, Values>,
@@ -163,14 +163,14 @@ export const fetchWrapper = <R = any, ER = unknown>(
       .andThen((data) =>
         response.ok
           ? okAsync({
-              status: response.status,
-              data: data as R
-            })
+            status: response.status,
+            data: data as R
+          })
           : errAsync({
-              status: response.status,
-              reason: 'RequestStatusNotOk',
-              data: data as ER
-            })
+            status: response.status,
+            reason: 'RequestStatusNotOk',
+            data: data as ER
+          })
       )
   )
 
@@ -182,63 +182,63 @@ export const formatTokenValue = (
   const splitIntegerAndDecimals = (input: string) => input.split('.')
   const round =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
-      const [integer] = splitIntegerAndDecimals(stringValue)
-      if (integer.length >= maxPlaces)
-        return input.decimalPlaces(1, BigNumber.ROUND_UP)
-      const decimalPlaces = maxPlaces - integer.length
-      return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
-    }
+      (input: BigNumber) => {
+        const [integer] = splitIntegerAndDecimals(stringValue)
+        if (integer.length >= maxPlaces)
+          return input.decimalPlaces(1, BigNumber.ROUND_UP)
+        const decimalPlaces = maxPlaces - integer.length
+        return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
+      }
 
   const addSuffix =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
-      const [integer] = splitIntegerAndDecimals(stringValue)
+      (input: BigNumber) => {
+        const [integer] = splitIntegerAndDecimals(stringValue)
 
-      let suffix = ''
-      let updatedValue = input
+        let suffix = ''
+        let updatedValue = input
 
-      if (integer.length >= 15) {
-        suffix = 'T'
-        updatedValue = input
-          .shiftedBy(-12)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 12),
-            BigNumber.ROUND_HALF_UP
-          )
-      } else if (integer.length >= 12) {
-        suffix = 'B'
-        updatedValue = input
-          .shiftedBy(-9)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 9),
-            BigNumber.ROUND_HALF_UP
-          )
-      } else if (integer.length >= 9) {
-        suffix = 'M'
-        updatedValue = input
-          .shiftedBy(-6)
-          .decimalPlaces(
-            maxPlaces - (integer.length - 6),
-            BigNumber.ROUND_HALF_UP
-          )
+        if (integer.length >= 15) {
+          suffix = 'T'
+          updatedValue = input
+            .shiftedBy(-12)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 12),
+              BigNumber.ROUND_HALF_UP
+            )
+        } else if (integer.length >= 12) {
+          suffix = 'B'
+          updatedValue = input
+            .shiftedBy(-9)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 9),
+              BigNumber.ROUND_HALF_UP
+            )
+        } else if (integer.length >= 9) {
+          suffix = 'M'
+          updatedValue = input
+            .shiftedBy(-6)
+            .decimalPlaces(
+              maxPlaces - (integer.length - 6),
+              BigNumber.ROUND_HALF_UP
+            )
+        }
+
+        return {
+          rounded: updatedValue.toString(),
+          suffix,
+          value: input.toString()
+        }
       }
-
-      return {
-        rounded: updatedValue.toString(),
-        suffix,
-        value: input.toString()
-      }
-    }
 
   const thousandsSeparator =
     (character = ',') =>
-    (input: string) => {
-      const [integer, decimals] = input.split('.')
-      return [integer.replace(/\B(?=(\d{3})+(?!\d))/g, character), decimals]
-        .filter((value) => value !== undefined)
-        .join('.')
-    }
+      (input: string) => {
+        const [integer, decimals] = input.split('.')
+        return [integer.replace(/\B(?=(\d{3})+(?!\d))/g, character), decimals]
+          .filter((value) => value !== undefined)
+          .join('.')
+      }
 
   const strInput = new BigNumber(input).toString()
 
@@ -257,8 +257,10 @@ export const formatTokenValue = (
   )(strInput)
 }
 
-export const formatXRDValue = (value: string) =>
-  `${formatTokenValue(value).displayValue} ${XRD_SYMBOL}`
+export const formatXRDValue = (value: string) => {
+  console.log('formatted value', `${formatTokenValue(value).displayValue} ${XRD_SYMBOL}`)
+  return `${formatTokenValue(value).displayValue} ${XRD_SYMBOL}`
+}
 
 export const isMobile = () =>
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
