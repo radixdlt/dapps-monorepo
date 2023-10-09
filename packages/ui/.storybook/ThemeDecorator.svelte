@@ -7,5 +7,5 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../src/global.scss';
+  
 </style>

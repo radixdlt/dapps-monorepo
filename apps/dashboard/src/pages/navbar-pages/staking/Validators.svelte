@@ -206,7 +206,6 @@
 </ValidatorList>
 
 <style lang="scss">
-  @use '../../../../../../packages/ui/src/mixins.scss';
   .header {
     display: flex;
   }

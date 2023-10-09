@@ -3,8 +3,6 @@
 </tr>
 
 <style lang="scss">
-  @use '../../../../mixins.scss';
-
   .table-row {
     &:hover {
       box-shadow: var(--shadow-hover);

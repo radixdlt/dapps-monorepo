@@ -17,8 +17,6 @@
 </td>
 
 <style lang="scss">
-  @use '../../../../mixins.scss';
-
   .cell {
     width: var(--responsive-table-cell-width);
 

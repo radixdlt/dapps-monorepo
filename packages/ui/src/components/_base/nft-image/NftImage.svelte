@@ -41,7 +41,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../src/mixins.scss';
   .wrapper {
     background: var(--theme-surface-2);
     padding: 0.25rem;

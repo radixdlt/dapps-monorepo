@@ -69,7 +69,6 @@
 </Accordion>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
   .address-spacing {
     margin: 0.5rem 0;
 

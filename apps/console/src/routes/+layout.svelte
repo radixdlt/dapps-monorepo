@@ -122,8 +122,6 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../../../../packages/ui/src/global.scss';
-
   .logo {
     background-size: contain;
     background-repeat: no-repeat;

@@ -60,8 +60,6 @@
 </StakeCard>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
   .validator-name {
     font-size: var(--text-lg);
   }

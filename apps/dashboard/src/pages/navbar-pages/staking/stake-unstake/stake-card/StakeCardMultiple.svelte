@@ -51,8 +51,6 @@
 </StakeCard>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
   .remove-icon {
     display: flex;
     flex-direction: column;

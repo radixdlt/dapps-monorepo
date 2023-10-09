@@ -34,7 +34,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins.scss';
   .layout {
     display: grid;
     height: 100%;

@@ -102,7 +102,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../../packages/ui/src/mixins.scss';
   @use './shared.scss';
 
   .wrapper {

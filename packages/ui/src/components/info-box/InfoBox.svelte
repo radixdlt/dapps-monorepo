@@ -12,8 +12,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins';
-
   .info-box {
     padding: 1.5rem;
 

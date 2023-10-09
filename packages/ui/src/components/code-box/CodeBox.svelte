@@ -14,7 +14,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins';
   .wrapper {
     position: relative;
     width: 100%;

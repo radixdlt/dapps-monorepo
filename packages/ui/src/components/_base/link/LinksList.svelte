@@ -18,8 +18,6 @@
 {/if}
 
 <style lang="scss">
-  @use '../../../../../../packages/ui/src/mixins.scss';
-
   .links-list {
     display: flex;
     flex-direction: column;

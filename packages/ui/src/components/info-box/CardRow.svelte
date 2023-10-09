@@ -13,8 +13,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins.scss';
-
   .card-row {
     &:first-child {
       padding-top: 0;

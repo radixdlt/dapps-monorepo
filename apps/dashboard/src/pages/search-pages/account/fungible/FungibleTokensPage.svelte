@@ -43,8 +43,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
-
   .tokens {
     display: grid;
     gap: var(--spacing-2xl);

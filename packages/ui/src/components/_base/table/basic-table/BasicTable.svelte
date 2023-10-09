@@ -128,7 +128,6 @@
 
 <style lang="scss">
   @use '../shared.scss';
-  @use '../../../../mixins.scss';
 
   .cell-text {
     font-weight: var(--font-weight-bold-2);

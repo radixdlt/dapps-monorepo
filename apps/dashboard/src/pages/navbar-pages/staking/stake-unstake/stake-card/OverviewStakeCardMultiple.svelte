@@ -22,8 +22,6 @@
 </OverviewStakeCard>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
   .info {
     display: flex;
     flex-direction: column;

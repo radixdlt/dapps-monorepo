@@ -141,8 +141,6 @@
 </SidePanel>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
-
   .text {
     margin-bottom: var(--spacing-xl);
   }

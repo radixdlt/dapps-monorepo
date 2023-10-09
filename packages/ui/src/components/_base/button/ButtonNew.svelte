@@ -13,8 +13,6 @@
 </button>
 
 <style lang="scss">
-  @use '../../../../../../packages/ui/src/mixins.scss';
-
   button {
     box-sizing: border-box;
     background: var(--color-radix-blue-2);
