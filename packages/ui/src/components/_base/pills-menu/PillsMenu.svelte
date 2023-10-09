@@ -24,8 +24,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
-
   .menu {
     display: flex;
     flex-direction: row;

@@ -11,7 +11,7 @@
     "build:prod": "vite build --mode production",
     "package": "svelte-kit package",
     "preview": "vite preview",
-    "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json",
+    "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json --compiler-warnings \"css-unused-selector:ignore\"",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "cypress": "cypress open",
     "e2etest": "cypress run",

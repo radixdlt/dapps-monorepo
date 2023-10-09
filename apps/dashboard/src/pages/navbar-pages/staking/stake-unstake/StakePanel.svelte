@@ -69,8 +69,6 @@
 </SidePanel>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
-
   .flex {
     display: flex;
     justify-content: space-between;

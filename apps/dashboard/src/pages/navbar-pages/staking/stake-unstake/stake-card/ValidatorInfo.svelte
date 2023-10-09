@@ -29,8 +29,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
-
   .staking-info {
     display: flex;
     flex-direction: column;

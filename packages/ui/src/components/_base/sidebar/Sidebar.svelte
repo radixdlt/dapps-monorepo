@@ -44,8 +44,6 @@
 {/if}
 
 <style lang="scss">
-  @use '../../../mixins.scss';
-
   nav {
     z-index: 2000;
     height: 100%;

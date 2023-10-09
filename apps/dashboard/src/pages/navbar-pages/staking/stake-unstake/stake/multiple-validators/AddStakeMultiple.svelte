@@ -162,8 +162,6 @@
 </StakePanel>
 
 <style lang="scss">
-  @use '../../../../../../../../../packages/ui/src/mixins.scss';
-
   .validator-card {
     display: flex;
     flex-direction: column;

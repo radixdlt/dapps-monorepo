@@ -10,8 +10,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../../../packages/ui/src/mixins.scss';
-
   .distribute-switch {
     box-shadow: none;
     display: flex;

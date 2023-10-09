@@ -80,8 +80,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../mixins.scss';
-
   .label {
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);

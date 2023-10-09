@@ -7,7 +7,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
   .common {
     height: 100vh;
 

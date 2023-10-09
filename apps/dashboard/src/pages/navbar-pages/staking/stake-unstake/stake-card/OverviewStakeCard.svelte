@@ -52,7 +52,6 @@
 </StakeCard>
 
 <style lang="scss">
-  @use '../../../../../../../../packages/ui/src/mixins.scss';
   .invalid {
     color: var(--invalid-border-color);
   }

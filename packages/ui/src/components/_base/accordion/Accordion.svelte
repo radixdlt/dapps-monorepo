@@ -32,7 +32,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../mixins.scss';
   .accordion {
     border-top: 1px solid var(--theme-border-separator);
 

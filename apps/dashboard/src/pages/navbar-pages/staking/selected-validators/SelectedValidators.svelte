@@ -21,8 +21,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../../../packages/ui/src/mixins.scss';
-
   .selected-validators {
     display: grid;
     grid: auto / auto auto auto;

@@ -42,8 +42,6 @@
 </header>
 
 <style lang="scss">
-  @use '../../mixins.scss';
-
   .mobile-dapps-dropdown {
     justify-self: end;
   }

@@ -34,8 +34,6 @@
 </Sidebar>
 
 <style lang="scss">
-  @use '../../mixins.scss';
-
   .sidebar-wrapper {
     display: flex;
     flex-direction: column;

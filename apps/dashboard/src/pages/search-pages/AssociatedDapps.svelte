@@ -28,8 +28,6 @@
 </CardRow>
 
 <style lang="scss">
-  @use '../../../../../packages/ui/src/mixins.scss';
-
   .cards {
     display: flex;
     flex-wrap: wrap;

@@ -34,8 +34,6 @@
 </div>
 
 <style lang="scss">
-  @use '../../../../../packages/ui/src/mixins.scss';
-
   .box {
     display: flex;
     flex-direction: column;

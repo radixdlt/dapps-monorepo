@@ -134,9 +134,6 @@
 </Theme>
 
 <style lang="scss" global>
-  @use '../../../../packages/ui/src/global.scss';
-  @use '../../../../packages/ui/src/mixins.scss';
-
   .page {
     display: flex;
     flex-direction: column;
