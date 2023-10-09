@@ -43,6 +43,7 @@ export const getUnstakeAndClaimInfo =
     let readyToClaim: ReadyToClaimInfo[] = []
 
     for (const claimNft of claimNfts) {
+      console.log(claimNft)
       const isClaimable = new BigNumber(
         claimNft.nftData.standard['claim_epoch']!.value
       ).lte(currentEpoch)
