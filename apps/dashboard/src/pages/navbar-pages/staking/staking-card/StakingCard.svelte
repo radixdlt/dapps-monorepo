@@ -117,11 +117,13 @@
   }
 
   .title-text {
+    @extend .dotted-overflow;
     font-weight: var(--font-weight-bold-1);
     color: var(--color-grey-2);
   }
 
   .amount-text {
+    @extend .dotted-overflow;
     font-weight: var(--font-weight-bold-3);
     font-size: var(--text-2xl);
   }
@@ -129,6 +131,7 @@
   .stake-display {
     display: flex;
     flex-direction: column;
+    gap: var(--spacing-sm);
   }
 
   .slot-section {

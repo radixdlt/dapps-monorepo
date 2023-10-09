@@ -5,6 +5,7 @@
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import BigNumber from 'bignumber.js'
   import { writable } from 'svelte/store'
+  import { formatXRDValue } from '@utils'
 
   export let staked: ComponentProps<StakingCard>['staking']
   export let unstaking: ComponentProps<StakingCard>['unstaking']
@@ -54,8 +55,8 @@
             <SkeletonLoader />
           {:then validatorAddress}
             <ReadyToClaim {validatorAddress}>
-              <div slot="text" let:timeToClaimText>
-                Ready to claim in approx. {timeToClaimText}
+              <div slot="text" let:timeToClaimText let:amount class="subtext">
+                Ready to claim {formatXRDValue(amount)} in approx. {timeToClaimText}
               </div>
             </ReadyToClaim>
           {/await}
