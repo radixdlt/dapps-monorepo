@@ -2,9 +2,13 @@ name: Dashboard CI/CD
 
 on:
   push:
+    paths-ignore:
+      - 'apps/console/**'
     branches:
       - main
   pull_request:
+    paths-ignore:
+      - 'apps/console/**'
   release:
     types:
       - published
