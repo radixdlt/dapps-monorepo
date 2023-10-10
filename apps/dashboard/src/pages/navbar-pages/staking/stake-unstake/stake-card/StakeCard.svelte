@@ -29,6 +29,8 @@
       gap: var(--spacing-md);
       align-items: center;
 
+      overflow: hidden;
+
       .icon {
         display: flex;
         justify-content: center;

@@ -105,9 +105,11 @@
   @use './shared.scss';
 
   .wrapper {
-    width: var(--card-width);
+    min-width: var(--card-width);
+    max-width: var(--card-width);
     justify-self: end;
   }
+
   .token-amount-card {
     padding: var(--card-padding-top-bottom) var(--card-padding-left-right);
     border-radius: var(--card-border-radius);
