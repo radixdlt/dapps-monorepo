@@ -6,7 +6,7 @@
   import type {
     EntityMetadataItem,
     MetadataTypedValue
-  } from '@radixdlt/babylon-gateway-api-sdk'
+  } from '@common/gateway-sdk'
   import Resource from '../resource/Resource.svelte'
   import type { NonFungible } from '@api/utils/nfts'
 

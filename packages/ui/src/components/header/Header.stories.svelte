@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Header from './Header.svelte'
-  import { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+  import { RadixDappToolkit } from '@common/rdt'
   RadixDappToolkit({ dAppDefinitionAddress: '', networkId: 12 })
 </script>
 

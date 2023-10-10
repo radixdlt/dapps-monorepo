@@ -1,9 +1,9 @@
 import { CURRENT_NETWORK } from './../../../../../../../packages/ui/src/network'
 import type { LayoutServerLoad } from './$types'
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@common/ret'
 import { getTransactionDetails } from '@api/gateway'
 import { error, redirect } from '@sveltejs/kit'
-import type { ErrorResponse } from '@radixdlt/babylon-gateway-api-sdk'
+import type { ErrorResponse } from '@common/gateway-sdk'
 
 export const load: LayoutServerLoad = async ({ params, route }) => {
   if (!route.id.includes('raw-receipt') && !route.id.includes('details')) {

@@ -7,7 +7,7 @@ import type {
   MetadataTypedValue,
   MetadataUrlValueTypeEnum,
   StateEntityDetailsVaultResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import { isNil, pipe } from 'ramda'
 import sanitizeHtml from 'sanitize-html'
 

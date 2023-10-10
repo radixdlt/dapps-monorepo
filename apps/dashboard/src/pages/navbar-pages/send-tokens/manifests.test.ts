@@ -1,6 +1,6 @@
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@common/ret'
 import { getSendNFTManifest, getSendTokenManifest } from './manifests'
-import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 
 describe('send tokens manifests', () => {
   const NETWORK_ID = RadixNetwork.RCnetV2

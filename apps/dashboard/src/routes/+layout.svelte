@@ -14,12 +14,12 @@
   import {
     Account,
     DataRequestBuilder,
-    RadixDappToolkit
-  } from '@radixdlt/radix-dapp-toolkit'
+    RadixDappToolkit,
+    createLogger
+  } from '@common/rdt'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
-  import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { authApi } from '../server/auth/auth-api'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { getNetworkConfiguration } from '@api/gateway'

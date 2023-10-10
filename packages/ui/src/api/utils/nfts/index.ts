@@ -1,7 +1,7 @@
 import type {
   NonFungibleResourcesCollectionItemVaultAggregated,
   StateNonFungibleDetailsResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import type { GeneralNft } from './general-nft'
 import { isUnstakeData, type ClaimNft } from './claim-nft'
 import {

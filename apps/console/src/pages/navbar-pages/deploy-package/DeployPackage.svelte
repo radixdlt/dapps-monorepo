@@ -10,7 +10,7 @@
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import { getTransactionDetails } from '@api/gateway'
-  import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { TransactionStatus } from '@common/gateway-sdk'
   import type { ComponentEvents } from 'svelte'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
 

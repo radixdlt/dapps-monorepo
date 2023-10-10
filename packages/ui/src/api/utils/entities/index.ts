@@ -6,7 +6,7 @@ import type { PoolUnit } from './pool-unit'
 import type { Resource } from './resource'
 import type { StakeUnit } from './stake-unit'
 import type { Validator } from './validator'
-import type { EntityMetadataItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { EntityMetadataItem } from '@common/gateway-sdk'
 
 export type Entity =
   | Package

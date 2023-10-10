@@ -16,8 +16,8 @@
     "test": "turbo run test",
     "prettier": "prettier --cache --check apps/*/src packages/*/src",
     "prettier:fix": "prettier --cache --write apps/*/src packages/*/src",
-    "lint": "eslint --cache apps/*/src packages/*/src",
-    "lint:fix": "eslint --cache --fix apps/*/src packages/*/src",
+    "lint": "eslint --cache --no-error-on-unmatched-pattern apps/*/src packages/*/src",
+    "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern apps/*/src packages/*/src",
     "format": "npm run prettier:fix && npm run lint:fix",
     "dev:dashboard": "turbo run dev --filter=dashboard",
     "dev:console": "turbo run dev --filter=console"

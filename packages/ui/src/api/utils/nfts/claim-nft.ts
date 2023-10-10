@@ -1,6 +1,6 @@
 import type { _Entity } from '../entities'
 import type { _NonFungible } from '.'
-import type { StateNonFungibleDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateNonFungibleDetailsResponseItem } from '@common/gateway-sdk'
 
 export type ClaimNft = _NonFungible<
   'claimNft',

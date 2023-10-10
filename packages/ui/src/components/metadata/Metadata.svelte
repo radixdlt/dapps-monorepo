@@ -20,7 +20,7 @@
   import type {
     EntityMetadataItem,
     EntityMetadataItemValue
-  } from '@radixdlt/babylon-gateway-api-sdk'
+  } from '@common/gateway-sdk'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import TypedMetadataRenderer from './TypedMetadataRenderer.svelte'
 

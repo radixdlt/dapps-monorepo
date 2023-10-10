@@ -2,7 +2,7 @@ import type {
   StateEntityDetailsResponseFungibleResourceDetails,
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import { getEnumStringMetadata, transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import {

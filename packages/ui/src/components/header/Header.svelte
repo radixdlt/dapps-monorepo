@@ -1,5 +1,4 @@
 <script lang="ts">
-  import '@radixdlt/dapps-dropdown'
   import ConnectButton from '../connect-button/ConnectButton.svelte'
   import NetworkLookupSearch from './NetworkLookupSearch.svelte'
   import MenuIcon from '@icons/menu.svg'
@@ -7,10 +6,11 @@
   import { isMobileDevice, showSidebar } from '@stores'
   import PageNavigation from './PageNavigation.svelte'
   import type { ComponentProps } from 'svelte'
+  import DappsDropdown from '@components/dapps-dropdown/DappsDropdown.svelte'
 
-  export let hideSearch: boolean | undefined
-  export let showDesktopSidebar: boolean | undefined
-  export let routes: ComponentProps<PageNavigation>['routes']
+  export let hideSearch: boolean | undefined = undefined
+  export let showDesktopSidebar: boolean | undefined = undefined
+  export let routes: ComponentProps<PageNavigation>['routes'] = []
 </script>
 
 <header>
@@ -30,11 +30,14 @@
       </div>
     {/if}
 
-    <radix-dapps-dropdown class="mobile-only mobile-dapps-dropdown" />
+    <div class="mobile-only mobile-dapps-dropdown"><DappsDropdown /></div>
   </div>
   {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
   <div class="right-wrapper">
-    <radix-dapps-dropdown class="desktop-only" />
+    <div class="desktop-only">
+      <DappsDropdown />
+    </div>
+
     {#if !$isMobileDevice}
       <div class="connect-button"><ConnectButton /></div>
     {/if}

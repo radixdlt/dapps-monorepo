@@ -3,7 +3,7 @@
   import type { LayoutData } from './$types'
   import { goto } from '$app/navigation'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
-  import type { ErrorResponse } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { ErrorResponse } from '@common/gateway-sdk'
 
   export let data: LayoutData
 

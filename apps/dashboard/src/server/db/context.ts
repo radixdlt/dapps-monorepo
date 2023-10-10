@@ -1,7 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
 import { mockDeep, type DeepMockProxy } from 'vitest-mock-extended'
 import type { Cookies } from '@sveltejs/kit'
-import type { GatewayApiClient } from '@radixdlt/babylon-gateway-api-sdk'
+import type { GatewayApiClient } from '@common/gateway-sdk'
 
 export type Context = {
   prisma: PrismaClient

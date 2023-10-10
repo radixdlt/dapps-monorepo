@@ -4,7 +4,7 @@
   import CopyableText from '../copyable-text/CopyableText.svelte'
   import { writable } from 'svelte/store'
   import { CURRENT_NETWORK } from '@networks'
-  import { RadixNetworkConfigById } from '@radixdlt/babylon-gateway-api-sdk'
+  import { RadixNetworkConfigById } from '@common/gateway-sdk'
 
   export let value = ''
   export let short = false

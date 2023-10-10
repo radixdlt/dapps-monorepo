@@ -4,7 +4,7 @@ import {
   type StateEntityDetailsOptions,
   type StateNonFungibleDetailsResponseItem,
   type LedgerStateSelector
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
   applicationName: 'Radix Dashboard',
