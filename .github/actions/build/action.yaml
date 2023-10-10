@@ -1,4 +1,4 @@
-name: build
+name: Install dependencies
 description: Build the project
 inputs:
   active_network_name:
@@ -50,8 +50,6 @@ runs:
       shell: bash
       run: |
         echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
-    - name: Build
+    - name: Install dependencies
       shell: bash
-      run: npm ci && npm run db:generate && npx turbo run build --filter=ui && npx turbo run build --filter=dashboard
-      env:
-        PUBLIC_NETWORK_NAME: ${{ env.NETWORK_NAME }}
+      run: npm ci

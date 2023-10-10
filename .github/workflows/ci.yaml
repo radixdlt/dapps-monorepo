@@ -70,6 +70,9 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       
+      - name: Generate DB
+        run: npm run db:generate
+
       - name: Lint
         run: npm run lint
 
@@ -85,8 +88,8 @@ jobs:
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:
-          start: npm run dev
-          wait-on: http://localhost:5174
+          start: npm run dev:dashboard
+          wait-on: http://localhost:5173
           project: ./apps/dashboard
         
 
@@ -250,10 +253,8 @@ jobs:
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
-          step_name: 'snyk-container-monitor'
           dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
           snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
           snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
           image: ${{ needs.setup-tags.outputs.dashboard-tags }}
           target_ref: ${{ github.ref_name }}
@@ -319,7 +320,6 @@ jobs:
           tags: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
           target: 'dashboard'
-          sbom: true
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
@@ -373,7 +373,6 @@ jobs:
           tags: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.storybook-labels }}
           target: 'storybook'
-          sbom: true
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
