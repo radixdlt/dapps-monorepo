@@ -74,6 +74,26 @@ jobs:
           npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
+      
+      - name: Lint
+        run: npm run lint
+
+      - name: Prettier
+        run: npm run prettier
+
+      - name: Unit tests
+        run: npm run coverage:dashboard
+
+      - name: Svelte check
+        run: npm run svelte:check:dashboard
+
+      - name: Run e2e tests on the PR environment
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm run dev
+          wait-on: http://localhost:5173
+          project: ./apps/dashboard
+        
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -130,54 +150,6 @@ jobs:
       storybook-json: ${{ steps.storybook-tags.outputs.json }}
       tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
       network-name: ${{steps.network.outputs.network-name}}
-
-  lint:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'lint'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-      - name: Lint
-        run: npm run lint
-
-  prettier:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'prettier'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-      - name: Prettier
-        run: npm run prettier
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
@@ -322,93 +294,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
 
-  svelte-check:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'svelte'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-      - name: Svelte check
-        run: npm run svelte:check
-
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - name: Use Node.js
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          always-auth: true
-          node-version: 20.3.0
-          cache: npm
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'unit-tests'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-      - name: Unit tests
-        run: npm run coverage
-
-  run-e2e-tests:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-        with:
-          always-auth: true
-          node-version: 20.3.0
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-        with:
-          fetch-depth: 0
-      - name: Fetch AWS secrets
-        uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'e2e-tests'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      - uses: ./.github/actions/build
-        with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
-          active_network_name: ${{ env.active_network }}
-          release_network_name: ${{ env.release_network }}
-      - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v4
-        with:
-          start: npm run dev
-          wait-on: http://localhost:5173
-          project: ./apps/dashboard
-
   push-dashboard:
     runs-on: ubuntu-latest
     needs:
@@ -507,13 +392,7 @@ jobs:
           secret_prefix: 'GH'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
           parse_json: true
-      # - name: Restore yarn cache
-      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-      #   with:
-      #     node-version: 20.3.0
-      #     cache: npm
-      # - name: Copy cache locally
-      #   run: cp -R $HOME/.cache .cache
+
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
