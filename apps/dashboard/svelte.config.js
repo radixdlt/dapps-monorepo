@@ -1,36 +1,14 @@
-import preprocess from 'svelte-preprocess'
-import adapter from '@sveltejs/adapter-node'
-import { aliases } from '../../aliases.js'
-import fs from 'fs'
+import sharedConfig  from '../../packages/ui/svelte.config.js'
+
 globalThis.self = globalThis
-
-// traverse folders up until reached root of project, which is where there a turbo.json file
-const getRoot = (path = process.cwd()) => {
-  const turboPath = `${path}/turbo.json`
-  const isRoot = fs.existsSync(turboPath)
-  if (isRoot) {
-    return path
-  } else {
-    const newPath = path.split('/').slice(0, -1).join('/')
-    return getRoot(newPath)
-  }
-}
-
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: preprocess({
-    scss: {
-      prependData: `@use "${getRoot()}/packages/ui/src/global.scss"; @use "${getRoot()}/packages/ui/src/mixins.scss";`
-    }
-  }),
+  ...sharedConfig,
 
   kit: {
-    adapter: adapter({ out: 'build' }),
-    alias: aliases(),
-    env: {
-      dir: process.cwd()
-    },
+    ...sharedConfig.kit,
+
     csp: {
       mode: 'auto',
       directives: {

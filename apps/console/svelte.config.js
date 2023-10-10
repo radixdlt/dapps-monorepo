@@ -1,18 +1,14 @@
-import preprocess from 'svelte-preprocess'
-import adapter from '@sveltejs/adapter-node'
-import { aliases } from '../../aliases.js'
+import sharedConfig from '../../packages/ui/svelte.config.js'
+
 globalThis.self = globalThis
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: preprocess(),
+  ...sharedConfig,
 
   kit: {
-    adapter: adapter({ out: 'build' }),
-    alias: aliases(),
-    env: {
-      dir: process.cwd()
-    },
+    ...sharedConfig.kit,
+
     csp: {
       mode: 'auto',
       directives: {
