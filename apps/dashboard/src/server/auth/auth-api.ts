@@ -1,4 +1,4 @@
-import type { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
+import type { SignedChallenge } from '@common/rdt'
 import { fetchWrapper } from '@utils'
 
 export const authApi = {

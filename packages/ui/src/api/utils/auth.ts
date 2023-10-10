@@ -1,4 +1,4 @@
-import type { StateEntityDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsResponseItem } from '@common/gateway-sdk'
 
 export const getSetMetadataAuth = ({
   details

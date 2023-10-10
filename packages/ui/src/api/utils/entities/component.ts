@@ -3,7 +3,7 @@ import type { _Entity } from '.'
 import type {
   StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsVaultResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import { transformMetadata } from '../metadata'
 
 export type Component = _Entity<'component', ['name', 'description']> & {

@@ -1,4 +1,4 @@
-import type { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+import type { TransactionStatus } from '@common/gateway-sdk'
 import type { PageLoad } from './$types'
 
 export const prerender = false

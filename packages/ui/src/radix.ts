@@ -1,4 +1,4 @@
-import type { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+import type { RadixDappToolkit } from '@common/rdt'
 import { andThen, pipe } from 'ramda'
 
 type RDT = RadixDappToolkit

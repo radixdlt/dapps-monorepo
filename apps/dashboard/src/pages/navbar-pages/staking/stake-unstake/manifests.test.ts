@@ -1,11 +1,11 @@
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@common/ret'
 import {
   getClaimManifest,
   getMultipleStakeManifest,
   getStakeManifest,
   getUnstakeManifest
 } from './manifests'
-import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 
 const fixtures = [
   {

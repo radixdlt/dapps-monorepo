@@ -15,7 +15,7 @@ import type {
   StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem,
   StateNonFungibleDetailsResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import {
   andThen,
   filter,

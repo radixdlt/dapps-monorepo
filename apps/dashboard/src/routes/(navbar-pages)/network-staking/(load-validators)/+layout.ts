@@ -2,7 +2,7 @@ import { bookmarkedValidatorsApi } from '../../../../server/validators/validator
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
 import { bookmarkedValidatorsStore } from '../../../../stores'
-import type { NetworkConfigurationResponse } from '@radixdlt/babylon-gateway-api-sdk'
+import type { NetworkConfigurationResponse } from '@common/gateway-sdk'
 import { networkConfiguration } from '@stores'
 
 export type Bookmarked = { [validator: string]: boolean }

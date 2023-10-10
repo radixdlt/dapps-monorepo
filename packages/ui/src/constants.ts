@@ -1,5 +1,5 @@
 import xrdIcon from '@icons/xrd-token-icon.svg'
-import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 
 export const Network = {
   MAINNET: 'mainnet',

@@ -2,7 +2,7 @@ import type { _Entity } from '.'
 import { getStringMetadata, transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
 import { getSingleEntityDetails } from '@api/gateway'
-import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 
 export type StakeUnit = Omit<FungibleResource, 'type'> &
   _Entity<'stakeUnit', ['name', 'description', 'icon_url', 'validator']>

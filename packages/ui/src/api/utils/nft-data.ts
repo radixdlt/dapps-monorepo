@@ -3,7 +3,7 @@ import type {
   MetadataTypedValue,
   MetadataUrlValueTypeEnum,
   StateNonFungibleDetailsResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 
 export type NftDataItem<N extends keyof KnownStandardTypes | string = string> =
   {

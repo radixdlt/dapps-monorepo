@@ -1,4 +1,4 @@
-import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { getEntityDetails } from '@api/gateway'
 import { getVectorMetadata } from './metadata'
 

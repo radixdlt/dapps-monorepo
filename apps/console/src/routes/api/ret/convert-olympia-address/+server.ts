@@ -1,4 +1,4 @@
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@common/ret'
 import { error, json } from '@sveltejs/kit'
 import { CURRENT_NETWORK } from '@networks'
 import type { RequestEvent } from './$types'

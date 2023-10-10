@@ -1,7 +1,7 @@
 <script lang="ts">
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import CodeBox from '@components/code-box/CodeBox.svelte'
-  import type { TransactionReceipt } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { TransactionReceipt } from '@common/gateway-sdk'
 
   export let receipt: Promise<TransactionReceipt | undefined>
 </script>

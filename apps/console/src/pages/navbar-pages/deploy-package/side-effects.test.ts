@@ -1,14 +1,14 @@
 import {
   ManifestSborStringRepresentation,
   RadixEngineToolkit
-} from '@radixdlt/radix-engine-toolkit'
+} from '@common/ret'
 import {
   getCreateBadgeManifest,
   getDeployPackageManifest
 } from './side-effects'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 
 describe('Deploy Package Transaction Manifests', () => {
   const NETWORK_ID = RadixNetwork.RCnetV3

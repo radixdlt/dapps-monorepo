@@ -2,7 +2,7 @@
   import AddressesList from '@components/_base/address/AddressesList.svelte'
   import Link from '@components/_base/link/Link.svelte'
   import LinksList from '@components/_base/link/LinksList.svelte'
-  import type { MetadataTypedValue } from '@radixdlt/babylon-gateway-api-sdk'
+  import type { MetadataTypedValue } from '@common/gateway-sdk'
 
   export let metadataTypedValue: MetadataTypedValue | undefined
 </script>

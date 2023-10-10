@@ -6,7 +6,7 @@
   import {
     TransactionStatus,
     RadixNetworkConfigById
-  } from '@radixdlt/babylon-gateway-api-sdk'
+  } from '@common/gateway-sdk'
   import { CURRENT_NETWORK } from '@networks'
 
   export let txID: string

@@ -17,7 +17,7 @@ WORKDIR /app
 
 RUN npm install -g turbo
 COPY . .
-RUN turbo prune --scope=dashboard --scope=console --scope=ui --docker
+RUN turbo prune --scope=dashboard --scope=console --scope=ui --scope=common --docker
 
 FROM base AS installer
 ARG BUILDKIT_SBOM_SCAN_STAGE=true

@@ -1,7 +1,7 @@
 import {
   ManifestSborStringRepresentation,
   RadixEngineToolkit
-} from '@radixdlt/radix-engine-toolkit'
+} from '@common/ret'
 import { error, json } from '@sveltejs/kit'
 import { CURRENT_NETWORK } from '@networks'
 import type { RequestEvent } from './$types'

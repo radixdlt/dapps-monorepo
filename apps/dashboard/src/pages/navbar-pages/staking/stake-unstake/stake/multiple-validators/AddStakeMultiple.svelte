@@ -13,7 +13,7 @@
   import { removeThousandsSeparator } from '@utils/format-amount'
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
-  import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+  import { TransactionStatus } from '@common/gateway-sdk'
   import type { Validator } from '@api/utils/entities/validator'
 
   export let validators: Validator[]

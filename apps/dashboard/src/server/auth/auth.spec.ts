@@ -7,7 +7,7 @@ import {
   type Context,
   createMockContext
 } from '../db/context'
-import type { SignedChallenge } from '@radixdlt/radix-dapp-toolkit'
+import type { SignedChallenge } from '@common/rdt'
 import { UserModel } from '../user/model'
 
 let mockCtx: MockContext

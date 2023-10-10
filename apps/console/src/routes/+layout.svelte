@@ -2,17 +2,17 @@
   import '@fonts'
   import { featureFlags } from '@featureFlags'
   import { darkTheme, getCssText } from '@styles'
-  import { navigating, page } from '$app/stores'
+  import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
   import { accounts, selectedAccount, storage } from '@stores'
   import {
     RadixDappToolkit,
     Account,
-    DataRequestBuilder
-  } from '@radixdlt/radix-dapp-toolkit'
+    DataRequestBuilder,
+    createLogger
+  } from '@common/rdt'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
-  import { createLogger } from '@radixdlt/radix-dapp-toolkit'
   import { accountLabel } from '@utils'
   import Layout from '@components/layout/Layout.svelte'
   import LayersIcon from '@icons/layers.svg'

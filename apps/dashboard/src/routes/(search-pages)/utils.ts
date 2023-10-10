@@ -1,6 +1,6 @@
 import { getStringMetadata } from '@api/utils/metadata'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { map } from 'ramda'
 
 export const getDappDefinitionData = ({

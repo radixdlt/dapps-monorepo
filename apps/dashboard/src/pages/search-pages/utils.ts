@@ -1,7 +1,7 @@
 import type {
   EntityMetadataItem,
   MetadataTypedValue
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 
 export const metadataItem = (
   key: string,
