@@ -226,10 +226,8 @@ jobs:
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
           app_name: 'console'
-          step_name: 'snyk-container-monitor'
           dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
           snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
           snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
           image: ${{ needs.setup-tags.outputs.console-tags }}
           target_ref: ${{ github.ref_name }}
@@ -300,7 +298,6 @@ jobs:
           tags: docker.io/radixdlt/dapps-console:${{ needs.setup-tags.outputs.tag-with-network }}
           labels: ${{ needs.setup-tags.outputs.console-labels }}
           target: 'console'
-          sbom: true
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
