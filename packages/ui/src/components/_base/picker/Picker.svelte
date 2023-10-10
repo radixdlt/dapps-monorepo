@@ -61,10 +61,6 @@
     overflow-y: clip;
   }
 
-  .icon {
-    transition: transform 0.3s ease;
-  }
-
   .options-header {
     font-weight: var(--font-weight-bold-3);
     font-size: var(--text-md);

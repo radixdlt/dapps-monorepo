@@ -441,12 +441,6 @@
       margin-bottom: 1rem;
     }
   }
-  .content {
-    background: var(--theme-surface-2);
-    padding: var(--spacing-xl);
-    margin-top: var(--space-xl);
-    max-width: 800px;
-  }
   .faded {
     color: var(--colors-muted);
   }

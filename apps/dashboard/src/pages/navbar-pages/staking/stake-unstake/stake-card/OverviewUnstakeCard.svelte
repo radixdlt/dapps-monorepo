@@ -60,10 +60,6 @@
 </StakeCard>
 
 <style lang="scss">
-  .validator-name {
-    font-size: var(--text-lg);
-  }
-
   .invalid {
     color: var(--invalid-border-color);
   }
