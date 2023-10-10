@@ -17,6 +17,7 @@
     "format": {},
     "prettier": {},
     "coverage": {},
+    "prepare": {},
     "lint": {},
     "dev": {
       "cache": false,

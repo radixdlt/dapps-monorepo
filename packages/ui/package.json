@@ -8,6 +8,7 @@
   "types": "./src/index.ts",
   "svelte": "./src/index.ts",
   "scripts": {
+    "prepare": "svelte-kit sync",
     "test:storybook": "npx wait-on http://localhost:6006 && test-storybook --no-index-json --coverage && nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook",
     "test:storybook:watch": "test-storybook --no-index-json --watch",
     "storybook": "storybook dev -p 6006",
