@@ -10,6 +10,7 @@
     "build": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "package": "svelte-kit package",
+    "prepare": "svelte-kit sync",
     "preview": "vite preview",
     "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
