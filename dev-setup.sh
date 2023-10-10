@@ -6,7 +6,7 @@ set -e
 docker compose up -d
 
 # Install dependencies
-npm install
+bun install
 
 # Add DATABASE_URL to .env
 echo 'DATABASE_URL="postgresql://user:password@localhost:5432/dashboard?schema=public"' >> apps/dashboard/.env
@@ -18,4 +18,4 @@ npx turbo run db:push --filter=dashboard
 npx turbo run build --filter=ui
 
 # Run dev servers
-npm run dev
+bun run dev

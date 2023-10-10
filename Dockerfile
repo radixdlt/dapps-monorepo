@@ -1,28 +1,38 @@
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 
-FROM node:20.8-bookworm AS base
+FROM oven/bun:latest AS base
+
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
-
 ARG NETWORK_NAME
-ARG NPM_LOCAL_CACHE=.cache
-
-RUN apt-get update && apt-get install -y openssh-client=1:9.2p1-2+deb12u1
 
 FROM base AS builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
-
-RUN apt-get update && apt-get install -y libc6 openssl openssh-client=1:9.2p1-2+deb12u1
+ENV IS_DOCKER=true
+RUN apt-get update && \
+    apt-get install -y libc6 openssl curl git
 
 WORKDIR /app
 
-RUN npm install -g turbo
 COPY . .
-RUN turbo prune --scope=dashboard --scope=console --scope=ui --scope=common --docker
+RUN bun install
+RUN bun run turbo prune --scope=dashboard --scope=console --scope=ui --scope=common --docker
 
 FROM base AS installer
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
+ENV IS_DOCKER=true
+ENV NODE_VERSION=16.13.0
+RUN apt-get update && \
+    apt-get install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+RUN node --version
+RUN npm --version
 
-RUN apt-get update && apt-get install -y libc6
+RUN apt-get update && apt-get install -y libc6 && apt-get install -y git
 
 COPY aliases.js /app/aliases.js
 
@@ -32,8 +42,10 @@ COPY .gitignore .gitignore
 COPY aliases.js aliases.js
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
+# COPY --from=builder /app/out/bun.lockb ./bun.lockb
 
-RUN npm ci
+RUN bun install
+# RUN bun install --frozen-lockfile
 
 COPY --from=builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/dashboard/.env.production
@@ -43,18 +55,14 @@ RUN cat apps/console/.env.production
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> packages/ui/.env.production
 RUN cat packages/ui/.env.production
 
-RUN npx turbo run prepare
-RUN npx turbo run build:prod --filter=ui
-RUN npx turbo run build:prod --filter=dashboard
-RUN npx turbo run build:prod --filter=console
-RUN NODE_OPTIONS=--max_old_space_size=4096 npx turbo run build --filter=ui
+RUN bun run turbo run build:prod --filter=ui
+RUN bun run turbo run build:prod --filter=dashboard
+RUN bun run turbo run build:prod --filter=console
+RUN bun run turbo run build --filter=ui
 RUN rm -f .npmrc
 
-FROM node:20.8-bookworm AS dashboard
-
+FROM oven/bun:latest AS dashboard
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
-
-RUN apt-get update && apt-get install -y openssh-client=1:9.2p1-2+deb12u1
 
 WORKDIR /app
 
@@ -63,10 +71,9 @@ COPY --from=installer /app/apps/ apps
 COPY --from=installer /app/packages/ packages
 COPY --from=installer /app/node_modules node_modules
 
-RUN npm install pm2 -g && \
-    pm2 install pm2-metrics
+EXPOSE 3000
 
-CMD ["pm2-runtime","apps/dashboard/build/index.js"]
+CMD ["bun", "apps/dashboard/build/index.js"]
 
 FROM nginx:alpine AS storybook
 
@@ -78,11 +85,8 @@ COPY --from=installer /app/packages/ui/storybook-static /usr/share/nginx/html
 COPY --from=installer /app/packages/ui/nginx/mime.types /etc/nginx/mime.types
 COPY --from=installer /app/packages/ui/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-FROM node:20.8-bookworm AS console
-
+FROM oven/bun:latest AS console
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
-
-RUN apt-get update && apt-get install -y openssh-client=1:9.2p1-2+deb12u1
 
 WORKDIR /app
 
@@ -90,9 +94,6 @@ COPY --from=installer /app/apps/ apps
 COPY --from=installer /app/packages/ packages
 COPY --from=installer /app/node_modules node_modules
 
-RUN npm install pm2 -g && \
-    pm2 install pm2-metrics
-
 EXPOSE 3000
 
-CMD ["pm2-runtime","apps/console/build/index.js"]
+CMD ["bun", "apps/console/build/index.js"]

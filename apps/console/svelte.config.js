@@ -1,5 +1,5 @@
 import preprocess from 'svelte-preprocess'
-import adapter from '@sveltejs/adapter-node'
+import adapter from 'svelte-adapter-bun'
 import { aliases } from '../../aliases.js'
 globalThis.self = globalThis
 

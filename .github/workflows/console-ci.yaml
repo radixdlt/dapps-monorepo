@@ -71,16 +71,16 @@ jobs:
           release_network_name: ${{ env.release_network }}
 
       - name: Lint
-        run: npm run lint
+        run: bun run lint
 
       - name: Prettier
-        run: npm run prettier
+        run: bun run prettier
 
       - name: Unit tests
-        run: npm run coverage:console
+        run: bun run coverage:console
 
       - name: Svelte check
-        run: npm run svelte:check:console
+        run: bun run svelte:check:console
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -303,7 +303,7 @@ jobs:
           sbom: true
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
+
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'

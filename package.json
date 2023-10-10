@@ -4,7 +4,6 @@
     "build": "turbo run build",
     "build:prod": "turbo run build:prod",
     "dev": "turbo run dev",
-    "prepare": "husky install",
     "svelte:check:dashboard": "turbo run svelte:check --filter=dashboard",
     "svelte:check:console": "turbo run svelte:check --filter=console",
     "db:generate": "turbo run db:generate",
@@ -18,7 +17,7 @@
     "prettier:fix": "prettier --cache --write apps/*/src packages/*/src",
     "lint": "eslint --cache --no-error-on-unmatched-pattern apps/*/src packages/*/src",
     "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern apps/*/src packages/*/src",
-    "format": "npm run prettier:fix && npm run lint:fix",
+    "format": "bun run prettier:fix && bun run lint:fix",
     "dev:dashboard": "turbo run dev --filter=dashboard",
     "dev:console": "turbo run dev --filter=console"
   },
@@ -35,7 +34,7 @@
     "eslint-plugin-unused-imports": "^3.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
-    "turbo": "latest"
+    "turbo": "1.10.4"
   },
   "packageManager": "npm@9.7.1",
   "workspaces": [
