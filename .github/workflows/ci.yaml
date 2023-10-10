@@ -61,17 +61,8 @@ jobs:
           fetch-depth: 0
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'build'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
       - uses: ./.github/actions/build
         with:
-          npm_token: ${{ env.GH_NPM_TOKEN }}
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       
@@ -315,21 +306,6 @@ jobs:
         with:
           username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
           password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-dashboard'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
-      # - name: Restore yarn cache
-      #   uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
-      #   with:
-      #     node-version: 20.3.0
-      #     cache: npm
-      # - name: Copy cache locally
-      #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
         with:
@@ -341,7 +317,6 @@ jobs:
           target: 'dashboard'
           sbom: true
           build-args: |
-            NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
@@ -384,14 +359,6 @@ jobs:
         with:
           username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
           password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-story'
-          secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI'
-          parse_json: true
 
       - name: Docker build and push
         uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
@@ -404,7 +371,6 @@ jobs:
           target: 'storybook'
           sbom: true
           build-args: |
-            NPM_TOKEN=${{ env.GH_NPM_TOKEN }}
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
             NPM_LOCAL_CACHE=.cache/
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main

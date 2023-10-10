@@ -3,7 +3,6 @@ ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 FROM node:20.8-bookworm AS base
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
-ARG NPM_TOKEN
 ARG NETWORK_NAME
 ARG NPM_LOCAL_CACHE=.cache
 
@@ -25,7 +24,6 @@ ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 RUN apt-get update && apt-get install -y libc6
 
-COPY .npmrc.docker      /app/.npmrc
 COPY aliases.js /app/aliases.js
 
 WORKDIR /app

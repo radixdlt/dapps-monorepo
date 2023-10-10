@@ -1,9 +1,6 @@
 name: build
 description: Build the project
 inputs:
-  npm_token:
-    description: 'NPM token for private package access.'
-    required: true
   active_network_name:
     description: 'Network name to use when triger is merge.'
     required: true
@@ -43,9 +40,6 @@ runs:
         key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Authenticate with private NPM package
-      shell: bash
-      run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm_token }}" > ~/.npmrc
     - name: Add network to prod env variables
       shell: bash
       run: echo "PUBLIC_NETWORK_NAME=${{ env.NETWORK_NAME }}" >> .env.production
