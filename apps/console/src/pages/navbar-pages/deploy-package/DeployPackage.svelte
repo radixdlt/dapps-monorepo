@@ -133,9 +133,6 @@
 
 <style lang="scss">
   .account-picker {
-    p {
-      margin-bottom: 1rem;
-    }
     max-width: 25rem;
   }
   .card {

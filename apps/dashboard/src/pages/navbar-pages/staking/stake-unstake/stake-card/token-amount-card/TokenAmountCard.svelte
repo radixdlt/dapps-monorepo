@@ -124,11 +124,6 @@
         align-items: center;
         gap: var(--spacing-md);
         font-weight: var(--font-weight-bold-2);
-
-        img {
-          width: 1.5rem;
-          height: 1.5rem;
-        }
       }
     }
   }

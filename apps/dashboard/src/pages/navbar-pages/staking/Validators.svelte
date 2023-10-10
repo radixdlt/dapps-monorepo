@@ -206,10 +206,6 @@
 </ValidatorList>
 
 <style lang="scss">
-  .header {
-    display: flex;
-  }
-
   .title-header {
     max-width: 25rem;
   }
