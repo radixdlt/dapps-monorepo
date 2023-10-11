@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { fade, fly } from 'svelte/transition'
 
   export let open = true
@@ -34,7 +34,7 @@
     role="dialog"
     class="side-panel"
     bind:this={panel}
-    transition:fly={{ duration: 300, opacity: 1, x: 700 }}
+    transition:fly={{ duration: 300, opacity: 1, x: panel.clientWidth }}
   >
     <slot />
   </div>
