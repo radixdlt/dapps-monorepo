@@ -10,7 +10,10 @@
     input: { value: string }
   }>()
 
-  $: value = format(value)
+  $: {
+    value = format(value)
+    dispatch('input', { value })
+  }
 </script>
 
 <input
@@ -19,7 +22,7 @@
   {readonly}
   {maxlength}
   on:input={(e) => {
-    dispatch('input', { value: e.currentTarget.value })
+    value = e.currentTarget.value
   }}
 />
 <slot name="postfix" />
