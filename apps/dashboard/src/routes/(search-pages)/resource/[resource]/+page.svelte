@@ -17,11 +17,6 @@
   <Resource
     resource={Promise.resolve(data.resource)}
     associatedDapps={data.promises.associatedDapps}
-    redeemableTokens={data.promises.redeemableTokens.then((tokens) =>
-      tokens?.map((token) => ({
-        iconUrl: token.icon?.href,
-        name: token.name
-      }))
-    )}
+    redeemableTokens={data.promises.redeemableTokens}
   />
 </SearchPage>

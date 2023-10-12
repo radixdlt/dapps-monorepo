@@ -3,7 +3,7 @@
   import PoolUnitCard from '@components/pool-unit-card/PoolUnitCard.svelte'
   import type PoolUnits from './PoolUnits.svelte'
 
-  export let poolUnits: ComponentProps<PoolUnits>['poolUnits']
+  export let poolUnits: ComponentProps<PoolUnits>['poolData']
 </script>
 
 <div class="pool-units">

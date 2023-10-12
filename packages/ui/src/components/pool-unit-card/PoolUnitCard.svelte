@@ -13,7 +13,7 @@
     poolTokens: {
       name?: string
       icon?: URL
-      amount: BigNumber
+      redeemableAmount: BigNumber
     }[]
   }
 </script>
@@ -41,7 +41,7 @@
         <TokenIcon iconUrl={token.icon?.href} />
         {token.name}
       </div>
-      <div class="bold-text">{token.amount.toString()}</div>
+      <div class="bold-text">{token.redeemableAmount.toString()}</div>
     </div>
   {/each}
 </div>
