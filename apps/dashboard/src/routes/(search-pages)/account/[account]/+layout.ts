@@ -1,19 +1,100 @@
-import { getAccountDataNew } from '@api/utils/entities/resource'
+import {
+  getAccountDataNew,
+  transformFungibleResource
+} from '@api/utils/entities/resource'
 import type { LayoutLoad } from './$types'
 import { getValidators } from '@api/utils/entities/validator'
-import { getPoolUnitData, getPoolUnits } from '@api/utils/entities/pool-unit'
+import { getPoolUnits, type PoolUnit } from '@api/utils/entities/pool-unit'
 import {
   getStakedInfo,
   getUnstakeAndClaimInfo,
   type StakeInfo
 } from '@api/utils/staking'
 import BigNumber from 'bignumber.js'
-import { filter, map, pipe } from 'ramda'
+import { andThen, pipe } from 'ramda'
 import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
 import { handleGatewayResult } from '../../../../utils'
 import { handleLookupGatewayResult } from '../../utils'
+import {
+  getRedeemablePoolTokenAmount,
+  transformPool
+} from '@api/utils/entities/pool'
+import { callApi } from '@api/gateway'
+import { errorPage } from '../../../../stores'
 
 const ERROR_MSG = 'Failed to load account data.'
+
+const getPoolUnitData =
+  (stateVersion: number) => async (poolUnits: PoolUnit[]) => {
+    const poolAddresses = poolUnits.map(
+      (unit) => unit.metadata.standard.pool?.value
+    )
+
+    if (poolAddresses.some((a) => a === undefined)) {
+      errorPage.set({
+        message: ERROR_MSG
+      })
+
+      throw 'Pool not found.'
+    }
+
+    const poolEntities = await pipe(
+      () =>
+        callApi(
+          'getEntityDetailsVaultAggregated',
+          poolAddresses as string[],
+          undefined,
+          { state_version: stateVersion }
+        ),
+      handleGatewayResult((_) => ERROR_MSG)
+    )()
+
+    const pools = poolEntities.map(transformPool)
+
+    const poolTokens = await pipe(
+      () =>
+        callApi(
+          'getEntityDetailsVaultAggregated',
+          pools.flatMap((pool) => pool.metadata.standard.pool_resources!.value),
+          undefined,
+          { state_version: stateVersion }
+        ),
+      handleGatewayResult((_) => ERROR_MSG)
+    )()
+
+    return poolUnits.map((unit) => {
+      const pool = pools.find(
+        (pool) => pool.address === unit.metadata.standard.pool!.value
+      )!
+      const poolEntity = poolEntities.find(
+        (poolEntity) => poolEntity.address === pool.address
+      )!
+
+      return {
+        poolUnit: {
+          address: unit.address,
+          name: unit.metadata.standard.name?.value,
+          icon: unit.metadata.standard.icon_url?.value
+        },
+        poolTokens: pool.metadata.standard.pool_resources!.value.map(
+          (poolToken) => {
+            const token = transformFungibleResource(
+              poolTokens.find((token) => token.address === poolToken)!,
+              poolEntity.fungible_resources.items.find(
+                (fungible) => fungible.resource_address === poolToken
+              )!
+            )
+
+            return {
+              name: token.metadata.standard.name?.value,
+              icon: token.metadata.standard.icon_url?.value,
+              redeemableAmount: getRedeemablePoolTokenAmount(token, unit)
+            }
+          }
+        )
+      }
+    })
+  }
 
 export const load: LayoutLoad = ({ params }) => {
   const accountData = pipe(
@@ -28,6 +109,10 @@ export const load: LayoutLoad = ({ params }) => {
     () => getValidators(undefined, false, false),
     (result) => handleGatewayResult((_) => ERROR_MSG)(result)
   )()
+
+  const stateVersion = validatorResponse.then(
+    (response) => response.ledger_state.state_version
+  )
 
   const stakeInfo = Promise.all([validatorResponse, accountData])
     .then(
@@ -108,26 +193,20 @@ export const load: LayoutLoad = ({ params }) => {
       )
     })
 
-  const poolUnits = accountData
-    .then(({ fungible }) => getPoolUnits(fungible))
-    .then(
-      map((poolUnits) =>
-        handleGatewayResult((_) => ERROR_MSG)(getPoolUnitData(poolUnits))
-      )
+  const poolData = pipe(
+    () => Promise.all([accountData, stateVersion]),
+    andThen(([{ fungible }, stateVersion]) =>
+      pipe(() => getPoolUnits(fungible), getPoolUnitData(stateVersion))()
     )
-    .then(filter((poolUnit) => poolUnit !== undefined))
-    .then((poolUnits) => Promise.all(poolUnits))
-    .then((poolUnits) => poolUnits as NonNullable<(typeof poolUnits)[number]>[])
+  )()
 
   return {
     address: params.account,
     promises: {
-      stateVersion: validatorResponse.then(
-        (response) => response.ledger_state.state_version
-      ),
+      stateVersion,
       accountData,
       stakeInfo,
-      poolUnits
+      poolData
     }
   }
 }

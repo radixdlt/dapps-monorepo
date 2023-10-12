@@ -17,7 +17,7 @@
     }[]
   >
 
-  export let poolUnits: Promise<
+  export let poolData: Promise<
     {
       poolUnit: {
         name?: string
@@ -28,12 +28,12 @@
         | {
             name?: string
             icon?: URL
-            amount: BigNumber
+            redeemableAmount: BigNumber
           }[]
     }[]
   >
 
-  $: splitPoolUnits = poolUnits.then(
+  $: splitPoolUnits = poolData.then(
     (poolUnits) =>
       [
         poolUnits.slice(0, poolUnits.length / 2),
@@ -106,7 +106,7 @@
 
   <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
     {#if contentWidth < 650}
-      <PoolUnitCards {poolUnits} />
+      <PoolUnitCards poolUnits={poolData} />
     {:else}
       <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[0])} />
       <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[1])} />

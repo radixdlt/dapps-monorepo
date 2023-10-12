@@ -7,5 +7,5 @@
 
 <PoolUnits
   stakeInfo={data.promises.stakeInfo}
-  poolUnits={data.promises.poolUnits}
+  poolData={data.promises.poolData}
 />
