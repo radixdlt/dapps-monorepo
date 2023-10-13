@@ -81,11 +81,11 @@
   }
 </script>
 
-{#await filterOutClaimNfts(nonFungibleResources)}
+{#await Promise.all([filterOutClaimNfts(nonFungibleResources), data])}
   {#each Array(3) as _}
     <NFTAccordion data={new Promise(() => {})} />
   {/each}
-{:then nonFungibleResources}
+{:then [nonFungibleResources, [stateVersion, accountAddress]]}
   {#each nonFungibleResources as { resource, nonFungibles, ownedNonFungibles, nextCursor, vaultAddress }}
     <NFTAccordion
       data={{
@@ -97,10 +97,21 @@
         totalCount: Number(resource.totalSupply)
       }}
     >
-      {#await data then [stateVersion, accountAddress]}
-        <div bind:clientWidth={width}>
-          <div class="nft-cards" class:center={width < 500}>
-            {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
+      <div bind:clientWidth={width}>
+        <div class="nft-cards" class:center={width < 500}>
+          {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
+            <NonFungibleTokenCard
+              imgUrl={key_image_url?.value}
+              name={name?.value}
+              {address}
+              on:click={() =>
+                dispatch('click-nft', {
+                  address: address.nonFungibleAddress
+                })}
+            />
+          {/each}
+          {#if loadedLaterNfts[resource.address]}
+            {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
               <NonFungibleTokenCard
                 imgUrl={key_image_url?.value}
                 name={name?.value}
@@ -111,39 +122,26 @@
                   })}
               />
             {/each}
-            {#if loadedLaterNfts[resource.address]}
-              {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
-                <NonFungibleTokenCard
-                  imgUrl={key_image_url?.value}
-                  name={name?.value}
-                  {address}
-                  on:click={() =>
-                    dispatch('click-nft', {
-                      address: address.nonFungibleAddress
-                    })}
-                />
-              {/each}
-            {/if}
-          </div>
+          {/if}
         </div>
+      </div>
 
-        <InfiniteScroll
-          on:thresholdReached={() => {
-            fetchMore({
-              stateVersion,
-              componentAddress: accountAddress,
-              cursor: nextCursor,
-              vaultAddress,
-              resourceAddress: resource.address
-            })
-          }}
-        />
-        {#if isLoading}
-          <div class="loader-spacing">
-            <SkeletonLoader />
-          </div>
-        {/if}
-      {/await}
+      <InfiniteScroll
+        on:thresholdReached={() => {
+          fetchMore({
+            stateVersion,
+            componentAddress: accountAddress,
+            cursor: nextCursor,
+            vaultAddress,
+            resourceAddress: resource.address
+          })
+        }}
+      />
+      {#if isLoading}
+        <div class="loader-spacing">
+          <SkeletonLoader />
+        </div>
+      {/if}
     </NFTAccordion>
   {/each}
 {/await}

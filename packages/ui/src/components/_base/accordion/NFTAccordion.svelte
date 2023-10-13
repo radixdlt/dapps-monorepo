@@ -41,7 +41,7 @@
           {#await _data}
             <SkeletonLoader width={100} height={20} />
           {:then { name }}
-            {name}
+            {name ?? ''}
           {/await}
         </span>
         <div class:address-spacing={hasName}>
