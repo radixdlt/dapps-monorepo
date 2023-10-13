@@ -392,18 +392,18 @@ const appendOwner =
   }
 
 export const getValidators = <
-  T extends string | undefined,
-  K extends boolean,
-  V extends boolean
+  WithOwner extends string | undefined,
+  WithUptime extends boolean,
+  WithStakeUnits extends boolean
 >(
-  validatorOwnerBadge: T,
-  withUptime: V,
-  withStakeUnits: K
+  validatorOwnerBadge: WithOwner,
+  withUptime: WithUptime,
+  withStakeUnits: WithStakeUnits
 ) =>
   callApi('getAllValidatorsWithLedgerState').andThen(
-    transformValidatorResponse<T, typeof withStakeUnits, typeof withUptime>(
+    transformValidatorResponse<WithOwner, WithUptime, WithStakeUnits>(
       validatorOwnerBadge,
-      withStakeUnits,
-      withUptime
+      withUptime,
+      withStakeUnits
     )
   )
