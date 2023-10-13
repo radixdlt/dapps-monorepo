@@ -162,10 +162,14 @@ function calculateFee(
 }
 
 export const transformValidatorResponse =
-  <T extends string | undefined, K extends boolean, V extends boolean>(
-    validatorOwnerBadgeResource: T,
-    withStakeUnits: K,
-    withUptime: V
+  <
+    WithOwner extends string | undefined,
+    WithUptime extends boolean,
+    WithStakeUnits extends boolean
+  >(
+    validatorOwnerBadgeResource: WithOwner,
+    withUptime: WithUptime,
+    withStakeUnits: WithStakeUnits
   ) =>
   ({
     aggregatedEntities,
@@ -175,7 +179,11 @@ export const transformValidatorResponse =
     ledger_state: LedgerState
   }): ResultAsync<
     {
-      validators: Validator<T extends string ? true : false, K, V>[]
+      validators: Validator<
+        WithOwner extends string ? true : false,
+        WithUptime,
+        WithStakeUnits
+      >[]
       ledger_state: LedgerState
     },
     GatewayError
@@ -214,9 +222,9 @@ export const transformValidatorResponse =
 
         return {
           validators: returnedValidators as Validator<
-            T extends string ? true : false,
-            K,
-            V
+            WithOwner extends string ? true : false,
+            WithUptime,
+            WithStakeUnits
           >[],
           ledger_state
         }
