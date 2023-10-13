@@ -51,8 +51,8 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    width: 44px;
-    height: 44px;
+    width: var(--size, 44px);
+    height: var(--size, 44px);
     border-radius: 50%;
     overflow: hidden;
     display: flex;

@@ -135,7 +135,8 @@ export const getTransactionDetails = (
       createdEntities:
         ((res.transaction.receipt?.state_updates as any)
           ?.new_global_entities as any[]) || [],
-      stateVersion: res.transaction.state_version
+      stateVersion: res.transaction.state_version,
+      balanceChanges: res.transaction.balance_changes
     }))
 }
 

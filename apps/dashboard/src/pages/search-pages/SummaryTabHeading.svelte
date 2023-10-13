@@ -20,18 +20,26 @@
   $: symbol = entity.then(
     (entity) => (entity.metadata.standard as any).symbol?.value as string
   )
+
+  $: displayName = entity.then((entity) =>
+    entity.type === 'resource' ? entity.displayName : undefined
+  )
 </script>
 
 <div class="title">
-  {#await Promise.all([iconUrl, name, symbol])}
+  {#await Promise.all([iconUrl, name, symbol, displayName])}
     <SkeletonLoader />
-  {:then [iconUrl, name, symbol]}
+  {:then [iconUrl, name, symbol, displayName]}
     {#if iconUrl}
       <NftImage url={iconUrl.href} />
     {/if}
     {#if name}
       <h2>
-        {`${name} ${symbol ? `(${symbol})` : ''}`}
+        {#if displayName}
+          {displayName}
+        {:else}
+          {`${name} ${symbol ? `(${symbol})` : ''}`}
+        {/if}
       </h2>
     {/if}
   {/await}
