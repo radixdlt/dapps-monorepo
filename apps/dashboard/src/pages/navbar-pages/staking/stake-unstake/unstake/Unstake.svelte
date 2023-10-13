@@ -72,7 +72,7 @@
     }[] = []
 
     const validators = (
-      await getValidators(undefined, true, false)
+      await getValidators(undefined, false, true)
     )._unsafeUnwrap().validators
 
     stakes.forEach((stake, i) => {
