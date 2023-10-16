@@ -18,6 +18,7 @@
       on:unchecked={() => {
         $selectedValidators = $selectedValidators
       }}
+      disabled={!validator.acceptsStake}
       --label-color="var(--theme-subtext)"
     >
       {text}

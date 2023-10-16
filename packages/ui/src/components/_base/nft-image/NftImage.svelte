@@ -8,7 +8,7 @@
   let imageNotFound = false
   let imageLoaded = false
 
-  const safeUrl = getSafeImageUrl({
+  $: safeUrl = getSafeImageUrl({
     url: sanitizeHtml(url),
     width: 1024,
     height: 1024

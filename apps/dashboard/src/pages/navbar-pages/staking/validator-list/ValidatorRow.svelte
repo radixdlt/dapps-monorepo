@@ -27,6 +27,7 @@
 
     <ResponsiveTableCell>
       <div class="name-and-icon" class:left-padded={!$connected}>
+        <NftImage url={validator.metadata.standard.icon_url?.value.href} />
         <div class="dotted-overflow" style:max-width="15ch">
           {validator.metadata.standard.name?.value ?? ''}
         </div>
@@ -55,7 +56,7 @@
 
     <ResponsiveTableCell>
       <div class="apy apy-text-box no-overflow bold">
-        {truncateNumber(validator.apy)}%
+        {validator.rank <= 100 ? `${truncateNumber(validator.apy)}%` : 'N/A'}
         <span class="subtext">per year</span>
       </div>
     </ResponsiveTableCell>
@@ -68,7 +69,9 @@
 
     <ResponsiveTableCell>
       <div class="uptime apy-text-box no-overflow bold">
-        {truncateNumber(validator[selectedUptime])}%
+        {validator[selectedUptime] > 0
+          ? `${truncateNumber(validator[selectedUptime])}%`
+          : 'Not Measurable'}
       </div>
     </ResponsiveTableCell>
 

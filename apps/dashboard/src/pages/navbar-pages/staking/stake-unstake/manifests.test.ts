@@ -5,7 +5,6 @@ import {
   getStakeManifest,
   getUnstakeManifest
 } from './manifests'
-import { RadixNetwork } from '@common/gateway-sdk'
 
 const fixtures = [
   {
@@ -70,7 +69,7 @@ describe('staking manifests', () => {
               kind: 'String',
               value: manifest
             },
-            RadixNetwork.RCnetV2
+            13
           )
         ).kind
       ).toEqual('Valid')

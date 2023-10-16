@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
   export type TransformedValidator = Validator<true, true, true> &
     Validator<unknown, true, unknown>['uptimePercentages'] & {
+      id: string
       feePercentage: number
     }
 </script>
@@ -37,7 +38,8 @@
       '6months': validator.uptimePercentages['6months'],
       '1year': validator.uptimePercentages['1year'],
       alltime: validator.uptimePercentages['alltime'],
-      feePercentage: validator.fee.percentage
+      feePercentage: validator.fee.percentage,
+      id: validator.address
     }))
   )
 
@@ -156,7 +158,12 @@
 </script>
 
 {#await transformedValidators}
-  <BasicTable {columns} entries={Array(15).fill(undefined)}>
+  <BasicTable
+    columns={[]}
+    entries={Array(15)
+      .fill(undefined)
+      .map((_, i) => ({ id: i.toString() }))}
+  >
     <svelte:fragment slot="row">
       <SkeletonRow columns={columns.length} />
     </svelte:fragment>

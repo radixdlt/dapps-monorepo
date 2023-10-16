@@ -42,11 +42,12 @@
   )
 
   const entries = stakeInfo.then((stakeInfo) =>
-    stakeInfo.map((info) => ({
+    stakeInfo.map((info, i) => ({
       validatorName: info.validatorName,
       staking: info.staking.toString(),
       unstaking: info.unstaking.toString(),
-      readyToClaim: info.readyToClaim.toString()
+      readyToClaim: info.readyToClaim.toString(),
+      id: i.toString()
     }))
   )
 

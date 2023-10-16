@@ -12,6 +12,7 @@
   export let readyToClaim: ComponentProps<StakingCard>['readyToClaim']
   export let claimText: ComponentProps<StakingCard>['claimText']
   export let validatorAddress: Promise<string>
+  export let acceptsStake: Promise<boolean>
 
   const isUnstaking = writable(false)
 
@@ -34,11 +35,13 @@
   on:click={() => dispatchEvent('claim')}
 >
   <div slot="staking-section" class="stake-unstake">
-    <button
-      class="stake-unstake-button"
-      on:click={() => dispatchEvent('add-stake')}>Add Stake</button
-    >
-    {#await staked then staked}
+    {#await Promise.all([staked, acceptsStake]) then [staked, acceptsStake]}
+      <button
+        class="stake-unstake-button"
+        class:disabled={!acceptsStake}
+        disabled={!acceptsStake}
+        on:click={() => dispatchEvent('add-stake')}>Add Stake</button
+      >
       {#if new BigNumber(staked).gt(0)}
         <button
           class="stake-unstake-button"
@@ -80,5 +83,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
+  }
+
+  .disabled {
+    cursor: not-allowed;
+    pointer-events: all;
   }
 </style>

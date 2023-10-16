@@ -61,7 +61,8 @@
         nonStandard: [],
         all: [],
         explicit: []
-      }
+      },
+      rank: i + 1
     }))
 </script>
 

@@ -26,7 +26,9 @@
   <div class="picker">
     <SimplePicker {options} bind:selected />
   </div>
-  {truncateNumber(uptimes[selected.value])}%
+  {uptimes[selected.value] > 0
+    ? `${truncateNumber(uptimes[selected.value])}%`
+    : 'Not Measurable'}
 </div>
 
 <style>

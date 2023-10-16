@@ -6,7 +6,7 @@
   export let entity: Promise<Entity>
 
   $: iconUrl = entity.then(
-    (entity) => (entity.metadata.standard as any).icon_url?.value as string
+    (entity) => (entity.metadata.standard as any).icon_url?.value as URL
   )
 
   $: name = entity.then(
@@ -27,7 +27,7 @@
     <SkeletonLoader />
   {:then [iconUrl, name, symbol]}
     {#if iconUrl}
-      <NftImage url={iconUrl} />
+      <NftImage url={iconUrl.href} />
     {/if}
     {#if name}
       <h2>

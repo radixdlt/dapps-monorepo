@@ -3,6 +3,7 @@
   import CheckedIcon from '@icons/checked-checkbox.svg'
 
   export let checked = false
+  export let disabled = false
 
   const dispatch = createEventDispatcher<{
     checked: undefined
@@ -15,12 +16,14 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div on:click|stopPropagation={handleOnClick} class="wrapper">
+<button {disabled} on:click|stopPropagation={handleOnClick} class="wrapper">
   <label class="label">
     <input
+      {disabled}
       class="checkbox"
       type="checkbox"
       class:checked
+      class:disabled
       bind:checked
       style={checked
         ? `background: center / contain no-repeat url(${CheckedIcon});`
@@ -28,7 +31,7 @@
     />
     <slot />
   </label>
-</div>
+</button>
 
 <style lang="scss">
   $border-width: 2px;
@@ -39,9 +42,9 @@
     flex-direction: column;
     gap: var(--spacing-sm);
     width: fit-content;
+    height: fit-content;
   }
   .label {
-    cursor: pointer;
     display: flex;
     align-items: center;
     font-weight: var(--font-weight-bold-2);
@@ -57,9 +60,15 @@
     border-radius: var(--border-radius-sm);
     margin: 0 var(--spacing-sm) 0 0;
     align-self: center;
+    pointer-events: all;
   }
 
   .checked {
     border: none;
+  }
+
+  .disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 </style>
