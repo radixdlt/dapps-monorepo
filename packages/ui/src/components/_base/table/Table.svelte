@@ -64,7 +64,7 @@
     return [...entries].sort((a, b) => sortFn(a, b, direction))
   }
 
-  export type Entry = { [key: string | number | symbol]: any }
+  export type Entry = { id: string; [key: string | number | symbol]: any }
 
   export type TablePage<T> = {
     next_cursor?: string | null
@@ -137,6 +137,7 @@
     const column = columns.find((c) => c?.id === defaultSortedColumn)!
     sortColumn(column, columns.indexOf(column))
   }
+  $: console.log(entries)
 </script>
 
 <table>
@@ -158,7 +159,7 @@
   </thead>
 
   <tbody>
-    {#each lastSortedBy ? sortedEntries : entries as entry}
+    {#each lastSortedBy ? sortedEntries : entries as entry (entry.id)}
       <slot name="empty-row" {entry}>
         <tr>
           <slot name="row" {entry} />
