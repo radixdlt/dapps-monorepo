@@ -69,7 +69,9 @@
 
     <ResponsiveTableCell>
       <div class="uptime apy-text-box no-overflow bold">
-        {truncateNumber(validator[selectedUptime])}%
+        {validator[selectedUptime] > 0
+          ? `${truncateNumber(validator[selectedUptime])}%`
+          : 'Not Measurable'}
       </div>
     </ResponsiveTableCell>
 
