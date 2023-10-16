@@ -56,7 +56,7 @@
 
     <ResponsiveTableCell>
       <div class="apy apy-text-box no-overflow bold">
-        {truncateNumber(validator.apy)}%
+        {validator.rank <= 100 ? `${truncateNumber(validator.apy)}%` : 'N/A'}
         <span class="subtext">per year</span>
       </div>
     </ResponsiveTableCell>

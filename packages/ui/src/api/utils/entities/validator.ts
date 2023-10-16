@@ -24,7 +24,6 @@ export type Validator<
   WithStakeUnits = false
 > = _Entity<'validator', ['name', 'icon_url', 'description', 'info_url']> & {
   totalStakeInXRD: BigNumber
-  ownerStake: BigNumber
   fee: {
     percentage: number
     tooltip?: string
@@ -33,6 +32,7 @@ export type Validator<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
+  rank: number
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
   (WithUptime extends true
     ? {
@@ -236,36 +236,40 @@ const transformValidators = async (
   aggregatedEntities: ValidatorCollectionItem[],
   ledger_state: LedgerState
 ): Promise<Validator[]> => {
-  return aggregatedEntities.map((validator, i) => {
-    const state: any = validator.state || {}
+  return aggregatedEntities
+    .sort((v1, v2) =>
+      new BigNumber(v2.stake_vault.balance).comparedTo(
+        new BigNumber(v1.stake_vault.balance)
+      )
+    )
+    .map((validator, i) => {
+      const state: any = validator.state || {}
 
-    const stakeUnitResourceAddress = state.stake_unit_resource_address as string
+      const stakeUnitResourceAddress =
+        state.stake_unit_resource_address as string
 
-    let totalStakeUnits = new BigNumber(0)
-    let ownerStake = new BigNumber(0)
+      const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
 
-    const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
-
-    return {
-      type: 'validator' as const,
-      address: validator.address,
-      fee: calculateFee(validator, ledger_state.epoch),
-      percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-      stakeUnitResourceAddress,
-      unstakeClaimResourceAddress: state.claim_token_resource_address as string,
-      totalStakeUnits,
-      totalStakeInXRD,
-      metadata: transformMetadata(validator, [
-        'name',
-        'icon_url',
-        'description',
-        'tags',
-        'info_url'
-      ]),
-      ownerStake,
-      acceptsStake: state.accepts_delegated_stake
-    }
-  })
+      return {
+        type: 'validator' as const,
+        address: validator.address,
+        fee: calculateFee(validator, ledger_state.epoch),
+        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
+        stakeUnitResourceAddress,
+        unstakeClaimResourceAddress:
+          state.claim_token_resource_address as string,
+        totalStakeInXRD,
+        metadata: transformMetadata(validator, [
+          'name',
+          'icon_url',
+          'description',
+          'tags',
+          'info_url'
+        ]),
+        rank: i + 1,
+        acceptsStake: state.accepts_delegated_stake
+      }
+    })
 }
 
 const appendUptime =
