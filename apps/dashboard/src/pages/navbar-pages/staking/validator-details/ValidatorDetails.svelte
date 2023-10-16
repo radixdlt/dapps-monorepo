@@ -97,6 +97,7 @@
         )}
         claimText="Claim"
         validatorAddress={validator.then((v) => v.address)}
+        acceptsStake={validator.then((v) => v.acceptsStake)}
         on:add-stake
         on:unstake
         on:claim
