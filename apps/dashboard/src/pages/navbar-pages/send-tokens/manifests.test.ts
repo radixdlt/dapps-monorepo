@@ -1,9 +1,7 @@
 import { RadixEngineToolkit } from '@common/ret'
 import { getSendNFTManifest, getSendTokenManifest } from './manifests'
-import { RadixNetwork } from '@common/gateway-sdk'
 
 describe('send tokens manifests', () => {
-  const NETWORK_ID = RadixNetwork.RCnetV2
   it('should create a send tokens manifest', async () => {
     const stringManifest = getSendTokenManifest(
       'resource_tdx_d_1tkx7f4tdf9zlqnhvtjrftddxvpjtvwqshjw5p9v0qslka44un68w6k',
@@ -17,7 +15,7 @@ describe('send tokens manifests', () => {
         kind: 'String',
         value: stringManifest
       },
-      NETWORK_ID
+      13
     )
 
     await expect(manifest.kind).toEqual('Valid')
@@ -46,7 +44,7 @@ describe('send tokens manifests', () => {
         kind: 'String',
         value: stringManifest
       },
-      NETWORK_ID
+      13
     )
 
     await expect(manifest.kind).toEqual('Valid')
