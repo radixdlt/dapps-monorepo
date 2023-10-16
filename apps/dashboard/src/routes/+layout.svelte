@@ -28,6 +28,7 @@
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
   import { callApi } from '@api/gateway'
   import { errorPage } from '../stores'
+  import { NETWORK_CONFIG } from '@constants'
 
   let mounted = false
 
@@ -126,6 +127,9 @@
 </svelte:head>
 
 <Theme theme="light">
+  {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
+    <div class="banner">For development only. Not usable on Radix mainnet.</div>
+  {/if}
   {#if mounted}
     <Layout {hideSearch} {routes}>
       <!-- svelte-ignore a11y-missing-content -->
@@ -174,5 +178,11 @@
     height: 1.5rem;
     display: inline-flex;
     margin-left: var(--spacing-lg);
+  }
+
+  .banner {
+    background: var(--color-alert);
+    padding: var(--spacing-md);
+    text-align: center;
   }
 </style>
