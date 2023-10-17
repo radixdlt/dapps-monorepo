@@ -254,7 +254,7 @@ jobs:
           dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
           snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
           snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
-          image: ${{ needs.setup-tags.outputs.tag-with-network }}
+          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           target_ref: ${{ github.ref_name }}
 
   sonar:
