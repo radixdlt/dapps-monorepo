@@ -1,0 +1,7 @@
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="control_point_duplicate">
+<path id="Vector" d="M17 8C12.04 8 8 12.04 8 17C8 21.96 12.04 26 17 26C21.96 26 26 21.96 26 17C26 12.04 21.96 8 17 8ZM17 24C13.14 24 10 20.86 10 17C10 13.14 13.14 10 17 10C20.86 10 24 13.14 24 17C24 20.86 20.86 24 17 24Z" fill="#8A8FA4"/>
+<path id="Union" opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M17 14.25H14V15.75H17L17 16L14 19L17 22V19.75H20V18.25H17L17 18L20 15L17 12V14.25Z" fill="#8A8FA4"/>
+<circle id="Ellipse 202" opacity="0.5" cx="17" cy="17" r="12" stroke="#CED0D6" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 4"/>
+</g>
+</svg>
