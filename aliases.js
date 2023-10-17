@@ -18,8 +18,8 @@ module.exports.aliases = () => {
     '@images': `${uiRoot}/static/images`,
     '@fonts': `${uiRoot}/src/fonts.css`,
     '@networks': `${uiRoot}/src/network`,
+    '@featureFlags': `${uiRoot}/src/feature-flags`,
 
-    '@dashboard-pages': `${dashboardRoot}/src/pages`,
-    '@featureFlags': `${dashboardRoot}/src/feature-flags`
+    '@dashboard-pages': `${dashboardRoot}/src/pages`
   }
 }
