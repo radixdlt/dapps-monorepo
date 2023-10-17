@@ -78,14 +78,14 @@
     border-top: none;
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     background: var(--theme-surface-1);
-    padding: var(--spacing-md) 0;
     box-shadow: var(--shadow);
+    height: 2.5rem;
   }
 
   .staking-box-grid {
     display: grid;
     grid: 1fr / auto auto auto auto;
-    margin-left: 1.5rem;
+    margin-left: 1rem;
     gap: var(--spacing-lg);
     align-items: center;
   }
