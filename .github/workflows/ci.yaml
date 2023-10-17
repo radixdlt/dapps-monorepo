@@ -24,10 +24,8 @@ on:
           - hammunet
           - gilganet
           - mardunet
-          - zabanet
           - stokenet
           - mainnet
-          - rcnet-v3
 
 env:
   active_network: 'stokenet'
@@ -536,54 +534,6 @@ jobs:
       github_environment: mardunet
       app_name: 'dashboard'
       step_name: 'deploy-mardunet'
-
-  deploy_rcnet_v3:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'rcnet-v3' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: zabanet
-      restart_pods: false
-      namespace: dashboard-zabanet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-zabanet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=zabanet
-      github_environment: zabanet
-      app_name: 'dashboard'
-      step_name: 'deploy-rcnet-v3'
-
-  deploy_zabanet:
-    if: >
-      ( github.event.inputs.ENVIRONMENT_NAME == 'zabanet' && github.event_name == 'workflow_dispatch' )
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
-    needs:
-      - push-dashboard
-      - push-storybook
-      - setup-tags
-    with:
-      env_name: zabanet-internal
-      namespace: dashboard-zabanet-internal
-      create_subns: false
-      restart_pods: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-zabanet-internal-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=zabanet-internal
-      github_environment: zabanet-internal
-      app_name: 'dashboard'
-      step_name: 'deploy-zabanet'
 
   deploy_stokenet:
     if: >
