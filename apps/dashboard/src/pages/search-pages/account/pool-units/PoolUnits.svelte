@@ -86,34 +86,43 @@
   let contentWidth: number
 </script>
 
-<Accordion isOpened={true}>
-  <div class="radix-staking-header" slot="header">
-    <TokenIcon isXrd />
-    <span class="header-text">Radix Network XRD Stake</span>
-  </div>
+{#await entries}
+  <SkeletonLoader />
+{:then entries}
+  <Accordion isOpened={true}>
+    <div class="radix-staking-header" slot="header">
+      <TokenIcon isXrd />
+      <span class="header-text">Radix Network XRD Stake</span>
+    </div>
 
-  <svelte:fragment slot="content">
-    {#await entries}
-      <SkeletonLoader />
-    {:then entries}
+    <svelte:fragment slot="content">
       {#if entries.length > 0}
         <BasicTable {entries} {columns} />
+      {:else}
+        <div class="no-stake">
+          This account hasn't staked to any validators.
+        </div>
       {/if}
-    {/await}
-  </svelte:fragment>
-</Accordion>
-<Accordion isOpened={true}>
-  <div class="header-text" slot="header">Pool Units</div>
+    </svelte:fragment>
+  </Accordion>
+{/await}
 
-  <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
-    {#if contentWidth < 650}
-      <PoolUnitCards poolUnits={poolData} />
-    {:else}
-      <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[0])} />
-      <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[1])} />
-    {/if}
-  </div></Accordion
->
+{#await Promise.all([poolData, splitPoolUnits])}
+  <SkeletonLoader />
+{:then [poolData, splitPoolUnits]}
+  <Accordion isOpened={true}>
+    <div class="header-text" slot="header">Pool Units</div>
+
+    <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
+      {#if contentWidth < 650}
+        <PoolUnitCards poolUnits={poolData} />
+      {:else}
+        <PoolUnitCards poolUnits={splitPoolUnits[0]} />
+        <PoolUnitCards poolUnits={splitPoolUnits[1]} />
+      {/if}
+    </div>
+  </Accordion>
+{/await}
 
 <style>
   .radix-staking-header {
@@ -131,5 +140,12 @@
     display: flex;
     gap: var(--spacing-2xl);
     justify-content: stretch;
+  }
+
+  .no-stake {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold-1);
+    color: var(--color-gray-2);
+    padding: var(--spacing-xl);
   }
 </style>
