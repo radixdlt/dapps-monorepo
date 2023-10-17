@@ -7,9 +7,7 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   MARDUNET: 'mardunet',
-  ZABANET: 'zabanet',
-  STOKENET: 'stokenet',
-  RCNETV3: 'rcnet-v3'
+  STOKENET: 'stokenet'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -42,22 +40,6 @@ export const NETWORK_CONFIG = {
     url: 'https://mardunet-gateway.radixdlt.com',
     consoleDappAddress: 'account_tdx_24_thisdummyvalue12345',
     dashboardDappAddress: 'account_tdx_24_thisdummyvalue12345'
-  },
-  [Network.ZABANET]: {
-    id: 14,
-    url: 'https://zabanet-gateway.radixdlt.com',
-    consoleDappAddress:
-      'account_tdx_e_12yw8fmgdt7w3xapc22389t8vuzr9yxgvlvrn9zmnkyg6zr42t5han6',
-    dashboardDappAddress:
-      'account_tdx_e_12978f5k05j63le94deyya95rxwsrd26mdstvxctudl3hxjgjqhksrj'
-  },
-  [Network.RCNETV3]: {
-    id: 14,
-    url: 'https://rcnet-v3.radixdlt.com',
-    consoleDappAddress:
-      'account_tdx_e_12yw8fmgdt7w3xapc22389t8vuzr9yxgvlvrn9zmnkyg6zr42t5han6',
-    dashboardDappAddress:
-      'account_tdx_e_12978f5k05j63le94deyya95rxwsrd26mdstvxctudl3hxjgjqhksrj'
   },
   [Network.STOKENET]: {
     id: 2,

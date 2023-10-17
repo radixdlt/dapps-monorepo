@@ -12,10 +12,8 @@ environments:
   hammunet: {}
   gilganet: {}
   mardunet: {}
-  zabanet: {}
   stokenet: {}
   mainnet: {}
-  zabanet-internal: {}
 repositories:
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
