@@ -11,6 +11,7 @@
     "build:prod": "vite build --mode production",
     "package": "svelte-kit package",
     "prepare": "svelte-kit sync",
+    "svelte:sync": "svelte-kit sync",
     "preview": "vite preview",
     "svelte:check": "svelte-check --tsconfig ./tsconfig.svelte.json --compiler-warnings \"css-unused-selector:ignore\" \"a11y-click-events-have-key-events:ignore\"",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

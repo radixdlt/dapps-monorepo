@@ -2,11 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": ["db:generate"],
+      "dependsOn": ["db:generate", "^svelte:sync"],
       "outputs": [".svelte-kit/**"]
     },
     "build:prod": {
-      "dependsOn": ["db:generate"],
+      "dependsOn": ["db:generate", "^svelte:sync"],
       "outputs": [".svelte-kit/**"]
     },
     "build:storybook": {
@@ -20,6 +20,7 @@
     "coverage": {
       "dependsOn": ["db:generate"]
     },
+    "svelte:sync": {},
     "prepare": {},
     "lint": {},
     "dev": {
