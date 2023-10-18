@@ -7,7 +7,7 @@ import { map, pipe } from 'ramda'
 import type {
   LedgerStateSelector,
   StateEntityDetailsOptions
-} from '@radixdlt/radix-dapp-toolkit'
+} from '@common/rdt'
 import { handleGatewayResult } from '../../utils'
 
 export const getDappDefinitionData = ({

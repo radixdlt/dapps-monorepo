@@ -4,11 +4,13 @@ on:
   push:
     paths-ignore:
       - 'apps/dashboard/**'
+      - 'apps/sandbox/**'
     branches:
       - main
   pull_request:
     paths-ignore:
       - 'apps/dashboard/**'
+      - 'apps/sandbox/**'
   release:
     types:
       - published
