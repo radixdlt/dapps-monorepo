@@ -72,7 +72,7 @@ jobs:
         run: npm run db:generate
 
       - name: Lint
-        run: npm run lint
+        run: npx turbo run lint --filter=dashboard
 
       - name: Prettier
         run: npx turbo run prettier --filter=dashboard

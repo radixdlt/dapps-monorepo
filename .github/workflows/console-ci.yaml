@@ -69,7 +69,7 @@ jobs:
           release_network_name: ${{ env.release_network }}
 
       - name: Lint
-        run: npm run lint
+        run: npx turbo run lint --filter=console
 
       - name: Prettier
         run: npx turbo run prettier --filter=console
