@@ -4,7 +4,7 @@ FROM oven/bun:1.0.6 AS base
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 ARG NETWORK_NAME
 
-RUN apt-get update && apt-get install -y libc6 curl openssl
+RUN apt-get update && apt-get install -y libc6 openssl
 COPY --from=node:18 /usr/local/bin/node /usr/local/bin/node
 
 FROM base AS dashboard
