@@ -4,12 +4,20 @@ module.exports = {
   extends: ['plugin:storybook/recommended', 'prettier'],
   overrides: [
     {
-      files: ["*.svelte"],
+      files: ['*.svelte'],
       processor: 'svelte3/svelte3'
-    },
+    }
   ],
   settings: {
     'svelte3/typescript': () => require('typescript')
-  }
-};
-
+  },
+  ignorePatterns: [
+    'node_modules/',
+    'dist/',
+    '.history/',
+    'coverage/',
+    '.husky/',
+    '.vscode/',
+    'vite.config.ts'
+  ]
+}

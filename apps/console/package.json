@@ -20,13 +20,14 @@
     "test:watch": "vitest",
     "prettier": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --check . ../../packages",
     "prettier:fix": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --write --check . ../../packages",
+    "lint": "eslint --cache --no-error-on-unmatched-pattern . ../packages/ui",
+    "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern . ../packages/ui",
     "coverage": "vitest run --coverage",
     "update:gateway": "ts-node --esm ./scripts/update-gateway.ts",
     "db:migrate:dev": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push --skip-generate",
-    "ui": "*"
+    "db:push": "prisma db push --skip-generate"
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^10.1.0",
@@ -88,7 +89,8 @@
     "typescript": "^5.1.6",
     "vite": "^4.2.1",
     "vitest": "^0.32.0",
-    "vitest-mock-extended": "^1.1.3"
+    "vitest-mock-extended": "^1.1.3",
+    "eslint-config-custom": "*"
   },
   "type": "module",
   "dependencies": {
