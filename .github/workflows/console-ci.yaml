@@ -68,6 +68,9 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
 
+      - name: Svelte sync
+        run: bunx turbo run svelte:sync
+        
       - name: Turbo Worfkflow
         run: bunx turbo run lint prettier coverage svelte:check --filter=console
 

@@ -18,7 +18,7 @@
     "prettier": {},
     "prettier:fix": {},
     "coverage": {
-      "dependsOn": ["db:generate"]
+      "dependsOn": ["db:generate", "^svelte:sync"]
     },
     "svelte:sync": {},
     "prepare": {},
