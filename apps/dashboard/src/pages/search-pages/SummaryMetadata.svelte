@@ -7,6 +7,8 @@
   import Tags from '@components/_base/tags/Tags.svelte'
   import Row from '@components/info-box/Row.svelte'
   import type { ComponentProps } from 'svelte'
+  import Behaviors from './Behaviors.svelte'
+  import type { Resource } from '@api/utils/entities/resource'
 
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
@@ -17,6 +19,7 @@
       iconUrl: string
     }[]
   > = Promise.resolve([])
+  export let behaviors: Promise<Resource['behaviors']> | undefined = undefined
   export let redeemableTokens: Promise<
     | {
         iconUrl?: string
@@ -65,6 +68,12 @@
         {#if tokens.length > 0}
           <RedeemableTokens {tokens} />
         {/if}
+      {/if}
+    {/await}
+
+    {#await behaviors then behaviors}
+      {#if behaviors}
+        <Behaviors {behaviors} />
       {/if}
     {/await}
   </svelte:fragment>
