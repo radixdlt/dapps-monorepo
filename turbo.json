@@ -16,6 +16,7 @@
     "svelte:check": {},
     "format": {},
     "prettier": {},
+    "prettier:fix": {},
     "coverage": {},
     "prepare": {},
     "lint": {},

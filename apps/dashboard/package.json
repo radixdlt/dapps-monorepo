@@ -18,6 +18,8 @@
     "e2etest": "cypress run",
     "test": "vitest run",
     "test:watch": "vitest",
+    "prettier": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --check . ../../packages",
+    "prettier:fix": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --write --check . ../../packages",
     "coverage": "vitest run --coverage",
     "update:gateway": "ts-node --esm ./scripts/update-gateway.ts",
     "db:migrate:dev": "prisma migrate dev",
