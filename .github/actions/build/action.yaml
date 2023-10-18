@@ -37,4 +37,4 @@ runs:
         echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
     - name: Install dependencies
       shell: bash
-      run: bun install --ignore-scripts --frozen-lockfile
+      run: bun install --ignore-scripts

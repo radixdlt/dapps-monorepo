@@ -75,7 +75,7 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           start: bun run dev:dashboard
-          install-command: bun --frozen-lockfile --ignore-scripts
+          install-command: bun --ignore-scripts
           wait-on: http://localhost:5173
           project: ./apps/dashboard
         

@@ -18,6 +18,7 @@ RUN bun install --ignore-scripts
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/dashboard/.env.production
 RUN cat apps/dashboard/.env.production
 
+RUN bunx svelte-kit sync
 RUN bun run turbo build:prod --filter=dashboard
 
 EXPOSE 3000
@@ -35,6 +36,7 @@ RUN bun install --ignore-scripts
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/console/.env.production
 RUN cat apps/console/.env.production
 
+RUN bunx svelte-kit sync
 RUN bun run turbo build:prod --filter=console
 
 EXPOSE 3000
