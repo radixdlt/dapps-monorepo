@@ -8,6 +8,34 @@ ARG NPM_LOCAL_CACHE=.cache
 
 RUN apt-get update && apt-get install -y openssh-client=1:9.2p1-2+deb12u1
 
+FROM base AS sandbox-builder
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+
+WORKDIR /app
+
+RUN npm install -g turbo
+COPY . .
+RUN turbo prune --scope=sandbox --scope=common --docker
+
+FROM base AS sandbox-installer
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+
+WORKDIR /app
+
+COPY .gitignore .gitignore
+COPY aliases.js aliases.js
+COPY --from=sandbox-builder /app/out/json/ .
+COPY --from=sandbox-builder /app/out/package-lock.json ./package-lock.json
+
+RUN npm ci --ignore-scripts
+
+COPY --from=sandbox-builder /app/out/full/ .
+RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/sandbox/.env.production
+RUN cat apps/sandbox/.env.production
+
+RUN npx turbo run build:prod --filter=sandbox
+RUN rm -f .npmrc
+
 FROM base AS console-builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
@@ -36,7 +64,6 @@ RUN cat apps/console/.env.production
 RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=console
 RUN rm -f .npmrc
-
 
 FROM base AS dashboard-builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
@@ -118,7 +145,6 @@ RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=ui
 RUN rm -f .npmrc
 
-
 FROM nginx:alpine AS storybook
 
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
@@ -128,6 +154,15 @@ WORKDIR /app
 COPY --from=storybook-installer /app/packages/ui/storybook-static /usr/share/nginx/html
 COPY --from=storybook-installer /app/packages/ui/nginx/mime.types /etc/nginx/mime.types
 COPY --from=storybook-installer /app/packages/ui/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+FROM nginx:alpine AS sandbox
+
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+
+WORKDIR /app
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=sandbox-installer /app/apps/sandbox/dist /usr/share/nginx/html
+COPY --from=sandbox-installer /app/apps/sandbox/.nginx/nginx.conf /etc/nginx/nginx.conf
 
 FROM node:20.8-bookworm AS console
 

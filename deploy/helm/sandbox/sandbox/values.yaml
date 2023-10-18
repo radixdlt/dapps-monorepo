@@ -1,0 +1,51 @@
+replicaCount: 1
+
+image:
+  repository: docker.io/radixdlt/private-sandbox
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets:
+  - name: docker-hub-dev
+
+nameOverride: "sandbox"
+fullnameOverride: "sandbox"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "sandbox"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  hosts: []
+  tls: []
+  basic_auth: false
+
+resources:
+  limits:
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

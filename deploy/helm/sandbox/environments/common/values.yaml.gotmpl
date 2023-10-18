@@ -1,0 +1,9 @@
+project: sandbox
+
+docker:
+  secrets:
+    region: eu-west-1
+    name: docker.io/radixdlt
+
+image:
+  tag: {{ .StateValues.ci.tag }}

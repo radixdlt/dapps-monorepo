@@ -5,7 +5,7 @@
   "scripts": {},
   "dependencies": {
     "@radixdlt/babylon-gateway-api-sdk": "1.1.0",
-    "@radixdlt/radix-dapp-toolkit": "1.1.1",
+    "@radixdlt/radix-dapp-toolkit": "^1.2.0",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
     "@radixdlt/rola": "1.0.0"
   },
