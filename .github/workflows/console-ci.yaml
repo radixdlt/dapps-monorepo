@@ -69,7 +69,7 @@ jobs:
           release_network_name: ${{ env.release_network }}
 
       - name: Turbo Worfkflow
-        run: npx turbo run lint prettier coverage svelte:check --filter=console
+        run: bunx turbo run lint prettier coverage svelte:check --filter=console
 
   setup-tags:
     runs-on: ubuntu-latest
@@ -289,7 +289,7 @@ jobs:
           target: 'console'
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
+
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'

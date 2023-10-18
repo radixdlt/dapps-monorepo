@@ -69,12 +69,13 @@ jobs:
           release_network_name: ${{ env.release_network }}
       
       - name: Turbo Worfkflow
-        run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
+        run: bunx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
 
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
         with:
-          start: npm run dev:dashboard
+          start: bun run dev:dashboard
+          install-command: bun --frozen-lockfile --ignore-scripts
           wait-on: http://localhost:5173
           project: ./apps/dashboard
         
@@ -308,7 +309,7 @@ jobs:
           target: 'dashboard'
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
+
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
@@ -361,7 +362,7 @@ jobs:
           target: 'storybook'
           build-args: |
             NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
+
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
           role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
@@ -602,7 +603,6 @@ jobs:
   #         parse_json: true
   #     - uses: ./.github/actions/build
   #       with:
-  #         npm_token: ${{ env.GH_NPM_TOKEN }}
   #     - name: Integration tests (PR)
   #       if: github.event.pull_request
   #       run: |

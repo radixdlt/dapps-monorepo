@@ -11,12 +11,10 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Use Node.js
-      uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+    - name: Use Bun.js
+      uses: oven-sh/setup-bun@v1
       with:
-        always-auth: true
-        node-version: 20.3.0
-        cache: npm
+        bun-version: latest
     - name: Define network name
       shell: bash
       run: |
@@ -27,19 +25,6 @@ runs:
         elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
           echo "NETWORK_NAME=${{ inputs.active_network_name }}" >> $GITHUB_ENV
         fi
-    - name: Get npm cache directory
-      shell: bash
-      id: npm-cache-dir
-      run: |
-        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
-    - name: Cache Node.js modules
-      uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
-      id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-      with:
-        path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
     - name: Add network to prod env variables
       shell: bash
       run: echo "PUBLIC_NETWORK_NAME=${{ env.NETWORK_NAME }}" >> .env.production
@@ -52,4 +37,4 @@ runs:
         echo "Network: ${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
     - name: Install dependencies
       shell: bash
-      run: npm ci --ignore-scripts
+      run: bun install --ignore-scripts --frozen-lockfile
