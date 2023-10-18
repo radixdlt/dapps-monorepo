@@ -137,7 +137,6 @@
     const column = columns.find((c) => c?.id === defaultSortedColumn)!
     sortColumn(column, columns.indexOf(column))
   }
-  $: console.log(entries)
 </script>
 
 <table>
