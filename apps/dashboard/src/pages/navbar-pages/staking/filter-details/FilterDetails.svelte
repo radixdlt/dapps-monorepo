@@ -117,6 +117,7 @@
 
   <div class="card">
     <HistogramFilterCard
+      max={Math.max(...totalXRDStakeValues)}
       values={totalXRDStakeValues}
       minText="MIN AMOUNT (%)"
       maxText="MAX AMOUNT (%)"
