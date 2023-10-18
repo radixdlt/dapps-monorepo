@@ -102,6 +102,7 @@
 </script>
 
 <StakePanel
+  learnMoreUrl="https://learn.radixdlt.com/article/how-does-staking-work-on-radix"
   {stakeButtonDisabled}
   on:click={unstake}
   sidePanelHeader="Request Unstake"
