@@ -72,7 +72,7 @@ jobs:
         run: npm run lint
 
       - name: Prettier
-        run: npm run prettier
+        run: npx turbo run prettier --filter=console
 
       - name: Unit tests
         run: npm run coverage:console
