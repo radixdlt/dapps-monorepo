@@ -17,7 +17,9 @@
     "format": {},
     "prettier": {},
     "prettier:fix": {},
-    "coverage": {},
+    "coverage": {
+      "dependsOn": ["db:generate"]
+    },
     "prepare": {},
     "lint": {},
     "dev": {
