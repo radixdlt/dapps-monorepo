@@ -68,17 +68,8 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
 
-      - name: Lint
-        run: npx turbo run lint --filter=console
-
-      - name: Prettier
-        run: npx turbo run prettier --filter=console
-
-      - name: Unit tests
-        run: npm run coverage:console
-
-      - name: Svelte check
-        run: npm run svelte:check:console
+      - name: Turbo Worfkflow
+        run: npx turbo run lint prettier coverage svelte:check --filter=console
 
   setup-tags:
     runs-on: ubuntu-latest

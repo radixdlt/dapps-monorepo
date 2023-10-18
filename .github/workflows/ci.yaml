@@ -68,20 +68,8 @@ jobs:
           active_network_name: ${{ env.active_network }}
           release_network_name: ${{ env.release_network }}
       
-      - name: Generate DB
-        run: npm run db:generate
-
-      - name: Lint
-        run: npx turbo run lint --filter=dashboard
-
-      - name: Prettier
-        run: npx turbo run prettier --filter=dashboard
-
-      - name: Unit tests
-        run: npm run coverage:dashboard
-
-      - name: Svelte check
-        run: npm run svelte:check:dashboard
+      - name: Turbo Worfkflow
+        run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
 
       - name: Run e2e tests on the PR environment
         uses: cypress-io/github-action@v4
