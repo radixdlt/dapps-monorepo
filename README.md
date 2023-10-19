@@ -18,32 +18,32 @@ Fastest way to getting a dev server running on your local machine is to run the 
 
 ## Running scripts
 
-dApps monorepo is built on [Turbo repo](https://turbo.build/repo/docs) for faster npm script execution through caching and parallelization.
+dApps monorepo is built on [Turbo repo](https://turbo.build/repo/docs) for faster script execution through caching and parallelization.
 
 _*Run npm scripts from the repo top directory*_
 
 ### Install all dependencies
 
 ```bash
-npm install
+bun install
 ```
 
 ### Start development servers
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 ### Linting, testing, pre-compiling
 
 ```bash
-npm run pre-push
+bun run pre-push
 ```
 
 ### Test
 
 ```bash
-npm run test
+bun run test
 ```
 
 # License

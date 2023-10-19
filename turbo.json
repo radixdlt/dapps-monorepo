@@ -2,11 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": ["db:generate", "build:storybook"],
+      "dependsOn": ["db:generate", "^svelte:sync"],
       "outputs": [".svelte-kit/**"]
     },
     "build:prod": {
-      "dependsOn": ["db:generate", "build:storybook"],
+      "dependsOn": ["db:generate", "^svelte:sync"],
       "outputs": [".svelte-kit/**"]
     },
     "build:storybook": {
@@ -18,8 +18,9 @@
     "prettier": {},
     "prettier:fix": {},
     "coverage": {
-      "dependsOn": ["db:generate"]
+      "dependsOn": ["db:generate", "^svelte:sync"]
     },
+    "svelte:sync": {},
     "prepare": {},
     "lint": {},
     "dev": {
