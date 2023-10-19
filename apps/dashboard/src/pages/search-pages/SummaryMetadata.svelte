@@ -10,6 +10,7 @@
   import Behaviors from './Behaviors.svelte'
   import type { Resource } from '@api/utils/entities/resource'
 
+  export let isXRD = Promise.resolve(false)
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
@@ -71,9 +72,9 @@
       {/if}
     {/await}
 
-    {#await behaviors then behaviors}
+    {#await Promise.all([behaviors, isXRD]) then [behaviors, isXRD]}
       {#if behaviors}
-        <Behaviors {behaviors} />
+        <Behaviors {isXRD} {behaviors} />
       {/if}
     {/await}
   </svelte:fragment>

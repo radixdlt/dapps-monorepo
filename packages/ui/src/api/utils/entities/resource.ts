@@ -84,8 +84,10 @@ type RoleKey =
   | 'recaller_updater'
   | 'depositer_updater'
   | 'withdrawer_updater'
+  | 'metadata_setter'
+  | 'metadata_setter_updater'
 
-type Behavior =
+export type Behavior =
   | 'simple'
   | 'supply-increase'
   | 'supply-decrease'
@@ -104,6 +106,8 @@ type Behavior =
   | 'removable-by-anyone'
   | 'nft-data-changeable'
   | 'nft-data-changeable-anyone'
+  | 'info-can-change'
+  | 'info-can-change-anyone'
 
 const ruleToBehavior =
   (authInfo: AuthInfo) =>
@@ -138,6 +142,10 @@ const ruleToBehavior =
         case 'withdrawer_updater': {
           return 'movement-restricted-future'
         }
+        case 'metadata_setter':
+        case 'metadata_setter_updater': {
+          return 'info-can-change'
+        }
       }
     }
 
@@ -165,6 +173,10 @@ const ruleToBehavior =
         case 'depositer_updater':
         case 'withdrawer_updater': {
           return 'movement-restricted-future-anyone'
+        }
+        case 'metadata_setter':
+        case 'metadata_setter_updater': {
+          return 'info-can-change-anyone'
         }
       }
     }

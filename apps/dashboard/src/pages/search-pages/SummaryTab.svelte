@@ -2,6 +2,7 @@
   import type { ComponentProps } from 'svelte'
   import SummaryMetadata from './SummaryMetadata.svelte'
   import SummaryTabHeading from './SummaryTabHeading.svelte'
+  import { xrdAddress } from '@stores'
 
   export let entity: ComponentProps<SummaryTabHeading>['entity']
   export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata']
@@ -22,6 +23,7 @@
     {omittedKeys}
     {redeemableTokens}
     {behaviors}
+    isXRD={entity.then(({ address }) => address === $xrdAddress)}
   />
 </div>
 
