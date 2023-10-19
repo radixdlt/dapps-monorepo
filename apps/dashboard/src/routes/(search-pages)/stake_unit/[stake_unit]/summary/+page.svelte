@@ -8,4 +8,5 @@
 <Summary
   stakeUnit={data.promises.stakeUnit}
   associatedDapps={data.promises.associatedDapps}
+  behaviors={data.promises.stakeUnit.then(({ behaviors }) => behaviors)}
 />

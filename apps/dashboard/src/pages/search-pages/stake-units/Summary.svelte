@@ -6,6 +6,7 @@
 
   export let stakeUnit: Promise<StakeUnit>
   export let associatedDapps: ComponentProps<SummaryTab>['associatedDapps']
+  export let behaviors: ComponentProps<SummaryTab>['behaviors']
 </script>
 
 <div class="card">
@@ -27,5 +28,6 @@
     ])}
     {associatedDapps}
     omittedKeys={['validator']}
+    {behaviors}
   />
 </div>
