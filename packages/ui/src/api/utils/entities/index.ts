@@ -1,3 +1,4 @@
+import type { AuthInfo } from '../auth'
 import type { KnownStandardTypes, MetadataTypeToNativeType } from '../metadata'
 import type { Component } from './component'
 import type { Package } from './package'

@@ -81,6 +81,7 @@
       {associatedDapps}
       omittedKeys={['pool']}
       {redeemableTokens}
+      behaviors={resource.then(({ behaviors }) => behaviors)}
     />
   {/if}
   {#if activeTab === 'metadata'}

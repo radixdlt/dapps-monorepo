@@ -10,6 +10,7 @@
   export let omittedKeys: ComponentProps<SummaryMetadata>['omittedKeys'] = []
   export let redeemableTokens: ComponentProps<SummaryMetadata>['redeemableTokens'] =
     undefined
+  export let behaviors: ComponentProps<SummaryMetadata>['behaviors'] = undefined
 </script>
 
 <div class="summary-tab">
@@ -20,6 +21,7 @@
     {associatedDapps}
     {omittedKeys}
     {redeemableTokens}
+    {behaviors}
   />
 </div>
 
