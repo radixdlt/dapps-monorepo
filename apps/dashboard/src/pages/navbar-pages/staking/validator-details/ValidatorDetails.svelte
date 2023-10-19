@@ -68,7 +68,7 @@
         <SkeletonLoader />
       {:then { metadata: { standard: { name, icon_url } } }}
         <div class="icon-and-name">
-          <NftImage url={icon_url?.value.href} />
+          <NftImage url={icon_url?.value.href} width={64} height={64} />
           <h1 class="dotted-overflow">{name?.value ?? '<no-name>'}</h1>
         </div>
       {/await}
