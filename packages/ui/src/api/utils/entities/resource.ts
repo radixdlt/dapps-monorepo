@@ -274,6 +274,13 @@ const getCombinedBehaviors = (behaviors: Behavior[]) => {
     removeItem('nft-data-changeable')
   }
 
+  if (
+    behaviors.includes('info-can-change') &&
+    behaviors.includes('info-can-change-anyone')
+  ) {
+    removeItem('info-can-change')
+  }
+
   return _behaviors
 }
 
