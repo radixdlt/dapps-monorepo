@@ -15,26 +15,10 @@
   import RemovableByAnyone from '@icons/behavior-removable-by-anyone.svg'
   import NftDataChangeable from '@icons/behavior-nft-data-changeable.svg'
   import NftDataChangeableAnyone from '@icons/behavior-nft-data-changeable-anyone.svg'
+  import type { Behavior } from '@api/utils/entities/resource'
 
-  export let type:
-    | 'simple'
-    | 'supply-increase'
-    | 'supply-decrease'
-    | 'supply-increase-decrease'
-    | 'supply-increase-anyone'
-    | 'supply-decrease-anyone'
-    | 'supply-increase-decrease-anyone'
-    | 'movement-restricted'
-    | 'movement-restricted-future'
-    | 'movement-restricted-future-anyone'
-    | 'info-can-change'
-    | 'info-can-change-anyone'
-    | 'removable-by-third-party'
-    | 'removable-by-anyone'
-    | 'freezable'
-    | 'freezable-anyone'
-    | 'nft-data-changeable'
-    | 'nft-data-changeable-anyone'
+  export let isXRD = false
+  export let type: Behavior
 
   $: info = {
     simple: {
@@ -54,7 +38,9 @@
     },
     'supply-increase-decrease': {
       icon: IncreaseDecrease,
-      text: 'The supply of this asset can be increased or decreased.',
+      text: isXRD
+        ? 'Only the Radix Network may increase or decrease the supply of XRD.'
+        : 'The supply of this asset can be increased or decreased.',
       iconSize: '2.7rem'
     },
     'supply-increase-anyone': {
@@ -144,7 +130,7 @@
     display: flex;
     gap: var(--spacing-xl);
     align-items: center;
-    max-width: 17rem;
+    max-width: 20rem;
   }
 
   .icon {

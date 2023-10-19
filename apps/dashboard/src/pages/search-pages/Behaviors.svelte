@@ -3,6 +3,7 @@
   import Behavior from '@components/behavior/Behavior.svelte'
   import type { Resource } from '@api/utils/entities/resource'
 
+  export let isXRD = false
   export let behaviors: Resource['behaviors']
 </script>
 
@@ -11,7 +12,7 @@
     {#if Array.isArray(behaviors)}
       {#each behaviors as behavior}
         <div class:flex-basis={behaviors.length > 1}>
-          <Behavior type={behavior} />
+          <Behavior {isXRD} type={behavior} />
         </div>
       {/each}
     {:else}
