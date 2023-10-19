@@ -5,13 +5,16 @@
   export let url = ''
   export let size: 'small' | 'large' = 'small'
 
+  export let width = 1024
+  export let height = 1024
+
   let imageNotFound = false
   let imageLoaded = false
 
   $: safeUrl = getSafeImageUrl({
     url: sanitizeHtml(url),
-    width: 1024,
-    height: 1024
+    width,
+    height
   })
 
   $: resolvedIconUrl =
