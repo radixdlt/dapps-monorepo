@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {},
   "dependencies": {
-    "@radixdlt/babylon-gateway-api-sdk": "1.1.0",
+    "@radixdlt/babylon-gateway-api-sdk": "1.1.2",
     "@radixdlt/radix-dapp-toolkit": "1.1.1",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
     "@radixdlt/rola": "1.0.0"
