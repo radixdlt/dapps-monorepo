@@ -4,4 +4,4 @@ patch: {}
 ignore:
   'SNYK-DEBIAN12-ZLIB-6008963':
     - '*':
-      reason: 'Unfixed, but shouldn't be critical for us'
+        reason: 'Unfixed, but shouldn't be critical for us'
