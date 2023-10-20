@@ -2,7 +2,7 @@
 version: v1.25.0
 patch: {}
 ignore:
-  SNYK-DEBIAN12-ZLIB-6008963:
+  'SNYK-DEBIAN12-ZLIB-6008963':
     - '*':
-        reason: Unfixed, but shouldn't be critical for us
-        expires: 2024-01-10T17:33:45.004Z
+        reason: 'Unfixed, but shouldn't be critical for us'
+        expires: '2024-01-10'
