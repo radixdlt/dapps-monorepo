@@ -309,7 +309,8 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
-      - name: Snyk image scan
+      - if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.ENVIRONMENT_NAME == 'stokenet' || github.event.inputs.ENVIRONMENT_NAME == 'mainnet'))
+        name: Snyk image scan
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           image: docker.io/radixdlt/dapps-console:${{ needs.setup-tags.outputs.tag-with-network }}
