@@ -114,9 +114,9 @@ jobs:
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" && "${{ github.event.release.prerelease }} = 'false' ]; then
+          elif [ "${{ github.event.action }}" = "published" && "${{ github.event.release.prerelease }}" = "false" ]; then
             echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" && "${{ github.event.release.prerelease }} = 'true' ]; then
+          elif [ "${{ github.event.action }}" = "published" && "${{ github.event.release.prerelease }}" = "true" ]; then
             echo "NETWORK_NAME=${{ env.prerelease_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
