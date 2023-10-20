@@ -83,7 +83,11 @@ const getEntryInfo = (entry: ComponentEntityRoleAssignmentEntry) => {
 export const getAuthInfo = (
   auth: ComponentEntityRoleAssignments
 ): AuthInfo => ({
-  owner: auth.owner as AuthRule,
+  owner:
+    (auth.owner as any).rule.type === 'AllowAll' ||
+    (auth.owner as any).rule.type === 'DenyAll'
+      ? ((auth.owner as any).rule.type as AccessRule)
+      : ((auth.owner as any).rule as AuthRule),
   rules: auth.entries.map(getEntryInfo).reduce(
     (acc, entry) => ({
       ...acc,
