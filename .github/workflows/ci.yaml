@@ -323,7 +323,7 @@ jobs:
         uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
         with:
           image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
-          args: --file=Dockerfile --severity-threshold=critical
+          args: --file=Dockerfile --severity-threshold=critical --fail-on=all
       - name: Docker Image output
         run: docker images
       - name: Output job summary
