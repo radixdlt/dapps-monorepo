@@ -2,14 +2,20 @@
   import NftPlaceholder from '@icons/nft-placeholder.svg'
   import { getSafeImageUrl } from '@utils/safe-image'
   import sanitizeHtml from 'sanitize-html'
+
   export let url = ''
   export let size: 'small' | 'large' = 'small'
-
   export let width = 1024
   export let height = 1024
 
   let imageNotFound = false
   let imageLoaded = false
+
+  $: {
+    url
+    imageNotFound = false
+    imageLoaded = false
+  }
 
   $: safeUrl = getSafeImageUrl({
     url: sanitizeHtml(url),
