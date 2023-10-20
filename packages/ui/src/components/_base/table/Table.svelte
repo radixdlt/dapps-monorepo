@@ -64,7 +64,7 @@
     return [...entries].sort((a, b) => sortFn(a, b, direction))
   }
 
-  export type Entry = { id: string; [key: string | number | symbol]: any }
+  export type Entry = { [key: string | number | symbol]: any }
 
   export type TablePage<T> = {
     next_cursor?: string | null
@@ -158,7 +158,7 @@
   </thead>
 
   <tbody>
-    {#each lastSortedBy ? sortedEntries : entries as entry (entry.id)}
+    {#each lastSortedBy ? sortedEntries : entries as entry}
       <slot name="empty-row" {entry}>
         <tr>
           <slot name="row" {entry} />
