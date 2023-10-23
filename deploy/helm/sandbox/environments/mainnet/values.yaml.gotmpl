@@ -1,9 +1,13 @@
+image:
+  tag: {{ .StateValues.ci.tag }}
+
 autoscaling:
   enabled: true
   minReplicas: 3
   maxReplicas: 15
   targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 70
+
 resources:
   limits:
     memory: 256Mi
@@ -14,7 +18,7 @@ resources:
 ingress:
   enabled: true
   hosts:
-    - host: {{ .StateValues.ci.ingressDomain }}
+    - host: sandbox-2.radixdlt.com
       paths:
         - path: /
           pathType: Prefix

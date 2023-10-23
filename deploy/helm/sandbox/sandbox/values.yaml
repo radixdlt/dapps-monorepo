@@ -1,7 +1,14 @@
+project: sandbox
+
+docker:
+  secrets:
+    region: eu-west-1
+    name: docker.io/radixdlt
+
 replicaCount: 1
 
 image:
-  repository: docker.io/radixdlt/private-sandbox
+  repository: docker.io/radixdlt/dapps-sandbox
   pullPolicy: IfNotPresent
   tag: ""
 

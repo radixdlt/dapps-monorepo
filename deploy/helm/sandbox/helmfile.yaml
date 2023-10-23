@@ -1,0 +1,38 @@
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: false
+  createNamespace: false
+environments:
+  dev: {}
+  pr: {}
+  stokenet: {}
+  mainnet: {}
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  - name: rdx-works
+    url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
+    username: {{ requiredEnv "HELM_GH_USER" }}
+    password: {{ requiredEnv "HELM_GH_PASS" }}
+releases:
+  - name: sandbox
+    chart: ./sandbox
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: developer-access
+    chart: rdx-works/developer-access
+    version: 1.0.0
+    values:
+      - project: dashboard
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl
+
+  - name: alertmanager
+    chart: rdx-works/alertmanager-configs
+    version: 1.1.0
+    installed: {{ ne .Environment.Name "pr" }}
+    values:
+      - environments/{{ .Environment.Name }}/values.yaml.gotmpl

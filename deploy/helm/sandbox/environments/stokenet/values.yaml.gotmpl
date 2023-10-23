@@ -1,3 +1,6 @@
+image:
+  tag: {{ .StateValues.ci.tag }}
+
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -14,7 +17,7 @@ resources:
 ingress:
   enabled: true
   hosts:
-    - host: {{ .StateValues.ci.ingressDomain }}
+    - host: stokenet-sandbox-2.radixdlt.com
       paths:
         - path: /
           pathType: Prefix
