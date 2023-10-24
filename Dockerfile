@@ -19,6 +19,11 @@ RUN turbo prune --scope=sandbox --scope=common --docker
 
 FROM base AS sandbox-installer
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
+ARG NETWORK_NAME
+ENV VITE_NETWORK_NAME=$NETWORK_NAME
+
+ARG IS_PUBLIC
+ENV VITE_IS_PUBLIC=$IS_PUBLIC
 
 WORKDIR /app
 

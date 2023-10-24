@@ -4,13 +4,23 @@ on:
   push:
     paths-ignore:
       - 'apps/console/**'
+      - 'deploy/helm/console/**'
+      - ".github/workflows/console-ci.yaml"
       - 'apps/dashboard/**'
+      - 'deploy/helm/dashboard/**'
+      - ".github/workflows/ci.yaml"
     branches:
       - main
   pull_request:
     paths-ignore:
       - 'apps/console/**'
+      - 'deploy/helm/console/**'
+      - ".github/workflows/console-ci.yaml"
       - 'apps/dashboard/**'
+      - 'deploy/helm/dashboard/**'
+      - ".github/workflows/ci.yaml"
+    branches:
+      - main
   release:
     types:
       - published
@@ -26,8 +36,8 @@ on:
           - mainnet
 
 env:
-  active_network: 'stokenet'
-  release_network: 'mainnet'
+  prerelease_network: 'Stokenet'
+  release_network: 'Mainnet'
 
 permissions:
   id-token: write
@@ -40,8 +50,9 @@ jobs:
     name: Check trigger
     if: >
       ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
-      (github.event_name == 'workflow_dispatch' ) ||
-      (github.ref == 'refs/heads/main' && github.event_name == 'push') ||
+      ( github.event_name == 'release' && github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
+      ( github.event_name == 'workflow_dispatch' ) ||
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
     runs-on: ubuntu-latest
     steps:
@@ -51,8 +62,95 @@ jobs:
         run: |
           echo "This is triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
 
+  snyk-scan-deps-licences:
+    runs-on: ubuntu-latest
+    needs:
+      - trigger
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'sandbox'
+          step_name: 'snyk-scan-deps-licenses'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Run Snyk to check for deps vulnerabilities
+        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
+
+  snyk-scan-code:
+    runs-on: ubuntu-latest
+    needs:
+      - trigger
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'sandbox'
+          step_name: 'snyk-scan-code'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Run Snyk to check for code vulnerabilities
+        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        continue-on-error: true # temporary until code fix
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
+          command: code test
+
+  snyk-sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+      deployments: write
+    needs:
+      - snyk-scan-deps-licences
+      - snyk-scan-code
+    steps:
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'sandbox'
+          step_name: 'snyk-sbom'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Generate SBOM # check SBOM can be generated but nothing is done with it
+        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
+          command: sbom
+      - name: Upload SBOM
+        if: github.event_name == 'release'
+        uses: AButler/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a # v2.0.2
+        with:
+          files: sbom.json
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.event.release.tag_name }}
+
   build:
     runs-on: ubuntu-latest
+    needs:
+    - trigger
+    - snyk-scan-deps-licences
+    - snyk-scan-code
     outputs:
       tag: ${{ steps.setup_tags.outputs.tag }}
     steps:
@@ -78,6 +176,8 @@ jobs:
 
   setup-build-args:
     runs-on: ubuntu-latest
+    needs:
+      - trigger
     name: Setup build argument values for docker
     outputs:
       network: ${{ steps.network_name_step.outputs.network_name }}
@@ -91,12 +191,12 @@ jobs:
       - name: Define network name
         id: network_name_step
         run: |
-          if [ "${{ github.event_name}}" = 'release' -a ${{!github.event.release.prerelease}} ] || [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'Mainnet' ]; then
+          if [ "${{ github.event_name}}" = 'release' -a "${{ github.event.release.prerelease }}" = "false" ] || [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'mainnet' ]; then
             echo "is_public=true" >> $GITHUB_OUTPUT
-            echo "network_name=Mainnet" >> $GITHUB_OUTPUT
-          elif [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'Stokenet' ]; then
+            echo "network_name=${{ env.release_network }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.action }}" = "published" -a "${{ github.event.release.prerelease }}" = "true" ] || [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'stokenet' ]; then
             echo "is_public=true" >> $GITHUB_OUTPUT
-            echo "network_name=Stokenet" >> $GITHUB_OUTPUT
+            echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           else
             echo "is_public=false" >> $GITHUB_OUTPUT
             echo "network_name=" >> $GITHUB_OUTPUT
@@ -113,7 +213,7 @@ jobs:
       image_registry: 'docker.io'
       image_organization: 'radixdlt'
       target: 'sandbox'
-      image_name: 'private-sandbox'
+      image_name: 'dapps-sandbox'
       tag: ${{ needs.build.outputs.tag }}
       tags: |
         type=semver,pattern={{version}}
@@ -126,3 +226,145 @@ jobs:
         NETWORK_NAME=${{needs.setup-build-args.outputs.network}}
         IS_PUBLIC=${{needs.setup-build-args.outputs.is_public}}
 
+  snyk-monitor:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    needs:
+      - push-sandbox
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'sandbox'
+          step_name: 'snyk-monitor'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Enable Snyk online monitoring to check for vulnerabilities
+        uses: snyk/actions/node@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --target-reference=${{ github.ref_name }}
+          command: monitor
+
+  snyk-container-monitor:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    needs:
+      - build
+      - setup-build-args
+      - push-sandbox
+    permissions:
+      id-token: write
+      pull-requests: read
+      contents: read
+      deployments: write
+    steps:
+      - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
+        with:
+          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          app_name: 'sandbox'
+          step_name: 'snyk-container-monitor'
+          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
+          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+          snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
+          image: docker.io/radixdlt/dapps-sandbox:${{ needs.build.outputs.tag }}
+          target_ref: ${{ github.ref_name }}
+
+  deploy_pull_request:
+    if: ${{ github.event.pull_request }}
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.15.0
+    needs:
+      - push-sandbox
+      - setup-build-args
+      - build
+    with:
+      env_name: pr
+      hierarchical_namespace: dapps-sandbox-ci-pr
+      namespace: dapps-sandbox-pr-${{ github.event.number }}
+      restart_pods: false
+      create_subns: true
+      aws_region: eu-west-2
+      role_to_assume: arn:aws:iam::308190735829:role/gh-dapps-sandbox-pr-deployer
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/sandbox
+      helmfile_extra_vars: >-
+        ci.tag=${{ needs.build.outputs.tag }},
+        ci.prNumber=${{ github.event.number }}
+      app_name: 'sandbox'
+      step_name: 'deploy-pr'
+
+  deploy_dev:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.15.0
+    needs:
+      - push-sandbox
+      - setup-build-args
+      - build
+    with:
+      env_name: dev
+      namespace: dapps-sandbox-dev
+      restart_pods: false
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: arn:aws:iam::308190735829:role/gh-dapps-sandbox-dev-deployer
+      eks_cluster: rdx-works-main-dev
+      helm_folder: deploy/helm/sandbox
+      helmfile_extra_vars: >-
+        ci.tag=${{ needs.build.outputs.tag }}
+      app_name: 'sandbox'
+      step_name: 'deploy-dev'
+
+  deploy_stokenet:
+    if: >
+      ( github.event_name == 'release' && github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-sandbox
+      - setup-build-args
+      - build
+    with:
+      env_name: stokenet
+      restart_pods: false
+      namespace: dapps-sandbox-stokenet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-sandbox-stokenet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/sandbox
+      helmfile_extra_vars: >-
+        ci.tag=${{ needs.build.outputs.tag }}
+      github_environment: sandbox-stokenet
+      app_name: 'sandbox'
+      step_name: 'deploy-stokenet'
+
+  deploy_mainnet:
+    if: >
+      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    needs:
+      - push-sandbox
+      - setup-build-args
+      - build
+    with:
+      env_name: mainnet
+      restart_pods: false
+      namespace: dapps-sandbox-mainnet
+      create_subns: false
+      aws_region: eu-west-2
+      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-sandbox-mainnet-deployer'
+      eks_cluster: rtlj-prod
+      helm_folder: deploy/helm/sandbox
+      helmfile_extra_vars: >-
+        ci.tag=${{ needs.build.outputs.tag }}
+      github_environment: sandbox-mainnet
+      app_name: 'sandbox'
+      step_name: 'deploy-mainnet'
