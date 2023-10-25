@@ -20,7 +20,7 @@ describe('pools manifests', () => {
   }
 
   it('should create pools', () => {
-    ;;[
+    ;[
       createPoolManifest(
         'package_tdx_2_1pkgxxxxxxxxxplxxxxxxxxxxxxx020379220524xxxxxxxxxe4r780',
         'OneResourcePool',
@@ -70,7 +70,7 @@ describe('pools manifests', () => {
   })
 
   it('should contribute to pools', () => {
-    ;;[
+    ;[
       contributeToPoolManifest(
         'account_tdx_2_168qgdkgfqxpnswu38wy6fy5v0q0um52zd0umuely5t9xrf88x4wqmf',
         'pool_tdx_2_1c5mplf9rxrht4rm9pq2dx3euqh4glccgfq6wldynl6t4ryjzg680pe',
