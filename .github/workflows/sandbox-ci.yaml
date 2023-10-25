@@ -195,7 +195,7 @@ jobs:
             echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           else
             echo "is_public=false" >> $GITHUB_OUTPUT
-            echo "network_name=" >> $GITHUB_OUTPUT
+            echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           fi
 
   push-sandbox:
