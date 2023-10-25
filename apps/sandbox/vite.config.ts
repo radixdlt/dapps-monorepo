@@ -25,7 +25,7 @@ const mappedAliases = Object.entries<string>(aliases()).reduce(
 )
 
 const dAppDefinitionAddress =
-  config[env.network_name || 'Mainnet']?.dappDefinitionAccount ||
+  config[env.VITE_NETWORK_NAME || 'Mainnet']?.dappDefinitionAccount ||
   config.Mainnet.dappDefinitionAccount
 
 // https://vitejs.dev/config/

@@ -4,13 +4,23 @@ on:
   push:
     paths-ignore:
       - 'apps/dashboard/**'
+      - 'deploy/helm/dashboard/**'
+      - ".github/workflows/ci.yaml"
       - 'apps/sandbox/**'
+      - 'deploy/helm/sandbox/**'
+      - ".github/workflows/sandbox-ci.yaml"
     branches:
       - main
   pull_request:
     paths-ignore:
       - 'apps/dashboard/**'
+      - 'deploy/helm/dashboard/**'
+      - ".github/workflows/ci.yaml"
       - 'apps/sandbox/**'
+      - 'deploy/helm/sandbox/**'
+      - ".github/workflows/sandbox-ci.yaml"
+    branches:
+      - main
   release:
     types:
       - published

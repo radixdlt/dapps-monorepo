@@ -19,6 +19,11 @@ RUN turbo prune --scope=sandbox --scope=common --docker
 
 FROM base AS sandbox-installer
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
+ARG NETWORK_NAME
+ENV VITE_NETWORK_NAME=$NETWORK_NAME
+
+ARG IS_PUBLIC
+ENV VITE_IS_PUBLIC=$IS_PUBLIC
 
 WORKDIR /app
 
@@ -30,8 +35,6 @@ COPY --from=sandbox-builder /app/out/package-lock.json ./package-lock.json
 RUN npm ci --ignore-scripts
 
 COPY --from=sandbox-builder /app/out/full/ .
-RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/sandbox/.env.production
-RUN cat apps/sandbox/.env.production
 
 RUN npx turbo run build:prod --filter=sandbox
 RUN rm -f .npmrc
@@ -163,6 +166,9 @@ WORKDIR /app
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=sandbox-installer /app/apps/sandbox/dist /usr/share/nginx/html
 COPY --from=sandbox-installer /app/apps/sandbox/.nginx/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=sandbox-installer /app/apps/sandbox/src/assets/favicon.png /usr/share/nginx/html/assets/favicon.png
+COPY --from=sandbox-installer /app/apps/sandbox/src/assets/sandbox_icon.png /usr/share/nginx/html/assets/sandbox_icon.png
 
 FROM node:20.8-bookworm AS console
 
