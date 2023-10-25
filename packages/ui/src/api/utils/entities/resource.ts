@@ -542,12 +542,12 @@ export const transformResources =
     return accountEntities.map((accountEntity) => ({
       accountAddress: accountEntity.address,
       details: accountEntity,
-      fungible: fungible.find(
-        ({ account }) => account === accountEntity.address
-      )!.items,
-      nonFungible: nonFungible.find(
-        ({ account }) => account === accountEntity.address
-      )!.items
+      fungible: fungible
+        .find(({ account }) => account === accountEntity.address)!
+        .items.filter((item) => item.value !== '0'),
+      nonFungible: nonFungible
+        .find(({ account }) => account === accountEntity.address)!
+        .items.filter((item) => item.ownedNonFungibles !== 0)
     }))
   }
 
