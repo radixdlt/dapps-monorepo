@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --mode development",
-    "build:prod": "tsc && vite build --mode production"
+    "build:prod": "tsc && vite build --mode production",
+    "prettier": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --check .",
+    "prettier:fix": "prettier --config ../../.prettierrc --ignore-path ../../.prettierignore --cache --write --check ."
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
