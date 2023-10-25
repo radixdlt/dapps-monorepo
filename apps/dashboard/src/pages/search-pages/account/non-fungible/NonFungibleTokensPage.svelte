@@ -11,6 +11,7 @@
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
   import { createEventDispatcher } from 'svelte'
+  import NoTokens from '../NoTokens.svelte'
 
   export let nonFungibleResources: Promise<TransformedNonFungible[]>
 
@@ -86,32 +87,23 @@
     <NFTAccordion data={new Promise(() => {})} />
   {/each}
 {:then [nonFungibleResources, [stateVersion, accountAddress]]}
-  {#each nonFungibleResources as { resource, nonFungibles, ownedNonFungibles, nextCursor, vaultAddress }}
-    <NFTAccordion
-      data={{
-        name: resource.metadata.standard.name?.value,
-        address: resource.address,
-        imageUrl: resource.metadata.standard.icon_url?.value.href,
-        count: ownedNonFungibles,
-        tags: resource.metadata.standard.tags?.value,
-        totalCount: Number(resource.totalSupply)
-      }}
-    >
-      <div bind:clientWidth={width}>
-        <div class="nft-cards" class:center={width < 500}>
-          {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
-            <NonFungibleTokenCard
-              imgUrl={key_image_url?.value}
-              name={name?.value}
-              {address}
-              on:click={() =>
-                dispatch('click-nft', {
-                  address: address.nonFungibleAddress
-                })}
-            />
-          {/each}
-          {#if loadedLaterNfts[resource.address]}
-            {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
+  {#if nonFungibleResources.length === 0}
+    <NoTokens>No NFT's found</NoTokens>
+  {:else}
+    {#each nonFungibleResources as { resource, nonFungibles, ownedNonFungibles, nextCursor, vaultAddress }}
+      <NFTAccordion
+        data={{
+          name: resource.metadata.standard.name?.value,
+          address: resource.address,
+          imageUrl: resource.metadata.standard.icon_url?.value.href,
+          count: ownedNonFungibles,
+          tags: resource.metadata.standard.tags?.value,
+          totalCount: Number(resource.totalSupply)
+        }}
+      >
+        <div bind:clientWidth={width}>
+          <div class="nft-cards" class:center={width < 500}>
+            {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
               <NonFungibleTokenCard
                 imgUrl={key_image_url?.value}
                 name={name?.value}
@@ -122,28 +114,41 @@
                   })}
               />
             {/each}
-          {/if}
+            {#if loadedLaterNfts[resource.address]}
+              {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
+                <NonFungibleTokenCard
+                  imgUrl={key_image_url?.value}
+                  name={name?.value}
+                  {address}
+                  on:click={() =>
+                    dispatch('click-nft', {
+                      address: address.nonFungibleAddress
+                    })}
+                />
+              {/each}
+            {/if}
+          </div>
         </div>
-      </div>
 
-      <InfiniteScroll
-        on:thresholdReached={() => {
-          fetchMore({
-            stateVersion,
-            componentAddress: accountAddress,
-            cursor: nextCursor,
-            vaultAddress,
-            resourceAddress: resource.address
-          })
-        }}
-      />
-      {#if isLoading}
-        <div class="loader-spacing">
-          <SkeletonLoader />
-        </div>
-      {/if}
-    </NFTAccordion>
-  {/each}
+        <InfiniteScroll
+          on:thresholdReached={() => {
+            fetchMore({
+              stateVersion,
+              componentAddress: accountAddress,
+              cursor: nextCursor,
+              vaultAddress,
+              resourceAddress: resource.address
+            })
+          }}
+        />
+        {#if isLoading}
+          <div class="loader-spacing">
+            <SkeletonLoader />
+          </div>
+        {/if}
+      </NFTAccordion>
+    {/each}
+  {/if}
 {/await}
 
 <style>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import FungibleTokenCard from '@components/fungible-token-card/FungibleTokenCard.svelte'
   import type { Token } from '../types'
+  import NoTokens from '../NoTokens.svelte'
 
   export let data: Promise<{
     tokens: Token[]
@@ -14,31 +15,35 @@
       <FungibleTokenCard loading />
     {/each}
   {:then { tokens, xrd }}
-    {#if xrd}
-      <div class="xrd">
-        <FungibleTokenCard
-          isXrd
-          address={xrd.address}
-          linksTo={xrd.linksTo}
-          amount={xrd.amount}
-          iconUrl={xrd.iconUrl}
-          symbol={xrd.symbol}
-        />
-      </div>
-    {/if}
+    {#if tokens.length === 0 && !xrd}
+      <NoTokens>No fungible tokens found</NoTokens>
+    {:else}
+      {#if xrd}
+        <div class="xrd">
+          <FungibleTokenCard
+            isXrd
+            address={xrd.address}
+            linksTo={xrd.linksTo}
+            amount={xrd.amount}
+            iconUrl={xrd.iconUrl}
+            symbol={xrd.symbol}
+          />
+        </div>
+      {/if}
 
-    {#each tokens as token}
-      <div class="token">
-        <FungibleTokenCard
-          address={token.address}
-          linksTo={token.linksTo}
-          amount={token.amount}
-          iconUrl={token.iconUrl}
-          symbol={token.symbol}
-          numberOfTags={token.numberOfTags}
-        />
-      </div>
-    {/each}
+      {#each tokens as token}
+        <div class="token">
+          <FungibleTokenCard
+            address={token.address}
+            linksTo={token.linksTo}
+            amount={token.amount}
+            iconUrl={token.iconUrl}
+            symbol={token.symbol}
+            numberOfTags={token.numberOfTags}
+          />
+        </div>
+      {/each}
+    {/if}
   {/await}
 </div>
 
