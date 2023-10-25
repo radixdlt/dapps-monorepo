@@ -20,7 +20,9 @@
 
 <div style:min-width="18rem">
   <a class="card token-card" href={linksTo}>
-    <TokenIcon {isXrd} {iconUrl} />
+    {#if !loading}
+      <TokenIcon {isXrd} {iconUrl} />
+    {/if}
     <div>
       <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
         {#if symbol}
