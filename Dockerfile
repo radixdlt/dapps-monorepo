@@ -35,8 +35,6 @@ COPY --from=sandbox-builder /app/out/package-lock.json ./package-lock.json
 RUN npm ci --ignore-scripts
 
 COPY --from=sandbox-builder /app/out/full/ .
-RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/sandbox/.env.production
-RUN cat apps/sandbox/.env.production
 
 RUN npx turbo run build:prod --filter=sandbox
 RUN rm -f .npmrc
