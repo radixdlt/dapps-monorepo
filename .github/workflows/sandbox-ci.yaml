@@ -190,16 +190,13 @@ jobs:
             echo "is_public=false" >> $GITHUB_OUTPUT
             echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           fi
-      - name: Setup tags for docker image
-        id: setup_tags
-        run: echo "tag=sha-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - id: tag-with-network
         run: |
-          echo "tag-with-network=${{ steps.setup_tags.outputs.tag }}-${{ steps.network_name_step.outputs.network_name }}" >> $GITHUB_OUTPUT
+          echo "tag-with-network=${{ github.sha }}-${{ steps.network_name_step.outputs.network_name }}" >> $GITHUB_OUTPUT
       - name: Output tag value to job summary
         run: |
           echo "network-name=${{ steps.network_name_step.outputs.network_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "docker-tag=${{ steps.setup_tags.outputs.tag }}-${{ steps.network_name_step.outputs.network_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "docker-tag=${{ github.sha }}-${{ steps.network_name_step.outputs.network_name }}" >> $GITHUB_STEP_SUMMARY
 
   push-sandbox:
     name: (PRIVATE) Docker AMD
