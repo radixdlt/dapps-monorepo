@@ -176,9 +176,6 @@ jobs:
     steps:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v2
-      - name: Info
-        run: |
-          echo "This is triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
       - name: Define network name
         id: network_name_step
         run: |
