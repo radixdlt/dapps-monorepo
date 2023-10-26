@@ -19,7 +19,7 @@
   <TableRow on:click>
     {#if $connected}
       <ResponsiveTableCell width="4rem">
-        <div class="center">
+        <div class="center" style:min-width="3rem">
           <slot name="icon" />
         </div>
       </ResponsiveTableCell>
@@ -47,13 +47,13 @@
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <div class="center">
+      <div class="center padding">
         <StakeDisplay validator={Promise.resolve(validator)} />
       </div>
     </ResponsiveTableCell>
 
     <ResponsiveTableCell>
-      <div class="center bold">
+      <div class="center bold padding">
         {formatXRDValue(validator.ownerStake.toString())}
       </div>
     </ResponsiveTableCell>
@@ -113,6 +113,10 @@
     justify-content: center;
   }
 
+  .padding {
+    padding: 0 var(--spacing-md);
+  }
+
   .left-padded {
     padding-left: var(--spacing-xl);
   }
@@ -145,7 +149,7 @@
   }
 
   .select {
-    padding-right: var(--spacing-lg);
+    padding-right: var(--spacing-xl);
   }
 
   .name-and-icon {
