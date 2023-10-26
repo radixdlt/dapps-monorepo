@@ -196,14 +196,14 @@ jobs:
           fi
       - id: network
         run: |
-          echo "network_name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+          echo "network_name=${{ needs.output.network_name_step.network_name }}" >> $GITHUB_OUTPUT
       - id: tag-with-network
         run: |
-          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+          echo "tag-with-network=${{github.short_sha}}-${{ needs.output.network_name_step.network_name }}" >> $GITHUB_OUTPUT
       - name: Output tag value to job summary
         run: |
-          echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
-          echo "docker-tag=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "network-name=${{ needs.output.network_name_step.network_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "docker-tag=${{github.short_sha}}-${{ needs.output.network_name_step.network_name }}" >> $GITHUB_STEP_SUMMARY
 
   push-sandbox:
     name: (PRIVATE) Docker AMD
