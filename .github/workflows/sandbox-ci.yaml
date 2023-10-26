@@ -147,14 +147,10 @@ jobs:
     - trigger
     - snyk-scan-deps-licences
     - snyk-scan-code
-    outputs:
-      tag: ${{ steps.setup_tags.outputs.tag }}
+    # outputs:
+    #   tag: ${{ steps.setup_tags.outputs.tag }}
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-
-      - name: Setup tags for docker image
-        id: setup_tags
-        run: echo "tag=sha-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Use Node.js
         uses: actions/setup-node@7c29869aec4da703a571b27bcd84d4f15af0b56e
@@ -178,6 +174,7 @@ jobs:
     outputs:
       network: ${{ steps.network_name_step.outputs.network_name }}
       is_public: ${{ steps.network_name_step.outputs.is_public }}
+      tag_with_network: ${{ steps.tag-with-network.outputs.tag-with-network }}
     steps:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v2
@@ -197,6 +194,16 @@ jobs:
             echo "is_public=false" >> $GITHUB_OUTPUT
             echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           fi
+      - id: network
+        run: |
+          echo "network_name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - id: tag-with-network
+        run: |
+          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - name: Output tag value to job summary
+        run: |
+          echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "docker-tag=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_STEP_SUMMARY
 
   push-sandbox:
     name: (PRIVATE) Docker AMD
@@ -210,7 +217,7 @@ jobs:
       image_organization: 'radixdlt'
       target: 'sandbox'
       image_name: 'dapps-sandbox'
-      tag: ${{ needs.build.outputs.tag }}
+      tag: ${{ needs.setup-build-args.outputs.tag }}
       tags: |
         type=semver,pattern={{version}}
       context: './'
