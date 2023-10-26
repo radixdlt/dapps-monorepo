@@ -8,3 +8,12 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+
+alertmanager:
+  env: "dev"
+  nameOverride: "dapps-sandbox-amcfg"
+  slackConfig:
+    channel: "feed--alerts-dapps-dev"
+  secrets:
+    region: eu-west-2
+    name: "rtlj-prod/eks/dapps/dev/alertmanager-integration-keys"
