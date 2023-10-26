@@ -149,11 +149,11 @@
       loadingRowsCount={3}
       validators={validators.then((v) =>
         $stakeInfo.then((stakes) =>
-        v.filter(
-          (v) =>
-            stakes.staked.some((s) => s.validator.address === v.address) ||
-            stakes.unstaking.some((s) => s.validator.address === v.address) ||
-            stakes.readyToClaim.some((s) => s.validator.address === v.address)
+          v.filter(
+            (v) =>
+              stakes.staked.some((s) => s.validator.address === v.address) ||
+              stakes.unstaking.some((s) => s.validator.address === v.address) ||
+              stakes.readyToClaim.some((s) => s.validator.address === v.address)
           )
         )
       )}
