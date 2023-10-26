@@ -112,7 +112,7 @@
 
 <div id="staked-validators" class="header-section">
   <h3 class="title">Your Stakes</h3>
-  {#await $stakeInfo}
+  {#if !$connected}
     <div class="subtext">
       Connect your wallet and your accounts containing Radix Network stake pool
       units to see the status of your current validators and stakes.
@@ -125,14 +125,15 @@
       <Icon icon={InfoIcon} />
       What is staking?
     </a>
-  {:then}
+  {:else}
     <div class="subtext">
       Summary of your current stakes and requested unstakes for the accounts you
       have connected.
     </div>
-  {/await}
+  {/if}
 </div>
-{#await $stakeInfo then stakes}
+
+{#if $connected}
   <div id="staking-info">
     <StakingCard
       staking={totalStaked}
@@ -145,12 +146,15 @@
     />
 
     <ValidatorList
+      loadingRowsCount={3}
       validators={validators.then((v) =>
+        $stakeInfo.then((stakes) =>
         v.filter(
           (v) =>
             stakes.staked.some((s) => s.validator.address === v.address) ||
             stakes.unstaking.some((s) => s.validator.address === v.address) ||
             stakes.readyToClaim.some((s) => s.validator.address === v.address)
+          )
         )
       )}
     >
@@ -169,7 +173,7 @@
       />
     </ValidatorList>
   </div>
-{/await}
+{/if}
 
 <Divider --spacing="var(--spacing-xl)" />
 

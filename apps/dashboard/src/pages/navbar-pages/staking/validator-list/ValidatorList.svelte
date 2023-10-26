@@ -22,6 +22,7 @@
   } from '@components/_base/table/Table.svelte'
 
   export let validators: Promise<Validator<true, true, true>[]>
+  export let loadingRowsCount = 15
 
   let selectedUptime: { label: string; value: UptimeValue }
 
@@ -156,7 +157,7 @@
 </script>
 
 {#await transformedValidators}
-  <BasicTable {columns} entries={Array(15).fill(undefined)}>
+  <BasicTable {columns} entries={Array(loadingRowsCount).fill(undefined)}>
     <svelte:fragment slot="row">
       <SkeletonRow columns={columns.length} />
     </svelte:fragment>

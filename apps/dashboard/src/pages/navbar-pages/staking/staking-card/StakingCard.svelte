@@ -92,6 +92,7 @@
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
     max-width: 80rem;
+    height: 6rem;
   }
 
   .section {
@@ -126,6 +127,7 @@
     @extend .dotted-overflow;
     font-weight: var(--font-weight-bold-3);
     font-size: var(--text-2xl);
+    height: 2rem;
   }
 
   .stake-display {
