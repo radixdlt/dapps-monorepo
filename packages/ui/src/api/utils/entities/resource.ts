@@ -25,6 +25,7 @@ import type { _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
 import { isPoolUnit, resourceToPoolUnit } from './pool-unit'
 import { getAuthInfo, type AuthInfo, isAllowed } from '../auth'
+import { err, ok } from 'neverthrow'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
   'resource',
@@ -600,6 +601,10 @@ export const getAccountDataNew = (
         accounts,
         options,
         ledgerState
+      ).andThen((entities) =>
+        entities.length === 0
+          ? err({ message: 'Entity not found.' })
+          : ok(entities)
       ),
     (result) =>
       result.map(
