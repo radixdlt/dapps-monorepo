@@ -174,6 +174,7 @@ jobs:
       is_public: ${{ steps.network_name_step.outputs.is_public }}
       tag_with_network: ${{ steps.tag-with-network.outputs.tag-with-network }}
     steps:
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v2
       - name: Define network name
