@@ -7,6 +7,8 @@
   import BigNumber from 'bignumber.js'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { XRDToken } from '@constants'
+  import Popover from '@components/_base/popover/Popover.svelte'
+  import FeeWarning from '@components/_base/popover/FeeWarning.svelte'
 
   export let amountToStake: string
   export let tokenAmountDisabled = false
@@ -20,8 +22,24 @@
   })
 
   $: tokenAmountInvalid = !validStakeAmount
+
+  let displayFeeWarning = false
+
+  $: {
+    amountToStake
+    ;(async () => {
+      const balance = await xrdBalance
+      const diff = new BigNumber(balance).minus(new BigNumber(amountToStake))
+      if (diff.isPositive() && diff.lt(10)) {
+        displayFeeWarning = true
+      } else {
+        displayFeeWarning = false
+      }
+    })()
+  }
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <StakeCard>
   <svelte:fragment slot="icon">
     <IconNew icon={StakingIcon} --size="3rem" />
@@ -30,24 +48,32 @@
   <slot name="info" slot="info" />
 
   <svelte:fragment slot="token-amount-card">
-    <TokenAmountCard
-      token={XRDToken}
-      bind:tokenAmount={amountToStake}
-      bind:disabled={tokenAmountDisabled}
-      bind:invalid={tokenAmountInvalid}
-    >
-      <div
-        slot="footer"
-        class="footer subtext"
-        class:invalid={tokenAmountInvalid}
-      >
-        {#await xrdBalance}
-          <SkeletonLoader />
-        {:then balance}
-          Balance {formatTokenValue(balance).displayValue}
-        {/await}
+    <Popover placement="top" bind:show={displayFeeWarning}>
+      <div>
+        <TokenAmountCard
+          token={XRDToken}
+          bind:tokenAmount={amountToStake}
+          bind:disabled={tokenAmountDisabled}
+          bind:invalid={tokenAmountInvalid}
+        >
+          <div
+            slot="footer"
+            class="footer subtext"
+            class:invalid={tokenAmountInvalid}
+          >
+            {#await xrdBalance}
+              <SkeletonLoader />
+            {:then balance}
+              Balance {formatTokenValue(balance).displayValue}
+            {/await}
+          </div>
+        </TokenAmountCard>
       </div>
-    </TokenAmountCard>
+
+      <svelte:fragment slot="content">
+        <FeeWarning />
+      </svelte:fragment>
+    </Popover>
   </svelte:fragment>
 </StakeCard>
 
