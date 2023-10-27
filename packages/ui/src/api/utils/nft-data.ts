@@ -25,7 +25,7 @@ export const getNftData = (
   data: StateNonFungibleDetailsResponseItem['data'],
   key: string
 ) =>
-  ((data?.programmatic_json as any).fields as any[]).find(
+  ((data?.programmatic_json as any)?.fields as any[])?.find(
     ({ field_name }) => field_name === key
   )?.value
 

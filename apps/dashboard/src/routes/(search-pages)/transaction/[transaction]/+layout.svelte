@@ -12,11 +12,14 @@
   activeTab={data.pageName}
   menuItems={[
     [
+      { id: 'summary', label: 'Summary' },
       { id: 'details', label: 'Details' },
       { id: 'raw-receipt', label: 'Raw receipt' }
     ]
   ]}
-  on:navigate={({ detail }) => goto(detail)}
+  on:navigate={({ detail }) => {
+    goto(detail)
+  }}
 >
   <slot />
 </SearchPage>

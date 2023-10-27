@@ -38,6 +38,7 @@ type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
     explicit: EntityMetadataItem[]
   }
   behaviors: 'simple' | Behavior[]
+  displayName: string
 }
 
 export type FungibleResource = _Resource<'fungible'> & {
@@ -300,8 +301,16 @@ export const getBehaviors = (auth: AuthInfo) =>
 
 export const transformNonFungibleResource = (
   entity: StateEntityDetailsResponseItem
-): NonFungibleResource =>
-  ({
+): NonFungibleResource => {
+  const metadata = transformMetadata(entity, [
+    'name',
+    'symbol',
+    'icon_url',
+    'description',
+    'tags'
+  ])
+
+  return {
     type: 'resource',
     resourceType: 'non-fungible',
     address: `${entity.address}`,
@@ -311,26 +320,30 @@ export const transformNonFungibleResource = (
     divisibility: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).divisibility,
-    metadata: transformMetadata(entity, [
-      'name',
-      'symbol',
-      'icon_url',
-      'description',
-      'tags'
-    ]),
+    metadata,
     behaviors: getBehaviors(
       getAuthInfo(
         (entity.details as StateEntityDetailsResponseFungibleResourceDetails)
           .role_assignments
       )
-    )
-  } as const)
+    ),
+    displayName: metadata.standard.name ? metadata.standard.name.value : ''
+  } as const
+}
 
 export const transformFungibleResource = (
   entity: StateEntityDetailsResponseItem,
   fungible?: FungibleResourcesCollectionItemVaultAggregated
-): FungibleResource =>
-  ({
+): FungibleResource => {
+  const metadata = transformMetadata(entity, [
+    'name',
+    'symbol',
+    'icon_url',
+    'description',
+    'tags'
+  ])
+
+  return {
     type: 'resource',
     resourceType: 'fungible',
     value:
@@ -344,20 +357,20 @@ export const transformFungibleResource = (
     divisibility: (
       entity.details as StateEntityDetailsResponseFungibleResourceDetails
     ).divisibility,
-    metadata: transformMetadata(entity, [
-      'name',
-      'symbol',
-      'icon_url',
-      'description',
-      'tags'
-    ]),
+    metadata,
     behaviors: getBehaviors(
       getAuthInfo(
         (entity.details as StateEntityDetailsResponseFungibleResourceDetails)
           .role_assignments
       )
-    )
-  } as const)
+    ),
+    displayName: metadata.standard.name
+      ? `${metadata.standard.name.value} ${
+          metadata.standard.symbol ? `(${metadata.standard.symbol.value})` : ''
+        }`
+      : ''
+  } as const
+}
 
 export type TransformedNonFungible = {
   resource: NonFungibleResource

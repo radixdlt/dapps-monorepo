@@ -27,7 +27,7 @@
     imageNotFound || !safeUrl.valid ? NftPlaceholder : safeUrl.url
 </script>
 
-<div class="wrapper {size}">
+<div class="wrapper" class:size>
   <div
     class="token-icon"
     class:loaded={imageLoaded}
@@ -52,7 +52,7 @@
 <style lang="scss">
   .wrapper {
     background: var(--theme-surface-2);
-    padding: 0.25rem;
+    padding: calc(var(--size, 3.25rem) / 13);
     border-radius: var(--border-radius-lg);
     width: var(--size, 3.25rem);
     height: var(--size, 3.25rem);
