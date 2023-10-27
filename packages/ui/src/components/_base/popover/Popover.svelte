@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { css } from '@styles'
   import { createPopperActions } from 'svelte-popperjs'
   import { fade } from 'svelte/transition'
 
@@ -16,31 +15,16 @@
     | `top-${PlacementVariation}`
     | 'bottom'
     | `bottom-${PlacementVariation}`
-  export let margin: number = 10
 
   $: [popperRef, popperContent] = createPopperActions({
     placement,
     strategy: 'fixed',
-    modifiers: [{ name: 'offset', options: { offset: [0, margin] } }]
+    modifiers: [
+      { name: 'offset', options: { offset: [0, 10] } },
+      { name: 'preventOverflow', options: { padding: 20 } },
+      { name: 'flip', options: { padding: 20 } }
+    ]
   })
-
-  $: contentStyle = css({
-    backgroundColor: {
-      info: '$background',
-      error: '$error',
-      success: '$transparent'
-    }[type],
-    color: {
-      info: '$text',
-      error: 'white',
-      success: '$success'
-    }[type],
-    borderRadius: '$sm',
-    boxShadow: '$sm',
-    padding: '$xs',
-    zIndex: 100,
-    fontSize: '$sm'
-  })()
 </script>
 
 <div use:popperRef>
@@ -51,8 +35,58 @@
   <div
     use:popperContent
     transition:fade={{ duration: 100 }}
-    class={contentStyle}
+    class="popover card"
+    data-popper-placement={placement}
+    style:background={type === 'success'
+      ? 'var(--theme-success-primary)'
+      : type === 'error'
+      ? 'var(--theme-error-primary)'
+      : 'var(--color-alert)'}
   >
     <slot name="content" />
+    <div class="arrow" data-popper-arrow />
   </div>
 {/if}
+
+<style>
+  .popover {
+    color: var(--color-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-right: 100px;
+  }
+
+  .arrow,
+  .arrow::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+  }
+
+  .arrow {
+    visibility: hidden;
+  }
+
+  .arrow::before {
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
+  }
+
+  .popover[data-popper-placement^='top'] > .arrow {
+    bottom: -4px;
+  }
+
+  .popover[data-popper-placement^='bottom'] > .arrow {
+    top: -4px;
+  }
+
+  .popover[data-popper-placement^='left'] > .arrow {
+    right: -4px;
+  }
+
+  .popover[data-popper-placement^='right'] > .arrow {
+    left: -4px;
+  }
+</style>
