@@ -1,20 +1,23 @@
 import { clone } from 'ramda'
-import type { AuthInfo, AuthRule } from '../auth'
+import type { AuthInfo, AccessRule, ProtectedAccessRule } from '../auth'
 import { getBehaviors } from './resource'
 
-const mockAuthRule: AuthRule = {
-  type: 'protected',
-  proof_rule: {
-    type: 'require',
-    requirement: {
-      type: 'NonFungible',
-      non_fungible: {
-        local_id: {
-          id_type: 'Bytes',
-          sbor_hex: '',
-          simple_rep: ''
-        },
-        resource_address: ''
+const mockAuthRule: ProtectedAccessRule = {
+  type: 'Protected',
+  access_rule: {
+    type: 'ProofRule',
+    proof_rule: {
+      type: 'Require',
+      requirement: {
+        type: 'NonFungible',
+        non_fungible: {
+          local_id: {
+            id_type: 'Bytes',
+            sbor_hex: '',
+            simple_rep: ''
+          },
+          resource_address: ''
+        }
       }
     }
   }
@@ -26,19 +29,27 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         minter: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['minter_updater']
         },
         burner: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['burner_updater']
         },
         minter_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['minter_updater']
         },
         burner_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['burner_updater']
         }
       }
@@ -61,7 +72,7 @@ describe('resource behaviors', () => {
 
     it('should return supply increase by anyone', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.minter.rule = 'AllowAll'
+      auth1.rules.minter.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['supply-increase-anyone']
 
@@ -69,7 +80,7 @@ describe('resource behaviors', () => {
 
       const auth2 = clone(authInfo)
 
-      auth2.rules.minter_updater.rule = 'AllowAll'
+      auth2.rules.minter_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -90,14 +101,14 @@ describe('resource behaviors', () => {
 
     it('should return supply decrease by anyone', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.burner.rule = 'AllowAll'
+      auth1.rules.burner.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['supply-decrease-anyone']
 
       expect(getBehaviors(auth1)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.burner_updater.rule = 'AllowAll'
+      auth2.rules.burner_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -120,16 +131,16 @@ describe('resource behaviors', () => {
 
     it('should return supply increase and decrease by anyone', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.minter.rule = 'AllowAll'
-      auth1.rules.burner.rule = 'AllowAll'
+      auth1.rules.minter.rule.type = 'AllowAll'
+      auth1.rules.burner.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['supply-increase-decrease-anyone']
 
       expect(getBehaviors(auth1)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.minter_updater.rule = 'AllowAll'
-      auth2.rules.burner_updater.rule = 'AllowAll'
+      auth2.rules.minter_updater.rule.type = 'AllowAll'
+      auth2.rules.burner_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -137,7 +148,7 @@ describe('resource behaviors', () => {
     it('should only return supply increase by anyone if minter is explicit and minter_updater is AllowAll', () => {
       const auth = clone(authInfo)
       auth.rules.minter.rule = mockAuthRule
-      auth.rules.minter_updater.rule = 'AllowAll'
+      auth.rules.minter_updater.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['supply-increase-anyone']
 
@@ -150,19 +161,27 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         depositer: {
-          rule: 'AllowAll',
+          rule: {
+            type: 'AllowAll'
+          },
           updaters: ['depositer_updater']
         },
         withdrawer: {
-          rule: 'AllowAll',
+          rule: {
+            type: 'AllowAll'
+          },
           updaters: ['withdrawer_updater']
         },
         depositer_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['depositer_updater']
         },
         withdrawer_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['withdrawer_updater']
         }
       }
@@ -170,14 +189,14 @@ describe('resource behaviors', () => {
 
     it('should return movement restricted', () => {
       const auth = clone(authInfo)
-      auth.rules.depositer.rule = 'DenyAll'
+      auth.rules.depositer.rule.type = 'DenyAll'
 
       const expectedBehaviors = ['movement-restricted']
 
       expect(getBehaviors(auth)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.withdrawer.rule = 'DenyAll'
+      auth2.rules.withdrawer.rule.type = 'DenyAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -198,14 +217,14 @@ describe('resource behaviors', () => {
 
     it('should return movement restricted in future', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.depositer_updater.rule = 'AllowAll'
+      auth1.rules.depositer_updater.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['movement-restricted-future-anyone']
 
       expect(getBehaviors(auth1)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.withdrawer_updater.rule = 'AllowAll'
+      auth2.rules.withdrawer_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -216,11 +235,15 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         recaller: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['recaller_updater']
         },
         recaller_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['recaller_updater']
         }
       }
@@ -242,14 +265,14 @@ describe('resource behaviors', () => {
 
     it('should return anyone can remove asset', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.recaller.rule = 'AllowAll'
+      auth1.rules.recaller.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['removable-by-anyone']
 
       expect(getBehaviors(auth1)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.recaller_updater.rule = 'AllowAll'
+      auth2.rules.recaller_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -260,11 +283,15 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         freezer: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['freezer_updater']
         },
         freezer_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['freezer_updater']
         }
       }
@@ -286,14 +313,14 @@ describe('resource behaviors', () => {
 
     it('should return anyone can freeze asset', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.freezer.rule = 'AllowAll'
+      auth1.rules.freezer.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['freezable-anyone']
 
       expect(getBehaviors(auth1)).toEqual(expectedBehaviors)
 
       const auth2 = clone(authInfo)
-      auth2.rules.freezer_updater.rule = 'AllowAll'
+      auth2.rules.freezer_updater.rule.type = 'AllowAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
     })
@@ -304,7 +331,9 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         non_fungible_data_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['non_fungible_data_updater']
         }
       }
@@ -321,7 +350,7 @@ describe('resource behaviors', () => {
 
     it('should return data on nfts can be changed by anyone', () => {
       const auth = clone(authInfo)
-      auth.rules.non_fungible_data_updater.rule = 'AllowAll'
+      auth.rules.non_fungible_data_updater.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['nft-data-changeable-anyone']
 
@@ -334,47 +363,69 @@ describe('resource behaviors', () => {
       owner: {} as any,
       rules: {
         minter: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['minter_updater']
         },
         burner: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['burner_updater']
         },
         minter_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['minter_updater']
         },
         burner_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['burner_updater']
         },
         depositer: {
-          rule: 'AllowAll',
+          rule: {
+            type: 'AllowAll'
+          },
           updaters: ['depositer_updater']
         },
         withdrawer: {
-          rule: 'AllowAll',
+          rule: {
+            type: 'AllowAll'
+          },
           updaters: ['withdrawer_updater']
         },
         depositer_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['depositer_updater']
         },
         withdrawer_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['withdrawer_updater']
         },
         recaller: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['recaller_updater']
         },
         recaller_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['recaller_updater']
         },
         non_fungible_data_updater: {
-          rule: 'DenyAll',
+          rule: {
+            type: 'DenyAll'
+          },
           updaters: ['non_fungible_data_updater']
         }
       }
@@ -394,7 +445,9 @@ describe('resource behaviors', () => {
       owner: mockAuthRule,
       rules: {
         minter: {
-          rule: 'Owner',
+          rule: {
+            type: 'Owner'
+          },
           updaters: ['minter_updater']
         }
       }
@@ -410,7 +463,7 @@ describe('resource behaviors', () => {
 
     it('should return simple when owner is DenyAll', () => {
       const auth = clone(authInfo)
-      auth.owner = 'DenyAll'
+      auth.owner.type = 'DenyAll'
 
       const expectedBehavior = 'simple'
 
