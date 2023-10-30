@@ -1,12 +1,13 @@
+import dayjs from '@common/dayjs'
 import { WorkbookClient } from './workbook-client'
 
 describe('workbook client', () => {
   it('should initialize without throw', () => {
-    expect(() => WorkbookClient({ toDate: new Date() })).not.toThrow()
+    expect(() => WorkbookClient({ toDate: dayjs.utc() })).not.toThrow()
   })
 
   it('should only add TXs before toDate', async () => {
-    const client = WorkbookClient({ toDate: new Date('2021-01-01') })
+    const client = WorkbookClient({ toDate: dayjs.utc('2021-01-01') })
     client.addRows([
       {
         round_timestamp: '2019-01-01',
