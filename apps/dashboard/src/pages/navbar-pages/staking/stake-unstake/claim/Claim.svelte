@@ -19,7 +19,9 @@
 
   $: accumulatedClaims = readyToClaim.reduce((acc, claim) => {
     const existingClaimIndex = acc.findIndex(
-      (c) => c.validator.address === claim.validator.address
+      (c) =>
+        c.validator.address === claim.validator.address &&
+        c.account === claim.account
     )
 
     if (existingClaimIndex >= 0) {
