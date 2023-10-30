@@ -38,8 +38,8 @@
       return {
         amount: nearestClaim.amount,
         timeToClaim: timeToEpoch(
-          parseInt(nearestClaim.claimEpoch),
-          await $currentEpoch
+          await $currentEpoch,
+          parseInt(nearestClaim.claimEpoch)
         )
       }
     })
