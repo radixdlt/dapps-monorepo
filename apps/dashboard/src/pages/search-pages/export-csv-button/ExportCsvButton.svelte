@@ -2,24 +2,29 @@
   import DatePickerInput from '@components/_base/date-picker/DatePickerInput.svelte'
   import dayjs from '@common/dayjs'
   import { onMount } from 'svelte'
-  import { downloadBinaryFile } from '@common/http'
   import DatePickerCalendar from '@components/_base/date-picker/DatePickerCalendar.svelte'
   import { fly } from 'svelte/transition'
 
   import IosShare from './IosShare.svelte'
   import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import { getDownloadLink } from './side-effects'
+  import { exportTransactions } from './side-effects'
 
   export let entityAddress: string
+
+  const dateFormat = 'DD/MM/YYYY'
 
   let open = false
   let isExporting = false
 
-  let width: number
   let offset: number
   let picker: HTMLElement
 
-  let customDateValue = { fromDate: '', toDate: '' }
+  let customDateValue = {
+    fromDate: '',
+    toDate: '',
+    fromDateObject: dayjs(),
+    toDateObject: dayjs()
+  }
   let selectingDate: 'fromDate' | 'toDate' | undefined
 
   const options = [
@@ -39,48 +44,49 @@
 
   $: {
     if (open) {
-      customDateValue = { fromDate: '', toDate: '' }
+      customDateValue = {
+        fromDate: '',
+        toDate: '',
+        fromDateObject: dayjs(),
+        toDateObject: dayjs()
+      }
       selectingDate = undefined
     }
   }
 
-  const exportTransactions = (fromDate: string, toDate: string) => {
+  const _exportTransactions = (
+    fromDateObject: dayjs.Dayjs,
+    toDateObject: dayjs.Dayjs
+  ) => {
+    if (isExporting) return
     isExporting = true
-    downloadBinaryFile(
-      getDownloadLink(fromDate, toDate, entityAddress),
-      'transactions.csv'
-    ).finally(() => {
+    exportTransactions(fromDateObject, toDateObject, entityAddress).then(() => {
       isExporting = false
     })
   }
 
   const handleKnownRangeExport = (value: string) => {
-    if (isExporting) return
     const getSubstractedDate = (hours: number) => {
-      const now = new Date()
-      now.setHours(now.getHours() - hours)
-      return now
+      const now = dayjs.utc()
+      return now.set('hours', now.get('hours') - hours)
     }
-    const currentDate = new Date()
     const dates = {
       lastDay: getSubstractedDate(24),
       lastWeek: getSubstractedDate(24 * 7),
       lastMonth: getSubstractedDate(24 * 30)
     }
 
-    exportTransactions(
-      dates[value as 'lastDay' | 'lastWeek' | 'lastMonth'].toISOString(),
-      currentDate.toISOString()
+    _exportTransactions(
+      dates[value as 'lastDay' | 'lastWeek' | 'lastMonth'],
+      dayjs()
     )
   }
 
   const handleCustomExport = () => {
-    const fromDate = dayjs.utc(customDateValue.fromDate, 'DD/MM/YYYY')
-    const toDate = dayjs
-      .utc(customDateValue.toDate, 'DD/MM/YYYY')
-      .set('hours', 24)
-
-    exportTransactions(fromDate.toISOString(), toDate.toISOString())
+    _exportTransactions(
+      customDateValue.fromDateObject,
+      customDateValue.toDateObject
+    )
   }
 
   onMount(() => {
@@ -96,7 +102,7 @@
   })
 </script>
 
-<div class="picker" bind:clientWidth={width} bind:this={picker}>
+<div class="picker" bind:this={picker}>
   <button
     class="export-csv-button"
     class:disabled={isExporting}
@@ -136,6 +142,12 @@
           <span>Custom:</span>
           <DatePickerInput
             bind:value={customDateValue.fromDate}
+            on:change={(e) => {
+              customDateValue.fromDateObject = dayjs.utc(
+                customDateValue.fromDate,
+                dateFormat
+              )
+            }}
             on:open-calendar={() => {
               selectingDate = 'fromDate'
             }}
@@ -143,6 +155,11 @@
           <span>to</span>
           <DatePickerInput
             bind:value={customDateValue.toDate}
+            on:change={(e) => {
+              customDateValue.toDateObject = dayjs
+                .utc(customDateValue.toDate, dateFormat)
+                .set('hours', 24)
+            }}
             on:open-calendar={() => {
               selectingDate = 'toDate'
             }}
@@ -153,7 +170,11 @@
               open = false
             }}
             rotate
-            disable={!customDateValue.fromDate || !customDateValue.toDate}
+            disable={!customDateValue.fromDate ||
+              !customDateValue.toDate ||
+              customDateValue.fromDateObject.diff(
+                customDateValue.toDateObject
+              ) > 0}
           />
         </button>
       {/if}
@@ -162,6 +183,18 @@
         <DatePickerCalendar
           bind:value={customDateValue[selectingDate]}
           on:datepicked={(e) => {
+            if (selectingDate === 'fromDate') {
+              customDateValue.fromDate = e.detail.datepicked
+              customDateValue.fromDateObject = dayjs
+                .utc(e.detail.datepicked, dateFormat)
+                .set('hours', 0)
+            } else if (selectingDate === 'toDate') {
+              customDateValue.toDate = e.detail.datepicked
+              customDateValue.toDateObject = dayjs
+                .utc(e.detail.datepicked, dateFormat)
+                .set('hours', 24)
+            }
+
             selectingDate = undefined
           }}
         />
