@@ -1,5 +1,6 @@
 import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
+import { http } from '@common/http'
 
 export const getCreateBadgeManifest = (accountAddress: string) => `
 CREATE_NON_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
@@ -96,16 +97,12 @@ export const getDeployPackageManifest = (
   return transactionManifest
 }
 
-export const sborDecodeSchema = (schema: string) => {
-  return fetch('api/ret/sbor-decode', {
-    method: 'POST',
-    body: JSON.stringify({
+export const sborDecodeSchema = async (schema: string) =>
+  http
+    .post('api/ret/sbor-decode', {
       hexEncodedSchema: schema
     })
-  })
-    .then((res) => res.json())
     .then((res) => res.decodedString)
-}
 
 export const createBadge = (accountAddress: string) =>
   sendTransaction(getCreateBadgeManifest(accountAddress))

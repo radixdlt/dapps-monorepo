@@ -5,7 +5,8 @@ import {
   type ErrorResponse,
   type StateEntityDetailsOptions,
   type StateNonFungibleDetailsResponseItem,
-  type LedgerStateSelector
+  type LedgerStateSelector,
+  type StreamTransactionsResponse
 } from '@common/gateway-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
@@ -97,6 +98,29 @@ export const callApi = <T extends keyof typeof api>(
 
 export const getRecentTransactions = (address: string, cursor?: string) =>
   gatewayApi.stream.getTransactionsList([address], cursor)
+
+export const getTransactionsFromDate = (
+  address: string,
+  timestamp: Date,
+  cursor?: string
+): Promise<StreamTransactionsResponse> => {
+  return gatewayApi.stream.innerClient.streamTransactions({
+    streamTransactionsRequest: {
+      affected_global_entities_filter: [address],
+      cursor,
+      order: 'Asc',
+      from_ledger_state: {
+        timestamp
+      },
+      opt_ins: {
+        balance_changes: false, // TODO: change to true when time comes
+        receipt_state_changes: false,
+        receipt_output: false,
+        receipt_events: false
+      }
+    }
+  })
+}
 
 export const getValidatorsList = () => {
   return gatewayApi.state.getAllValidators()
