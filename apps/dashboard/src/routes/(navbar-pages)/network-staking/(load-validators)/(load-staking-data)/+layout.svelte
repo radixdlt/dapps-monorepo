@@ -49,17 +49,17 @@
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
       const filtered = validators.filter((v) => {
-          return (
-            v.fee.percentage >= e.detail.feeFilter[0] &&
-            v.fee.percentage <= e.detail.feeFilter[1] &&
-            v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
-            v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
-            (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-            (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
-            v.uptimePercentages[e.detail.uptimeFilter.timeframe] >=
-              e.detail.uptimeFilter.percentage
-          )
-        })
+        return (
+          v.fee.percentage >= e.detail.feeFilter[0] &&
+          v.fee.percentage <= e.detail.feeFilter[1] &&
+          v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
+          v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
+          (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
+          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
+          (v.uptimePercentages[e.detail.uptimeFilter.timeframe] ?? 0) >=
+            e.detail.uptimeFilter.percentage
+        )
+      })
 
       if (filtered.length === validators.length) {
         filteredValidators = undefined
