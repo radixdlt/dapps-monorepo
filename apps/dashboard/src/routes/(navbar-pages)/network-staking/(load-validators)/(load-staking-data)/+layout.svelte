@@ -38,7 +38,9 @@
 
   let filterOpen = false
 
-  let filteredValidators: typeof data.promises.validators
+  let filteredValidators: Awaited<typeof data.promises.validators> | undefined
+
+  let filter: FilterDetails
 
   const applyFilter =
     (
@@ -46,8 +48,7 @@
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
-      filteredValidators = Promise.resolve(
-        validators.filter((v) => {
+      const filtered = validators.filter((v) => {
           return (
             v.fee.percentage >= e.detail.feeFilter[0] &&
             v.fee.percentage <= e.detail.feeFilter[1] &&
@@ -59,7 +60,12 @@
               e.detail.uptimeFilter.percentage
           )
         })
-      )
+
+      if (filtered.length === validators.length) {
+        filteredValidators = undefined
+      } else {
+        filteredValidators = filtered
+      }
     }
 </script>
 
@@ -73,10 +79,15 @@
   on:show-filters={() => {
     filterOpen = true
   }}
+  on:reset-filters={() => {
+    filteredValidators = undefined
+    filter.reset()
+  }}
 />
 
 {#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
   <FilterDetails
+    bind:this={filter}
     bind:open={filterOpen}
     feeValues={validators.map((v) => v.fee.percentage)}
     totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}

@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import InfoIcon from '@icons/info.svg'
+  import Cross from '@icons/cross-2.svg'
 
   export type AccountWithStakes = Account & {
     stakes: {
@@ -39,9 +40,11 @@
   import type { Validator } from '@api/utils/entities/validator'
   import type { StakeInfo } from '@api/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
 
   export let validators: Promise<Validator<true, true, true>[]>
-  export let filteredValidators: Promise<Validator<true, true, true>[]>
+  export let filteredValidators: Validator<true, true, true>[] | undefined =
+    undefined
 
   context.set('validators', writable([]))
 
@@ -77,6 +80,7 @@
     'show-stake-multiple': undefined
     'show-stake-single': string
     'show-filters': undefined
+    'reset-filters': undefined
   }>()
 </script>
 
@@ -182,7 +186,18 @@
   <div class="subtext">
     Full list of validator nodes currently registered on the Radix Network.
   </div>
+
   <div id="filter-btn">
+    {#if filteredValidators}
+      <button
+        class="reset-filters"
+        on:click={() => {
+          dispatch('reset-filters')
+        }}
+      >
+        <IconNew faded icon={Cross} />
+      </button>
+    {/if}
     <FilterButton
       on:click={() => {
         dispatch('show-filters')
@@ -192,7 +207,7 @@
 </div>
 
 <ValidatorList
-  validators={filteredValidators || validators}
+  validators={filteredValidators ?? validators}
   on:click-validator={(e) => {
     goto(`/network-staking/${e.detail}`)
   }}
@@ -257,6 +272,19 @@
 
     #filter-btn {
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+
+      .reset-filters {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: var(--color-grey-4);
+      }
     }
   }
 </style>
