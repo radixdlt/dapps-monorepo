@@ -5,6 +5,7 @@
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import Change from './Change.svelte'
   import BigNumber from 'bignumber.js'
+  import { xrdAddress } from '@stores'
 
   type _BalanceChange<T extends 'fungible' | 'non-fungible' | 'fee'> = {
     type: T
@@ -45,7 +46,11 @@
         {#if change.type === 'non-fungible'}
           <NftImage url={change.token.icon} --size="2.3rem" />
         {:else}
-          <TokenIcon iconUrl={change.token.icon} --size="2rem" />
+          <TokenIcon
+            isXrd={change.token.address === $xrdAddress}
+            iconUrl={change.token.icon}
+            --size="2rem"
+          />
         {/if}
       </div>
 
