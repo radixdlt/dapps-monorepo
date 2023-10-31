@@ -9,10 +9,12 @@
   type _BalanceChange<T extends 'fungible' | 'non-fungible' | 'fee'> = {
     type: T
     token: {
+      address: string
       icon?: string
       name?: T extends 'fee' ? 'Radix (XRD)' : string
     } & (T extends 'non-fungible'
       ? {
+          id: string
           resourceName?: string
         }
       : {})
@@ -49,18 +51,22 @@
 
       <div class="name-and-amount dotted-overflow">
         {#if change.type === 'non-fungible'}
-          <div class="non-fungible-name dotted-overflow">
-            <div class="subtext dotted-overflow">
-              {change.token.resourceName ?? ''}
+          <a href={`/nft/${change.token.address}:${change.token.id}`}>
+            <div class="non-fungible-name dotted-overflow">
+              <div class="subtext dotted-overflow">
+                {change.token.resourceName ?? ''}
+              </div>
+              <div class="dotted-overflow">
+                {change.token.name ?? ''}
+              </div>
             </div>
-            <div class="dotted-overflow">
+          </a>
+        {:else}
+          <a href={`/resource/${change.token.address}`}>
+            <div class="fungible-name dotted-overflow">
               {change.token.name ?? ''}
             </div>
-          </div>
-        {:else}
-          <div class="fungible-name dotted-overflow">
-            {change.token.name ?? ''}
-          </div>
+          </a>
         {/if}
 
         {#if change.type === 'fee'}
