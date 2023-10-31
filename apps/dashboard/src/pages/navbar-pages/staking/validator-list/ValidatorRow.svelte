@@ -13,6 +13,8 @@
 
   export let validator: TransformedValidator
   export let selectedUptime: UptimeValue
+
+  $: uptime = validator[selectedUptime]
 </script>
 
 <tr class="validator-row">
@@ -61,7 +63,9 @@
     <ResponsiveTableCell>
       <div class="apy apy-text-box no-overflow bold">
         {validator.rank <= 100 ? `${truncateNumber(validator.apy)}%` : 'N/A'}
-        <span class="subtext">per year</span>
+        {#if validator.rank <= 100}
+          <span class="subtext">per year</span>
+        {/if}
       </div>
     </ResponsiveTableCell>
 
@@ -73,9 +77,7 @@
 
     <ResponsiveTableCell>
       <div class="uptime apy-text-box no-overflow bold">
-        {validator[selectedUptime] > 0
-          ? `${truncateNumber(validator[selectedUptime])}%`
-          : 'Not Measurable'}
+        {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
       </div>
     </ResponsiveTableCell>
 

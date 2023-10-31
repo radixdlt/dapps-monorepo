@@ -130,6 +130,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
             type: 'fungible',
             change: change.change.balance_change,
             token: {
+              address: change.change.resource_address,
               icon: icon?.href,
               name
             }
@@ -146,6 +147,8 @@ export const load: LayoutServerLoad = async ({ params }) => {
               type: 'non-fungible',
               change: 'added',
               token: {
+                address: change.change.resource_address,
+                id: id,
                 icon: icon?.href,
                 name: getNftData(nft.data, 'name'),
                 resourceName
@@ -160,6 +163,8 @@ export const load: LayoutServerLoad = async ({ params }) => {
               type: 'non-fungible',
               change: 'removed',
               token: {
+                address: change.change.resource_address,
+                id: id,
                 icon: icon?.href,
                 name: getNftData(nft.data, 'name'),
                 resourceName
@@ -172,6 +177,7 @@ export const load: LayoutServerLoad = async ({ params }) => {
             type: 'fee',
             change: change.change.balance_change,
             token: {
+              address: change.change.resource_address,
               icon: icon?.href || '',
               name: 'Radix (XRD)'
             }

@@ -71,6 +71,6 @@
 <Story name="Connected">
   <Validators
     validators={Promise.resolve(validators)}
-    filteredValidators={Promise.resolve([])}
+    filteredValidators={[]}
   />
 </Story>

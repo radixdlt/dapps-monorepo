@@ -12,6 +12,14 @@
   export let feeValues: number[]
   export let totalXRDStakeValues: number[]
 
+  export const reset = () => {
+    feeFilter = [0, 100]
+    totalXRDStakeFilter = [0, 100]
+    uptimeFilterPercentage = 0
+    acceptsStakeFilter = false
+    bookmarkedFilter = false
+  }
+
   let feeFilter: [number, number] = [0, 100]
 
   let totalXRDStakeFilter: [number, number] = [0, 100]

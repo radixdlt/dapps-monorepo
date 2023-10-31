@@ -20,15 +20,15 @@
   ]
 
   let selected: (typeof options)[number] = options[6]
+
+  $: uptime = uptimes[selected.value]
 </script>
 
 <div class="uptime-detail">
   <div class="picker">
     <SimplePicker {options} bind:selected />
   </div>
-  {uptimes[selected.value] > 0
-    ? `${truncateNumber(uptimes[selected.value])}%`
-    : 'Not Measurable'}
+  {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
 </div>
 
 <style>

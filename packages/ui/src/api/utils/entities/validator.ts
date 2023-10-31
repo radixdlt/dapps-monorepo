@@ -37,13 +37,13 @@ export type Validator<
   (WithUptime extends true
     ? {
         uptimePercentages: {
-          '1day': number
-          '1week': number
-          '1month': number
-          '3months': number
-          '6months': number
-          '1year': number
-          alltime: number
+          '1day'?: number
+          '1week'?: number
+          '1month'?: number
+          '3months'?: number
+          '6months'?: number
+          '1year'?: number
+          alltime?: number
         }
         apy: number
       }
@@ -70,13 +70,15 @@ const getValidatorUptimeSinceDate =
       uptimes.reduce((acc, cur) => {
         acc[cur.address] = calculateUptimePercentage(cur)
         return acc
-      }, {} as Record<string, number>)
+      }, {} as Record<string, number | undefined>)
     )
 
 const calculateUptimePercentage = ({
   proposals_made,
-  proposals_missed
+  proposals_missed,
+  epochs_active_in
 }: ValidatorUptimeCollectionItem) => {
+  if (epochs_active_in === 0) return undefined
   if (proposals_made === undefined || proposals_missed === undefined) return 0
 
   let total_proposals = proposals_made! + proposals_missed!
@@ -304,7 +306,7 @@ const appendUptime =
           apy: new BigNumber(YEARLY_XRD_EMISSIONS)
             .multipliedBy(
               (1 - (entity.state as any).validator_fee_factor) *
-                _uptimes.alltime
+                (_uptimes.alltime ?? 0)
             )
             .dividedBy(totalAmountStaked)
             .toNumber()
