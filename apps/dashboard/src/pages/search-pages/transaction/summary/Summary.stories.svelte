@@ -16,6 +16,7 @@
           {
             type: 'fungible',
             token: {
+              address: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'TEST'
             },
@@ -24,6 +25,8 @@
           {
             type: 'non-fungible',
             token: {
+              address: '0x000000',
+              id: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'Cool Monkey',
               resourceName: 'Bored Apes'
@@ -33,6 +36,7 @@
           {
             type: 'fungible',
             token: {
+              address: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'XRD'
             },
@@ -41,6 +45,7 @@
           {
             type: 'fee',
             token: {
+              address: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'Radix (XRD)'
             },
@@ -54,6 +59,7 @@
           {
             type: 'fungible',
             token: {
+              address: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'TEST'
             },
@@ -62,6 +68,7 @@
           {
             type: 'fungible',
             token: {
+              address: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'Radix (XRD)'
             },
@@ -70,6 +77,8 @@
           {
             type: 'non-fungible',
             token: {
+              address: '0x000000',
+              id: '0x000000',
               icon: 'https://picsum.photos/200/200',
               name: 'Space Monkey',
               resourceName: 'Bored Apes'
