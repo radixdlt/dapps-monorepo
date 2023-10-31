@@ -75,7 +75,7 @@
   export type SortableType = BigNumber | string | number | boolean
 
   export type SortableValues<T> = {
-    [K in keyof T]: T[K] extends SortableType ? K : never
+    [K in keyof T]: T[K] extends SortableType | undefined ? K : never
   }[keyof T]
 
   export type TableColumn<Entry = any> = {
