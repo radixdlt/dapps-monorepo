@@ -23,7 +23,8 @@ on:
       - main
   release:
     types:
-      - published
+      - prereleased
+      - released
   workflow_dispatch:
     inputs:
       ENVIRONMENT_NAME:
@@ -36,8 +37,6 @@ on:
           - hammunet
           - gilganet
           - mardunet
-          - stokenet
-          - mainnet
 
 env:
   active_network: 'stokenet'
@@ -54,8 +53,8 @@ jobs:
   trigger:
     name: Check trigger
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'console') ) ||
-      ( github.event_name == 'release' && github.event.release.prerelease && contains( github.event.release.tag_name, 'console') ) ||
+      ( github.event.action == 'prereleased' && contains( github.event.release.tag_name, 'console') ) ||
+      ( github.event.action == 'released' && contains( github.event.release.tag_name, 'console') ) ||
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push') ||
       ( github.event_name == 'pull_request' )
@@ -65,7 +64,8 @@ jobs:
         uses: crazy-max/ghaction-dump-context@v2
       - name: Info
         run: |
-          echo "This is triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
+          echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   build:
     runs-on: ubuntu-latest
@@ -107,9 +107,9 @@ jobs:
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
             echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" -a "${{ github.event.release.prerelease }}" = "false" ]; then
+          elif [ "${{ github.event.action }}" = "released" ]; then
             echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-          elif [ "${{ github.event.action }}" = "published" -a "${{ github.event.release.prerelease }}" = "true" ]; then
+          elif [ "${{ github.event.action }}" = "prereleased" ]; then
             echo "NETWORK_NAME=${{ env.prerelease_network }}" >> $GITHUB_ENV
           elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
@@ -364,8 +364,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=dev
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       app_name: 'console'
       step_name: 'deploy-dev'
 
@@ -386,8 +385,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=enkinet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-enkinet
       app_name: 'console'
       step_name: 'deploy-enkinet'
@@ -409,8 +407,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=hammunet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-hammunet
       app_name: 'console'
       step_name: 'deploy-hammunet'
@@ -432,8 +429,7 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=gilganet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-gilganet
       app_name: 'console'
       step_name: 'deploy-gilganet'
@@ -455,16 +451,13 @@ jobs:
       eks_cluster: rdx-works-main-dev
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=mardunet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-mardunet
       app_name: 'console'
       step_name: 'deploy-mardunet'
 
   deploy_stokenet:
-    if: >
-      ( github.event_name == 'release' && github.event.release.prerelease ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
+    if: github.event_name == 'release' && github.event.action == 'prereleased'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
@@ -479,16 +472,13 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=stokenet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-stokenet
       app_name: 'console'
       step_name: 'deploy-stokenet'
 
   deploy_mainnet:
-    if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    if: github.event_name == 'release' && github.event.action == 'released'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-console
@@ -503,8 +493,7 @@ jobs:
       eks_cluster: rtlj-prod
       helm_folder: deploy/helm/console
       helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},
-        ci.environment=mainnet
+        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
       github_environment: console-mainnet
       app_name: 'console'
       step_name: 'deploy-mainnet'

@@ -22,22 +22,18 @@ repositories:
     username: {{ requiredEnv "HELM_GH_USER" }}
     password: {{ requiredEnv "HELM_GH_PASS" }}
 releases:
-{{ $DASHBOARD_NS := .Namespace }}
   - name: dashboard
-    namespace: {{ $DASHBOARD_NS }}
     chart: ./dashboard
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: storybook
-    namespace: {{ $DASHBOARD_NS }}
-    installed: {{ ne .Environment.Name "prod" }}
+    installed: {{ and (ne .Environment.Name "mainnet") (ne .Environment.Name "stokenet") }}
     chart: ./storybook
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: developer-access
-    namespace: {{ $DASHBOARD_NS }}
     chart: rdx-works/developer-access
     version: 1.0.0
     values:
@@ -45,7 +41,6 @@ releases:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: alertmanager
-    namespace: {{ $DASHBOARD_NS }}
     chart: rdx-works/alertmanager-configs
     version: 1.1.0
     installed: {{ ne .Environment.Name "pr" }}
@@ -53,7 +48,6 @@ releases:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: postgres
-    namespace: {{ $DASHBOARD_NS }}
     chart: bitnami/postgresql
     version:  12.4.2
     installed: {{ eq .Environment.Name "pr" }}
