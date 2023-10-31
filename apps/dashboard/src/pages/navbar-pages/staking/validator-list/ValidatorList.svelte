@@ -21,14 +21,19 @@
     type Direction
   } from '@components/_base/table/Table.svelte'
 
-  export let validators: Promise<Validator<true, true, true>[]>
+  export let validators:
+    | Promise<Validator<true, true, true>[]>
+    | Validator<true, true, true>[]
+
   export let loadingRowsCount = 15
+
+  $: _validators = Promise.resolve(validators)
 
   let selectedUptime: { label: string; value: UptimeValue }
 
   let transformedValidators: Promise<TransformedValidator[]>
 
-  $: transformedValidators = validators.then((resolved) =>
+  $: transformedValidators = _validators.then((resolved) =>
     resolved.map((validator) => ({
       ...validator,
       '1day': validator.uptimePercentages['1day'],
