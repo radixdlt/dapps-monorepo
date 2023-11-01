@@ -29,6 +29,7 @@
   import { callApi } from '@api/gateway'
   import { errorPage } from '../stores'
   import { NETWORK_CONFIG } from '@constants'
+  import { PUBLIC_NETWORK_NAME } from '$env/static/public'
 
   let mounted = false
 
@@ -128,7 +129,10 @@
 
 <Theme theme="light">
   {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
-    <div class="banner">For development only. Not usable on Radix mainnet.</div>
+    <div class="banner">
+      This dApp is configured to use the testnet {PUBLIC_NETWORK_NAME}. It does
+      not use the Radix Public Network mainnet.
+    </div>
   {/if}
   {#if mounted}
     <Layout {hideSearch} {routes}>
