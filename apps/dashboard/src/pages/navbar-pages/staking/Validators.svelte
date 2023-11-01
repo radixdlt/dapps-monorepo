@@ -239,7 +239,7 @@
   .selected-validators {
     position: absolute;
     top: var(--spacing-xl);
-    right: var(--spacing-xl);
+    right: var(--spacing-2xl);
     z-index: 2;
   }
 
