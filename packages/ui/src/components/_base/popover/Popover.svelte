@@ -4,7 +4,7 @@
 
   type PlacementVariation = 'end' | 'start'
 
-  export let type: 'info' | 'error' | 'success' = 'info'
+  export let type: 'warn' | 'error' | 'success' | 'info' = 'warn'
   export let show: boolean = false
   export let placement:
     | 'right'
@@ -35,25 +35,39 @@
   <div
     use:popperContent
     transition:fade={{ duration: 100 }}
-    class="popover card"
+    class="popover card {type}"
     data-popper-placement={placement}
-    style:background={type === 'success'
-      ? 'var(--theme-success-primary)'
-      : type === 'error'
-      ? 'var(--theme-error-primary)'
-      : 'var(--color-alert)'}
   >
     <slot name="content" />
     <div class="arrow" data-popper-arrow />
   </div>
 {/if}
 
-<style>
+<style lang="scss">
   .popover {
     color: var(--color-light);
     border-radius: var(--border-radius-md);
     padding: var(--spacing-md);
     margin-right: 100px;
+
+    &.success {
+      background: var(--theme-success-primary);
+    }
+
+    &.error {
+      background: var(--theme-error-primary);
+    }
+
+    &.warn {
+      background: var(--color-alert);
+    }
+
+    &.info {
+      border: none;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--color-grey-1);
+      border-radius: var(--border-radius-lg);
+    }
   }
 
   .arrow,
