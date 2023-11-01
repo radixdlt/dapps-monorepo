@@ -7,6 +7,7 @@ on:
       - 'deploy/helm/console/**'
       - ".github/workflows/console-ci.yaml"
       - 'apps/dashboard/**'
+      - 'packages/ui/**'
       - 'deploy/helm/dashboard/**'
       - ".github/workflows/ci.yaml"
     branches:
@@ -15,6 +16,7 @@ on:
     paths-ignore:
       - 'apps/console/**'
       - 'deploy/helm/console/**'
+      - 'packages/ui/**'
       - ".github/workflows/console-ci.yaml"
       - 'apps/dashboard/**'
       - 'deploy/helm/dashboard/**'

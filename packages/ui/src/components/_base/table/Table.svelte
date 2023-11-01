@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type BigNumber from 'bignumber.js'
-
+  import Tooltip from '../tooltip/Tooltip.svelte'
   export type Direction = 'ascending' | 'descending'
 
   export const sortBasic = <T extends string | number | boolean>(
@@ -97,6 +97,7 @@
     header?: {
       label?: string
       alignment?: 'left' | 'right' | 'center'
+      tooltip?: string
     }
   }
 </script>
@@ -145,12 +146,17 @@
       <slot name="header" sort={sortColumn} {sortStatus}>
         {#each columns as column, i}
           <th style:text-align={column?.header?.alignment ?? 'left'}>
-            <slot
-              name="header-cell"
-              {column}
-              sort={() => sortColumn(column, i)}
-              sortStatus={sortStatus[i]}
-            />
+            <Tooltip
+              headerText={column?.header?.tooltip && column?.header?.label}
+              text={column?.header?.tooltip}
+            >
+              <slot
+                name="header-cell"
+                {column}
+                sort={() => sortColumn(column, i)}
+                sortStatus={sortStatus[i]}
+              />
+            </Tooltip>
           </th>
         {/each}
       </slot>

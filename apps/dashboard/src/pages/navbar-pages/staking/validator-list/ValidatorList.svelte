@@ -84,55 +84,63 @@
   let columns: ComponentProps<BasicTable<TransformedValidator>>['columns'] = [
     {
       header: {
-        label: 'VALIDATOR'
+        label: 'Validator',
+        tooltip: 'Name of validator set by its owner'
       }
     },
     {
       header: {
-        label: 'ADDRESS',
-        alignment: 'center'
+        label: 'Address',
+        alignment: 'center',
+        tooltip: 'Validator component address'
       }
     },
     {
       id: 'totalStake',
       sortBy: sort('totalStakeInXRD', sortBigNumber),
       header: {
-        label: 'TOTAL STAKE',
-        alignment: 'center'
+        label: 'Total Stake',
+        alignment: 'center',
+        tooltip: 'Total XRD staked to this validator'
       }
     },
     {
       sortBy: sort('ownerStake', sortBigNumber),
       header: {
-        label: 'OWNER STAKE',
-        alignment: 'center'
+        label: 'Owner Stake',
+        alignment: 'center',
+        tooltip: '% of stake provided by validator’s owner'
       }
     },
     {
       sortBy: sort('apy', sortBasic),
       header: {
         label: 'APY',
-        alignment: 'center'
+        alignment: 'center',
+        tooltip: 'Estimated return based on recent uptime and current fee'
       }
     },
     {
       sortBy: sort('feePercentage', sortBasic),
       header: {
-        label: 'FEE',
-        alignment: 'center'
+        label: 'Fee',
+        alignment: 'center',
+        tooltip: '% of XRD emissions taken by validator owner'
       }
     },
     {
       header: {
-        label: 'UPTIME',
-        alignment: 'center'
+        label: 'Uptime',
+        alignment: 'center',
+        tooltip: '% of proposals made over the recent time frame selected'
       },
       id: 'uptime'
     },
     {
       header: {
-        label: 'ACCEPTS STAKE',
-        alignment: 'center'
+        label: 'Accepts Stake',
+        alignment: 'center',
+        tooltip: 'Does this validator accept third party staking?'
       }
     }
   ]
