@@ -23,17 +23,19 @@ on:
       - main
   release:
     types:
-      - published
+      - prereleased
+      - released
+
   workflow_dispatch:
     inputs:
       ENVIRONMENT_NAME:
         description: 'Environment Name'
         required: true
-        default: stokenet
+        default: enkinet
         type: choice
         options:
-          - stokenet
-          - mainnet
+          - enkinet
+
 
 env:
   prerelease_network: 'Stokenet'
@@ -49,8 +51,8 @@ jobs:
   trigger:
     name: Check trigger
     if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
-      ( github.event_name == 'release' && github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
+      ( github.event.action == 'prereleased' && contains( github.event.release.tag_name, 'sandbox') ) ||
+      ( github.event.action == 'released' && github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
@@ -60,7 +62,8 @@ jobs:
         uses: crazy-max/ghaction-dump-context@v2
       - name: Info
         run: |
-          echo "This is triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
+          echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
@@ -180,10 +183,10 @@ jobs:
       - name: Define network name
         id: network_name_step
         run: |
-          if [ "${{ github.event_name}}" = 'release' -a "${{ github.event.release.prerelease }}" = "false" ] || [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'mainnet' ]; then
+          if [ "${{ github.event.action }}" = "released" ]; then
             echo "is_public=true" >> $GITHUB_OUTPUT
             echo "network_name=${{ env.release_network }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.event.action }}" = "published" -a "${{ github.event.release.prerelease }}" = "true" ] || [ ${{github.event_name }} = 'workflow_dispatch' -a "${{github.event.inputs.ENVIRONMENT_NAME}}" = 'stokenet' ]; then
+          elif [ "${{ github.event.action }}" = "prereleased" ]; then
             echo "is_public=true" >> $GITHUB_OUTPUT
             echo "network_name=${{ env.prerelease_network }}" >> $GITHUB_OUTPUT
           else
@@ -318,9 +321,7 @@ jobs:
       step_name: 'deploy-dev'
 
   deploy_stokenet:
-    if: >
-      ( github.event_name == 'release' && github.event.release.prerelease ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'stokenet' && github.event_name == 'workflow_dispatch' )
+    if: github.event_name == 'release' && github.event.action == 'prereleased'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-sandbox
@@ -342,9 +343,7 @@ jobs:
       step_name: 'deploy-stokenet'
 
   deploy_mainnet:
-    if: >
-      ( github.event_name == 'release' && !github.event.release.prerelease ) ||
-      ( github.event.inputs.ENVIRONMENT_NAME == 'mainnet' && github.event_name == 'workflow_dispatch' )
+    if: github.event_name == 'release' && github.event.action == 'released'
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
     needs:
       - push-sandbox

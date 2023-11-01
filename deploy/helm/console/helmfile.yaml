@@ -22,15 +22,12 @@ repositories:
     username: {{ requiredEnv "HELM_GH_USER" }}
     password: {{ requiredEnv "HELM_GH_PASS" }}
 releases:
-{{ $CONSOLE_NS := .Namespace }}
   - name: console
-    namespace: {{ $CONSOLE_NS }}
     chart: ./console
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: developer-access
-    namespace: {{ $CONSOLE_NS }}
     chart: rdx-works/developer-access
     version: 1.0.0
     values:
@@ -38,7 +35,6 @@ releases:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
   - name: alertmanager
-    namespace: {{ $CONSOLE_NS }}
     chart: rdx-works/alertmanager-configs
     version: 1.1.0
     installed: {{ ne .Environment.Name "pr" }}
