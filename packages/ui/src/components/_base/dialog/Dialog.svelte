@@ -1,50 +1,32 @@
 <script lang="ts">
-  import {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    DialogDescription
-  } from '@rgossiaux/svelte-headlessui'
-  import { css } from '@styles'
-  import Box from '@components/_base/box/Box.svelte'
-  import type { config } from '@styles'
+  import { fade } from 'svelte/transition'
+  import Backdrop from '../backdrop/Backdrop.svelte'
 
-  export let size:
-    | `$${(typeof config)['theme']['sizes']['4xl']}`
-    | `$${(typeof config)['theme']['sizes']['5xl']}`
-    | `$${(typeof config)['theme']['sizes']['6xl']}`
-  export let open = true
-
-  const overlay = css({
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    alpha: 0.5,
-    width: '100%',
-    height: '100%'
-  })()
+  export let open = false
 </script>
 
-<Dialog {open} on:close={() => (open = false)}>
-  <DialogOverlay class={overlay} />
-  <Box
-    cx={{
-      position: 'fixed',
-      zIndex: 1000,
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: size,
-      padding: '$sm',
-      borderRadius: '$md'
-    }}
-  >
-    <DialogTitle>
-      <slot name="title" />
-    </DialogTitle>
-    <DialogDescription>
-      <slot name="description" />
-    </DialogDescription>
-  </Box>
-</Dialog>
+{#if open}
+  <Backdrop />
+  <div class="dialog card" transition:fade>
+    <slot />
+  </div>
+{/if}
+
+<style lang="scss">
+  .dialog {
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--theme-surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+
+    @include mixins.desktop {
+      padding: var(--spacing-xl);
+    }
+  }
+</style>
