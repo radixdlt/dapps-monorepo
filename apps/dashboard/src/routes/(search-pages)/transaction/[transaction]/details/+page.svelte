@@ -3,8 +3,6 @@
   import type { LayoutData } from '../$types'
 
   export let data: LayoutData
-
-  $: tx = data.promises.tx.then((tx: any) => tx!)
 </script>
 
-<Overview {tx} manifest={data.promises.manifest} />
+<Overview tx={data.promises.tx} manifest={data.promises.manifest} />

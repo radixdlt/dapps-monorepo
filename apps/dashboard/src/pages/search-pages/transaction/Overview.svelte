@@ -1,11 +1,15 @@
 <script lang="ts">
-  import type { getTransactionDetails } from '@api/gateway'
+  import type { getTransactionDetailsNew } from '@api/gateway'
   import CodeBox from '@components/code-box/CodeBox.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import AddressesList from '@components/_base/address/AddressesList.svelte'
 
-  export let tx: ReturnType<typeof getTransactionDetails>
+  export let tx: Promise<
+    ReturnType<
+      Awaited<ReturnType<typeof getTransactionDetailsNew>>['_unsafeUnwrap']
+    >
+  >
   export let manifest: Promise<string | undefined>
 </script>
 
