@@ -164,6 +164,29 @@ export const getTransactionDetails = (
     }))
 }
 
+export const getTransactionDetailsNew = (
+  intentHashHex: string,
+  optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]
+) => {
+  return callApi('getCommittedDetails', intentHashHex, optIns).map((res) => ({
+    epoch: res.transaction.epoch,
+    round: res.transaction.round,
+    status: res.transaction.transaction_status,
+    date: res.transaction.confirmed_at,
+    fee: res.transaction.fee_paid,
+    message: (res.transaction.message as any)?.content?.value,
+    encodedManifest: res.transaction.raw_hex,
+    receipt: res.transaction.receipt,
+    events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
+    affectedEntities: res.transaction.affected_global_entities || [],
+    createdEntities:
+      ((res.transaction.receipt?.state_updates as any)
+        ?.new_global_entities as any[]) || [],
+    stateVersion: res.transaction.state_version,
+    balanceChanges: res.transaction.balance_changes
+  }))
+}
+
 export const getNetworkConfiguration = () =>
   gatewayApi.status.getNetworkConfiguration()
 
