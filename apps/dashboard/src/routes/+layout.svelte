@@ -7,6 +7,7 @@
   import { onMount } from 'svelte'
   import {
     accounts,
+    externalNavigationConfirmation,
     networkConfiguration,
     selectedAccount,
     storage
@@ -28,8 +29,14 @@
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
   import { callApi } from '@api/gateway'
   import { errorPage } from '../stores'
-  import { NETWORK_CONFIG } from '@constants'
   import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@constants'
+  import Dialog from '@components/_base/dialog/Dialog.svelte'
+  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import Cross from '@icons/cross-2.svg'
+  import External from '@icons/external-white.svg'
+  import ExternalBlack from '@icons/external-black.svg'
 
   let mounted = false
 
@@ -38,6 +45,21 @@
   $: {
     $page
     $errorPage = undefined
+  }
+
+  let displayNavigationWarning = false
+
+  $: if ($externalNavigationConfirmation) displayNavigationWarning = true
+
+  $: if ($externalNavigationConfirmation) {
+    if (
+      NON_EXTERNAL_ORIGINS.includes(
+        new URL($externalNavigationConfirmation.url).origin
+      )
+    ) {
+      displayNavigationWarning = false
+      $externalNavigationConfirmation.confirm(true)
+    }
   }
 
   onMount(() => {
@@ -137,6 +159,7 @@
   {#if mounted}
     <Layout {hideSearch} {routes}>
       <!-- svelte-ignore a11y-missing-content -->
+
       <a
         slot="logo"
         href="/"
@@ -144,6 +167,7 @@
         style:background-image="url({LogoIcon})"
         style:margin-bottom="var(--spacing-lg)"
       />
+
       <div class="page">
         <div>
           {#if $errorPage}
@@ -160,6 +184,47 @@
       </div>
     </Layout>
   {/if}
+
+  <Dialog bind:open={displayNavigationWarning}>
+    <div class="external-page-warning">
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <div
+        on:click={() => {
+          const navigation = $externalNavigationConfirmation
+          if (navigation) navigation.confirm(false)
+          displayNavigationWarning = false
+        }}
+        class="close-icon"
+      >
+        <IconNew icon={Cross} faded />
+      </div>
+      <div class="external-icon">
+        <IconNew icon={ExternalBlack} --size="1.5rem" />
+      </div>
+
+      <h2 class="warning-title">Leaving Radix Dashboard</h2>
+
+      <p class="warning-text">
+        You are now leaving the Radix Dashboard and redirecting to {$externalNavigationConfirmation?.url}
+      </p>
+
+      <div class="button">
+        <ButtonNew
+          size="big"
+          on:click={() => {
+            const navigation = $externalNavigationConfirmation
+            if (navigation) navigation.confirm(true)
+            displayNavigationWarning = false
+          }}
+        >
+          <div class="continue-btn">
+            <IconNew icon={External} />
+            Continue
+          </div>
+        </ButtonNew>
+      </div>
+    </div>
+  </Dialog>
 </Theme>
 
 <style lang="scss" global>
@@ -188,5 +253,47 @@
     background: var(--color-alert);
     padding: var(--spacing-md);
     text-align: center;
+  }
+
+  .external-page-warning {
+    display: grid;
+    grid:
+      'close     title'
+      'icon      title'
+      'content   content'
+      'button    button' / 1.5rem 1fr;
+    width: 20rem;
+    row-gap: var(--spacing-lg);
+
+    .close-icon {
+      grid-area: close;
+      cursor: pointer;
+    }
+
+    .external-icon {
+      grid-area: icon;
+      transform: translateX(-3px);
+    }
+
+    .warning-title {
+      grid-area: title;
+      align-self: end;
+      margin: 0;
+    }
+
+    .warning-text {
+      grid-area: content;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .button {
+      grid-area: button;
+      .continue-btn {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        color: var(--theme-light);
+      }
+    }
   }
 </style>

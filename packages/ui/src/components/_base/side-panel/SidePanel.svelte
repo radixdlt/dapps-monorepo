@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
-  import { fade, fly } from 'svelte/transition'
+  import { createEventDispatcher } from 'svelte'
+  import { fly } from 'svelte/transition'
+  import Backdrop from '../backdrop/Backdrop.svelte'
 
   export let open = true
   export let useBackdrop = false
@@ -21,10 +22,8 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 {#if open}
   {#if useBackdrop}
-    <div
-      class="backdrop"
-      transition:fade={{ duration: 300 }}
-      on:click|self={() => {
+    <Backdrop
+      on:click={() => {
         dispatch('close')
       }}
     />
@@ -51,16 +50,5 @@
     z-index: 3;
     overflow-y: scroll;
     padding: var(--spacing-2xl) var(--spacing-3xl);
-  }
-
-  .backdrop {
-    backdrop-filter: blur(8px);
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2;
   }
 </style>
