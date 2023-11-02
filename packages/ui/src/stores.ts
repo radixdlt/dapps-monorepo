@@ -29,3 +29,11 @@ export const xrdAddress = derived(networkConfiguration, (config) =>
 )
 
 export const showSidebar = writable(false)
+
+export const externalNavigationConfirmation = writable<
+  | {
+      confirm: (value: boolean) => void
+      url: string
+    }
+  | undefined
+>(undefined)

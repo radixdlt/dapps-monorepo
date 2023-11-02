@@ -20,9 +20,9 @@
 </script>
 
 <Popover type="info" {placement} bind:show>
-  <div 
-  on:mouseenter={() => (show = !!text && true)} 
-  on:mouseleave={() => (show = false)}
+  <div
+    on:mouseenter={() => (show = !!text && true)}
+    on:mouseleave={() => (show = false)}
   >
     <slot />
   </div>

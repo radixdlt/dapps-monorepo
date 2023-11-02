@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import { externalNavigationConfirmation } from '@stores'
   import IconNew from '../icon/IconNew.svelte'
   import ExternalLink from '@icons/external-link.svg'
 
@@ -9,7 +10,25 @@
 </script>
 
 {#if external}
-  <a class="wrapper" href={url} target="_blank">
+  <a
+    class="wrapper"
+    href={url}
+    on:click={(e) => {
+      e.preventDefault()
+
+      const awaitConfirmation = new Promise((resolve) => {
+        $externalNavigationConfirmation = {
+          confirm: resolve,
+          url: url
+        }
+      })
+
+      awaitConfirmation.then((confirmation) => {
+        if (confirmation) window.open(url, '_blank')
+      })
+    }}
+    target="_blank"
+  >
     {text || url}
 
     <IconNew icon={ExternalLink} />

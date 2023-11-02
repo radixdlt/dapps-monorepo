@@ -77,3 +77,5 @@ export const YEARLY_XRD_EMISSIONS = 300_000_000
 
 export const SAFE_IMAGE_SERVICE_URL =
   'https://image-service-dev.extratools.works'
+
+export const NON_EXTERNAL_ORIGINS = ['https://www.radixdlt.com']

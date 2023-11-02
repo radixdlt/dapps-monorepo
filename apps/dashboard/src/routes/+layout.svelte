@@ -7,6 +7,7 @@
   import { onMount } from 'svelte'
   import {
     accounts,
+    externalNavigationConfirmation,
     networkConfiguration,
     selectedAccount,
     storage
@@ -28,15 +29,14 @@
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
   import { callApi } from '@api/gateway'
   import { errorPage } from '../stores'
-  import { NETWORK_CONFIG } from '@constants'
   import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@constants'
   import Dialog from '@components/_base/dialog/Dialog.svelte'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import Cross from '@icons/cross-2.svg'
   import External from '@icons/external-white.svg'
   import ExternalBlack from '@icons/external-black.svg'
-  import { beforeNavigate, goto } from '$app/navigation'
 
   let mounted = false
 
@@ -49,26 +49,18 @@
 
   let displayNavigationWarning = false
 
-  let resolveNavigation: (confirm: boolean) => void
+  $: if ($externalNavigationConfirmation) displayNavigationWarning = true
 
-  let externalUrl: string
-
-  beforeNavigate(async ({ to, cancel }) => {
-    if (to?.url.origin === window.location.origin || !to) return
-    cancel()
-
-    const confirmExternalNavigation = new Promise<boolean>((resolve) => {
-      resolveNavigation = resolve
-    })
-
-    externalUrl = to!.url.href
-    displayNavigationWarning = true
-
-    const confirmation = await confirmExternalNavigation
-
-    if (!confirmation) return
-    goto(to!.url.href)
-  })
+  $: if ($externalNavigationConfirmation) {
+    if (
+      NON_EXTERNAL_ORIGINS.includes(
+        new URL($externalNavigationConfirmation.url).origin
+      )
+    ) {
+      displayNavigationWarning = false
+      $externalNavigationConfirmation.confirm(true)
+    }
+  }
 
   onMount(() => {
     callApi('getNetworkConfiguration').then((res) =>
@@ -198,7 +190,8 @@
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         on:click={() => {
-          resolveNavigation(false)
+          const navigation = $externalNavigationConfirmation
+          if (navigation) navigation.confirm(false)
           displayNavigationWarning = false
         }}
         class="close-icon"
@@ -212,14 +205,15 @@
       <h2 class="warning-title">Leaving Radix Dashboard</h2>
 
       <p class="warning-text">
-        You are now leaving the Radix Dashboard and redirecting to {externalUrl}
+        You are now leaving the Radix Dashboard and redirecting to {$externalNavigationConfirmation?.url}
       </p>
 
       <div class="button">
         <ButtonNew
           size="big"
           on:click={() => {
-            resolveNavigation(true)
+            const navigation = $externalNavigationConfirmation
+            if (navigation) navigation.confirm(true)
             displayNavigationWarning = false
           }}
         >

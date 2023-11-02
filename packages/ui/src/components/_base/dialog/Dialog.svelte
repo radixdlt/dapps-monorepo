@@ -1,13 +1,18 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition'
+  import { fade, scale } from 'svelte/transition'
   import Backdrop from '../backdrop/Backdrop.svelte'
 
   export let open = false
 </script>
 
 {#if open}
-  <Backdrop />
-  <div class="dialog card" transition:fade>
+  <Backdrop zIndex={4} duration={200} />
+  <div
+    class="dialog card"
+    transition:scale={{
+      duration: 200
+    }}
+  >
     <slot />
   </div>
 {/if}
