@@ -2,7 +2,6 @@ project: sandbox
 
 docker:
   secrets:
-    region: eu-west-1
     name: rdx-works-main-dev/eks/docker.io/radixdlt
 
 replicaCount: 1
