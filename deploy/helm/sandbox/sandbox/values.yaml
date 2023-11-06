@@ -3,7 +3,7 @@ project: sandbox
 docker:
   secrets:
     region: eu-west-1
-    name: docker.io/radixdlt
+    name: rdx-works-main-dev/eks/docker.io/radixdlt
 
 replicaCount: 1
 
@@ -13,7 +13,7 @@ image:
   tag: ""
 
 imagePullSecrets:
-  - name: docker-hub-dev
+  - name: dockerhub-dev
 
 nameOverride: "sandbox"
 fullnameOverride: "sandbox"
