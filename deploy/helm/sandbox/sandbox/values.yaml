@@ -2,7 +2,7 @@ project: sandbox
 
 docker:
   secrets:
-    name: rdx-works-main-dev/eks/docker.io/radixdlt
+    name: docker.io/radixdlt
 
 replicaCount: 1
 
