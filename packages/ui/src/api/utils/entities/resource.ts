@@ -77,14 +77,14 @@ type RoleKey =
   | 'minter'
   | 'freezer'
   | 'recaller'
-  | 'depositer'
+  | 'depositor'
   | 'withdrawer'
   | 'non_fungible_data_updater'
   | 'burner_updater'
   | 'minter_updater'
   | 'freezer_updater'
   | 'recaller_updater'
-  | 'depositer_updater'
+  | 'depositor_updater'
   | 'withdrawer_updater'
   | 'metadata_setter'
   | 'metadata_setter_updater'
@@ -140,7 +140,7 @@ const ruleToBehavior =
         case 'non_fungible_data_updater': {
           return 'nft-data-changeable'
         }
-        case 'depositer_updater':
+        case 'depositor_updater':
         case 'withdrawer_updater': {
           return 'movement-restricted-future'
         }
@@ -172,7 +172,7 @@ const ruleToBehavior =
         case 'non_fungible_data_updater': {
           return 'nft-data-changeable-anyone'
         }
-        case 'depositer_updater':
+        case 'depositor_updater':
         case 'withdrawer_updater': {
           return 'movement-restricted-future-anyone'
         }
@@ -185,7 +185,7 @@ const ruleToBehavior =
 
     if (allowed === 'by-no-one') {
       switch (roleKey as RoleKey) {
-        case 'depositer':
+        case 'depositor':
         case 'withdrawer': {
           return 'movement-restricted'
         }
