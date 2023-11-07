@@ -160,11 +160,11 @@ describe('resource behaviors', () => {
     const authInfo: AuthInfo = {
       owner: {} as any,
       rules: {
-        depositer: {
+        depositor: {
           rule: {
             type: 'AllowAll'
           },
-          updaters: ['depositer_updater']
+          updaters: ['depositor_updater']
         },
         withdrawer: {
           rule: {
@@ -172,11 +172,11 @@ describe('resource behaviors', () => {
           },
           updaters: ['withdrawer_updater']
         },
-        depositer_updater: {
+        depositor_updater: {
           rule: {
             type: 'DenyAll'
           },
-          updaters: ['depositer_updater']
+          updaters: ['depositor_updater']
         },
         withdrawer_updater: {
           rule: {
@@ -189,7 +189,7 @@ describe('resource behaviors', () => {
 
     it('should return movement restricted', () => {
       const auth = clone(authInfo)
-      auth.rules.depositer.rule.type = 'DenyAll'
+      auth.rules.depositor.rule.type = 'DenyAll'
 
       const expectedBehaviors = ['movement-restricted']
 
@@ -203,7 +203,7 @@ describe('resource behaviors', () => {
 
     it('should return movement restricted in future', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.depositer_updater.rule = mockAuthRule
+      auth1.rules.depositor_updater.rule = mockAuthRule
 
       const expectedBehaviors = ['movement-restricted-future']
 
@@ -217,7 +217,7 @@ describe('resource behaviors', () => {
 
     it('should return movement restricted in future', () => {
       const auth1 = clone(authInfo)
-      auth1.rules.depositer_updater.rule.type = 'AllowAll'
+      auth1.rules.depositor_updater.rule.type = 'AllowAll'
 
       const expectedBehaviors = ['movement-restricted-future-anyone']
 
@@ -386,11 +386,11 @@ describe('resource behaviors', () => {
           },
           updaters: ['burner_updater']
         },
-        depositer: {
+        depositor: {
           rule: {
             type: 'AllowAll'
           },
-          updaters: ['depositer_updater']
+          updaters: ['depositor_updater']
         },
         withdrawer: {
           rule: {
@@ -398,11 +398,11 @@ describe('resource behaviors', () => {
           },
           updaters: ['withdrawer_updater']
         },
-        depositer_updater: {
+        depositor_updater: {
           rule: {
             type: 'DenyAll'
           },
-          updaters: ['depositer_updater']
+          updaters: ['depositor_updater']
         },
         withdrawer_updater: {
           rule: {
