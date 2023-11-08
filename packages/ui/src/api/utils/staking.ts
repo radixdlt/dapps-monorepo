@@ -55,7 +55,7 @@ export const getUnstakeAndClaimInfo =
 
       const xrdAmount = new BigNumber(
         claimNft.nftData.standard['claim_amount']!.value
-      ).toFixed(RET_DECIMAL_PRECISION - 1)
+      ).toFixed(RET_DECIMAL_PRECISION)
 
       if (new BigNumber(xrdAmount).eq(0)) continue
 
@@ -101,7 +101,7 @@ export const getStakedInfo =
         const xrdAmount = validator.totalStakeInXRD
           .multipliedBy(stakeUnitToken.value)
           .dividedBy(stakeUnitToken.totalSupply)
-          .toFixed(RET_DECIMAL_PRECISION - 1)
+          .toFixed(RET_DECIMAL_PRECISION)
 
         return {
           type: 'staked',
