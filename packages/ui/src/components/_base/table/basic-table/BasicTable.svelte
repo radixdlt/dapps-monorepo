@@ -28,7 +28,7 @@
   type T = $$Generic<Entry>
 
   export let entries: ComponentProps<Table<T>>['entries']
-  export let columns: (BasicTableColumn<T> | null)[]
+  export let columns: BasicTableColumn<T>[]
   export let defaultSortedColumn: ComponentProps<
     Table<T>
   >['defaultSortedColumn'] = undefined

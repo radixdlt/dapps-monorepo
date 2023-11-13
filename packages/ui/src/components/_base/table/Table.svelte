@@ -10,22 +10,18 @@
   type T = $$Generic<Entry>
 
   export let entries: T[]
-  export let columns: (TableColumn<T> | null)[]
+  export let columns: TableColumn<T>[]
   export let defaultSortedColumn:
     | NonNullable<(typeof columns)[number]>['id']
     | undefined = undefined
 
-  const { sortedEntries, sortColumn, sortStatus, lastSortedBy } = useSorting(
-    columns,
-    entries,
-    defaultSortedColumn
-  )
+  const { sort, sortStatus } = useSorting(columns, defaultSortedColumn)
 </script>
 
 <table>
   <thead class="desktop-only">
     <tr>
-      <slot name="header" sort={sortColumn} {sortStatus}>
+      <slot name="header" {sort} {sortStatus}>
         {#each columns as column, i}
           <th style:text-align={column?.header?.alignment ?? 'left'}>
             <Tooltip
@@ -35,8 +31,8 @@
               <slot
                 name="header-cell"
                 {column}
-                sort={() => sortColumn(column, i)}
-                sortStatus={sortStatus[i]}
+                sort={() => (entries = sort(column, i)(entries))}
+                sortStatus={$sortStatus[i]}
               />
             </Tooltip>
           </th>
@@ -46,7 +42,7 @@
   </thead>
 
   <tbody>
-    {#each lastSortedBy ? sortedEntries : entries as entry}
+    {#each entries as entry}
       <slot name="empty-row" {entry}>
         <tr>
           <slot name="row" {entry} />

@@ -54,12 +54,14 @@
     BasicTable<Awaited<typeof entries>[number]>
   >['columns'] = [
     {
+      id: 'name',
       header: {
         label: 'Validator'
       },
       renderAs: ({ validatorName }) => validatorName
     },
     {
+      id: 'staked',
       header: {
         label: 'Staked'
       },
@@ -67,6 +69,7 @@
       renderAs: ({ staking }) => formatXRDValue(staking)
     },
     {
+      id: 'unstaking',
       header: {
         label: 'Unstaking'
       },
@@ -74,6 +77,7 @@
       renderAs: ({ unstaking }) => formatXRDValue(unstaking)
     },
     {
+      id: 'readyToClaim',
       header: {
         label: 'Ready to Claim'
       },

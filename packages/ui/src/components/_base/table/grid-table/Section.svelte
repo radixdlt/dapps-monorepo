@@ -1,37 +1,39 @@
 <script lang="ts">
-  type ID = $$Generic<string>
+  type IDs = $$Generic<string[]>
+  type ColumnIdentifier = $$Generic<number | IDs[number]>
 
-  type ColumnIdentifier = number | ID
-
-  export let columns: Readonly<ID[]> | Readonly<{ id: ID }[]>
+  export let columnIds: Readonly<IDs>
   export let renderAt:
     | (ColumnIdentifier | { start: ColumnIdentifier; end: ColumnIdentifier })
     | undefined = undefined
 
-  $: _columns = columns.map((c) =>
-    typeof c === 'string' ? c : c.id
-  ) as Readonly<ID[]>
-
   const getIndexOfColumn = (column: ColumnIdentifier) =>
-    typeof column === 'number' ? column : _columns.indexOf(column)
+    typeof column === 'number' ? column : columnIds.indexOf(column)
 
-  $: start = renderAt
-    ? getIndexOfColumn(typeof renderAt === 'object' ? renderAt.start : renderAt)
-    : 0
+  let start: number
+
+  $: {
+    columnIds
+    start = renderAt
+      ? getIndexOfColumn(
+          typeof renderAt === 'object' ? renderAt.start : renderAt
+        )
+      : 0
+  }
 
   $: end = renderAt
     ? getIndexOfColumn(typeof renderAt === 'object' ? renderAt.end : renderAt)
-    : _columns.length
+    : columnIds.length
 
-  $: subColumns = _columns.slice(start, end)
+  $: subColumns = columnIds.slice(start, end)
 </script>
 
-<div class="row" style:grid-column="{start + 1} / {end + 2}">
-  <slot columns={subColumns} />
+<div class="section" style:grid-column="{start + 1} / {end + 2}">
+  <slot columnIds={subColumns} />
 </div>
 
 <style>
-  .row {
+  .section {
     display: grid;
     grid-template-columns: subgrid;
   }

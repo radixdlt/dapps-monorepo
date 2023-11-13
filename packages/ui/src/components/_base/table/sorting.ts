@@ -1,5 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import type { Direction, Entry, TableColumn } from './types'
+import { writable, type Writable } from 'svelte/store'
 
 export const sortBasic = <T extends string | number | boolean>(
   a: T,
@@ -37,57 +38,58 @@ export const sortBigNumber = (
     : -1
 }
 
-export const sort = <E extends Entry>(
-  entries: E[],
-  column: TableColumn<E>,
-  direction: Direction
-) => {
-  if (!column.sortBy) {
-    return entries
-  }
-
-  const defaultSortFn = (a: E, b: E, direction: Direction) => {
-    const property = column.sortBy as keyof E
-
-    if (['string', 'number', 'boolean'].includes(typeof a[property])) {
-      return sortBasic(a[property], b[property], direction)
-    } else {
-      return sortBigNumber(a[property], b[property], direction)
+export const sort =
+  <E extends Entry>(column: TableColumn<E>, direction: Direction) =>
+  (rows: E[]) => {
+    if (!column.sortBy) {
+      return rows
     }
+
+    const defaultSortFn = (a: E, b: E, direction: Direction) => {
+      const property = column.sortBy as keyof E
+
+      if (['string', 'number', 'boolean'].includes(typeof a[property])) {
+        return sortBasic(a[property], b[property], direction)
+      } else {
+        return sortBigNumber(a[property], b[property], direction)
+      }
+    }
+
+    const sortFn =
+      typeof column.sortBy === 'function' ? column.sortBy : defaultSortFn
+
+    return [...rows].sort((a, b) => sortFn(a, b, direction))
   }
-
-  const sortFn =
-    typeof column.sortBy === 'function' ? column.sortBy : defaultSortFn
-
-  return [...entries].sort((a, b) => sortFn(a, b, direction))
-}
 
 export const useSorting = <T extends Entry>(
-  columns: (TableColumn<T> | null)[],
-  entries: T[],
+  columns: Readonly<(TableColumn<T> | null)[]>,
   defaultSortedColumn?: string
 ) => {
-  let sortedEntries: T[] = []
   let lastSortedBy: number | undefined = undefined
   let ascendingSort = false
-  let sortStatus: ('ascending' | 'descending' | 'unsorted')[] = Array(
-    columns.length
-  ).fill('unsorted')
+  let sortStatus: Writable<('ascending' | 'descending' | 'unsorted')[]> =
+    writable(Array(columns.length).fill('unsorted'))
 
-  const sortColumn = (column: (typeof columns)[number], index: number) => {
-    if (!column || !column.sortBy) return
-
+  const sortColumn = (
+    column: NonNullable<(typeof columns)[number]>,
+    index: number
+  ) => {
     if (lastSortedBy) {
-      sortStatus[lastSortedBy] = 'unsorted'
+      sortStatus.update((value) =>
+        value.map((v, i) => (i === lastSortedBy ? 'unsorted' : v))
+      )
     }
 
     ascendingSort = index === lastSortedBy ? !ascendingSort : false
 
     lastSortedBy = index
     const direction = ascendingSort ? 'ascending' : 'descending'
-    sortStatus[index] = direction
 
-    sortedEntries = sort(entries, column, direction)
+    sortStatus.update((value) =>
+      value.map((v, i) => (i === index ? direction : v))
+    )
+
+    return sort(column, direction)
   }
 
   if (defaultSortedColumn) {
@@ -96,9 +98,7 @@ export const useSorting = <T extends Entry>(
   }
 
   return {
-    sortedEntries,
-    sortColumn,
-    sortStatus,
-    lastSortedBy
+    sort: sortColumn,
+    sortStatus
   }
 }

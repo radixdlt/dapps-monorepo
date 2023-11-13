@@ -3,29 +3,50 @@
     Validator<unknown, true, unknown>['uptimePercentages'] & {
       feePercentage: number
     }
+
+  export enum ColumnIds {
+    stakingIconBookmark = 'staking-icon-or-bookmark',
+    icon = 'icon',
+    name = 'name',
+    address = 'address',
+    totalStake = 'totalStake',
+    ownerStake = 'ownerStake',
+    apy = 'apy',
+    feePercentage = 'feePercentage',
+    uptime = 'uptime',
+    acceptsStake = 'acceptsStake',
+    select = 'select'
+  }
 </script>
 
 <script lang="ts">
-  import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
   import type { Validator } from '@api/utils/entities/validator'
   import type { ComponentProps } from 'svelte'
   import { connected } from '@stores'
-  import UptimeHeader, { type UptimeValue } from './UptimeHeader.svelte'
-  import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
-  import SkeletonRow from './SkeletonRow.svelte'
   import { bookmarkedValidatorsStore } from '../../../../stores'
-  import {
-    sortBigNumber,
-    type SortableValues,
-    sortBasic,
-    type Direction
-  } from '@components/_base/table/Table.svelte'
+  import GridTable from '@components/_base/table/grid-table/GridTable.svelte'
+  import type { UptimeValue } from './UptimeHeader.svelte'
+  import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
+  import type { Direction, SortableValues } from '@components/_base/table/types'
+  import { sortBigNumber, sortBasic } from '@components/_base/table/sorting'
+  import UptimeHeader from './UptimeHeader.svelte'
+  import ValidatorRow from './ValidatorRow.svelte'
+  import StakedValidatorRow from './staked/StakedValidatorRow.svelte'
+
+  interface $$Slots {
+    rows: {
+      validators: typeof transformedValidators
+      columns: ComponentProps<GridTable<TransformedValidator>>['columns']
+      selectedUptime: UptimeValue
+      columnIds: ColumnIds[]
+      ValidatorRow: typeof ValidatorRow
+      StakedValidatorRow: typeof StakedValidatorRow
+    }
+  }
 
   export let validators:
     | Promise<Validator<true, true, true>[]>
     | Validator<true, true, true>[]
-
-  export let loadingRowsCount = 15
 
   $: _validators = Promise.resolve(validators)
 
@@ -73,73 +94,68 @@
       }
     }
 
-  interface $$Slots {
-    row: {
-      entry: TransformedValidator
-      columns: ComponentProps<BasicTable<TransformedValidator>>['columns']
-      selectedUptime: UptimeValue
-    }
-  }
-
-  let columns: ComponentProps<BasicTable<TransformedValidator>>['columns'] = [
+  let columns: ComponentProps<GridTable<TransformedValidator>>['columns'] = [
     {
+      id: ColumnIds.icon
+    },
+    {
+      id: ColumnIds.name,
       header: {
         label: 'Validator',
+        alignment: 'left',
         tooltip: 'Name of validator set by its owner'
       }
     },
     {
+      id: ColumnIds.address,
       header: {
         label: 'Address',
-        alignment: 'center',
         tooltip: 'Validator component address'
       }
     },
     {
-      id: 'totalStake',
+      id: ColumnIds.totalStake,
       sortBy: sort('totalStakeInXRD', sortBigNumber),
       header: {
         label: 'Total Stake',
-        alignment: 'center',
         tooltip: 'Total XRD staked to this validator'
       }
     },
     {
+      id: ColumnIds.ownerStake,
       sortBy: sort('ownerStake', sortBigNumber),
       header: {
         label: 'Owner Stake',
-        alignment: 'center',
         tooltip: '% of stake provided by validator’s owner'
       }
     },
     {
+      id: ColumnIds.apy,
       sortBy: sort('apy', sortBasic),
       header: {
         label: 'APY',
-        alignment: 'center',
         tooltip: 'Estimated return based on recent uptime and current fee'
       }
     },
     {
+      id: ColumnIds.feePercentage,
       sortBy: sort('feePercentage', sortBasic),
       header: {
         label: 'Fee',
-        alignment: 'center',
         tooltip: '% of XRD emissions taken by validator owner'
       }
     },
     {
+      id: ColumnIds.uptime,
       header: {
         label: 'Uptime',
-        alignment: 'center',
         tooltip: '% of proposals made over the recent time frame selected'
-      },
-      id: 'uptime'
+      }
     },
     {
+      id: ColumnIds.acceptsStake,
       header: {
         label: 'Accepts Stake',
-        alignment: 'center',
         tooltip: 'Does this validator accept third party staking?'
       }
     }
@@ -150,7 +166,11 @@
   }
 
   $: if ($connected) {
-    columns = [{}, ...columns, {}]
+    columns = [
+      { id: ColumnIds.stakingIconBookmark },
+      ...columns,
+      { id: ColumnIds.select }
+    ]
   } else if (isEmpty(columns[0]) && isEmpty(columns[columns.length - 1])) {
     columns = columns.slice(1, -1)
   }
@@ -167,73 +187,54 @@
       return column
     })
   }
+
+  $: columnIds = columns.map((column) => column.id) as ColumnIds[]
 </script>
 
-{#await transformedValidators}
-  <BasicTable {columns} entries={Array(loadingRowsCount).fill(undefined)}>
-    <svelte:fragment slot="row">
-      <SkeletonRow columns={columns.length} />
-    </svelte:fragment>
-  </BasicTable>
-{:then validators}
-  {#if validators.length > 0}
-    <div class="validator-list">
-      <BasicTable
-        {columns}
-        entries={validators}
-        defaultSortedColumn={'totalStake'}
+<GridTable {columns} defaultSortedColumn="totalStake">
+  <div class="header" slot="header-cell" let:column let:sort let:sortStatus>
+    {#if column?.id === 'uptime'}
+      <UptimeHeader
+        on:click={async () => {
+          const validators = await transformedValidators
+          transformedValidators = Promise.resolve(sort()(validators))
+        }}
+        sorting={column?.sortBy ? sortStatus : undefined}
+        bind:selected={selectedUptime}
+      />
+    {:else}
+      <BasicHeader
+        on:click={async () => {
+          const validators = await transformedValidators
+          transformedValidators = Promise.resolve(sort()(validators))
+        }}
+        sorting={column?.sortBy ? sortStatus : undefined}
       >
-        <svelte:fragment slot="header-cell" let:column let:sort let:sortStatus>
-          {#if column?.id === 'uptime'}
-            <UptimeHeader
-              on:click={sort}
-              sorting={column?.sortBy ? sortStatus : undefined}
-              bind:selected={selectedUptime}
-            />
-          {:else}
-            <BasicHeader
-              on:click={sort}
-              sorting={column?.sortBy ? sortStatus : undefined}
-            >
-              {#if column?.header?.label}
-                {column.header.label}
-              {/if}
-            </BasicHeader>
-          {/if}
-        </svelte:fragment>
+        {#if column?.header?.label}
+          {column.header.label}
+        {/if}
+      </BasicHeader>
+    {/if}
+  </div>
 
-        <svelte:fragment slot="row" let:entry>
-          <tr><th class="separator" /> </tr>
-          <slot
-            name="row"
-            {entry}
-            {columns}
-            selectedUptime={selectedUptime?.value}
-          />
-        </svelte:fragment>
-      </BasicTable>
-    </div>
-  {/if}
-{/await}
+  <div class="rows" slot="rows">
+    <slot
+      name="rows"
+      validators={transformedValidators}
+      {columns}
+      {columnIds}
+      selectedUptime={selectedUptime?.value}
+      {ValidatorRow}
+      {StakedValidatorRow}
+    />
+  </div>
+</GridTable>
 
-<style lang="scss">
-  @use '../../../../../../../packages/ui/src/components/_base/table/shared.scss';
-  .validator-list :global(table) {
-    border-spacing: 0 !important;
-    min-width: 60rem;
-
-    :global(td) {
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
-    }
-  }
-
-  .separator {
-    padding-top: shared.$row-spacing;
+<style>
+  .rows {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    grid-gap: var(--spacing-md);
   }
 </style>

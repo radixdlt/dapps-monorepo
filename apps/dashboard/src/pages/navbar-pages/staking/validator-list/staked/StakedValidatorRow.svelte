@@ -4,37 +4,46 @@
   import StakingInfo from './StakingInfo.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
-  import type { UptimeValue } from '../UptimeHeader.svelte'
 
-  export let validator: ComponentProps<ValidatorRow>['validator']
-  export let selectedUptime: UptimeValue
-  export let nbrOfColumns: number
+  export let input: ComponentProps<ValidatorRow>['input']
+  export let columnIds: ComponentProps<ValidatorRow>['columnIds']
 </script>
 
-<tr class="validator-row">
-  <ValidatorRow {validator} {selectedUptime} on:click>
+<div class="validator-row full-width">
+  <ValidatorRow {input} {columnIds} on:click>
     <IconNew icon={StakingIcon} --size="2.5rem" slot="icon" />
   </ValidatorRow>
-</tr>
 
-<td colspan={nbrOfColumns} class="staking-info">
-  <StakingInfo {validator} on:claim-validator />
-</td>
+  <div class="staking-info full-width">
+    <StakingInfo
+      validator={input === 'loading'
+        ? new Promise(() => {})
+        : Promise.resolve(input.validator)}
+      on:claim-validator
+    />
+  </div>
+</div>
 
 <style lang="scss">
   .validator-row {
-    display: contents;
+    display: grid;
+    grid-template-columns: subgrid;
+    border-radius: var(--border-radius-lg);
 
-    :global(.table-row) {
+    &:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    transition: var(--transition-hover-card);
+
+    :global(.validator-row) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: none;
+
       &:hover {
         box-shadow: var(--shadow);
       }
-    }
-
-    :global(td) {
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-      border-bottom: none !important;
     }
   }
 
@@ -42,5 +51,9 @@
     @include mixins.mobile {
       display: none;
     }
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
   }
 </style>

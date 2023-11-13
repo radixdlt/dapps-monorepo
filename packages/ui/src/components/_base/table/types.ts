@@ -16,11 +16,11 @@ export type SortableValues<T> = {
   [K in keyof T]: T[K] extends SortableType | undefined ? K : never
 }[keyof T]
 
-export type TableColumn<Entry = any> = {
+export type TableColumn<Entry = any> = Readonly<{
   /**
    * A unique id.
    */
-  id?: string
+  id: string
 
   /**
    * Can be a sortable entry in the provided entries, or a custom sort function. Leave unset if the column is not sortable.
@@ -37,4 +37,4 @@ export type TableColumn<Entry = any> = {
     alignment?: 'left' | 'right' | 'center'
     tooltip?: string
   }
-}
+}>

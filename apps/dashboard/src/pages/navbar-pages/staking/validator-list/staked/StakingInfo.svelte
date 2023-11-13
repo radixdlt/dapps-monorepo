@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { createEventDispatcher, type ComponentProps } from 'svelte'
-  import type ValidatorRow from '../ValidatorRow.svelte'
+  import { createEventDispatcher } from 'svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { formatTokenValue, formatXRDValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
+  import type { TransformedValidator } from '../ValidatorList.svelte'
 
-  export let validator: ComponentProps<ValidatorRow>['validator']
+  export let validator: Promise<TransformedValidator>
 
   const dispatch = createEventDispatcher<{
     'claim-validator': string

@@ -34,8 +34,6 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import StakedValidatorRow from './validator-list/staked/StakedValidatorRow.svelte'
-  import ValidatorRow from './validator-list/ValidatorRow.svelte'
   import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
   import type { Validator } from '@api/utils/entities/validator'
   import type { StakeInfo } from '@api/utils/staking'
@@ -150,7 +148,6 @@
     />
 
     <ValidatorList
-      loadingRowsCount={3}
       validators={validators.then((v) =>
         $stakeInfo.then((stakes) =>
           v.filter(
@@ -162,19 +159,33 @@
         )
       )}
     >
-      <StakedValidatorRow
-        slot="row"
-        let:entry
-        let:columns
+      <svelte:fragment
+        slot="rows"
+        let:StakedValidatorRow
         let:selectedUptime
-        validator={entry}
-        nbrOfColumns={columns.length}
-        {selectedUptime}
-        on:click={() => goto(`/network-staking/${entry.address}`)}
-        on:claim-validator={(e) => {
-          dispatch('show-claim-single', e.detail)
-        }}
-      />
+        let:validators
+        let:columnIds
+      >
+        {#await validators}
+          {#each Array(3) as _}
+            <StakedValidatorRow input={'loading'} {columnIds} />
+          {/each}
+        {:then validators}
+          {#each validators as validator}
+            <StakedValidatorRow
+              input={{
+                validator,
+                selectedUptime
+              }}
+              {columnIds}
+              on:click={() => goto(`/network-staking/${validator.address}`)}
+              on:claim-validator={(e) => {
+                dispatch('show-claim-single', e.detail)
+              }}
+            />
+          {/each}
+        {/await}
+      </svelte:fragment>
     </ValidatorList>
   </div>
 {/if}
@@ -212,16 +223,32 @@
     goto(`/network-staking/${e.detail}`)
   }}
 >
-  <ValidatorRow
-    slot="row"
+  <svelte:fragment
+    slot="rows"
+    let:ValidatorRow
+    let:validators
     let:selectedUptime
-    let:entry
-    validator={entry}
-    {selectedUptime}
-    on:click={() => goto(`/network-staking/${entry.address}`)}
+    let:columnIds
   >
-    <BookmarkValidator slot="icon" validator={entry} />
-  </ValidatorRow>
+    {#await validators}
+      {#each Array(15) as _}
+        <ValidatorRow input={'loading'} {columnIds} />
+      {/each}
+    {:then validators}
+      {#each validators as validator}
+        <ValidatorRow
+          input={{
+            validator,
+            selectedUptime
+          }}
+          {columnIds}
+          on:click={() => goto(`/network-staking/${validator.address}`)}
+        >
+          <BookmarkValidator slot="icon" {validator} />
+        </ValidatorRow>
+      {/each}
+    {/await}
+  </svelte:fragment>
 </ValidatorList>
 
 <style lang="scss">
