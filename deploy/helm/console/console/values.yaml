@@ -14,7 +14,7 @@ console:
     tag: ""
 
   imagePullSecrets:
-    - name: docker-hub-dev
+    - name: dockerhub-dev
 
   nameOverride: "console"
 
@@ -42,7 +42,6 @@ console:
 
   ingress:
     enabled: false
-    basic_auth: false
     className: ""
     hosts:
       - host: chart-example.local
@@ -68,9 +67,4 @@ console:
 
   docker:
     secrets:
-      region: eu-west-1
       name: docker.io/radixdlt
-
-  # Set it to true if you want to secret to be deployed.
-  docker_secret: 
-      enabled: true
