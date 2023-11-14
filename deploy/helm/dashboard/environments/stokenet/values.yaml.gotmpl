@@ -23,18 +23,16 @@ dashboard:
     NETWORK_GATEWAY_API: https://babylon-stokenet-gateway.radixdlt.com
     PUBLIC_NETWORK_NAME: "stokenet"
   secrets:
-  - name: database-url
+  - name: database-url-v2
     variable: "DATABASE_URL"
     path: "rtlj-prod/eks/dashboard/stokenet/postgres"
     secretProperty: "database-url"
     secretName: "database-url"
-    region: "eu-west-2"
-  - name: jwt-secret
+  - name: jwt-secret-v2
     variable: "JWT_SECRET"
     path: "rtlj-prod/eks/dashboard/jwt"
     secretProperty: "jwt-secret"
     secretName: "jwt-secret"
-    region: "eu-west-2"
 
 
   ingress:
