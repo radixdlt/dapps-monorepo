@@ -4,7 +4,7 @@
   import Label from './Label.svelte'
 </script>
 
-<Meta title="Form / Select" />
+<Meta title="Dev console / Form / Select" />
 
 <Story name="Primary">
   <div class="content">
