@@ -70,22 +70,20 @@
   </div>
 </div>
 
-<style>
+<style lang="scss">
   .staking-box {
+    padding: var(--spacing-lg) var(--spacing-2xl);
     display: flex;
     align-items: center;
     border: var(--border) var(--theme-border);
     border-top: none;
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     background: var(--theme-surface-1);
-    padding: var(--spacing-md) 0;
-    box-shadow: var(--shadow);
   }
 
   .staking-box-grid {
     display: grid;
     grid: 1fr / auto auto auto auto;
-    margin-left: 1.5rem;
     gap: var(--spacing-lg);
     align-items: center;
   }

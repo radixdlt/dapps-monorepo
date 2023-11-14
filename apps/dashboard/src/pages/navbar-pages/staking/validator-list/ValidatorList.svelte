@@ -31,7 +31,6 @@
   import { sortBigNumber, sortBasic } from '@components/_base/table/sorting'
   import UptimeHeader from './UptimeHeader.svelte'
   import ValidatorRow from './ValidatorRow.svelte'
-  import StakedValidatorRow from './staked/StakedValidatorRow.svelte'
 
   interface $$Slots {
     rows: {
@@ -40,7 +39,6 @@
       selectedUptime: UptimeValue
       columnIds: ColumnIds[]
       ValidatorRow: typeof ValidatorRow
-      StakedValidatorRow: typeof StakedValidatorRow
     }
   }
 
@@ -225,7 +223,6 @@
       {columnIds}
       selectedUptime={selectedUptime?.value}
       {ValidatorRow}
-      {StakedValidatorRow}
     />
   </div>
 </GridTable>
@@ -235,6 +232,6 @@
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    grid-gap: var(--spacing-md);
+    grid-row-gap: var(--spacing-lg);
   }
 </style>

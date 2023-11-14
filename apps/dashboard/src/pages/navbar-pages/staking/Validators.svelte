@@ -39,6 +39,7 @@
   import type { StakeInfo } from '@api/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import ValidatorRow from './validator-list/ValidatorRow.svelte'
 
   export let validators: Promise<Validator<true, true, true>[]>
   export let filteredValidators: Validator<true, true, true>[] | undefined =
@@ -161,23 +162,24 @@
     >
       <svelte:fragment
         slot="rows"
-        let:StakedValidatorRow
+        let:ValidatorRow
         let:selectedUptime
         let:validators
         let:columnIds
       >
         {#await validators}
           {#each Array(3) as _}
-            <StakedValidatorRow input={'loading'} {columnIds} />
+            <ValidatorRow input={'loading'} {columnIds} />
           {/each}
         {:then validators}
           {#each validators as validator}
-            <StakedValidatorRow
+            <ValidatorRow
               input={{
                 validator,
                 selectedUptime
               }}
               {columnIds}
+              showStakeInfo
               on:click={() => goto(`/network-staking/${validator.address}`)}
               on:claim-validator={(e) => {
                 dispatch('show-claim-single', e.detail)
@@ -243,9 +245,7 @@
           }}
           {columnIds}
           on:click={() => goto(`/network-staking/${validator.address}`)}
-        >
-          <BookmarkValidator slot="icon" {validator} />
-        </ValidatorRow>
+        />
       {/each}
     {/await}
   </svelte:fragment>
