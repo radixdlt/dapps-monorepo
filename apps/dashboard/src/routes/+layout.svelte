@@ -250,7 +250,7 @@
   }
 
   .banner {
-    background: var(--color-alert);
+    background: var(--color-alert-1);
     padding: var(--spacing-md);
     text-align: center;
   }
