@@ -8,7 +8,7 @@ storybook:
     tag: ""
 
   imagePullSecrets:
-    - name: docker-hub-dev
+    - name: dockerhub-dev
 
   nameOverride: "storybook"
 
