@@ -7,7 +7,7 @@
 <style lang="scss">
   div {
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     user-select: none;
   }
 </style>
