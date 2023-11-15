@@ -29,6 +29,6 @@
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);
     text-transform: uppercase;
-    text-align: end;
+    text-align: center;
   }
 </style>

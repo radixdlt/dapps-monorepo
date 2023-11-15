@@ -94,7 +94,7 @@
 
   .drawer {
     position: absolute;
-    width: 100%;
+    width: fit-content;
     overflow-y: auto;
   }
 
