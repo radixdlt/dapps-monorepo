@@ -1,11 +1,13 @@
 <script lang="ts" context="module">
   export type Item = {
-    id: string | number
+    id: string
     label: string
   }
 </script>
 
 <script lang="ts">
+  type T = $$Generic
+
   import Chevron from '@icons/expand-more.svg'
   import SelectItems from './SelectItems.svelte'
   import SelectItem from './SelectItem.svelte'
@@ -21,7 +23,7 @@
   let element: HTMLElement
 
   export let items: Item[] = []
-  const dispatch = createEventDispatcher<{ onSelect: Item['id'] }>()
+  const dispatch = createEventDispatcher<{ select: Item['id'] }>()
 
   $: if (selected) {
     placeholder = items.find((item) => item.id === selected)?.label ?? ''
@@ -61,11 +63,13 @@
     <div class="select-items">
       <SelectItems>
         {#if items.length}
-          {#each items as item}
+          {#each items as item, index}
             <SelectItem
               selected={item.id === selected}
+              isFirst={index === 0}
+              isLast={index === items.length - 1}
               on:click={() => {
-                dispatch('onSelect', item.id)
+                dispatch('select', item.id)
                 expanded = false
                 selected = item.id
               }}>{item.label}</SelectItem

@@ -1,93 +1,217 @@
 <script lang="ts">
   import { Buffer } from 'buffer'
-  import FileUpload, {
-    type FileItem
-  } from '@components/file-upload/FileUpload.svelte'
-  import { pipe } from 'ramda'
-  import type { Account } from '@stores'
+  import FileUpload from '@components/file-upload/FileUpload.svelte'
   import { derived, writable } from 'svelte/store'
-  import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
+  import Select from '@components/../dev-console/form/Select.svelte'
+  import Label from '@components/../dev-console/form/Label.svelte'
+  import Button from '@components/_base/button/ButtonNew.svelte'
+  import { accounts, dAppToolkit } from '@stores'
+  import {
+    getAccountData,
+    type FungibleResource,
+    type NonFungibleResource,
+    type TransformedNonFungible
+  } from '@api/utils/entities/resource'
+  import { shortenAddress, typedError } from '@utils'
+  import {
+    getDeployPackageManifest,
+    sborDecodeSchema,
+    type AccessRule
+  } from './side-effects'
+  import { ResultAsync } from 'neverthrow'
+  import { getTransactionDetails as getTransactionDetailsFn } from '@api/gateway'
   import { goto } from '$app/navigation'
-  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import { getTransactionDetails } from '@api/gateway'
-  import type { TransactionStatus } from '@common/gateway-sdk'
-  import type { ComponentEvents } from 'svelte'
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
 
-  const files = pipe(
-    () => writable<FileItem[]>([]),
-    ({ subscribe, update }) => ({
-      subscribe,
-      removeFile: (fileToRemove: FileItem) =>
-        update((files) => files.filter((file) => file !== fileToRemove)),
-      addFile: (fileToAdd: FileItem) => update((files) => [...files, fileToAdd])
-    })
-  )()
+  type Resource =
+    | FungibleResource
+    | (NonFungibleResource & {
+        nonFungibles: TransformedNonFungible['nonFungibles']
+      })
 
-  const requiredUploadedFiles = derived(files, ($files) => {
-    const fileData = ['wasm', 'rpd'].map((extension) =>
-      $files
-        .find((file) => file.fileExtension === extension)
-        ?.file.arrayBuffer()
-        .then(Buffer.from)
-        .then((buf) => buf.toString('hex'))
-    )
+  const ownerRoleType = {
+    badge: 'badge',
+    allowAll: 'allowAll',
+    none: 'none'
+  } as const
 
-    return {
-      wasm: fileData[0] as Promise<string>,
-      rpd: fileData[1] as Promise<string>
+  let accountResourcesMap = writable<Map<string, Resource>>(new Map())
+  let resourceSelectItems = writable<{ id: string; label: string }[]>([])
+  let wasm = writable<string | undefined>()
+  let sborDecodedSchema = writable<string | undefined>()
+  let selectedOwnerRole = writable<string>(ownerRoleType.badge)
+  let selectedResource = writable<Resource | undefined>()
+  let selectedNftAddress = writable<string | undefined>()
+  let status = writable<'sendingToWallet' | 'initial'>('initial')
+
+  const ownerRoleSelectItems = [
+    { id: ownerRoleType.badge, label: 'Badge' },
+    { id: ownerRoleType.allowAll, label: 'Allow all' },
+    { id: ownerRoleType.none, label: 'None' }
+  ]
+
+  let isFormInvalid = derived(
+    [
+      wasm,
+      sborDecodedSchema,
+      selectedOwnerRole,
+      selectedResource,
+      selectedNftAddress
+    ],
+    ([
+      _wasm,
+      _sborDecodedSchema,
+      _selectedOwnerRole,
+      _selectedResource,
+      _selectedNftAddress
+    ]) => {
+      const areBinariesDefined = !!_wasm && !!_sborDecodedSchema
+      const isBadgeSelected = _selectedOwnerRole === ownerRoleType.badge
+      const isResourceSelected = !!_selectedResource
+
+      // Binaries are always required
+      if (!areBinariesDefined) return true
+      // Valid for allowAll and none
+      else if (!isBadgeSelected) return false
+      // Valid for fungible and non-fungible badge
+      else if (isBadgeSelected && isResourceSelected) return false
+
+      return true
     }
-  })
-
-  let selected: Account
-
-  const packageDeployed = writable<{
-    txStatus: TransactionStatus
-    txID: string
-    address: string
-  }>()
-
-  const deployButtonEnabled = derived(
-    [requiredUploadedFiles],
-    ([{ wasm, rpd }]) => !!rpd && !!wasm && !!selected,
-    false
   )
 
-  const deployPackage = async (e: ComponentEvents<SendTxButton>['click']) => {
-    const wasm = await $requiredUploadedFiles.wasm
-    const rpd = await $requiredUploadedFiles.rpd
-    const sborDecodedSchema = await sborDecodeSchema(rpd)
+  const decodeSborSchema = (rpd: string) =>
+    ResultAsync.fromPromise(sborDecodeSchema(rpd), typedError)
 
-    const manifest = getDeployPackageManifest(
-      selected?.address!,
-      wasm,
-      sborDecodedSchema
+  const fileToHex = (file: File) =>
+    ResultAsync.fromPromise(
+      file
+        .arrayBuffer()
+        .then(Buffer.from)
+        .then((buf) => buf.toString('hex')),
+      typedError
     )
 
-    e.detail(manifest, [wasm])
+  const getAccessRule = (): AccessRule => {
+    const ownerRole = $selectedOwnerRole
+    const selected = $selectedResource
+    const selectedNft = $selectedNftAddress
+
+    if (ownerRole === ownerRoleType.allowAll)
+      return { type: ownerRoleType.allowAll }
+    else if (ownerRole === ownerRoleType.none)
+      return { type: ownerRoleType.none }
+    else if (
+      ownerRole === ownerRoleType.badge &&
+      selected?.resourceType === 'fungible'
+    )
+      return { type: 'fungible', address: selected.address }
+    else if (
+      ownerRole === ownerRoleType.badge &&
+      selected?.resourceType === 'non-fungible' &&
+      selectedNft === 'any'
+    ) {
+      return {
+        type: 'fungible',
+        address: selected.address
+      }
+    } else if (
+      ownerRole === ownerRoleType.badge &&
+      selected?.resourceType === 'non-fungible'
+    ) {
+      return {
+        type: 'nonFungible',
+        address: selectedNft!
+      }
+    }
+
+    throw new Error('Invalid access rule')
   }
 
-  const handleResponse = async (
-    e: ComponentEvents<SendTxButton>['response']
-  ) => {
-    const entities = (
-      await getTransactionDetails(e.detail.transactionIntentHash)
-    ).createdEntities
+  const getTransactionDetails = (transactionIntentHash: string) =>
+    ResultAsync.fromPromise(
+      getTransactionDetailsFn(transactionIntentHash),
+      typedError
+    )
 
-    packageDeployed.set({
-      txStatus: e.detail.status,
-      address: entities[0]?.entity_address as string,
-      txID: e.detail.transactionIntentHash
+  const handleSendTransaction = () => {
+    if ($wasm && $sborDecodedSchema) {
+      const transactionManifest = getDeployPackageManifest(
+        $wasm,
+        $sborDecodedSchema,
+        getAccessRule()
+      )
+
+      $status = 'sendingToWallet'
+      $dAppToolkit!.walletApi
+        .sendTransaction({
+          transactionManifest,
+          blobs: [$wasm]
+        })
+        .andThen(({ transactionIntentHash, status }) =>
+          getTransactionDetails(transactionIntentHash).map((response) => {
+            const packageAddress = response.createdEntities[0]
+              ?.entity_address as string
+
+            goto(
+              `deploy-package/success?` +
+                `txID=${transactionIntentHash}&` +
+                `txStatus=${status}&` +
+                `packageAddress=${packageAddress}&`
+            )
+          })
+        )
+        .mapErr(() => {
+          $status = 'initial'
+        })
+    }
+  }
+
+  const accountStateToResources = (account: {
+    fungible: FungibleResource[]
+    nonFungible: TransformedNonFungible[]
+  }): Resource[] => {
+    const fungible = account.fungible
+    const nfts = account.nonFungible.map((resource) => ({
+      ...resource.resource,
+      nonFungibles: resource.nonFungibles
+    }))
+    return [...fungible, ...nfts]
+  }
+
+  const setResourceState = (resources: Resource[]) => {
+    resources.forEach((resource) => {
+      $accountResourcesMap.set(resource.address, resource)
     })
+    $resourceSelectItems = resources.map((resource) => ({
+      id: resource.address,
+      label: `${
+        resource.metadata.standard.name?.value || 'Unnamed resource'
+      } (${shortenAddress(resource.address)})`
+    }))
   }
 
-  $: if ($packageDeployed) {
-    goto(
-      `deploy-package/success?` +
-        `txID=${$packageDeployed.txID}&` +
-        `txStatus=${$packageDeployed.txStatus}&` +
-        `packageAddress=${$packageDeployed.address}&`
-    )
+  const resetResourceState = () => {
+    $accountResourcesMap.clear()
+    $resourceSelectItems = []
+    $selectedResource = undefined
+    $selectedNftAddress = 'any'
+  }
+
+  const isFormDisabled = derived([status], ([_status]) => {
+    return _status === 'sendingToWallet'
+  })
+
+  const isSendToWalletButtonDisabled = derived(
+    [status, isFormInvalid],
+    ([_status, _isFormValid]) => _status === 'sendingToWallet' || _isFormValid
+  )
+
+  $: {
+    resetResourceState()
+    getAccountData($accounts.map(({ address }) => address))
+      .then((accounts) => accounts.map(accountStateToResources))
+      .then((resources) => resources.flat())
+      .then((resources) => setResourceState(resources))
   }
 </script>
 
@@ -96,62 +220,136 @@
   and RPD files and submitting a transaction using your Radix Wallet.
 </div>
 
-<div class="card">
-  <div class="file-inputs">
-    <FileUpload
-      acceptedFileTypes={['.wasm', 'wasm']}
-      onRemoveFile={(_, file) => files.removeFile(file)}
-      onAddFile={files.addFile}
-      labelIdle="Drop the package WASM file here - or <span class='filepond--label-action'>browse</span>"
-      maxFiles={1}
-    />
-    <FileUpload
-      acceptedFileTypes={['.rpd', 'rpd']}
-      onRemoveFile={(_, file) => files.removeFile(file)}
-      onAddFile={files.addFile}
-      labelIdle="Drop the package RPD file here - or <span class='filepond--label-action'>browse</span>"
-      maxFiles={1}
-    />
+<div class="content">
+  <div class="file-inputs" class:disabled={$isFormDisabled}>
+    <div>
+      <FileUpload
+        acceptedFileTypes={['.wasm', 'wasm']}
+        onRemoveFile={() => {
+          $wasm = undefined
+        }}
+        onAddFile={({ file }) =>
+          fileToHex(file).map((hex) => {
+            $wasm = hex
+          })}
+        labelIdle="Drop the package WASM file here - or <span class='filepond--label-action'>browse</span>"
+        maxFiles={1}
+      />
+    </div>
+    <div>
+      <FileUpload
+        acceptedFileTypes={['.rpd', 'rpd']}
+        onRemoveFile={() => {
+          $sborDecodedSchema = undefined
+        }}
+        onAddFile={({ file }) =>
+          fileToHex(file).andThen((hex) =>
+            decodeSborSchema(hex).map((decoded) => {
+              $sborDecodedSchema = decoded
+            })
+          )}
+        labelIdle="Drop the package RPD file here - or <span class='filepond--label-action'>browse</span>"
+        maxFiles={1}
+      />
+    </div>
   </div>
+  <div class="form">
+    <div class="form-item">
+      <Label disabled={$isFormDisabled}>Owner role</Label>
+      <Select
+        placeholder="Select owner role"
+        items={ownerRoleSelectItems}
+        selected={$selectedOwnerRole}
+        disabled={$isFormDisabled}
+        on:select={(value) => {
+          $selectedOwnerRole = value.detail
+          $selectedResource = undefined
+        }}
+      />
+    </div>
 
-  <div class="account-description">
-    Please choose an account to receive an owner badge that will be minted and
-    set to control this package's metadata and royalties.
-  </div>
+    {#if $selectedOwnerRole === ownerRoleType.badge}
+      <div class="form-item">
+        <Label disabled={$isFormDisabled}>Resource address</Label>
+        <Select
+          placeholder="Select resource address"
+          items={$resourceSelectItems}
+          disabled={$isFormDisabled}
+          on:select={({ detail: resourceAddress }) => {
+            $selectedResource = $accountResourcesMap.get(resourceAddress)
+            $selectedNftAddress = 'any'
+          }}
+        />
+      </div>
+    {/if}
 
-  <div class="account-picker">
-    <AccountPicker bind:selected />
+    {#if $selectedOwnerRole === 'badge' && $selectedResource && $selectedResource.resourceType === 'non-fungible'}
+      <div class="form-item">
+        <Label disabled={$isFormDisabled}>NFT</Label>
+        <Select
+          placeholder="Select NFT"
+          selected={$selectedNftAddress}
+          disabled={$isFormDisabled}
+          items={[
+            { id: 'any', label: 'Any' },
+            ...$selectedResource.nonFungibles
+              .map((nft) =>
+                typeof nft === 'string'
+                  ? { id: '', label: '' }
+                  : {
+                      id: nft.address.nonFungibleAddress,
+                      label: `${
+                        nft.nftData.standard.name?.value || 'Unnamed NFT'
+                      } (${shortenAddress(nft.address.id)})`
+                    }
+              )
+              .filter((item) => item.id !== '')
+          ]}
+          on:select={({ detail: resourceAddress }) => {
+            $selectedNftAddress = resourceAddress
+          }}
+        />
+      </div>
+    {/if}
+    <Button
+      disabled={$isSendToWalletButtonDisabled}
+      on:click={handleSendTransaction}
+      size="big"
+    >
+      {#if $status === 'sendingToWallet'}
+        Sending...
+      {:else}
+        Send to wallet
+      {/if}
+    </Button>
   </div>
-</div>
-<div class="send-button">
-  <SendTxButton
-    buttonProps={{ disabled: !$deployButtonEnabled, size: 'big' }}
-    on:click={deployPackage}
-    on:response={handleResponse}
-  />
 </div>
 
 <style lang="scss">
-  .account-picker {
-    max-width: 25rem;
+  .description {
+    margin-bottom: 3rem;
   }
-  .card {
-    margin-top: 1rem;
-    padding: 2rem;
-    margin-bottom: 1rem;
+  .content {
     display: flex;
     flex-direction: column;
+    width: 50%;
+    gap: 2rem;
+    min-width: 37rem;
   }
-  .description {
-    margin-bottom: 1rem;
+  .form {
+    width: 100%;
+  }
+  .file-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    div {
+      width: 100%;
+    }
   }
 
-  .account-description {
+  .form-item {
     margin-bottom: 1rem;
-    align-self: center;
-  }
-  .account-picker {
-    width: 25rem;
-    align-self: center;
   }
 </style>

@@ -1,99 +1,70 @@
-import { sendTransaction } from '@api/wallet'
 import { hash } from '@utils'
 import { http } from '@common/http'
+import { createLogger } from '@radixdlt/radix-dapp-toolkit'
 
-export const getCreateBadgeManifest = (accountAddress: string) => `
-CREATE_NON_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
-    Enum<0u8>()
-    Enum<1u8>()
-    true
-    Enum<NonFungibleDataSchema::Local>(
-        Enum<0u8>(
-            Tuple(
-                Array<Enum>(),
-                Array<Tuple>(),
-                Array<Enum>()
-            )
-        ),
-        Enum<0u8>(
-            66u8
-        ),
-        Array<String>()
-    )
-    Map<NonFungibleLocalId, Tuple>(
-        NonFungibleLocalId("#1#") => Tuple(
-            Tuple()
-        )
-    )
-    Tuple(
-        Enum<0u8>(),
-        Enum<0u8>(),
-        Enum<0u8>(),
-        Enum<0u8>(),
-        Enum<0u8>(),
-        Enum<0u8>(),
-        Enum<0u8>()
-    )
-    Tuple(
-        Map<String, Tuple>(
-            "description" => Tuple(
-                Enum<1u8>(
+export type AccessRule =
+  | { type: 'allowAll' }
+  | { type: 'none' }
+  | { address: string; type: 'fungible' }
+  | { address: string; type: 'nonFungible' }
+
+const getAccessRule = (rule: AccessRule) => {
+  switch (rule.type) {
+    case 'allowAll':
+      return `Enum<AccessRule::AllowAll>()`
+    case 'none':
+      return `None`
+    case 'fungible':
+      return `
+        Enum<2u8>(
+            Enum<2u8>(
+                Enum<0u8>(
                     Enum<0u8>(
-                        "This NFT was created by the Radix Sandbox dApp as a simple badge to be used for default package control permissions."
-                    )
-                ),
-                false
-            ),
-            "name" => Tuple(
-                Enum<1u8>(
-                    Enum<0u8>(
-                        "My Package Owner Badge"
-                    )
-                ),
-                false
-            ),
-            "tags" => Tuple(
-                Enum<1u8>(
-                    Enum<128u8>(
-                        Array<String>(
-                            "badge"
+                        Enum<1u8>(
+                            Address("${rule.address}")
                         )
                     )
-                ),
-                false
+                )
             )
-        ),
-        Map<String, Enum>()
-    )
-    Enum<0u8>()
-;
-CALL_METHOD
-    Address("${accountAddress}")
-    "deposit_batch"
-    Expression("ENTIRE_WORKTOP")
-;
-`
+        )
+      `
+    case 'nonFungible':
+      return `
+            Enum<2u8>(
+                Enum<2u8>(
+                    Enum<0u8>(
+                        Enum<0u8>(
+                            Enum<0u8>(
+                                NonFungibleGlobalId("${rule.address}")
+                            )
+                        )
+                    )
+                )
+            )
+        `
+
+    default:
+      break
+  }
+}
 
 export const getDeployPackageManifest = (
-  account: string,
   wasm: string,
-  schema: string
+  packageDefinition: string,
+  accessRule: AccessRule
 ) => {
   const wasmHash: string = hash(wasm).toString('hex')
 
   const transactionManifest = `
-    PUBLISH_PACKAGE
-      ${schema}                    
+    PUBLISH_PACKAGE_ADVANCED
+      ${getAccessRule(accessRule)}
+      ${packageDefinition}                    
       Blob("${wasmHash}")          
-      Map<String, Tuple>()         
-    ;
-
-    CALL_METHOD
-      Address("${account}")
-      "deposit_batch"
-      Expression("ENTIRE_WORKTOP")
+      Map<String, Tuple>()
+      None         
     ;
     `
+  createLogger(1).debug(transactionManifest)
   return transactionManifest
 }
 
@@ -102,7 +73,4 @@ export const sborDecodeSchema = async (schema: string) =>
     .post('api/ret/sbor-decode', {
       hexEncodedSchema: schema
     })
-    .then((res) => res.decodedString)
-
-export const createBadge = (accountAddress: string) =>
-  sendTransaction(getCreateBadgeManifest(accountAddress))
+    .then((res): string => res.decodedString)

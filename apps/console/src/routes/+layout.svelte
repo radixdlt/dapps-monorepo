@@ -4,7 +4,7 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, selectedAccount, storage } from '@stores'
+  import { accounts, dAppToolkit, selectedAccount, storage } from '@stores'
   import {
     RadixDappToolkit,
     Account,
@@ -47,6 +47,8 @@
       logger: createLogger(0),
       onDisconnect: () => updateAccounts([])
     })
+
+    dAppToolkit.set(rdt)
 
     rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
 
