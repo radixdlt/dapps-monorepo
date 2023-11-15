@@ -79,3 +79,5 @@ export const SAFE_IMAGE_SERVICE_URL =
   'https://image-service-dev.extratools.works'
 
 export const NON_EXTERNAL_ORIGINS = ['https://www.radixdlt.com']
+
+export const PERCENTAGE_TOTAL_STAKE_WARNING = 3

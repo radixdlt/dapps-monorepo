@@ -14,6 +14,7 @@
 
   const columns: ComponentProps<PaginatedTable<any>>['columns'] = [
     {
+      id: 'date',
       header: {
         label: 'ID/DATE (GMT +00)'
       },
@@ -24,12 +25,14 @@
       }
     },
     {
+      id: 'fee',
       header: {
         label: 'Fee'
       },
       renderAs: (entry: any) => `${entry.fee_paid} XRD`
     },
     {
+      id: 'status',
       header: {
         label: 'Status'
       },

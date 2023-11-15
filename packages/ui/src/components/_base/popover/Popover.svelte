@@ -59,7 +59,7 @@
     }
 
     &.warn {
-      background: var(--color-alert);
+      background: var(--color-alert-1);
     }
 
     &.info {

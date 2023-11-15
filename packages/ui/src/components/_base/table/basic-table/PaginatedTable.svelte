@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TablePage } from '../Table.svelte'
+  import type { TablePage } from '../types'
 
   import BasicTable, { type BasicTableColumn } from './BasicTable.svelte'
 
@@ -10,7 +10,7 @@
 
   type T = $$Generic<Entry>
 
-  export let columns: (BasicTableColumn<T> | null)[]
+  export let columns: BasicTableColumn<T>[]
   export let queryFunction: (cursor?: string) => Promise<TablePage<T>>
 
   export let mode: 'infiniteScroll' | 'paginated' = 'infiniteScroll'

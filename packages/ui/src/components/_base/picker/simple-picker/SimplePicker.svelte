@@ -54,6 +54,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    text-wrap: nowrap;
+    gap: var(--spacing-md);
 
     &:hover {
       background-color: var(--color-grey-4);

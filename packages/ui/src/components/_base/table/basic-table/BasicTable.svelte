@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+  import type { TableColumn } from '../types'
+
   export type BasicTableColumn<Entry = any> = TableColumn<Entry> & {
     /**
      * For rendering a simple value. Returns data that will be displayed in the cell.
@@ -20,13 +22,13 @@
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
   import TableRow from './TableRow.svelte'
   import type { ComponentProps, SvelteComponent } from 'svelte'
-  import Table, { type TableColumn, type Entry } from '../Table.svelte'
+  import Table from '../Table.svelte'
   import BasicHeader from '../basic-header/BasicHeader.svelte'
 
   type T = $$Generic<Entry>
 
   export let entries: ComponentProps<Table<T>>['entries']
-  export let columns: (BasicTableColumn<T> | null)[]
+  export let columns: BasicTableColumn<T>[]
   export let defaultSortedColumn: ComponentProps<
     Table<T>
   >['defaultSortedColumn'] = undefined
