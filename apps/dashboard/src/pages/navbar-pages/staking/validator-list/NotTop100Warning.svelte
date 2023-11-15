@@ -2,20 +2,15 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import WarningIcon from '@icons/warning.svg'
-  import WarningPanel from './WarningPanel.svelte'
+  import WarningPanel from '../WarningPanel.svelte'
 </script>
 
 <WarningPanel>
   <div class="warning-text">
     <IconNew icon={WarningIcon} />
-    <span class="bold">
-      This validator has more than {PERCENTAGE_TOTAL_STAKE_WARNING}% total stake
-    </span>
+    <span class="bold"> Not within top 100 </span>
     <div>
-      <span>We recommend to stake with</span>
-      <span style:text-decoration="underline"
-        >validators below {PERCENTAGE_TOTAL_STAKE_WARNING}% total stake</span
-      >
+      <span>Stakes do not get APY this epoch</span>
     </div>
   </div>
 </WarningPanel>

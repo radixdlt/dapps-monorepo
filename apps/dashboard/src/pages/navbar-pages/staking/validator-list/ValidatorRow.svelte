@@ -16,6 +16,7 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
+  import NotTop100Warning from './NotTop100Warning.svelte'
 
   export let input:
     | {
@@ -34,6 +35,8 @@
     input !== 'loading'
       ? input.validator.percentageTotalStake >= PERCENTAGE_TOTAL_STAKE_WARNING
       : false
+
+  $: notTop100 = input !== 'loading' ? input.validator.rank > 100 : false
 </script>
 
 <Section {columnIds} let:columnIds>
@@ -41,7 +44,7 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
       class="validator-row card"
-      class:extension={top3Percent || showStakeInfo}
+      class:extension={top3Percent || showStakeInfo || notTop100}
       class:top3Percent
       on:click
     >
@@ -189,7 +192,10 @@
     </div>
 
     {#if showStakeInfo}
-      <div class="staking-info full-width" class:extension={top3Percent}>
+      <div
+        class="staking-info full-width"
+        class:extension={top3Percent || notTop100}
+      >
         <StakingInfo
           validator={input === 'loading'
             ? new Promise(() => {})
@@ -200,8 +206,14 @@
     {/if}
 
     {#if top3Percent}
-      <div class="full-width">
+      <div class="full-width" class:extension={notTop100}>
         <TopValidatorWarning />
+      </div>
+    {/if}
+
+    {#if notTop100}
+      <div class="full-width">
+        <NotTop100Warning />
       </div>
     {/if}
   </div>
@@ -226,12 +238,8 @@
     grid-column: 1/-1;
 
     &.extension {
-      @include extension;
-    }
-
-    &.top3Percent {
       @include warning-border;
-      border-bottom: none;
+      @include extension;
     }
   }
 

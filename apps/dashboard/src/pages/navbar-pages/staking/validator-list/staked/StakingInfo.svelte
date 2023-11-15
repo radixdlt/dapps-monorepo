@@ -78,7 +78,7 @@
     border: var(--border) var(--theme-border);
     border-top: none;
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-    background: var(--theme-surface-1);
+    background: var(--theme-surface-2);
   }
 
   .staking-box-grid {
