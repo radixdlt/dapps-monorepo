@@ -5,7 +5,7 @@ import type {
   ValidatorUptimeCollectionItem
 } from '@common/gateway-sdk'
 import { getEnumStringMetadata, transformMetadata } from '../metadata'
-import type { _Entity } from '.'
+import { transformEntity, type _Entity } from '.'
 import {
   callApi,
   getEntityDetails,
@@ -234,6 +234,37 @@ export const transformValidatorResponse =
       (e) => e as GatewayError
     )
 
+const transformValidator = (
+  validator: ValidatorCollectionItem,
+  ledger_state: LedgerState
+) =>
+  pipe(
+    () =>
+      transformEntity(['name', 'icon_url', 'description', 'tags', 'info_url'])(
+        validator
+      ),
+    (entity) => {
+      const state: any = validator.state || {}
+
+      const stakeUnitResourceAddress =
+        state.stake_unit_resource_address as string
+
+      const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
+
+      return {
+        ...entity,
+        type: 'validator' as const,
+        fee: calculateFee(entity.entity, ledger_state.epoch),
+        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
+        stakeUnitResourceAddress,
+        unstakeClaimResourceAddress:
+          state.claim_token_resource_address as string,
+        totalStakeInXRD,
+        acceptsStake: state.accepts_delegated_stake
+      }
+    }
+  )()
+
 const transformValidators = async (
   aggregatedEntities: ValidatorCollectionItem[],
   ledger_state: LedgerState
@@ -244,34 +275,10 @@ const transformValidators = async (
         new BigNumber(v1.stake_vault.balance)
       )
     )
-    .map((validator, i) => {
-      const state: any = validator.state || {}
-
-      const stakeUnitResourceAddress =
-        state.stake_unit_resource_address as string
-
-      const totalStakeInXRD = new BigNumber(validator.stake_vault.balance)
-
-      return {
-        type: 'validator' as const,
-        address: validator.address,
-        fee: calculateFee(validator, ledger_state.epoch),
-        percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
-        stakeUnitResourceAddress,
-        unstakeClaimResourceAddress:
-          state.claim_token_resource_address as string,
-        totalStakeInXRD,
-        metadata: transformMetadata(validator, [
-          'name',
-          'icon_url',
-          'description',
-          'tags',
-          'info_url'
-        ]),
-        rank: i + 1,
-        acceptsStake: state.accepts_delegated_stake
-      }
-    })
+    .map((validator, i) => ({
+      ...transformValidator(validator, ledger_state),
+      rank: i + 1
+    }))
 }
 
 const appendUptime =

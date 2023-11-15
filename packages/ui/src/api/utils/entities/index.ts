@@ -1,5 +1,9 @@
-import type { AuthInfo } from '../auth'
-import type { KnownStandardTypes, MetadataTypeToNativeType } from '../metadata'
+import { getAuthInfo, type AuthInfo } from '../auth'
+import {
+  transformMetadata,
+  type KnownStandardTypes,
+  type MetadataTypeToNativeType
+} from '../metadata'
 import type { Component } from './component'
 import type { Package } from './package'
 import type { Pool } from './pool'
@@ -7,7 +11,11 @@ import type { PoolUnit } from './pool-unit'
 import type { Resource } from './resource'
 import type { StakeUnit } from './stake-unit'
 import type { Validator } from './validator'
-import type { EntityMetadataItem } from '@common/gateway-sdk'
+import type {
+  EntityMetadataItem,
+  StateEntityDetailsResponseComponentDetails,
+  StateEntityDetailsVaultResponseItem
+} from '@common/gateway-sdk'
 
 export type Entity =
   | Package
@@ -42,4 +50,25 @@ export type _Entity<
     explicit: EntityMetadataItem[]
     all: EntityMetadataItem[]
   }
+  auth: AuthInfo
 }
+
+export const transformEntity =
+  (standardMetadata: (keyof KnownStandardTypes)[]) =>
+  <
+    E extends {
+      address: string
+      metadata: StateEntityDetailsVaultResponseItem['metadata']
+      details?: StateEntityDetailsVaultResponseItem['details']
+    }
+  >(
+    entity: E
+  ) => ({
+    address: entity.address,
+    entity,
+    metadata: transformMetadata(entity, standardMetadata),
+    auth: getAuthInfo(
+      (entity.details as StateEntityDetailsResponseComponentDetails)
+        .role_assignments!
+    )
+  })
