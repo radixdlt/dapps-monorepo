@@ -64,6 +64,7 @@
       header: {
         label: 'Balance Increases'
       },
+      width: '190px',
       alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {
@@ -77,6 +78,7 @@
       header: {
         label: 'Balance Decreases'
       },
+      width: '190px',
       alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {

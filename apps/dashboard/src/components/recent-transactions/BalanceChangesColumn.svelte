@@ -104,6 +104,10 @@
   </a>
 {/each}
 
+{#if !fungibleChanges.length && !nonFungibleChanges.length}
+  -
+{/if}
+
 <style lang="scss">
   .balance-change {
     display: block;

@@ -30,6 +30,7 @@
   .header {
     display: inline-flex;
     align-items: center;
+    padding: 0 var(--table-row-cell-horizontal-padding, 10px);
   }
 
   .text {

@@ -15,5 +15,6 @@
   .information {
     color: var(--color-grey-2);
     margin-bottom: var(--space-md);
+    padding-top: var(--space-md);
   }
 </style>

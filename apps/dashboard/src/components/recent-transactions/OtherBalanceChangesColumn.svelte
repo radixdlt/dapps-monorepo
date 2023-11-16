@@ -17,7 +17,9 @@
     _entityAddress: string,
     _balanceChanges: TransactionBalanceChanges
   ) => {
-    const addToBalanceChangesSets = (changes: { entity_address: string }[]) => {
+    const addToBalanceChangesSets = (
+      changes: { entity_address: string }[] = []
+    ) => {
       changes.forEach((balanceChange) => {
         if (balanceChange.entity_address === _entityAddress) {
           return
@@ -32,9 +34,9 @@
         }
       })
     }
-    addToBalanceChangesSets(_balanceChanges.fungible_balance_changes)
-    addToBalanceChangesSets(_balanceChanges.non_fungible_balance_changes)
-    addToBalanceChangesSets(_balanceChanges.fungible_fee_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.fungible_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.non_fungible_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.fungible_fee_balance_changes)
   }
 </script>
 
@@ -44,6 +46,10 @@
 {#if accountBalanceChanges.size}<div class="text">
     {accountBalanceChanges.size} Account{#if accountBalanceChanges.size > 1}s{/if}
   </div>{/if}
+
+{#if !accountBalanceChanges.size && !componentBalanceChanges.size}
+  -
+{/if}
 
 <style lang="scss">
   .text {

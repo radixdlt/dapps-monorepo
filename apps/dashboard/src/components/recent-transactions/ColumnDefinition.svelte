@@ -67,7 +67,7 @@
   }: { entityAddress?: string; label?: string } = {}) => {
     return {
       id: 'other-balance-changes',
-      width: '170px',
+      width: '190px',
       header: {
         label: label || 'Other Balance Changes'
       },
