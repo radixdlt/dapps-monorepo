@@ -1,15 +1,9 @@
-import {
-  callApi,
-  getEntityDetails,
-  getEntityNonFungibleIDs,
-  getSingleEntityDetails
-} from '@api/gateway'
+import { callApi, getEntityDetails, getSingleEntityDetails } from '@api/gateway'
 import type {
   EntityMetadataItem,
   FungibleResourcesCollectionItemVaultAggregated,
   FungibleResourcesVaultCollection,
   LedgerStateSelector,
-  NonFungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesVaultCollection,
   StateEntityDetailsOptions,
   StateEntityDetailsResponseFungibleResourceDetails,
@@ -49,28 +43,11 @@ export type NonFungibleResource = _Resource<'non-fungible'>
 
 export type Resource = FungibleResource | NonFungibleResource
 
+export type NftGlobalId = `${string}:${string}`
+
 export type DecoratedAccount = Awaited<
   ReturnType<typeof getAccountData>
 >[number]
-
-const getNonFungibleIds = async (
-  accountAddress: string,
-  nonFungibleResource: NonFungibleResourcesCollectionItemVaultAggregated
-) => {
-  const ids: string[] = []
-
-  for (const vault of nonFungibleResource.vaults.items) {
-    const entityIds = await getEntityNonFungibleIDs(
-      accountAddress,
-      nonFungibleResource.resource_address,
-      vault.vault_address
-    )
-
-    ids.push(...entityIds.items)
-  }
-
-  return ids
-}
 
 type RoleKey =
   | 'burner'

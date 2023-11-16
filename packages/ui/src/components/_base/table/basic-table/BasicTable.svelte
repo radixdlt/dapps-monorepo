@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import type { TableColumn } from '../types'
+  import type { TableColumn, TableConfig } from '../types'
 
   export type BasicTableColumn<Entry = any> = TableColumn<Entry> & {
     /**
@@ -29,6 +29,7 @@
 
   export let entries: ComponentProps<Table<T>>['entries']
   export let columns: BasicTableColumn<T>[]
+  export let config: TableConfig<T> | undefined = undefined
   export let defaultSortedColumn: ComponentProps<
     Table<T>
   >['defaultSortedColumn'] = undefined
@@ -70,7 +71,7 @@
 </script>
 
 <div class="basic-table">
-  <Table {entries} {columns} {defaultSortedColumn}>
+  <Table {config} {entries} {columns} {defaultSortedColumn}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
 
     <slot
@@ -85,6 +86,7 @@
     >
       <BasicHeader
         on:click={sort}
+        alignment={column?.alignment}
         sorting={column?.sortBy ? sortStatus : undefined}
       >
         {#if column?.header?.label}
@@ -95,9 +97,17 @@
 
     <svelte:fragment slot="empty-row" let:entry>
       <slot name="row" {entry}>
-        <TableRow>
+        <TableRow
+          customClass={config?.onRowClick ? 'clickable' : ''}
+          on:click={() => config?.onRowClick?.(entry)}
+        >
           {#each columns as column}
-            <ResponsiveTableCell label={column?.header?.label}>
+            <ResponsiveTableCell
+              label={column?.header?.label}
+              alignment={column?.alignment}
+              hideMobile={column?.hideMobile}
+              hideDesktop={column?.hideDesktop}
+            >
               {#if !$$slots.cell}
                 {#if !column?.component}
                   {#if column?.renderAs}

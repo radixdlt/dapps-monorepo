@@ -20,6 +20,7 @@ module.exports.aliases = () => {
     '@networks': `${uiRoot}/src/network`,
     '@featureFlags': `${uiRoot}/src/feature-flags`,
 
+    '@dashboard': `${dashboardRoot}/src`,
     '@dashboard-pages': `${dashboardRoot}/src/pages`
   }
 }

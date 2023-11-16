@@ -10,6 +10,10 @@ export type TablePage<T> = {
   items: T[]
 }
 
+export type TableConfig<Entry = any> = {
+  onRowClick?: (entry: Entry) => void
+}
+
 export type SortableType = BigNumber | string | number | boolean
 
 export type SortableValues<T> = {
@@ -28,6 +32,26 @@ export type TableColumn<Entry = any> = Readonly<{
   sortBy?:
     | SortableValues<Entry>
     | ((a: Entry, b: Entry, direction: Direction) => number)
+
+  /**
+   * Set CSS width of the column.
+   */
+  width?: string
+
+  /**
+   * Set text alignment for the column
+   */
+  alignment?: 'left' | 'right' | 'center'
+
+  /**
+   * Column is visible only for desktop resolution
+   */
+  hideMobile?: boolean
+
+  /**
+   * Column is visible only for mobile resolution
+   */
+  hideDesktop?: boolean
 
   /**
    * Header options.

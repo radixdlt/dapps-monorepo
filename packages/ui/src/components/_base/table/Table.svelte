@@ -5,11 +5,12 @@
 <script lang="ts">
   import { useSorting } from './sorting'
 
-  import type { TableColumn } from './types'
+  import type { TableColumn, TableConfig } from './types'
 
   type T = $$Generic<Entry>
 
   export let entries: T[]
+  export let config: TableConfig<T> | undefined = undefined
   export let columns: TableColumn<T>[]
   export let defaultSortedColumn:
     | NonNullable<(typeof columns)[number]>['id']
@@ -23,19 +24,26 @@
     <tr>
       <slot name="header" {sort} {sortStatus}>
         {#each columns as column, i}
-          <th style:text-align={column?.header?.alignment ?? 'left'}>
-            <Tooltip
-              headerText={column?.header?.tooltip && column?.header?.label}
-              text={column?.header?.tooltip}
+          {#if !column?.hideDesktop}
+            <th
+              style:text-align={(column?.alignment ||
+                column?.header?.alignment) ??
+                'left'}
+              style:width={column?.width ?? 'auto'}
             >
-              <slot
-                name="header-cell"
-                {column}
-                sort={() => (entries = sort(column, i)(entries))}
-                sortStatus={$sortStatus[i]}
-              />
-            </Tooltip>
-          </th>
+              <Tooltip
+                headerText={column?.header?.tooltip && column?.header?.label}
+                text={column?.header?.tooltip}
+              >
+                <slot
+                  name="header-cell"
+                  {column}
+                  sort={() => (entries = sort(column, i)(entries))}
+                  sortStatus={$sortStatus[i]}
+                />
+              </Tooltip>
+            </th>
+          {/if}
         {/each}
       </slot>
     </tr>
@@ -44,10 +52,19 @@
   <tbody>
     {#each entries as entry}
       <slot name="empty-row" {entry}>
-        <tr>
+        <tr
+          class:clickable={!!config?.onRowClick}
+          on:click={() => config && config.onRowClick?.(entry)}
+        >
           <slot name="row" {entry} />
         </tr>
       </slot>
     {/each}
   </tbody>
 </table>
+
+<style lang="scss">
+  .clickable {
+    cursor: pointer;
+  }
+</style>

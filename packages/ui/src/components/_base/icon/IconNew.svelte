@@ -3,13 +3,26 @@
   export let size: 'small' | 'medium' | 'large' = 'medium'
   export let faded = false
   export let rounded = false
+  export let centered = false
 </script>
 
-<img class={size} class:faded class:rounded on:click src={icon} alt="icon" />
+<img
+  class={size}
+  class:centered
+  class:faded
+  class:rounded
+  on:click
+  src={icon}
+  alt="icon"
+/>
 
 <style lang="scss">
   img {
     display: block;
+
+    &.centered {
+      margin: 0 auto;
+    }
   }
 
   .faded {

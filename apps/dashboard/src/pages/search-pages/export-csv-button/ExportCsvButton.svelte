@@ -208,10 +208,10 @@
     color: var(--color-radix-blue-2);
     font-weight: var(--font-weight-bold-2);
     display: flex;
+    width: 100%;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    width: 121px;
     height: 40px;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -219,6 +219,10 @@
 
     &.disabled {
       pointer-events: none;
+    }
+
+    @include mixins.desktop {
+      width: 121px;
     }
   }
 
@@ -234,14 +238,16 @@
   }
 
   .picker {
+    width: 100%;
     display: inline-flex;
     flex-direction: column;
     z-index: 1;
   }
 
   .drawer {
+    max-width: 100vw;
     position: absolute;
-    right: -10px;
+    right: 0;
     width: 420px;
     overflow-y: auto;
     border-radius: 10px;
@@ -254,6 +260,14 @@
     &.calendar {
       width: 306px;
       padding-top: 1rem;
+    }
+
+    @include mixins.desktop {
+      right: -10px;
+    }
+
+    @media (max-width: 400px) {
+      right: -25px;
     }
   }
 

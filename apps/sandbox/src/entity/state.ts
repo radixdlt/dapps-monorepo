@@ -7,7 +7,7 @@ import {
   FungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesCollectionItemVaultAggregated,
   StateEntityDetailsResponseComponentDetails
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import { createObservableHook } from '../helpers/create-observable-hook'
 import { getStringMetadata } from '../helpers/find-metadata'
 

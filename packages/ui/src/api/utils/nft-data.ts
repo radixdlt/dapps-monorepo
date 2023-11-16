@@ -45,7 +45,8 @@ export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
   const standard = {} as { [K in T[number]]: NftDataItem<K> }
   const nonStandard: NftDataItem[] = []
 
-  for (let field of (data?.programmatic_json as any).fields as NftDataItem[]) {
+  for (let field of ((data?.programmatic_json as any)?.fields ||
+    []) as NftDataItem[]) {
     if (isStandardEntry(standardEntries, field)) {
       standard[field.field_name] = field
     } else {

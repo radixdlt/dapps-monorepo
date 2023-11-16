@@ -3,17 +3,42 @@ import { WorkbookClient } from './workbook-client'
 
 describe('workbook client', () => {
   it('should initialize without throw', () => {
-    expect(() => WorkbookClient({ toDate: dayjs.utc() })).not.toThrow()
+    expect(() =>
+      WorkbookClient({ toDate: dayjs.utc(), entityAddress: 'abc' })
+    ).not.toThrow()
   })
 
   it('should only add TXs before toDate', async () => {
-    const client = WorkbookClient({ toDate: dayjs.utc('2021-01-01') })
+    const client = WorkbookClient({
+      toDate: dayjs.utc('2021-01-01'),
+      entityAddress: 'abc'
+    })
     client.addRows([
       {
+        balance_changes: {
+          fungible_balance_changes: [
+            {
+              entity_address: 'abc',
+              resource_address: 'abc',
+              balance_change: '1'
+            }
+          ],
+          non_fungible_balance_changes: []
+        },
         round_timestamp: '2019-01-01',
         intent_hash: 'intent_hash_1'
       },
       {
+        balance_changes: {
+          fungible_balance_changes: [
+            {
+              entity_address: 'abc',
+              resource_address: 'abc',
+              balance_change: '1'
+            }
+          ],
+          non_fungible_balance_changes: []
+        },
         round_timestamp: '2022-01-01',
         intent_hash: 'intent_hash_3'
       }
