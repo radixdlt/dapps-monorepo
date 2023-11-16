@@ -57,8 +57,8 @@
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
-    getOtherBalanceChangesColumnDefinition({ entityAddress }),
     getFeeColumnDefinition({ alignment: 'right' }),
+    getOtherBalanceChangesColumnDefinition({ entityAddress }),
     {
       id: 'balance-increases',
       header: {
