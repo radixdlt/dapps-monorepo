@@ -14,6 +14,19 @@
 
   window.addEventListener('resize', onResize)
 
+  const findParentWithCorrectDisplay = (
+    component: HTMLElement | null
+  ): HTMLElement | null => {
+    if (component) {
+      if (getComputedStyle(component).display === 'contents') {
+        return findParentWithCorrectDisplay(component.parentElement)
+      } else {
+        return component
+      }
+    }
+    return null
+  }
+
   const findParentWithScroll = (
     component: HTMLElement | null
   ): HTMLElement | null => {
@@ -45,7 +58,10 @@
       assignScrollableParent()
     })
 
-    resizeObserver.observe(component.parentElement as HTMLElement)
+    const parentElement = findParentWithCorrectDisplay(component.parentElement)
+    if (parentElement) {
+      resizeObserver.observe(parentElement)
+    }
   })
 
   const onScroll = (e: any) => {
