@@ -1,5 +1,5 @@
 <script>
-  import { goto } from '$app/navigation'
-
-  goto('network-staking')
+  import Home from '@dashboard/pages/navbar-pages/home/Home.svelte'
 </script>
+
+<Home />

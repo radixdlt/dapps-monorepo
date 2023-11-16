@@ -16,6 +16,7 @@
 
 <style lang="scss">
   .message-background {
+    margin: 0 auto;
     max-width: 32px;
     background: var(--color-grey-5);
     padding: var(--spacing-md);
