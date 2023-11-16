@@ -1,6 +1,7 @@
 <script lang="ts">
   import PercentageInput from '@components/_base/input/PercentageInput.svelte'
   import HistogramFilter from './histogram-filter/HistogramFilter.svelte'
+  import BigNumber from 'bignumber.js'
 
   export let values: number[]
   export let minText: string
@@ -9,7 +10,10 @@
   export let max = 100
   export let range: [number, number] = [0, 100]
 
-  $: range = [parseFloat(range[0].toFixed(2)), parseFloat(range[1].toFixed(2))]
+  $: range = [
+    parseFloat(range[0].toFixed(2)),
+    parseFloat(new BigNumber(range[1]).toFixed(2, BigNumber.ROUND_UP))
+  ]
 </script>
 
 <div class="card filter-card">
