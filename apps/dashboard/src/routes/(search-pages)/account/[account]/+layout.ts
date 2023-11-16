@@ -21,6 +21,8 @@ import {
 } from '@api/utils/entities/pool'
 import { callApi } from '@api/gateway'
 import { errorPage } from '../../../../stores'
+import { resourcesCacheClient } from '@api/utils/resource-cache-client'
+import type { NonFungible } from '@api/utils/nfts'
 
 const ERROR_MSG = 'Failed to load account data.'
 
@@ -103,7 +105,19 @@ export const load: LayoutLoad = ({ params }) => {
         explicitMetadata: ['name', 'tags', 'icon_url']
       }),
     handleLookupGatewayResult
-  )().then((accountData) => accountData[0])
+  )().then((accountData) => {
+    const data = accountData[0]
+    resourcesCacheClient.addFungibles(data.fungible)
+    data.nonFungible.forEach((nft) => {
+      resourcesCacheClient.addNonFungibles([nft.resource])
+      nft.nonFungibles
+        .filter((nft): nft is NonFungible => typeof nft !== 'string')
+        .forEach((nft) => {
+          resourcesCacheClient.addNonFungiblesData([nft])
+        })
+    })
+    return data
+  })
 
   const validatorResponse = pipe(
     () => getValidators(undefined, false, false),
