@@ -107,6 +107,21 @@ export const getRecentTransactions = (address: string, cursor?: string) =>
     }
   })
 
+export const getRecentNetworkTransactions = (cursor?: string) =>
+  fromPromise(
+    gatewayApi.stream.innerClient.streamTransactions({
+      streamTransactionsRequest: {
+        cursor,
+        limit_per_page: 15,
+        opt_ins: {
+          receipt_output: false,
+          balance_changes: true
+        }
+      }
+    }),
+    handleError
+  )
+
 export const getTransactionsFromDate = (
   address: string,
   timestamp: Date,
