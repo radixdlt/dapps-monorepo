@@ -100,7 +100,7 @@
   >
     {type === 'decreases' ? '-' : '+'}
     {change.resource?.displayName}
-    {change.nft?.nftData.standard.name?.value || ''}
+    {change.nft?.nftData.standard.name?.value || change.nftId}
   </a>
 {/each}
 

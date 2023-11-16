@@ -21,16 +21,16 @@ export const ResourceCacheClient = () => {
     )
     addresses.forEach((address) => queriedResources.add(address))
 
-    return callApi('getEntityDetailsVaultAggregated', addressesToQuery)
-      .map((entities) => {
+    return callApi('getEntityDetailsVaultAggregated', addressesToQuery).map(
+      (entities) => {
         entities.forEach((entity) => {
           fungibleResources.set(
             entity.address,
             transformFungibleResource(entity)
           )
         })
-      })
-      .unwrapOr(null)
+      }
+    )
   }
 
   const queryNonFungiblesData = (addresses: NftGlobalId[]) => {
@@ -82,10 +82,39 @@ export const ResourceCacheClient = () => {
     )
   }
 
+  const addFungibles = (resources: FungibleResource[]) => {
+    resources.forEach(({ address }) => queriedResources.add(address))
+    resources.forEach((resource) => {
+      fungibleResources.set(resource.address, resource)
+    })
+  }
+
+  const addNonFungibles = (resources: NonFungibleResource[]) => {
+    resources.forEach(({ address }) => queriedResources.add(address))
+    resources.forEach((resource) => {
+      nonFungibleResources.set(resource.address, resource)
+    })
+  }
+
+  const addNonFungiblesData = (resources: NonFungible[]) => {
+    resources.forEach((resource) =>
+      queriedResources.add(`${resource.address}:${resource.id}`)
+    )
+    resources.forEach((resource) => {
+      nonFungibleResourcesData.set(
+        `${resource.address}:${resource.id}`,
+        resource
+      )
+    })
+  }
+
   return {
     queryFungibles,
     queryNonFungibles,
     queryNonFungiblesData,
+    addFungibles,
+    addNonFungibles,
+    addNonFungiblesData,
     fungibleResources,
     nonFungibleResources,
     nonFungibleResourcesData
