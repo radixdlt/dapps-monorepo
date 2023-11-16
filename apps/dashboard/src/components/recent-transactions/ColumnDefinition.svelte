@@ -62,13 +62,14 @@
   }
 
   export const getOtherBalanceChangesColumnDefinition = ({
-    entityAddress
-  }: { entityAddress?: string } = {}) => {
+    entityAddress,
+    label
+  }: { entityAddress?: string; label?: string } = {}) => {
     return {
       id: 'other-balance-changes',
       width: '170px',
       header: {
-        label: 'Other Balance Changes'
+        label: label || 'Other Balance Changes'
       },
       component: OtherBalanceChangesColumn,
       componentProps: {
