@@ -23,7 +23,9 @@
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
     getFeeColumnDefinition(),
-    getOtherBalanceChangesColumnDefinition(),
+    getOtherBalanceChangesColumnDefinition({
+      label: 'Balance Changes'
+    }),
     chevronColumnDefinition
   ]
 </script>
