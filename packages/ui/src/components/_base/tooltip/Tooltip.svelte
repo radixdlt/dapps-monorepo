@@ -17,6 +17,11 @@
   export let headerText: string | undefined = undefined
 
   let show = false
+
+  const handleTooltipClick = (e: Event) => {
+    e?.preventDefault()
+    e?.stopImmediatePropagation()
+  }
 </script>
 
 <Popover type="info" {placement} bind:show>
@@ -24,15 +29,20 @@
     on:mouseenter={() => (show = !!text && true)}
     on:mouseleave={() => (show = false)}
   >
-    <slot />
+    <div on:click={handleTooltipClick} on:keypress={handleTooltipClick}>
+      <slot />
+    </div>
   </div>
-  <div slot="content">
+  <div class="content" slot="content">
     {#if headerText}<div class="header-text">{headerText}</div>{/if}
     {#if text}<span class="text">{text}</span>{/if}
   </div>
 </Popover>
 
 <style>
+  .content {
+    max-width: 500px;
+  }
   .header-text {
     text-transform: capitalize;
     color: var(--color-light);

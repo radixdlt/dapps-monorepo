@@ -56,7 +56,11 @@
 
       <div class="name-and-amount dotted-overflow">
         {#if change.type === 'non-fungible'}
-          <a href={`/nft/${change.token.address}:${change.token.id}`}>
+          <a
+            href={`/nft/${encodeURIComponent(
+              `${change.token.address}:${change.token.id}`
+            )}`}
+          >
             <div class="non-fungible-name dotted-overflow">
               <div class="subtext dotted-overflow">
                 {change.token.resourceName ?? ''}

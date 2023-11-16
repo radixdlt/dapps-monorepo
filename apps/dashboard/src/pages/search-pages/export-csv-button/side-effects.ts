@@ -13,7 +13,7 @@ export const exportTransactions = (
   toDateObject: dayjs.Dayjs,
   entityAddress: string
 ) => {
-  const workbookClient = WorkbookClient({ toDate: toDateObject })
+  const workbookClient = WorkbookClient({ toDate: toDateObject, entityAddress })
   return iterateTransactionsApi(
     {
       fromDate: fromDateObject.toDate(),

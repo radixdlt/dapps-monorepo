@@ -97,7 +97,11 @@
         .page-content {
           max-width: 80rem;
           margin: 0 auto;
-          padding: var(--spacing-2xl);
+          padding: var(--spacing-xl);
+
+          @include mixins.desktop {
+            padding: var(--spacing-2xl);
+          }
         }
       }
     }
