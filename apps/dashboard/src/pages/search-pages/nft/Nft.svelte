@@ -1,6 +1,9 @@
 <script lang="ts">
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
-  import type { NonFungibleResource } from '@api/utils/entities/resource'
+  import type {
+    FungibleResource,
+    NonFungibleResource
+  } from '@api/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type {
@@ -34,6 +37,11 @@
         }
       }
     } as EntityMetadataItem)
+
+  export let tokenInfo: {
+    fungibles: Promise<FungibleResource[]>
+    nonFungibles: Promise<NonFungible[]>
+  }
 
   $: metadata = nft.then(({ id, type, nftData }) =>
     [metadataItem('id', id, 'String')].concat(
@@ -96,7 +104,7 @@
 
 <h2 class="resource-card-header">Belongs To:</h2>
 
-<Resource {resource} {associatedDapps} showAddressInMetadata />
+<Resource {resource} {associatedDapps} showAddressInMetadata {tokenInfo} />
 
 <style lang="scss">
   .nft-image {

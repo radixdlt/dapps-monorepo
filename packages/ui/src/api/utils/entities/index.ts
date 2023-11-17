@@ -28,7 +28,8 @@ export type Entity =
 
 export type _Entity<
   Type extends string,
-  StandardMetadata extends (keyof KnownStandardTypes)[]
+  StandardMetadata extends (keyof KnownStandardTypes)[],
+  HasAuth = true
 > = {
   type: Type
   address: string
@@ -50,8 +51,7 @@ export type _Entity<
     explicit: EntityMetadataItem[]
     all: EntityMetadataItem[]
   }
-  auth: AuthInfo
-}
+} & (HasAuth extends true ? { auth: AuthInfo } : {})
 
 export const transformEntity =
   (standardMetadata: (keyof KnownStandardTypes)[]) =>
@@ -67,8 +67,11 @@ export const transformEntity =
     address: entity.address,
     entity,
     metadata: transformMetadata(entity, standardMetadata),
-    auth: getAuthInfo(
-      (entity.details as StateEntityDetailsResponseComponentDetails)
-        .role_assignments!
-    )
+    auth: (entity.details as StateEntityDetailsResponseComponentDetails)
+      .role_assignments
+      ? getAuthInfo(
+          (entity.details as StateEntityDetailsResponseComponentDetails)
+            .role_assignments!
+        )
+      : (undefined as unknown as AuthInfo)
   })

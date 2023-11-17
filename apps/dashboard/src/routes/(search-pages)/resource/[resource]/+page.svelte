@@ -18,5 +18,6 @@
     resource={Promise.resolve(data.resource)}
     associatedDapps={data.promises.associatedDapps}
     redeemableTokens={data.promises.redeemableTokens}
+    tokenInfo={data.promises.authResources}
   />
 </SearchPage>
