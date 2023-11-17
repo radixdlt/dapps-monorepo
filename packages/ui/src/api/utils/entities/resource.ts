@@ -7,14 +7,12 @@ import type {
   NonFungibleResourcesVaultCollection,
   StateEntityDetailsOptions,
   StateEntityDetailsResponseFungibleResourceDetails,
-  StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem,
   StateNonFungibleDetailsResponseItem
 } from '@common/gateway-sdk'
 import { andThen, flatten, isNil, map, pick, pipe, reject } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
-import { transformMetadata } from '../metadata'
 import { transformEntity, type _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
 import { isPoolUnit, resourceToPoolUnit } from './pool-unit'
@@ -79,8 +77,6 @@ export type Behavior =
   | 'movement-restricted-future-anyone'
   | 'freezable'
   | 'freezable-anyone'
-  | 'info-can-change'
-  | 'info-can-change-anyone'
   | 'removable-by-third-party'
   | 'removable-by-anyone'
   | 'nft-data-changeable'
@@ -290,14 +286,7 @@ export const _transformResource = pipe(
         entity.entity
           .details as StateEntityDetailsResponseFungibleResourceDetails
       ).divisibility,
-      behaviors: getBehaviors(
-        getAuthInfo(
-          (
-            entity.entity
-              .details as StateEntityDetailsResponseFungibleResourceDetails
-          ).role_assignments
-        )
-      )
+      behaviors: getBehaviors(entity.auth)
     } as const)
 )
 
@@ -351,7 +340,7 @@ export type TransformedNonFungible = {
   vaultAddress: string
 }
 
-const transformNonFungible = async (
+const transformAccountNonFungibles = async (
   accountResourceItems: {
     account: string
     items: NonFungibleResourcesVaultCollection['items']
@@ -518,7 +507,7 @@ export const transformResources =
       : []
 
     const nonFungible = nfts
-      ? await transformNonFungible(
+      ? await transformAccountNonFungibles(
           nonFungibleItems,
           stateOptions,
           ledgerState,

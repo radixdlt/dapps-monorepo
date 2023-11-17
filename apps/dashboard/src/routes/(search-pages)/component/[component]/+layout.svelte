@@ -22,6 +22,10 @@
       {
         id: 'recent-transactions',
         label: 'Recent Transactions'
+      },
+      {
+        id: 'auth',
+        label: 'Auth'
       }
     ]
   ]}

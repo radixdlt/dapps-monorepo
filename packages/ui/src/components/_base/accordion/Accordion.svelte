@@ -4,14 +4,15 @@
   import PickerExpand from '@icons/picker-expand.svg'
   export let isOpened = false
   export let header = ''
-  const toggleContent = (event: MouseEvent) => {
+
+  export const toggleContent = () => {
     isOpened = !isOpened
   }
 </script>
 
 <div class="accordion">
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="header-wrapper" on:click={(event) => toggleContent(event)}>
+  <div class="header-wrapper" on:click={toggleContent}>
     <slot name="header">
       <div class="header-text">{header}</div>
     </slot>
@@ -32,14 +33,6 @@
 </div>
 
 <style lang="scss">
-  .accordion {
-    border-top: 1px solid var(--theme-border-separator);
-
-    &:last-child {
-      border-bottom: 1px solid var(--theme-border-separator);
-    }
-  }
-
   .icon {
     transition: transform 0.3s ease-in-out;
 
@@ -68,11 +61,6 @@
 
   .header-wrapper {
     position: relative;
-    height: 8rem;
-
-    @include mixins.desktop {
-      height: 7rem;
-    }
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -90,9 +78,5 @@
       white-space: nowrap;
       font-weight: var(--font-weight-bold-1);
     }
-  }
-
-  .content {
-    padding-bottom: 1rem;
   }
 </style>
