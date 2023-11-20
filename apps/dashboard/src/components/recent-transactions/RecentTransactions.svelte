@@ -8,62 +8,38 @@
     mobileHeaderColumnDefinition,
     recentTransactionsTableConfig
   } from './ColumnDefinition.svelte'
-  import type { NftGlobalId } from '@api/utils/entities/resource'
   import BalanceChangesColumn from './BalanceChangesColumn.svelte'
   import ExportCsvButton from '@dashboard-pages/search-pages/export-csv-button/ExportCsvButton.svelte'
   import { getRecentTransactions } from '@api/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
-  import { resourcesCacheClient } from '@api/utils/resource-cache-client'
+  import { queryAndCacheUniqueResources } from '@api/utils/resource-cache-client'
+  import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
+  import { TransactionStatus } from '@common/gateway-sdk'
+  import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
+  import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
+  import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
+  import CommittedFailureColumn from './CommittedFailureColumn.svelte'
 
   export let entityAddress: string
 
-  const queryFunction = (cursor?: string) => {
-    const uniqueNfts = new Set<string>()
-    const uniqueFungibleTokens = new Set<string>()
-    const uniqueIndividualNfts = new Set<NftGlobalId>()
-    return getRecentTransactions(entityAddress, cursor)
-      .then((res) => {
-        res.items.forEach((transactionInfo) => {
-          transactionInfo.balance_changes?.fungible_balance_changes?.forEach(
-            (change) => {
-              uniqueFungibleTokens.add(change.resource_address)
-            }
-          )
+  const queryFunction = (cursor?: string) =>
+    queryAndCacheUniqueResources(getRecentTransactions(entityAddress, cursor))
 
-          transactionInfo.balance_changes?.non_fungible_balance_changes?.forEach(
-            (change) => {
-              uniqueNfts.add(change.resource_address)
-              ;[...change.added, ...change.removed].forEach((id) => {
-                uniqueIndividualNfts.add(`${change.resource_address}:${id}`)
-              })
-            }
-          )
-        })
-        return res
-      })
-      .then((res) =>
-        Promise.all([
-          resourcesCacheClient.queryFungibles(Array.from(uniqueFungibleTokens)),
-          resourcesCacheClient.queryNonFungibles(Array.from(uniqueNfts)),
-          resourcesCacheClient.queryNonFungiblesData(
-            Array.from(uniqueIndividualNfts)
-          )
-        ]).then(() => res)
-      )
-  }
+  const feeColumnDefinition = getFeeColumnDefinition({ alignment: 'right' })
 
   const columns: ComponentProps<PaginatedTable<any>>['columns'] = [
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
+    feeColumnDefinition,
     getOtherBalanceChangesColumnDefinition({ entityAddress }),
-    getFeeColumnDefinition({ alignment: 'right' }),
     {
       id: 'balance-increases',
       header: {
         label: 'Balance Increases'
       },
+      width: '190px',
       alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {
@@ -77,6 +53,7 @@
       header: {
         label: 'Balance Decreases'
       },
+      width: '190px',
       alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {
@@ -98,7 +75,27 @@
   config={recentTransactionsTableConfig}
   {columns}
   {queryFunction}
-/>
+>
+  <svelte:fragment slot="row" let:entry>
+    {#if entry.transaction_status === TransactionStatus.CommittedFailure}
+      <TableRow
+        customClass="clickable"
+        on:click={(ev) => recentTransactionsTableConfig.onRowClick?.(entry, ev)}
+      >
+        <BasicColumn {entry} column={messageColumnDefinition} />
+        <BasicColumn {entry} column={mobileHeaderColumnDefinition} />
+        <BasicColumn {entry} column={dateAndTxIdColumnDefinition} />
+        <BasicColumn {entry} column={feeColumnDefinition} />
+        <ResponsiveTableCell colspan={3}>
+          <CommittedFailureColumn />
+        </ResponsiveTableCell>
+        <BasicColumn {entry} column={chevronColumnDefinition} />
+      </TableRow>
+    {:else}
+      <BasicRow {columns} config={recentTransactionsTableConfig} {entry} />
+    {/if}
+  </svelte:fragment>
+</PaginatedTable>
 
 <style lang="scss">
   .export-button {

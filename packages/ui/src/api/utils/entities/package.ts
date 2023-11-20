@@ -1,13 +1,15 @@
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
-import type { _Entity } from '.'
-import { transformMetadata } from '../metadata'
+import { transformEntity, type _Entity } from '.'
+import { pipe } from 'ramda'
 
-export type Package = _Entity<'package', ['name', 'description']>
+export type Package = _Entity<'package', ['name', 'description'], false>
 
-export let transformPackage = (
+export let transformPackage: (
   entity: StateEntityDetailsVaultResponseItem
-): Package => ({
-  type: 'package',
-  address: entity.address,
-  metadata: transformMetadata(entity, ['name', 'description', 'tags'])
-})
+) => Package = pipe(
+  transformEntity(['name', 'description', 'tags']),
+  (entity) => ({
+    ...entity,
+    type: 'package' as const
+  })
+)

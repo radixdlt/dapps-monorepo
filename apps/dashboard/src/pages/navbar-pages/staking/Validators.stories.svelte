@@ -2,7 +2,6 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
   import BigNumber from 'bignumber.js'
-  import { promise } from 'zod'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -62,7 +61,8 @@
         all: [],
         explicit: []
       },
-      rank: i + 1
+      rank: i + 1,
+      auth: {} as any
     }))
 </script>
 

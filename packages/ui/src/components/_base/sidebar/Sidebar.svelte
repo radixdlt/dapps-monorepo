@@ -22,19 +22,18 @@
 <svelte:window bind:innerWidth={windowWidth} />
 
 {#if showMobileSidebar && !isDesktopViewport}
-  <button
-    class="close"
-    style={`mask-image: url(${CloseIcon}); -webkit-mask-image: url(${CloseIcon});`}
-    transition:scale={{ delay: 0, duration: 300 }}
-    on:click={() => {
-      showSidebar.set(false)
-    }}
-  />
-
   <nav
     bind:clientWidth={width}
     transition:fly={{ x: -width, opacity: 1, duration: 300 }}
   >
+    <button
+      class="close"
+      style={`mask-image: url(${CloseIcon}); -webkit-mask-image: url(${CloseIcon});`}
+      transition:scale={{ delay: 0, duration: 300 }}
+      on:click={() => {
+        showSidebar.set(false)
+      }}
+    />
     <slot />
   </nav>
 {:else if isDesktopViewport && showDesktopSidebar}
@@ -75,9 +74,7 @@
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
-    position: fixed;
-    right: 0;
-    top: 0;
+
     &:hover {
       transition: background-color 0.1s ease-in-out;
       background-color: var(--theme-subtext);

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { sort } from './Table.svelte'
+import { sort } from './sorting'
 
 const createEntry = (a: BigNumber | string) => ({ a })
 
@@ -12,7 +12,8 @@ describe('sorting', () => {
         createEntry(new BigNumber(15))
       ]
 
-      expect(sort(entries, { sortBy: 'a' }, 'ascending')).toEqual([
+      //@ts-ignore
+      expect(sort({ sortBy: 'a' }, 'ascending')(entries)).toEqual([
         createEntry(new BigNumber(10)),
         createEntry(new BigNumber(15)),
         createEntry(new BigNumber(20))
@@ -25,8 +26,8 @@ describe('sorting', () => {
         createEntry(new BigNumber(10)),
         createEntry(new BigNumber(15))
       ]
-
-      expect(sort(entries, { sortBy: 'a' }, 'descending')).toEqual([
+      //@ts-ignore
+      expect(sort({ sortBy: 'a' }, 'descending')(entries)).toEqual([
         createEntry(new BigNumber(20)),
         createEntry(new BigNumber(15)),
         createEntry(new BigNumber(10))
@@ -42,14 +43,15 @@ describe('sorting', () => {
         createEntry(new BigNumber(10)),
         createEntry(new BigNumber(15))
       ]
-
-      expect(sort(entries, { sortBy: (a, b) => 0 }, 'descending')).toEqual([
+      //@ts-ignore
+      expect(sort({ sortBy: (a, b) => 0 }, 'descending')(entries)).toEqual([
         createEntry(new BigNumber(20)),
         createEntry(new BigNumber(21)),
         createEntry(new BigNumber(10)),
         createEntry(new BigNumber(15))
       ])
-      expect(sort(entries, { sortBy: (a, b) => 0 }, 'ascending')).toEqual([
+      //@ts-ignore
+      expect(sort({ sortBy: (a, b) => 0 }, 'ascending')(entries)).toEqual([
         createEntry(new BigNumber(20)),
         createEntry(new BigNumber(21)),
         createEntry(new BigNumber(10)),
@@ -65,13 +67,13 @@ describe('sorting', () => {
       ]
       expect(
         sort(
-          entries,
+          //@ts-ignore
           {
             sortBy: (a, b) =>
               a.a.toString().length > b.a.toString().length ? 1 : -1
           },
           'ascending'
-        )
+        )(entries)
       ).toEqual([
         createEntry(new BigNumber('b)b')),
         createEntry(new BigNumber('a)aaa')),

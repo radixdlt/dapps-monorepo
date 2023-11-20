@@ -7,15 +7,13 @@ import type {
   NonFungibleResourcesVaultCollection,
   StateEntityDetailsOptions,
   StateEntityDetailsResponseFungibleResourceDetails,
-  StateEntityDetailsResponseItem,
   StateEntityDetailsVaultResponseItem,
   StateNonFungibleDetailsResponseItem
 } from '@common/gateway-sdk'
 import { andThen, flatten, isNil, map, pick, pipe, reject } from 'ramda'
 import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
-import { transformMetadata } from '../metadata'
-import type { _Entity } from '.'
+import { transformEntity, type _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
 import { isPoolUnit, resourceToPoolUnit } from './pool-unit'
 import { getAuthInfo, type AuthInfo, isAllowed } from '../auth'
@@ -79,8 +77,6 @@ export type Behavior =
   | 'movement-restricted-future-anyone'
   | 'freezable'
   | 'freezable-anyone'
-  | 'info-can-change'
-  | 'info-can-change-anyone'
   | 'removable-by-third-party'
   | 'removable-by-anyone'
   | 'nft-data-changeable'
@@ -276,78 +272,65 @@ export const getBehaviors = (auth: AuthInfo) =>
     getCombinedBehaviors
   )()
 
-export const transformNonFungibleResource = (
-  entity: StateEntityDetailsResponseItem
-): NonFungibleResource => {
-  const metadata = transformMetadata(entity, [
-    'name',
-    'symbol',
-    'icon_url',
-    'description',
-    'tags'
-  ])
+export const _transformResource = pipe(
+  transformEntity(['name', 'symbol', 'icon_url', 'description', 'tags']),
+  (entity) =>
+    ({
+      ...entity,
+      type: 'resource',
+      totalSupply: (
+        entity.entity
+          .details as StateEntityDetailsResponseFungibleResourceDetails
+      ).total_supply,
+      divisibility: (
+        entity.entity
+          .details as StateEntityDetailsResponseFungibleResourceDetails
+      ).divisibility,
+      behaviors: getBehaviors(entity.auth)
+    } as const)
+)
 
-  return {
-    type: 'resource',
-    resourceType: 'non-fungible',
-    address: `${entity.address}`,
-    totalSupply: (
-      entity.details as StateEntityDetailsResponseFungibleResourceDetails
-    ).total_supply,
-    divisibility: (
-      entity.details as StateEntityDetailsResponseFungibleResourceDetails
-    ).divisibility,
-    metadata,
-    behaviors: getBehaviors(
-      getAuthInfo(
-        (entity.details as StateEntityDetailsResponseFungibleResourceDetails)
-          .role_assignments
-      )
-    ),
-    displayName: metadata.standard.name ? metadata.standard.name.value : ''
-  } as const
-}
+export const transformNonFungibleResource: (
+  entity: StateEntityDetailsVaultResponseItem
+) => NonFungibleResource = pipe(
+  _transformResource,
+  (entity) =>
+    ({
+      ...entity,
+      resourceType: 'non-fungible',
+      displayName: entity.metadata.standard.name
+        ? `${entity.metadata.standard.name.value} ${
+            entity.metadata.standard.symbol
+              ? `(${entity.metadata.standard.symbol.value})`
+              : ''
+          }`
+        : ''
+    } as const)
+)
 
 export const transformFungibleResource = (
-  entity: StateEntityDetailsResponseItem,
+  entity: StateEntityDetailsVaultResponseItem,
   fungible?: FungibleResourcesCollectionItemVaultAggregated
-): FungibleResource => {
-  const metadata = transformMetadata(entity, [
-    'name',
-    'symbol',
-    'icon_url',
-    'description',
-    'tags'
-  ])
-
-  return {
-    type: 'resource',
-    resourceType: 'fungible',
-    value:
-      fungible?.vaults.items
-        .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
-        .toString() || '0',
-    address: entity.address,
-    totalSupply: (
-      entity.details as StateEntityDetailsResponseFungibleResourceDetails
-    ).total_supply,
-    divisibility: (
-      entity.details as StateEntityDetailsResponseFungibleResourceDetails
-    ).divisibility,
-    metadata,
-    behaviors: getBehaviors(
-      getAuthInfo(
-        (entity.details as StateEntityDetailsResponseFungibleResourceDetails)
-          .role_assignments
-      )
-    ),
-    displayName: metadata.standard.name
-      ? `${metadata.standard.name.value} ${
-          metadata.standard.symbol ? `(${metadata.standard.symbol.value})` : ''
-        }`
-      : ''
-  } as const
-}
+): FungibleResource =>
+  pipe(
+    _transformResource,
+    (entity) =>
+      ({
+        ...entity,
+        resourceType: 'fungible',
+        value:
+          fungible?.vaults.items
+            .reduce((prev, next) => prev.plus(next.amount), new BigNumber(0))
+            .toString() || '0',
+        displayName: entity.metadata.standard.name
+          ? `${entity.metadata.standard.name.value} ${
+              entity.metadata.standard.symbol
+                ? `(${entity.metadata.standard.symbol.value})`
+                : ''
+            }`
+          : ''
+      } as const)
+  )(entity)
 
 export type TransformedNonFungible = {
   resource: NonFungibleResource
@@ -357,7 +340,7 @@ export type TransformedNonFungible = {
   vaultAddress: string
 }
 
-const transformNonFungible = async (
+const transformAccountNonFungibles = async (
   accountResourceItems: {
     account: string
     items: NonFungibleResourcesVaultCollection['items']
@@ -475,7 +458,9 @@ export const transformFungible = async (
   }))
 }
 
-export const transformResource = (entity: StateEntityDetailsResponseItem) => {
+export const transformResource = (
+  entity: StateEntityDetailsVaultResponseItem
+) => {
   if (entity.details?.type === 'FungibleResource') {
     const fungible = transformFungibleResource(entity)
     if (isPoolUnit(fungible)) {
@@ -522,7 +507,7 @@ export const transformResources =
       : []
 
     const nonFungible = nfts
-      ? await transformNonFungible(
+      ? await transformAccountNonFungibles(
           nonFungibleItems,
           stateOptions,
           ledgerState,

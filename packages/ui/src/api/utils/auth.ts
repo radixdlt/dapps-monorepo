@@ -9,26 +9,26 @@ export type AccessRule =
   | DenyAllAccessRule
   | OwnerAccessRule
 
-type AccessRuleNode =
+export type AccessRuleNode =
   | ProofAccessRuleNode
   | AnyOfAccessRuleNode
   | AllOfAccessRuleNode
 
-type ProofRule =
+export type ProofRule =
   | RequireProofRule
   | AmountOfProofRule
   | AllOfProofRule
   | AnyOfProofRule
   | CountOfProofRule
 
-type Requirement = ResourceRequirement | NonFungibleRequirement
+export type Requirement = ResourceRequirement | NonFungibleRequirement
 
-type ResourceRequirement = {
+export type ResourceRequirement = {
   type: 'Resource'
   resource: string
 }
 
-type NonFungibleRequirement = {
+export type NonFungibleRequirement = {
   type: 'NonFungible'
   non_fungible: {
     resource_address: string
@@ -40,28 +40,28 @@ type NonFungibleRequirement = {
   }
 }
 
-type RequireProofRule = {
+export type RequireProofRule = {
   type: 'Require'
   requirement: Requirement
 }
 
-type AmountOfProofRule = {
+export type AmountOfProofRule = {
   type: 'AmountOf'
   amount: string
   resource: string
 }
 
-type AllOfProofRule = {
+export type AllOfProofRule = {
   type: 'AllOf'
   list: Requirement[]
 }
 
-type AnyOfProofRule = {
+export type AnyOfProofRule = {
   type: 'AnyOf'
   list: Requirement[]
 }
 
-type CountOfProofRule = {
+export type CountOfProofRule = {
   type: 'CountOf'
   count: number
   list: Requirement[]

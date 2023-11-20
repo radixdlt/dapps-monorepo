@@ -1,15 +1,18 @@
 import ExcelJS from 'exceljs'
 import type { CommittedTransactionInfo } from '@common/gateway-sdk'
 import dayjs from 'dayjs'
+import type { ResourceCacheClient } from '@api/utils/resource-cache-client'
 
 export type WorkbookClient = ReturnType<typeof WorkbookClient>
 
 export const WorkbookClient = ({
   toDate,
-  entityAddress
+  entityAddress,
+  resourcesCacheClient
 }: {
   toDate: dayjs.Dayjs
   entityAddress: string
+  resourcesCacheClient: ResourceCacheClient
 }) => {
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Transactions')
@@ -19,6 +22,7 @@ export const WorkbookClient = ({
     'Fee',
     'Message',
     'Resource',
+    'Resource Name',
     'Balance Decreases',
     'Balance Increases'
   ])
@@ -31,35 +35,49 @@ export const WorkbookClient = ({
           const message = (tx?.message as any)?.content?.value
           const txInfo = [tx.intent_hash, tx.confirmed_at, tx.fee_paid, message]
 
-          tx.balance_changes?.fungible_balance_changes.forEach((change) => {
-            if (change.entity_address === entityAddress) {
-              worksheet.addRow([
-                ...txInfo,
-                change.resource_address,
-                change.balance_change.startsWith('-')
-                  ? change.balance_change
-                  : '',
-                change.balance_change.startsWith('-')
-                  ? ''
-                  : change.balance_change
-              ])
-            }
-          })
+          if (!tx.balance_changes) {
+            worksheet.addRow([
+              ...txInfo,
+              'data not loaded',
+              'data not loaded',
+              'data not loaded',
+              'data not loaded'
+            ])
+          } else {
+            tx.balance_changes?.fungible_balance_changes.forEach((change) => {
+              if (change.entity_address === entityAddress) {
+                worksheet.addRow([
+                  ...txInfo,
+                  change.resource_address,
+                  resourcesCacheClient.fungibleResources.get(
+                    change.resource_address
+                  )?.displayName,
+                  change.balance_change.startsWith('-')
+                    ? change.balance_change
+                    : '',
+                  change.balance_change.startsWith('-')
+                    ? ''
+                    : change.balance_change
+                ])
+              }
+            })
 
-          tx.balance_changes?.non_fungible_balance_changes.forEach((change) => {
-            if (change.entity_address === entityAddress) {
-              worksheet.addRow([
-                ...txInfo,
-                change.resource_address,
-                change.added
-                  .map((added) => `${change.resource_address}:${added}`)
-                  .join('\n'),
-                change.removed
-                  .map((removed) => `${change.resource_address}:${removed}`)
-                  .join('\n')
-              ])
-            }
-          })
+            tx.balance_changes?.non_fungible_balance_changes.forEach(
+              (change) => {
+                if (change.entity_address === entityAddress) {
+                  worksheet.addRow([
+                    ...txInfo,
+                    change.resource_address,
+                    resourcesCacheClient.nonFungibleResources.get(
+                      change.resource_address
+                    )?.displayName,
+                    change.added.map((added) => `${added}`).join('\n'),
+                    change.removed.map((removed) => `${removed}`).join('\n')
+                  ])
+                }
+              }
+            )
+          }
         })
     },
     csvBuffer: () => workbook.csv.writeBuffer()

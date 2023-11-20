@@ -10,6 +10,8 @@
   import type { PoolUnit } from '@api/utils/entities/pool-unit'
   import type { ComponentProps } from 'svelte'
   import { formatTokenValue } from '@utils'
+  import AuthConfigurationTab from '../../../components/auth/AuthConfigurationTab.svelte'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit
@@ -25,6 +27,10 @@
     Promise.resolve(undefined)
 
   export let showAddressInMetadata = false
+  export let tokenInfo: {
+    fungibles: Promise<FungibleResource[]>
+    nonFungibles: Promise<NonFungible[]>
+  }
 
   let activeTab = 'summary'
 
@@ -37,6 +43,10 @@
       {
         id: 'metadata',
         label: 'Metadata'
+      },
+      {
+        id: 'auth',
+        label: 'Configuration'
       }
     ]
   ]
@@ -86,6 +96,11 @@
   {/if}
   {#if activeTab === 'metadata'}
     <Metadata metadata={resource.then(({ metadata: { all } }) => all)} />
+  {/if}
+  {#if activeTab === 'auth'}
+    {#await resource then resource}
+      <AuthConfigurationTab auth={resource.auth} {tokenInfo} />
+    {/await}
   {/if}
 </div>
 

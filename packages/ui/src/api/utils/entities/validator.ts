@@ -22,7 +22,11 @@ export type Validator<
   WithOwner = false,
   WithUptime = false,
   WithStakeUnits = false
-> = _Entity<'validator', ['name', 'icon_url', 'description', 'info_url']> & {
+> = _Entity<
+  'validator',
+  ['name', 'icon_url', 'description', 'info_url'],
+  false
+> & {
   totalStakeInXRD: BigNumber
   fee: {
     percentage: number

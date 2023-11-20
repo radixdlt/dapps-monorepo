@@ -137,15 +137,16 @@
 </script>
 
 <svelte:head>
-  <!-- OneTrust Cookies Consent Notice start for betanet-dashboard.radixdlt.com -->
   {#if featureFlags().getFlag('cookie-banner')?.enabled}
     <script
       src="https://cdn-ukwest.onetrust.com/scripttemplates/otSDKStub.js"
       type="text/javascript"
       charset="UTF-8"
-      data-domain-script="de2483c5-9867-4af6-9434-dfc97b731f0c"
+      data-domain-script="c80d24fe-47d3-44f6-8955-4870e125aa09"
     ></script>
-    <!-- OneTrust Cookies Consent Notice end for betanet-dashboard.radixdlt.com -->
+    <script type="text/javascript">
+      function OptanonWrapper() {}
+    </script>
   {/if}
 </svelte:head>
 

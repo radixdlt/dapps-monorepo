@@ -11,7 +11,7 @@ export type TablePage<T> = {
 }
 
 export type TableConfig<Entry = any> = {
-  onRowClick?: (entry: Entry) => void
+  onRowClick?: (entry: Entry, ev: Event) => void
 }
 
 export type SortableType = BigNumber | string | number | boolean

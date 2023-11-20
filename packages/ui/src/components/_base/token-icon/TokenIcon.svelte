@@ -20,7 +20,7 @@
 
   $: resolvedIconUrl = isXrd
     ? XrdTokenIcon
-    : imageNotFound
+    : imageNotFound || !iconUrl || iconUrl === ''
     ? TokenPlaceholderIcon
     : safeUrl
 </script>

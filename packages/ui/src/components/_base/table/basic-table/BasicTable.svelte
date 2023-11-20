@@ -1,27 +1,13 @@
-<script lang="ts" context="module">
-  import type { TableColumn, TableConfig } from '../types'
-
-  export type BasicTableColumn<Entry = any> = TableColumn<Entry> & {
-    /**
-     * For rendering a simple value. Returns data that will be displayed in the cell.
-     */
-    renderAs?: (entry: Entry) => string | number
-
-    /**
-     * Component to be rendered instead of text content
-     */
-    component?: new (...args: any[]) => SvelteComponent
-    componentProps?: Record<
-      string,
-      string | number | boolean | Record<string, any> | ((value: Entry) => any)
-    >
-  }
-</script>
-
 <script lang="ts">
+  import BasicRow from './BasicRow.svelte'
+
+  import type { TableConfig } from '../types'
+
+  import type { BasicTableColumn } from './BasicRow.svelte'
+
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
   import TableRow from './TableRow.svelte'
-  import type { ComponentProps, SvelteComponent } from 'svelte'
+  import type { ComponentProps } from 'svelte'
   import Table from '../Table.svelte'
   import BasicHeader from '../basic-header/BasicHeader.svelte'
 
@@ -97,44 +83,13 @@
 
     <svelte:fragment slot="empty-row" let:entry>
       <slot name="row" {entry}>
-        <TableRow
-          customClass={config?.onRowClick ? 'clickable' : ''}
-          on:click={() => config?.onRowClick?.(entry)}
-        >
-          {#each columns as column}
-            <ResponsiveTableCell
-              label={column?.header?.label}
-              alignment={column?.alignment}
-              hideMobile={column?.hideMobile}
-              hideDesktop={column?.hideDesktop}
-            >
-              {#if !$$slots.cell}
-                {#if !column?.component}
-                  {#if column?.renderAs}
-                    <span class="cell-text">
-                      {column?.renderAs(entry)}
-                    </span>
-                  {/if}
-                {:else}
-                  <svelte:component
-                    this={column.component}
-                    {...transformProps(column, entry)}
-                  />
-                {/if}
-              {:else}
-                <span class="cell-text">
-                  <slot name="cell" {column} {entry}>
-                    {#if column?.renderAs}
-                      {column?.renderAs(entry)}
-                    {/if}
-                  </slot>
-                </span>
-              {/if}
-            </ResponsiveTableCell>
-          {/each}
-        </TableRow>
+        <BasicRow {columns} {config} {entry} />
       </slot>
     </svelte:fragment>
+
+    <slot name="row" slot="row" let:entry {entry}>
+      <BasicRow {columns} {config} {entry} />
+    </slot>
   </Table>
 </div>
 

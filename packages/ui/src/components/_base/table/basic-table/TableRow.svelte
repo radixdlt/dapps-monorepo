@@ -50,7 +50,8 @@
 
       @include mixins.desktop {
         margin: 10px 0;
-        padding: var(--table-row-cell-vertical-padding, 10px) 0;
+        padding: var(--table-row-cell-vertical-padding, 10px)
+          var(--table-row-cell-horizontal-padding, 10px);
 
         &:not(:first-child) {
           border-left: none;

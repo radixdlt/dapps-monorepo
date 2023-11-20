@@ -6,7 +6,7 @@
   export let data: PageData
 </script>
 
-{#await data.promises.nftData then nftData}
+{#await Promise.all( [data.promises.nftData, data.promises.authResources] ) then [nftData, tokenInfo]}
   <SearchPage
     title={nftData.type === 'generalNft'
       ? 'Non Fungible'
@@ -17,6 +17,7 @@
       nft={data.promises.nftData}
       resource={data.promises.resource}
       associatedDapps={data.promises.associatedDapps}
+      {tokenInfo}
     />
   </SearchPage>
 {/await}

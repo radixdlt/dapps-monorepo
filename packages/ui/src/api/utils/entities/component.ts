@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
-import type { _Entity } from '.'
+import { transformEntity, type _Entity } from '.'
 import type {
   StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
-import { transformMetadata } from '../metadata'
+import { pipe } from 'ramda'
 
 export type Component = _Entity<'component', ['name', 'description']> & {
   packageAddress: string
@@ -12,16 +12,17 @@ export type Component = _Entity<'component', ['name', 'description']> & {
   royalty: BigNumber
 }
 
-export const transformComponent = (
+export const transformComponent: (
   entity: StateEntityDetailsVaultResponseItem
-): Component => ({
-  type: 'component',
-  address: entity.address,
-  metadata: transformMetadata(entity, ['name', 'description', 'tags']),
-  packageAddress:
-    (entity.details as StateEntityDetailsResponseComponentDetails)!
-      .package_address!,
-  blueprintName: (entity.details as StateEntityDetailsResponseComponentDetails)!
-    .blueprint_name!,
-  royalty: new BigNumber(0)
-})
+) => Component = pipe(
+  transformEntity(['name', 'description', 'tags']),
+  (entity) => ({
+    ...entity,
+    type: 'component' as const,
+    packageAddress: (entity.entity
+      .details as StateEntityDetailsResponseComponentDetails)!.package_address!,
+    blueprintName: (entity.entity
+      .details as StateEntityDetailsResponseComponentDetails)!.blueprint_name!,
+    royalty: new BigNumber(0)
+  })
+)

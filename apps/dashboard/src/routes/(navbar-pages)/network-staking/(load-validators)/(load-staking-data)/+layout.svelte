@@ -49,6 +49,7 @@
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
       const filtered = validators.filter((v) => {
+        console.log(v.percentageTotalStake, e.detail.totalXRDStakeFilter[1])
         return (
           v.fee.percentage >= e.detail.feeFilter[0] &&
           v.fee.percentage <= e.detail.feeFilter[1] &&
