@@ -1,8 +1,17 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import Pill from './Pill.svelte'
   export let active: string | undefined
   export let items: { id: string; label: string }[][] = []
   export let onClick = (id: string) => {}
+
+  let pills: Record<string, HTMLElement> = {}
+
+  onMount(() => {
+    if (active) {
+      pills[active]?.scrollIntoView()
+    }
+  })
 </script>
 
 <div class="menu">
@@ -11,14 +20,16 @@
       <div class="divider" />
     {/if}
     {#each itemGroup as item, itemIndex}
-      <Pill
-        --pill-margin-right={itemGroup.length - 1 === itemIndex ? '' : '1rem'}
-        active={item.id === active}
-        on:click={() => {
-          active = item.id
-          onClick(item.id)
-        }}>{item.label}</Pill
-      >
+      <div bind:this={pills[item.id]}>
+        <Pill
+          --pill-margin-right={itemGroup.length - 1 === itemIndex ? '' : '1rem'}
+          active={item.id === active}
+          on:click={() => {
+            active = item.id
+            onClick(item.id)
+          }}>{item.label}</Pill
+        >
+      </div>
     {/each}
   {/each}
 </div>

@@ -20,7 +20,7 @@
     </div>
   {/if}
 
-  <div class="content" style:text-align={alignment}>
+  <div class="content {alignment}">
     <slot />
   </div>
 </td>
@@ -31,6 +31,26 @@
 
     @include mixins.mobile {
       width: 100%;
+    }
+  }
+
+  @include mixins.desktop {
+    .content.right {
+      text-align: right;
+    }
+
+    .content.left {
+      text-align: left;
+    }
+
+    .content.center {
+      text-align: center;
+    }
+  }
+
+  @include mixins.mobile {
+    .content {
+      text-align: right;
     }
   }
 

@@ -67,7 +67,7 @@
   }: { entityAddress?: string; label?: string } = {}) => {
     return {
       id: 'other-balance-changes',
-      width: '170px',
+      width: '190px',
       header: {
         label: label || 'Other Balance Changes'
       },
@@ -97,7 +97,8 @@
   }
 
   export const recentTransactionsTableConfig = {
-    onRowClick: (row: any) => {
+    onRowClick: (row: any, e: Event) => {
+      if ((e.target as HTMLElement)?.tagName === 'A') return
       goto(`/transaction/${row.intent_hash}/summary`)
     }
   }

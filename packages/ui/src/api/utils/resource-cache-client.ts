@@ -7,7 +7,9 @@ import {
   type NonFungibleResource
 } from './entities/resource'
 import { transformNft, type NonFungible } from './nfts'
+import type { StreamTransactionsResponse } from '@common/gateway-sdk'
 
+export type ResourceCacheClient = ReturnType<typeof ResourceCacheClient>
 export const ResourceCacheClient = () => {
   const queriedResources = new Set<string>()
 
@@ -122,3 +124,31 @@ export const ResourceCacheClient = () => {
 }
 
 export const resourcesCacheClient = ResourceCacheClient()
+
+export const queryAndCacheUniqueResources = (
+  promise: Promise<StreamTransactionsResponse>
+): Promise<StreamTransactionsResponse> => {
+  const uniqueNfts = new Set<string>()
+  const uniqueFungibleTokens = new Set<string>()
+  return promise.then((res) => {
+    res.items.forEach((transactionInfo) => {
+      transactionInfo.balance_changes?.fungible_balance_changes?.forEach(
+        (change) => {
+          uniqueFungibleTokens.add(change.resource_address)
+        }
+      )
+
+      transactionInfo.balance_changes?.non_fungible_balance_changes?.forEach(
+        (change) => {
+          uniqueNfts.add(change.resource_address)
+        }
+      )
+    })
+    return Promise.all([
+      resourcesCacheClient.queryFungibles(Array.from(uniqueFungibleTokens)),
+      resourcesCacheClient.queryNonFungibles(Array.from(uniqueNfts))
+    ])
+      .then(() => res)
+      .catch(() => res)
+  })
+}

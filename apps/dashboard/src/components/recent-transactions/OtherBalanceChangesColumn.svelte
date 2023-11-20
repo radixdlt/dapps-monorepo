@@ -2,7 +2,7 @@
   import type { TransactionBalanceChanges } from '@common/gateway-sdk'
 
   export let entityAddress: string
-  export let balanceChanges: TransactionBalanceChanges
+  export let balanceChanges: TransactionBalanceChanges | undefined
 
   let accountBalanceChanges: Set<string>
   let componentBalanceChanges: Set<string>
@@ -15,9 +15,11 @@
 
   const updateOtherBalanceChangesCount = (
     _entityAddress: string,
-    _balanceChanges: TransactionBalanceChanges
+    _balanceChanges?: TransactionBalanceChanges
   ) => {
-    const addToBalanceChangesSets = (changes: { entity_address: string }[]) => {
+    const addToBalanceChangesSets = (
+      changes: { entity_address: string }[] = []
+    ) => {
       changes.forEach((balanceChange) => {
         if (balanceChange.entity_address === _entityAddress) {
           return
@@ -32,9 +34,9 @@
         }
       })
     }
-    addToBalanceChangesSets(_balanceChanges.fungible_balance_changes)
-    addToBalanceChangesSets(_balanceChanges.non_fungible_balance_changes)
-    addToBalanceChangesSets(_balanceChanges.fungible_fee_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.fungible_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.non_fungible_balance_changes)
+    addToBalanceChangesSets(_balanceChanges?.fungible_fee_balance_changes)
   }
 </script>
 
@@ -44,6 +46,12 @@
 {#if accountBalanceChanges.size}<div class="text">
     {accountBalanceChanges.size} Account{#if accountBalanceChanges.size > 1}s{/if}
   </div>{/if}
+
+{#if !balanceChanges}
+  Balance changes loading... please reload in a few minutes.
+{:else if !accountBalanceChanges.size && !componentBalanceChanges.size}
+  -
+{/if}
 
 <style lang="scss">
   .text {

@@ -12,7 +12,7 @@
 
   export let entityAddress: string
   export let type: 'increases' | 'decreases'
-  export let balanceChanges: TransactionBalanceChanges
+  export let balanceChanges: TransactionBalanceChanges | undefined
 
   let fungibleChanges: (TransactionFungibleBalanceChanges & {
     bigNumber: BigNumber
@@ -29,12 +29,13 @@
       | TransactionFungibleBalanceChanges
       | TransactionNonFungibleBalanceChanges
   >(
-    changes: T[]
-  ): T[] => changes.filter((change) => change.entity_address === entityAddress)
+    changes?: T[]
+  ): T[] =>
+    (changes || []).filter((change) => change.entity_address === entityAddress)
 
   $: {
     fungibleChanges = currentEntityChanges(
-      balanceChanges.fungible_balance_changes
+      balanceChanges?.fungible_balance_changes
     )
       .filter((change) =>
         type === 'decreases'
@@ -47,7 +48,7 @@
       }))
 
     nonFungibleChanges = currentEntityChanges(
-      balanceChanges.non_fungible_balance_changes
+      balanceChanges?.non_fungible_balance_changes
     )
       .filter((change) =>
         type === 'decreases'
@@ -74,19 +75,21 @@
   {@const fungible = resourcesCacheClient.fungibleResources.get(
     change.resource_address
   )}
-  <a
-    href="/resource/{change.resource_address}"
+  <div
     class="balance-change"
     class:decrease={type === 'decreases'}
     class:increase={type === 'increases'}
   >
-    {type === 'decreases' ? '-' : '+'}
-    {formatTokenValue(change.bigNumber).displayValue}
-
-    {fungible?.metadata.standard.symbol?.value ||
-      fungible?.metadata.standard.name?.value ||
-      ''}
-  </a>
+    <span
+      >{type === 'decreases' ? '-' : '+'}
+      {formatTokenValue(change.bigNumber).displayValue}</span
+    >
+    <a href="/resource/{change.resource_address}">
+      {fungible?.metadata.standard.symbol?.value ||
+        fungible?.metadata.standard.name?.value ||
+        ''}
+    </a>
+  </div>
 {/each}
 
 {#each nonFungibleChanges as change}
@@ -100,9 +103,14 @@
   >
     {type === 'decreases' ? '-' : '+'}
     {change.resource?.displayName}
-    {change.nft?.nftData.standard.name?.value || change.nftId}
   </a>
 {/each}
+
+{#if !balanceChanges}
+  Balance changes loading... please reload in a few minutes.
+{:else if !fungibleChanges.length && !nonFungibleChanges.length}
+  -
+{/if}
 
 <style lang="scss">
   .balance-change {
@@ -112,10 +120,12 @@
     &:not(:last-child) {
       margin-bottom: var(--spacing-md);
     }
-    &.increase {
+    &.increase,
+    &.increase a {
       color: var(--color-radix-green-1);
     }
-    &.decrease {
+    &.decrease,
+    &.decrease a {
       color: var(--color-radix-error-red-1);
     }
   }

@@ -42,7 +42,7 @@
     grid-template-areas:
       'header'
       'content';
-    grid-template-rows: 151px 1fr;
+    grid-template-rows: 100px 1fr;
 
     @include mixins.desktop {
       grid-template-rows: unset;
@@ -97,7 +97,7 @@
         .page-content {
           max-width: 80rem;
           margin: 0 auto;
-          padding: var(--spacing-xl);
+          padding: var(--spacing-md);
 
           @include mixins.desktop {
             padding: var(--spacing-2xl);

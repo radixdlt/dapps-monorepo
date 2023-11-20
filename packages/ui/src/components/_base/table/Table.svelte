@@ -54,7 +54,7 @@
       <slot name="empty-row" {entry}>
         <tr
           class:clickable={!!config?.onRowClick}
-          on:click={() => config && config.onRowClick?.(entry)}
+          on:click={(ev) => config && config.onRowClick?.(entry, ev)}
         >
           <slot name="row" {entry} />
         </tr>
