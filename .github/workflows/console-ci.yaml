@@ -295,7 +295,7 @@ jobs:
       # - name: Copy cache locally
       #   run: cp -R $HOME/.cache .cache
       - name: Docker build and push
-        uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
         with:
           file: ./Dockerfile
           push: true
