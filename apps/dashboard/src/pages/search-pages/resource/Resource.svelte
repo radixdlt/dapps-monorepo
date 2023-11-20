@@ -46,7 +46,7 @@
       },
       {
         id: 'auth',
-        label: 'Auth'
+        label: 'Configuration'
       }
     ]
   ]
