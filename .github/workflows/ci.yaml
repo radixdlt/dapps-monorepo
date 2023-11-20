@@ -270,7 +270,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Use Node.js
-        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65
         with:
           always-auth: true
           node-version: 20.3.0
@@ -592,7 +592,7 @@ jobs:
   #       with:
   #         fetch-depth: 0
   #     - name: Use Node.js
-  #       uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
+  #       uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65
   #       with:
   #         always-auth: true
   #         node-version: 20.3.0
