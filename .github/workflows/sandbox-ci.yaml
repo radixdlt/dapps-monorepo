@@ -280,7 +280,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.15.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-2023
     needs:
       - push-sandbox
       - setup-build-args

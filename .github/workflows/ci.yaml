@@ -397,7 +397,6 @@ jobs:
         run: |
           echo "Network that will be deployed:${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
 
-          
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
     uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-2023
