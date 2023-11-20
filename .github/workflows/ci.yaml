@@ -399,7 +399,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@DO-2023
     needs:
       - push-dashboard
       - push-storybook
