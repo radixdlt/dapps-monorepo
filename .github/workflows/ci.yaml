@@ -103,7 +103,7 @@ jobs:
           fetch-depth: 0
       - name: Docker tags for dashboard
         id: dashboard-tags
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             docker.io/radixdlt/dapps-dashboard
@@ -113,7 +113,7 @@ jobs:
             type=semver,pattern={{version}}
       - name: Docker tags for storybook
         id: storybook-tags
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             docker.io/radixdlt/dapps-dashboard-storybook
