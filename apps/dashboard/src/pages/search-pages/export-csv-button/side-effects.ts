@@ -2,6 +2,11 @@ import { getTransactionsFromDate } from '@api/gateway'
 import { WorkbookClient } from './workbook-client'
 import type { Buffer } from 'exceljs'
 import type dayjs from '@common/dayjs'
+import {
+  queryAndCacheUniqueResources,
+  resourcesCacheClient
+} from '@api/utils/resource-cache-client'
+
 type ParsedData = {
   fromDate: Date
   toDate: Date
@@ -13,7 +18,11 @@ export const exportTransactions = (
   toDateObject: dayjs.Dayjs,
   entityAddress: string
 ) => {
-  const workbookClient = WorkbookClient({ toDate: toDateObject, entityAddress })
+  const workbookClient = WorkbookClient({
+    toDate: toDateObject,
+    entityAddress,
+    resourcesCacheClient
+  })
   return iterateTransactionsApi(
     {
       fromDate: fromDateObject.toDate(),
@@ -43,7 +52,9 @@ export const iterateTransactionsApi = async (
   workbookClient: WorkbookClient
 ) => {
   const getTransactions = (cursor?: string) =>
-    getTransactionsFromDate(entityAddress, fromDate, cursor).catch(() => {
+    queryAndCacheUniqueResources(
+      getTransactionsFromDate(entityAddress, fromDate, cursor)
+    ).catch(() => {
       return Promise.resolve({ items: [], next_cursor: undefined })
     })
 

@@ -1,7 +1,11 @@
 <script lang="ts">
+  import BasicRow from './BasicRow.svelte'
+
+  import type { BasicTableColumn } from './BasicRow.svelte'
+
   import type { TableConfig, TablePage } from '../types'
 
-  import BasicTable, { type BasicTableColumn } from './BasicTable.svelte'
+  import BasicTable from './BasicTable.svelte'
 
   import { onMount } from 'svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
@@ -72,7 +76,13 @@
   }
 </script>
 
-<BasicTable {config} {columns} {entries} />
+<BasicTable {config} {columns} {entries}>
+  <svelte:fragment slot="row" let:entry>
+    <slot name="row" {entry}>
+      <BasicRow {columns} {config} {entry} />
+    </slot>
+  </svelte:fragment>
+</BasicTable>
 
 {#if isLoadingCursor && mode === 'infiniteScroll'}
   <div class="bottom-space">

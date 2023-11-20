@@ -97,7 +97,8 @@
   }
 
   export const recentTransactionsTableConfig = {
-    onRowClick: (row: any) => {
+    onRowClick: (row: any, e: Event) => {
+      if ((e.target as HTMLElement)?.tagName === 'A') return
       goto(`/transaction/${row.intent_hash}/summary`)
     }
   }

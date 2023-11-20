@@ -2,7 +2,7 @@
   import type { TransactionBalanceChanges } from '@common/gateway-sdk'
 
   export let entityAddress: string
-  export let balanceChanges: TransactionBalanceChanges
+  export let balanceChanges: TransactionBalanceChanges | undefined
 
   let accountBalanceChanges: Set<string>
   let componentBalanceChanges: Set<string>
@@ -15,7 +15,7 @@
 
   const updateOtherBalanceChangesCount = (
     _entityAddress: string,
-    _balanceChanges: TransactionBalanceChanges
+    _balanceChanges?: TransactionBalanceChanges
   ) => {
     const addToBalanceChangesSets = (
       changes: { entity_address: string }[] = []
@@ -47,7 +47,9 @@
     {accountBalanceChanges.size} Account{#if accountBalanceChanges.size > 1}s{/if}
   </div>{/if}
 
-{#if !accountBalanceChanges.size && !componentBalanceChanges.size}
+{#if !balanceChanges}
+  Balance changes loading... please reload in a few minutes.
+{:else if !accountBalanceChanges.size && !componentBalanceChanges.size}
   -
 {/if}
 

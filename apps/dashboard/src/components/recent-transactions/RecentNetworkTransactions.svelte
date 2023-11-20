@@ -11,6 +11,12 @@
     mobileHeaderColumnDefinition,
     recentTransactionsTableConfig
   } from './ColumnDefinition.svelte'
+  import { TransactionStatus } from '@common/gateway-sdk'
+  import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
+  import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
+  import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
+  import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
+  import CommittedFailureColumn from './CommittedFailureColumn.svelte'
 
   const queryFunction = (cursor?: string) => {
     return getRecentNetworkTransactions(cursor).unwrapOr({
@@ -18,11 +24,13 @@
     })
   }
 
+  const feeColumnDefinition = getFeeColumnDefinition()
+
   const columns: ComponentProps<PaginatedTable<any>>['columns'] = [
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
-    getFeeColumnDefinition(),
+    feeColumnDefinition,
     getOtherBalanceChangesColumnDefinition({
       label: 'Balance Changes'
     }),
@@ -35,4 +43,24 @@
   config={recentTransactionsTableConfig}
   {columns}
   {queryFunction}
-/>
+>
+  <svelte:fragment slot="row" let:entry>
+    {#if entry.transaction_status === TransactionStatus.CommittedFailure}
+      <TableRow
+        customClass="clickable"
+        on:click={(ev) => recentTransactionsTableConfig.onRowClick?.(entry, ev)}
+      >
+        <BasicColumn {entry} column={messageColumnDefinition} />
+        <BasicColumn {entry} column={mobileHeaderColumnDefinition} />
+        <BasicColumn {entry} column={dateAndTxIdColumnDefinition} />
+        <BasicColumn {entry} column={feeColumnDefinition} />
+        <ResponsiveTableCell>
+          <CommittedFailureColumn />
+        </ResponsiveTableCell>
+        <BasicColumn {entry} column={chevronColumnDefinition} />
+      </TableRow>
+    {:else}
+      <BasicRow {columns} config={recentTransactionsTableConfig} {entry} />
+    {/if}
+  </svelte:fragment>
+</PaginatedTable>

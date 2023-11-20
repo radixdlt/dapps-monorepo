@@ -1,17 +1,23 @@
 import dayjs from '@common/dayjs'
 import { WorkbookClient } from './workbook-client'
+import { ResourceCacheClient } from '@api/utils/resource-cache-client'
 
 describe('workbook client', () => {
   it('should initialize without throw', () => {
     expect(() =>
-      WorkbookClient({ toDate: dayjs.utc(), entityAddress: 'abc' })
+      WorkbookClient({
+        toDate: dayjs.utc(),
+        entityAddress: 'abc',
+        resourcesCacheClient: ResourceCacheClient()
+      })
     ).not.toThrow()
   })
 
   it('should only add TXs before toDate', async () => {
     const client = WorkbookClient({
       toDate: dayjs.utc('2021-01-01'),
-      entityAddress: 'abc'
+      entityAddress: 'abc',
+      resourcesCacheClient: ResourceCacheClient()
     })
     client.addRows([
       {
