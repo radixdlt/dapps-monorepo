@@ -28,10 +28,15 @@
             <Accordion header={entry[0]}>
               <svelte:fragment slot="content">
                 <div class="accordion-content">
-                  <ComplexAuthRule
-                    rule={entry[1].rule.access_rule}
-                    {tokenInfo}
-                  />
+                  <!--
+                    <ComplexAuthRule
+                      rule={entry[1].rule.access_rule}
+                      {tokenInfo}
+                    />
+                  -->
+                  <pre>
+                    {JSON.stringify(entry[1].rule.access_rule, null, 2)}
+                    </pre>
                 </div>
               </svelte:fragment>
             </Accordion>
