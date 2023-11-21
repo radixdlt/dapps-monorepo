@@ -1,6 +1,4 @@
-<div class="box">
-  Failure committed on-ledger, see details for more information.
-</div>
+<div class="box">Failure committed on-ledger.</div>
 
 <style lang="scss">
   .box {
