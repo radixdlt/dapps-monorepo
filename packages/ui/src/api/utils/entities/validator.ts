@@ -302,16 +302,12 @@ const appendUptime =
         const { uptimes: _uptimes } = uptimes.find(
           (u) => u.address === validator.address
         )!
-        const entity = entities.find((e) => e.address === validator.address)!
-
+        const fee = validator.fee.percentage / 100
         return {
           ...validator,
           uptimePercentages: _uptimes,
           apy: new BigNumber(YEARLY_XRD_EMISSIONS)
-            .multipliedBy(
-              (1 - (entity.state as any).validator_fee_factor) *
-                (_uptimes.alltime ?? 0)
-            )
+            .multipliedBy((1 - fee) * (_uptimes.alltime ?? 0))
             .dividedBy(totalAmountStaked)
             .toNumber()
         }
