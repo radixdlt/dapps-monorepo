@@ -71,6 +71,7 @@
       header: {
         label: label || 'Other Balance Changes'
       },
+      alignment: 'right' as const,
       component: OtherBalanceChangesColumn,
       componentProps: {
         ...(entityAddress ? { entityAddress } : undefined),
