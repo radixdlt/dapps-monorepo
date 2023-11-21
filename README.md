@@ -50,3 +50,4 @@ npm run test
 
 * [Radix Dashboard](apps/dashboard/README.md#license) 
 * [Radix Console](apps/console/README.md#license)
+* [dApp Sandbox](apps/sandbox/README.md#license)
