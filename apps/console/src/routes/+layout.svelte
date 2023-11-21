@@ -74,6 +74,11 @@
       path: '/deploy-package'
     },
     {
+      text: 'Create Token',
+      icon: LayersIcon,
+      path: '/create-token'
+    },
+    {
       text: 'Send Raw Transaction',
       icon: TransactionsIcon,
       path: '/transaction-manifest'
