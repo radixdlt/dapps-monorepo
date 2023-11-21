@@ -35,20 +35,23 @@
   </div>
   <div class="content" slot="content">
     {#if headerText}<div class="header-text">{headerText}</div>{/if}
-    {#if text}<span class="text">{text}</span>{/if}
+    {#if text?.trim()}<span class="text">{text}</span>{/if}
   </div>
 </Popover>
 
-<style>
+<style lang="scss">
   .content {
     max-width: 500px;
   }
   .header-text {
     text-transform: capitalize;
     color: var(--color-light);
-    margin-bottom: var(--spacing-md);
     font-weight: var(--font-weight-bold-1);
     text-align: center;
+
+    &:not(:last-child) {
+      margin-bottom: var(--spacing-md);
+    }
   }
 
   .text {
