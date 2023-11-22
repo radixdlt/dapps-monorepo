@@ -607,7 +607,7 @@
   Create a fungible or non-fungible resource and deploy it to the Radix network.
 </div>
 
-<div class="content">
+<div class="content" id="create-token-page">
   <div class="left">
     <h3>Deposit to account</h3>
     <div class="account-picker" class:disabled={$isFormDisabled}>
