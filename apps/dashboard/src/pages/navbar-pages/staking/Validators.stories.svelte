@@ -61,7 +61,6 @@
         all: [],
         explicit: []
       },
-      rank: i + 1,
       auth: {} as any
     }))
 </script>

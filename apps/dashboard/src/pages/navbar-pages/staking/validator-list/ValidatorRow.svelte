@@ -36,7 +36,8 @@
       ? input.validator.percentageTotalStake >= PERCENTAGE_TOTAL_STAKE_WARNING
       : false
 
-  $: notTop100 = input !== 'loading' ? input.validator.rank > 100 : false
+  $: notTop100 =
+    input !== 'loading' ? !input.validator.percentageTotalStake : false
 </script>
 
 <Section {columnIds} let:columnIds>
@@ -135,10 +136,10 @@
               {#if input === 'loading'}
                 <SkeletonLoader width={80} />
               {:else}
-                {input.validator.rank <= 100
+                {input.validator.percentageTotalStake
                   ? `${truncateNumber(input.validator.apy)}%`
                   : 'N/A'}
-                {#if input.validator.rank <= 100}
+                {#if input.validator.percentageTotalStake}
                   <span class="subtext">per year</span>
                 {/if}
               {/if}
