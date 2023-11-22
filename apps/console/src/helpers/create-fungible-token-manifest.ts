@@ -51,5 +51,6 @@ export const createFungibleTokenManifest = ({
         Enum<0u8>()
     ;
 `
+  console.log(txManifest)
   return txManifest
 }
