@@ -10,7 +10,8 @@
 {#if accessRule.type !== 'Protected'}
   <Row text={accessRuleName}>
     <div slot="right">
-      {accessRule.type}
+      {typeof accessRule === 'string' ? accessRule : accessRule.type}
+      <!-- quickfix possibly owner should always have whole accessRule here  -->
     </div>
   </Row>
 {:else}
