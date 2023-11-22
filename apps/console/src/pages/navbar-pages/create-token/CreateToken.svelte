@@ -269,34 +269,6 @@
       items: authRuleSelectItems
     },
     {
-      key: 'withdrawer',
-      label: 'withdrawer',
-      placeholder: 'Select auth rule',
-      formItemType: 'select',
-      items: authRuleSelectItems
-    },
-    {
-      key: 'withdrawer_updater',
-      label: 'withdrawer_updater',
-      placeholder: 'Select auth rule',
-      formItemType: 'select',
-      items: authRuleSelectItems
-    },
-    {
-      key: 'depositer',
-      label: 'depositer',
-      placeholder: 'Select auth rule',
-      formItemType: 'select',
-      items: authRuleSelectItems
-    },
-    {
-      key: 'depositer_updater',
-      label: 'depositer_updater',
-      placeholder: 'Select auth rule',
-      formItemType: 'select',
-      items: authRuleSelectItems
-    },
-    {
       key: 'burner',
       label: 'burner',
       placeholder: 'Select auth rule',
@@ -334,6 +306,34 @@
     {
       key: 'recaller_updater',
       label: 'recaller_updater',
+      placeholder: 'Select auth rule',
+      formItemType: 'select',
+      items: authRuleSelectItems
+    },
+    {
+      key: 'withdrawer',
+      label: 'withdrawer',
+      placeholder: 'Select auth rule',
+      formItemType: 'select',
+      items: authRuleSelectItems
+    },
+    {
+      key: 'withdrawer_updater',
+      label: 'withdrawer_updater',
+      placeholder: 'Select auth rule',
+      formItemType: 'select',
+      items: authRuleSelectItems
+    },
+    {
+      key: 'depositer',
+      label: 'depositer',
+      placeholder: 'Select auth rule',
+      formItemType: 'select',
+      items: [{ id: 'allowAll', label: 'Allow all' }]
+    },
+    {
+      key: 'depositer_updater',
+      label: 'depositer_updater',
       placeholder: 'Select auth rule',
       formItemType: 'select',
       items: authRuleSelectItems
@@ -443,11 +443,11 @@
     const stringToAccessRule = (value: string) => {
       switch (value) {
         case 'owner':
-          return 'Enum<OwnerRole::None>()'
+          return 'None'
         case 'allowAll':
-          return 'Enum<AccessRule::AllowAll>()'
+          return 'Some(Enum<AccessRule::AllowAll>())'
         case 'denyAll':
-          return 'Enum<AccessRule::DenyAll>()'
+          return 'Some(Enum<AccessRule::DenyAll>())'
         default:
           throw new Error('Invalid auth role value')
       }
@@ -469,13 +469,12 @@
     const createAccessRule = (
       setterValue: string,
       setterUpdaterValue: string
-    ) => `
-        Some(         
-          Tuple(
-              Some(${stringToAccessRule(setterValue)}),  
-              Some(${stringToAccessRule(setterUpdaterValue)}),
-          )
-        )`
+    ) => `Some(         
+            Tuple(
+              ${stringToAccessRule(setterValue)},  
+              ${stringToAccessRule(setterUpdaterValue)}
+            )
+          )`
 
     const authRoles = (
       resourceType === 'fungible'
@@ -496,24 +495,23 @@
             [depositer, depositer_updater],
             [nft_data_setter, nft_data_setter_updater]
           ]
-    )
-      .map(([setterValue, setterUpdaterValue]) =>
-        createAccessRule(setterValue, setterUpdaterValue)
-      )
-      .join(',')
+    ).map(([setterValue, setterUpdaterValue]) =>
+      createAccessRule(setterValue, setterUpdaterValue)
+    ).join(`,
+          `)
 
-    const metadataAuthRoles = `
-      "metadata_setter" => ${stringToMetadataAccessRule(metadata_setter)},
-      "metadata_setter_updater" => ${stringToMetadataAccessRule(
-        metadata_setter_updater
-      )},
-      "metadata_locker" => ${stringToMetadataAccessRule(
-        metadata_locker
-      )},          
-      "metadata_locker_updater" => ${stringToMetadataAccessRule(
-        metadata_locker_updater
-      )}
-    `
+    const metadataAuthRoles = `"metadata_setter" => ${stringToMetadataAccessRule(
+      metadata_setter
+    )},
+              "metadata_setter_updater" => ${stringToMetadataAccessRule(
+                metadata_setter_updater
+              )},
+              "metadata_locker" => ${stringToMetadataAccessRule(
+                metadata_locker
+              )},          
+              "metadata_locker_updater" => ${stringToMetadataAccessRule(
+                metadata_locker_updater
+              )}`
 
     return { authRoles, metadataAuthRoles }
   }
