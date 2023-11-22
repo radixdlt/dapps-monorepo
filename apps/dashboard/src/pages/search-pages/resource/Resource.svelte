@@ -82,8 +82,8 @@
 
 <PillsMenu items={tabs} bind:active={activeTab} />
 
-<div class="card info-card">
-  {#if activeTab === 'summary'}
+{#if activeTab === 'summary'}
+  <div class="card info-card">
     <SummaryTab
       entity={resource}
       standardMetadata={resource.then(({ metadata }) => metadata.standard)}
@@ -93,16 +93,31 @@
       {redeemableTokens}
       behaviors={resource.then(({ behaviors }) => behaviors)}
     />
-  {/if}
-  {#if activeTab === 'metadata'}
+  </div>
+{/if}
+{#if activeTab === 'metadata'}
+  <div class="card info-card">
     <Metadata metadata={resource.then(({ metadata: { all } }) => all)} />
-  {/if}
-  {#if activeTab === 'auth'}
-    {#await resource then resource}
-      <AuthConfigurationTab auth={resource.auth} {tokenInfo} />
-    {/await}
-  {/if}
-</div>
+  </div>
+{/if}
+{#if activeTab === 'auth'}
+  {#await resource then resource}
+    <div class="margin-top">
+      <AuthConfigurationTab
+        auth={resource.auth}
+        {tokenInfo}
+        hideRules={new Set([
+          'royalty_setter',
+          'royalty_setter_updater',
+          'royalty_locker',
+          'royalty_locker_updater',
+          'royalty_claimer',
+          'royalty_claimer_updater'
+        ])}
+      />
+    </div>
+  {/await}
+{/if}
 
 <style>
   .info-card {
@@ -110,5 +125,9 @@
     display: flex;
     flex-direction: column;
     margin: var(--spacing-2xl) 0;
+  }
+
+  .margin-top {
+    margin-top: var(--spacing-2xl);
   }
 </style>
