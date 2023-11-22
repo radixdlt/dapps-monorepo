@@ -2,7 +2,6 @@
   import type { AuthInfo } from '@api/utils/auth'
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import Row from '@components/info-box/Row.svelte'
-  import ComplexAuthRule from './ComplexAuthRule.svelte'
   import type { FungibleResource } from '@api/utils/entities/resource'
   import type { NonFungible } from '@api/utils/nfts'
 
@@ -11,10 +10,11 @@
     fungibles: Promise<FungibleResource[]>
     nonFungibles: Promise<NonFungible[]>
   }
+  export let hideRules: Set<string> = new Set()
 </script>
 
 <div class="card">
-  {#each Object.entries(auth.rules) as entry}
+  {#each Object.entries(auth.rules).filter((entry) => !hideRules.has(entry[0])) as entry}
     {#if entry[1].rule.type !== 'Protected'}
       <Row text={entry[0]}>
         <div slot="right">
