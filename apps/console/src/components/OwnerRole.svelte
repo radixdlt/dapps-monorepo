@@ -10,7 +10,7 @@
     type TransformedNonFungible
   } from '@api/utils/entities/resource'
   import { shortenAddress } from '@utils'
-  import type { AccessRule } from '../deploy-package/side-effects'
+  import type { AccessRule } from '../helpers/simple-access-rule-builder'
 
   type Resource =
     | FungibleResource
@@ -28,10 +28,12 @@
   let resourceSelectItems = writable<{ id: string; label: string }[]>([])
   let selectedResource = writable<Resource | undefined>()
   let selectedNftAddress = writable<string | undefined>()
-  let status = writable<'sendingToWallet' | 'initial'>('initial')
 
   export let selectedOwnerRole = writable<string>(ownerRoleType.none)
   export let accessRule = writable<AccessRule | undefined>()
+
+  export let disabled = false
+  export let isValid = writable<boolean>(false)
 
   const ownerRoleSelectItems = [
     { id: ownerRoleType.none, label: 'None' },
@@ -39,13 +41,10 @@
     { id: ownerRoleType.allowAll, label: 'Allow all' }
   ]
 
-  export let isValid = writable<boolean>(false)
-
   const getAccessRule = (): AccessRule | undefined => {
     const ownerRole = $selectedOwnerRole
     const selected = $selectedResource
     const selectedNft = $selectedNftAddress
-    console.log(ownerRole, selected, selectedNft)
     if (ownerRole === ownerRoleType.allowAll)
       return { type: ownerRoleType.allowAll }
     else if (ownerRole === ownerRoleType.none)
@@ -119,10 +118,6 @@
     $selectedNftAddress = 'any'
   }
 
-  const isFormDisabled = derived([status], ([_status]) => {
-    return _status === 'sendingToWallet'
-  })
-
   $: {
     resetResourceState()
     getAccountData($accounts.map(({ address }) => address))
@@ -135,12 +130,12 @@
 <div class="content">
   <div class="form">
     <div class="form-item">
-      <Label disabled={$isFormDisabled}>Owner role</Label>
+      <Label {disabled}>Owner role</Label>
       <Select
         placeholder="Select owner role"
         items={ownerRoleSelectItems}
         selected={$selectedOwnerRole}
-        disabled={$isFormDisabled}
+        {disabled}
         on:select={(value) => {
           $selectedOwnerRole = value.detail
           $selectedResource = undefined
@@ -150,11 +145,11 @@
 
     {#if $selectedOwnerRole === ownerRoleType.badge}
       <div class="form-item">
-        <Label disabled={$isFormDisabled}>Resource address</Label>
+        <Label {disabled}>Resource address</Label>
         <Select
           placeholder="Select resource address"
           items={$resourceSelectItems}
-          disabled={$isFormDisabled}
+          {disabled}
           on:select={({ detail: resourceAddress }) => {
             $selectedResource = $accountResourcesMap.get(resourceAddress)
             $selectedNftAddress = 'any'
@@ -165,11 +160,11 @@
 
     {#if $selectedOwnerRole === 'badge' && $selectedResource && $selectedResource.resourceType === 'non-fungible'}
       <div class="form-item">
-        <Label disabled={$isFormDisabled}>NFT</Label>
+        <Label {disabled}>NFT</Label>
         <Select
           placeholder="Select NFT"
           selected={$selectedNftAddress}
-          disabled={$isFormDisabled}
+          {disabled}
           items={[
             { id: 'any', label: 'Any' },
             ...$selectedResource.nonFungibles

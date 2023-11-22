@@ -21,9 +21,14 @@ describe('Deploy Package Transaction Manifests', () => {
         ManifestSborStringRepresentation.ManifestString
       )
 
-    const stringManifest = getDeployPackageManifest(wasm, sborDecodedSchema, {
-      type: 'allowAll'
-    })
+    const stringManifest = getDeployPackageManifest(
+      wasm,
+      sborDecodedSchema,
+      {
+        type: 'allowAll'
+      },
+      'Updatable'
+    )
 
     const manifest = await RadixEngineToolkit.Instructions.staticallyValidate(
       {

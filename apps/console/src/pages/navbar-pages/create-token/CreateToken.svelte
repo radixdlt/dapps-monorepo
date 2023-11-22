@@ -2,9 +2,12 @@
   import { z } from '@common/zod'
   import { derived, writable, type Writable } from 'svelte/store'
   import Button from '@components/_base/button/ButtonNew.svelte'
-  import Form, { type FormItem } from './Form.svelte'
-  import OwnerRole from './OwnerRole.svelte'
-  import type { AccessRule } from '../../../helpers/simple-access-rule-builder'
+  import Form, { type FormItem } from '../../../components/Form.svelte'
+  import OwnerRole from '../../../components/OwnerRole.svelte'
+  import type {
+    OwnerAccessRuleUpdatable,
+    AccessRule
+  } from '../../../helpers/simple-access-rule-builder'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import type { Account as AccountType } from '@stores'
   import { createFungibleTokenManifest } from '../../../helpers/create-fungible-token-manifest'
@@ -16,6 +19,8 @@
   } from '../../../helpers/metadata'
   import Nft, { type NftData } from './Nft.svelte'
   import { createNonFungibleTokenManifest } from '../../../helpers/create-non-fungible-token-manifest'
+  import { goto } from '$app/navigation'
+  import { getTransactionDetails } from '@api/gateway'
 
   let selectedAccount = writable<AccountType>()
 
@@ -23,6 +28,8 @@
   let nftState = writable<Record<string, { data: NftData; isValid: boolean }>>(
     {}
   )
+
+  let status = writable<'initial' | 'sendingToWallet'>('initial')
 
   const handleNftDataChange = (
     key: string,
@@ -47,6 +54,7 @@
   }
 
   let formState = writable<Record<string, string>>({
+    ownerRoleUpdatable: 'Updatable',
     resourceType: 'fungible',
     trackSupply: 'true',
     initialSupply: '1000000',
@@ -75,6 +83,11 @@
 
   let accessRule = writable<AccessRule | undefined>()
 
+  let isFormDisabled = derived(
+    status,
+    ($status) => $status === 'sendingToWallet'
+  )
+
   const fungibleOnlyConditionFn = (formState: Record<string, string>) =>
     formState.resourceType === 'fungible'
 
@@ -82,17 +95,27 @@
     formState.resourceType === 'nonFungible'
 
   let isSendToWalletButtonDisabled = derived(
-    [selectedAccount, accessRule, nftState, formState],
-    ([$selectedAccount, $accessRule, $nftState, $formState]) => {
+    [selectedAccount, accessRule, nftState, formState, isFormDisabled],
+    ([
+      $selectedAccount,
+      $accessRule,
+      $nftState,
+      $formState,
+      $isFormDisabled
+    ]) => {
       if ($formState.resourceType === 'fungible')
-        return !$selectedAccount || !$accessRule
+        return !$selectedAccount || !$accessRule || $isFormDisabled
 
       const nftItems = Object.values($nftState)
       const hasNftItems = nftItems.length > 0
       const isNftItemsInvalid = nftItems.some((valid) => !valid.isValid)
 
       return (
-        !$selectedAccount || !$accessRule || isNftItemsInvalid || !hasNftItems
+        !$selectedAccount ||
+        !$accessRule ||
+        isNftItemsInvalid ||
+        !hasNftItems ||
+        $isFormDisabled
       )
     }
   )
@@ -131,7 +154,7 @@
       metadata: { type: MetadataType.String }
     },
     {
-      key: 'iconUrl',
+      key: 'icon_url',
       label: 'Icon URL',
       placeholder: 'Enter secure icon URL (https)',
       formItemType: 'inputWithCheckbox',
@@ -167,7 +190,7 @@
           .filter((tag) => tag)
     },
     {
-      key: 'infoUrl',
+      key: 'info_url',
       label: 'Info URL',
       placeholder: 'Enter secure info URL (https)',
       formItemType: 'inputWithCheckbox',
@@ -501,9 +524,11 @@
           { name, description, key_image_url },
           index
         ) => `NonFungibleLocalId("#${index}#") => Tuple(
-            "${name}",
-            "${description}",
-            "${key_image_url}"
+            Tuple(
+              "${name}",
+              "${description}",
+              "${key_image_url}"
+            )
           )`
       )
       .join(',')
@@ -513,8 +538,17 @@
 
   const handleSendToWallet = () => {
     if ($accessRule) {
-      const { trackSupply, divisibility, initialSupply, resourceType } =
-        $formState
+      const {
+        trackSupply,
+        divisibility,
+        initialSupply,
+        resourceType,
+        ownerRoleUpdatable
+      } = $formState
+
+      const ownerAccessRuleUpdatable =
+        ownerRoleUpdatable as unknown as OwnerAccessRuleUpdatable
+
       const shouldTrackSupply = trackSupply === 'true'
 
       const metadata = metadataFormValuesToManifestSyntax()
@@ -526,6 +560,7 @@
         resourceType === 'fungible'
           ? createFungibleTokenManifest({
               ownerAccessRule: $accessRule,
+              ownerAccessRuleUpdatable,
               accountAddress: $selectedAccount.address,
               trackSupply: shouldTrackSupply,
               divisibility,
@@ -536,6 +571,7 @@
             })
           : createNonFungibleTokenManifest({
               ownerAccessRule: $accessRule,
+              ownerAccessRuleUpdatable,
               accountAddress: $selectedAccount.address,
               trackSupply: shouldTrackSupply,
               metadata,
@@ -544,9 +580,25 @@
               nfts: nftValuesToManifestSyntax()
             })
 
-      $dAppToolkit?.walletApi.sendTransaction({
-        transactionManifest
-      })
+      $status = 'sendingToWallet'
+      $dAppToolkit?.walletApi
+        .sendTransaction({
+          transactionManifest
+        })
+        .map(({ transactionIntentHash, status }) =>
+          getTransactionDetails(transactionIntentHash).then((response) => {
+            goto(
+              `create-token/success?` +
+                `txID=${transactionIntentHash}&` +
+                `txStatus=${status}&` +
+                `resourceAddress=${response.createdEntities[0].entity_address}`
+            )
+          })
+        )
+
+        .mapErr(() => {
+          $status = 'initial'
+        })
     }
   }
 </script>
@@ -558,24 +610,54 @@
 <div class="content">
   <div class="left">
     <h3>Deposit to account</h3>
-    <div class="account-picker">
+    <div class="account-picker" class:disabled={$isFormDisabled}>
       <AccountPicker bind:selected={$selectedAccount} />
     </div>
 
     <h3>Owner</h3>
-    <OwnerRole bind:accessRule />
+    <OwnerRole bind:accessRule disabled={$isFormDisabled} />
+    <Form
+      disabled={$isFormDisabled}
+      items={[
+        {
+          key: 'ownerRoleUpdatable',
+          label: 'Owner role updatable',
+          placeholder: 'Should the owner role be updatable?',
+          formItemType: 'select',
+          items: [
+            { id: 'None', label: 'None' },
+            { id: 'Updatable', label: 'Updatable' },
+            { id: 'Fixed', label: 'Fixed' }
+          ],
+          schema: z.string()
+        }
+      ]}
+      state={formState}
+    />
 
     <h3>Token type</h3>
-    <Form items={resourceTypeItems} state={formState} />
-    <Form items={fungibleTokenConfigItems} state={formState} />
+    <Form
+      items={resourceTypeItems}
+      state={formState}
+      disabled={$isFormDisabled}
+    />
+    <Form
+      items={fungibleTokenConfigItems}
+      state={formState}
+      disabled={$isFormDisabled}
+    />
 
     <h3>Metadata</h3>
-    <Form items={metaDataFormItems} state={metadataState} />
+    <Form
+      items={metaDataFormItems}
+      state={metadataState}
+      disabled={$isFormDisabled}
+    />
   </div>
 
   <div class="right">
     <h3>Auth roles</h3>
-    <Form items={authRolesItems} state={formState} />
+    <Form items={authRolesItems} state={formState} disabled={$isFormDisabled} />
   </div>
 </div>
 
@@ -594,7 +676,10 @@
               }}>Remove</button
             >
           </div>
-          <Nft on:change={(ev) => handleNftDataChange(nftId, ev.detail)} />
+          <Nft
+            on:change={(ev) => handleNftDataChange(nftId, ev.detail)}
+            disabled={$isFormDisabled}
+          />
         </div>
       </div>
     {/each}
@@ -606,7 +691,9 @@
           addNft()
         }}
       >
-        <button class="add-item-button">Add item</button>
+        <button class="add-item-button" disabled={$isFormDisabled}
+          >Add item</button
+        >
       </div>
     </div>
   </div>
@@ -614,7 +701,13 @@
 <Button
   size="big"
   disabled={$isSendToWalletButtonDisabled}
-  on:click={() => handleSendToWallet()}>Send to wallet</Button
+  on:click={() => handleSendToWallet()}
+>
+  {#if $status === 'sendingToWallet'}
+    Sending to wallet...
+  {:else}
+    Send to wallet
+  {/if}</Button
 >
 
 <style lang="scss">

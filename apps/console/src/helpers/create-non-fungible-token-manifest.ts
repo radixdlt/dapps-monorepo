@@ -1,22 +1,12 @@
 import {
   accessRuleToManifestSyntax,
-  type AccessRule
+  type AccessRule,
+  OwnerAccessRuleUpdatable
 } from './simple-access-rule-builder'
-
-const standardDataSchema = `Array<Enum>(
-                                Enum<0u8>(
-                                    12u8
-                                ),
-                                Enum<0u8>(
-                                    12u8
-                                ),
-                                Enum<0u8>(
-                                    198u8
-                                )
-                            )`
 
 export const createNonFungibleTokenManifest = ({
   ownerAccessRule,
+  ownerAccessRuleUpdatable,
   accountAddress,
   trackSupply,
   metadata,
@@ -25,6 +15,7 @@ export const createNonFungibleTokenManifest = ({
   nfts
 }: {
   ownerAccessRule: AccessRule
+  ownerAccessRuleUpdatable: OwnerAccessRuleUpdatable
   accountAddress: string
   trackSupply: boolean
   metadata: string
@@ -34,38 +25,54 @@ export const createNonFungibleTokenManifest = ({
 }) => {
   const txManifest = `
     CREATE_NON_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
-      ${accessRuleToManifestSyntax(ownerAccessRule)}
+      ${accessRuleToManifestSyntax(ownerAccessRule, ownerAccessRuleUpdatable)}
       Enum<1u8>()
       ${trackSupply}
       Enum<0u8>(
         Enum<0u8>(
-          Tuple(
-            Array<Enum>(
-              Enum<14u8>(
+            Tuple(
                 Array<Enum>(
-                  Enum<0u8>(12u8),
-                  Enum<0u8>(12u8),
-                  Enum<0u8>(198u8)
+                    Enum<14u8>(
+                        Array<Enum>(
+                            Enum<0u8>(
+                                12u8
+                            ),
+                            Enum<0u8>(
+                                12u8
+                            ),
+                            Enum<0u8>(
+                                198u8
+                            )
+                        )
+                    )
+                ),
+                Array<Tuple>(
+                    Tuple(
+                        Enum<1u8>(
+                            "DataSchema"
+                        ),
+                        Enum<1u8>(
+                            Enum<0u8>(
+                                Array<String>(
+                                    "name",
+                                    "description",
+                                    "key_image_url"
+                                )
+                            )
+                        )
+                    )
+                ),
+                Array<Enum>(
+                    Enum<0u8>()
                 )
-              )
-            ),
-            Array<Tuple>(
-              Tuple(
-                Enum<1u8>("MetadataStandardNonFungibleData"),
-                Enum<1u8>(
-                  Enum<0u8>(
-                    Array<String>("name", "description","key_image_url")
-                  )
-                )
-              )
-            ),
-            Array<Enum>(Enum<0u8>())
-          )
+            )
         ),
-        Enum<1u8>(0u64),
+        Enum<1u8>(
+            0u64
+        ),
         Array<String>()
-      )
-      Map<NonFungibleLocalId, Tuple>(
+    )
+    Map<NonFungibleLocalId, Tuple>(
         ${nfts}
       )
       Tuple(

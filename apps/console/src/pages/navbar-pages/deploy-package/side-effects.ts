@@ -3,19 +3,21 @@ import { http } from '@common/http'
 import { createLogger } from '@radixdlt/radix-dapp-toolkit'
 import {
   accessRuleToManifestSyntax,
-  type AccessRule
+  type AccessRule,
+  OwnerAccessRuleUpdatable
 } from '../../../helpers/simple-access-rule-builder'
 
 export const getDeployPackageManifest = (
   wasm: string,
   packageDefinition: string,
-  accessRule: AccessRule
+  accessRule: AccessRule,
+  ownerAccessRuleUpdatable: OwnerAccessRuleUpdatable
 ) => {
   const wasmHash: string = hash(wasm).toString('hex')
 
   const transactionManifest = `
     PUBLISH_PACKAGE_ADVANCED
-      ${accessRuleToManifestSyntax(accessRule)}
+      ${accessRuleToManifestSyntax(accessRule, ownerAccessRuleUpdatable)}
       ${packageDefinition}                    
       Blob("${wasmHash}")          
       Map<String, Tuple>()

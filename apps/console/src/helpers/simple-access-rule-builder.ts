@@ -4,7 +4,17 @@ export type AccessRule =
   | { address: string; type: 'fungible' }
   | { address: string; type: 'nonFungible' }
 
-export const accessRuleToManifestSyntax = (rule: AccessRule) => {
+export type OwnerAccessRuleUpdatable = keyof typeof OwnerAccessRuleUpdatable
+export const OwnerAccessRuleUpdatable = {
+  None: 0,
+  Fixed: 1,
+  Updatable: 2
+} as const
+
+export const accessRuleToManifestSyntax = (
+  rule: AccessRule,
+  updatable: OwnerAccessRuleUpdatable
+) => {
   switch (rule.type) {
     case 'allowAll':
       return `Enum<AccessRule::AllowAll>()`
@@ -12,7 +22,7 @@ export const accessRuleToManifestSyntax = (rule: AccessRule) => {
       return `None`
     case 'fungible':
       return `
-        Enum<2u8>(
+        Enum<${OwnerAccessRuleUpdatable[updatable]}u8>(
             Enum<2u8>(
                 Enum<0u8>(
                     Enum<0u8>(
@@ -26,7 +36,7 @@ export const accessRuleToManifestSyntax = (rule: AccessRule) => {
       `
     case 'nonFungible':
       return `
-            Enum<2u8>(
+            Enum<${OwnerAccessRuleUpdatable[updatable]}u8>(
                 Enum<2u8>(
                     Enum<0u8>(
                         Enum<0u8>(

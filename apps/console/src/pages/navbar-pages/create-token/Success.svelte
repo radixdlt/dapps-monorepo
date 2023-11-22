@@ -11,8 +11,8 @@
 
   const txStatusTitle =
     txStatus === TransactionStatus.CommittedSuccess
-      ? 'Your package was submitted! 🎉'
-      : 'Your package was not submitted! ❌'
+      ? 'Your resource was created! 🎉'
+      : 'Your resource was not created! ❌'
 
   const dashboardUrl = RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
 </script>

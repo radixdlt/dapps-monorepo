@@ -57,6 +57,7 @@
 
   export let items: FormItem[] = []
   export let state = writable<Record<string, string>>({})
+  export let disabled = false
 
   const checkboxValue = (key: string) => $state[key] === 'true'
   const handleCheckboxChange = (item: FormItem, value: boolean) => {
@@ -71,21 +72,24 @@
 {#each items as item}
   {#if item.showCondition && !item.showCondition($state)}{''}{:else}
     <div class="form-item">
-      <Label>{item.label}</Label>
+      <Label {disabled}>{item.label}</Label>
       {#if item.formItemType === 'input'}
         <Input
+          {disabled}
           placeholder={item.placeholder}
           bind:value={$state[item.key]}
           schema={item.schema}
         />
       {:else if item.formItemType === 'inputWithCheckbox'}
         <Input
+          {disabled}
           placeholder={item.placeholder}
           bind:value={$state[item.key]}
           schema={item.schema}
           ><div slot="before" style:margin-right="1rem">
             <Checkbox
               checked={checkboxValue(item.checkboxKey)}
+              {disabled}
               on:checked={() => handleCheckboxChange(item, true)}
               on:unchecked={() => handleCheckboxChange(item, false)}
               >{item.checkboxLabel}</Checkbox
@@ -94,6 +98,7 @@
         >
       {:else if item.formItemType === 'textarea'}
         <Textarea
+          {disabled}
           placeholder={item.placeholder}
           bind:value={$state[item.key]}
           schema={item.schema}
@@ -101,12 +106,14 @@
         />
       {:else if item.formItemType === 'textareaWithCheckbox'}
         <Textarea
+          {disabled}
           placeholder={item.placeholder}
           bind:value={$state[item.key]}
           schema={item.schema}
           rows={item.rows}
           ><div slot="before" style:margin-right="1rem">
             <Checkbox
+              {disabled}
               checked={checkboxValue(item.checkboxKey)}
               on:checked={() => handleCheckboxChange(item, true)}
               on:unchecked={() => handleCheckboxChange(item, false)}
@@ -116,6 +123,7 @@
         >
       {:else if item.formItemType === 'select'}
         <Select
+          {disabled}
           placeholder={item.placeholder}
           bind:selected={$state[item.key]}
           items={item.items}

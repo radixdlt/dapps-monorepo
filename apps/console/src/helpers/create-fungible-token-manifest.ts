@@ -1,10 +1,12 @@
 import {
   type AccessRule,
-  accessRuleToManifestSyntax
+  accessRuleToManifestSyntax,
+  OwnerAccessRuleUpdatable
 } from './simple-access-rule-builder'
 
 export const createFungibleTokenManifest = ({
   ownerAccessRule,
+  ownerAccessRuleUpdatable,
   accountAddress,
   trackSupply,
   divisibility,
@@ -14,6 +16,7 @@ export const createFungibleTokenManifest = ({
   metadataAuthRoles
 }: {
   ownerAccessRule: AccessRule
+  ownerAccessRuleUpdatable: OwnerAccessRuleUpdatable
   accountAddress: string
   trackSupply: boolean
   divisibility: string
@@ -23,7 +26,7 @@ export const createFungibleTokenManifest = ({
   metadataAuthRoles: string
 }) => {
   const txManifest = `CREATE_FUNGIBLE_RESOURCE_WITH_INITIAL_SUPPLY
-        ${accessRuleToManifestSyntax(ownerAccessRule)}
+        ${accessRuleToManifestSyntax(ownerAccessRule, ownerAccessRuleUpdatable)}
         ${trackSupply}
         ${divisibility}u8
         Decimal("${initialSupply}")

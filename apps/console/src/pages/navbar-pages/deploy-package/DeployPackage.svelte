@@ -13,14 +13,15 @@
     type TransformedNonFungible
   } from '@api/utils/entities/resource'
   import { shortenAddress, typedError } from '@utils'
-  import {
-    getDeployPackageManifest,
-    sborDecodeSchema,
-    type AccessRule
-  } from './side-effects'
+  import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
   import { ResultAsync } from 'neverthrow'
   import { getTransactionDetails as getTransactionDetailsFn } from '@api/gateway'
   import { goto } from '$app/navigation'
+  import type {
+    AccessRule,
+    OwnerAccessRuleUpdatable
+  } from '../../../helpers/simple-access-rule-builder'
+  import Form from '../../../components/Form.svelte'
 
   type Resource =
     | FungibleResource
@@ -42,6 +43,9 @@
   let selectedResource = writable<Resource | undefined>()
   let selectedNftAddress = writable<string | undefined>()
   let status = writable<'sendingToWallet' | 'initial'>('initial')
+  let formState = writable<Record<string, string>>({
+    ownerRoleUpdatable: 'Updatable'
+  })
 
   const ownerRoleSelectItems = [
     { id: ownerRoleType.badge, label: 'Badge' },
@@ -135,10 +139,12 @@
 
   const handleSendTransaction = () => {
     if ($wasm && $sborDecodedSchema) {
+      const { ownerRoleUpdatable } = $formState
       const transactionManifest = getDeployPackageManifest(
         $wasm,
         $sborDecodedSchema,
-        getAccessRule()
+        getAccessRule(),
+        ownerRoleUpdatable as unknown as OwnerAccessRuleUpdatable
       )
 
       $status = 'sendingToWallet'
@@ -267,6 +273,24 @@
         }}
       />
     </div>
+
+    <Form
+      disabled={$isFormDisabled}
+      items={[
+        {
+          key: 'ownerRoleUpdatable',
+          label: 'Owner role updatable',
+          placeholder: 'Should the owner role be updatable?',
+          formItemType: 'select',
+          items: [
+            { id: 'None', label: 'None' },
+            { id: 'Updatable', label: 'Updatable' },
+            { id: 'Fixed', label: 'Fixed' }
+          ]
+        }
+      ]}
+      state={formState}
+    />
 
     {#if $selectedOwnerRole === ownerRoleType.badge}
       <div class="form-item">

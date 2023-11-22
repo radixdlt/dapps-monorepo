@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import Form, { type FormItem } from './Form.svelte'
+  import Form, { type FormItem } from '../../../components/Form.svelte'
   import { createEventDispatcher } from 'svelte'
   import { string } from 'zod'
 
@@ -17,6 +17,7 @@
     description: '',
     key_image_url: ''
   })
+  export let disabled = false
 
   const dispatch = createEventDispatcher<{
     change: { data: NftData; isValid: boolean }
@@ -65,8 +66,4 @@
   }
 </script>
 
-<div>
-  <Form items={formItems} {state} />
-</div>
-
-<style lang="scss"></style>
+<Form items={formItems} {state} {disabled} />
