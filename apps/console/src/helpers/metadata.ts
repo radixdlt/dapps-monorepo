@@ -15,9 +15,10 @@ export const AuthRoleType = {
 export const stringMetadata = (
   key: string,
   value: string,
-  locked: boolean
+  locked: boolean,
+  type: string
 ) => `"${key}" => Tuple(
-      Some(Enum<${MetadataType.String}>("${value}")),                  
+      Some(Enum<${type}>("${value}")),                  
       ${locked}                                                         
   )`
 

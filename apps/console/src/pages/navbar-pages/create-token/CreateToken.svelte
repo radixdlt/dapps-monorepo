@@ -401,7 +401,12 @@
               return stringArrayMetadata(item.key, tags, isLocked)
             }
 
-            return stringMetadata(item.key, value, isLocked)
+            return stringMetadata(
+              item.key,
+              value,
+              isLocked,
+              item.metadata?.type ?? MetadataType.String
+            )
           }
 
           default:
