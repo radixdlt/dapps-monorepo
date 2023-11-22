@@ -27,7 +27,7 @@
     imageNotFound || !safeUrl.valid ? NftPlaceholder : safeUrl.url
 </script>
 
-<div class="wrapper" class:size>
+<div class="wrapper {size}">
   <div
     class="token-icon"
     class:loaded={imageLoaded}
