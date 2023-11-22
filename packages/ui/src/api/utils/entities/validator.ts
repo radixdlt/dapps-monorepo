@@ -36,7 +36,6 @@ export type Validator<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
-  rank: number
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
   (WithUptime extends true
     ? {
@@ -248,7 +247,7 @@ const transformValidators = async (
         new BigNumber(v1.stake_vault.balance)
       )
     )
-    .map((validator, i) => {
+    .map((validator) => {
       const state: any = validator.state || {}
 
       const stakeUnitResourceAddress =
@@ -272,7 +271,6 @@ const transformValidators = async (
           'tags',
           'info_url'
         ]),
-        rank: i + 1,
         acceptsStake: state.accepts_delegated_stake
       }
     })

@@ -1,6 +1,5 @@
 <script lang="ts">
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import WarningIcon from '@icons/warning.svg'
   import WarningPanel from '../WarningPanel.svelte'
 </script>
@@ -8,10 +7,9 @@
 <WarningPanel>
   <div class="warning-text">
     <IconNew icon={WarningIcon} />
-    <span class="bold"> Not within top 100 </span>
-    <div>
-      <span>Stakes do not get APY this epoch</span>
-    </div>
+    <span class="bold">Currently not an active validator.</span><span
+      >Stakes do not get APY.</span
+    >
   </div>
 </WarningPanel>
 
@@ -26,5 +24,9 @@
     }
     display: flex;
     gap: var(--spacing-lg);
+  }
+
+  .bold {
+    font-weight: var(--font-weight-bold-2);
   }
 </style>
