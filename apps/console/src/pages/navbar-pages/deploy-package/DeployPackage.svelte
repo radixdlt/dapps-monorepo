@@ -188,12 +188,15 @@
     resources.forEach((resource) => {
       $accountResourcesMap.set(resource.address, resource)
     })
-    $resourceSelectItems = resources.map((resource) => ({
-      id: resource.address,
-      label: `${
-        resource.metadata.standard.name?.value || 'Unnamed resource'
-      } (${shortenAddress(resource.address)})`
-    }))
+    $resourceSelectItems = [
+      { id: 'createBadge', label: 'Create new badge' },
+      ...resources.map((resource) => ({
+        id: resource.address,
+        label: `${
+          resource.metadata.standard.name?.value || 'Unnamed resource'
+        } (${shortenAddress(resource.address)})`
+      }))
+    ]
   }
 
   const resetResourceState = () => {
@@ -274,6 +277,35 @@
       />
     </div>
 
+    {#if $selectedOwnerRole === 'badge' && $selectedResource && $selectedResource.resourceType === 'non-fungible'}
+      <div class="form-item">
+        <Label disabled={$isFormDisabled}>NFT</Label>
+        <Select
+          placeholder="Select NFT"
+          selected={$selectedNftAddress}
+          disabled={$isFormDisabled}
+          items={[
+            { id: 'any', label: 'Any' },
+            ...$selectedResource.nonFungibles
+              .map((nft) =>
+                typeof nft === 'string'
+                  ? { id: '', label: '' }
+                  : {
+                      id: nft.address.nonFungibleAddress,
+                      label: `${
+                        nft.nftData.standard.name?.value || 'Unnamed NFT'
+                      } (${shortenAddress(nft.address.id)})`
+                    }
+              )
+              .filter((item) => item.id !== '')
+          ]}
+          on:select={({ detail: resourceAddress }) => {
+            $selectedNftAddress = resourceAddress
+          }}
+        />
+      </div>
+    {/if}
+
     <Form
       disabled={$isFormDisabled}
       items={[
@@ -300,6 +332,9 @@
           items={$resourceSelectItems}
           disabled={$isFormDisabled}
           on:select={({ detail: resourceAddress }) => {
+            if (resourceAddress === 'createBadge') {
+              return goto('/create-token?action=create-badge')
+            }
             $selectedResource = $accountResourcesMap.get(resourceAddress)
             $selectedNftAddress = 'any'
           }}

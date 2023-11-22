@@ -21,6 +21,21 @@
   import { createNonFungibleTokenManifest } from '../../../helpers/create-non-fungible-token-manifest'
   import { goto } from '$app/navigation'
   import { getTransactionDetails } from '@api/gateway'
+  import { onMount } from 'svelte'
+
+  export let action: string = ''
+
+  onMount(() => {
+    if (action === 'create-badge') {
+      $formState = { ...$formState, initialSupply: '1' }
+      $metadataState = {
+        ...$metadataState,
+        name: 'Badge',
+        tags: 'badge',
+        description: 'A simple badge'
+      }
+    }
+  })
 
   let selectedAccount = writable<AccountType>()
 
