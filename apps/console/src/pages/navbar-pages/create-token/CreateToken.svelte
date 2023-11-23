@@ -42,7 +42,9 @@
 
   onMount(() => {
     if (action === 'create-badge') {
-      createNewBadgeAction()
+      setTimeout(() => {
+        createNewBadgeAction()
+      })
     }
   })
 
