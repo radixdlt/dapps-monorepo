@@ -41,13 +41,13 @@
     },
     {
       key: 'key_image_url',
-      label: 'Image URL',
-      placeholder: 'Enter secure NFT image URL (https)',
+      label: 'Key image URL',
+      placeholder: 'Enter key image URL',
       formItemType: 'input',
       schema: string()
-        .min(1, { message: 'image URL required' })
+        .min(1, { message: 'image key URL required' })
         .startsWith('https://', {
-          message: 'must provide secure URL (https://)'
+          message: 'URL must start with https://'
         })
     }
   ]

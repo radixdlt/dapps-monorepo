@@ -81,21 +81,21 @@
           schema={item.schema}
         />
       {:else if item.formItemType === 'inputWithCheckbox'}
-        <Input
-          {disabled}
-          placeholder={item.placeholder}
-          bind:value={$state[item.key]}
-          schema={item.schema}
-          ><div slot="before" style:margin-right="1rem">
-            <Checkbox
-              checked={checkboxValue(item.checkboxKey)}
-              {disabled}
-              on:checked={() => handleCheckboxChange(item, true)}
-              on:unchecked={() => handleCheckboxChange(item, false)}
-              >{item.checkboxLabel}</Checkbox
-            >
-          </div></Input
-        >
+        <div class="with-checkbox">
+          <Input
+            {disabled}
+            placeholder={item.placeholder}
+            bind:value={$state[item.key]}
+            schema={item.schema}
+          />
+          <Checkbox
+            checked={checkboxValue(item.checkboxKey)}
+            {disabled}
+            on:checked={() => handleCheckboxChange(item, true)}
+            on:unchecked={() => handleCheckboxChange(item, false)}
+            >{item.checkboxLabel}</Checkbox
+          >
+        </div>
       {:else if item.formItemType === 'textarea'}
         <Textarea
           {disabled}
@@ -105,22 +105,22 @@
           rows={item.rows}
         />
       {:else if item.formItemType === 'textareaWithCheckbox'}
-        <Textarea
-          {disabled}
-          placeholder={item.placeholder}
-          bind:value={$state[item.key]}
-          schema={item.schema}
-          rows={item.rows}
-          ><div slot="before" style:margin-right="1rem">
-            <Checkbox
-              {disabled}
-              checked={checkboxValue(item.checkboxKey)}
-              on:checked={() => handleCheckboxChange(item, true)}
-              on:unchecked={() => handleCheckboxChange(item, false)}
-              >{item.checkboxLabel}</Checkbox
-            >
-          </div></Textarea
-        >
+        <div class="with-checkbox">
+          <Textarea
+            {disabled}
+            placeholder={item.placeholder}
+            bind:value={$state[item.key]}
+            schema={item.schema}
+            rows={item.rows}
+          />
+          <Checkbox
+            {disabled}
+            checked={checkboxValue(item.checkboxKey)}
+            on:checked={() => handleCheckboxChange(item, true)}
+            on:unchecked={() => handleCheckboxChange(item, false)}
+            >{item.checkboxLabel}</Checkbox
+          >
+        </div>
       {:else if item.formItemType === 'select'}
         <Select
           {disabled}
@@ -136,5 +136,12 @@
 <style lang="scss">
   .form-item {
     margin-bottom: 1rem;
+  }
+
+  .with-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-lg);
   }
 </style>

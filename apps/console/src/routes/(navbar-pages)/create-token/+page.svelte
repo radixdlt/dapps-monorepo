@@ -6,6 +6,6 @@
   export let data: PageData
 </script>
 
-<NavbarPage title="Create token">
+<NavbarPage title="Create Token">
   <CreateToken action={data.action} />
 </NavbarPage>

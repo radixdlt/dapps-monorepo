@@ -4,7 +4,6 @@
   import { derived, writable } from 'svelte/store'
   import Select from '@components/../dev-console/form/Select.svelte'
   import Label from '@components/../dev-console/form/Label.svelte'
-  import Button from '@components/_base/button/ButtonNew.svelte'
   import { accounts, dAppToolkit } from '@stores'
   import {
     getAccountData,
@@ -22,6 +21,7 @@
     OwnerAccessRuleUpdatable
   } from '../../../helpers/simple-access-rule-builder'
   import Form from '../../../components/Form.svelte'
+  import SendToWalletButton from '../../../components/SendToWalletButton.svelte'
 
   type Resource =
     | FungibleResource
@@ -370,17 +370,11 @@
         />
       </div>
     {/if}
-    <Button
+    <SendToWalletButton
       disabled={$isSendToWalletButtonDisabled}
+      loading={$status === 'sendingToWallet'}
       on:click={handleSendTransaction}
-      size="big"
-    >
-      {#if $status === 'sendingToWallet'}
-        Sending...
-      {:else}
-        Send to wallet
-      {/if}
-    </Button>
+    />
   </div>
 </div>
 

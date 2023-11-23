@@ -11,6 +11,8 @@
   } from '@api/utils/entities/resource'
   import { shortenAddress } from '@utils'
   import type { AccessRule } from '../helpers/simple-access-rule-builder'
+  import { goto } from '$app/navigation'
+  import { createEventDispatcher } from 'svelte'
 
   type Resource =
     | FungibleResource
@@ -18,7 +20,9 @@
         nonFungibles: TransformedNonFungible['nonFungibles']
       })
 
-  const ownerRoleType = {
+  const dispatch = createEventDispatcher<{ 'create-badge': undefined }>()
+
+  export const ownerRoleType = {
     none: 'none',
     badge: 'badge',
     allowAll: 'allowAll'
@@ -145,12 +149,18 @@
 
     {#if $selectedOwnerRole === ownerRoleType.badge}
       <div class="form-item">
-        <Label {disabled}>Resource address</Label>
+        <Label {disabled}>Owner role badge resource</Label>
         <Select
-          placeholder="Select resource address"
-          items={$resourceSelectItems}
+          placeholder="Select badge resource"
+          items={[
+            { id: 'createBadge', label: 'Create new badge' },
+            ...$resourceSelectItems
+          ]}
           {disabled}
           on:select={({ detail: resourceAddress }) => {
+            if (resourceAddress === 'createBadge') {
+              dispatch('create-badge')
+            }
             $selectedResource = $accountResourcesMap.get(resourceAddress)
             $selectedNftAddress = 'any'
           }}
