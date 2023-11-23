@@ -1,7 +1,6 @@
 <script lang="ts">
   import { z } from '@common/zod'
   import { derived, writable, type Writable } from 'svelte/store'
-  import Button from '@components/_base/button/ButtonNew.svelte'
   import Form, { type FormItem } from '../../../components/Form.svelte'
   import OwnerRole from '../../../components/OwnerRole.svelte'
   import type {
@@ -27,17 +26,28 @@
   export let action: string = ''
 
   const createNewBadgeAction = () => {
-    $formState = { ...$formState, resourceType: 'nonFungible' }
+    $formState = {
+      ...$formState,
+      resourceType: 'nonFungible'
+    }
     $metadataState = {
       ...$metadataState,
-      name: 'Badge',
+      name: 'Owner Badges',
+      icon_url:
+        'https://assets.radixdlt.com/icons/icon-package_owner_badge.png',
       tags: 'badge',
-      description: 'A simple badge'
+      description:
+        'Badges created by the Radix system that provide individual control over resources deployed by developers.'
     }
     $accessRule = { type: 'none' }
 
     $selectedOwnerRole = 'none'
-    addNft()
+    addNft({
+      name: 'Badge',
+      description: 'A simple badge',
+      key_image_url:
+        'https://assets.radixdlt.com/icons/icon-package_owner_badge.png'
+    })
   }
 
   onMount(() => {
@@ -744,6 +754,7 @@
             >
           </div>
           <Nft
+            defaultState={$nftState[nftId].data}
             on:change={(ev) => handleNftDataChange(nftId, ev.detail)}
             disabled={$isFormDisabled}
           />

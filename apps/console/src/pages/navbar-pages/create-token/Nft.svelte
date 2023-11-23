@@ -9,8 +9,14 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
   import Form, { type FormItem } from '../../../components/Form.svelte'
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { string } from 'zod'
+
+  export let defaultState: NftData = {
+    name: '',
+    description: '',
+    key_image_url: ''
+  }
 
   export let state = writable<NftData>({
     name: '',
@@ -18,6 +24,10 @@
     key_image_url: ''
   })
   export let disabled = false
+
+  onMount(() => {
+    $state = defaultState
+  })
 
   const dispatch = createEventDispatcher<{
     change: { data: NftData; isValid: boolean }
