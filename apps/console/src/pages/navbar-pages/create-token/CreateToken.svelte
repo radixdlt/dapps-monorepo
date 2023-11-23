@@ -54,6 +54,7 @@
     if (action === 'create-badge') {
       setTimeout(() => {
         createNewBadgeAction()
+        goto('create-token')
       })
     }
   })
