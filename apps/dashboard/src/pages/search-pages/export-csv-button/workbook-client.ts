@@ -32,10 +32,12 @@ export const WorkbookClient = ({
       items
         .filter((tx) => dayjs.utc(tx.round_timestamp).diff(toDate) <= 0)
         .forEach((tx) => {
+          let txRecorded = false
           const message = (tx?.message as any)?.content?.value
           const txInfo = [tx.intent_hash, tx.confirmed_at, tx.fee_paid, message]
 
           if (!tx.balance_changes) {
+            txRecorded = true
             worksheet.addRow([
               ...txInfo,
               'data not loaded',
@@ -46,6 +48,7 @@ export const WorkbookClient = ({
           } else {
             tx.balance_changes?.fungible_balance_changes.forEach((change) => {
               if (change.entity_address === entityAddress) {
+                txRecorded = true
                 worksheet.addRow([
                   ...txInfo,
                   change.resource_address,
@@ -65,6 +68,7 @@ export const WorkbookClient = ({
             tx.balance_changes?.non_fungible_balance_changes.forEach(
               (change) => {
                 if (change.entity_address === entityAddress) {
+                  txRecorded = true
                   worksheet.addRow([
                     ...txInfo,
                     change.resource_address,
@@ -77,6 +81,10 @@ export const WorkbookClient = ({
                 }
               }
             )
+          }
+
+          if (!txRecorded) {
+            worksheet.addRow([...txInfo])
           }
         })
     },
