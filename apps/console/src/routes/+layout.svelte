@@ -16,6 +16,8 @@
   import { accountLabel } from '@utils'
   import Layout from '@components/layout/Layout.svelte'
   import LayersIcon from '@icons/layers.svg'
+  import NftsIcon from '@icons/nfts.svg'
+  import TokensIcon from '@icons/tokens.svg'
   import TransactionsIcon from '@icons/transactions.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import CreateTokenIcon from '@icons/create-token.svg'
@@ -81,6 +83,24 @@
       icon: CreateTokenIcon,
       path: '/create-token'
     },
+    ...(featureFlags().getFlag('send-nft')?.enabled
+      ? [
+          {
+            text: 'Send NFTs',
+            icon: NftsIcon,
+            path: '/send-nft'
+          }
+        ]
+      : []),
+    ...(featureFlags().getFlag('send-token')?.enabled
+      ? [
+          {
+            text: 'Send Token',
+            icon: TokensIcon,
+            path: '/send-tokens'
+          }
+        ]
+      : []),
     {
       text: 'Send Raw Transaction',
       icon: TransactionsIcon,

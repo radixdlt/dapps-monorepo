@@ -131,7 +131,7 @@
     top: calc(100% + 0.5rem);
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 2;
   }
   .icon.expand {
     transform: rotate(0deg);

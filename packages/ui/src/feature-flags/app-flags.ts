@@ -20,12 +20,12 @@ export const appFlags = (env: keyof typeof environment): Readonly<Flag[]> =>
     {
       id: 'send-tokens',
       description: 'Send Tokens in the sidebar menu',
-      enabled: true
+      enabled: false
     },
     {
       id: 'send-nft',
       description: 'Send NFTs in the sidebar menu',
-      enabled: true
+      enabled: false
     },
     {
       id: 'dark-mode',

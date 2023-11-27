@@ -3,6 +3,6 @@
   import SendFungibleTokens from '../../../pages/navbar-pages/send-tokens/SendFungibleTokens.svelte'
 </script>
 
-<NavbarPage title="Send Tokens" let:accounts>
-  <SendFungibleTokens {accounts} />
+<NavbarPage title="Send Tokens">
+  <SendFungibleTokens />
 </NavbarPage>

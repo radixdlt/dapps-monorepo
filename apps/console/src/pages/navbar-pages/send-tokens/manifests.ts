@@ -3,8 +3,8 @@ export const getSendTokenManifest = (
   fromAccount: string,
   toAccount: string,
   amount: number
-) =>
-  `
+) => {
+  const manifest = `
 CALL_METHOD 
   Address("${fromAccount}") 
   "withdraw"
@@ -21,6 +21,9 @@ CALL_METHOD
   "try_deposit_or_abort"
   Bucket("bucket")
   Enum<0u8>();`
+  console.log(manifest)
+  return manifest
+}
 
 export const getSendNFTManifest = (
   nfts: {
