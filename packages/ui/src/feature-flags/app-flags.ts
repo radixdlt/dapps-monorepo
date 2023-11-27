@@ -42,5 +42,13 @@ export const appFlags = (env: keyof typeof environment): Readonly<Flag[]> =>
         [environment.DEV]: false,
         [environment.PROD]: true
       }[environment[env]]!
+    },
+    {
+      id: 'google-tag-manager',
+      description: 'Google Tag Manager script tag',
+      enabled: {
+        [environment.DEV]: false,
+        [environment.PROD]: true
+      }[environment[env]]!
     }
   ] as const
