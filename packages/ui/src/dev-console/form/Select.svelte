@@ -1,15 +1,18 @@
 <script lang="ts" context="module">
   export type Item = {
-    id: string | number
+    id: string
     label: string
   }
 </script>
 
 <script lang="ts">
+  type T = $$Generic
+
   import Chevron from '@icons/expand-more.svg'
   import SelectItems from './SelectItems.svelte'
   import SelectItem from './SelectItem.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
+  import { computePosition, flip } from '@floating-ui/dom'
 
   export let placeholder = ''
   export let disabled = false
@@ -19,9 +22,10 @@
   export let noItemsText = 'No items found'
   export let expanded = false
   let element: HTMLElement
+  let dropdownElement: HTMLElement
 
   export let items: Item[] = []
-  const dispatch = createEventDispatcher<{ onSelect: Item['id'] }>()
+  const dispatch = createEventDispatcher<{ select: Item['id'] }>()
 
   $: if (selected) {
     placeholder = items.find((item) => item.id === selected)?.label ?? ''
@@ -42,6 +46,17 @@
 
     return () => document.removeEventListener('click', handleClick, true)
   })
+
+  let selectItemsYCoord = 0
+
+  $: {
+    computePosition(element!, dropdownElement, {
+      placement: 'bottom',
+      middleware: [flip()]
+    }).then(({ y }) => {
+      selectItemsYCoord = y
+    })
+  }
 </script>
 
 <div class="wrapper" bind:this={element}>
@@ -58,14 +73,20 @@
     <img alt="expand icon" class="icon expand" src={Chevron} />
   </div>
   {#if expanded}
-    <div class="select-items">
+    <div
+      class="select-items"
+      bind:this={dropdownElement}
+      style:top={`${selectItemsYCoord}px`}
+    >
       <SelectItems>
         {#if items.length}
-          {#each items as item}
+          {#each items as item, index}
             <SelectItem
               selected={item.id === selected}
+              isFirst={index === 0}
+              isLast={index === items.length - 1}
               on:click={() => {
-                dispatch('onSelect', item.id)
+                dispatch('select', item.id)
                 expanded = false
                 selected = item.id
               }}>{item.label}</SelectItem

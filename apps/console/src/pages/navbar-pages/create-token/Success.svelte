@@ -7,12 +7,12 @@
 
   export let txID: string
   export let txStatus: TransactionStatus
-  export let packageAddress: string
+  export let resourceAddress: string
 
   const txStatusTitle =
     txStatus === TransactionStatus.CommittedSuccess
-      ? 'Your package was submitted! 🎉'
-      : 'Your package was not submitted! ❌'
+      ? 'Your resource was created! 🎉'
+      : 'Your resource was not created! ❌'
 
   const dashboardUrl = RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
 </script>
@@ -24,9 +24,9 @@
     <a target="_blank" href={`${dashboardUrl}/transaction/${txID}`}>{txID}</a>
   </div>
   <div class="item">
-    <strong>Package address:</strong>
-    <a target="_blank" href={`${dashboardUrl}/package/${packageAddress}`}
-      >{packageAddress}</a
+    <strong>Resource address:</strong>
+    <a target="_blank" href={`${dashboardUrl}/resource/${resourceAddress}`}
+      >{resourceAddress}</a
     >
   </div>
 </div>

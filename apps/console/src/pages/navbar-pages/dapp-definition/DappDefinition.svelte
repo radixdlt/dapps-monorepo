@@ -128,7 +128,7 @@
   >.
 </div>
 
-<div class="card">
+<div class="card" id="manage-dapp-definition">
   <div class="grid">
     <div style:padding-top="0.5rem" class="left-column-text">
       Select an Account
@@ -428,6 +428,9 @@
 </div>
 
 <style lang="scss">
+  #manage-dapp-definition :global(.drawer) {
+    width: 100%;
+  }
   .account-picker {
     max-width: 25rem;
   }

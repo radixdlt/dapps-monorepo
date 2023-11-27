@@ -4,7 +4,7 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, selectedAccount, storage } from '@stores'
+  import { accounts, dAppToolkit, selectedAccount, storage } from '@stores'
   import {
     RadixDappToolkit,
     Account,
@@ -18,9 +18,12 @@
   import LayersIcon from '@icons/layers.svg'
   import TransactionsIcon from '@icons/transactions.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import CreateTokenIcon from '@icons/create-token.svg'
   import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
+  import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import { NETWORK_CONFIG } from '@constants'
 
   let mounted = false
 
@@ -48,6 +51,8 @@
       onDisconnect: () => updateAccounts([])
     })
 
+    dAppToolkit.set(rdt)
+
     rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
 
     rdt.walletApi.walletData$.subscribe((state) => {
@@ -70,6 +75,11 @@
       text: 'Deploy Package',
       icon: LayersIcon,
       path: '/deploy-package'
+    },
+    {
+      text: 'Create Token',
+      icon: CreateTokenIcon,
+      path: '/create-token'
     },
     {
       text: 'Send Raw Transaction',
@@ -107,6 +117,12 @@
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
+  {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
+    <div class="banner">
+      This dApp is configured to use the testnet {PUBLIC_NETWORK_NAME}. It does
+      not use the Radix Public Network mainnet.
+    </div>
+  {/if}
   {#if mounted}
     <Layout {routes} {hideSearch} {showDesktopSidebar}>
       <!-- svelte-ignore a11y-missing-content -->
@@ -130,5 +146,10 @@
     height: 2rem;
     display: inline-flex;
     margin-left: var(--spacing-lg);
+  }
+  .banner {
+    background: var(--color-alert-1);
+    padding: var(--spacing-md);
+    text-align: center;
   }
 </style>
