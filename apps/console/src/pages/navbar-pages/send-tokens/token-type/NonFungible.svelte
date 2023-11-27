@@ -1,18 +1,21 @@
 <script lang="ts">
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import type { Resources } from '@api/utils/entities/resource'
-  import Box from '@components/_base/box/Box.svelte'
   import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
   import Text from '@components/_base/text/Text.svelte'
-  import { boxStyle } from '../SendTokens.svelte'
   import { getSendNFTManifest } from '../manifests'
   import type { NonFungible } from '@api/utils/nfts'
+  import Label from '@components/../dev-console/form/Label.svelte'
+  import { RadixNetworkConfigById } from '@common/gateway-sdk'
+  import { CURRENT_NETWORK } from '@networks'
 
   export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''
   export let setTransactionManifest: (manifest: string) => void
   export let setResourceSelected: (selected: boolean) => void
+
+  const dashboardUrl = RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
 
   $: options = resources.then((resources) =>
     resources
@@ -51,26 +54,32 @@
   )
 </script>
 
-<Box wrapper cx={{ width: '30%' }}>
-  {#await resources}
-    <SkeletonLoader />
-  {:then resources}
-    {#if resources.length === 0}
-      <Text mx="large" bold>No NFTs in currently selected account.</Text>
-    {:else}
-      <Text mx="large" bold>Choose NFTs to send</Text>
-    {/if}
-  {/await}
-</Box>
-<Box cx={boxStyle}>
-  <div />
-  {#await options}
-    <SkeletonLoader />
-  {:then options}
+{#await resources}
+  <SkeletonLoader />
+{:then resources}
+  {#if resources.length === 0}
+    <Text mx="large" bold>No NFTs in currently selected account.</Text>
+  {:else}
+    <Label>Choose NFTs to send</Label>
+  {/if}
+{/await}
+
+{#await options}
+  <SkeletonLoader />
+{:then options}
+  <div class="section">
     <CheckedList {options} bind:selected let:option loading={!resources}>
       <Text inline bold underlined>
-        <a href="/nft/{encodeURIComponent(option.address)}">{option.label}</a>
+        <a href="{dashboardUrl}/nft/{encodeURIComponent(option.address)}"
+          >{option.label}</a
+        >
       </Text>
     </CheckedList>
-  {/await}
-</Box>
+  </div>
+{/await}
+
+<style lang="scss">
+  .section {
+    margin-bottom: 1rem;
+  }
+</style>

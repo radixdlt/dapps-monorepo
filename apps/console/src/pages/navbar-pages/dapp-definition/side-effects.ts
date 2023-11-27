@@ -198,7 +198,7 @@ const setOrRemoveMetadata = ({
   }
 }
 
-const createBadgeProof = (badgeAddresses: string[], address: string) => {
+export const createBadgeProof = (badgeAddresses: string[], address: string) => {
   const transactionManifest: string[] = []
 
   for (const badgeAddress of badgeAddresses) {
