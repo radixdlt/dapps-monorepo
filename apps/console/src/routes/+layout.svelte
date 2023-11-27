@@ -18,6 +18,7 @@
   import LayersIcon from '@icons/layers.svg'
   import TransactionsIcon from '@icons/transactions.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import CreateTokenIcon from '@icons/create-token.svg'
   import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
@@ -77,7 +78,7 @@
     },
     {
       text: 'Create Token',
-      icon: LayersIcon,
+      icon: CreateTokenIcon,
       path: '/create-token'
     },
     {
