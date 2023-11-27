@@ -64,7 +64,11 @@ const config = {
           'https://cdn-ukwest.onetrust.com',
           'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location'
         ],
-        'script-src': ['self', 'https://cdn-ukwest.onetrust.com']
+        'script-src': [
+          'self',
+          'https://cdn-ukwest.onetrust.com',
+          'sha256-5VrVgGfPbUH5IoPb+tGodpswZad/XDHQfqHeVD0LMG4='
+        ]
       }
     }
   }
