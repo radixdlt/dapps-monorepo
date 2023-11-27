@@ -12,6 +12,7 @@
   import SelectItems from './SelectItems.svelte'
   import SelectItem from './SelectItem.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
+  import { computePosition, flip } from '@floating-ui/dom'
 
   export let placeholder = ''
   export let disabled = false
@@ -21,6 +22,7 @@
   export let noItemsText = 'No items found'
   export let expanded = false
   let element: HTMLElement
+  let dropdownElement: HTMLElement
 
   export let items: Item[] = []
   const dispatch = createEventDispatcher<{ select: Item['id'] }>()
@@ -44,6 +46,17 @@
 
     return () => document.removeEventListener('click', handleClick, true)
   })
+
+  let selectItemsYCoord = 0
+
+  $: {
+    computePosition(element!, dropdownElement, {
+      placement: 'bottom',
+      middleware: [flip()]
+    }).then(({ y }) => {
+      selectItemsYCoord = y
+    })
+  }
 </script>
 
 <div class="wrapper" bind:this={element}>
@@ -60,7 +73,11 @@
     <img alt="expand icon" class="icon expand" src={Chevron} />
   </div>
   {#if expanded}
-    <div class="select-items">
+    <div
+      class="select-items"
+      bind:this={dropdownElement}
+      style:top={`${selectItemsYCoord}px`}
+    >
       <SelectItems>
         {#if items.length}
           {#each items as item, index}
