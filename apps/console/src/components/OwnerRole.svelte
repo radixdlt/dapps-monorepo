@@ -45,10 +45,9 @@
     { id: ownerRoleType.allowAll, label: 'Allow all' }
   ]
 
-  const getAccessRule = (): AccessRule | undefined => {
+  const getAccessRule = (selectedNft?: string): AccessRule | undefined => {
     const ownerRole = $selectedOwnerRole
     const selected = $selectedResource
-    const selectedNft = $selectedNftAddress
     if (ownerRole === ownerRoleType.allowAll)
       return { type: ownerRoleType.allowAll }
     else if (ownerRole === ownerRoleType.none)
@@ -88,7 +87,7 @@
     else if (isBadgeSelected && isResourceSelected) $isValid = true
     else $isValid = false
 
-    $accessRule = getAccessRule()
+    $accessRule = getAccessRule($selectedNftAddress)
   }
 
   const accountStateToResources = (account: {

@@ -345,9 +345,9 @@
 
     {#if $selectedOwnerRole === 'badge' && $selectedResource && $selectedResource.resourceType === 'non-fungible'}
       <div class="form-item">
-        <Label disabled={$isFormDisabled}>NFT</Label>
+        <Label disabled={$isFormDisabled}>Non-fungible</Label>
         <Select
-          placeholder="Select NFT"
+          placeholder="Select non-fungible"
           selected={$selectedNftAddress}
           disabled={$isFormDisabled}
           items={[
