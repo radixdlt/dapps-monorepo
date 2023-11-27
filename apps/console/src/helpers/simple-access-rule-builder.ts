@@ -17,7 +17,9 @@ export const accessRuleToManifestSyntax = (
 ) => {
   switch (rule.type) {
     case 'allowAll':
-      return `Enum<AccessRule::AllowAll>()`
+      return `Enum<${OwnerAccessRuleUpdatable[updatable]}u8>(
+          Enum<0u8>()
+        )`
     case 'none':
       return `None`
     case 'fungible':
