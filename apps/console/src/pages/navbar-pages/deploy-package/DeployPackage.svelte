@@ -279,9 +279,9 @@
 
     {#if $selectedOwnerRole === 'badge' && $selectedResource && $selectedResource.resourceType === 'non-fungible'}
       <div class="form-item">
-        <Label disabled={$isFormDisabled}>NFT</Label>
+        <Label disabled={$isFormDisabled}>Non-fungible</Label>
         <Select
-          placeholder="Select NFT"
+          placeholder="Select non-fungible"
           selected={$selectedNftAddress}
           disabled={$isFormDisabled}
           items={[
@@ -293,7 +293,8 @@
                   : {
                       id: nft.address.nonFungibleAddress,
                       label: `${
-                        nft.nftData.standard.name?.value || 'Unnamed NFT'
+                        nft.nftData.standard.name?.value ||
+                        'Unnamed non-fungible'
                       } (${shortenAddress(nft.address.id)})`
                     }
               )
