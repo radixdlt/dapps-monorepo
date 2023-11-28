@@ -7,7 +7,7 @@
 <WarningPanel>
   <div class="warning-text">
     <IconNew icon={WarningIcon} />
-    <span class="bold">Currently not an active validator.</span><span
+    <span class="bold">Not within top 100.</span><span
       >Stakes do not get APY.</span
     >
   </div>
