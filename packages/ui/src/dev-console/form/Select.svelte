@@ -50,12 +50,13 @@
   let selectItemsYCoord = 0
 
   $: {
-    computePosition(element!, dropdownElement, {
-      placement: 'bottom',
-      middleware: [flip()]
-    }).then(({ y }) => {
-      selectItemsYCoord = y
-    })
+    if (element && dropdownElement)
+      computePosition(element!, dropdownElement, {
+        placement: 'bottom',
+        middleware: [flip()]
+      }).then(({ y }) => {
+        selectItemsYCoord = y
+      })
   }
 </script>
 

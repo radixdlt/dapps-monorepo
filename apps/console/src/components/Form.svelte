@@ -82,12 +82,14 @@
         />
       {:else if item.formItemType === 'inputWithCheckbox'}
         <div class="with-checkbox">
-          <Input
-            {disabled}
-            placeholder={item.placeholder}
-            bind:value={$state[item.key]}
-            schema={item.schema}
-          />
+          <div class="input">
+            <Input
+              {disabled}
+              placeholder={item.placeholder}
+              bind:value={$state[item.key]}
+              schema={item.schema}
+            />
+          </div>
           <Checkbox
             checked={checkboxValue(item.checkboxKey)}
             {disabled}
@@ -143,5 +145,9 @@
     flex-direction: row;
     align-items: center;
     gap: var(--spacing-lg);
+  }
+
+  .input {
+    width: 100%;
   }
 </style>

@@ -211,7 +211,7 @@
       label: 'Info URL',
       placeholder: 'Enter info URL',
       formItemType: 'inputWithCheckbox',
-      checkboxKey: 'iconUrlLocked',
+      checkboxKey: 'infoUrlLocked',
       checkboxLabel: 'Lock',
       schema: z.string().startsWith('https://', {
         message: 'Must provide URL that starts with https://'
@@ -385,7 +385,7 @@
     },
     {
       key: 'nft_data_setter',
-      label: 'nft_data_setter',
+      label: 'non_fungible_data_updater',
       placeholder: 'Select auth rule',
       formItemType: 'select',
       items: authRuleSelectItems,
@@ -393,7 +393,7 @@
     },
     {
       key: 'nft_data_setter_updater',
-      label: 'nft_data_setter_updater',
+      label: 'non_fungible_data_updater_updater',
       placeholder: 'Select auth rule',
       formItemType: 'select',
       items: authRuleSelectItems,
