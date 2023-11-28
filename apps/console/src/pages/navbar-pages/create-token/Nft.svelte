@@ -65,7 +65,6 @@
         : false
       return invalid
     })
-    console.log('isInvalid', isInvalid)
     dispatch('change', {
       data: $state,
       isValid: !isInvalid
