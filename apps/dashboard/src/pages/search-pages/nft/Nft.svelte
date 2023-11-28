@@ -5,13 +5,9 @@
     NonFungibleResource
   } from '@api/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import Metadata from '@components/metadata/Metadata.svelte'
-  import type {
-    EntityMetadataItem,
-    MetadataTypedValue
-  } from '@common/gateway-sdk'
   import Resource from '../resource/Resource.svelte'
   import type { NonFungible } from '@api/utils/nfts'
+  import NftDataRow from './NftDataRow.svelte'
 
   export let nft: Promise<NonFungible>
   export let resource: Promise<NonFungibleResource>
@@ -23,39 +19,10 @@
     }[]
   >
 
-  const metadataItem = (
-    key: string,
-    value: unknown,
-    type: MetadataTypedValue['type']
-  ) =>
-    ({
-      key,
-      value: {
-        typed: {
-          type,
-          value
-        }
-      }
-    } as EntityMetadataItem)
-
   export let tokenInfo: {
     fungibles: Promise<FungibleResource[]>
     nonFungibles: Promise<NonFungible[]>
   }
-
-  $: metadata = nft.then(({ id, type, nftData }) =>
-    [metadataItem('id', id, 'String')].concat(
-      type === 'generalNft'
-        ? nftData.nonStandard.map(({ kind, field_name, value }) =>
-            metadataItem(field_name, value, kind)
-          )
-        : Object.values(nftData.standard)
-            .filter((data) => data.field_name !== 'name')
-            .map(({ field_name, value, kind }) =>
-              metadataItem(field_name, value, kind)
-            )
-    )
-  )
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
@@ -98,8 +65,18 @@
       {description}
     {/if}
   {/await}
-
-  <Metadata {metadata} />
+  <div>
+    {#await nft}
+      <SkeletonLoader />
+    {:then nftData}
+      <NftDataRow
+        value={{ kind: 'String', field_name: 'ID', value: nftData.id }}
+      />
+      {#each nftData.type === 'generalNft' ? nftData.nftData.nonStandard : Object.values(nftData.nftData.standard).filter((data) => data.field_name !== 'name') as value}
+        <NftDataRow {value} />
+      {/each}
+    {/await}
+  </div>
 </div>
 
 <h2 class="resource-card-header">Belongs To:</h2>

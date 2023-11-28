@@ -1,24 +1,26 @@
 import type {
-  MetadataStringValueTypeEnum,
-  MetadataTypedValue,
-  MetadataUrlValueTypeEnum,
+  ProgrammaticScryptoSborValue,
+  ProgrammaticScryptoSborValueDecimal,
+  ProgrammaticScryptoSborValueNonFungibleLocalId,
+  ProgrammaticScryptoSborValueReference,
+  ProgrammaticScryptoSborValueString,
+  ProgrammaticScryptoSborValueTuple,
+  ProgrammaticScryptoSborValueU64,
   StateNonFungibleDetailsResponseItem
 } from '@common/gateway-sdk'
+import { add } from 'ramda'
 
 export type NftDataItem<N extends keyof KnownStandardTypes | string = string> =
-  {
-    kind: MetadataTypedValue['type']
-    field_name: N
-    value: string
-    type_name?: string
-  }
+  N extends keyof KnownStandardTypes
+    ? KnownStandardTypes[N]
+    : ProgrammaticScryptoSborValue
 
 export type KnownStandardTypes = {
-  name: MetadataStringValueTypeEnum
-  description: MetadataStringValueTypeEnum
-  key_image_url: MetadataUrlValueTypeEnum
-  claim_amount: MetadataStringValueTypeEnum
-  claim_epoch: MetadataStringValueTypeEnum
+  name: ProgrammaticScryptoSborValueString
+  description: ProgrammaticScryptoSborValueString
+  key_image_url: ProgrammaticScryptoSborValueString
+  claim_amount: ProgrammaticScryptoSborValueDecimal
+  claim_epoch: ProgrammaticScryptoSborValueU64
 }
 
 export const getNftData = (
@@ -31,9 +33,9 @@ export const getNftData = (
 
 const isStandardEntry = <T extends (keyof KnownStandardTypes)[]>(
   standard: T,
-  item: NftDataItem
-): item is NftDataItem<T[number]> => {
-  const fieldName = standard.find((key) => item.field_name === key)!
+  item: ProgrammaticScryptoSborValue
+): item is KnownStandardTypes[T[number]] => {
+  const fieldName = standard.find((key) => item.field_name === key)
   if (fieldName) return true
   return false
 }
@@ -42,15 +44,21 @@ export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
   data: StateNonFungibleDetailsResponseItem['data'],
   standardEntries: T
 ) => {
-  const standard = {} as { [K in T[number]]: NftDataItem<K> }
-  const nonStandard: NftDataItem[] = []
+  const standard = {} as { [K in T[number]]: KnownStandardTypes[K] }
+  const nonStandard: ProgrammaticScryptoSborValue[] = []
 
-  for (let field of ((data?.programmatic_json as any)?.fields ||
-    []) as NftDataItem[]) {
-    if (isStandardEntry(standardEntries, field)) {
-      standard[field.field_name] = field
-    } else {
-      nonStandard.push(field)
+  const programmatic_json = data?.programmatic_json
+
+  if (programmatic_json && programmatic_json.kind === 'Tuple') {
+    for (let field of programmatic_json.fields) {
+      if (field.field_name) {
+        if (isStandardEntry(standardEntries, field)) {
+          const key = field.field_name as T[number]
+          standard[key] = field
+        } else {
+          nonStandard.push(field)
+        }
+      }
     }
   }
 
@@ -59,4 +67,27 @@ export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
     nonStandard,
     all: [...Object.values(standard), ...nonStandard]
   }
+}
+
+export const transformTupleGlobalIdToAddress = (
+  data: ProgrammaticScryptoSborValueTuple
+): string => {
+  if (data.type_name !== 'NonFungibleGlobalId') {
+    return ''
+  }
+
+  const address = data.fields.find(
+    ({ field_name, kind }) =>
+      field_name === 'resource_address' && kind === 'Reference'
+  ) as ProgrammaticScryptoSborValueReference
+
+  const localId = data.fields.find(
+    ({ field_name, kind }) =>
+      field_name === 'local_id' && kind === 'NonFungibleLocalId'
+  ) as ProgrammaticScryptoSborValueNonFungibleLocalId
+
+  if (address && localId) {
+    return `${address.value}:${localId.value}`
+  }
+  return ''
 }
