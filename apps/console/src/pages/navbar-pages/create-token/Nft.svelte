@@ -46,19 +46,13 @@
       label: 'Description',
       placeholder: 'Enter NFT description (truncated after 256 characters)',
       formItemType: 'textarea',
-      rows: 2,
-      schema: string().min(1, { message: 'description required' })
+      rows: 2
     },
     {
       key: 'key_image_url',
       label: 'Key image URL',
       placeholder: 'Enter key image URL',
-      formItemType: 'input',
-      schema: string()
-        .min(1, { message: 'image key URL required' })
-        .startsWith('https://', {
-          message: 'URL must start with https://'
-        })
+      formItemType: 'input'
     }
   ]
 
@@ -66,9 +60,12 @@
     const values = $state
     const isInvalid = formItems.some((item) => {
       const value = values[item.key as keyof NftData]
-      const invalid = item.schema!.safeParse(value).success === false
+      const invalid = item.schema
+        ? item.schema.safeParse(value).success === false
+        : false
       return invalid
     })
+    console.log('isInvalid', isInvalid)
     dispatch('change', {
       data: $state,
       isValid: !isInvalid
