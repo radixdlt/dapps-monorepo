@@ -40,9 +40,7 @@
 </script>
 
 <div class="content">
-  <slot name="before" />
   <input {placeholder} class:disabled class:error on:input bind:value />
-  <slot name="after" />
 </div>
 
 {#if schema}
@@ -62,6 +60,7 @@
     width: 100%;
     line-height: 1.5rem;
     display: flex;
+    flex-direction: column;
   }
 
   input {
