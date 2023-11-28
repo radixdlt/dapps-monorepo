@@ -211,7 +211,7 @@
       label: 'Info URL',
       placeholder: 'Enter info URL',
       formItemType: 'inputWithCheckbox',
-      checkboxKey: 'iconUrlLocked',
+      checkboxKey: 'infoUrlLocked',
       checkboxLabel: 'Lock',
       schema: z.string().startsWith('https://', {
         message: 'Must provide URL that starts with https://'
