@@ -1,4 +1,4 @@
-import { callApi } from '@api/gateway'
+import { callApi } from '@api/_deprecated/gateway'
 import type { _Entity } from '.'
 import { getStringMetadata, transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'

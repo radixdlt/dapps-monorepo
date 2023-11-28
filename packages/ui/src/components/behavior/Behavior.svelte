@@ -15,7 +15,7 @@
   import RemovableByAnyone from '@icons/behavior-removable-by-anyone.svg'
   import NftDataChangeable from '@icons/behavior-nft-data-changeable.svg'
   import NftDataChangeableAnyone from '@icons/behavior-nft-data-changeable-anyone.svg'
-  import type { Behavior } from '@api/utils/entities/resource'
+  import type { Behavior } from '@api/_deprecated/utils/entities/resource'
 
   export let isXRD = false
   export let type: Behavior

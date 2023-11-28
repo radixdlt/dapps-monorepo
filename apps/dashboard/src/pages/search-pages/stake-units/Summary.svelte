@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import SummaryTab from '../SummaryTab.svelte'
-  import type { StakeUnit } from '@api/utils/entities/stake-unit'
+  import type { StakeUnit } from '@api/_deprecated/utils/entities/stake-unit'
   import { formatTokenValue } from '@utils'
 
   export let stakeUnit: Promise<StakeUnit>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Requirement } from '@api/utils/auth'
+  import type { Requirement } from '@api/_deprecated/utils/auth'
   import ResourceProofRule from './ResourceProofRule.svelte'
 
   export let requirement: Requirement

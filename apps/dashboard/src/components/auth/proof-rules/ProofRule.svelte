@@ -4,13 +4,13 @@
     ProofRule,
     RequireProofRule,
     Requirement
-  } from '@api/utils/auth'
+  } from '@api/_deprecated/utils/auth'
   import Require from './Require.svelte'
   import AmountOf from './AmountOf.svelte'
   import AccessRuleCollection from '../AccessRuleCollection.svelte'
-  import type { FungibleResource } from '@api/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
-  import type { GeneralNft } from '@api/utils/nfts/general-nft'
+  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
+  import type { NonFungible } from '@api/_deprecated/utils/nfts'
+  import type { GeneralNft } from '@api/_deprecated/utils/nfts/general-nft'
 
   export let proofRule: ProofRule
   export let tokenInfo: {

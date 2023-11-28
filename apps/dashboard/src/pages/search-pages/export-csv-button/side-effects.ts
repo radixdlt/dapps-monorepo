@@ -1,4 +1,4 @@
-import { getTransactionsFromDate } from '@api/gateway'
+import { getTransactionsFromDate } from '@api/_deprecated/gateway'
 import { WorkbookClient } from './workbook-client'
 import type { Buffer } from 'exceljs'
 import type dayjs from '@common/dayjs'

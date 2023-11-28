@@ -14,7 +14,7 @@
   import type { ComponentEvents } from 'svelte'
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@common/gateway-sdk'
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
 
   export let validators: Validator[]
   export let currentlyStaked: Promise<{

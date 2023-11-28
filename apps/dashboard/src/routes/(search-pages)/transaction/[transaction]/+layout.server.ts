@@ -1,4 +1,4 @@
-import { getTransactionDetailsNew } from '@api/gateway'
+import { getTransactionDetailsNew } from '@api/_deprecated/gateway'
 import { CURRENT_NETWORK } from '../../../../../../../packages/ui/src/network'
 import type { LayoutServerLoad } from './$types'
 import { RadixEngineToolkit } from '@common/ret'

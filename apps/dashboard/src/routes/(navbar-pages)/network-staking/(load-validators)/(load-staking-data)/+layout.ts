@@ -1,5 +1,5 @@
 import type { LayoutLoad } from './$types'
-import { getAccountData } from '@api/utils/entities/resource'
+import { getAccountData } from '@api/_deprecated/utils/entities/resource'
 import { accounts, type Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import { derived } from 'svelte/store'
@@ -10,7 +10,7 @@ import {
   type StakedInfo,
   type UnstakingInfo,
   getStakedInfo
-} from '@api/utils/staking'
+} from '@api/_deprecated/utils/staking'
 
 export type AccumulatedStakes = {
   [validator: string]: {

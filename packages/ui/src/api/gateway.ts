@@ -1,5 +1,6 @@
-import { fromPromise, type ResultAsync } from 'neverthrow'
+import { fromPromise, okAsync, type ResultAsync } from 'neverthrow'
 import { CURRENT_NETWORK } from '../../src/network'
+import { GatewayApiClient, type ErrorResponse } from '@common/gateway-sdk'
 import { cache } from './cache'
 
 const gatewayApi = GatewayApiClient.initialize({
@@ -97,8 +98,8 @@ export const callApi = <T extends keyof typeof api>(
 ) =>
   (
     fromPromise((api[methodName] as any)(...args), handleError) as ResultAsync<
-  Awaited<ReturnType<(typeof api)[T]>>,
-  ReturnType<typeof handleError>
+      Awaited<ReturnType<(typeof api)[T]>>,
+      ReturnType<typeof handleError>
     >
   ).map((res) => {
     const _cache = cache[methodName]

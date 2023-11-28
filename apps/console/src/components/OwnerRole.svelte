@@ -8,7 +8,7 @@
     type FungibleResource,
     type NonFungibleResource,
     type TransformedNonFungible
-  } from '@api/utils/entities/resource'
+  } from '@api/_deprecated/utils/entities/resource'
   import { shortenAddress } from '@utils'
   import type { AccessRule } from '../helpers/simple-access-rule-builder'
   import { goto } from '$app/navigation'

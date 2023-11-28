@@ -20,7 +20,7 @@
 </script>
 
 <script lang="ts">
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import type { ComponentProps } from 'svelte'
   import { connected } from '@stores'
   import { bookmarkedValidatorsStore } from '../../../../stores'

@@ -4,7 +4,10 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import { getValidators, type Validator } from '@api/utils/entities/validator'
+  import {
+    getValidators,
+    type Validator
+  } from '@api/_deprecated/utils/entities/validator'
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { formatXRDValue } from '@utils'
 

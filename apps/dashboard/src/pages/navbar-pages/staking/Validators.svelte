@@ -34,8 +34,9 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import type { Validator } from '@api/utils/entities/validator'
-  import type { StakeInfo } from '@api/utils/staking'
+  import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
+  import type { StakeInfo } from '@api/_deprecated/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
 

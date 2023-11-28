@@ -1,7 +1,7 @@
 <script lang="ts">
   import CardRow from '@components/info-box/CardRow.svelte'
   import Behavior from '@components/behavior/Behavior.svelte'
-  import type { Resource } from '@api/utils/entities/resource'
+  import type { Resource } from '@api/_deprecated/utils/entities/resource'
 
   export let isXRD = false
   export let behaviors: Resource['behaviors']

@@ -17,7 +17,6 @@
       nft={data.promises.nftData}
       resource={data.promises.resource}
       associatedDapps={data.promises.associatedDapps}
-      {tokenInfo}
     />
   </SearchPage>
 {/await}

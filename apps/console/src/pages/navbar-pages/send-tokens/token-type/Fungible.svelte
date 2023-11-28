@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import { query } from '@api/query'
-  import type { FungibleResource } from '@api/utils/entities/resource'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/../dev-console/form/Input.svelte'
   import Select from '@components/../dev-console/form/Select.svelte'
@@ -11,6 +10,8 @@
   import { getSendTokenManifest } from '../manifests'
   import Label from '@components/../dev-console/form/Label.svelte'
   import { formatTokenValue, shortenAddress } from '@utils'
+  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
+
   export let resources: Promise<FungibleResource[]>
   export let selectedFromAccount: string = ''
   export let selectedToAccount: string = ''

@@ -6,7 +6,7 @@
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
 
   export let open: boolean
   export let feeValues: number[]

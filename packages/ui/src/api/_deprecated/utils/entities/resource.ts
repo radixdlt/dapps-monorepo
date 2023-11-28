@@ -1,4 +1,8 @@
-import { callApi, getEntityDetails, getSingleEntityDetails } from '@api/gateway'
+import {
+  callApi,
+  getEntityDetails,
+  getSingleEntityDetails
+} from '@api/_deprecated/gateway'
 import type {
   EntityMetadataItem,
   FungibleResourcesCollectionItemVaultAggregated,
@@ -12,7 +16,7 @@ import type {
 } from '@common/gateway-sdk'
 import { andThen, flatten, isNil, map, pick, pipe, reject } from 'ramda'
 import { BigNumber } from 'bignumber.js'
-import { getNonFungibleData } from '@api/gateway'
+import { getNonFungibleData } from '@api/_deprecated/gateway'
 import { transformEntity, type _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
 import {

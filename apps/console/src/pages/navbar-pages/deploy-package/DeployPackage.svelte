@@ -10,11 +10,11 @@
     type FungibleResource,
     type NonFungibleResource,
     type TransformedNonFungible
-  } from '@api/utils/entities/resource'
+  } from '@api/_deprecated/utils/entities/resource'
   import { shortenAddress, typedError } from '@utils'
   import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
   import { ResultAsync } from 'neverthrow'
-  import { getTransactionDetails as getTransactionDetailsFn } from '@api/gateway'
+  import { getTransactionDetails as getTransactionDetailsFn } from '@api/_deprecated/gateway'
   import { goto } from '$app/navigation'
   import type {
     AccessRule,

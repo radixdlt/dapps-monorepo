@@ -1,6 +1,6 @@
 import type { LayoutLoad } from './$types'
 import { getAssociatedDapps, getLookupEntity } from '../../utils'
-import { transformMetadata } from '@api/utils/metadata'
+import { transformMetadata } from '@api/_deprecated/utils/metadata'
 
 export const load: LayoutLoad = ({ params }) => {
   const entity = getLookupEntity(params.validator)
