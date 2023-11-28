@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { getTransactionDetailsNew } from '@api/gateway'
+  import type { getTransactionDetailsNew } from '@api/_deprecated/gateway'
   import CodeBox from '@components/code-box/CodeBox.svelte'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'

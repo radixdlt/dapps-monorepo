@@ -1,6 +1,7 @@
 import type { _Entity } from '../entities'
-import type { _NonFungible } from '.'
+import type { NonFungible, _NonFungible } from '.'
 import type { StateNonFungibleDetailsResponseItem } from '@common/gateway-sdk'
+import type { Validator } from '../entities/component/validator'
 
 export type ClaimNft = _NonFungible<
   'claimNft',

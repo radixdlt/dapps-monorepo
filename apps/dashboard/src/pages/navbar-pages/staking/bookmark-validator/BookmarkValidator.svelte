@@ -6,7 +6,7 @@
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
 
   export let validator: Promise<Validator> | Validator
   export let withText = false

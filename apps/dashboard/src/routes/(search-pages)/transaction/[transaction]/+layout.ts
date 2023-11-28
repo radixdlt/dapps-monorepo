@@ -1,6 +1,6 @@
-import { callApi, getTransactionDetailsNew } from '@api/gateway'
+import { callApi, getTransactionDetailsNew } from '@api/_deprecated/gateway'
 import type { LayoutLoad } from './$types'
-import { transformResource } from '@api/utils/entities/resource'
+import { transformResource } from '@api/_deprecated/utils/entities/resource'
 import { ResultAsync } from 'neverthrow'
 import type { ComponentProps } from 'svelte'
 import type Summary from '@dashboard-pages/search-pages/transaction/summary/Summary.svelte'
@@ -9,7 +9,7 @@ import type {
   TransactionFungibleFeeBalanceChanges,
   TransactionNonFungibleBalanceChanges
 } from '@common/gateway-sdk'
-import { getNftData } from '@api/utils/nft-data'
+import { getNftData } from '@api/_deprecated/utils/nft-data'
 import { pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 

@@ -2,16 +2,15 @@
   import type {
     FungibleResource,
     NonFungibleResource
-  } from '@api/utils/entities/resource'
+  } from '@api/_deprecated/utils/entities/resource'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { metadataItem } from '../utils'
   import SummaryTab from '../SummaryTab.svelte'
-  import type { PoolUnit } from '@api/utils/entities/pool-unit'
+  import type { PoolUnit } from '@api/_deprecated/utils/entities/pool-unit'
   import type { ComponentProps } from 'svelte'
   import { formatTokenValue } from '@utils'
   import AuthConfigurationTab from '../../../components/auth/AuthConfigurationTab.svelte'
-  import type { NonFungible } from '@api/utils/nfts'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit
@@ -27,10 +26,6 @@
     Promise.resolve(undefined)
 
   export let showAddressInMetadata = false
-  export let tokenInfo: {
-    fungibles: Promise<FungibleResource[]>
-    nonFungibles: Promise<NonFungible[]>
-  }
 
   let activeTab = 'summary'
 
@@ -105,7 +100,6 @@
     <div class="margin-top">
       <AuthConfigurationTab
         auth={resource.auth}
-        {tokenInfo}
         hideRules={new Set([
           'royalty_setter',
           'royalty_setter_updater',

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getRecentNetworkTransactions } from '@api/gateway'
+  import { getRecentNetworkTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
   import {

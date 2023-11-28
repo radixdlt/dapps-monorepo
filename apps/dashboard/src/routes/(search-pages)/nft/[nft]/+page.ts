@@ -1,7 +1,7 @@
-import { callApi } from '@api/gateway'
+import { callApi } from '@api/_deprecated/gateway'
 import type { PageLoad } from './$types'
-import { transformNonFungibleResource } from '@api/utils/entities/resource'
-import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
+import { transformNonFungibleResource } from '@api/_deprecated/utils/entities/resource'
+import { getLinkedDappDefinitions } from '@api/_deprecated/utils/two-way-linking'
 import {
   getDappDefinitionData,
   getLookupEntity,

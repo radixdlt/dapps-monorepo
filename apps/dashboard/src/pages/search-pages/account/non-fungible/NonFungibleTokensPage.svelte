@@ -3,8 +3,7 @@
   import {
     getNonFungiblesIdsPageWithData,
     type GetNonFungibleIdsPageWithDataRequest
-  } from '@api/gateway'
-  import type { TransformedNonFungible } from '@api/utils/entities/resource'
+  } from '@api/_deprecated/gateway'
   import { transformNft } from '@api/utils/nfts'
   import type { GeneralNft } from '@api/utils/nfts/general-nft'
   import NFTAccordion from '@components/_base/accordion/NFTAccordion.svelte'
@@ -12,18 +11,24 @@
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import NoTokens from '../NoTokens.svelte'
+  import type {
+    DefaultNonFungibleResource,
+    NonFungibleResource
+  } from '@api/utils/entities/resource/non-fungible/index'
+  import type { ClaimNftCollection } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
+  import type { Account } from '@api/utils/entities/component/account'
 
-  export let nonFungibleResources: Promise<TransformedNonFungible[]>
-
+  export let nonFungibleResources: Promise<NonFungibleResource[]>
+  export let nfts: Promise<GeneralNft[]>
   export let stateVersion: Promise<number>
-  export let accountAddress: Promise<string>
+  export let account: Promise<Account>
 
   const loadedLaterNfts: Record<string, GeneralNft[]> = {}
   let isLoading = false
 
   let currentCursor: string | null | undefined = null
 
-  $: data = Promise.all([stateVersion, accountAddress])
+  $: data = Promise.all([stateVersion, account, nfts])
 
   let width: number
 
@@ -60,24 +65,18 @@
     })
   }
 
-  type GeneralNonFungibleResource = TransformedNonFungible & {
-    nonFungibles: GeneralNft[]
-  }
-
   const isClaimNftResource = (
-    resource: TransformedNonFungible
-  ): resource is GeneralNonFungibleResource =>
-    resource.resource.metadata.nonStandard.some(
-      (metadata) => metadata.key === 'validator'
-    )
+    resource: NonFungibleResource
+  ): resource is ClaimNftCollection =>
+    resource.nonFungibleType === 'claim-nft-collection'
 
   const filterOutClaimNfts = (
-    nonFungibleResources: Promise<TransformedNonFungible[]>
-  ): Promise<GeneralNonFungibleResource[]> => {
+    nonFungibleResources: Promise<NonFungibleResource[]>
+  ): Promise<DefaultNonFungibleResource[]> => {
     return nonFungibleResources.then((nonFungibleResources) => {
       return nonFungibleResources.filter(
         (resource) => !isClaimNftResource(resource)
-      ) as GeneralNonFungibleResource[]
+      ) as DefaultNonFungibleResource[]
     })
   }
 </script>
@@ -86,18 +85,28 @@
   {#each Array(3) as _}
     <NFTAccordion data={new Promise(() => {})} />
   {/each}
-{:then [nonFungibleResources, [stateVersion, accountAddress]]}
+{:then [nonFungibleResources, [stateVersion, account, nfts]]}
   {#if nonFungibleResources.length === 0}
     <NoTokens>No NFT's found</NoTokens>
   {:else}
-    {#each nonFungibleResources as { resource, nonFungibles, ownedNonFungibles, nextCursor, vaultAddress }}
+    {#each nonFungibleResources as resource}
+      {@const nonFungibles = nfts.filter(
+        (nft) => nft.address.resourceAddress === resource.address
+      )}
+
+      {@const nbrOfNfts = nonFungibles.length}
+
+      {@const ownedNonFungible = account.resources.nonFungible.find(
+        (nonFungible) => nonFungible.address === resource.address
+      )}
+
       <NFTAccordion
         data={{
-          name: resource.metadata.standard.name?.value,
+          name: resource.metadata.expected.name?.value,
           address: resource.address,
-          imageUrl: resource.metadata.standard.icon_url?.value.href,
-          count: ownedNonFungibles,
-          tags: resource.metadata.standard.tags?.value,
+          imageUrl: resource.metadata.expected.icon_url?.value?.href,
+          count: nbrOfNfts,
+          tags: resource.metadata.expected.tags?.value,
           totalCount: Number(resource.totalSupply)
         }}
       >
@@ -134,9 +143,9 @@
           on:thresholdReached={() => {
             fetchMore({
               stateVersion,
-              componentAddress: accountAddress,
-              cursor: nextCursor,
-              vaultAddress,
+              componentAddress: account.address,
+              cursor: ownedNonFungible?.vaults[0].next_cursor ?? undefined,
+              vaultAddress: ownedNonFungible?.vaults[0].vault_address ?? '',
               resourceAddress: resource.address
             })
           }}

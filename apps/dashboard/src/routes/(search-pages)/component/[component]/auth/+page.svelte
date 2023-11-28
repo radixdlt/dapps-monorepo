@@ -6,5 +6,5 @@
 </script>
 
 {#await Promise.all( [data.promises.component, data.promises.authResources] ) then [{ auth }, tokenInfo]}
-  <AuthConfigurationTab {auth} {tokenInfo} />
+  <AuthConfigurationTab {auth} />
 {/await}

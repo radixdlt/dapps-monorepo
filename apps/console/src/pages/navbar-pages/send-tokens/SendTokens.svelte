@@ -15,16 +15,16 @@
   import Select from '@components/../dev-console/form/Select.svelte'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import {
-    getAccountData,
-    type Resources,
-    type TransformedNonFungible
-  } from '@api/utils/entities/resource'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import type { Account } from '@stores'
   import { shortenAddress } from '@utils'
   import { createBadgeProof } from '../dapp-definition/side-effects'
   import { address } from '@radixdlt/radix-engine-toolkit'
+  import {
+    getAccountData,
+    type Resources,
+    type TransformedNonFungible
+  } from '@api/_deprecated/utils/entities/resource'
 
   let resources: Promise<Resources[number]> = new Promise((resolve) => {})
 

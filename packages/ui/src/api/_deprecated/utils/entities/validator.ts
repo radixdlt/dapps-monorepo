@@ -11,7 +11,7 @@ import {
   getEntityDetails,
   getNonFungibleLocation,
   type GatewayError
-} from '@api/gateway'
+} from '@api/_deprecated/gateway'
 import BigNumber from 'bignumber.js'
 import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
 import { YEARLY_XRD_EMISSIONS } from '@constants'

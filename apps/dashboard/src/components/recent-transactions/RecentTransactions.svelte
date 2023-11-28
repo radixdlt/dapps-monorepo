@@ -10,7 +10,7 @@
   } from './ColumnDefinition.svelte'
   import BalanceChangesColumn from './BalanceChangesColumn.svelte'
   import ExportCsvButton from '@dashboard-pages/search-pages/export-csv-button/ExportCsvButton.svelte'
-  import { getRecentTransactions } from '@api/gateway'
+  import { getRecentTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
   import { queryAndCacheUniqueResources } from '@api/utils/resource-cache-client'

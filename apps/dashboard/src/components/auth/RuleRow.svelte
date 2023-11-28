@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AccessRule } from '@api/utils/auth'
+  import type { AccessRule } from '@api/_deprecated/utils/auth'
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import Row from '@components/info-box/Row.svelte'
 

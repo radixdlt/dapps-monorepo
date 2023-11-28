@@ -19,7 +19,7 @@
   import Nft, { type NftData } from './Nft.svelte'
   import { createNonFungibleTokenManifest } from '../../../helpers/create-non-fungible-token-manifest'
   import { goto } from '$app/navigation'
-  import { getTransactionDetails } from '@api/gateway'
+  import { getTransactionDetails } from '@api/_deprecated/gateway'
   import { onMount } from 'svelte'
   import SendToWalletButton from '../../../components/SendToWalletButton.svelte'
 

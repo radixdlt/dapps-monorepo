@@ -1,14 +1,12 @@
-import type {
-  NonFungibleResourcesCollectionItemVaultAggregated,
-  StateNonFungibleDetailsResponseItem
-} from '@common/gateway-sdk'
+import type { StateNonFungibleDetailsResponseItem } from '@common/gateway-sdk'
 import type { GeneralNft } from './general-nft'
-import { isUnstakeData, type ClaimNft } from './claim-nft'
+import type { ClaimNft } from './claim-nft'
 import {
   transformNftData,
   type NftDataItem,
   type KnownStandardTypes
 } from '../nft-data'
+import type { NonFungibleResource } from '../entities/resource/non-fungible'
 
 export type _NonFungible<
   Type extends string,
@@ -36,17 +34,24 @@ export type NonFungibleAddress<
 }
 
 export const transformNft = (
-  resource_address: NonFungibleResourcesCollectionItemVaultAggregated['resource_address'],
+  resource: string | NonFungibleResource,
   { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
 ): NonFungible => {
-  const type = isUnstakeData(data) ? 'claimNft' : 'generalNft'
+  const type =
+    typeof resource !== 'string' &&
+    resource.nonFungibleType === 'claim-nft-collection'
+      ? 'claimNft'
+      : 'generalNft'
+
+  const resourceAddress =
+    typeof resource === 'string' ? resource : resource.address
 
   const partial = {
     type,
     address: {
-      resourceAddress: resource_address,
+      resourceAddress,
       id: non_fungible_id,
-      nonFungibleAddress: `${resource_address}:${non_fungible_id}`
+      nonFungibleAddress: `${resourceAddress}:${non_fungible_id}`
     },
     id: non_fungible_id
   }

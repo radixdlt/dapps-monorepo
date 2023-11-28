@@ -4,20 +4,20 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformResource } from '@api/utils/entities/resource'
+import { transformResource } from '@api/_deprecated/utils/entities/resource'
 import { isNFTAddress } from '@utils'
-import {
-  hasValidatorMetadataSet,
-  verifyStakeUnit
-} from '@api/utils/entities/stake-unit'
 import { redirect } from '@sveltejs/kit'
-import type { PoolUnit } from '@api/utils/entities/pool-unit'
-import { callApi } from '@api/gateway'
+import type { PoolUnit } from '@api/_deprecated/utils/entities/pool-unit'
+import { callApi } from '@api/_deprecated/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
 import type { EntityType } from '@common/ret'
 import { http } from '@common/http'
+import {
+  hasValidatorMetadataSet,
+  verifyStakeUnit
+} from '@api/_deprecated/utils/entities/stake-unit'
 
 const ERROR_MSG = 'Failed to load resource data.'
 
