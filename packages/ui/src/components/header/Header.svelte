@@ -109,7 +109,6 @@
   }
 
   .search {
-    margin: 1rem 0;
     height: 2.5rem;
     width: 100%;
     max-width: 42.8125rem;
@@ -117,6 +116,7 @@
     align-items: center;
 
     @include mixins.desktop {
+      margin: 1rem 0;
     }
   }
 

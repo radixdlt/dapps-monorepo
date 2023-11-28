@@ -56,15 +56,45 @@ const config = {
           'self',
           'data:',
           'https://cdn-ukwest.onetrust.com',
+          'https://px.ads.linkedin.com/',
+          'https://www.google.pl',
+          'https://www.google.com',
+          'https://alb.reddit.com',
+          'https://www.googletagmanager.com/',
+          'https://t.co/',
+          'https://analytics.twitter.com/',
+          'https://www.facebook.com/tr/',
           'https://image-service-dev.extratools.works'
         ],
         'connect-src': [
           'self',
           'https://*.radixdlt.com',
           'https://cdn-ukwest.onetrust.com',
+          'https://px.ads.linkedin.com/',
+          'https://www.google-analytics.com/',
+          'https://stats.g.doubleclick.net/',
+          'https://region1.analytics.google.com/',
           'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location'
         ],
-        'script-src': ['self', 'https://cdn-ukwest.onetrust.com']
+        'script-src': [
+          'self',
+          'https://cdn-ukwest.onetrust.com',
+          'https://tagmanager.google.com/',
+          'https://www.googletagmanager.com/',
+          'https://www.google-analytics.com/',
+          'https://snap.licdn.com/',
+          'https://analytics.tiktok.com/',
+          'https://static.ads-twitter.com/',
+          'https://www.redditstatic.com',
+          'https://www.youtube.com',
+          'https://connect.facebook.net/',
+          'https://px.ads.linkedin.com/',
+          'sha256-q6rgKfZKdcn/pHsqOxRfNrKmmys1//WnFYpIdWiu7w0=', // OneTrust
+          'sha256-5VrVgGfPbUH5IoPb+tGodpswZad/XDHQfqHeVD0LMG4=', // GTM
+          'sha256-iqy3LRnXlk3T3Si5rUUztqoKxwYlK/FGrKGJ3OOwoNU=', // GTM
+          'sha256-oYPTcDf2CB/QxInrrYXimXLmzCk11RIF7HUZXWxsRro=', // GTM
+          'sha256-ngbR4SH6yZjgS9lO7g7PMF3gp9XC4SVO58ftF59dmnw=' // GTM
+        ]
       }
     }
   }

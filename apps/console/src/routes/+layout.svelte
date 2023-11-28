@@ -4,7 +4,7 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, selectedAccount, storage } from '@stores'
+  import { accounts, dAppToolkit, selectedAccount, storage } from '@stores'
   import {
     RadixDappToolkit,
     Account,
@@ -18,9 +18,12 @@
   import LayersIcon from '@icons/layers.svg'
   import TransactionsIcon from '@icons/transactions.svg'
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
+  import CreateTokenIcon from '@icons/create-token.svg'
   import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
+  import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import { NETWORK_CONFIG } from '@constants'
 
   let mounted = false
 
@@ -48,6 +51,8 @@
       onDisconnect: () => updateAccounts([])
     })
 
+    dAppToolkit.set(rdt)
+
     rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
 
     rdt.walletApi.walletData$.subscribe((state) => {
@@ -70,6 +75,11 @@
       text: 'Deploy Package',
       icon: LayersIcon,
       path: '/deploy-package'
+    },
+    {
+      text: 'Create Token',
+      icon: CreateTokenIcon,
+      path: '/create-token'
     },
     {
       text: 'Send Raw Transaction',
@@ -100,13 +110,45 @@
     ></script>
     <!-- OneTrust Cookies Consent Notice end for betanet-dashboard.radixdlt.com -->
   {/if}
-</svelte:head>
 
+  {#if featureFlags().getFlag('google-tag-manager')?.enabled}
+    <script>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-PKNDV4C')
+    </script>
+  {/if}
+</svelte:head>
+{#if featureFlags().getFlag('google-tag-manager')?.enabled}
+  <!-- Google Tag Manager (noscript) -->
+  <noscript
+    ><iframe
+      src="https://www.googletagmanager.com/ns.html?id=GTM-PKNDV4C"
+      height="0"
+      width="0"
+      style="display: none; visibility: hidden"
+    /></noscript
+  >
+  <!-- End Google Tag Manager (noscript) -->
+{/if}
 <!-- enables SSR of css -->
 <!-- eslint-disable-next-line -->
 {@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
+  {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
+    <div class="banner">
+      This dApp is configured to use the testnet {PUBLIC_NETWORK_NAME}. It does
+      not use the Radix Public Network mainnet.
+    </div>
+  {/if}
   {#if mounted}
     <Layout {routes} {hideSearch} {showDesktopSidebar}>
       <!-- svelte-ignore a11y-missing-content -->
@@ -130,5 +172,10 @@
     height: 2rem;
     display: inline-flex;
     margin-left: var(--spacing-lg);
+  }
+  .banner {
+    background: var(--color-alert-1);
+    padding: var(--spacing-md);
+    text-align: center;
   }
 </style>

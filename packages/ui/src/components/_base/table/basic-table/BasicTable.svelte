@@ -1,32 +1,21 @@
-<script lang="ts" context="module">
-  export type BasicTableColumn<Entry = any> = TableColumn<Entry> & {
-    /**
-     * For rendering a simple value. Returns data that will be displayed in the cell.
-     */
-    renderAs?: (entry: Entry) => string | number
-
-    /**
-     * Component to be rendered instead of text content
-     */
-    component?: new (...args: any[]) => SvelteComponent
-    componentProps?: Record<
-      string,
-      string | number | boolean | Record<string, any> | ((value: Entry) => any)
-    >
-  }
-</script>
-
 <script lang="ts">
+  import BasicRow from './BasicRow.svelte'
+
+  import type { TableConfig } from '../types'
+
+  import type { BasicTableColumn } from './BasicRow.svelte'
+
   import ResponsiveTableCell from './ResponsiveTableCell.svelte'
   import TableRow from './TableRow.svelte'
-  import type { ComponentProps, SvelteComponent } from 'svelte'
-  import Table, { type TableColumn, type Entry } from '../Table.svelte'
+  import type { ComponentProps } from 'svelte'
+  import Table from '../Table.svelte'
   import BasicHeader from '../basic-header/BasicHeader.svelte'
 
   type T = $$Generic<Entry>
 
   export let entries: ComponentProps<Table<T>>['entries']
-  export let columns: (BasicTableColumn<T> | null)[]
+  export let columns: BasicTableColumn<T>[]
+  export let config: TableConfig<T> | undefined = undefined
   export let defaultSortedColumn: ComponentProps<
     Table<T>
   >['defaultSortedColumn'] = undefined
@@ -68,7 +57,7 @@
 </script>
 
 <div class="basic-table">
-  <Table {entries} {columns} {defaultSortedColumn}>
+  <Table {config} {entries} {columns} {defaultSortedColumn}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
 
     <slot
@@ -83,6 +72,7 @@
     >
       <BasicHeader
         on:click={sort}
+        alignment={column?.alignment}
         sorting={column?.sortBy ? sortStatus : undefined}
       >
         {#if column?.header?.label}
@@ -93,36 +83,13 @@
 
     <svelte:fragment slot="empty-row" let:entry>
       <slot name="row" {entry}>
-        <TableRow>
-          {#each columns as column}
-            <ResponsiveTableCell label={column?.header?.label}>
-              {#if !$$slots.cell}
-                {#if !column?.component}
-                  {#if column?.renderAs}
-                    <span class="cell-text">
-                      {column?.renderAs(entry)}
-                    </span>
-                  {/if}
-                {:else}
-                  <svelte:component
-                    this={column.component}
-                    {...transformProps(column, entry)}
-                  />
-                {/if}
-              {:else}
-                <span class="cell-text">
-                  <slot name="cell" {column} {entry}>
-                    {#if column?.renderAs}
-                      {column?.renderAs(entry)}
-                    {/if}
-                  </slot>
-                </span>
-              {/if}
-            </ResponsiveTableCell>
-          {/each}
-        </TableRow>
+        <BasicRow {columns} {config} {entry} />
       </slot>
     </svelte:fragment>
+
+    <slot name="row" slot="row" let:entry {entry}>
+      <BasicRow {columns} {config} {entry} />
+    </slot>
   </Table>
 </div>
 

@@ -9,43 +9,48 @@
 
   export let validatorAddress: string
 
-  let nearestClaim: Promise<{
+  let accumulatedUnstaking: Promise<{
     amount: string
     timeToClaim: string
   }> = new Promise(() => {})
 
   $: if ($stakeInfo)
-    nearestClaim = $stakeInfo.then(async (info) => {
-      let nearestClaim = {
-        claimEpoch: '-1',
-        amount: '0'
-      }
-
-      info.unstaking
-        .filter((u) => u.validator.address === validatorAddress)
-        .forEach((unstake) => {
-          if (
-            new BigNumber(nearestClaim.claimEpoch).eq(-1) ||
-            new BigNumber(unstake.claimEpoch).lt(nearestClaim.claimEpoch)
-          ) {
-            nearestClaim = {
-              claimEpoch: unstake.claimEpoch,
-              amount: unstake.xrdAmount
-            }
+    accumulatedUnstaking = $stakeInfo.then(async (info) => {
+      const validatorUnstakes = info.unstaking.filter(
+        (u) => u.validator.address === validatorAddress
+      )
+      const accumulatedUnstaking = validatorUnstakes.reduce(
+        (previousValue, currentValue) => {
+          const currentXrdAmount = new BigNumber(currentValue.xrdAmount)
+          const currentClaimEpoch = new BigNumber(currentValue.claimEpoch)
+          return {
+            amount: previousValue.amount.plus(currentXrdAmount),
+            claimEpoch: previousValue.claimEpoch.lt(currentClaimEpoch)
+              ? previousValue.claimEpoch
+              : currentClaimEpoch
           }
-        })
+        },
+        { amount: new BigNumber('0'), claimEpoch: new BigNumber('-1') }
+      )
+
+      const timeToClaim = timeToEpoch(
+        await $currentEpoch,
+        parseInt(accumulatedUnstaking.claimEpoch.toString())
+      )
 
       return {
-        amount: nearestClaim.amount,
-        timeToClaim: timeToEpoch(
-          await $currentEpoch,
-          parseInt(nearestClaim.claimEpoch)
-        )
+        amount: accumulatedUnstaking.amount.toString(),
+        timeToClaim:
+          validatorUnstakes.length === 1
+            ? timeToClaim
+            : timeToClaim.includes('less than')
+            ? timeToClaim
+            : `${timeToClaim} or less`
       }
     })
 </script>
 
-{#await nearestClaim}
+{#await accumulatedUnstaking}
   <SkeletonLoader />
 {:then claim}
   <slot

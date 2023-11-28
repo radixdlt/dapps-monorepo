@@ -1,7 +1,11 @@
 <script lang="ts">
-  import type { TablePage } from '../Table.svelte'
+  import BasicRow from './BasicRow.svelte'
 
-  import BasicTable, { type BasicTableColumn } from './BasicTable.svelte'
+  import type { BasicTableColumn } from './BasicRow.svelte'
+
+  import type { TableConfig, TablePage } from '../types'
+
+  import BasicTable from './BasicTable.svelte'
 
   import { onMount } from 'svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
@@ -10,7 +14,8 @@
 
   type T = $$Generic<Entry>
 
-  export let columns: (BasicTableColumn<T> | null)[]
+  export let columns: BasicTableColumn<T>[]
+  export let config: TableConfig<T> | undefined
   export let queryFunction: (cursor?: string) => Promise<TablePage<T>>
 
   export let mode: 'infiniteScroll' | 'paginated' = 'infiniteScroll'
@@ -71,7 +76,13 @@
   }
 </script>
 
-<BasicTable {columns} {entries} />
+<BasicTable {config} {columns} {entries}>
+  <svelte:fragment slot="row" let:entry>
+    <slot name="row" {entry}>
+      <BasicRow {columns} {config} {entry} />
+    </slot>
+  </svelte:fragment>
+</BasicTable>
 
 {#if isLoadingCursor && mode === 'infiniteScroll'}
   <div class="bottom-space">

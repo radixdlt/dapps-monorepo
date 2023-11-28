@@ -1,5 +1,9 @@
 import type { PageLoad } from './$types'
-import { getAssociatedDapps, getLookupEntity } from '../../utils'
+import {
+  getAssociatedDapps,
+  getLookupEntity,
+  getResourcesFromAuth
+} from '../../utils'
 import { transformResource } from '@api/utils/entities/resource'
 import { isNFTAddress } from '@utils'
 import { isStakeUnit } from '@api/utils/entities/stake-unit'
@@ -51,7 +55,8 @@ export const load: PageLoad = async ({ params }) => {
     resource: transformedResource,
     promises: {
       associatedDapps: getAssociatedDapps(Promise.resolve(resource)),
-      redeemableTokens
+      redeemableTokens,
+      authResources: getResourcesFromAuth(transformedResource.auth)
     }
   }
 }

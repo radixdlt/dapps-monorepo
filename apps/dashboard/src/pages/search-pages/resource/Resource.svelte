@@ -10,6 +10,8 @@
   import type { PoolUnit } from '@api/utils/entities/pool-unit'
   import type { ComponentProps } from 'svelte'
   import { formatTokenValue } from '@utils'
+  import AuthConfigurationTab from '../../../components/auth/AuthConfigurationTab.svelte'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit
@@ -25,6 +27,10 @@
     Promise.resolve(undefined)
 
   export let showAddressInMetadata = false
+  export let tokenInfo: {
+    fungibles: Promise<FungibleResource[]>
+    nonFungibles: Promise<NonFungible[]>
+  }
 
   let activeTab = 'summary'
 
@@ -37,6 +43,10 @@
       {
         id: 'metadata',
         label: 'Metadata'
+      },
+      {
+        id: 'auth',
+        label: 'Configuration'
       }
     ]
   ]
@@ -72,8 +82,8 @@
 
 <PillsMenu items={tabs} bind:active={activeTab} />
 
-<div class="card info-card">
-  {#if activeTab === 'summary'}
+{#if activeTab === 'summary'}
+  <div class="card info-card">
     <SummaryTab
       entity={resource}
       standardMetadata={resource.then(({ metadata }) => metadata.standard)}
@@ -83,11 +93,31 @@
       {redeemableTokens}
       behaviors={resource.then(({ behaviors }) => behaviors)}
     />
-  {/if}
-  {#if activeTab === 'metadata'}
+  </div>
+{/if}
+{#if activeTab === 'metadata'}
+  <div class="card info-card">
     <Metadata metadata={resource.then(({ metadata: { all } }) => all)} />
-  {/if}
-</div>
+  </div>
+{/if}
+{#if activeTab === 'auth'}
+  {#await resource then resource}
+    <div class="margin-top">
+      <AuthConfigurationTab
+        auth={resource.auth}
+        {tokenInfo}
+        hideRules={new Set([
+          'royalty_setter',
+          'royalty_setter_updater',
+          'royalty_locker',
+          'royalty_locker_updater',
+          'royalty_claimer',
+          'royalty_claimer_updater'
+        ])}
+      />
+    </div>
+  {/await}
+{/if}
 
 <style>
   .info-card {
@@ -95,5 +125,9 @@
     display: flex;
     flex-direction: column;
     margin: var(--spacing-2xl) 0;
+  }
+
+  .margin-top {
+    margin-top: var(--spacing-2xl);
   }
 </style>

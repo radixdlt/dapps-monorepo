@@ -3,12 +3,19 @@ import { getStringMetadata } from '@api/utils/metadata'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { err, ok } from 'neverthrow'
-import { map, pipe } from 'ramda'
+import { andThen, flatten, map, pipe } from 'ramda'
 import type {
   LedgerStateSelector,
   StateEntityDetailsOptions
 } from '@common/rdt'
 import { handleGatewayResult } from '../../utils'
+import type {
+  AuthInfo,
+  NonFungibleRequirement,
+  ResourceRequirement
+} from '@api/utils/auth'
+import { transformFungibleResource } from '@api/utils/entities/resource'
+import { transformNft } from '@api/utils/nfts'
 
 export const getDappDefinitionData = ({
   metadata,
@@ -46,3 +53,58 @@ export const getLookupEntity = (
 export const handleLookupGatewayResult = handleGatewayResult((e) =>
   e.status === 400 ? 'Invalid address. Please try again.' : e.message
 )
+
+export const getResourcesFromAuth = (authInfo: AuthInfo) => {
+  let fungibleAddresses: string[] = []
+  let nonFungibleAddresses: Record<string, string[]> = {}
+
+  const isNonFungibleRule = (rule: any): rule is NonFungibleRequirement =>
+    rule.type === 'NonFungible'
+
+  const isFungibleRule = (rule: any): rule is ResourceRequirement =>
+    rule.type === 'Resource'
+
+  const traverse = (obj: any) => {
+    for (let key in obj) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        traverse(obj[key])
+      } else {
+        const rule = obj[key]
+        if (isNonFungibleRule(rule)) {
+          nonFungibleAddresses[rule.non_fungible.resource_address].push(
+            rule.non_fungible.local_id.simple_rep
+          )
+        }
+
+        if (isFungibleRule(rule)) {
+          fungibleAddresses.push(rule.resource)
+        }
+      }
+    }
+  }
+
+  traverse(authInfo)
+
+  const fungibles = pipe(
+    () => callApi('getEntityDetailsVaultAggregated', fungibleAddresses),
+    handleGatewayResult((_) => 'Failed to load component.'),
+    andThen(map(transformFungibleResource))
+  )()
+
+  const nonFungibles = pipe(
+    () =>
+      Object.keys(nonFungibleAddresses).map((resource) =>
+        callApi(
+          'getNonFungibleData',
+          resource,
+          nonFungibleAddresses[resource]
+        ).map((entities) => entities.map((entity) => ({ resource, ...entity })))
+      ),
+    map(handleGatewayResult((_) => 'Failed to load component.')),
+    (entities) => Promise.all(entities),
+    andThen(flatten),
+    andThen(map((entity) => transformNft(entity.resource, entity)))
+  )()
+
+  return { fungibles, nonFungibles }
+}

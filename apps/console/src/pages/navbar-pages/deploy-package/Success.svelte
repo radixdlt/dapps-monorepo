@@ -1,8 +1,4 @@
 <script lang="ts">
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Row from '@components/info-box/Row.svelte'
-  import Success from '@components/success/Success.svelte'
-  import Text from '@components/_base/text/Text.svelte'
   import {
     TransactionStatus,
     RadixNetworkConfigById
@@ -21,27 +17,28 @@
   const dashboardUrl = RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
 </script>
 
-<Success title={txStatusTitle}>
-  <InfoBox>
-    <Row>
-      <Text slot="left" align="right" bold>Tx ID</Text>
-      <Text slot="right" align="left">
-        <Text color="link">
-          <a target="_blank" href={`${dashboardUrl}/transaction/${txID}`}
-            >{txID}</a
-          >
-        </Text>
-      </Text>
-    </Row>
-    <Row>
-      <Text slot="left" align="right" bold>Package address</Text>
-      <Text slot="right" align="left">
-        <Text color="link">
-          <a target="_blank" href={`${dashboardUrl}/package/${packageAddress}`}
-            >{packageAddress}</a
-          >
-        </Text>
-      </Text>
-    </Row>
-  </InfoBox>
-</Success>
+<div class="content">
+  <h1>{txStatusTitle}</h1>
+  <div class="item">
+    <strong>Transaction ID:</strong>
+    <a target="_blank" href={`${dashboardUrl}/transaction/${txID}`}>{txID}</a>
+  </div>
+  <div class="item">
+    <strong>Package address:</strong>
+    <a target="_blank" href={`${dashboardUrl}/package/${packageAddress}`}
+      >{packageAddress}</a
+    >
+  </div>
+</div>
+
+<style lang="scss">
+  .content {
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 2rem;
+  }
+  .item {
+    margin-bottom: 1rem;
+  }
+</style>

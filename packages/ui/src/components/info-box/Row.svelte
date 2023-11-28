@@ -4,10 +4,12 @@
 </script>
 
 <div class="row {modifiers}">
-  <slot name="left">
-    <span class="label">{text}</span>
+  <slot>
+    <slot name="left">
+      <span class="label">{text}</span>
+    </slot>
+    <slot name="right" />
   </slot>
-  <slot name="right" />
 </div>
 
 <style lang="scss">

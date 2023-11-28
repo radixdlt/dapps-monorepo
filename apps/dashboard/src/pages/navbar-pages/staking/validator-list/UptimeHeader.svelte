@@ -48,7 +48,7 @@
     margin: 0 var(--spacing-lg);
 
     .picker {
-      min-width: 8rem;
+      min-width: 6rem;
     }
   }
 </style>

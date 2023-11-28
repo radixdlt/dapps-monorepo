@@ -19,6 +19,8 @@
   import { isNil, pipe, reject } from 'ramda'
   import type { metadataItem } from '@dashboard-pages/search-pages/utils'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
+  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
+  import StakeDisplay from '../validator-list/StakeDisplay.svelte'
 
   export let validator: Promise<Validator<true, true, true>>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -98,6 +100,9 @@
         claimText="Claim"
         validatorAddress={validator.then((v) => v.address)}
         acceptsStake={validator.then((v) => v.acceptsStake)}
+        showTopValidatorWarning={validator.then(
+          (v) => v.percentageTotalStake >= PERCENTAGE_TOTAL_STAKE_WARNING
+        )}
         on:add-stake
         on:unstake
         on:claim
@@ -127,6 +132,13 @@
             component: RecentUptimeDetail,
             componentProperties: (item) => ({
               uptimes: item.typed.type === 'String' ? item.typed.value : []
+            })
+          },
+          'total stake': {
+            label: 'Total Stake',
+            component: StakeDisplay,
+            componentProperties: (item) => ({
+              validator
             })
           }
         }}

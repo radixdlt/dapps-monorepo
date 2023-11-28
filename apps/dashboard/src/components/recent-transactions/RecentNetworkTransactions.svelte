@@ -1,0 +1,66 @@
+<script lang="ts">
+  import { getRecentNetworkTransactions } from '@api/gateway'
+  import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
+  import type { ComponentProps } from 'svelte'
+  import {
+    chevronColumnDefinition,
+    dateAndTxIdColumnDefinition,
+    getFeeColumnDefinition,
+    getOtherBalanceChangesColumnDefinition,
+    messageColumnDefinition,
+    mobileHeaderColumnDefinition,
+    recentTransactionsTableConfig
+  } from './ColumnDefinition.svelte'
+  import { TransactionStatus } from '@common/gateway-sdk'
+  import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
+  import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
+  import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
+  import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
+  import CommittedFailureColumn from './CommittedFailureColumn.svelte'
+
+  const queryFunction = (cursor?: string) => {
+    return getRecentNetworkTransactions(cursor).unwrapOr({
+      items: []
+    })
+  }
+
+  const feeColumnDefinition = getFeeColumnDefinition()
+
+  const columns: ComponentProps<PaginatedTable<any>>['columns'] = [
+    messageColumnDefinition,
+    mobileHeaderColumnDefinition,
+    dateAndTxIdColumnDefinition,
+    feeColumnDefinition,
+    getOtherBalanceChangesColumnDefinition({
+      label: 'Balance Changes'
+    }),
+    chevronColumnDefinition
+  ]
+</script>
+
+<PaginatedTable
+  --table-row-cell-vertical-padding="25px"
+  config={recentTransactionsTableConfig}
+  {columns}
+  {queryFunction}
+>
+  <svelte:fragment slot="row" let:entry>
+    {#if entry.transaction_status === TransactionStatus.CommittedFailure}
+      <TableRow
+        customClass="clickable"
+        on:click={(ev) => recentTransactionsTableConfig.onRowClick?.(entry, ev)}
+      >
+        <BasicColumn {entry} column={messageColumnDefinition} />
+        <BasicColumn {entry} column={mobileHeaderColumnDefinition} />
+        <BasicColumn {entry} column={dateAndTxIdColumnDefinition} />
+        <BasicColumn {entry} column={feeColumnDefinition} />
+        <ResponsiveTableCell>
+          <CommittedFailureColumn />
+        </ResponsiveTableCell>
+        <BasicColumn {entry} column={chevronColumnDefinition} />
+      </TableRow>
+    {:else}
+      <BasicRow {columns} config={recentTransactionsTableConfig} {entry} />
+    {/if}
+  </svelte:fragment>
+</PaginatedTable>

@@ -21,17 +21,19 @@ export const load: LayoutLoad = ({ params, data }) => {
 
   const balanceChangeEntities = details.then(async (tx) => {
     const entities = tx.balanceChanges
-      ? [
-          ...tx.balanceChanges.fungible_balance_changes.map(
-            (change) => change.resource_address
-          ),
-          ...tx.balanceChanges.fungible_fee_balance_changes.map(
-            (change) => change.resource_address
-          ),
-          ...tx.balanceChanges.non_fungible_balance_changes.map(
-            (change) => change.resource_address
-          )
-        ]
+      ? Array.from(
+          new Set([
+            ...tx.balanceChanges.fungible_balance_changes.map(
+              (change) => change.resource_address
+            ),
+            ...tx.balanceChanges.fungible_fee_balance_changes.map(
+              (change) => change.resource_address
+            ),
+            ...tx.balanceChanges.non_fungible_balance_changes.map(
+              (change) => change.resource_address
+            )
+          ])
+        )
       : undefined
 
     return entities
@@ -115,20 +117,19 @@ export const load: LayoutLoad = ({ params, data }) => {
             }
           } as const
         } else if (change.type === 'non-fungible') {
-          const { icon, name: resourceName } = resourceInfo.find(
+          const { name: resourceName } = resourceInfo.find(
             (r) => r.address === resourceAddress
           )!
 
           change.change.added.forEach((id) => {
             const nft = nftData.find((nft) => nft.non_fungible_id === id)!
-
             balanceChange = {
               type: 'non-fungible',
               change: 'added',
               token: {
                 address: change.change.resource_address,
                 id: id,
-                icon: icon?.href,
+                icon: getNftData(nft.data, 'key_image_url'),
                 name: getNftData(nft.data, 'name'),
                 resourceName
               }
@@ -144,7 +145,7 @@ export const load: LayoutLoad = ({ params, data }) => {
               token: {
                 address: change.change.resource_address,
                 id: id,
-                icon: icon?.href,
+                icon: getNftData(nft.data, 'key_image_url'),
                 name: getNftData(nft.data, 'name'),
                 resourceName
               }

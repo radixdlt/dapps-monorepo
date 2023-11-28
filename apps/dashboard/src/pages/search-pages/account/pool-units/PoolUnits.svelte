@@ -54,12 +54,14 @@
     BasicTable<Awaited<typeof entries>[number]>
   >['columns'] = [
     {
+      id: 'name',
       header: {
         label: 'Validator'
       },
       renderAs: ({ validatorName }) => validatorName
     },
     {
+      id: 'staked',
       header: {
         label: 'Staked'
       },
@@ -67,6 +69,7 @@
       renderAs: ({ staking }) => formatXRDValue(staking)
     },
     {
+      id: 'unstaking',
       header: {
         label: 'Unstaking'
       },
@@ -74,6 +77,7 @@
       renderAs: ({ unstaking }) => formatXRDValue(unstaking)
     },
     {
+      id: 'readyToClaim',
       header: {
         label: 'Ready to Claim'
       },
@@ -85,36 +89,38 @@
   let contentWidth: number
 </script>
 
-<Accordion isOpened={true}>
-  <div class="radix-staking-header" slot="header">
-    <TokenIcon isXrd />
-    <span class="header-text">Radix Network XRD Stake</span>
-  </div>
+<div class="pool-units">
+  <Accordion isOpened={true}>
+    <div class="radix-staking-header" slot="header">
+      <TokenIcon isXrd />
+      <span class="header-text">Radix Network XRD Stake</span>
+    </div>
 
-  <svelte:fragment slot="content">
-    {#await entries}
-      <SkeletonLoader />
-    {:then entries}
-      {#if entries.length > 0}
-        <BasicTable {entries} {columns} />
+    <svelte:fragment slot="content">
+      {#await entries}
+        <SkeletonLoader />
+      {:then entries}
+        {#if entries.length > 0}
+          <BasicTable {entries} {columns} />
+        {/if}
+      {/await}
+    </svelte:fragment>
+  </Accordion>
+  <Accordion isOpened={true}>
+    <div class="header-text" slot="header">Pool Units</div>
+
+    <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
+      {#if contentWidth < 650}
+        <PoolUnitCards poolUnits={poolData} />
+      {:else}
+        <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[0])} />
+        <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[1])} />
       {/if}
-    {/await}
-  </svelte:fragment>
-</Accordion>
-<Accordion isOpened={true}>
-  <div class="header-text" slot="header">Pool Units</div>
+    </div></Accordion
+  >
+</div>
 
-  <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
-    {#if contentWidth < 650}
-      <PoolUnitCards poolUnits={poolData} />
-    {:else}
-      <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[0])} />
-      <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[1])} />
-    {/if}
-  </div></Accordion
->
-
-<style>
+<style lang="scss">
   .radix-staking-header {
     display: flex;
     align-items: center;
@@ -130,5 +136,26 @@
     display: flex;
     gap: var(--spacing-2xl);
     justify-content: stretch;
+  }
+
+  .pool-units {
+    :global(.header-wrapper) {
+      height: 8rem;
+
+      @include mixins.desktop {
+        height: 7rem;
+      }
+    }
+
+    :global(.accordion) {
+      border-top: 1px solid var(--theme-border-separator);
+
+      &:last-child {
+        border-bottom: 1px solid var(--theme-border-separator);
+      }
+    }
+    :global(.content) {
+      padding-bottom: 1rem;
+    }
   }
 </style>

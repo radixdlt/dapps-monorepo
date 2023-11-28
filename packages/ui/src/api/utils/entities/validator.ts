@@ -22,7 +22,11 @@ export type Validator<
   WithOwner = false,
   WithUptime = false,
   WithStakeUnits = false
-> = _Entity<'validator', ['name', 'icon_url', 'description', 'info_url']> & {
+> = _Entity<
+  'validator',
+  ['name', 'icon_url', 'description', 'info_url'],
+  false
+> & {
   totalStakeInXRD: BigNumber
   fee: {
     percentage: number
@@ -32,7 +36,6 @@ export type Validator<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
-  rank: number
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
   (WithUptime extends true
     ? {
@@ -244,7 +247,7 @@ const transformValidators = async (
         new BigNumber(v1.stake_vault.balance)
       )
     )
-    .map((validator, i) => {
+    .map((validator) => {
       const state: any = validator.state || {}
 
       const stakeUnitResourceAddress =
@@ -268,7 +271,6 @@ const transformValidators = async (
           'tags',
           'info_url'
         ]),
-        rank: i + 1,
         acceptsStake: state.accepts_delegated_stake
       }
     })
@@ -298,16 +300,12 @@ const appendUptime =
         const { uptimes: _uptimes } = uptimes.find(
           (u) => u.address === validator.address
         )!
-        const entity = entities.find((e) => e.address === validator.address)!
-
+        const fee = validator.fee.percentage / 100
         return {
           ...validator,
           uptimePercentages: _uptimes,
           apy: new BigNumber(YEARLY_XRD_EMISSIONS)
-            .multipliedBy(
-              (1 - (entity.state as any).validator_fee_factor) *
-                (_uptimes.alltime ?? 0)
-            )
+            .multipliedBy((1 - fee) * (_uptimes.alltime ?? 0))
             .dividedBy(totalAmountStaked)
             .toNumber()
         }

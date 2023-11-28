@@ -20,6 +20,8 @@
   export let isXRD = false
   export let type: Behavior
 
+  let info: { icon: string; text: string; iconSize: string } | undefined
+
   $: info = {
     simple: {
       icon: Simple,
@@ -114,16 +116,20 @@
       iconSize: '1.3rem'
     }
   }[type]
+
+  $: if (isXRD && type === 'info-can-change') info = undefined
 </script>
 
-<div class="behavior">
-  <div class="icon">
-    <IconNew icon={info.icon} --size={info.iconSize} />
+{#if info}
+  <div class="behavior">
+    <div class="icon">
+      <IconNew icon={info.icon} --size={info.iconSize} />
+    </div>
+    <div class="text">
+      {info.text}
+    </div>
   </div>
-  <div class="text">
-    {info.text}
-  </div>
-</div>
+{/if}
 
 <style>
   .behavior {

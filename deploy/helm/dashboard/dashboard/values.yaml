@@ -14,7 +14,7 @@ dashboard:
     tag: ""
 
   imagePullSecrets:
-    - name: docker-hub-dev
+    - name: dockerhub-dev
 
   nameOverride: "dashboard"
 
@@ -68,7 +68,6 @@ dashboard:
 
   docker:
     secrets:
-      region: eu-west-1
       name: docker.io/radixdlt
 
   # Set it to true if you want to secret to be deployed.

@@ -97,7 +97,30 @@ export const callApi = <T extends keyof typeof api>(
 > => fromPromise((api[methodName] as any)(...args), handleError)
 
 export const getRecentTransactions = (address: string, cursor?: string) =>
-  gatewayApi.stream.getTransactionsList([address], cursor)
+  gatewayApi.stream.innerClient.streamTransactions({
+    streamTransactionsRequest: {
+      affected_global_entities_filter: [address],
+      cursor,
+      opt_ins: {
+        balance_changes: true
+      }
+    }
+  })
+
+export const getRecentNetworkTransactions = (cursor?: string) =>
+  fromPromise(
+    gatewayApi.stream.innerClient.streamTransactions({
+      streamTransactionsRequest: {
+        cursor,
+        limit_per_page: 15,
+        opt_ins: {
+          receipt_output: false,
+          balance_changes: true
+        }
+      }
+    }),
+    handleError
+  )
 
 export const getTransactionsFromDate = (
   address: string,
@@ -113,10 +136,7 @@ export const getTransactionsFromDate = (
         timestamp
       },
       opt_ins: {
-        balance_changes: false, // TODO: change to true when time comes
-        receipt_state_changes: false,
-        receipt_output: false,
-        receipt_events: false
+        balance_changes: true
       }
     }
   })

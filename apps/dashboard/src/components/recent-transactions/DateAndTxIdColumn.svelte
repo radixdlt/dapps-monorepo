@@ -1,6 +1,5 @@
 <script lang="ts">
   import { shortenAddress } from '@utils'
-  import Link from '@components/_base/link/Link.svelte'
 
   export let id: string
   export let date: string
@@ -11,7 +10,7 @@
 
 <div class="wrapper">
   <span class="bolder subtext">
-    ID: <Link text={shortenAddress(id)} url={`/transaction/${id}`} />
+    ID: <a href={`/transaction/${id}`}>{shortenAddress(id)}</a>
   </span>
   <span class="date subtext">{day} {month} • {hours}:{minutes}</span>
 </div>
@@ -22,6 +21,7 @@
   }
   .subtext {
     color: var(--theme-subtext);
+    text-align: left;
   }
   .wrapper {
     display: flex;

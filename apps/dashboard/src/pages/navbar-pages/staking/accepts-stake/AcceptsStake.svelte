@@ -15,7 +15,7 @@
   {#if acceptsStake}
     <Icon size="medium" icon={CheckMarkIcon} />
   {:else}
-    <div style:color="var(--color-alert)">
+    <div style:color="var(--color-alert-1)">
       <Icon size="medium" icon={CrossIcon} />
     </div>
   {/if}

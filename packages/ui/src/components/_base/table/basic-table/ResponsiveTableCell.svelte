@@ -2,16 +2,25 @@
   export let label: string = ''
   export let width: string = 'auto'
   export let colspan = 1
+  export let hideMobile = false
+  export let hideDesktop = false
+  export let alignment: 'left' | 'right' | 'center' = 'left'
 </script>
 
-<td class="cell" style="--responsive-table-cell-width: {width}" {colspan}>
+<td
+  class="cell"
+  class:desktop-only={hideMobile}
+  class:mobile-only={hideDesktop}
+  style="--responsive-table-cell-width: {width}"
+  {colspan}
+>
   {#if label}
     <div class="mobile-only header-text">
       {label}
     </div>
   {/if}
 
-  <div class="content">
+  <div class="content {alignment}">
     <slot />
   </div>
 </td>
@@ -22,6 +31,26 @@
 
     @include mixins.mobile {
       width: 100%;
+    }
+  }
+
+  @include mixins.desktop {
+    .content.right {
+      text-align: right;
+    }
+
+    .content.left {
+      text-align: left;
+    }
+
+    .content.center {
+      text-align: center;
+    }
+  }
+
+  @include mixins.mobile {
+    .content {
+      text-align: right;
     }
   }
 

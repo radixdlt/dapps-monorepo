@@ -23,18 +23,16 @@ dashboard:
     PUBLIC_NETWORK_NAME: "enkinet"
 
   secrets:
-  - name: database-url
+  - name: database-url-v2
     variable: "DATABASE_URL"
     path: "rdx-works-main-dev/eks/dashboard/postgres"
     secretProperty: "database-url-enkinet"
     secretName: "database-url"
-    region: "eu-west-2"
-  - name: jwt-secret
+  - name: jwt-secret-v2
     variable: "JWT_SECRET"
     path: "rdx-works-main-dev/eks/dashboard/jwt"
     secretProperty: "jwt-secret"
     secretName: "jwt-secret"
-    region: "eu-west-2"
 
   ingress:
     enabled: true
@@ -50,7 +48,7 @@ dashboard:
       cpu: 475m
       memory: 256Mi
     requests:
-      cpu: 475m
+      cpu: 50m
       memory: 256Mi
 
 developerAccess:
