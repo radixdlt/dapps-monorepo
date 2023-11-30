@@ -24,8 +24,15 @@ export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   }
 })
 
-export const isPoolUnit = (resource: FungibleResource) =>
-  !!getMetadataItem('pool')({ items: resource.metadata.all })
+export const isPoolUnit = (resource: FungibleResource) => {
+  const poolMetadataEntry = getMetadataItem('pool')({
+    items: resource.metadata.all
+  })
+  return (
+    poolMetadataEntry?.value.typed.type === 'GlobalAddress' &&
+    poolMetadataEntry?.value.typed.value.startsWith('pool_')
+  )
+}
 
 export const getPoolUnits = (resources: FungibleResource[]) =>
   resources.filter(isPoolUnit).map(resourceToPoolUnit)

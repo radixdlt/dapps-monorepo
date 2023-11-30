@@ -35,10 +35,27 @@
         const tokens = Object.values(tokensRaw)
           .filter(
             (fungibleResource) =>
-              !fungibleResource.metadata.all.find(
-                (metadata) =>
-                  metadata.key === 'pool' || metadata.key === 'validator'
-              )
+              !fungibleResource.metadata.all.find((metadata) => {
+                if (metadata.key === 'pool') {
+                  if (
+                    metadata.value.typed.type === 'GlobalAddress' &&
+                    metadata.value.typed.value.startsWith('pool_')
+                  ) {
+                    return true
+                  }
+                }
+
+                if (metadata.key === 'validator') {
+                  if (
+                    metadata.value.typed.type === 'GlobalAddress' &&
+                    metadata.value.typed.value.startsWith('validator_')
+                  ) {
+                    return true
+                  }
+                }
+
+                return false
+              })
           )
           .map(transformFungibleTokenResource)
 
