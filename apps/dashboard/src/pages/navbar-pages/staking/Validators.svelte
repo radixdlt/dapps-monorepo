@@ -34,12 +34,10 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
   import type { Validator } from '@api/utils/entities/validator'
   import type { StakeInfo } from '@api/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-  import ValidatorRow from './validator-list/ValidatorRow.svelte'
 
   export let validators: Promise<Validator<true, true, true>[]>
   export let filteredValidators: Validator<true, true, true>[] | undefined =

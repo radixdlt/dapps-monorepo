@@ -53,7 +53,8 @@ const fixtures = [
         validatorAddress:
           'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
         unstakeClaimResource:
-          'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5'
+          'resource_tdx_d_1tkkywmvpnllj060fqkd2rrg6gjck7peep7mm0m95yx45ce7t70z2h5',
+        id: '#1#'
       }
     ])
   }

@@ -3,8 +3,7 @@ import type { LayoutLoad } from './$types'
 import type { Account } from '@stores'
 import BigNumber from 'bignumber.js'
 import type { Validator } from '@api/utils/entities/validator'
-import type { LoggedInStakeInfo } from '../../proxy+layout'
-
+import type { LoggedInStakeInfo } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout'
 export const load: LayoutLoad = ({ parent }) =>
   parent().then((data) => {
     const stakes = derived(data.stakeInfo, async ($info) => {
