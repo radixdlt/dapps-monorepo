@@ -109,6 +109,8 @@ describe('#utils', () => {
       const testVectors = [
         { input: '1000000000.1', output: '1,000 M' },
         { input: '1000000000', output: '1,000 M' },
+        { input: '64928.251276641797575711', output: '64,928.251' },
+        { input: '64,928.251', output: '64,928.251' },
         { input: '1000.12341999', output: '1,000.1234' },
         { input: '1000.5000000000', output: '1,000.5' },
         { input: '0.12345671', output: '0.1234567' },
