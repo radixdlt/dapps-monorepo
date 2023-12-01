@@ -106,16 +106,17 @@ export const getClaimManifest = (
     accountAddress: string
     validatorAddress: string
     unstakeClaimResource: string
+    id: string
   }[]
 ) =>
   claims
     .map(
-      ({ accountAddress, validatorAddress, unstakeClaimResource }, i) => `
+      ({ accountAddress, validatorAddress, unstakeClaimResource, id }, i) => `
     CALL_METHOD
     Address("${accountAddress}")
-    "withdraw"
+    "withdraw_non_fungibles"
     Address("${unstakeClaimResource}")
-    Decimal("${1}");
+    Array<NonFungibleLocalId>(NonFungibleLocalId("${id}"));
 
     TAKE_ALL_FROM_WORKTOP
     Address("${unstakeClaimResource}")

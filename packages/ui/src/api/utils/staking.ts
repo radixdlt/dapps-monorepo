@@ -21,6 +21,7 @@ export type UnstakingInfo = CommonStakeInfo<'unstaking'> & {
 
 export type ReadyToClaimInfo = CommonStakeInfo<'readyToClaim'> & {
   claimEpoch: string
+  claimNft: ClaimNft
 }
 
 export type StakeInfo = StakedInfo | UnstakingInfo | ReadyToClaimInfo
@@ -63,6 +64,7 @@ export const getUnstakeAndClaimInfo =
         account: accountData.accountAddress,
         validator,
         xrdAmount,
+        claimNft,
         claimEpoch: claimNft.nftData.standard['claim_epoch']!.value
       }
 

@@ -9,11 +9,12 @@
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
   import type { Validator } from '@api/utils/entities/validator'
-
+  import type { ClaimNft } from '@api/utils/nfts/claim-nft'
   export let readyToClaim: {
     validator: Validator
     xrdAmount: string
     account: Account
+    claimNft: ClaimNft
   }[]
   export let useBackdrop: boolean = false
 
@@ -54,6 +55,7 @@
     e.detail(
       getClaimManifest(
         readyToClaim.map((claim) => ({
+          id: claim.claimNft.id,
           accountAddress: claim.account.address,
           validatorAddress: claim.validator.address,
           unstakeClaimResource: claim.validator.unstakeClaimResourceAddress
