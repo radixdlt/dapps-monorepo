@@ -25,7 +25,7 @@
           const currentClaimEpoch = new BigNumber(currentValue.claimEpoch)
           return {
             amount: previousValue.amount.plus(currentXrdAmount),
-            claimEpoch: previousValue.claimEpoch.lt(currentClaimEpoch)
+            claimEpoch: previousValue.claimEpoch.gt(currentClaimEpoch)
               ? previousValue.claimEpoch
               : currentClaimEpoch
           }
