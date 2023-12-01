@@ -53,9 +53,5 @@
 {#await accumulatedUnstaking}
   <SkeletonLoader />
 {:then claim}
-  <slot
-    name="text"
-    amount={formatTokenValue(claim.amount).displayValue}
-    timeToClaimText={claim.timeToClaim}
-  />
+  <slot name="text" amount={claim.amount} timeToClaimText={claim.timeToClaim} />
 {/await}

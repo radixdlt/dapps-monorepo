@@ -175,6 +175,8 @@ export const formatTokenValue = (
   input: string | number | BigNumber,
   options?: Partial<{ maxPlaces: number; thousandsSeparator: string }>
 ) => {
+  const removeCommasFromString = (input: string | number | BigNumber) =>
+    typeof input === 'string' ? input.split(',').join('') : input
   const stringToBigInt = (input: string) => new BigNumber(input)
   const splitIntegerAndDecimals = (input: string) => input.split('.')
   const round =
@@ -237,7 +239,7 @@ export const formatTokenValue = (
         .join('.')
     }
 
-  const strInput = new BigNumber(input).toString()
+  const strInput = new BigNumber(removeCommasFromString(input)).toString()
 
   return pipe(
     stringToBigInt,
