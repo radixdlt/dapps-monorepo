@@ -16,6 +16,7 @@ import type {
   StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
+import type { EntityType } from '@common/ret'
 
 export type Entity =
   | Package
@@ -60,12 +61,14 @@ export const transformEntity =
       address: string
       metadata: StateEntityDetailsVaultResponseItem['metadata']
       details?: StateEntityDetailsVaultResponseItem['details']
+      entityType?: EntityType
     }
   >(
     entity: E
   ) => ({
     address: entity.address,
     entity,
+    entityType: entity.entityType,
     metadata: transformMetadata(entity, standardMetadata),
     auth: (entity.details as StateEntityDetailsResponseComponentDetails)
       .role_assignments

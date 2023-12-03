@@ -15,8 +15,13 @@ import { BigNumber } from 'bignumber.js'
 import { getNonFungibleData } from '@api/gateway'
 import { transformEntity, type _Entity } from '.'
 import { transformNft, type _NonFungible, type NonFungible } from '../nfts'
-import { isPoolUnit, resourceToPoolUnit } from './pool-unit'
-import { getAuthInfo, type AuthInfo, isAllowed } from '../auth'
+import {
+  getPoolUnits,
+  hasPoolMetadataSet,
+  type GetEntityTypesFn,
+  type GetEntityDetailsFn
+} from './pool-unit'
+import { type AuthInfo, isAllowed } from '../auth'
 import { err, ok } from 'neverthrow'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<
@@ -458,13 +463,19 @@ export const transformFungible = async (
   }))
 }
 
-export const transformResource = (
-  entity: StateEntityDetailsVaultResponseItem
+export const transformResource = async (
+  entity: StateEntityDetailsVaultResponseItem,
+  getEntityTypesFn: GetEntityTypesFn,
+  getEntityDetailsFn: GetEntityDetailsFn
 ) => {
   if (entity.details?.type === 'FungibleResource') {
     const fungible = transformFungibleResource(entity)
-    if (isPoolUnit(fungible)) {
-      return resourceToPoolUnit(fungible)
+    if (hasPoolMetadataSet(fungible)) {
+      return getPoolUnits(
+        [fungible],
+        getEntityTypesFn,
+        getEntityDetailsFn
+      ).then((res) => res[0])
     }
     return fungible
   }

@@ -13,6 +13,33 @@ import { callApi } from '@api/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
+import type { EntityType } from '@common/ret'
+import { http } from '@common/http'
+
+const ERROR_MSG = 'Failed to load account data.'
+
+const getEntityTypes = async (
+  addresses: string[]
+): Promise<{ [address: string]: EntityType }> =>
+  http.post('/api/ret/entity-type', {
+    addresses
+  })
+
+const getEntityDetailsFn = (stateVersion?: number) => (addresses: string[]) =>
+  pipe(
+    () =>
+      callApi(
+        'getEntityDetailsVaultAggregated',
+        addresses,
+        undefined,
+        stateVersion
+          ? {
+              state_version: stateVersion
+            }
+          : undefined
+      ),
+    handleGatewayResult((_) => ERROR_MSG)
+  )()
 
 const getRedeemableTokens = async (poolUnit: PoolUnit) => {
   const pool = poolUnit.metadata.standard.pool!.value
@@ -42,8 +69,11 @@ export const load: PageLoad = async ({ params }) => {
   if (await isStakeUnit(resource)) {
     throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
   }
-
-  const transformedResource = transformResource(resource)
+  const transformedResource = await transformResource(
+    resource,
+    getEntityTypes,
+    getEntityDetailsFn()
+  )
 
   const redeemableTokens =
     transformedResource.type === 'poolUnit'
