@@ -57,8 +57,7 @@ const config = {
           'data:',
           'https://cdn-ukwest.onetrust.com',
           'https://px.ads.linkedin.com/',
-          'https://www.google.pl',
-          'https://www.google.com',
+          'https://www.google.*',
           'https://alb.reddit.com',
           'https://www.googletagmanager.com/',
           'https://t.co/',
@@ -74,7 +73,9 @@ const config = {
           'https://www.google-analytics.com/',
           'https://stats.g.doubleclick.net/',
           'https://region1.analytics.google.com/',
-          'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location'
+          'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location',
+          'https://region1.google-analytics.com/',
+          'https://analytics.tiktok.com/'
         ],
         'script-src': [
           'self',
