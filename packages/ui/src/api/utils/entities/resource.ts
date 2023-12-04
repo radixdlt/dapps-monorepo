@@ -475,7 +475,7 @@ export const transformResource = async (
         [fungible],
         getEntityTypesFn,
         getEntityDetailsFn
-      ).then((res) => res[0])
+      ).then((res) => res[0] ?? fungible)
     }
     return fungible
   }

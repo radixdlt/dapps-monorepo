@@ -25,7 +25,7 @@ const getEntityTypes = async (
     addresses
   })
 
-const getEntityDetailsFn = (stateVersion?: number) => (addresses: string[]) =>
+const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
   pipe(
     () =>
       callApi(
@@ -72,7 +72,7 @@ export const load: PageLoad = async ({ params }) => {
   const transformedResource = await transformResource(
     resource,
     getEntityTypes,
-    getEntityDetailsFn()
+    getEntityDetails()
   )
 
   const redeemableTokens =
