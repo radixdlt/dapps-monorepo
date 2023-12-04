@@ -16,7 +16,7 @@ import { getStringMetadata } from '@api/utils/metadata'
 import type { EntityType } from '@common/ret'
 import { http } from '@common/http'
 
-const ERROR_MSG = 'Failed to load account data.'
+const ERROR_MSG = 'Failed to load resource data.'
 
 const getEntityTypes = async (
   addresses: string[]
