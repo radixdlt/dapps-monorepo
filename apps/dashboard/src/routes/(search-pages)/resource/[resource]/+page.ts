@@ -6,7 +6,10 @@ import {
 } from '../../utils'
 import { transformResource } from '@api/utils/entities/resource'
 import { isNFTAddress } from '@utils'
-import { isStakeUnit } from '@api/utils/entities/stake-unit'
+import {
+  hasValidatorMetadataSet,
+  verifyStakeUnit
+} from '@api/utils/entities/stake-unit'
 import { redirect } from '@sveltejs/kit'
 import type { PoolUnit } from '@api/utils/entities/pool-unit'
 import { callApi } from '@api/gateway'
@@ -66,7 +69,9 @@ export const load: PageLoad = async ({ params }) => {
 
   const resource = await getLookupEntity(params.resource)
 
-  if (await isStakeUnit(resource)) {
+  const isValidStakeUnit = await verifyStakeUnit(resource)
+
+  if (hasValidatorMetadataSet(resource) && isValidStakeUnit) {
     throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
   }
   const transformedResource = await transformResource(
