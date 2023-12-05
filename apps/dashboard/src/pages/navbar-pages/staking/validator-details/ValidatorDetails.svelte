@@ -21,6 +21,7 @@
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import StakeDisplay from '../validator-list/StakeDisplay.svelte'
+  import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
 
   export let validator: Promise<Validator<true, true, true>>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
@@ -64,7 +65,12 @@
         <SkeletonLoader />
       {:then { metadata: { standard: { name, icon_url } } }}
         <div class="icon-and-name">
-          <NftImage url={icon_url?.value.href} width={64} height={64} />
+          <NftImage
+            url={icon_url?.value.href}
+            width={64}
+            height={64}
+            defaultImageUrl={ValidatorPlaceholder}
+          />
           <h1 class="dotted-overflow">{name?.value ?? '<no-name>'}</h1>
         </div>
       {/await}

@@ -7,6 +7,7 @@
   export let size: 'small' | 'large' = 'small'
   export let width = 1024
   export let height = 1024
+  export let defaultImageUrl: string | undefined = undefined
 
   let imageNotFound = false
   let imageLoaded = false
@@ -24,7 +25,9 @@
   })
 
   $: resolvedIconUrl =
-    imageNotFound || !safeUrl.valid ? NftPlaceholder : safeUrl.url
+    imageNotFound || !safeUrl.valid
+      ? defaultImageUrl ?? NftPlaceholder
+      : safeUrl.url
 </script>
 
 <div class="wrapper {size}">

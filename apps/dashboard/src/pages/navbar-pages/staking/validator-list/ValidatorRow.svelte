@@ -13,6 +13,7 @@
   import StakingInfo from './staked/StakingInfo.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
+  import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
@@ -72,6 +73,7 @@
           {:else}
             <NftImage
               url={input.validator.metadata.standard.icon_url?.value.href}
+              defaultImageUrl={ValidatorPlaceholder}
               width={64}
               height={64}
             />
