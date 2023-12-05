@@ -20,11 +20,11 @@
   }[] = [
     { label: '1 Day', value: '1day' },
     { label: '1 Week', value: '1week' },
-    { label: '1 Months', value: '1month' },
+    { label: '1 Months', value: '1month', default: true },
     { label: '3 Months', value: '3months' },
     { label: '6 Months', value: '6months' },
     { label: '1 Year', value: '1year' },
-    { label: 'All Time', value: 'alltime', default: true }
+    { label: 'All Time', value: 'alltime' }
   ]
 
   export let selected: (typeof options)[number]
