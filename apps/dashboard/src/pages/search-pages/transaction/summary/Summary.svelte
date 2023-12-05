@@ -2,7 +2,7 @@
   import Divider from '@components/_base/divider/Divider.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import Checkmark from '@icons/green-check.svg'
-  import Cross from '@icons/cross.svg'
+  import Cross from '@icons/cross-red.svg'
   import type { ComponentProps } from 'svelte'
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
