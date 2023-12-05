@@ -34,11 +34,11 @@
   }[] = [
     { label: '1 day', value: '1day' },
     { label: '1 week', value: '1week' },
-    { label: '1 month', value: '1month' },
+    { label: '1 month', value: '1month', default: true },
     { label: '3 months', value: '3months' },
     { label: '6 months', value: '6months' },
     { label: '1 year', value: '1year' },
-    { label: 'All time', value: 'alltime', default: true }
+    { label: 'All time', value: 'alltime' }
   ]
 
   const changeDefaultUptime = (
