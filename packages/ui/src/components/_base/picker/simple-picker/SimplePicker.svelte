@@ -25,7 +25,7 @@
 >
   <button slot="selected" class="selected option" let:selected>
     {selected.label}
-    <div class="icon" style:transform={`rotate(${open ? '180deg' : 0})`}>
+    <div class="icon" style:transform={`rotate(${open ? 0 : '180deg'})`}>
       <IconNew icon={PickerExpandIcon} size="small" />
     </div>
   </button>
