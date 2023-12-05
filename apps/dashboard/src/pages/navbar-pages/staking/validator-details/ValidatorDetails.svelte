@@ -32,7 +32,7 @@
   const getNonMetadataItems = pipe(
     (validator: Validator<true, true, true>) => [
       validator.ownerAddress
-        ? ['owner addres', validator.ownerAddress, 'GlobalAddress']
+        ? ['owner address', validator.ownerAddress, 'GlobalAddress']
         : undefined,
       validator.metadata.standard.info_url
         ? ['website', validator.metadata.standard.info_url.value, 'Url']
