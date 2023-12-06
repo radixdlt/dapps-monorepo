@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dump context
-        uses: crazy-max/ghaction-dump-context@v2
+        uses: RDXWorks-actions/ghaction-dump-context@master
       - name: Info
         run: |
           echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
@@ -76,7 +76,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Dump context
-        uses: crazy-max/ghaction-dump-context@158bbf4d6158a44a7e13f76295dc55a69e481a6e
+        uses: RDXWorks-actions/ghaction-dump-context@master
       - uses: ./.github/actions/build
         with:
           active_network_name: ${{ env.active_network }}
@@ -192,7 +192,7 @@ jobs:
           command: sbom
       - name: Upload SBOM
         if: github.event_name == 'release'
-        uses: AButler/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a # v2.0.2
+        uses: RDXWorks-actions/upload-release-assets@master
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -259,7 +259,7 @@ jobs:
           secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/console/sonar-token-xXTI1Y'
           parse_json: true
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: RDXWorks-actions/sonarcloud-github-action@master
         with:
           projectBaseDir: ./apps/console
         env:
