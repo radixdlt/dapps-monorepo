@@ -23,8 +23,26 @@ import { callApi } from '@api/gateway'
 import { errorPage } from '../../../../stores'
 import { resourcesCacheClient } from '@api/utils/resource-cache-client'
 import type { NonFungible } from '@api/utils/nfts'
+import { http } from '@common/http'
+import type { EntityType } from '@common/ret'
 
 const ERROR_MSG = 'Failed to load account data.'
+
+const getEntityTypes = async (
+  addresses: string[]
+): Promise<{ [address: string]: EntityType }> =>
+  http.post('/api/ret/entity-type', {
+    addresses
+  })
+
+const getEntityDetailsFn = (stateVersion: number) => (addresses: string[]) =>
+  pipe(
+    () =>
+      callApi('getEntityDetailsVaultAggregated', addresses, undefined, {
+        state_version: stateVersion
+      }),
+    handleGatewayResult((_) => ERROR_MSG)
+  )()
 
 const getPoolUnitData =
   (stateVersion: number) => async (poolUnits: PoolUnit[]) => {
@@ -206,11 +224,16 @@ export const load: LayoutLoad = ({ params }) => {
         })
       )
     })
-
   const poolData = pipe(
     () => Promise.all([accountData, stateVersion]),
     andThen(([{ fungible }, stateVersion]) =>
-      pipe(() => getPoolUnits(fungible), getPoolUnitData(stateVersion))()
+      pipe(() => {
+        return getPoolUnits(
+          fungible,
+          getEntityTypes,
+          getEntityDetailsFn(stateVersion)
+        )
+      }, andThen(getPoolUnitData(stateVersion)))()
     )
   )()
 

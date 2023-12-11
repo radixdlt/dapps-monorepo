@@ -13,6 +13,35 @@ import { getNftData } from '@api/utils/nft-data'
 import { pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 
+import type { EntityType } from '@common/ret'
+import { http } from '@common/http'
+import { typedError } from '@utils'
+
+const ERROR_MSG = 'Failed to load transaction data.'
+
+const getEntityTypes = async (
+  addresses: string[]
+): Promise<{ [address: string]: EntityType }> =>
+  http.post('/api/ret/entity-type', {
+    addresses
+  })
+
+const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
+  pipe(
+    () =>
+      callApi(
+        'getEntityDetailsVaultAggregated',
+        addresses,
+        undefined,
+        stateVersion
+          ? {
+              state_version: stateVersion
+            }
+          : undefined
+      ),
+    handleGatewayResult((_) => ERROR_MSG)
+  )()
+
 export const load: LayoutLoad = ({ params, data }) => {
   const details = pipe(
     () => getTransactionDetailsNew(params.transaction),
@@ -47,14 +76,18 @@ export const load: LayoutLoad = ({ params, data }) => {
 
       if (entitiesResult.isErr()) throw entitiesResult.error
 
-      const resourceInfo = entitiesResult.value
-        .map(transformResource)
-        .map((resource) => ({
-          resource,
-          icon: resource.metadata.standard.icon_url?.value,
-          name: resource.displayName,
-          address: resource.address
-        }))
+      const resources = await Promise.all(
+        entitiesResult.value.map((resource) =>
+          transformResource(resource, getEntityTypes, getEntityDetails())
+        )
+      )
+
+      const resourceInfo = resources.map((resource) => ({
+        resource,
+        icon: resource.metadata.standard.icon_url?.value,
+        name: resource.displayName,
+        address: resource.address
+      }))
 
       const nftIds = tx.balanceChanges.non_fungible_balance_changes.map(
         (change) => ({
