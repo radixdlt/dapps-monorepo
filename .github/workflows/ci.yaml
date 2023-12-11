@@ -214,7 +214,7 @@ jobs:
           command: sbom
       - name: Upload SBOM
         if: github.event_name == 'release'
-        uses: RDXWorks-actions/upload-release-assets@master
+        uses: RDXWorks-actions/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a
         with:
           files: sbom.json
           repo-token: ${{ secrets.GITHUB_TOKEN }}
