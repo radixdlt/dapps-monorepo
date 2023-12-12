@@ -45,9 +45,10 @@ env:
 
 permissions:
   id-token: write
-  pull-requests: read
+  pull-requests: write
   contents: read
   deployments: write
+  packages: write
 
 jobs:
   trigger:
@@ -293,109 +294,159 @@ jobs:
           SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
 
   push-dashboard:
-    runs-on: ubuntu-latest
+    name: (PRIVATE) Dashboard docker AMD
     needs:
       - setup-tags
       - snyk-scan-deps-licences
       - snyk-scan-code
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-dashboard'
-          secret_prefix: 'DOCKERHUB_PRIVATE'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
-          parse_json: true
-      - name: Login to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
-          password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-      - name: Docker build and push
-        uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
-        with:
-          file: ./Dockerfile
-          push: true
-          context: .
-          tags: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
-          labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
-          target: 'dashboard'
-          build-args: |
-            NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-dashboard'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Snyk image scan
-        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
-          args: --file=Dockerfile --severity-threshold=critical --fail-on=all
-      - name: Docker Image output
-        run: docker images
-      - name: Output job summary
-        run: |
-          echo "Network that will be deployed: ${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
+    with:
+      runs_on: ubuntu-latest
+      image_registry: 'docker.io'
+      image_organization: 'radixdlt'
+      target: 'dashboard'
+      image_name: 'dapps-dashboard'
+      tag: ${{ needs.setup-tags.outputs.tag-with-network }}
+      context: './'
+      dockerfile: './Dockerfile'
+      platforms: 'linux/amd64'
+      scan_image: true
+      with_sbom: false
+      provenance: false
+      snyk_target_ref: ${{ github.ref_name }}
+      build-args: |
+        NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+        NPM_LOCAL_CACHE=.cache/
+
+  # push-dashboard:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - setup-tags
+  #     - snyk-scan-deps-licences
+  #     - snyk-scan-code
+  #   steps:
+  #     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+  #       with:
+  #         role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+  #         app_name: 'dashboard'
+  #         step_name: 'push-dashboard'
+  #         secret_prefix: 'DOCKERHUB_PRIVATE'
+  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
+  #         parse_json: true
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+  #       with:
+  #         username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
+  #         password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
+  #     - name: Docker build and push
+  #       uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
+  #       with:
+  #         file: ./Dockerfile
+  #         push: true
+  #         context: .
+  #         tags: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
+  #         labels: ${{ needs.setup-tags.outputs.dashboard-labels }}
+  #         target: 'dashboard'
+  #         build-args: |
+  #           NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+  #           NPM_LOCAL_CACHE=.cache/
+  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+  #       with:
+  #         role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+  #         app_name: 'dashboard'
+  #         step_name: 'push-dashboard'
+  #         secret_prefix: 'SNYK'
+  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+  #         parse_json: true
+  #     - name: Snyk image scan
+  #       uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+  #       with:
+  #         image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
+  #         args: --file=Dockerfile --severity-threshold=critical --fail-on=all
+  #     - name: Docker Image output
+  #       run: docker images
+  #     - name: Output job summary
+  #       run: |
+  #         echo "Network that will be deployed: ${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
+
+  # push-storybook:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - setup-tags
+  #     - snyk-scan-deps-licences
+  #     - snyk-scan-code
+  #   steps:
+  #     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+  #       with:
+  #         role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+  #         app_name: 'dashboard'
+  #         step_name: 'push-story'
+  #         secret_prefix: 'DOCKERHUB_PRIVATE'
+  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
+  #         parse_json: true
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+  #       with:
+  #         username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
+  #         password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
+
+  #     - name: Docker build and push
+  #       uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
+  #       with:
+  #         file: ./Dockerfile
+  #         push: true
+  #         context: .
+  #         tags: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
+  #         labels: ${{ needs.setup-tags.outputs.storybook-labels }}
+  #         target: 'storybook'
+  #         build-args: |
+  #           NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+  #           NPM_LOCAL_CACHE=.cache/
+  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+  #       with:
+  #         role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+  #         app_name: 'dashboard'
+  #         step_name: 'push-storybook'
+  #         secret_prefix: 'SNYK'
+  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+  #         parse_json: true
+  #     - name: Snyk image scan
+  #       uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
+  #       with:
+  #         image: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
+  #         args: --file=Dockerfile --severity-threshold=critical --fail-on=all
+  #     - name: Docker Image output
+  #       run: docker images
+  #     - name: Output job summary
+  #       run: |
+  #         echo "Network that will be deployed:${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
 
   push-storybook:
-    runs-on: ubuntu-latest
+    name: (PRIVATE) Dashboard docker AMD
     needs:
       - setup-tags
       - snyk-scan-deps-licences
       - snyk-scan-code
-    steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-story'
-          secret_prefix: 'DOCKERHUB_PRIVATE'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
-          parse_json: true
-      - name: Login to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{env.DOCKERHUB_PRIVATE_USERNAME}}
-          password: ${{env.DOCKERHUB_PRIVATE_TOKEN}}
-
-      - name: Docker build and push
-        uses: docker/build-push-action@c56af957549030174b10d6867f20e78cfd7debc5
-        with:
-          file: ./Dockerfile
-          push: true
-          context: .
-          tags: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
-          labels: ${{ needs.setup-tags.outputs.storybook-labels }}
-          target: 'storybook'
-          build-args: |
-            NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-            NPM_LOCAL_CACHE=.cache/
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'push-storybook'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Snyk image scan
-        uses: snyk/actions/docker@b98d498629f1c368650224d6d212bf7dfa89e4bf # v0.4.0
-        with:
-          image: docker.io/radixdlt/dapps-dashboard-storybook:${{ needs.setup-tags.outputs.tag-with-network }}
-          args: --file=Dockerfile --severity-threshold=critical --fail-on=all
-      - name: Docker Image output
-        run: docker images
-      - name: Output job summary
-        run: |
-          echo "Network that will be deployed:${{ needs.setup-tags.outputs.network-name }}" >> $GITHUB_STEP_SUMMARY
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
+    with:
+      runs_on: ubuntu-latest
+      image_registry: 'docker.io'
+      image_organization: 'radixdlt'
+      target: 'storybook'
+      image_name: 'dapps-dashboard-storybook'
+      tag: ${{ needs.setup-tags.outputs.tag-with-network }}
+      context: './'
+      dockerfile: './Dockerfile'
+      platforms: 'linux/amd64'
+      scan_image: true
+      provenance: false
+      snyk_target_ref: ${{ github.ref_name }}
+      with_sbom: false
+      build-args: |
+        NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+        NPM_LOCAL_CACHE=.cache/
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
