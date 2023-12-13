@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NonFungibleResource } from '@api/utils/entities/resource'
+  import type { NonFungibleResource } from '@api/_deprecated/utils/entities/resource'
   import type { NonFungible } from '@api/utils/nfts'
   import { resourcesCacheClient } from '@api/utils/resource-cache-client'
   import type {

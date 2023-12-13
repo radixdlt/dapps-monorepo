@@ -8,8 +8,9 @@
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
-  import type { Validator } from '@api/utils/entities/validator'
-  import type { ClaimNft } from '@api/utils/nfts/claim-nft'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
+  import type { ClaimNft } from '@api/_deprecated/utils/nfts/claim-nft'
+
   export let readyToClaim: {
     validator: Validator
     xrdAmount: string

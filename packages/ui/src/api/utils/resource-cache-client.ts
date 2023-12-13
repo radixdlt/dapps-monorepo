@@ -1,12 +1,12 @@
-import { callApi } from '@api/gateway'
+import { callApi } from '@api/_deprecated/gateway'
 import {
   transformFungibleResource,
   transformNonFungibleResource,
   type FungibleResource,
   type NftGlobalId,
   type NonFungibleResource
-} from './entities/resource'
-import { transformNft, type NonFungible } from './nfts'
+} from '../_deprecated/utils/entities/resource'
+import { transformNft, type NonFungible, type NonFungibleAddress } from './nfts'
 import type { StreamTransactionsResponse } from '@common/gateway-sdk'
 
 export type ResourceCacheClient = ReturnType<typeof ResourceCacheClient>
@@ -15,7 +15,10 @@ export const ResourceCacheClient = () => {
 
   const fungibleResources = new Map<string, FungibleResource>()
   const nonFungibleResources = new Map<string, NonFungibleResource>()
-  const nonFungibleResourcesData = new Map<NftGlobalId, NonFungible>()
+  const NonFungibles = new Map<
+    NonFungibleAddress['nonFungibleAddress'],
+    NonFungible
+  >()
 
   const queryFungibles = (addresses: string[]) => {
     const addressesToQuery = addresses.filter(
@@ -35,7 +38,9 @@ export const ResourceCacheClient = () => {
     )
   }
 
-  const queryNonFungiblesData = (addresses: NftGlobalId[]) => {
+  const queryNonFungiblesData = (
+    addresses: NonFungibleAddress['nonFungibleAddress'][]
+  ) => {
     const addressesToQuery = addresses.filter(
       (address) => !queriedResources.has(address)
     )
@@ -56,7 +61,7 @@ export const ResourceCacheClient = () => {
       Array.from(individualResources.entries()).map(([address, nftIds]) =>
         callApi('getNonFungibleData', address, nftIds).map((data) => {
           data.forEach((nftDetails) => {
-            nonFungibleResourcesData.set(
+            NonFungibles.set(
               `${address}:${nftDetails.non_fungible_id}`,
               transformNft(address, nftDetails)
             )
@@ -103,10 +108,7 @@ export const ResourceCacheClient = () => {
       queriedResources.add(`${resource.address}:${resource.id}`)
     )
     resources.forEach((resource) => {
-      nonFungibleResourcesData.set(
-        `${resource.address}:${resource.id}`,
-        resource
-      )
+      NonFungibles.set(`${resource.address}:${resource.id}`, resource)
     })
   }
 
@@ -119,7 +121,7 @@ export const ResourceCacheClient = () => {
     addNonFungiblesData,
     fungibleResources,
     nonFungibleResources,
-    nonFungibleResourcesData
+    nonFungibleResourcesData: NonFungibles
   }
 }
 

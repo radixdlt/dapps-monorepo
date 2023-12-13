@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import SimplePicker from '@components/_base/picker/simple-picker/SimplePicker.svelte'
   import type { UptimeValue } from '../validator-list/UptimeHeader.svelte'
   import { truncateNumber } from '@utils'

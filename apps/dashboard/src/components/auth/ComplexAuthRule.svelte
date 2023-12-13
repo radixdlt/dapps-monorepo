@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { AccessRuleNode } from '@api/utils/auth'
+  import type { AccessRuleNode } from '@api/_deprecated/utils/auth'
   import ProofRule from './proof-rules/ProofRule.svelte'
   import AllOfAnyOf from './AccessRuleCollection.svelte'
-  import type { FungibleResource } from '@api/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
+  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
+  import type { NonFungible } from '@api/_deprecated/utils/nfts'
 
   export let rule: AccessRuleNode
 

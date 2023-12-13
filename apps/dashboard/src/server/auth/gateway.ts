@@ -1,5 +1,5 @@
 import { ResultAsync } from 'neverthrow'
-import { getSingleEntityDetails } from '@api/gateway'
+import { getSingleEntityDetails } from '@api/_deprecated/gateway'
 
 export type GatewayService = ReturnType<typeof GatewayService>
 

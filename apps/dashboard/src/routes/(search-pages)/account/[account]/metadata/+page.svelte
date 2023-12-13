@@ -4,9 +4,7 @@
 
   export let data: LayoutData
 
-  const metadata = data.promises.accountData.then(
-    ({ details: { metadata } }) => metadata.items
-  )
+  const metadata = data.promises.account.then(({ metadata }) => metadata.all)
 </script>
 
 <div class="card">

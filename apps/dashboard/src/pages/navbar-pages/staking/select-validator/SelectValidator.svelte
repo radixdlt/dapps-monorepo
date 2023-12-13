@@ -2,7 +2,7 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import { selectedValidators } from '../Validators.svelte'
   import { connected } from '@stores'
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
 
   export let text: string
   export let validator: Promise<Validator>

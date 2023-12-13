@@ -1,15 +1,8 @@
 <script lang="ts">
-  import type { AuthInfo } from '@api/utils/auth'
-
-  import type { FungibleResource } from '@api/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
+  import type { AuthInfo } from '@api/_deprecated/utils/auth'
   import RuleRow from './RuleRow.svelte'
 
   export let auth: AuthInfo
-  export let tokenInfo: {
-    fungibles: Promise<FungibleResource[]>
-    nonFungibles: Promise<NonFungible[]>
-  }
   export let hideRules: Set<string> = new Set()
 </script>
 

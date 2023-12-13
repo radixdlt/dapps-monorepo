@@ -11,7 +11,7 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { createEventDispatcher } from 'svelte'
-  import type { Validator } from '@api/utils/entities/validator'
+  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import RecentUptimeDetail from './RecentUptimeDetail.svelte'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
   import SummaryMetadata from '@dashboard-pages/search-pages/SummaryMetadata.svelte'

@@ -1,13 +1,10 @@
 <script lang="ts">
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
-  import type {
-    FungibleResource,
-    NonFungibleResource
-  } from '@api/utils/entities/resource'
+  import type { NonFungibleResource } from '@api/_deprecated/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Resource from '../resource/Resource.svelte'
-  import type { NonFungible } from '@api/utils/nfts'
   import NftDataRow from './NftDataRow.svelte'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let nft: Promise<NonFungible>
   export let resource: Promise<NonFungibleResource>
@@ -18,11 +15,6 @@
       iconUrl: string
     }[]
   >
-
-  export let tokenInfo: {
-    fungibles: Promise<FungibleResource[]>
-    nonFungibles: Promise<NonFungible[]>
-  }
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
@@ -81,7 +73,7 @@
 
 <h2 class="resource-card-header">Belongs To:</h2>
 
-<Resource {resource} {associatedDapps} showAddressInMetadata {tokenInfo} />
+<Resource {resource} {associatedDapps} showAddressInMetadata />
 
 <style lang="scss">
   .nft-image {

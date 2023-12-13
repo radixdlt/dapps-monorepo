@@ -1,4 +1,4 @@
-import { getAccountData } from '@api/utils/entities/resource'
+import { getAccountData } from '@api/_deprecated/utils/entities/resource'
 import { xrdAddress } from '@stores'
 
 let xrd: string | undefined

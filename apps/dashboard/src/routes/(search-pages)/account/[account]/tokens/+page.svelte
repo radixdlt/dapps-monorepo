@@ -1,37 +1,47 @@
 <script lang="ts">
-  import type { FungibleResource } from '@api/utils/entities/resource'
   import type { LayoutData } from '../$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
+  import type { FungibleResource } from '@api/utils/entities/resource/fungible'
+  import type { Account } from '@api/utils/entities/component/account'
 
   export let data: LayoutData
 
-  const transformFungibleTokenResource = ({
-    address,
-    value: amount,
-    metadata: {
-      standard: { symbol, icon_url, tags }
-    }
-  }: FungibleResource): Token => ({
-    linksTo: `/resource/${address}`,
-    numberOfTags: tags?.value.length ?? 0,
-    amount,
-    symbol: symbol?.value,
-    address,
-    iconUrl: icon_url?.value.href
-  })
+  const transformFungibleTokenResource =
+    (account: Account) =>
+    ({
+      address,
+      metadata: {
+        expected: { symbol, icon_url, tags }
+      }
+    }: FungibleResource): Token => ({
+      linksTo: `/resource/${address}`,
+      numberOfTags: tags?.value?.length ?? 0,
+      amount: account.resources.fungible.find(
+        (fungible) => fungible.address === address
+      )!.value,
+      symbol: symbol?.value,
+      address,
+      iconUrl: icon_url?.value?.href
+    })
 
   $: xrdAddress = $xrdAddressStore
 
   $: promise = xrdAddress
-    ? data.promises.accountData.then(({ fungible }) => {
+    ? Promise.all([
+        data.promises.account,
+        data.promises.fungibleResources
+      ]).then(([account, fungibles]) => {
         const { [xrdAddress!]: xrdRaw, ...tokensRaw } = indexBy(
           prop('address'),
-          fungible
+          fungibles
         )
-        const xrd = xrdRaw ? transformFungibleTokenResource(xrdRaw) : undefined
+
+        const xrd = xrdRaw
+          ? transformFungibleTokenResource(account)(xrdRaw)
+          : undefined
         const tokens = Object.values(tokensRaw)
           .filter(
             (fungibleResource) =>
@@ -57,7 +67,7 @@
                 return false
               })
           )
-          .map(transformFungibleTokenResource)
+          .map(transformFungibleTokenResource(account))
 
         return { xrd, tokens }
       })

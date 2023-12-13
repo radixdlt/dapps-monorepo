@@ -4,7 +4,7 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformComponent } from '@api/utils/entities/component'
+import { transformComponent } from '@api/_deprecated/utils/entities/component'
 
 export const prerender = false
 

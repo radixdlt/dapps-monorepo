@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Component } from '@api/utils/entities/component'
+  import type { Component } from '@api/_deprecated/utils/entities/component'
   import SummaryTab from '../SummaryTab.svelte'
 
   export let component: Promise<Component>

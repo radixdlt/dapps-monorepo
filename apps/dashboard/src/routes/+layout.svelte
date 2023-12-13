@@ -27,7 +27,7 @@
   import LogoIcon from '@images/dashboard-logo.svg'
   import Footer from '@components/footer/Footer.svelte'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
-  import { callApi } from '@api/gateway'
+  import { callApi } from '@api/_deprecated/gateway'
   import { errorPage } from '../stores'
   import { PUBLIC_NETWORK_NAME } from '$env/static/public'
   import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@constants'

@@ -1,4 +1,4 @@
-import type { GatewayError } from '@api/gateway'
+import type { GatewayError } from '@api/_deprecated/gateway'
 import type { ResultAsync } from 'neverthrow'
 import { errorPage } from './stores'
 

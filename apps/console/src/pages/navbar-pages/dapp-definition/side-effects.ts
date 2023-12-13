@@ -1,9 +1,12 @@
 import {
   getAccountData,
   type DecoratedAccount
-} from '@api/utils/entities/resource'
+} from '@api/_deprecated/utils/entities/resource'
 import type { Account } from '@stores'
-import { getStringMetadata, getVectorMetadata } from '@api/utils/metadata'
+import {
+  getStringMetadata,
+  getVectorMetadata
+} from '@api/_deprecated/utils/metadata'
 
 export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>

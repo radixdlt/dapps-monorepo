@@ -2,15 +2,21 @@
   import FungibleTokenCard from '@components/fungible-token-card/FungibleTokenCard.svelte'
   import type { Token } from '../types'
   import NoTokens from '../NoTokens.svelte'
+  import BigNumber from 'bignumber.js'
 
   export let data: Promise<{
     tokens: Token[]
     xrd: Token | undefined
   }>
+
+  $: filteredData = data.then(({ tokens, xrd }) => ({
+    tokens: tokens.filter((token) => new BigNumber(token.amount).gt(0)),
+    xrd
+  }))
 </script>
 
 <div class="tokens">
-  {#await data}
+  {#await filteredData}
     {#each Array(4) as _}
       <FungibleTokenCard loading />
     {/each}

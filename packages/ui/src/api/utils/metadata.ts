@@ -11,22 +11,6 @@ import type {
 import { isNil, pipe } from 'ramda'
 import sanitizeHtml from 'sanitize-html'
 
-export type KnownStandardTypes = {
-  name: MetadataStringValueTypeEnum
-  description: MetadataStringValueTypeEnum
-  tags: MetadataStringArrayValueTypeEnum
-  owner_badge: MetadataStringValueTypeEnum
-  pool_vault_number: MetadataStringValueTypeEnum
-  pool_resources: MetadataStringArrayValueTypeEnum
-  pool_unit: MetadataStringValueTypeEnum
-  validator: MetadataStringValueTypeEnum
-  symbol: MetadataStringValueTypeEnum
-  icon_url: MetadataUrlValueTypeEnum
-  info_url: MetadataUrlValueTypeEnum
-  pool: MetadataGlobalAddressValueTypeEnum
-  key_image_url: MetadataUrlValueTypeEnum
-}
-
 export type MetadataTypeToNativeType = {
   [MetadataStringValueTypeEnum.String]: string
   [MetadataUrlValueTypeEnum.Url]: URL
@@ -81,8 +65,11 @@ const getValue = (typedValue: MetadataTypedValue) => {
   }
 }
 
-const isStandardEntry = <T extends (keyof KnownStandardTypes)[]>(
-  standard: T,
+const isStandardEntry = <
+  StandardMetadata extends { [key in MetadataKey]: unknown },
+  MetadataKey extends string | number | symbol = keyof StandardMetadata
+>(
+  standard: MetadataKey[],
   item: EntityMetadataItem
 ): item is EntityMetadataItem & { key: typeof key } => {
   const key = standard.find((key) => item.key === key)!
@@ -90,17 +77,21 @@ const isStandardEntry = <T extends (keyof KnownStandardTypes)[]>(
   return false
 }
 
-export const transformMetadata = <T extends (keyof KnownStandardTypes)[]>(
+export const transformMetadata = <
+  ExpectedMetadata extends { [key in MetadataKey]: MetadataValue },
+  MetadataKey extends string | number | symbol = keyof ExpectedMetadata,
+  MetadataValue = ExpectedMetadata[MetadataKey]
+>(
   metadata: {
     metadata: StateEntityDetailsVaultResponseItem['metadata']
     explicit_metadata?: StateEntityDetailsVaultResponseItem['explicit_metadata']
   },
-  standardEntries: T
+  standardEntries: MetadataKey[]
 ) => {
-  let standard = {} as {
-    [K in T[number]]: {
+  let expected = {} as {
+    [K in MetadataKey]: {
       item: EntityMetadataItem
-      value: MetadataTypeToNativeType[KnownStandardTypes[K]]
+      value: ExpectedMetadata[K]
     }
   }
 
@@ -108,23 +99,23 @@ export const transformMetadata = <T extends (keyof KnownStandardTypes)[]>(
 
   for (const item of metadata.metadata?.items) {
     if (isStandardEntry(standardEntries, item)) {
-      let value = getValue(item.value.typed)
+      let value = getValue(
+        item.value.typed
+      ) as (typeof expected)[typeof item.key]['value']
       // @ts-ignore
-      standard[item.key] = {
+      expected[item.key] = {
         item,
-        value:
-          value as MetadataTypeToNativeType[KnownStandardTypes[typeof item.key]]
+        value
       }
     }
   }
 
   return {
-    standard,
+    expected,
     explicit,
     nonStandard:
       metadata.metadata?.items.filter(
-        (item) =>
-          !standardEntries.includes(item.key as keyof KnownStandardTypes)
+        (item) => !standardEntries.includes(item.key as MetadataKey)
       ) ?? [],
     all: metadata.metadata?.items ?? []
   }
