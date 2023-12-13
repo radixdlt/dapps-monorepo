@@ -110,7 +110,8 @@ const getPoolUnitData =
               redeemableAmount: getRedeemablePoolTokenAmount(
                 token,
                 unit,
-                account
+                account,
+                pool
               )
             }
           }

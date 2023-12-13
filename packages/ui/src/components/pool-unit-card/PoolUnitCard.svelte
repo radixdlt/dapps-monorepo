@@ -2,6 +2,7 @@
   import Address from '@components/_base/address/Address.svelte'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
+  import { formatTokenValue } from '@utils'
   import type BigNumber from 'bignumber.js'
 
   export let poolUnit: {
@@ -41,7 +42,9 @@
         <TokenIcon iconUrl={token.icon?.href} />
         {token.name}
       </div>
-      <div class="bold-text">{token.redeemableAmount.toString()}</div>
+      <div class="bold-text">
+        {formatTokenValue(token.redeemableAmount).displayValue}
+      </div>
     </div>
   {/each}
 </div>
