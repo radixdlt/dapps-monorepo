@@ -14,45 +14,16 @@ const gatewayApi = GatewayApiClient.initialize({
   basePath: CURRENT_NETWORK?.url
 })
 
-type ValidationError = {
-  errors: unknown
-  type: string
-  title: string
-  status: number
-  traceId: string
-}
-
 type RawGatewayError = {
-  errorResponse: ErrorResponse | ValidationError
+  errorResponse: ErrorResponse
 }
-
-export type GatewayError = {
-  status?: number
-  message: string
-  traceId?: string
-}
-
-const isValidationError = (error: Object): error is ValidationError =>
-  error.hasOwnProperty('status')
 
 const isGatewayError = (error: any): error is RawGatewayError =>
   error.hasOwnProperty('errorResponse')
 
-const handleError = (error: unknown): GatewayError => {
+const handleError = (error: unknown): ErrorResponse => {
   if (isGatewayError(error)) {
-    if (isValidationError(error.errorResponse)) {
-      return {
-        status: error.errorResponse.status,
-        message: error.errorResponse.title,
-        traceId: error.errorResponse.traceId
-      }
-    } else {
-      return {
-        status: error.errorResponse.code,
-        message: error.errorResponse.message,
-        traceId: error.errorResponse.trace_id
-      }
-    }
+    return error.errorResponse
   } else {
     return {
       message: 'Unknown network error.'

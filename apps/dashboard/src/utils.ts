@@ -1,10 +1,10 @@
-import type { GatewayError } from '@api/_deprecated/gateway'
 import type { ResultAsync } from 'neverthrow'
 import { errorPage } from './stores'
+import type { ErrorResponse } from '@common/gateway-sdk'
 
 export const handleGatewayResult =
-  (errorMessage?: (e: GatewayError) => string) =>
-  <T, E extends GatewayError>(result: ResultAsync<T, E>) =>
+  (errorMessage?: (e: ErrorResponse) => string) =>
+  <T, E extends ErrorResponse>(result: ResultAsync<T, E>) =>
     result
       .mapErr((e) => {
         errorPage.set({

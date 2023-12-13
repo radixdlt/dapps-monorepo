@@ -29,7 +29,7 @@ import {
   getPoolUnits,
   type PoolUnit
 } from '@api/utils/entities/resource/fungible/pool-unit'
-import { getResourcesFromAuth } from '../../utils'
+import { getResourcesFromAuth, handleLookupGatewayResult } from '../../utils'
 
 const ERROR_MSG = 'Failed to load account data.'
 
@@ -123,7 +123,7 @@ const getPoolUnitData =
 export const load: LayoutLoad = ({ params }) => {
   const account = pipe(
     () => callApi('getEntityDetailsVaultAggregated', [params.account]),
-    handleGatewayResult((_) => ERROR_MSG),
+    handleLookupGatewayResult,
     andThen((accounts) => accounts[0]),
     andThen(transformAccount)
   )()

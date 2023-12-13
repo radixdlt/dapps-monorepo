@@ -1,4 +1,5 @@
 import type {
+  ErrorResponse,
   LedgerState,
   StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsResponseFungibleResourceDetails,
@@ -15,8 +16,7 @@ import { type _Entity } from '..'
 import {
   callApi,
   getEntityDetails,
-  getNonFungibleLocation,
-  type GatewayError
+  getNonFungibleLocation
 } from '@api/_deprecated/gateway'
 import BigNumber from 'bignumber.js'
 import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
@@ -266,7 +266,7 @@ export const transformValidatorResponse =
       >[]
       ledger_state: LedgerState
     },
-    GatewayError
+    ErrorResponse
   > =>
     ResultAsync.fromPromise(
       (async () => {
@@ -306,7 +306,7 @@ export const transformValidatorResponse =
           ledger_state
         }
       })(),
-      (e) => e as GatewayError
+      (e) => e as ErrorResponse
     )
 
 export const transformValidator = (
@@ -372,7 +372,7 @@ const appendUptime =
   <T, K>(validators: ValidatorListItem<T, false, K>[]) =>
   async (
     entities: ValidatorCollectionItem[]
-  ): Promise<Result<ValidatorListItem<T, true, K>[], GatewayError>> => {
+  ): Promise<Result<ValidatorListItem<T, true, K>[], ErrorResponse>> => {
     const result = await getUptimePercentages(entities)
 
     if (result.isErr()) return errAsync(result.error)
