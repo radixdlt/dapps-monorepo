@@ -19,7 +19,11 @@
     ],
     [
       { id: 'recent-transactions', label: 'Recent Transactions' },
-      { id: 'metadata', label: 'Metadata' }
+      { id: 'metadata', label: 'Metadata' },
+      {
+        id: 'auth',
+        label: 'Configuration'
+      }
     ]
   ]}
   on:navigate={({ detail }) => goto(detail)}

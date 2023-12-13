@@ -18,6 +18,10 @@
       {
         id: 'metadata',
         label: 'Metadata'
+      },
+      {
+        id: 'auth',
+        label: 'Configuration'
       }
     ]
   ]}
