@@ -168,7 +168,7 @@
       >
         {#await validators}
           {#each Array(3) as _}
-            <ValidatorRow input={'loading'} {columnIds} />
+            <ValidatorRow input={'loading'} />
           {/each}
         {:then validators}
           {#each validators as validator}
@@ -177,7 +177,6 @@
                 validator,
                 selectedUptime
               }}
-              {columnIds}
               showStakeInfo
               on:click={() => goto(`/network-staking/${validator.address}`)}
               on:claim-validator={(e) => {
@@ -233,7 +232,7 @@
   >
     {#await validators}
       {#each Array(15) as _}
-        <ValidatorRow input={'loading'} {columnIds} />
+        <ValidatorRow input={'loading'} />
       {/each}
     {:then validators}
       {#each validators as validator}
@@ -242,7 +241,6 @@
             validator,
             selectedUptime
           }}
-          {columnIds}
           on:click={() => goto(`/network-staking/${validator.address}`)}
         />
       {/each}
