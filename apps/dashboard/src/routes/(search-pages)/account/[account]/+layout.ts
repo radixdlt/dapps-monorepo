@@ -29,6 +29,7 @@ import {
   getPoolUnits,
   type PoolUnit
 } from '@api/utils/entities/resource/fungible/pool-unit'
+import { getResourcesFromAuth } from '../../utils'
 
 const ERROR_MSG = 'Failed to load account data.'
 
@@ -300,7 +301,8 @@ export const load: LayoutLoad = ({ params }) => {
       poolData,
       fungibleResources,
       nonFungibleResources,
-      nfts
+      nfts,
+      authResources: account.then(({ auth }) => getResourcesFromAuth(auth))
     }
   }
 }
