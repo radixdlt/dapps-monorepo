@@ -6,7 +6,6 @@ import {
 } from '../metadata'
 import type { Component } from './component'
 import type { Package } from './package'
-import type { Pool } from './pool'
 import type { PoolUnit } from './pool-unit'
 import type { Resource } from './resource'
 import type { StakeUnit } from './stake-unit'
@@ -22,7 +21,6 @@ export type Entity =
   | Validator
   | Resource
   | PoolUnit
-  | Pool
   | Component
   | StakeUnit
 
