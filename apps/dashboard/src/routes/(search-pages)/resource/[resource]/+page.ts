@@ -14,10 +14,9 @@ import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
 import type { EntityType } from '@common/ret'
 import { http } from '@common/http'
-import {
-  hasValidatorMetadataSet,
-  verifyStakeUnit
-} from '@api/_deprecated/utils/entities/stake-unit'
+import { hasValidatorMetadataSet } from '@api/utils/entities/component/validator'
+import { verifyStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
+import { verifyClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
 
 const ERROR_MSG = 'Failed to load resource data.'
 
@@ -70,9 +69,16 @@ export const load: PageLoad = async ({ params }) => {
   const resource = await getLookupEntity(params.resource)
 
   const isValidStakeUnit = await verifyStakeUnit(resource)
+  const isValidClaimNft = await verifyClaimNft(resource)
 
-  if (hasValidatorMetadataSet(resource) && isValidStakeUnit) {
-    throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
+  console.log(isValidClaimNft, isValidStakeUnit)
+
+  if (hasValidatorMetadataSet(resource)) {
+    if (isValidStakeUnit) {
+      throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
+    } else if (isValidClaimNft) {
+      throw redirect(308, `/claim_nft/${encodeURIComponent(params.resource)}`)
+    }
   }
   const transformedResource = await transformResource(
     resource,

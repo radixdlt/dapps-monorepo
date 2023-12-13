@@ -1,5 +1,5 @@
-import { transformFungibleResource } from '@api/_deprecated/utils/entities/resource.js'
-import { resourceToStakeUnit } from '@api/_deprecated/utils/entities/stake-unit.js'
+import { transformFungibleResource } from '@api/utils/entities/resource/fungible/index.js'
+import { resourceToStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit.js'
 import {
   getAssociatedDapps,
   getLookupEntity,

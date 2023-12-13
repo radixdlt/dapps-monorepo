@@ -4,5 +4,5 @@
 
   export let data: LayoutData
 
-  goto(`${data.address}/metadata`, { replaceState: true })
+  goto(`${data.address}/summary`, { replaceState: true })
 </script>

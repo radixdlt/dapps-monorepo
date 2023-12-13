@@ -4,14 +4,17 @@
   import SummaryTabHeading from './SummaryTabHeading.svelte'
   import { xrdAddress } from '@stores'
 
-  export let entity: ComponentProps<SummaryTabHeading>['entity']
-  export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata']
+  export let entity: ComponentProps<SummaryTabHeading>['entity'] & any
+  export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata'] &
+    any
   export let nonMetadataItems: ComponentProps<SummaryMetadata>['nonMetadataItems']
   export let associatedDapps: ComponentProps<SummaryMetadata>['associatedDapps']
   export let omittedKeys: ComponentProps<SummaryMetadata>['omittedKeys'] = []
   export let redeemableTokens: ComponentProps<SummaryMetadata>['redeemableTokens'] =
     undefined
   export let behaviors: ComponentProps<SummaryMetadata>['behaviors'] = undefined
+
+  $: isXRD = entity.then((_entity: any) => _entity.address === $xrdAddress)
 </script>
 
 <div class="summary-tab">
@@ -23,7 +26,7 @@
     {omittedKeys}
     {redeemableTokens}
     {behaviors}
-    isXRD={entity.then(({ address }) => address === $xrdAddress)}
+    {isXRD}
   />
 </div>
 

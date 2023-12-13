@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import SummaryTab from '../SummaryTab.svelte'
-  import type { StakeUnit } from '@api/_deprecated/utils/entities/stake-unit'
   import { formatTokenValue } from '@utils'
+  import type { StakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
 
   export let stakeUnit: Promise<StakeUnit>
   export let associatedDapps: ComponentProps<SummaryTab>['associatedDapps']
@@ -12,11 +12,11 @@
 <div class="card">
   <SummaryTab
     entity={stakeUnit}
-    standardMetadata={stakeUnit.then(({ metadata: { standard } }) => standard)}
+    standardMetadata={stakeUnit.then(({ metadata: { expected } }) => expected)}
     nonMetadataItems={stakeUnit.then((stakeUnit) => [
       [
         'associated validator',
-        stakeUnit.metadata.standard.validator?.value,
+        stakeUnit.metadata.expected.validator?.value,
         'GlobalAddress'
       ],
       [

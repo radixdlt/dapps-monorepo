@@ -5,8 +5,10 @@ import { getStringMetadata } from '@api/_deprecated/utils/metadata'
 import type { Validator, ValidatorListItem } from '../../component/validator'
 import type {
   ClaimNftCollection,
-  SystemMetadata as ClaimSystemMetadata
+  SystemMetadata as ClaimSystemMetadata,
+  SystemMetadata
 } from './claim-nft-collection'
+import { transformMetadata } from '@api/utils/metadata'
 
 export type DefaultNonFungibleResource = Resource<
   'non-fungible',
@@ -32,6 +34,28 @@ const isClaimNftCollection = (
 
   return validator !== undefined
 }
+
+export const resourceToClaimNftCollection = (
+  resource: DefaultNonFungibleResource
+): ClaimNftCollection => ({
+  ...resource,
+  type: 'resource',
+  nonFungibleType: 'claim-nft-collection',
+  metadata: {
+    ...resource.metadata,
+    standard: {
+      ...resource.metadata.expected,
+      ...transformMetadata<SystemMetadata>(
+        {
+          metadata: {
+            items: resource.metadata.all
+          }
+        },
+        ['validator']
+      ).expected
+    }
+  } as any // svelte-check complains otherwise
+})
 
 export const transformNonFungibleResource = (
   entity: StateEntityDetailsVaultResponseItem,

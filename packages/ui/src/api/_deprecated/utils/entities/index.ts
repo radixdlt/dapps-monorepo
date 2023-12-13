@@ -8,7 +8,6 @@ import type { Component } from './component'
 import type { Package } from './package'
 import type { PoolUnit } from './pool-unit'
 import type { Resource } from './resource'
-import type { StakeUnit } from './stake-unit'
 import type { Validator } from './validator'
 import type {
   EntityMetadataItem,
@@ -16,13 +15,7 @@ import type {
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 
-export type Entity =
-  | Package
-  | Validator
-  | Resource
-  | PoolUnit
-  | Component
-  | StakeUnit
+export type Entity = Package | Validator | Resource | PoolUnit | Component
 
 export type _Entity<
   Type extends string,
