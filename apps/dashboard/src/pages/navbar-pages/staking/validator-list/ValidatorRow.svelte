@@ -6,9 +6,7 @@
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { connected } from '@stores'
   import type { UptimeValue } from './UptimeHeader.svelte'
-  import { ColumnIds, type TransformedValidator } from './ValidatorList.svelte'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import Section from '@components/_base/table/grid-table/Section.svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
   import StakingInfo from './staked/StakingInfo.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
@@ -18,6 +16,7 @@
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
   import NotTop100Warning from './NotTop100Warning.svelte'
+  import type { TransformedValidator } from './ValidatorList.svelte'
 
   export let input:
     | {
@@ -26,7 +25,6 @@
       }
     | 'loading'
 
-  export let columnIds: ColumnIds[]
   export let showStakeInfo = false
 
   $: uptime =
@@ -41,186 +39,154 @@
     input !== 'loading' ? !input.validator.percentageTotalStake : false
 </script>
 
-<Section {columnIds} let:columnIds>
-  <div class="grid-wrapper full-width">
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div
-      class="validator-row card"
-      class:extension={top3Percent || showStakeInfo || notTop100}
-      class:top3Percent
-      on:click
-    >
-      {#if $connected}
-        <Section {columnIds} renderAt={ColumnIds.stakingIconBookmark}>
-          <div class="icon" style:min-width="2rem">
-            {#if showStakeInfo}
-              <div style:transform="translateX(-0.4rem)">
-                <IconNew icon={StakingIcon} --size="2.5rem" />
-              </div>
-            {:else if input === 'loading'}
-              <SkeletonLoader width={30} />
-            {:else}
-              <BookmarkValidator validator={input.validator} />
-            {/if}
+<div class="grid-wrapper full-width">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div
+    class="validator-row card"
+    class:extension={top3Percent || showStakeInfo || notTop100}
+    class:top3Percent
+    on:click
+  >
+    {#if $connected}
+      <div class="icon" style:min-width="2rem">
+        {#if showStakeInfo}
+          <div style:transform="translateX(-0.4rem)">
+            <IconNew icon={StakingIcon} --size="2.5rem" />
           </div>
-        </Section>
-      {/if}
+        {:else if input === 'loading'}
+          <SkeletonLoader width={30} />
+        {:else}
+          <BookmarkValidator validator={input.validator} />
+        {/if}
+      </div>
+    {/if}
 
-      <Section {columnIds} renderAt={ColumnIds.icon}>
-        <div class="padding" class:left-padded={!$connected}>
-          {#if input === 'loading'}
-            <NftImage />
-          {:else}
-            <NftImage
-              url={input.validator.metadata.standard.icon_url?.value.href}
-              defaultImageUrl={ValidatorPlaceholder}
-              width={64}
-              height={64}
-            />
-          {/if}
-        </div>
-      </Section>
-
-      <Section {columnIds} renderAt={ColumnIds.name}>
-        <div class="name">
-          <div class="dotted-overflow" style:max-width="15ch">
-            {#if input === 'loading'}
-              <SkeletonLoader width={100} />
-            {:else}
-              {input.validator.metadata.standard.name?.value ?? ''}
-            {/if}
-          </div>
-        </div>
-      </Section>
-
-      <Section {columnIds} renderAt={ColumnIds.address}>
-        <div class="center">
-          {#if input === 'loading'}
-            <SkeletonLoader width={80} />
-          {:else}
-            <Address
-              short
-              value={input.validator.address}
-              --background="var(--theme-surface-1)"
-            />
-          {/if}
-        </div>
-      </Section>
-
-      <Section {columnIds} renderAt={ColumnIds.totalStake}>
-        <div class="center padding" style:max-width="7rem">
-          {#if input === 'loading'}
-            <StakeDisplay validator={new Promise(() => {})} />
-          {:else}
-            <StakeDisplay validator={Promise.resolve(input.validator)} />
-          {/if}
-        </div>
-      </Section>
-
-      <Section {columnIds} renderAt={ColumnIds.ownerStake}>
-        <div class="center bold padding" style:white-space="nowrap">
-          {#if input === 'loading'}
-            <SkeletonLoader width={80} />
-          {:else}
-            {formatXRDValue(input.validator.ownerStake.toString())}
-          {/if}
-        </div>
-      </Section>
-
-      <Section
-        {columnIds}
-        renderAt={{ start: ColumnIds.apy, end: ColumnIds.uptime }}
-        let:columnIds
-      >
-        <div class="apy-box center">
-          <Section {columnIds} renderAt={ColumnIds.apy}>
-            <div class="apy apy-text-box no-overflow bold center">
-              {#if input === 'loading'}
-                <SkeletonLoader width={80} />
-              {:else}
-                {input.validator.percentageTotalStake
-                  ? `${truncateNumber(input.validator.apy)}%`
-                  : 'N/A'}
-                {#if input.validator.percentageTotalStake}
-                  <span class="subtext">per year</span>
-                {/if}
-              {/if}
-            </div>
-          </Section>
-
-          <Section {columnIds} renderAt={ColumnIds.feePercentage}>
-            <div class="apy-text-box no-overflow bold center fee">
-              {#if input === 'loading'}
-                <SkeletonLoader width={50} />
-              {:else}
-                {truncateNumber(input.validator.fee.percentage)}%
-              {/if}
-            </div>
-          </Section>
-
-          <Section {columnIds} renderAt={ColumnIds.uptime}>
-            <div class="uptime apy-text-box no-overflow bold center">
-              {#if input === 'loading'}
-                <SkeletonLoader width={80} />
-              {:else}
-                {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
-              {/if}
-            </div>
-          </Section>
-        </div>
-      </Section>
-
-      <Section {columnIds} renderAt={ColumnIds.acceptsStake}>
-        <div class="accepts-stake center">
-          {#if input === 'loading'}
-            <SkeletonLoader width={30} />
-          {:else}
-            <AcceptsStake value={input.validator.acceptsStake} />
-          {/if}
-        </div>
-      </Section>
-
-      {#if $connected}
-        <Section {columnIds} renderAt={ColumnIds.select}>
-          <div class="select center">
-            <SelectValidator
-              validator={input === 'loading'
-                ? new Promise(() => {})
-                : Promise.resolve(input.validator)}
-              text="SELECT"
-            />
-          </div>
-        </Section>
+    <div class="padding" class:left-padded={!$connected}>
+      {#if input === 'loading'}
+        <NftImage />
+      {:else}
+        <NftImage
+          url={input.validator.metadata.standard.icon_url?.value.href}
+          defaultImageUrl={ValidatorPlaceholder}
+          width={64}
+          height={64}
+        />
       {/if}
     </div>
 
-    {#if showStakeInfo}
-      <div
-        class="staking-info full-width"
-        class:extension={top3Percent || notTop100}
-      >
-        <StakingInfo
+    <div class="name">
+      <div class="dotted-overflow" style:max-width="15ch">
+        {#if input === 'loading'}
+          <SkeletonLoader width={100} />
+        {:else}
+          {input.validator.metadata.standard.name?.value ?? ''}
+        {/if}
+      </div>
+    </div>
+
+    <div class="center">
+      {#if input === 'loading'}
+        <SkeletonLoader width={80} />
+      {:else}
+        <Address
+          short
+          value={input.validator.address}
+          --background="var(--theme-surface-1)"
+        />
+      {/if}
+    </div>
+
+    <div class="center padding" style:max-width="7rem">
+      {#if input === 'loading'}
+        <StakeDisplay validator={new Promise(() => {})} />
+      {:else}
+        <StakeDisplay validator={Promise.resolve(input.validator)} />
+      {/if}
+    </div>
+
+    <div class="center bold padding" style:white-space="nowrap">
+      {#if input === 'loading'}
+        <SkeletonLoader width={80} />
+      {:else}
+        {formatXRDValue(input.validator.ownerStake.toString())}
+      {/if}
+    </div>
+
+    <div class="apy apy-text-box no-overflow bold center">
+      {#if input === 'loading'}
+        <SkeletonLoader width={80} />
+      {:else}
+        {input.validator.percentageTotalStake
+          ? `${truncateNumber(input.validator.apy)}%`
+          : 'N/A'}
+        {#if input.validator.percentageTotalStake}
+          <span class="subtext">per year</span>
+        {/if}
+      {/if}
+    </div>
+
+    <div class="apy-text-box no-overflow bold center fee">
+      {#if input === 'loading'}
+        <SkeletonLoader width={50} />
+      {:else}
+        {truncateNumber(input.validator.fee.percentage)}%
+      {/if}
+    </div>
+
+    <div class="uptime apy-text-box no-overflow bold center">
+      {#if input === 'loading'}
+        <SkeletonLoader width={80} />
+      {:else}
+        {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
+      {/if}
+    </div>
+
+    <div class="accepts-stake center">
+      {#if input === 'loading'}
+        <SkeletonLoader width={30} />
+      {:else}
+        <AcceptsStake value={input.validator.acceptsStake} />
+      {/if}
+    </div>
+
+    {#if $connected}
+      <div class="select center">
+        <SelectValidator
           validator={input === 'loading'
             ? new Promise(() => {})
             : Promise.resolve(input.validator)}
-          on:claim-validator
+          text="SELECT"
         />
       </div>
     {/if}
-
-    {#if top3Percent}
-      <div class="full-width" class:extension={notTop100}>
-        <TopValidatorWarning />
-      </div>
-    {/if}
-
-    {#if notTop100}
-      <div class="full-width">
-        <NotTop100Warning />
-      </div>
-    {/if}
   </div>
-</Section>
+
+  {#if showStakeInfo}
+    <div
+      class="staking-info full-width"
+      class:extension={top3Percent || notTop100}
+    >
+      <StakingInfo
+        validator={input === 'loading'
+          ? new Promise(() => {})
+          : Promise.resolve(input.validator)}
+        on:claim-validator
+      />
+    </div>
+  {/if}
+
+  {#if top3Percent}
+    <div class="full-width" class:extension={notTop100}>
+      <TopValidatorWarning />
+    </div>
+  {/if}
+
+  {#if notTop100}
+    <div class="full-width">
+      <NotTop100Warning />
+    </div>
+  {/if}
+</div>
 
 <style lang="scss">
   @mixin warning-border {
@@ -316,13 +282,6 @@
     white-space: nowrap;
   }
 
-  .apy-box {
-    display: grid;
-    grid-gap: 0;
-    grid-template-columns: subgrid;
-    grid-column: 1/-1;
-  }
-
   .apy {
     display: flex;
     gap: var(--spacing-md);
@@ -336,6 +295,8 @@
   }
 
   .apy-text-box {
+    align-self: center;
+    height: 2rem;
     border: 1px solid #e2e5ed;
     text-align: center;
     padding: var(--spacing-sm) 0;
