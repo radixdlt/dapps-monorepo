@@ -1,4 +1,4 @@
-import { callApi } from '@api/_deprecated/gateway'
+import { callApi } from '@api/gateway'
 import { getStringMetadata } from '@api/_deprecated/utils/metadata'
 import { getLinkedDappDefinitions } from '@api/_deprecated/utils/two-way-linking'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
@@ -50,9 +50,17 @@ export const getLookupEntity = (
     handleLookupGatewayResult
   )()
 
-export const handleLookupGatewayResult = handleGatewayResult((e) =>
-  e.status === 400 ? 'Invalid address. Please try again.' : e.message
-)
+export const handleLookupGatewayResult = handleGatewayResult((e) => {
+  if (
+    e.details?.type === 'InvalidRequestError' &&
+    e.details?.validation_errors[0].errors[0].includes(
+      "doesn't belong to this network"
+    )
+  ) {
+    return 'The entity you requested belongs to a different network.'
+  }
+  return e.code === 400 ? 'Invalid address. Please try again.' : e.message
+})
 
 export const getResourcesFromAuth = (authInfo: AuthInfo) => {
   let fungibleAddresses: string[] = []
