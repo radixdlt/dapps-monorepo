@@ -116,11 +116,9 @@
       iconSize: '1.3rem'
     }
   }[type]
-
-  $: if (isXRD && type === 'info-can-change') info = undefined
 </script>
 
-{#if info}
+{#if info && !(isXRD && type === 'info-can-change')}
   <div class="behavior">
     <div class="icon">
       <IconNew icon={info.icon} --size={info.iconSize} />
