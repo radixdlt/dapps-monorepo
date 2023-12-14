@@ -199,9 +199,9 @@
         <div>
           {#if $errorPage}
             <ErrorPage
-              status={$errorPage.status}
+              status={$errorPage.code}
               message={$errorPage.message}
-              traceId={$errorPage.traceId}
+              traceId={$errorPage.trace_id}
             />
           {:else}
             <slot />
