@@ -10,7 +10,7 @@
   import Behaviors from './Behaviors.svelte'
   import type { Resource } from '@api/_deprecated/utils/entities/resource'
 
-  export let isXRD = Promise.resolve(false)
+  export let isXRD: Promise<boolean> = Promise.resolve(false)
   export let standardMetadata: Promise<Entity['metadata']['standard']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
@@ -47,9 +47,9 @@
 
 <Metadata {expectedEntries} metadata={combined}>
   <svelte:fragment slot="extra-rows">
-    {#await standardMetadata then metadata}
+    {#await Promise.all([standardMetadata, isXRD]) then [metadata, isXRD]}
       <Row text="Tags">
-        <Tags showNetworkTag={false} slot="right" tags={metadata.tags?.value} />
+        <Tags showNetworkTag={isXRD} slot="right" tags={metadata.tags?.value} />
       </Row>
     {/await}
 

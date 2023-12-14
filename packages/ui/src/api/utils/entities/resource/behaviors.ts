@@ -69,6 +69,10 @@ const ruleToBehavior =
         case 'non_fungible_data_updater': {
           return 'nft-data-changeable'
         }
+        case 'depositor':
+        case 'withdrawer': {
+          return 'movement-restricted'
+        }
         case 'depositor_updater':
         case 'withdrawer_updater': {
           return 'movement-restricted-future'
