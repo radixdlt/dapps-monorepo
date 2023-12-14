@@ -35,6 +35,8 @@
 <style lang="scss">
   .tags {
     display: flex;
+    flex-wrap: wrap;
+    row-gap: var(--spacing-md);
     align-items: center;
   }
 
