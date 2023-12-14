@@ -199,6 +199,11 @@ describe('resource behaviors', () => {
       auth2.rules.withdrawer.rule.type = 'DenyAll'
 
       expect(getBehaviors(auth2)).toEqual(expectedBehaviors)
+
+      const auth3 = clone(authInfo)
+      auth3.rules.withdrawer.rule = mockAuthRule
+
+      expect(getBehaviors(auth3)).toEqual(expectedBehaviors)
     })
 
     it('should return movement restricted in future', () => {
