@@ -10,7 +10,7 @@
   import Behaviors from './Behaviors.svelte'
   import type { Resource } from '@api/utils/entities/resource'
 
-  export let isXRD = Promise.resolve(false)
+  export let useOfficialRadixTag = Promise.resolve(false)
   export let standardMetadata: Promise<Entity['metadata']['expected']>
   export let nonMetadataItems: Promise<Parameters<typeof metadataItem>[]>
   export let associatedDapps: Promise<
@@ -48,7 +48,7 @@
 
 <Metadata {expectedEntries} metadata={combined}>
   <svelte:fragment slot="extra-rows">
-    {#await Promise.all([standardMetadata, isXRD]) then [metadata, isXRD]}
+    {#await Promise.all( [standardMetadata, useOfficialRadixTag] ) then [metadata, isXRD]}
       <Row text="Tags">
         <Tags showNetworkTag={isXRD} slot="right" tags={metadata.tags?.value} />
       </Row>
@@ -73,7 +73,7 @@
       {/if}
     {/await}
 
-    {#await Promise.all([behaviors, isXRD]) then [behaviors, isXRD]}
+    {#await Promise.all( [behaviors, useOfficialRadixTag] ) then [behaviors, isXRD]}
       {#if behaviors}
         <Behaviors {isXRD} {behaviors} />
       {/if}
