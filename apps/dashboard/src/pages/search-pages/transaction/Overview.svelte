@@ -17,13 +17,20 @@
   <InfoBox>
     <AwaitedRow
       text="Status"
-      promise={tx.then(({ status }) => status)}
+      promise={tx.then(({ status, receipt }) => ({ status, receipt }))}
       let:data
     >
-      {#if data === 'CommittedSuccess'}
+      {#if data.status === 'CommittedSuccess'}
         <span class="text-success">Committed Success</span>
-      {:else if data === 'CommittedFailure' || data === 'Rejected'}
-        <span class="text-error">{data}</span>
+      {:else if data.status === 'CommittedFailure' || data.status === 'Rejected'}
+        <span style:text-align="right">
+          <div class="text-error">
+            {data.status}
+          </div>
+          <div class="subtext">
+            {data.receipt?.error_message}
+          </div>
+        </span>
       {:else}
         {data}
       {/if}
