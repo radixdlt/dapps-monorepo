@@ -7,9 +7,7 @@
 
 <Summary
   balanceChanges={data.promises.balanceChanges}
-  status={data.promises.tx.then(({ status }) =>
-    status === 'CommittedSuccess' ? 'Complete' : 'Failure'
-  )}
+  status={data.promises.status.then((status) => status.intent_status)}
   timestamp={data.promises.tx.then((tx) => (tx.date ? tx.date : undefined))}
   message={data.promises.tx.then((tx) => tx.message)}
 />

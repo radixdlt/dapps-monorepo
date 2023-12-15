@@ -48,6 +48,11 @@ export const load: LayoutLoad = ({ params, data }) => {
     handleGatewayResult()
   )()
 
+  const status = pipe(
+    () => callApi('getStatus', params.transaction),
+    handleGatewayResult()
+  )()
+
   const balanceChangeEntities = details.then(async (tx) => {
     const entities = tx.balanceChanges
       ? Array.from(
@@ -226,6 +231,7 @@ export const load: LayoutLoad = ({ params, data }) => {
     address: params.transaction,
     promises: {
       tx: details,
+      status,
       balanceChanges,
       manifest: data.promises.manifest
     }
