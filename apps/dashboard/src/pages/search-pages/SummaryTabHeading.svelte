@@ -6,19 +6,19 @@
   export let entity: Promise<Entity>
 
   $: iconUrl = entity.then(
-    (entity) => (entity.metadata.standard as any).icon_url?.value as URL
+    (entity) => (entity.metadata.expected as any).icon_url?.value as URL
   )
 
   $: name = entity.then(
-    (entity) => (entity.metadata.standard as any).name?.value as string
+    (entity) => (entity.metadata.expected as any).name?.value as string
   )
 
   $: description = entity.then(
-    (entity) => (entity.metadata.standard as any).description?.value as string
+    (entity) => (entity.metadata.expected as any).description?.value as string
   )
 
   $: symbol = entity.then(
-    (entity) => (entity.metadata.standard as any).symbol?.value as string
+    (entity) => (entity.metadata.expected as any).symbol?.value as string
   )
 
   $: displayName = entity.then((entity) =>

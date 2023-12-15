@@ -4,10 +4,8 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformResource } from '@api/_deprecated/utils/entities/resource'
 import { isNFTAddress } from '@utils'
 import { redirect } from '@sveltejs/kit'
-import type { PoolUnit } from '@api/_deprecated/utils/entities/pool-unit'
 import { callApi } from '@api/_deprecated/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
@@ -17,6 +15,8 @@ import { http } from '@common/http'
 import { hasValidatorMetadataSet } from '@api/utils/entities/component/validator'
 import { verifyStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
 import { verifyClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
+import { transformUnknownResource } from '@api/utils/entities/resource'
+import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
 
 const ERROR_MSG = 'Failed to load resource data.'
 
@@ -44,7 +44,7 @@ const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
   )()
 
 const getRedeemableTokens = async (poolUnit: PoolUnit) => {
-  const pool = poolUnit.metadata.standard.pool!.value
+  const pool = poolUnit.metadata.expected.pool!.value
 
   const poolEntity = await pipe(
     () =>
@@ -71,8 +71,6 @@ export const load: PageLoad = async ({ params }) => {
   const isValidStakeUnit = await verifyStakeUnit(resource)
   const isValidClaimNft = await verifyClaimNft(resource)
 
-  console.log(isValidClaimNft, isValidStakeUnit)
-
   if (hasValidatorMetadataSet(resource)) {
     if (isValidStakeUnit) {
       throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
@@ -80,7 +78,7 @@ export const load: PageLoad = async ({ params }) => {
       throw redirect(308, `/claim_nft/${encodeURIComponent(params.resource)}`)
     }
   }
-  const transformedResource = await transformResource(
+  const transformedResource = await transformUnknownResource(
     resource,
     getEntityTypes,
     getEntityDetails()

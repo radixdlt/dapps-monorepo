@@ -5,8 +5,9 @@
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import WarningIcon from '@icons/warning.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
-  export let validator: Promise<Validator>
+  export let validator: Promise<ValidatorListItem>
 </script>
 
 <div class="stake-display">

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-  export type TransformedValidator = Validator<true, true, true> &
-    Validator<unknown, true, unknown>['uptimePercentages'] & {
+  export type TransformedValidator = ValidatorListItem<true, true, true> &
+    ValidatorListItem<unknown, true, unknown>['uptimePercentages'] & {
       feePercentage: number
     }
 
@@ -20,7 +20,6 @@
 </script>
 
 <script lang="ts">
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import type { ComponentProps } from 'svelte'
   import { connected } from '@stores'
   import { bookmarkedValidatorsStore } from '../../../../stores'
@@ -31,6 +30,8 @@
   import { sortBigNumber, sortBasic } from '@components/_base/table/sorting'
   import UptimeHeader from './UptimeHeader.svelte'
   import ValidatorRow from './ValidatorRow.svelte'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
   interface $$Slots {
     rows: {
@@ -43,8 +44,8 @@
   }
 
   export let validators:
-    | Promise<Validator<true, true, true>[]>
-    | Validator<true, true, true>[]
+    | Promise<ValidatorListItem<true, true, true>[]>
+    | ValidatorListItem<true, true, true>[]
 
   $: _validators = Promise.resolve(validators)
 
@@ -52,18 +53,19 @@
 
   let transformedValidators: Promise<TransformedValidator[]>
 
-  $: transformedValidators = _validators.then((resolved) =>
-    resolved.map((validator) => ({
-      ...validator,
-      '1day': validator.uptimePercentages['1day'],
-      '1week': validator.uptimePercentages['1week'],
-      '1month': validator.uptimePercentages['1month'],
-      '3months': validator.uptimePercentages['3months'],
-      '6months': validator.uptimePercentages['6months'],
-      '1year': validator.uptimePercentages['1year'],
-      alltime: validator.uptimePercentages['alltime'],
-      feePercentage: validator.fee.percentage
-    }))
+  $: transformedValidators = Promise.all([_validators, $currentEpoch]).then(
+    ([validators, epoch]) =>
+      validators.map((validator) => ({
+        ...validator,
+        '1day': validator.uptimePercentages['1day'],
+        '1week': validator.uptimePercentages['1week'],
+        '1month': validator.uptimePercentages['1month'],
+        '3months': validator.uptimePercentages['3months'],
+        '6months': validator.uptimePercentages['6months'],
+        '1year': validator.uptimePercentages['1year'],
+        alltime: validator.uptimePercentages['alltime'],
+        feePercentage: validator.fee(epoch).percentage
+      }))
   )
 
   const sort =

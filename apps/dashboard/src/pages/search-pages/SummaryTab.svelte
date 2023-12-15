@@ -4,9 +4,8 @@
   import SummaryTabHeading from './SummaryTabHeading.svelte'
   import { xrdAddress } from '@stores'
 
-  export let entity: ComponentProps<SummaryTabHeading>['entity'] & any
-  export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata'] &
-    any
+  export let entity: ComponentProps<SummaryTabHeading>['entity']
+  export let standardMetadata: ComponentProps<SummaryMetadata>['standardMetadata']
   export let nonMetadataItems: ComponentProps<SummaryMetadata>['nonMetadataItems']
   export let associatedDapps: ComponentProps<SummaryMetadata>['associatedDapps']
   export let omittedKeys: ComponentProps<SummaryMetadata>['omittedKeys'] = []

@@ -1,7 +1,6 @@
 import { transformResource, type Resource, type StandardMetadata } from '..'
-import { pipe } from 'ramda'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
-import { getStringMetadata } from '@api/_deprecated/utils/metadata'
+import { getStringMetadata } from '@api/utils/metadata'
 import type { Validator, ValidatorListItem } from '../../component/validator'
 import type {
   ClaimNftCollection,
@@ -63,7 +62,7 @@ export const transformNonFungibleResource = (
 ): NonFungibleResource => {
   if (validators && isClaimNftCollection(entity, validators)) {
     return {
-      ...transformResource<ClaimSystemMetadata>(entity),
+      ...transformResource<StandardMetadata & ClaimSystemMetadata>(entity),
       resourceType: 'non-fungible',
       nonFungibleType: 'claim-nft-collection'
     } as const

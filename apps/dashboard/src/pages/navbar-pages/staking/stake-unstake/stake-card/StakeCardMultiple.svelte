@@ -4,12 +4,12 @@
   import ValidatorInfo from './ValidatorInfo.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { createEventDispatcher } from 'svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import TrashIcon from '@icons/trash.svg'
   import { XRDToken } from '@constants'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
   export let rightColumnWidth: string
-  export let validator: Validator
+  export let validator: ValidatorListItem
   export let tokenAmount: string = '0'
   export let amountCardDisabled = false
   export let currentlyStakingAmount: Promise<string | undefined>
@@ -33,7 +33,7 @@
 
   <div class="info" slot="info">
     <ValidatorInfo
-      name={validator.metadata.standard.name?.value}
+      name={validator.metadata.expected.name?.value}
       address={validator.address}
       {currentlyStakingAmount}
     />

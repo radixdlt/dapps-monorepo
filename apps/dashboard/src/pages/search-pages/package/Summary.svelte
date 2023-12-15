@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Package } from '@api/_deprecated/utils/entities/package'
+  import type { Package } from '@api/utils/entities/package'
   import SummaryMetadata from '../SummaryMetadata.svelte'
   import type { metadataItem } from '../utils'
 
@@ -16,7 +16,7 @@
 
 <div class="card">
   <SummaryMetadata
-    standardMetadata={metadata.then(({ standard }) => standard)}
+    standardMetadata={metadata.then(({ expected }) => expected)}
     {nonMetadataItems}
     {associatedDapps}
   />

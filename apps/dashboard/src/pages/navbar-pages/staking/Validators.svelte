@@ -34,19 +34,16 @@
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import BookmarkValidator from './bookmark-validator/BookmarkValidator.svelte'
   import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import type { StakeInfo } from '@api/_deprecated/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
-  export let validators: Promise<Validator<true, true, true>[]>
-  export let filteredValidators: Validator<true, true, true>[] | undefined =
-    undefined
-
-  context.set('validators', writable([]))
-
-  $: validators.then(context.get('validators').set)
+  export let validators: Promise<ValidatorListItem<true, true, true>[]>
+  export let filteredValidators:
+    | ValidatorListItem<true, true, true>[]
+    | undefined = undefined
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>

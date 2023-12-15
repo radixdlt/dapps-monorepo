@@ -8,11 +8,11 @@
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import type { ClaimNft } from '@api/_deprecated/utils/nfts/claim-nft'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
   export let readyToClaim: {
-    validator: Validator
+    validator: ValidatorListItem
     xrdAmount: string
     account: Account
     claimNft: ClaimNft
@@ -77,7 +77,7 @@
         <StakeCard>
           <svelte:fragment slot="info">
             <ValidatorInfo
-              name={validator.metadata.standard.name?.value}
+              name={validator.metadata.expected.name?.value}
               {...validator}
             />
           </svelte:fragment>

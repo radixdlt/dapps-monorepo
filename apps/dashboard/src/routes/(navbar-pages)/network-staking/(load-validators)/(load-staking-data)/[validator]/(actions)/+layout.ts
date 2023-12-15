@@ -2,8 +2,8 @@ import { derived } from 'svelte/store'
 import type { LayoutLoad } from './$types'
 import type { Account } from '@stores'
 import BigNumber from 'bignumber.js'
-import type { Validator } from '@api/_deprecated/utils/entities/validator'
 import type { LoggedInStakeInfo } from '../../proxy+layout'
+import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
 export const load: LayoutLoad = ({ parent }) =>
   parent().then((data) => {
@@ -35,7 +35,7 @@ export const load: LayoutLoad = ({ parent }) =>
 
       const transformedData: {
         account: Account
-        validator: Validator
+        validator: ValidatorListItem
         staked: string
         unstaking: string
         readyToClaim: string

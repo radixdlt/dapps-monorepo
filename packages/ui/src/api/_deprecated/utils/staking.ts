@@ -1,13 +1,13 @@
-import type { Validator } from './entities/validator'
 import type { getAccountData } from './entities/resource'
 import BigNumber from 'bignumber.js'
 import { RET_DECIMAL_PRECISION } from '@constants'
 import type { ClaimNft } from './nfts/claim-nft'
+import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
 type CommonStakeInfo<T extends string> = {
   type: T
   account: string
-  validator: Validator
+  validator: ValidatorListItem
   xrdAmount: string
 }
 
@@ -27,7 +27,7 @@ export type ReadyToClaimInfo = CommonStakeInfo<'readyToClaim'> & {
 export type StakeInfo = StakedInfo | UnstakingInfo | ReadyToClaimInfo
 
 export const getUnstakeAndClaimInfo =
-  (validators: Validator[]) =>
+  (validators: ValidatorListItem[]) =>
   (
     accountData: Awaited<ReturnType<typeof getAccountData>>[number],
     currentEpoch: number
@@ -86,7 +86,7 @@ export const getUnstakeAndClaimInfo =
   }
 
 export const getStakedInfo =
-  (validators: Validator[]) =>
+  (validators: ValidatorListItem[]) =>
   (accountData: Awaited<ReturnType<typeof getAccountData>>[number]) =>
     accountData.fungible
       .filter((token) =>

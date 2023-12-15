@@ -17,6 +17,7 @@
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
   import NotTop100Warning from './NotTop100Warning.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
+  import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
   export let input:
     | {
@@ -66,7 +67,7 @@
         <NftImage />
       {:else}
         <NftImage
-          url={input.validator.metadata.standard.icon_url?.value.href}
+          url={input.validator.metadata.expected.icon_url?.value?.href}
           defaultImageUrl={ValidatorPlaceholder}
           width={64}
           height={64}
@@ -79,7 +80,7 @@
         {#if input === 'loading'}
           <SkeletonLoader width={100} />
         {:else}
-          {input.validator.metadata.standard.name?.value ?? ''}
+          {input.validator.metadata.expected.name?.value ?? ''}
         {/if}
       </div>
     </div>
@@ -129,7 +130,9 @@
       {#if input === 'loading'}
         <SkeletonLoader width={50} />
       {:else}
-        {truncateNumber(input.validator.fee.percentage)}%
+        {#await $currentEpoch then epoch}
+          {truncateNumber(input.validator.fee(epoch).percentage)}%
+        {/await}
       {/if}
     </div>
 

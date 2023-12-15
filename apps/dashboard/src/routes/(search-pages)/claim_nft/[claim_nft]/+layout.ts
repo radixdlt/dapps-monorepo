@@ -1,5 +1,4 @@
-import { transformNonFungibleResource } from '@api/_deprecated/utils/entities/resource.js'
-
+import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible/index.js'
 import {
   getAssociatedDapps,
   getLookupEntity,

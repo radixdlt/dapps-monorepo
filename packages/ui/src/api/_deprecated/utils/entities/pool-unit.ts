@@ -126,25 +126,23 @@ const extendWithPoolAddress = (resources: FungibleResource[]) =>
     poolAddress: getPoolAddress(resource)!
   }))
 
-export const verifyPoolUnit =
-  (
-    getEntityTypesFn: GetEntityTypesFn,
-    getEntityDetailsFn: GetEntityDetailsFn
-  ) =>
-  (resources: FungibleResource[]) =>
-    pipe(
-      (resources: FungibleResource[]) => resources.filter(hasPoolMetadataSet),
-      extendWithPoolAddress,
-      filterByEntityType(
-        new Set([
-          'GlobalOneResourcePool',
-          'GlobalTwoResourcePool',
-          'GlobalMultiResourcePool'
-        ]),
-        getEntityTypesFn
-      ),
-      andThen(verify2WayLinking(getEntityDetailsFn))
-    )(resources)
+export const verifyPoolUnit = (
+  getEntityTypesFn: GetEntityTypesFn,
+  getEntityDetailsFn: GetEntityDetailsFn
+) =>
+  pipe(
+    (resources: FungibleResource[]) => resources.filter(hasPoolMetadataSet),
+    extendWithPoolAddress,
+    filterByEntityType(
+      new Set([
+        'GlobalOneResourcePool',
+        'GlobalTwoResourcePool',
+        'GlobalMultiResourcePool'
+      ]),
+      getEntityTypesFn
+    ),
+    andThen(verify2WayLinking(getEntityDetailsFn))
+  )
 
 export const getPoolUnits = (
   resources: FungibleResource[],

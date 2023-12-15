@@ -11,6 +11,14 @@ import type {
 import { getBehaviors, type Behavior } from './behaviors'
 import { getAuthInfo } from '@api/_deprecated/utils/auth'
 import type { MetadataTypeToNativeType } from '@api/_deprecated/utils/metadata'
+import { transformFungibleResource } from './fungible'
+import {
+  getPoolUnits,
+  hasPoolMetadataSet,
+  type GetEntityTypesFn,
+  type GetEntityDetailsFn
+} from './fungible/pool-unit'
+import { transformNonFungibleResource } from './non-fungible'
 
 type ResourceType = 'fungible' | 'non-fungible'
 
@@ -60,3 +68,23 @@ export const transformResource = <ExpectedMetadata extends EntityMetadata>(
         behaviors: getBehaviors(getAuthInfo(entity.details.role_assignments))
       } as const)
   )()
+
+export const transformUnknownResource = async (
+  entity: StateEntityDetailsVaultResponseItem,
+  getEntityTypesFn: GetEntityTypesFn,
+  getEntityDetailsFn: GetEntityDetailsFn
+) => {
+  if (entity.details?.type === 'FungibleResource') {
+    const fungible = transformFungibleResource(entity)
+    if (hasPoolMetadataSet(fungible)) {
+      return getPoolUnits(
+        [fungible],
+        getEntityTypesFn,
+        getEntityDetailsFn
+      ).then((res) => res[0] ?? fungible)
+    }
+    return fungible
+  }
+
+  return transformNonFungibleResource(entity)
+}
