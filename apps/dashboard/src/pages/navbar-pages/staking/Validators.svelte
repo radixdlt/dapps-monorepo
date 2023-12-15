@@ -95,7 +95,7 @@
 <div class="selected-validators">
   {#if $connected}
     <SelectedValidators
-      on:click={() => {
+      on:stake-selected={() => {
         let selected = Object.keys($selectedValidators).filter(
           (key) => $selectedValidators[key]
         )
@@ -105,6 +105,9 @@
         } else {
           dispatch('show-stake-multiple')
         }
+      }}
+      on:clear-all={() => {
+        $selectedValidators = {}
       }}
     />
   {/if}

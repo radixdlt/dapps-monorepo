@@ -3,20 +3,33 @@
   import { selectedValidators } from '../Validators.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import MultipleStaking from '@icons/multiple-staking.svg'
+  import { createEventDispatcher } from 'svelte'
 
   $: count = Object.keys($selectedValidators).filter(
     (key) => $selectedValidators[key]
   ).length
+
+  const dispatch = createEventDispatcher<{
+    'clear-all': undefined
+    'stake-selected': undefined
+  }>()
 </script>
 
 <div class="card selected-validators">
   <IconNew icon={MultipleStaking} --size="3.5rem" />
-  <div class="text">
-    You've selected {count}
-    {` ${count === 1 ? 'validator' : 'validators'}`}
+  <div>
+    <div class="text">
+      You've selected {count}
+      {` ${count === 1 ? 'validator' : 'validators'}`}
+    </div>
+    <button on:click={() => dispatch('clear-all')}>Clear all</button>
   </div>
-  <ButtonNew on:click size="big" disabled={count === 0}
-    >Stake to Selected</ButtonNew
+  <ButtonNew
+    on:click={() => {
+      dispatch('stake-selected')
+    }}
+    size="big"
+    disabled={count === 0}>Stake to Selected</ButtonNew
   >
 </div>
 
