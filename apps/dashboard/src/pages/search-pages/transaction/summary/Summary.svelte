@@ -6,8 +6,9 @@
   import type { ComponentProps } from 'svelte'
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+  import type { TransactionIntentStatus } from '@common/gateway-sdk'
 
-  export let status: Promise<'Complete' | 'Failure'>
+  export let status: Promise<TransactionIntentStatus>
   export let timestamp: Promise<Date | undefined>
   export let message: Promise<string>
   export let balanceChanges: Promise<
@@ -17,6 +18,17 @@
       }[]
     | undefined
   >
+
+  const errorMessages: { [key in TransactionIntentStatus]: string } = {
+    CommittedSuccess: 'Success (committed on-ledger)',
+    CommittedFailure: 'Failure (failure committed on-ledger)',
+    CommitPendingOutcomeUnknown: 'Pending (outcome unknown)',
+    PermanentlyRejected: 'Failure (rejected off-ledger)',
+    LikelyButNotCertainRejection:
+      'Pending (rejected, but could still be accepted)',
+    Pending: 'Pending (submitted, in process)',
+    Unknown: 'Unknown'
+  }
 </script>
 
 <div class="tx-summary card">
@@ -34,11 +46,12 @@
       {:then status}
         <div
           class="status"
-          class:success={status === 'Complete'}
-          class:failure={status === 'Failure'}
+          class:success={status === 'CommittedSuccess'}
+          class:failure={status === 'PermanentlyRejected' ||
+            status === 'CommittedFailure'}
         >
-          <IconNew icon={status === 'Complete' ? Checkmark : Cross} />
-          {status}
+          <IconNew icon={status === 'CommittedSuccess' ? Checkmark : Cross} />
+          {errorMessages[status] ?? status}
         </div>
       {/await}
     </div>
