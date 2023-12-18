@@ -29,6 +29,9 @@
       <a href="https://www.radixdlt.com/privacy-policy" target="_blank"
         >Privacy Notice</a
       >
+      <a href="http://www.radixdlt.com/terms/developerconsoleEULA"
+        >Terms and Conditions</a
+      >
     </div>
   </div>
 </Sidebar>
@@ -49,7 +52,10 @@
     gap: var(--spacing-xl);
   }
   .links {
-    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: 3rem 1.5rem;
     margin: 0 1rem;
     border-top: 1px solid var(--theme-border);
     a {

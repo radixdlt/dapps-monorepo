@@ -36,6 +36,12 @@ export const Page = () => {
           <Link target="_blank" href="https://www.radixdlt.com/privacy-policy">
             Privacy Policy
           </Link>
+          <Link
+            target="_blank"
+            href="http://www.radixdlt.com/terms/sandbox"
+          >
+            Terms and Conditions
+          </Link>
         </Layout.SideNav>
 
         <Layout.Main>
