@@ -49,7 +49,6 @@
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
       const filtered = validators.filter((v) => {
-        console.log(v.percentageTotalStake, e.detail.totalXRDStakeFilter[1])
         return (
           v.fee.percentage >= e.detail.feeFilter[0] &&
           v.fee.percentage <= e.detail.feeFilter[1] &&
@@ -74,7 +73,7 @@
   validators={data.promises.validators}
   {filteredValidators}
   on:show-claim-all={() => goto('/network-staking/claim-multiple')}
-  on:show-claim-single={(e) => goto(`/network-staking/${e.detail}/claim`)}
+  on:show-claim-single={(e) => goto(`/network-staking/claim/${e.detail}`)}
   on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
   on:show-stake-single={(e) => goto(`/network-staking/${e.detail}/stake`)}
   on:show-filters={() => {
