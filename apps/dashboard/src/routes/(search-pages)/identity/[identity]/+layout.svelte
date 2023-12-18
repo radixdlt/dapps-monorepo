@@ -11,7 +11,15 @@
   title="Identity"
   address={data.address}
   activeTab={data.activeTab || 'metadata'}
-  menuItems={[[{ id: 'metadata', label: 'Metadata' }]]}
+  menuItems={[
+    [
+      { id: 'metadata', label: 'Metadata' },
+      {
+        id: 'recent-transactions',
+        label: 'Recent Transactions'
+      }
+    ]
+  ]}
   on:navigate={({ detail }) => goto(detail)}
 >
   <slot />
