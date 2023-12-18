@@ -136,11 +136,10 @@ export const load: LayoutLoad = ({ params, data }) => {
           (r) => r.address === resourceAddress
         )!
 
-        let balanceChange =
-          {} as (typeof changes)[number]['balanceChanges'][number]
+        let balanceChanges: (typeof changes)[number]['balanceChanges'] = []
 
         if (change.type === 'fungible') {
-          balanceChange = {
+          balanceChanges.push({
             type: 'fungible',
             change: change.change.balance_change,
             token: {
@@ -148,7 +147,7 @@ export const load: LayoutLoad = ({ params, data }) => {
               icon: icon?.href,
               name
             }
-          } as const
+          })
         } else if (change.type === 'non-fungible') {
           const { name: resourceName } = resourceInfo.find(
             (r) => r.address === resourceAddress
@@ -156,7 +155,7 @@ export const load: LayoutLoad = ({ params, data }) => {
 
           change.change.added.forEach((id) => {
             const nft = nftData.find((nft) => nft.non_fungible_id === id)!
-            balanceChange = {
+            balanceChanges.push({
               type: 'non-fungible',
               change: 'added',
               token: {
@@ -166,13 +165,13 @@ export const load: LayoutLoad = ({ params, data }) => {
                 name: getNftData(nft.data, 'name'),
                 resourceName
               }
-            } as const
+            })
           })
 
           change.change.removed.forEach((id) => {
             const nft = nftData.find((nft) => nft.non_fungible_id === id)!
 
-            balanceChange = {
+            balanceChanges.push({
               type: 'non-fungible',
               change: 'removed',
               token: {
@@ -182,11 +181,11 @@ export const load: LayoutLoad = ({ params, data }) => {
                 name: getNftData(nft.data, 'name'),
                 resourceName
               }
-            } as const
+            })
           })
         } else {
           if (change.change.type !== 'FeePayment') return
-          balanceChange = {
+          balanceChanges.push({
             type: 'fee',
             change: change.change.balance_change,
             token: {
@@ -194,15 +193,15 @@ export const load: LayoutLoad = ({ params, data }) => {
               icon: icon?.href || '',
               name: 'Radix (XRD)'
             }
-          } as const
+          })
         }
 
         if (existingAccountChange) {
-          existingAccountChange.balanceChanges.push(balanceChange)
+          existingAccountChange.balanceChanges.push(...balanceChanges)
         } else {
           changes.push({
             account: entityAddress,
-            balanceChanges: [balanceChange]
+            balanceChanges: [...balanceChanges]
           })
         }
       }
