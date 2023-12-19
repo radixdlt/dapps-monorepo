@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { query } from '@api/query'
   import Box from '@components/_base/box/Box.svelte'
   import Input from '@components/../dev-console/form/Input.svelte'

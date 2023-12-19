@@ -4,7 +4,7 @@
   import Cross from '@icons/cross-2.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import { formatTokenValue, shortenAddress } from '@utils'
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
 
   export let resourceAddress: string
   export let iconUrl: Promise<string | undefined> | undefined

@@ -3,7 +3,7 @@
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
   import ExtendedStakingCard from './ExtendedStakingCard.svelte'
   import Divider from '@components/_base/divider/Divider.svelte'
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { connected } from '@stores'
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Address from '@components/_base/address/Address.svelte'

@@ -8,7 +8,7 @@
   import BasicTable from './BasicTable.svelte'
 
   import { onMount } from 'svelte'
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import Pagination from './Pagination.svelte'
 
