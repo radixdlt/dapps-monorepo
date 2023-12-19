@@ -3,9 +3,9 @@
   let Wrapper: any = null
   export let count = 1
   export let duration = 1.2
-  export let width = null
+  export let width: number | null = null
   export { Wrapper as wrapper }
-  export let height = null
+  export let height: number | null = null
   export let circle = false
   export { customClassName as class }
   export const defaultBaseColor = '#eee'

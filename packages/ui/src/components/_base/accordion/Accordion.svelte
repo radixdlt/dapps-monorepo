@@ -26,7 +26,7 @@
     </div>
   </div>
   {#if isOpened}
-    <div class="content" transition:slide|local>
+    <div class="content" transition:slide>
       <slot name="content" />
     </div>
   {/if}

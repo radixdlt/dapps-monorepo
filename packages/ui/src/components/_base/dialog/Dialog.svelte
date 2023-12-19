@@ -9,7 +9,7 @@
   <Backdrop zIndex={4} duration={200} />
   <div
     class="dialog card"
-    transition:scale={{
+    transition:scale|global={{
       duration: 200
     }}
   >

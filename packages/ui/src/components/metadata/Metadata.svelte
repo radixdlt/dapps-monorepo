@@ -15,7 +15,7 @@
 <script lang="ts">
   import { indexBy, prop } from 'ramda'
   import Row from '@components/info-box/Row.svelte'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import PadlockIcon from '@icons/validators-menu.svg'
   import type {
     EntityMetadataItem,

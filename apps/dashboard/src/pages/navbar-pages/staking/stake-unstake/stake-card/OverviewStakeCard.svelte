@@ -5,7 +5,7 @@
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { XRDToken } from '@constants'
   import Popover from '@components/_base/popover/Popover.svelte'
   import FeeWarning from '@components/_base/popover/FeeWarning.svelte'

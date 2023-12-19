@@ -7,7 +7,7 @@
   import { connected } from '@stores'
   import type { UptimeValue } from './UptimeHeader.svelte'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import StakingInfo from './staked/StakingInfo.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'

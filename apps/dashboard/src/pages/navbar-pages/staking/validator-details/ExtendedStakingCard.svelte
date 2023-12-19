@@ -2,7 +2,7 @@
   import { createEventDispatcher, type ComponentProps } from 'svelte'
   import StakingCard from '../staking-card/StakingCard.svelte'
   import ReadyToClaim from '../ready-to-claim/ReadyToClaim.svelte'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import BigNumber from 'bignumber.js'
   import { writable } from 'svelte/store'
   import { formatXRDValue } from '@utils'

@@ -33,7 +33,7 @@
     role="dialog"
     class="side-panel"
     bind:this={panel}
-    transition:fly={{ duration: 300, opacity: 1, x: panel.clientWidth }}
+    transition:fly|global={{ duration: 300, opacity: 1, x: panel.clientWidth }}
   >
     <slot />
   </div>
