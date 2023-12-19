@@ -24,12 +24,12 @@
 {#if showMobileSidebar && !isDesktopViewport}
   <nav
     bind:clientWidth={width}
-    transition:fly={{ x: -width, opacity: 1, duration: 300 }}
+    transition:fly|global={{ x: -width, opacity: 1, duration: 300 }}
   >
     <button
       class="close"
       style={`mask-image: url(${CloseIcon}); -webkit-mask-image: url(${CloseIcon});`}
-      transition:scale={{ delay: 0, duration: 300 }}
+      transition:scale|global={{ delay: 0, duration: 300 }}
       on:click={() => {
         showSidebar.set(false)
       }}

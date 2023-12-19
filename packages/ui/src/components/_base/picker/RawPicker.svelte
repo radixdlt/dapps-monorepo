@@ -66,7 +66,7 @@
       class="drawer"
       style:transform={`translateY(${offset}px)`}
       style:max-height={`${offset * 7}px`}
-      in:fly={{ y: -10, duration: 150 }}
+      in:fly|global={{ y: -10, duration: 150 }}
     >
       <slot name="options-header" />
       {#each options as option}

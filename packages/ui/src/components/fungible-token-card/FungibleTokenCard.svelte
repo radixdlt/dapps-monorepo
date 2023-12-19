@@ -4,7 +4,7 @@
   import { formatTokenValue } from '@utils'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import 'cooltipz-css'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
 
   export let isXrd = false
   export let numberOfTags = 0

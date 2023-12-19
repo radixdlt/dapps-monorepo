@@ -123,7 +123,7 @@
       class="drawer"
       class:calendar={selectingDate}
       style:transform={`translateY(${offset}px)`}
-      in:fly={{ y: -10, duration: 150 }}
+      in:fly|global={{ y: -10, duration: 150 }}
     >
       {#if !selectingDate}
         {#each options as option}

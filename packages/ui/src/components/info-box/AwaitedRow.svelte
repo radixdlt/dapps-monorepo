@@ -1,5 +1,5 @@
 <script lang="ts">
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import Row from './Row.svelte'
 

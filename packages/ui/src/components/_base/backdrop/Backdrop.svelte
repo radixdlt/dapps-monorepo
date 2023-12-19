@@ -8,7 +8,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="backdrop"
-  transition:fade={{ duration }}
+  transition:fade|global={{ duration }}
   on:click|self
   style:z-index={zIndex}
 />

@@ -34,7 +34,7 @@
 {#if show}
   <div
     use:popperContent
-    transition:fade={{ duration: 100 }}
+    transition:fade|global={{ duration: 100 }}
     class="popover card {type}"
     data-popper-placement={placement}
   >

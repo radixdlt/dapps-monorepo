@@ -10,6 +10,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   if (result.isErr()) {
     appLogger.error(result.error)
+    // @ts-ignore
     throw error(result.error.httpResponseCode, result.error.reason)
   }
 

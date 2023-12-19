@@ -7,6 +7,7 @@ export const GET: RequestHandler = async () => {
   const result = await authController.createChallenge()
 
   if (result.isErr())
+    // @ts-ignore
     throw error(result.error.httpResponseCode, result.error.reason)
 
   return json(result.value.data, { status: result.value.httpResponseCode })

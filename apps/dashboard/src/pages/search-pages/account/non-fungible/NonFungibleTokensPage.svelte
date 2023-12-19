@@ -1,5 +1,5 @@
 <script lang="ts">
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import {
     getNonFungiblesIdsPageWithData,
     type GetNonFungibleIdsPageWithDataRequest

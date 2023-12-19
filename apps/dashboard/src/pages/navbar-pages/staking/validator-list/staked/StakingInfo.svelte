@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
- import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { formatTokenValue, formatXRDValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
