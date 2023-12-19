@@ -15,9 +15,9 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
-  import NotTop100Warning from './NotTop100Warning.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
   import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
+  import Warning from './Warning.svelte'
 
   export let input:
     | {
@@ -38,6 +38,8 @@
 
   $: notTop100 =
     input !== 'loading' ? !input.validator.percentageTotalStake : false
+
+  $: notRegistered = input !== 'loading' ? !input.validator.isRegistered : false
 </script>
 
 <div class="grid-wrapper full-width">
@@ -184,9 +186,19 @@
     </div>
   {/if}
 
-  {#if notTop100}
+  {#if notRegistered}
     <div class="full-width">
-      <NotTop100Warning />
+      <Warning>
+        <span class="bold">Not currently registered.</span>
+        <span>Stakes do not get APY.</span>
+      </Warning>
+    </div>
+  {:else if notTop100}
+    <div class="full-width">
+      <Warning>
+        <span class="bold">Not within top 100.</span>
+        <span>Stakes do not get APY.</span>
+      </Warning>
     </div>
   {/if}
 </div>

@@ -36,6 +36,7 @@ export type Validator<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
+  isRegistered: boolean
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
   (WithUptime extends true
     ? {
@@ -271,7 +272,8 @@ const transformValidators = async (
           'tags',
           'info_url'
         ]),
-        acceptsStake: state.accepts_delegated_stake
+        acceptsStake: state.accepts_delegated_stake,
+        isRegistered: state.is_registered
       }
     })
 }

@@ -7,9 +7,7 @@
 <WarningPanel>
   <div class="warning-text">
     <IconNew icon={WarningIcon} />
-    <span class="bold">Not within top 100.</span><span
-      >Stakes do not get APY.</span
-    >
+    <slot />
   </div>
 </WarningPanel>
 
@@ -19,9 +17,7 @@
 
 <style lang="scss">
   .warning-text {
-    * {
-      color: var(--color-alert-1);
-    }
+    color: var(--color-alert-1);
     display: flex;
     gap: var(--spacing-lg);
   }
