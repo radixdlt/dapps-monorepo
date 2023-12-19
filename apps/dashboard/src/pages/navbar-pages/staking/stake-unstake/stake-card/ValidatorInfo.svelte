@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import Address from '@components/_base/address/Address.svelte'
   import { formatTokenValue } from '@utils'
 

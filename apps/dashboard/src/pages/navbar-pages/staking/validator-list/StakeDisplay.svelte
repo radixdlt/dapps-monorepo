@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import { formatTokenValue, truncateNumber } from '@utils'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'

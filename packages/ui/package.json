@@ -87,7 +87,6 @@
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
     "@radixdlt/dapps-dropdown": "1.0.1",
-    "@radixdlt/svelte-skeleton-loader": "^1.0.1",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
     "@vitest/coverage-v8": "^0.32.0",
     "bignumber.js": "^9.1.0",

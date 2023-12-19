@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'

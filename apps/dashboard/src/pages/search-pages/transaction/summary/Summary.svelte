@@ -5,8 +5,7 @@
   import Cross from '@icons/cross-red.svg'
   import type { ComponentProps } from 'svelte'
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
-  import type { TransactionIntentStatus } from '@common/gateway-sdk'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
 
   export let status: Promise<TransactionIntentStatus>
   export let timestamp: Promise<Date | undefined>

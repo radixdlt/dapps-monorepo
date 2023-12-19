@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
+ import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import BigNumber from 'bignumber.js'
   import { formatTokenValue, timeToEpoch } from '@utils'
   import {
