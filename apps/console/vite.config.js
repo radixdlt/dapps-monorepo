@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite'
+// @ts-ignore
 globalThis.self = globalThis
 
 /** @type {import('vite').UserConfigFn} */
