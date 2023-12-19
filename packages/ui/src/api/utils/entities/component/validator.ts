@@ -115,6 +115,7 @@ export type ValidatorListItem<
   percentageTotalStake: number
   stakeUnitResourceAddress: string
   unstakeClaimResourceAddress: string
+  isRegistered: boolean
   rank: number
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
   (WithUptime extends true
@@ -351,7 +352,8 @@ export const transformValidatorListItem = (
     stakeUnitResourceAddress: state.stake_unit_resource_address,
     unstakeClaimResourceAddress: state.claim_token_resource_address,
     totalStakeInXRD: new BigNumber(validator.stake_vault.balance),
-    acceptsStake: state.accepts_delegated_stake
+    acceptsStake: state.accepts_delegated_stake,
+    isRegistered: state.is_registered
   }
 }
 
