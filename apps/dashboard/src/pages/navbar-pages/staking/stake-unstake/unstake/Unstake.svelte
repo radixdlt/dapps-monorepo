@@ -4,16 +4,14 @@
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import {
-    getValidators,
-    type Validator
-  } from '@api/_deprecated/utils/entities/validator'
+  import { getValidators } from '@api/_deprecated/utils/entities/validator'
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { formatXRDValue } from '@utils'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
   export let stakes: {
     account: Account
-    validator: Validator
+    validator: ValidatorListItem
     amount: string
     stakeUnits: string
   }[]
@@ -123,7 +121,7 @@
           <OverviewUnstakeCard
             validator={{
               address: stake.validator.address,
-              name: stake.validator.metadata.standard.name?.value
+              name: stake.validator.metadata.expected.name?.value
             }}
             account={stake.account}
             stakedAmount={stake.amount.toString()}

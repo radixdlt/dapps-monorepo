@@ -10,7 +10,8 @@ import type {
 import {
   getEnumStringMetadata,
   transformMetadata,
-  type MetadataTypeToNativeType
+  type MetadataTypeToNativeType,
+  getStringMetadata
 } from '../../metadata'
 import { type _Entity } from '..'
 import {
@@ -515,3 +516,16 @@ export const getValidators = <
       withStakeUnits
     )
   )
+
+export const getValidatorMetadataValue = (
+  entity: StateEntityDetailsVaultResponseItem
+) => getStringMetadata('validator')(entity.metadata)
+
+export const hasValidatorMetadataSet = (
+  entity: StateEntityDetailsVaultResponseItem
+) => {
+  const validatorAddress = getValidatorMetadataValue(entity)
+  const isValidatorAddress = validatorAddress.startsWith('validator_')
+
+  return isValidatorAddress
+}

@@ -8,7 +8,7 @@
     }>
   >(new Promise(() => {}))
 
-  export const currentEpoch = writable<Promise<number>>(Promise.resolve(0))
+  export const currentEpoch = writable<Promise<number>>(new Promise(() => {}))
 
   export const validatorNotFound = writable<boolean>(false)
 </script>
@@ -48,10 +48,12 @@
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
     (e: ComponentEvents<FilterDetails>['close']) => {
-      const filtered = validators.filter((v) => {
+      const filtered = validators.filter(async (v) => {
+        const epoch = await $currentEpoch
+
         return (
-          v.fee.percentage >= e.detail.feeFilter[0] &&
-          v.fee.percentage <= e.detail.feeFilter[1] &&
+          v.fee(epoch).percentage >= e.detail.feeFilter[0] &&
+          v.fee(epoch).percentage <= e.detail.feeFilter[1] &&
           v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
           v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
           (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
@@ -85,11 +87,11 @@
   }}
 />
 
-{#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators] ) then [validators, bookmarked]}
+{#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators, $currentEpoch] ) then [validators, bookmarked, epoch]}
   <FilterDetails
     bind:this={filter}
     bind:open={filterOpen}
-    feeValues={validators.map((v) => v.fee.percentage)}
+    feeValues={validators.map((v) => v.fee(epoch).percentage)}
     totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
     on:close={(e) => {
       applyFilter(validators, bookmarked)(e)

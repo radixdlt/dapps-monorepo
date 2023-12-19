@@ -45,6 +45,12 @@ export const getStringMetadata = (key: string) =>
     sanitizeHtml
   )
 
+export const ensureMetadataType = (key: string, type: string) =>
+  pipe(
+    (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
+    (item) => (isNil(item) ? [] : getVectorMetadataValue(item))
+  )
+
 export const getVectorMetadata = (key: string) =>
   pipe(
     (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),

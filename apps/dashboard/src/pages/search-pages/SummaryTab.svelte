@@ -12,6 +12,17 @@
   export let redeemableTokens: ComponentProps<SummaryMetadata>['redeemableTokens'] =
     undefined
   export let behaviors: ComponentProps<SummaryMetadata>['behaviors'] = undefined
+
+  $: isXRD = entity.then(
+    (entity) =>
+      entity.address === $xrdAddress ||
+      entity.type === 'stakeUnit' ||
+      (entity.type === 'resource' &&
+        entity.resourceType === 'non-fungible' &&
+        entity.nonFungibleType === 'claim-nft-collection')
+  )
+
+  $: entity.then(console.log)
 </script>
 
 <div class="summary-tab">
@@ -23,7 +34,7 @@
     {omittedKeys}
     {redeemableTokens}
     {behaviors}
-    isXRD={entity.then(({ address }) => address === $xrdAddress)}
+    useOfficialRadixTag={isXRD}
   />
 </div>
 

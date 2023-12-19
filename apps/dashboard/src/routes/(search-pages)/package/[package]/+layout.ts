@@ -1,5 +1,5 @@
 import type { LayoutLoad } from './$types'
-import { transformPackage } from '@api/_deprecated/utils/entities/package'
+import { transformPackage } from '@api/utils/entities/package'
 import { getAssociatedDapps, getLookupEntity } from '../../utils'
 
 export const load: LayoutLoad = ({ params }) => {

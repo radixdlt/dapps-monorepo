@@ -1,7 +1,6 @@
 import { callApi } from '@api/_deprecated/gateway'
 import type { PageLoad } from './$types'
-import { transformNonFungibleResource } from '@api/_deprecated/utils/entities/resource'
-import { getLinkedDappDefinitions } from '@api/_deprecated/utils/two-way-linking'
+import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import {
   getDappDefinitionData,
   getLookupEntity,
@@ -10,6 +9,7 @@ import {
 import { map, pipe } from 'ramda'
 import { transformNft } from '@api/utils/nfts'
 import { handleGatewayResult } from '../../../../utils'
+import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
 
 export const load: PageLoad = async ({ params }) => {
   const [resourceAddress, nftId] = decodeURIComponent(params.nft).split(':')

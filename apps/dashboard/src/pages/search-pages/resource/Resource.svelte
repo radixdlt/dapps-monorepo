@@ -1,16 +1,14 @@
 <script lang="ts">
-  import type {
-    FungibleResource,
-    NonFungibleResource
-  } from '@api/_deprecated/utils/entities/resource'
   import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
   import Metadata from '@components/metadata/Metadata.svelte'
   import type { metadataItem } from '../utils'
   import SummaryTab from '../SummaryTab.svelte'
-  import type { PoolUnit } from '@api/_deprecated/utils/entities/pool-unit'
   import type { ComponentProps } from 'svelte'
   import { formatTokenValue } from '@utils'
   import AuthConfigurationTab from '../../../components/auth/AuthConfigurationTab.svelte'
+  import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
+  import type { FungibleResource } from '@api/utils/entities/resource/fungible'
+  import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit
@@ -65,7 +63,7 @@
       if (resource.type === 'poolUnit') {
         metadata.push([
           'associated pool component',
-          resource.metadata.standard.pool?.value,
+          resource.metadata.expected.pool?.value,
           'GlobalAddress'
         ])
       }
@@ -81,7 +79,7 @@
   <div class="card info-card">
     <SummaryTab
       entity={resource}
-      standardMetadata={resource.then(({ metadata }) => metadata.standard)}
+      standardMetadata={resource.then(({ metadata }) => metadata.expected)}
       {nonMetadataItems}
       {associatedDapps}
       omittedKeys={['pool']}

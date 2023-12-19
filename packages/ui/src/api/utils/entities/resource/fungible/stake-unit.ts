@@ -7,6 +7,9 @@ import {
 } from '../../../metadata'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import type { FungibleResource } from '.'
+import { ok } from 'neverthrow'
+import { getValidatorMetadataValue } from '../../component/validator'
+import { getPoolUnitMetadataValue } from './pool-unit'
 
 type SystemMetadata = {
   validator: MetadataTypeToNativeType['String']
@@ -48,4 +51,18 @@ export const isStakeUnit = async (
       !!getStringMetadata('pool_unit')(validatorEntity[0].metadata),
     () => false
   )
+}
+
+const getEntityDetails = (address: string) =>
+  callApi('getEntityDetailsVaultAggregated', [address])
+
+export const verifyStakeUnit = async (
+  entity: StateEntityDetailsVaultResponseItem
+) => {
+  const result = await ok(getValidatorMetadataValue(entity))
+    .asyncAndThen(getEntityDetails)
+    .map(([entity]) => getPoolUnitMetadataValue(entity))
+    .map((poolUnit) => poolUnit === entity.address)
+
+  return result.isOk() && result.value === true
 }

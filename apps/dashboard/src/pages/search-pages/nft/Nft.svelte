@@ -1,10 +1,10 @@
 <script lang="ts">
   import { SkeletonLoader } from '@radixdlt/svelte-skeleton-loader'
-  import type { NonFungibleResource } from '@api/_deprecated/utils/entities/resource'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import Resource from '../resource/Resource.svelte'
   import NftDataRow from './NftDataRow.svelte'
   import type { NonFungible } from '@api/utils/nfts'
+  import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
 
   export let nft: Promise<NonFungible>
   export let resource: Promise<NonFungibleResource>
@@ -19,13 +19,13 @@
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
       ? nft.nftData.standard.key_image_url?.value
-      : resource.metadata.standard.icon_url?.value?.href
+      : resource.metadata.expected.icon_url?.value?.href
   )
 
   $: description = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
       ? nft.nftData.standard.description?.value
-      : resource.metadata.standard.description?.value
+      : resource.metadata.expected.description?.value
   )
 
   const imageSize = 'large'

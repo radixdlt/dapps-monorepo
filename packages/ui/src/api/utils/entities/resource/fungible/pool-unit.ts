@@ -2,7 +2,8 @@ import type { _Entity } from '../..'
 import {
   getMetadataItem,
   transformMetadata,
-  type MetadataTypeToNativeType
+  type MetadataTypeToNativeType,
+  getStringMetadata
 } from '../../../metadata'
 import type { FungibleResource } from '.'
 import type {
@@ -159,3 +160,7 @@ export const getPoolUnits = (
     verifyPoolUnit(getEntityTypesFn, getEntityDetailsFn),
     andThen((resources) => resources.map(resourceToPoolUnit))
   )(resources)
+
+export const getPoolUnitMetadataValue = (
+  entity: StateEntityDetailsVaultResponseItem
+) => getStringMetadata('pool_unit')(entity.metadata)

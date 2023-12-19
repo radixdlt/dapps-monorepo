@@ -2,6 +2,7 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Validators from './Validators.svelte'
   import BigNumber from 'bignumber.js'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
   const validatorAddresses = [
     'validator_1234567890',
@@ -23,9 +24,9 @@
       address: validatorAddresses[i % 10],
       totalStake: new BigNumber(100000000),
       apy: Math.random() * 10,
-      fee: {
+      fee: (epoch: number) => ({
         percentage: Math.random() * 5
-      },
+      }),
       uptimePercentages: {
         '1day': Math.random() * 100,
         '1week': Math.random() * 100,
@@ -47,7 +48,7 @@
       totalStakeUnits: new BigNumber(0),
       totalStakeInXRD: new BigNumber(0),
       metadata: {
-        standard: {
+        expected: {
           name: {
             item: {} as any,
             value: 'RADNODE🔥'
@@ -61,8 +62,9 @@
         all: [],
         explicit: []
       },
-      auth: {} as any
-    }))
+      auth: {} as any,
+      rank: 0
+    })) as unknown as ValidatorListItem<true, true, true>[]
 </script>
 
 <Meta title="Navbar Pages / Validators" />

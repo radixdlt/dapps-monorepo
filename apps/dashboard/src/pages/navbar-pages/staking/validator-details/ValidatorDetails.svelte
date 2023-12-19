@@ -11,7 +11,6 @@
   import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { createEventDispatcher } from 'svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
   import RecentUptimeDetail from './RecentUptimeDetail.svelte'
   import type { AccumulatedStakes } from '../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
   import SummaryMetadata from '@dashboard-pages/search-pages/SummaryMetadata.svelte'
@@ -22,21 +21,23 @@
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import StakeDisplay from '../validator-list/StakeDisplay.svelte'
   import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
+  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
-  export let validator: Promise<Validator<true, true, true>>
+  export let validator: Promise<ValidatorListItem<true, true, true>>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
+  export let currentEpoch: number
 
   const dispatch = createEventDispatcher<{
     close: null
   }>()
 
   const getNonMetadataItems = pipe(
-    (validator: Validator<true, true, true>) => [
+    (validator: ValidatorListItem<true, true, true>) => [
       validator.ownerAddress
         ? ['owner address', validator.ownerAddress, 'GlobalAddress']
         : undefined,
-      validator.metadata.standard.info_url
-        ? ['website', validator.metadata.standard.info_url.value, 'Url']
+      validator.metadata.expected.info_url
+        ? ['website', validator.metadata.expected.info_url.value, 'Url']
         : undefined,
       [
         'total stake',
@@ -44,7 +45,11 @@
         'String'
       ],
       ['accepts stake', validator.acceptsStake, 'Bool'],
-      ['fee (%)', `${truncateNumber(validator.fee.percentage)} %`, 'String'],
+      [
+        'fee (%)',
+        `${truncateNumber(validator.fee(currentEpoch).percentage)} %`,
+        'String'
+      ],
       ['apy', `${truncateNumber(validator.apy)} %`, 'String'],
       ['recent uptime', validator.uptimePercentages, 'String'],
       ['owner stake', formatXRDValue(validator.ownerStake.toString()), 'String']
@@ -63,10 +68,10 @@
     <div class="validator-name">
       {#await validator}
         <SkeletonLoader />
-      {:then { metadata: { standard: { name, icon_url } } }}
+      {:then { metadata: { expected: { name, icon_url } } }}
         <div class="icon-and-name">
           <NftImage
-            url={icon_url?.value.href}
+            url={icon_url?.value?.href}
             width={64}
             height={64}
             defaultImageUrl={ValidatorPlaceholder}
@@ -121,7 +126,7 @@
     <InfoBox header="Validator Details" --background="var(--theme-surface-1)">
       <SummaryMetadata
         standardMetadata={validator.then(
-          ({ metadata: { standard } }) => standard
+          ({ metadata: { expected } }) => expected
         )}
         nonMetadataItems={validator.then(getNonMetadataItems)}
         expectedEntries={{
