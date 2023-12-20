@@ -1,9 +1,11 @@
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import CopyableText from './CopyableText.svelte'
+<script lang="ts" context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Base Components / Copyable Text" />
+<script>
+  import { Story } from '@storybook/addon-svelte-csf'
+  import CopyableText from './CopyableText.svelte'
+</script>
 
 <Story name="Primary">
   <CopyableText value="sample text" />

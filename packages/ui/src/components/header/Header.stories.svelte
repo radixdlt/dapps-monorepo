@@ -1,11 +1,13 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import Header from './Header.svelte'
   import { RadixDappToolkit } from '@common/rdt'
   RadixDappToolkit({ dAppDefinitionAddress: '', networkId: 12 })
 </script>
-
-<Meta title="Header" />
 
 <Story name="Primary">
   <Header />

@@ -1,9 +1,11 @@
-<script lang="ts">
-  import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
-  import PillsMenu from './PillsMenu.svelte'
+<script context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Base components / Pills menu" />
+<script lang="ts">
+  import { Story, Template } from '@storybook/addon-svelte-csf'
+  import PillsMenu from './PillsMenu.svelte'
+</script>
 
 <Template>
   <PillsMenu

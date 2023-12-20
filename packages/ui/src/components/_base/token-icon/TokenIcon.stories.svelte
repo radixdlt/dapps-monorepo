@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
   import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
   import TokenIcon from './TokenIcon.svelte'
@@ -21,8 +25,6 @@
     { icon: 'javascript:alert(xss)' }
   ]
 </script>
-
-<Meta title="TokenIcon" />
 
 <Template>
   {#each tokens as token, index}

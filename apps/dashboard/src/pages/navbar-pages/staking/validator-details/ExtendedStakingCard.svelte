@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, type ComponentProps } from 'svelte'
-  import StakingCard from '../staking-card/StakingCard.svelte'
+  import StakingCard from '../../../../lib/staking-card/StakingCard.svelte'
   import ReadyToClaim from '../ready-to-claim/ReadyToClaim.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import BigNumber from 'bignumber.js'

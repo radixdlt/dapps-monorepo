@@ -1,5 +1,9 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import SimplePicker from './SimplePicker.svelte'
 
   let options = [
@@ -17,8 +21,6 @@
     }
   ]
 </script>
-
-<Meta title="Base Components / Picker / SimplePicker" />
 
 <Story name="Primary">
   <SimplePicker

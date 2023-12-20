@@ -24,7 +24,7 @@
 <script lang="ts">
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
-  import StakingCard from './staking-card/StakingCard.svelte'
+  import StakingCard from '../../../lib/staking-card/StakingCard.svelte'
   import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'

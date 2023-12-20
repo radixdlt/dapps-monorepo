@@ -1,9 +1,11 @@
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import Behavior from './Behavior.svelte'
+<script context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Components / Behavior" />
+<script>
+  import { Story } from '@storybook/addon-svelte-csf'
+  import Behavior from './Behavior.svelte'
+</script>
 
 <Story name="Primary">
   <div>

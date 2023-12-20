@@ -1,12 +1,14 @@
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+<script lang="ts" context="module">
+  import { Story } from '@storybook/addon-svelte-csf'
 
-  import Accordion from './Accordion.svelte'
-  import FungibleTokenAccordion from './FungibleTokenAccordion.svelte'
-  import NFTAccordion from './NFTAccordion.svelte'
+  export const meta = {}
 </script>
 
-<Meta title="Accordion" />
+<script lang="ts">
+  import Accordion from './Accordion.svelte'
+  import NFTAccordion from './NFTAccordion.svelte'
+  import FungibleTokenAccordion from './FungibleTokenAccordion.svelte'
+</script>
 
 <Story name="Simple">
   <Accordion>
@@ -61,12 +63,15 @@
 
 <Story name="NFT Collection Accordion">
   <NFTAccordion
-    name="Gipsy Kings"
-    address="resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev"
-    imageUrl="https://picsum.photos/1000/500"
-    count={1}
-    tags={['NFT', 'badge', 'gaming', 'NBA']}
-    totalCount={100000}
+    data={{
+      name: 'Gipsy Kings',
+      address:
+        'resource_tdx_22_1tknxxxxxxxxxradxrdxxxxxxxxx009923554798xxxxxxxxxmaesev',
+      imageUrl: 'https://picsum.photos/1000/500',
+      count: 1,
+      tags: ['NFT', 'badge', 'gaming', 'NBA'],
+      totalCount: 100000
+    }}
   >
     <p>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -74,12 +79,15 @@
     </p>
   </NFTAccordion>
   <NFTAccordion
-    name="Glumpy Gummy Bears"
-    address="resource_tdx_22_1tknxxxxxfghjwrrd35safgdfsgrqqqwerdsfg98xxxxxxxxxmaesev"
-    imageUrl="https://picsum.photos/1000/500?shuffle"
-    count={55}
-    tags={['premium', 'rare', 'NFT']}
-    totalCount={9000}
+    data={{
+      name: 'Glumpy Gummy Bears',
+      address:
+        'resource_tdx_22_1tknxxxxxfghjwrrd35safgdfsgrqqqwerdsfg98xxxxxxxxxmaesev',
+      imageUrl: 'https://picsum.photos/1000/500?shuffle',
+      count: 55,
+      tags: ['premium', 'rare', 'NFT'],
+      totalCount: 9000
+    }}
   >
     <p>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -87,9 +95,12 @@
     </p>
   </NFTAccordion>
   <NFTAccordion
-    address="resource_tdx_22_1tknxxxxxfghjwrrd35safgdfsgrqqqwerdsfg98xxxxxxxxxmaesev"
-    count={1}
-    totalCount={1}
+    data={{
+      address:
+        'resource_tdx_22_1tknxxxxxfghjwrrd35safgdfsgrqqqwerdsfg98xxxxxxxxxmaesev',
+      count: 1,
+      totalCount: 1
+    }}
   >
     <p>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry.

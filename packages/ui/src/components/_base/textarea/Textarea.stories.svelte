@@ -1,24 +1,25 @@
-<script lang="ts">
-  import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
-  import Textarea from './Textarea.svelte'
+<script context="module">
+  export const meta = {
+    component: Textarea,
+    argTypes: {
+      size: {
+        options: ['small', 'medium', 'large'],
+        control: {
+          type: 'select'
+        }
+      },
+      type: {
+        options: ['static', 'dynamic'],
+        control: { type: 'radio' }
+      }
+    }
+  }
 </script>
 
-<Meta
-  title="Textarea"
-  component={Textarea}
-  argTypes={{
-    size: {
-      options: ['small', 'medium', 'large'],
-      control: {
-        type: 'select'
-      }
-    },
-    type: {
-      options: ['static', 'dynamic'],
-      control: { type: 'radio' }
-    }
-  }}
-/>
+<script lang="ts">
+  import { Story, Template } from '@storybook/addon-svelte-csf'
+  import Textarea from './Textarea.svelte'
+</script>
 
 <Template let:args>
   <Textarea

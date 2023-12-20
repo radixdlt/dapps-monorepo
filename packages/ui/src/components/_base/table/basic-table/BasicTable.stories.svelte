@@ -1,5 +1,9 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import Table from '../Table.svelte'
   import Address from '../../address/Address.svelte'
   import { formatTokenValue } from '../../../../utils'
@@ -230,8 +234,6 @@
     }
   ]
 </script>
-
-<Meta title="Base Components / Table / Basic Table" />
 
 <Story name="Validators Table">
   <BasicTable {entries} {columns}>

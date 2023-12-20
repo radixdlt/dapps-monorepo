@@ -255,6 +255,9 @@
 </Theme>
 
 <style lang="scss" global>
+  body {
+    overflow: hidden;
+  }
   .page {
     display: flex;
     flex-direction: column;

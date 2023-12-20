@@ -1,10 +1,12 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
 
   import NftImage from './NftImage.svelte'
 </script>
-
-<Meta title="NFT Image" />
 
 <Story name="Small">
   <div style:background-color="var(--theme-surface-3)" style:padding="20px">

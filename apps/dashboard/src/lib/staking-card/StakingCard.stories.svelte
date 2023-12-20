@@ -1,9 +1,11 @@
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import StakingCard from './StakingCard.svelte'
+<script context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Navbar Pages / Validators / StakingCard" />
+<script>
+  import { Story } from '@storybook/addon-svelte-csf'
+  import StakingCard from './StakingCard.svelte'
+</script>
 
 <Story name="Primary">
   <StakingCard

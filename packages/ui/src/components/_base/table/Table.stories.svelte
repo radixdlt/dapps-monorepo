@@ -1,5 +1,9 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import Table from './Table.svelte'
   import type { ComponentProps } from 'svelte'
 
@@ -70,8 +74,6 @@
     }
   ]
 </script>
-
-<Meta title="Base Components / Table" />
 
 <Story name="Primary">
   <Table entries={stakeEntries} columns={simpleTableConfig}>

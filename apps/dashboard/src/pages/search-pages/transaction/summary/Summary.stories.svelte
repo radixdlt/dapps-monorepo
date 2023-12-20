@@ -1,5 +1,9 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import Summary from './Summary.svelte'
   import type { ComponentProps } from 'svelte'
 
@@ -89,8 +93,6 @@
       }
     ])
 </script>
-
-<Meta title="Search Pages / Transaction / Summary" />
 
 <Story name="primary">
   <Summary {timestamp} {status} {message} {balanceChanges} />
