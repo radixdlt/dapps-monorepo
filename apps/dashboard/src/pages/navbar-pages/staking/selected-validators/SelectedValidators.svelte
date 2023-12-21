@@ -4,6 +4,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import MultipleStaking from '@icons/multiple-staking.svg'
   import { createEventDispatcher } from 'svelte'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   $: count = Object.keys($selectedValidators).filter(
     (key) => $selectedValidators[key]
@@ -28,6 +29,7 @@
   </div>
   <ButtonNew
     on:click={() => {
+      track('click:stake-selected-validators')
       dispatch('stake-selected')
     }}
     size="big"

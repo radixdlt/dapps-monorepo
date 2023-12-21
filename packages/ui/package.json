@@ -83,6 +83,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.3.8",
     "@bulatdashiev/svelte-slider": "^1.0.3",
     "@prisma/client": "^4.15.0",
     "@radixdlt/dapps-dropdown": "1.0.2",

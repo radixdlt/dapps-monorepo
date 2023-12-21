@@ -15,6 +15,7 @@
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@common/gateway-sdk'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let validators: ValidatorListItem[]
   export let currentlyStaked: Promise<{

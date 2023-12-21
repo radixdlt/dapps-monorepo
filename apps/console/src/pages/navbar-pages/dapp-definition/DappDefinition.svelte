@@ -16,6 +16,7 @@
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import type { Account as AccountType } from '@stores'
+  import { track } from '../../../routes/+layout.svelte'
 
   export let accounts: Account[]
 
@@ -32,6 +33,7 @@
   $: if ($response) refreshAccounts()
 
   const update = async () => {
+    track('click:dapp-definition-send-to-wallet')
     if ($selectedAccount)
       send(
         getTxManifest({

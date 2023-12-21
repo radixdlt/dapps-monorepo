@@ -7,6 +7,7 @@
   import { xrdAddress, type Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let validator: ComponentProps<ValidatorInfo>
 
@@ -34,6 +35,7 @@
   bind:stakeButtonDisabled
   sidePanelHeader="Add Stake"
   on:click={(e) => {
+    track('click:send-tx-stake')
     const manifest = getStakeManifest(
       selectedAccount.address,
       validator.address,

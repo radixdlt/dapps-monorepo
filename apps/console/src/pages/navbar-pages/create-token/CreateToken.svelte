@@ -22,6 +22,7 @@
   import { getTransactionDetails } from '@api/_deprecated/gateway'
   import { onMount } from 'svelte'
   import SendToWalletButton from '$lib/SendToWalletButton.svelte'
+  import { track } from '../../../routes/+layout.svelte'
 
   export let action: string = ''
 
@@ -73,6 +74,7 @@
     key: string,
     value: { data: NftData; isValid: boolean }
   ) => {
+    track('click:nft')
     $nftState[key] = value
   }
 
@@ -574,6 +576,7 @@
   }
 
   const handleSendToWallet = () => {
+    track('click:create-token-send-to-wallet')
     if ($accessRule) {
       const {
         trackSupply,
@@ -767,6 +770,7 @@
       <div
         class="add-item"
         on:click={() => {
+          track('click:add-nft')
           addNft()
         }}
       >

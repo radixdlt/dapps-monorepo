@@ -22,6 +22,7 @@
   } from '../../../helpers/simple-access-rule-builder'
   import Form from '$lib/form/Form.svelte'
   import SendToWalletButton from '$lib/SendToWalletButton.svelte'
+  import { track } from '../../../routes/+layout.svelte'
 
   type Resource =
     | FungibleResource
@@ -138,6 +139,7 @@
     )
 
   const handleSendTransaction = () => {
+    track('click:deploy-package')
     if ($wasm && $sborDecodedSchema) {
       const { ownerRoleUpdatable } = $formState
       const transactionManifest = getDeployPackageManifest(
