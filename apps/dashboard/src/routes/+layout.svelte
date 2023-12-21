@@ -1,3 +1,12 @@
+<script context="module">
+  amplitude.init(PUBLIC_AMPLITUDE_API_KEY, {
+    serverZone: 'EU',
+    defaultTracking: true
+  })
+
+  export const track = amplitude.track
+</script>
+
 <script lang="ts">
   import '@fonts'
   import Layout from '@components/layout/Layout.svelte'
@@ -29,7 +38,10 @@
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
   import { callApi } from '@api/_deprecated/gateway'
   import { errorPage } from '../stores'
-  import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import {
+    PUBLIC_NETWORK_NAME,
+    PUBLIC_AMPLITUDE_API_KEY
+  } from '$env/static/public'
   import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@constants'
   import Dialog from '@components/_base/dialog/Dialog.svelte'
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
@@ -37,6 +49,8 @@
   import Cross from '@icons/cross-2.svg'
   import External from '@icons/external-white.svg'
   import ExternalBlack from '@icons/external-black.svg'
+  // @ts-ignore
+  import * as amplitude from '@amplitude/analytics-browser'
 
   let mounted = false
 

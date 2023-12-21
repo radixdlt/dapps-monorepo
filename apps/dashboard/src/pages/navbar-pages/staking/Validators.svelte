@@ -39,6 +39,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
   import AvailableToStake from './available-to-stake/AvailableToStake.svelte'
+  import { track } from '../../../routes/+layout.svelte'
 
   export let validators: Promise<ValidatorListItem<true, true, true>[]>
   export let totalXrdBalance: Promise<string>
@@ -148,6 +149,7 @@
       readyToClaim={totalReadyToClaim}
       claimText="Claim All"
       on:click={() => {
+        track('click:claim-all')
         dispatch('show-claim-all')
       }}
     />
@@ -216,6 +218,7 @@
     {/if}
     <FilterButton
       on:click={() => {
+        track('click:filter-button')
         dispatch('show-filters')
       }}
     />

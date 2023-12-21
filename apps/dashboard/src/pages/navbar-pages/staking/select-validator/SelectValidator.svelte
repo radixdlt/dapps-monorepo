@@ -3,6 +3,7 @@
   import { selectedValidators } from '../Validators.svelte'
   import { connected } from '@stores'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let text: string
   export let validator: Promise<ValidatorListItem>
@@ -13,6 +14,7 @@
     <Checkbox
       bind:checked={$selectedValidators[validator.address]}
       on:checked={() => {
+        track('click:select-validator')
         $selectedValidators = $selectedValidators
       }}
       on:unchecked={() => {

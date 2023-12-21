@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import { track } from '../../../routes/+layout.svelte'
 
   let component: HTMLTextAreaElement
   const adjustHeight = () => {
@@ -40,6 +41,7 @@
 
 <SendTxButton
   on:click={(e) => {
+    track('click:transaction-manifest-send-to-wallet')
     e.detail(transactionManifest)
   }}
   on:response={(e) => {

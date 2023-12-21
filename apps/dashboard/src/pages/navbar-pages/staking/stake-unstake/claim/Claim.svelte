@@ -10,6 +10,7 @@
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
   import type { ClaimNft } from '@api/_deprecated/utils/nfts/claim-nft'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let readyToClaim: {
     validator: ValidatorListItem
@@ -53,6 +54,7 @@
       (transactionManifest: string, blobs?: string[] | undefined) => void
     >
   ) => {
+    track('click:send-tx-claim')
     e.detail(
       getClaimManifest(
         readyToClaim.map((claim) => ({

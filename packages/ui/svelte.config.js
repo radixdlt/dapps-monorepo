@@ -265,7 +265,8 @@ const config = {
           'https://region1.analytics.google.com/',
           'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location',
           'https://region1.google-analytics.com/',
-          'https://analytics.tiktok.com/'
+          'https://analytics.tiktok.com/',
+          'https://api.eu.amplitude.com/2/httpapi'
         ],
         'script-src': [
           'self',

@@ -7,6 +7,7 @@
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let validator: Promise<ValidatorListItem> | ValidatorListItem
   export let withText = false
@@ -21,6 +22,7 @@
     <button
       class="bookmarked"
       on:click|stopPropagation={() => {
+        track('click:bookmarked-validator')
         $bookmarkedValidatorsStore[validator.address] =
           !$bookmarkedValidatorsStore[validator.address]
         bookmarkedValidatorsStore.set($bookmarkedValidatorsStore)

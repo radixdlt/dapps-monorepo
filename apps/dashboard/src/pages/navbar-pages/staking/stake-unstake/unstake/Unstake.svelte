@@ -8,6 +8,7 @@
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { formatXRDValue } from '@utils'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let stakes: {
     account: Account
@@ -65,6 +66,7 @@
       (transactionManifest: string, blobs?: string[] | undefined) => void
     >
   ) => {
+    track('click:send-tx-unstake')
     const unstakes: {
       accountAddress: string
       validatorAddress: string

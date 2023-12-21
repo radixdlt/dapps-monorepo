@@ -28,6 +28,8 @@
     "db:push": "prisma db push --skip-generate"
   },
   "devDependencies": {
+    "@amplitude/analytics-browser": "^2.3.8",
+    "@apidevtools/json-schema-ref-parser": "^10.1.0",
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.18.6",

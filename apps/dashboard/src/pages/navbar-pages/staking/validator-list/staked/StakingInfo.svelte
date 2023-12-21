@@ -7,6 +7,7 @@
   import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import type { TransformedValidator } from '../ValidatorList.svelte'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let validator: Promise<TransformedValidator>
 
@@ -59,6 +60,7 @@
         <ButtonNew
           size="small"
           on:click={() => {
+            track('click:claim-staked-validator')
             dispatch('claim-validator', info.address)
           }}
           >Ready to Claim {formatXRDValue(

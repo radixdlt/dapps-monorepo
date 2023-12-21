@@ -1,3 +1,12 @@
+<script context="module">
+  amplitude.init(PUBLIC_AMPLITUDE_API_KEY, {
+    serverZone: 'EU',
+    defaultTracking: true
+  })
+
+  export const track = amplitude.track
+</script>
+
 <script lang="ts">
   import '@fonts'
   import { featureFlags } from '@featureFlags'
@@ -24,8 +33,12 @@
   import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
-  import { PUBLIC_NETWORK_NAME } from '$env/static/public'
+  import {
+    PUBLIC_AMPLITUDE_API_KEY,
+    PUBLIC_NETWORK_NAME
+  } from '$env/static/public'
   import { NETWORK_CONFIG } from '@constants'
+  import * as amplitude from '@amplitude/analytics-browser'
 
   let mounted = false
 

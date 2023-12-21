@@ -6,11 +6,13 @@
   import { writable } from 'svelte/store'
   import { convertOlympiaToBabylonAddress } from './side-effects'
   import Address from '@components/_base/address/Address.svelte'
+  import { track } from '../../+layout.svelte'
   const olympiaAddress = writable('')
   const babylonAddress = writable('')
   const loading = writable(false)
 
   const convertAddress = () => {
+    track('click:convert-olympia-address')
     babylonAddress.set('')
     loading.set(true)
     convertOlympiaToBabylonAddress($olympiaAddress).then((address) => {

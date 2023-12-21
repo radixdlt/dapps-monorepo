@@ -7,6 +7,7 @@
   import { writable } from 'svelte/store'
   import { formatXRDValue } from '@utils'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
+  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let staked: ComponentProps<StakingCard>['staking']
   export let unstaking: ComponentProps<StakingCard>['unstaking']
@@ -41,7 +42,10 @@
     {unstaking}
     {readyToClaim}
     {claimText}
-    on:click={() => dispatchEvent('claim')}
+    on:click={() => {
+      track('click:validator-details-claim')
+      dispatchEvent('claim')
+    }}
   >
     <div slot="staking-section" class="stake-unstake">
       {#await Promise.all([staked, acceptsStake]) then [staked, acceptsStake]}
@@ -49,12 +53,18 @@
           class="stake-unstake-button"
           class:disabled={!acceptsStake}
           disabled={!acceptsStake}
-          on:click={() => dispatchEvent('add-stake')}>Add Stake</button
+          on:click={() => {
+            track('click:validator-details-add-stake')
+            dispatchEvent('add-stake')
+          }}>Add Stake</button
         >
         {#if new BigNumber(staked).gt(0)}
           <button
             class="stake-unstake-button"
-            on:click={() => dispatchEvent('unstake')}>Request Unstake</button
+            on:click={() => {
+              track('click:validator-details-unstake')
+              dispatchEvent('unstake')
+            }}>Request Unstake</button
           >
         {/if}
       {/await}
