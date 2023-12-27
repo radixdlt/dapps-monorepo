@@ -15,6 +15,7 @@ const config = ({ command }) => ({
 		},
 		build: {
 			build: {
+				assetsInlineLimit: 0,
 				minify: true,
 				sourcemap: false
 			}
