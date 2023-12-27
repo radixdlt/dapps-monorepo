@@ -75,8 +75,8 @@ export const WorkbookClient = ({
                     resourcesCacheClient.nonFungibleResources.get(
                       change.resource_address
                     )?.displayName,
-                    change.added.map((added) => `${added}`).join('\n'),
-                    change.removed.map((removed) => `${removed}`).join('\n')
+                    change.removed.map((removed) => `${removed}`).join('\n'),
+                    change.added.map((added) => `${added}`).join('\n')
                   ])
                 }
               }
