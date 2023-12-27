@@ -1,12 +1,12 @@
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 
-FROM node:20.8-bookworm AS base
+FROM node:21.4-bullseye-slim AS base
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 ARG NETWORK_NAME
 ARG NPM_LOCAL_CACHE=.cache
 
-RUN apt-get update && apt-get install -y openssh-client=1:9.2p1-2+deb12u1
+RUN apt-get update && apt-get install -y openssh-client
 
 FROM base AS sandbox-builder
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
@@ -101,7 +101,7 @@ RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=dashboard
 RUN rm -f .npmrc
 
-FROM node:20.8-bookworm AS dashboard
+FROM node:21.4-bullseye-slim AS dashboard
 
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
@@ -170,7 +170,7 @@ COPY --from=sandbox-installer /app/apps/sandbox/.nginx/nginx.conf /etc/nginx/ngi
 COPY --from=sandbox-installer /app/apps/sandbox/src/assets/favicon.png /usr/share/nginx/html/assets/favicon.png
 COPY --from=sandbox-installer /app/apps/sandbox/src/assets/sandbox_icon.png /usr/share/nginx/html/assets/sandbox_icon.png
 
-FROM node:20.8-bookworm AS console
+FROM node:21.4-bullseye-slim AS console
 
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
