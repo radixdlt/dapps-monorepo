@@ -1,15 +1,13 @@
-<script lang="ts">
-  import { css } from '@styles'
-  import Box from '../box/Box.svelte'
+<div class="card">
+  <slot />
+</div>
 
-  const divider = css({
-    border: '1px solid $borderColor',
-    mt: '$md'
-  })()
-</script>
-
-<Box bgColor="surface" p="large" shadow>
-  <slot name="header" />
-  <hr class={divider} />
-  <slot name="body" />
-</Box>
+<style>
+  .card {
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius-lg);
+    background: var(--background, var(--surface));
+    border: var(--border);
+    padding: var(--padding, var(--spacing-2xl));
+  }
+</style>

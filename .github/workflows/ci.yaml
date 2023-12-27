@@ -85,13 +85,6 @@ jobs:
       
       - name: Turbo Worfkflow
         run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
-
-      - name: Run e2e tests on the PR environment
-        uses: cypress-io/github-action@v4
-        with:
-          start: npm run dev:dashboard
-          wait-on: http://localhost:5173
-          project: ./apps/dashboard
         
 
   setup-tags:

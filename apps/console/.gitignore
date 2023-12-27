@@ -19,3 +19,4 @@ storybook-static
 cypress/screenshots
 yarn-error.log
 .history
+vite.config.js.timestamp-*

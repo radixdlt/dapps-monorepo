@@ -31,15 +31,6 @@ For unit tests:
 yarn test
 ```
 
-and for e2e tests:
-
-```
-yarn dev
-yarn e2etest
-```
-
-integration tests are written using [svelte-testing-library](https://github.com/testing-library/svelte-testing-library), and for e2e tests we use [cypress](https://www.cypress.io/).
-
 ### Run storybook
 
 ```
