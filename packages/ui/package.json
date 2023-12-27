@@ -58,7 +58,6 @@
     "@vitest/coverage-c8": "^0.23.2",
     "babel-loader": "^8.2.5",
     "concurrently": "^8.0.1",
-    "cypress": "^10.10.0",
     "husky": "^8.0.3",
     "isomorphic-fetch": "^3.0.0",
     "jsdom": "^20.0.0",

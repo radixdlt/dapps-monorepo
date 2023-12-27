@@ -1,11 +1,11 @@
 <script>
-  import CardNew from '@components/_base/card/CardNew.svelte'
+  import Card from '@components/_base/card/Card.svelte'
 </script>
 
 <div>
-  <CardNew --background="var(--color-grey-5)">
+  <Card --background="var(--color-grey-5)">
     <slot />
-  </CardNew>
+  </Card>
 </div>
 
 <style>

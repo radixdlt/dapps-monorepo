@@ -38,6 +38,8 @@ const getDAppDefinitionFromLocalStorage = (): Record<string, string> => {
           'account_tdx_22_12xt9uxe39dxdfy9c23vn0qj7eaxs8p3fjjpkr8f48edsfvyk00ck3l',
         [RadixNetwork.Enkinet]:
           'account_tdx_21_168ydk240yx69yl7zdz2mzkdjc3r5p6n4gwypqsype2d6d942z0tyvx',
+        [RadixNetwork.RCnetV3]:
+          'account_tdx_e_12965dqmkmgs96s5cx7r52dg0shjvl7urwqy8eqeq2heym89ralzqdp',
         [RadixNetwork.Mainnet]:
           'account_rdx12y7md4spfq5qy7e3mfjpa52937uvkxf0nmydsu5wydkkxw3qx6nghn',
         [RadixNetwork.Stokenet]:

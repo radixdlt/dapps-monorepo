@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { CSS, VariantProps } from '@stitches/core'
   import { css, config } from '../../../styles'
-  import { TAB_HEIGHT } from '../tabs/types/BoxTab.svelte'
+
+  const TAB_HEIGHT = '40px'
 
   const variants = {
     center: {
