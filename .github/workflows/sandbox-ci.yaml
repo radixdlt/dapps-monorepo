@@ -48,6 +48,7 @@ permissions:
   pull-requests: write
   contents: read
   deployments: write
+  packages: write
 
 jobs:
   trigger:
