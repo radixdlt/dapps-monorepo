@@ -9,7 +9,10 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Select from '@mui/joy/Select'
 import Option from '@mui/joy/Option'
 import { setNetworkId, useNetworkId } from '../network/state'
-import { RadixNetworkConfig } from '@radixdlt/babylon-gateway-api-sdk'
+import {
+  RadixNetworkConfig,
+  RadixNetwork
+} from '@radixdlt/babylon-gateway-api-sdk'
 import { IS_PUBLIC } from '../config'
 
 declare global {
@@ -22,7 +25,7 @@ declare global {
       'radix-dapps-dropdown': React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement>,
         HTMLElement
-      >
+      > & { networkName: string }
     }
   }
 }
@@ -33,6 +36,8 @@ export const Header = ({
   setDrawerOpen: (value: boolean) => void
 }) => {
   const networkId = useNetworkId()
+  const networkName =
+    networkId === RadixNetwork.Mainnet ? 'Mainnet' : 'Stokenet'
   return (
     <Layout.Header>
       <Box
@@ -69,7 +74,7 @@ export const Header = ({
           gap: 1.5
         }}
       >
-        <radix-dapps-dropdown></radix-dapps-dropdown>
+        <radix-dapps-dropdown networkName={networkName}></radix-dapps-dropdown>
         <Select
           value={networkId}
           onChange={(_, value) => {

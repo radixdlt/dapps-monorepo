@@ -15,7 +15,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/public-sans": "^4.5.12",
-    "@radixdlt/dapps-dropdown": "1.0.1",
+    "@radixdlt/dapps-dropdown": "1.0.2",
     "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-alpha.76",
     "@mui/material": "^5.12.1",
