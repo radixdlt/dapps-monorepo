@@ -4,24 +4,24 @@ import type {
 } from '@common/gateway-sdk'
 import { transformEntity, type _Entity } from '.'
 import { pipe } from 'ramda'
-import type { MetadataTypeToNativeType } from '../metadata'
+import { createStandardMetadata } from '../metadata'
 
-type StandardMetadata = {
-  name: MetadataTypeToNativeType['String']
-  description: MetadataTypeToNativeType['String']
-  tags: MetadataTypeToNativeType['StringArray']
-}
+const standardMetadata = createStandardMetadata({
+  name: 'String',
+  description: 'String',
+  tags: 'StringArray'
+})
 
-export type Package = _Entity<'package', StandardMetadata>
+export type Package = _Entity<'package', typeof standardMetadata>
 
 export let transformPackage: (
   entity: StateEntityDetailsVaultResponseItem
 ) => Package = pipe(
-  transformEntity<StateEntityDetailsResponsePackageDetails, StandardMetadata>([
-    'name',
-    'description',
-    'tags'
-  ]),
+  transformEntity<
+    StateEntityDetailsResponsePackageDetails,
+    typeof standardMetadata,
+    never
+  >(standardMetadata),
   (entity) => ({
     ...entity,
     type: 'package' as const

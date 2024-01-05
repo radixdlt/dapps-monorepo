@@ -2,7 +2,7 @@ import type {
   EntityMetadataItem,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
-import { transformEntity, type _Entity, type EntityMetadata } from '..'
+import { transformEntity, type _Entity } from '..'
 import { pipe } from 'ramda'
 import type {
   StateEntityDetailsResponseFungibleResourceDetails,
@@ -10,7 +10,6 @@ import type {
 } from '@common/gateway-sdk'
 import { getBehaviors, type Behavior } from './behaviors'
 import { getAuthInfo } from '@api/_deprecated/utils/auth'
-import type { MetadataTypeToNativeType } from '@api/_deprecated/utils/metadata'
 import { transformFungibleResource } from './fungible'
 import {
   getPoolUnits,
@@ -19,12 +18,17 @@ import {
   type GetEntityDetailsFn
 } from './fungible/pool-unit'
 import { transformNonFungibleResource } from './non-fungible'
+import {
+  createStandardMetadata,
+  type ExpectedMetadata,
+  type SystemMetadata
+} from '@api/utils/metadata'
 
 type ResourceType = 'fungible' | 'non-fungible'
 
 export type Resource<
   T extends ResourceType,
-  Metadata extends EntityMetadata
+  Metadata extends ExpectedMetadata = typeof standardMetadata
 > = _Entity<'resource', Metadata> & {
   resourceType: T
   totalSupply: string
@@ -35,33 +39,38 @@ export type Resource<
   displayName: string
 }
 
-export type StandardMetadata = {
-  name?: MetadataTypeToNativeType['String']
-  description?: MetadataTypeToNativeType['String']
-  tags?: MetadataTypeToNativeType['StringArray']
-  symbol?: MetadataTypeToNativeType['String']
-  icon_url?: MetadataTypeToNativeType['Url']
-}
+export const standardMetadata = createStandardMetadata({
+  name: 'String',
+  description: 'String',
+  tags: 'StringArray',
+  symbol: 'String',
+  icon_url: 'Url'
+})
 
-export const transformResource = <ExpectedMetadata extends EntityMetadata>(
-  entity: StateEntityDetailsVaultResponseItem
+export const transformResource = <Metadata extends ExpectedMetadata>(
+  entity: StateEntityDetailsVaultResponseItem,
+  systemMetadata: Metadata = {} as Metadata
 ) =>
   pipe(
     () =>
       transformEntity<
         | StateEntityDetailsResponseFungibleResourceDetails
         | StateEntityDetailsResponseNonFungibleResourceDetails,
-        ExpectedMetadata
-      >(['name', 'symbol', 'icon_url', 'description', 'tags'])(entity),
+        typeof standardMetadata,
+        typeof systemMetadata
+      >(
+        standardMetadata,
+        systemMetadata
+      )(entity),
     (entity) =>
       ({
         ...entity,
         type: 'resource',
         totalSupply: entity.details?.total_supply,
         displayName: entity.metadata.expected.name
-          ? `${entity.metadata.expected.name.value} ${
+          ? `${entity.metadata.expected.name.typed.value} ${
               entity.metadata.expected.symbol
-                ? `(${entity.metadata.expected.symbol.value})`
+                ? `(${entity.metadata.expected.symbol.typed.value})`
                 : ''
             }`
           : '',

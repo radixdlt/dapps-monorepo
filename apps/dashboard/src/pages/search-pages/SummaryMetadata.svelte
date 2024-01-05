@@ -50,7 +50,11 @@
   <svelte:fragment slot="extra-rows">
     {#await Promise.all( [standardMetadata, useOfficialRadixTag] ) then [metadata, isXRD]}
       <Row text="Tags">
-        <Tags showNetworkTag={isXRD} slot="right" tags={metadata.tags?.value} />
+        <Tags
+          showNetworkTag={isXRD}
+          slot="right"
+          tags={metadata.tags?.typed.values}
+        />
       </Row>
     {/await}
 

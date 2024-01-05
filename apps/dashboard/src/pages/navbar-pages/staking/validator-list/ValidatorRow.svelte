@@ -44,6 +44,7 @@
 
 <div class="grid-wrapper full-width">
   <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="validator-row card"
     class:extension={top3Percent || showStakeInfo || notTop100}
@@ -69,7 +70,7 @@
         <NftImage />
       {:else}
         <NftImage
-          url={input.validator.metadata.expected.icon_url?.value?.href}
+          url={input.validator.metadata.expected.icon_url?.typed.value}
           defaultImageUrl={ValidatorPlaceholder}
           width={64}
           height={64}
@@ -82,7 +83,7 @@
         {#if input === 'loading'}
           <SkeletonLoader width={100} />
         {:else}
-          {input.validator.metadata.expected.name?.value ?? ''}
+          {input.validator.metadata.expected.name?.typed.value ?? ''}
         {/if}
       </div>
     </div>

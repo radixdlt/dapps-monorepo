@@ -3,7 +3,7 @@ import type { _Entity } from '../..'
 import {
   getStringMetadata,
   transformMetadata,
-  type MetadataTypeToNativeType
+  createSystemMetadata
 } from '../../../metadata'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import type { FungibleResource } from '.'
@@ -11,12 +11,12 @@ import { ok } from 'neverthrow'
 import { getValidatorMetadataValue } from '../../component/validator'
 import { getPoolUnitMetadataValue } from './pool-unit'
 
-type SystemMetadata = {
-  validator: MetadataTypeToNativeType['String']
-}
+const systemMetadata = createSystemMetadata({
+  validator: 'GlobalAddress'
+})
 
 export type StakeUnit = Omit<FungibleResource, 'type'> &
-  _Entity<'stakeUnit', SystemMetadata>
+  _Entity<'stakeUnit', typeof systemMetadata>
 
 export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => ({
   ...resource,
@@ -25,13 +25,13 @@ export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => ({
     ...resource.metadata,
     standard: {
       ...resource.metadata.expected,
-      ...transformMetadata<SystemMetadata>(
+      ...transformMetadata(
         {
           metadata: {
             items: resource.metadata.all
           }
         },
-        ['validator']
+        systemMetadata
       ).expected
     }
   } as any // svelte-check complains otherwise

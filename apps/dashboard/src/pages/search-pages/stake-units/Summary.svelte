@@ -16,7 +16,7 @@
     nonMetadataItems={stakeUnit.then((stakeUnit) => [
       [
         'associated validator',
-        stakeUnit.metadata.expected.validator?.value,
+        stakeUnit.metadata.expected.validator?.typed.value,
         'GlobalAddress'
       ],
       [

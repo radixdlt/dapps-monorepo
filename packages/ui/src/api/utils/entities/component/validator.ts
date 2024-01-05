@@ -1,7 +1,6 @@
 import type {
   ErrorResponse,
   LedgerState,
-  StateEntityDetailsResponseComponentDetails,
   StateEntityDetailsResponseFungibleResourceDetails,
   StateEntityDetailsVaultResponseItem,
   ValidatorCollectionItem,
@@ -10,8 +9,9 @@ import type {
 import {
   getEnumStringMetadata,
   transformMetadata,
-  type MetadataTypeToNativeType,
-  getStringMetadata
+  getStringMetadata,
+  createSystemMetadata,
+  createStandardMetadata
 } from '../../metadata'
 import { type _Entity } from '..'
 import {
@@ -27,19 +27,22 @@ import { Result, ResultAsync, errAsync, okAsync } from 'neverthrow'
 import {
   transformComponent,
   type Component,
-  type StandardMetadata as ComponentStandardMetadata,
-  type EntityType
+  type EntityType,
+  standardMetadata as componentStandardMetadata
 } from '.'
 
-type SystemMetadata = {
-  owner_badge: MetadataTypeToNativeType['String']
-  pool_unit: MetadataTypeToNativeType['String']
-  claim_nft: MetadataTypeToNativeType['String']
-}
+const systemMetadata = createSystemMetadata({
+  owner_badge: 'NonFungibleGlobalId',
+  pool_unit: 'GlobalAddress',
+  claim_nft: 'NonFungibleGlobalId'
+})
 
-type StandardMetadata = ComponentStandardMetadata & {
-  icon_url: MetadataTypeToNativeType['Url'] | undefined
-  info_url: MetadataTypeToNativeType['Url'] | undefined
+const standardMetadata = {
+  ...createStandardMetadata({
+    icon_url: 'Url',
+    info_url: 'Url'
+  }),
+  ...componentStandardMetadata
 }
 
 type ComponentState = {
@@ -89,7 +92,7 @@ type ComponentState = {
   already_unlocked_owner_stake_unit_amount: string
 }
 
-export type Validator = Component<ComponentState, StandardMetadata> & {
+export type Validator = Component<ComponentState, typeof standardMetadata> & {
   fee: (current_epoch: number) => {
     percentage: number
     tooltip?: string
@@ -316,10 +319,13 @@ export const transformValidator = (
 ): Validator =>
   pipe(
     () =>
-      transformComponent<ComponentState, StandardMetadata & SystemMetadata>(
-        entity,
-        ['icon_url', 'info_url', 'owner_badge', 'claim_nft', 'pool_unit']
-      ),
+      transformComponent<
+        ComponentState,
+        typeof standardMetadata & typeof systemMetadata
+      >(entity, {
+        ...standardMetadata,
+        ...systemMetadata
+      }),
     (entity) => ({
       ...entity,
       componentType: 'validator' as const,
@@ -337,16 +343,7 @@ export const transformValidatorListItem = (
 
   return {
     address: validator.address,
-    metadata: transformMetadata<StandardMetadata & SystemMetadata>(validator, [
-      'name',
-      'description',
-      'tags',
-      'icon_url',
-      'info_url',
-      'owner_badge',
-      'claim_nft',
-      'pool_unit'
-    ]),
+    metadata: transformMetadata(validator, standardMetadata, systemMetadata),
     fee: calculateFee(state),
     percentageTotalStake: validator.active_in_epoch?.stake_percentage || 0,
     stakeUnitResourceAddress: state.stake_unit_resource_address,

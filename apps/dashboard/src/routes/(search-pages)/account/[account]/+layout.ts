@@ -52,7 +52,7 @@ const getEntityDetailsFn = (stateVersion: number) => (addresses: string[]) =>
 const getPoolUnitData =
   (stateVersion: number, account: Account) => async (poolUnits: PoolUnit[]) => {
     const poolAddresses = poolUnits.map(
-      (unit) => unit.metadata.expected.pool?.value
+      (unit) => unit.metadata.expected.pool.typed.value
     )
 
     if (poolAddresses.some((a) => a === undefined)) {
@@ -80,7 +80,9 @@ const getPoolUnitData =
       () =>
         callApi(
           'getEntityDetailsVaultAggregated',
-          pools.flatMap((pool) => pool.metadata.expected.pool_resources!.value),
+          pools.flatMap(
+            (pool) => pool.metadata.expected.pool_resources.typed.values
+          ),
           undefined,
           { state_version: stateVersion }
         ),
@@ -89,24 +91,24 @@ const getPoolUnitData =
 
     return poolUnits.map((unit) => {
       const pool = pools.find(
-        (pool) => pool.address === unit.metadata.expected.pool!.value
+        (pool) => pool.address === unit.metadata.expected.pool.typed.value
       )!
 
       return {
         poolUnit: {
           address: unit.address,
-          name: unit.metadata.expected.name?.value,
-          icon: unit.metadata.expected.icon_url?.value
+          name: unit.metadata.expected.name?.typed.value,
+          icon: unit.metadata.expected.icon_url?.typed.value
         },
-        poolTokens: pool.metadata.expected.pool_resources!.value.map(
+        poolTokens: pool.metadata.expected.pool_resources.typed.values.map(
           (poolToken) => {
             const token = transformFungibleResource(
               poolTokens.find((token) => token.address === poolToken)!
             )
 
             return {
-              name: token.metadata.expected.name?.value,
-              icon: token.metadata.expected.icon_url?.value,
+              name: token.metadata.expected.name?.typed.value,
+              icon: token.metadata.expected.icon_url?.typed.value,
               redeemableAmount: getRedeemablePoolTokenAmount(
                 token,
                 unit,
@@ -225,7 +227,8 @@ export const load: LayoutLoad = ({ params }) => {
 
       for (const stake of stakeInfo) {
         const validator = stake.validator.address
-        const validatorName = stake.validator.metadata.expected.name?.value
+        const validatorName =
+          stake.validator.metadata.expected.name?.typed.value
 
         if (!accumulatedStakes[validator]) {
           accumulatedStakes[validator] = {

@@ -111,29 +111,29 @@ export type AuthInfo = {
 
 export const isAllowed =
   (authInfo: AuthInfo) =>
-    (rule: AuthInfo['rules'][keyof AuthInfo['rules']]) => {
-      if (rule.rule.type === 'Protected') {
+  (rule: AuthInfo['rules'][keyof AuthInfo['rules']]) => {
+    if (rule.rule.type === 'Protected') {
+      return 'by-someone'
+    }
+
+    if (rule.rule.type === 'AllowAll') {
+      return 'by-anyone'
+    }
+
+    if (rule.rule.type === 'Owner') {
+      const owner = authInfo.owner
+
+      if (owner.type == 'Protected') {
         return 'by-someone'
       }
 
-      if (rule.rule.type === 'AllowAll') {
+      if (owner.type === 'AllowAll') {
         return 'by-anyone'
       }
-
-      if (rule.rule.type === 'Owner') {
-        const owner = authInfo.owner
-
-        if (owner.type == 'Protected') {
-          return 'by-someone'
-        }
-
-        if (owner.type === 'AllowAll') {
-          return 'by-anyone'
-        }
-      }
-
-      return 'by-no-one'
     }
+
+    return 'by-no-one'
+  }
 
 const getEntryInfo = (entry: ComponentEntityRoleAssignmentEntry) => {
   const assignment = entry.assignment

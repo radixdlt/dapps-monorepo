@@ -19,13 +19,13 @@
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
       ? nft.nftData.standard.key_image_url?.value
-      : resource.metadata.expected.icon_url?.value?.href
+      : resource.metadata.expected.icon_url?.typed.value
   )
 
   $: description = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
       ? nft.nftData.standard.description?.value
-      : resource.metadata.expected.description?.value
+      : resource.metadata.expected.description?.typed.value
   )
 
   const imageSize = 'large'

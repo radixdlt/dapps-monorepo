@@ -102,11 +102,11 @@
 
       <NFTAccordion
         data={{
-          name: resource.metadata.expected.name?.value,
+          name: resource.metadata.expected.name?.typed.value,
           address: resource.address,
-          imageUrl: resource.metadata.expected.icon_url?.value?.href,
+          imageUrl: resource.metadata.expected.icon_url?.typed.value,
           count: nbrOfNfts,
-          tags: resource.metadata.expected.tags?.value,
+          tags: resource.metadata.expected.tags?.typed.values,
           totalCount: Number(resource.totalSupply)
         }}
       >

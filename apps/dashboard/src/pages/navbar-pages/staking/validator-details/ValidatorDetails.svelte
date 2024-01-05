@@ -37,7 +37,7 @@
         ? ['owner address', validator.ownerAddress, 'GlobalAddress']
         : undefined,
       validator.metadata.expected.info_url
-        ? ['website', validator.metadata.expected.info_url.value, 'Url']
+        ? ['website', validator.metadata.expected.info_url.typed.value, 'Url']
         : undefined,
       [
         'total stake',
@@ -71,12 +71,12 @@
       {:then { metadata: { expected: { name, icon_url } } }}
         <div class="icon-and-name">
           <NftImage
-            url={icon_url?.value?.href}
+            url={icon_url?.typed.value}
             width={64}
             height={64}
             defaultImageUrl={ValidatorPlaceholder}
           />
-          <h1 class="dotted-overflow">{name?.value ?? '<no-name>'}</h1>
+          <h1 class="dotted-overflow">{name?.typed.value ?? '<no-name>'}</h1>
         </div>
       {/await}
       <SelectValidator {validator} text="SELECT VALIDATOR" />

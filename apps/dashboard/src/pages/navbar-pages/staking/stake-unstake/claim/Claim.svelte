@@ -77,7 +77,7 @@
         <StakeCard>
           <svelte:fragment slot="info">
             <ValidatorInfo
-              name={validator.metadata.expected.name?.value}
+              name={validator.metadata.expected.name?.typed.value}
               {...validator}
             />
           </svelte:fragment>
