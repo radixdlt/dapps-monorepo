@@ -4,19 +4,19 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformComponent } from '@api/utils/entities/component'
+import { transformPool } from '@api/utils/entities/component/pool'
 
 export const prerender = false
 
 export const load: LayoutLoad = ({ params }) => {
   const entity = getLookupEntity(params.pool)
-  const pool = entity.then(transformComponent)
+  const pool = entity.then(transformPool)
 
   return {
     address: params.pool,
     promises: {
       entity,
-      pool: entity.then(transformComponent),
+      pool,
       associatedDapps: getAssociatedDapps(entity),
       authResources: pool.then(({ auth }) => getResourcesFromAuth(auth))
     }

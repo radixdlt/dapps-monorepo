@@ -121,7 +121,7 @@
           <OverviewUnstakeCard
             validator={{
               address: stake.validator.address,
-              name: stake.validator.metadata.expected.name?.value
+              name: stake.validator.metadata.expected.name?.typed.value
             }}
             account={stake.account}
             stakedAmount={stake.amount.toString()}

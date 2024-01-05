@@ -18,13 +18,13 @@
       }
     }: FungibleResource): Token => ({
       linksTo: `/resource/${address}`,
-      numberOfTags: tags?.value?.length ?? 0,
+      numberOfTags: tags?.typed.values.length ?? 0,
       amount: account.resources.fungible.find(
         (fungible) => fungible.address === address
       )!.value,
-      symbol: symbol?.value,
+      symbol: symbol?.typed.value,
       address,
-      iconUrl: icon_url?.value?.href
+      iconUrl: icon_url?.typed.value
     })
 
   $: xrdAddress = $xrdAddressStore

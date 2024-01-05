@@ -4,12 +4,15 @@ import type { PoolUnit } from '../resource/fungible/pool-unit'
 import { pipe } from 'ramda'
 import type { FungibleResource } from '../resource/fungible'
 import type { Account } from './account'
-import type { MetadataTypeToNativeType } from '../../metadata'
+import {
+  createSystemMetadata,
+  type SystemMetadata as _SystemMetadata
+} from '../../metadata'
 import {
   transformComponent,
   type Component,
-  type StandardMetadata,
-  type EntityType
+  type EntityType,
+  standardMetadata
 } from '.'
 
 type ComponentState = {
@@ -24,16 +27,16 @@ type ComponentState = {
   pool_unit_resource_address: string
 }
 
-type SystemMetadata = {
-  owner_badge: MetadataTypeToNativeType['String']
-  pool_vault_number: MetadataTypeToNativeType['String']
-  pool_resources: MetadataTypeToNativeType['StringArray']
-  pool_unit: MetadataTypeToNativeType['String']
-}
+const systemMetadata = createSystemMetadata({
+  owner_badge: 'NonFungibleGlobalId',
+  pool_vault_number: 'String',
+  pool_resources: 'GlobalAddressArray',
+  pool_unit: 'GlobalAddress'
+})
 
 export type Pool = Component<
   ComponentState,
-  StandardMetadata & SystemMetadata
+  typeof standardMetadata & typeof systemMetadata
 > & {
   componentType: 'pool'
 }
@@ -43,10 +46,10 @@ export const transformPool = (
 ): Pool =>
   pipe(
     () =>
-      transformComponent<ComponentState, StandardMetadata & SystemMetadata>(
-        entity,
-        ['owner_badge', 'pool_vault_number', 'pool_resources', 'pool_unit']
-      ),
+      transformComponent<
+        ComponentState,
+        typeof standardMetadata & typeof systemMetadata
+      >(entity, systemMetadata),
     (entity) => ({
       ...entity,
       componentType: 'pool' as const

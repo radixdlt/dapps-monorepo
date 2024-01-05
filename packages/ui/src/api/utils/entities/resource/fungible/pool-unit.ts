@@ -2,8 +2,8 @@ import type { _Entity } from '../..'
 import {
   getMetadataItem,
   transformMetadata,
-  type MetadataTypeToNativeType,
-  getStringMetadata
+  getStringMetadata,
+  createSystemMetadata
 } from '../../../metadata'
 import type { FungibleResource } from '.'
 import type {
@@ -13,12 +13,12 @@ import type {
 import { getStringMetadataValue } from '@api/_deprecated/utils/metadata'
 import { andThen, pipe } from 'ramda'
 
-type SystemMetadata = {
-  pool: MetadataTypeToNativeType['String']
-}
+const systemMetadata = createSystemMetadata({
+  pool: 'GlobalAddress'
+})
 
 export type PoolUnit = Omit<FungibleResource, 'type'> &
-  _Entity<'poolUnit', SystemMetadata>
+  _Entity<'poolUnit', typeof systemMetadata>
 export type GetEntityTypesFn = (
   address: string[]
 ) => Promise<{ [address: string]: string }>
@@ -42,13 +42,13 @@ export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
     ...resource.metadata,
     expected: {
       ...resource.metadata.expected,
-      ...transformMetadata<SystemMetadata>(
+      ...transformMetadata(
         {
           metadata: {
             items: resource.metadata.all
           }
         },
-        ['pool']
+        systemMetadata
       ).expected
     }
   }

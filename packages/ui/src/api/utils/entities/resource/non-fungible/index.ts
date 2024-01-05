@@ -1,18 +1,11 @@
-import { transformResource, type Resource, type StandardMetadata } from '..'
+import { transformResource, type Resource } from '..'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { getStringMetadata } from '@api/utils/metadata'
 import type { Validator, ValidatorListItem } from '../../component/validator'
-import type {
-  ClaimNftCollection,
-  SystemMetadata as ClaimSystemMetadata,
-  SystemMetadata
-} from './claim-nft-collection'
+import { systemMetadata, type ClaimNftCollection } from './claim-nft-collection'
 import { transformMetadata } from '@api/utils/metadata'
 
-export type DefaultNonFungibleResource = Resource<
-  'non-fungible',
-  StandardMetadata
-> & {
+export type DefaultNonFungibleResource = Resource<'non-fungible'> & {
   nonFungibleType: 'default'
 }
 
@@ -42,18 +35,18 @@ export const resourceToClaimNftCollection = (
   nonFungibleType: 'claim-nft-collection',
   metadata: {
     ...resource.metadata,
-    standard: {
+    expected: {
       ...resource.metadata.expected,
-      ...transformMetadata<SystemMetadata>(
+      ...transformMetadata(
         {
           metadata: {
             items: resource.metadata.all
           }
         },
-        ['validator']
+        systemMetadata
       ).expected
     }
-  } as any // svelte-check complains otherwise
+  }
 })
 
 export const transformNonFungibleResource = (
@@ -62,13 +55,13 @@ export const transformNonFungibleResource = (
 ): NonFungibleResource => {
   if (validators && isClaimNftCollection(entity, validators)) {
     return {
-      ...transformResource<StandardMetadata & ClaimSystemMetadata>(entity),
+      ...transformResource(entity, systemMetadata),
       resourceType: 'non-fungible',
       nonFungibleType: 'claim-nft-collection'
     } as const
   }
   return {
-    ...transformResource<StandardMetadata>(entity),
+    ...transformResource(entity),
     resourceType: 'non-fungible',
     nonFungibleType: 'default'
   } as const

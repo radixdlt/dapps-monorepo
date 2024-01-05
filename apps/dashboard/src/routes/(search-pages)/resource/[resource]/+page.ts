@@ -44,7 +44,7 @@ const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
   )()
 
 const getRedeemableTokens = async (poolUnit: PoolUnit) => {
-  const pool = poolUnit.metadata.expected.pool!.value
+  const pool = poolUnit.metadata.expected.pool!.typed.value
 
   const poolEntity = await pipe(
     () =>

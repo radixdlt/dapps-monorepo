@@ -63,7 +63,7 @@
       if (resource.type === 'poolUnit') {
         metadata.push([
           'associated pool component',
-          resource.metadata.expected.pool?.value,
+          resource.metadata.expected.pool?.typed.value,
           'GlobalAddress'
         ])
       }

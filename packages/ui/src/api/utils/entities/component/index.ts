@@ -5,7 +5,7 @@ import type {
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 import { pipe } from 'ramda'
-import type { MetadataTypeToNativeType } from '../../metadata'
+import { createStandardMetadata, type ExpectedMetadata } from '../../metadata'
 
 export type EntityType =
   | 'GlobalPackage'
@@ -30,15 +30,15 @@ export type EntityType =
   | 'GlobalMultiResourcePool'
   | 'GlobalTransactionTracker'
 
-export type StandardMetadata = {
-  name: MetadataTypeToNativeType['String'] | undefined
-  description: MetadataTypeToNativeType['String'] | undefined
-  tags: MetadataTypeToNativeType['StringArray'] | undefined
-}
+export const standardMetadata = createStandardMetadata({
+  name: 'String',
+  description: 'String',
+  tags: 'StringArray'
+})
 
 export type Component<
   ComponentState = {},
-  Metadata extends StandardMetadata = StandardMetadata
+  Metadata extends ExpectedMetadata = typeof standardMetadata
 > = _Entity<'component', Metadata> & {
   packageAddress: string
   blueprintName: string
@@ -48,17 +48,21 @@ export type Component<
 
 export const transformComponent = <
   ComponentState = {},
-  ExpectedMetadata extends StandardMetadata = StandardMetadata
+  ExpectedMetadata extends typeof standardMetadata = typeof standardMetadata
 >(
   entity: StateEntityDetailsVaultResponseItem,
-  metadata: (keyof ExpectedMetadata)[] = []
+  metadata: ExpectedMetadata = {} as ExpectedMetadata
 ): Component<ComponentState, ExpectedMetadata> =>
   pipe(
     () =>
       transformEntity<
         StateEntityDetailsResponseComponentDetails,
-        ExpectedMetadata
-      >(['name', 'description', 'tags', ...metadata])(entity),
+        typeof standardMetadata,
+        never
+      >({
+        ...standardMetadata,
+        ...metadata
+      })(entity),
     (entity) => ({
       ...entity,
       type: 'component' as const,

@@ -33,7 +33,7 @@
 
   <div class="info" slot="info">
     <ValidatorInfo
-      name={validator.metadata.expected.name?.value}
+      name={validator.metadata.expected.name?.typed.value}
       address={validator.address}
       {currentlyStakingAmount}
     />

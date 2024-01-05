@@ -1,11 +1,11 @@
-import { transformResource, type Resource, type StandardMetadata } from '..'
+import { transformResource, type Resource, standardMetadata } from '..'
 import { pipe } from 'ramda'
 import type {
   StateEntityDetailsResponseFungibleResourceDetails,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 
-export type FungibleResource = Resource<'fungible', StandardMetadata> & {
+export type FungibleResource = Resource<'fungible', typeof standardMetadata> & {
   divisibility: number
 }
 
@@ -13,7 +13,7 @@ export const transformFungibleResource = (
   entity: StateEntityDetailsVaultResponseItem
 ): FungibleResource =>
   pipe(
-    () => transformResource<StandardMetadata>(entity),
+    () => transformResource<typeof standardMetadata>(entity),
     (entity) =>
       ({
         ...entity,

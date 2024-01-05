@@ -1,7 +1,11 @@
 import BigNumber from 'bignumber.js'
 import { getAuthInfo, type AuthInfo } from '../auth'
-import { transformMetadata, type MetadataTypeToNativeType } from '../metadata'
-import type { Component, EntityType } from './component'
+import {
+  transformMetadata,
+  type ExpectedMetadata,
+  type NarrowedMetadataTypedValue
+} from '../metadata'
+import type { Component } from './component'
 import type { Package } from './package'
 import type { Pool } from './component/pool'
 import type { PoolUnit } from './resource/fungible/pool-unit'
@@ -28,39 +32,19 @@ export type Entity =
   | Component
   | StakeUnit
 
-export type ExpectedMetadata<
-  Metadata extends { [key in MetadataKey]: MetadataValue },
-  MetadataKey extends string | number | symbol = keyof Metadata,
-  MetadataValue = Metadata[MetadataKey]
-> = {
-  [K in MetadataKey]: {
-    item: EntityMetadataItem
-    value: Metadata[K]
-  }
-}
-
-export type EntityMetadata = {
-  [key: string]:
-    | MetadataTypeToNativeType[keyof MetadataTypeToNativeType]
-    | undefined
-}
-
 export type _Entity<
   Type extends string,
-  ExpectedMetadata extends { [key in MetadataKey]: MetadataValue },
-  MetadataKey extends string | number | symbol = keyof ExpectedMetadata,
-  MetadataValue = ExpectedMetadata[MetadataKey]
+  _ExpectedMetadata extends ExpectedMetadata
 > = {
   type: Type
   address: string
   metadata: {
     expected: {
-      [K in MetadataKey]: {
+      [K in keyof _ExpectedMetadata]: {
         item: EntityMetadataItem
-        value: ExpectedMetadata[K]
+        typed: NarrowedMetadataTypedValue<_ExpectedMetadata[K]>
       }
     }
-    nonStandard: EntityMetadataItem[]
     explicit: EntityMetadataItem[]
     all: EntityMetadataItem[]
   }
@@ -85,16 +69,16 @@ export type _Entity<
 export const transformEntity =
   <
     Details extends StateEntityDetailsVaultResponseItem['details'],
-    ExpectedMetadata extends { [key in MetadataKey]: MetadataValue },
-    MetadataKey extends string | number | symbol = keyof ExpectedMetadata,
-    MetadataValue = ExpectedMetadata[MetadataKey]
+    StandardMetadata extends ExpectedMetadata,
+    SystemMetadata extends ExpectedMetadata
   >(
-    standardMetadata: MetadataKey[]
+    standardMetadata?: StandardMetadata,
+    systemMetadata?: SystemMetadata
   ) =>
   <E extends StateEntityDetailsVaultResponseItem>(entity: E) => ({
     address: entity.address,
     details: entity.details as Details,
-    metadata: transformMetadata<ExpectedMetadata>(entity, standardMetadata),
+    metadata: transformMetadata(entity, standardMetadata, systemMetadata),
     auth: getAuthInfo(
       (entity.details as StateEntityDetailsResponseComponentDetails)
         .role_assignments!

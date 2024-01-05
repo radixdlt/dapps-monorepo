@@ -6,5 +6,5 @@
 </script>
 
 <Metadata
-  metadata={data.promises.package.then(({ metadata }) => metadata.nonStandard)}
+  metadata={data.promises.package.then(({ metadata }) => metadata.all)}
 />
