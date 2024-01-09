@@ -88,13 +88,12 @@
       {:else if value.kind === 'NonFungibleLocalId' || value.kind === 'String' || value.kind === 'U8' || value.kind === 'U16' || value.kind === 'U32' || value.kind === 'U64' || value.kind === 'U128' || value.kind === 'I32' || value.kind === 'I64' || value.kind === 'I16' || value.kind === 'I8' || value.kind === 'I128' || value.kind === 'Bool' || value.kind === 'Decimal' || value.kind === 'PreciseDecimal'}
         {value.value}
       {:else if value.kind === 'Reference'}
-        <Address value={value.value} short --background="var(--color-grey-5)" />
+        <Address value={value.value} --background="var(--color-grey-5)" />
       {:else if value.kind === 'Bytes'}
         {value.hex}
       {:else if value.kind === 'Tuple' && value.type_name === 'NonFungibleGlobalId'}
         <Address
           value={transformTupleGlobalIdToAddress(value)}
-          short
           --background="var(--color-grey-5)"
         />
       {/if}
