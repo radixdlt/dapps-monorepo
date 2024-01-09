@@ -4,12 +4,13 @@
   export let active: string | undefined
   export let items: { id: string; label: string }[][] = []
   export let onClick = (id: string) => {}
+  export let scrollIntoView = true
 
   let pills: Record<string, HTMLElement> = {}
 
   onMount(() => {
-    if (active) {
-      pills[active]?.scrollIntoView()
+    if (active && scrollIntoView) {
+      pills[active]?.scrollIntoView({ block: 'center' })
     }
   })
 </script>

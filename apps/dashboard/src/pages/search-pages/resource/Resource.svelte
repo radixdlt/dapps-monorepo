@@ -25,6 +25,8 @@
 
   export let showAddressInMetadata = false
 
+  export let scrollIntoView = true
+
   let activeTab = 'summary'
 
   const tabs = [
@@ -73,7 +75,7 @@
   })
 </script>
 
-<PillsMenu items={tabs} bind:active={activeTab} />
+<PillsMenu items={tabs} bind:active={activeTab} {scrollIntoView} />
 
 {#if activeTab === 'summary'}
   <div class="card info-card">
