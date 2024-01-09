@@ -1,27 +1,24 @@
 import type {
   ProgrammaticScryptoSborValue,
-  ProgrammaticScryptoSborValueDecimal,
   ProgrammaticScryptoSborValueNonFungibleLocalId,
   ProgrammaticScryptoSborValueReference,
-  ProgrammaticScryptoSborValueString,
   ProgrammaticScryptoSborValueTuple,
-  ProgrammaticScryptoSborValueU64,
   StateNonFungibleDetailsResponseItem
 } from '@common/gateway-sdk'
-import { add } from 'ramda'
 
-export type NftDataItem<N extends keyof KnownStandardTypes | string = string> =
-  N extends keyof KnownStandardTypes
-    ? KnownStandardTypes[N]
-    : ProgrammaticScryptoSborValue
-
-export type KnownStandardTypes = {
-  name: ProgrammaticScryptoSborValueString
-  description: ProgrammaticScryptoSborValueString
-  key_image_url: ProgrammaticScryptoSborValueString
-  claim_amount: ProgrammaticScryptoSborValueDecimal
-  claim_epoch: ProgrammaticScryptoSborValueU64
+export type ExpectedNftData = {
+  [key: string]: ProgrammaticScryptoSborValue['kind']
 }
+
+export type NarrowedNftDataTypedValue<
+  T extends ProgrammaticScryptoSborValue['kind']
+> = Extract<ProgrammaticScryptoSborValue, { kind: T }>
+
+export const createStandardNftData = <T extends ExpectedNftData>(entries: T) =>
+  entries as Partial<T>
+
+export const createSystemNftData = <T extends ExpectedNftData>(entries: T) =>
+  entries as Required<T>
 
 export const getNftData = (
   data: StateNonFungibleDetailsResponseItem['data'],
@@ -31,20 +28,40 @@ export const getNftData = (
     ({ field_name }) => field_name === key
   )?.value
 
-const isStandardEntry = <T extends (keyof KnownStandardTypes)[]>(
-  standard: T,
-  item: ProgrammaticScryptoSborValue
-): item is KnownStandardTypes[T[number]] => {
-  const fieldName = standard.find((key) => item.field_name === key)
-  if (fieldName) return true
-  return false
-}
-
-export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
+export const transformNftData = <
+  Standard extends ExpectedNftData,
+  System extends ExpectedNftData
+>(
   data: StateNonFungibleDetailsResponseItem['data'],
-  standardEntries: T
+  standardEntries: Standard = {} as Standard,
+  systemEntries: System = {} as System
 ) => {
-  const standard = {} as { [K in T[number]]: KnownStandardTypes[K] }
+  const isStandardEntry = (value: ProgrammaticScryptoSborValue) =>
+    Object.keys(standardEntries).some((key) => value.field_name === key)
+
+  const isSystemEntry = (value: ProgrammaticScryptoSborValue) =>
+    Object.keys(systemEntries).some((key) => value.field_name === key)
+
+  const validateStandardEntryType = (value: ProgrammaticScryptoSborValue) => {
+    const expectedType =
+      standardEntries[
+        Object.keys(standardEntries).find((key) => value.field_name === key)!
+      ]
+    const actualType = value.kind
+
+    return expectedType === actualType
+  }
+
+  const expected = {} as {
+    [K in keyof typeof standardEntries]: NarrowedNftDataTypedValue<
+      (typeof standardEntries)[K]
+    >
+  } & {
+    [K in keyof typeof systemEntries]: NarrowedNftDataTypedValue<
+      (typeof systemEntries)[K]
+    >
+  }
+
   const nonStandard: ProgrammaticScryptoSborValue[] = []
 
   const programmatic_json = data?.programmatic_json
@@ -52,9 +69,12 @@ export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
   if (programmatic_json && programmatic_json.kind === 'Tuple') {
     for (let field of programmatic_json.fields) {
       if (field.field_name) {
-        if (isStandardEntry(standardEntries, field)) {
-          const key = field.field_name as T[number]
-          standard[key] = field
+        if (
+          (isStandardEntry(field) && validateStandardEntryType(field)) ||
+          isSystemEntry(field)
+        ) {
+          // @ts-ignore
+          expected[field.field_name] = field
         } else {
           nonStandard.push(field)
         }
@@ -63,9 +83,9 @@ export const transformNftData = <T extends (keyof KnownStandardTypes)[]>(
   }
 
   return {
-    standard,
+    expected,
     nonStandard,
-    all: [...Object.values(standard), ...nonStandard]
+    all: { ...expected, ...nonStandard }
   }
 }
 

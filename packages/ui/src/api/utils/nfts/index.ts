@@ -1,28 +1,46 @@
-import type { StateNonFungibleDetailsResponseItem } from '@common/gateway-sdk'
+import type {
+  ProgrammaticScryptoSborValue,
+  StateNonFungibleDetailsResponseItem
+} from '@common/gateway-sdk'
 import type { GeneralNft } from './general-nft'
-import type { ClaimNft } from './claim-nft'
+import { systemNftData as claimNftSystemData, type ClaimNft } from './claim-nft'
 import {
   transformNftData,
-  type NftDataItem,
-  type KnownStandardTypes
+  type ExpectedNftData,
+  type NarrowedNftDataTypedValue,
+  createStandardNftData
 } from '../nft-data'
 import type { NonFungibleResource } from '../entities/resource/non-fungible'
+import {
+  systemNftData as ownerBadgeSystemData,
+  type PackageOwnerBadge
+} from './package-owner-badge'
+
+const standardNftData = createStandardNftData({
+  name: 'String',
+  description: 'String',
+  key_image_url: 'String'
+})
 
 export type _NonFungible<
   Type extends string,
-  StandardNftData extends (keyof KnownStandardTypes)[]
+  _ExpectedNftData extends ExpectedNftData
 > = {
   type: Type
   address: NonFungibleAddress
   id: string
   nftData: {
-    standard: Partial<{ [K in StandardNftData[number]]: NftDataItem<K> }>
-    nonStandard: NftDataItem[]
-    all: NftDataItem[]
+    expected: {
+      [K in keyof _ExpectedNftData]: NarrowedNftDataTypedValue<
+        _ExpectedNftData[K]
+      >
+    }
+    nonStandard: ProgrammaticScryptoSborValue[]
+    all: ProgrammaticScryptoSborValue[]
   }
 }
 
-export type NonFungible = GeneralNft | ClaimNft
+export type NonFungible = GeneralNft | ClaimNft | PackageOwnerBadge
 
 export type NonFungibleAddress<
   R extends string = string,
@@ -38,9 +56,12 @@ export const transformNft = (
   { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
 ): NonFungible => {
   const type =
-    typeof resource !== 'string' &&
-    resource.nonFungibleType === 'claim-nft-collection'
+    typeof resource === 'string'
+      ? 'generalNft'
+      : resource.nonFungibleType === 'claim-nft-collection'
       ? 'claimNft'
+      : resource.nonFungibleType === 'package-owner-badge-collection'
+      ? 'packageOwnerBadge'
       : 'generalNft'
 
   const resourceAddress =
@@ -59,14 +80,15 @@ export const transformNft = (
   return type === 'generalNft'
     ? ({
         ...partial,
-        nftData: transformNftData(data, [
-          'name',
-          'description',
-          'key_image_url'
-        ])
+        nftData: transformNftData(data, standardNftData)
       } as GeneralNft)
+    : type === 'claimNft'
+    ? ({
+        ...partial,
+        nftData: transformNftData(data, {}, claimNftSystemData)
+      } as ClaimNft)
     : ({
         ...partial,
-        nftData: transformNftData(data, ['name', 'claim_amount', 'claim_epoch'])
-      } as ClaimNft)
+        nftData: transformNftData(data, {}, ownerBadgeSystemData)
+      } as PackageOwnerBadge)
 }

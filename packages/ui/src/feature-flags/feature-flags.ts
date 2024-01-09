@@ -8,10 +8,10 @@ export type Flag = {
 }
 
 const getFlagsFromAppEnvironment = () =>
-({
-  development: appFlags('DEV'),
-  production: appFlags('PROD')
-}[PUBLIC_APP_ENV]!)
+  ({
+    development: appFlags('DEV'),
+    production: appFlags('PROD')
+  }[PUBLIC_APP_ENV]!)
 
 const flags = getFlagsFromAppEnvironment()
 

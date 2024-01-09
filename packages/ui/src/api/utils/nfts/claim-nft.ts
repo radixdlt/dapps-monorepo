@@ -1,11 +1,15 @@
 import type { _Entity } from '../entities'
 import type { _NonFungible } from '.'
 import type { StateNonFungibleDetailsResponseItem } from '@common/gateway-sdk'
+import { createSystemNftData } from '../nft-data'
 
-export type ClaimNft = _NonFungible<
-  'claimNft',
-  ['name', 'claim_amount', 'claim_epoch']
->
+export const systemNftData = createSystemNftData({
+  name: 'String',
+  claim_amount: 'String',
+  claim_epoch: 'String'
+})
+
+export type ClaimNft = _NonFungible<'claimNft', typeof systemNftData>
 
 export const isUnstakeData = (
   data: StateNonFungibleDetailsResponseItem['data']

@@ -10,6 +10,7 @@ import { map, pipe } from 'ramda'
 import { transformNft } from '@api/utils/nfts'
 import { handleGatewayResult } from '../../../../utils'
 import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
+import { errorPage } from '@dashboard/stores'
 
 export const load: PageLoad = async ({ params }) => {
   const [resourceAddress, nftId] = decodeURIComponent(params.nft).split(':')
@@ -23,6 +24,14 @@ export const load: PageLoad = async ({ params }) => {
     handleGatewayResult()
   )()
 
+  nftData.then((data) => {
+    if (data.length === 0) {
+      errorPage.set({
+        message: 'NFT not found'
+      })
+    }
+  })
+
   const associatedDapps = resourceEntity
     .then(getLinkedDappDefinitions)
     .then(map(getDappDefinitionData))
@@ -32,7 +41,7 @@ export const load: PageLoad = async ({ params }) => {
   return {
     nftAddress: params.nft,
     promises: {
-      nftData: Promise.all([nftData, resourceEntity]).then(
+      nft: Promise.all([nftData, resourceEntity]).then(
         ([nftData, { address }]) => transformNft(address, nftData[0])
       ),
       resource,

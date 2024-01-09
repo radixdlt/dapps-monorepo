@@ -21,8 +21,6 @@
         entity.resourceType === 'non-fungible' &&
         entity.nonFungibleType === 'claim-nft-collection')
   )
-
-  $: entity.then(console.log)
 </script>
 
 <div class="summary-tab">

@@ -116,7 +116,7 @@
       >
         <div bind:clientWidth={width}>
           <div class="nft-cards" class:center={width < 500}>
-            {#each nonFungibles as { address, nftData: { standard: { name, key_image_url } } }}
+            {#each nonFungibles as { address, nftData: { expected: { name, key_image_url } } }}
               <NonFungibleTokenCard
                 imgUrl={key_image_url?.value}
                 name={name?.value}
@@ -128,7 +128,7 @@
               />
             {/each}
             {#if loadedLaterNfts[resource.address]}
-              {#each loadedLaterNfts[resource.address] as { address, nftData: { standard: { key_image_url, name } } }}
+              {#each loadedLaterNfts[resource.address] as { address, nftData: { expected: { key_image_url, name } } }}
                 <NonFungibleTokenCard
                   imgUrl={key_image_url?.value}
                   name={name?.value}
