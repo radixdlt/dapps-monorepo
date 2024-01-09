@@ -18,13 +18,13 @@
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
-      ? nft.nftData.standard.key_image_url?.value
+      ? nft.nftData.expected.key_image_url?.value
       : resource.metadata.expected.icon_url?.typed.value
   )
 
   $: description = Promise.all([nft, resource]).then(([nft, resource]) =>
     nft.type === 'generalNft'
-      ? nft.nftData.standard.description?.value
+      ? nft.nftData.expected.description?.value
       : resource.metadata.expected.description?.typed.value
   )
 
@@ -43,7 +43,7 @@
   <h2>
     {#await nft}
       <SkeletonLoader />
-    {:then { nftData: { standard: { name } } }}
+    {:then { nftData: { expected: { name } } }}
       {#if name?.value}
         {name?.value}
       {/if}
@@ -60,11 +60,9 @@
   <div>
     {#await nft}
       <SkeletonLoader />
-    {:then nftData}
-      <NftDataRow
-        value={{ kind: 'String', field_name: 'ID', value: nftData.id }}
-      />
-      {#each nftData.type === 'generalNft' ? nftData.nftData.nonStandard : Object.values(nftData.nftData.standard).filter((data) => data.field_name !== 'name') as value}
+    {:then nft}
+      <NftDataRow value={{ kind: 'String', field_name: 'ID', value: nft.id }} />
+      {#each nft.type === 'generalNft' ? nft.nftData.nonStandard : Object.values(nft.nftData.expected).filter((data) => data.field_name !== 'name') as value}
         <NftDataRow {value} />
       {/each}
     {/await}

@@ -94,7 +94,7 @@ export const transformMetadata = <
     return expectedType === actualType
   }
 
-  let expected = {} as {
+  const expected = {} as {
     [K in keyof typeof standardEntries]: {
       item: EntityMetadataItem
       typed: NarrowedMetadataTypedValue<(typeof standardEntries)[K]>

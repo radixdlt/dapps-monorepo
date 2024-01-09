@@ -46,7 +46,7 @@ export const getUnstakeAndClaimInfo =
 
     for (const claimNft of claimNfts) {
       const isClaimable = new BigNumber(
-        claimNft.nftData.standard['claim_epoch']!.value
+        claimNft.nftData.expected['claim_epoch']!.value
       ).lte(currentEpoch)
 
       const validator = validators.find(
@@ -56,7 +56,7 @@ export const getUnstakeAndClaimInfo =
       )!
 
       const xrdAmount = new BigNumber(
-        claimNft.nftData.standard['claim_amount']!.value
+        claimNft.nftData.expected['claim_amount']!.value
       ).toFixed(RET_DECIMAL_PRECISION)
 
       if (new BigNumber(xrdAmount).eq(0)) continue
@@ -66,7 +66,7 @@ export const getUnstakeAndClaimInfo =
         validator,
         xrdAmount,
         claimNft,
-        claimEpoch: claimNft.nftData.standard['claim_epoch']!.value
+        claimEpoch: claimNft.nftData.expected['claim_epoch']!.value
       }
 
       isClaimable

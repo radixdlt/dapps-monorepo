@@ -6,15 +6,15 @@
   export let data: PageData
 </script>
 
-{#await Promise.all( [data.promises.nftData, data.promises.authResources] ) then [nftData, tokenInfo]}
+{#await Promise.all( [data.promises.nft, data.promises.authResources] ) then [nft, tokenInfo]}
   <SearchPage
-    title={nftData.type === 'generalNft'
+    title={nft.type === 'generalNft'
       ? 'Non Fungible'
       : 'Radix Network Stake Claim Non-fungible'}
     address={data.nftAddress}
   >
     <NonFungible
-      nft={data.promises.nftData}
+      nft={data.promises.nft}
       resource={data.promises.resource}
       associatedDapps={data.promises.associatedDapps}
     />

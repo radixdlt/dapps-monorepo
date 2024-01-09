@@ -9,8 +9,8 @@ import type { ClaimNftCollection } from '@api/utils/entities/resource/non-fungib
 export const load = ({ params }) => {
   const entity = getLookupEntity(params.claim_nft)
 
-  const claimNft = entity.then((e) => {
-    const claimNft = transformNonFungibleResource(e)
+  const claimNft = entity.then(async (e) => {
+    const claimNft = await transformNonFungibleResource(e)
     claimNft.nonFungibleType = 'claim-nft-collection'
     return claimNft
   }) as Promise<ClaimNftCollection>

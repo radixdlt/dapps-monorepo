@@ -161,7 +161,10 @@ export const load: LayoutLoad = ({ params }) => {
           ),
         handleGatewayResult((_) => ERROR_MSG),
         andThen(
-          map((entity) => transformNonFungibleResource(entity, validators))
+          pipe(
+            map((entity) => transformNonFungibleResource(entity, validators)),
+            (x) => Promise.all(x)
+          )
         )
       )()
   )
