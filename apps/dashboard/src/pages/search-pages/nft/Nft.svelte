@@ -73,7 +73,12 @@
 
 <h2 class="resource-card-header">Belongs To:</h2>
 
-<Resource {resource} {associatedDapps} showAddressInMetadata />
+<Resource
+  {resource}
+  {associatedDapps}
+  showAddressInMetadata
+  scrollIntoView={false}
+/>
 
 <style lang="scss">
   .nft-image {
