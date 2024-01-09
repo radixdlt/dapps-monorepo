@@ -79,10 +79,11 @@ export const transformEntity =
     address: entity.address,
     details: entity.details as Details,
     metadata: transformMetadata(entity, standardMetadata, systemMetadata),
-    auth: getAuthInfo(
+    auth: ((roleAssignments) =>
+      roleAssignments ? getAuthInfo(roleAssignments) : undefined)(
       (entity.details as StateEntityDetailsResponseComponentDetails)
-        .role_assignments!
-    ),
+        .role_assignments
+    ) as AuthInfo,
     resources: {
       fungible: entity.fungible_resources.items.map((item) => ({
         address: item.resource_address,
