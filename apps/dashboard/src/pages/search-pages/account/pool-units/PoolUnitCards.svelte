@@ -3,17 +3,15 @@
   import PoolUnitCard from '@components/pool-unit-card/PoolUnitCard.svelte'
   import type PoolUnits from './PoolUnits.svelte'
 
-  export let poolUnits: ComponentProps<PoolUnits>['poolData']
+  export let poolUnits: Awaited<ComponentProps<PoolUnits>['poolData']>
 </script>
 
 <div class="pool-units">
-  {#await poolUnits then poolUnits}
-    {#each poolUnits as poolUnit}
-      <div class="pool-unit">
-        <PoolUnitCard {poolUnit} />
-      </div>
-    {/each}
-  {/await}
+  {#each poolUnits as poolUnit}
+    <div class="pool-unit">
+      <PoolUnitCard {poolUnit} />
+    </div>
+  {/each}
 </div>
 
 <style>

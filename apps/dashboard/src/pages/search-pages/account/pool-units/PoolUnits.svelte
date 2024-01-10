@@ -110,12 +110,14 @@
     <div class="header-text" slot="header">Pool Units</div>
 
     <div class="flex-container" slot="content" bind:clientWidth={contentWidth}>
-      {#if contentWidth < 650}
-        <PoolUnitCards poolUnits={poolData} />
-      {:else}
-        <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[0])} />
-        <PoolUnitCards poolUnits={splitPoolUnits.then((arr) => arr[1])} />
-      {/if}
+      {#await Promise.all( [poolData, splitPoolUnits] ) then [poolUnits, splitPoolUnits]}
+        {#if contentWidth < 650 || poolUnits.length === 1}
+          <PoolUnitCards {poolUnits} />
+        {:else}
+          <PoolUnitCards poolUnits={splitPoolUnits[0]} />
+          <PoolUnitCards poolUnits={splitPoolUnits[1]} />
+        {/if}
+      {/await}
     </div></Accordion
   >
 </div>
