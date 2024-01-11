@@ -94,7 +94,11 @@
         (nft) => nft.address.resourceAddress === resource.address
       )}
 
-      {@const nbrOfNfts = nonFungibles.length}
+      {@const nbrOfNfts =
+        account.resources.nonFungible
+          .find((nonFungible) => nonFungible.address === resource.address)
+          ?.vaults.map((vault) => vault.total_count)
+          .reduce((a, b) => a + b, 0) ?? 0}
 
       {@const ownedNonFungible = account.resources.nonFungible.find(
         (nonFungible) => nonFungible.address === resource.address
