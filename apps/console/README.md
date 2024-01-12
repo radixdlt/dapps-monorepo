@@ -67,7 +67,7 @@ For theming and other repo-wide style config, there's a `src/styles.ts` file wit
 
 # License
 
-The Radix Dev Console code is released under [Apache 2.0 license](LICENSE).
+The Radix Developer Console code is released under [Apache 2.0 license](LICENSE).
 
       Copyright 2023 Radix Publishing Ltd
 
