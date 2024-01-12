@@ -21,7 +21,7 @@ import {
   Stack,
   Typography
 } from '@mui/joy'
-import { contributeToPoolManifest } from './manifests'
+import { contributeToPoolManifest, redeemFromPoolManifest } from './manifests'
 import { useEntities } from '../entity/state'
 import { useState } from 'react'
 import { SelectAccount } from '../account/SelectAccount'
@@ -34,6 +34,8 @@ export const PoolCard = ({ pool }: { pool: InstantiatedPool }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isMetadataModalOpen, setIsMetadataModalOpen] = useState<boolean>(false)
   const [account, setAccount] = useState<string>('')
+  const [redeemAccount, setRedeemAccount] = useState<string>('')
+  const [redeemAmount, setRedeemAmount] = useState<string>('')
   const [contributions, setContributiones] = useState<
     Record<
       string,
@@ -52,6 +54,26 @@ export const PoolCard = ({ pool }: { pool: InstantiatedPool }) => {
     }, {} as Record<string, any>)
   )
   const { fungibleToken } = useEntities()
+
+  const redeem = () => {
+    setIsLoading(true)
+    const transactionManifest = redeemFromPoolManifest(
+      redeemAccount,
+      pool.address,
+      pool.poolUnit,
+      redeemAmount
+    )
+    rdt.walletApi
+      .sendTransaction({
+        transactionManifest,
+        version: 1
+      })
+      .map((result) => {
+        rememberPoolTransaction(pool.address, result)
+        setIsLoading(false)
+      })
+      .mapErr(() => setIsLoading(false))
+  }
 
   const contribute = () => {
     setIsLoading(true)
@@ -255,6 +277,27 @@ export const PoolCard = ({ pool }: { pool: InstantiatedPool }) => {
           })}
           <Button fullWidth onClick={contribute} disabled={isLoading}>
             Contribute to pool
+          </Button>
+          <Divider></Divider>
+          <SelectAccount
+            label="Pool Unit Redeem Account"
+            onChange={(value) => {
+              setRedeemAccount(value)
+            }}
+          ></SelectAccount>
+          <FormControl>
+            <FormLabel>Amount to redeem</FormLabel>
+            <Input
+              value={redeemAmount}
+              type="number"
+              required
+              onChange={(ev) => {
+                setRedeemAmount(ev.target.value)
+              }}
+            />
+          </FormControl>
+          <Button fullWidth onClick={redeem} disabled={isLoading}>
+            Redeem from pool
           </Button>
         </Stack>
       </Card>
