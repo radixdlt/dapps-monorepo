@@ -28,6 +28,18 @@ export const createPoolManifest = (
   return manifest
 }
 
+export const redeemFromPoolManifest = (
+  account: string,
+  poolComponent: string,
+  poolResource: string,
+  amount: string
+) => `
+  CALL_METHOD Address("${account}") "withdraw" Address("${poolResource}") Decimal("${amount}");
+TAKE_FROM_WORKTOP Address("${poolResource}") Decimal("${amount}") Bucket("resource");
+CALL_METHOD Address("${poolComponent}") "redeem" Bucket("resource");
+CALL_METHOD Address("${account}") "try_deposit_batch_or_abort" Expression("ENTIRE_WORKTOP") None;
+`
+
 export const contributeToPoolManifest = (
   account: string,
   poolComponent: string,
