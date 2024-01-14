@@ -1,7 +1,7 @@
 <script lang="ts">
   import { derived, writable } from 'svelte/store'
-  import Select from '@components/../dev-console/form/Select.svelte'
-  import Label from '@components/../dev-console/form/Label.svelte'
+  import Select from '$lib/select/Select.svelte'
+  import Label from '$lib/Label.svelte'
   import { accounts } from '@stores'
   import {
     getAccountData,

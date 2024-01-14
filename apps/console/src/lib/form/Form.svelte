@@ -47,10 +47,10 @@
 </script>
 
 <script lang="ts">
-  import Select from '@components/../dev-console/form/Select.svelte'
-  import Input from '@components/../dev-console/form/Input.svelte'
-  import Textarea from '@components/../dev-console/form/Textarea.svelte'
-  import Label from '@components/../dev-console/form/Label.svelte'
+  import Select from '../select/Select.svelte'
+  import Input from '../input/Input.svelte'
+  import Textarea from '../Textarea.svelte'
+  import Label from '../Label.svelte'
   import type { ZodSchema, z } from '@common/zod'
   import { writable } from 'svelte/store'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'

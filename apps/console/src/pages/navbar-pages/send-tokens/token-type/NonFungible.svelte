@@ -1,11 +1,10 @@
 <script lang="ts">
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import type { Resources } from '@api/_deprecated/utils/entities/resource'
-  import Box from '@components/_base/box/Box.svelte'
   import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
   import Text from '@components/_base/text/Text.svelte'
   import { getSendNFTManifest } from '../manifests'
-  import Label from '@components/../dev-console/form/Label.svelte'
+  import Label from '$lib/Label.svelte'
   import { RadixNetworkConfigById } from '@common/gateway-sdk'
   import { CURRENT_NETWORK } from '@networks'
   import type { NonFungible } from '@api/_deprecated/utils/nfts'

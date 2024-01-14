@@ -2,8 +2,8 @@
   import { Buffer } from 'buffer'
   import FileUpload from '@components/file-upload/FileUpload.svelte'
   import { derived, writable } from 'svelte/store'
-  import Select from '@components/../dev-console/form/Select.svelte'
-  import Label from '@components/../dev-console/form/Label.svelte'
+  import Select from '$lib/select/Select.svelte'
+  import Label from '$lib/Label.svelte'
   import { accounts, dAppToolkit } from '@stores'
   import {
     getAccountData,
@@ -20,8 +20,8 @@
     AccessRule,
     OwnerAccessRuleUpdatable
   } from '../../../helpers/simple-access-rule-builder'
-  import Form from '../../../components/Form.svelte'
-  import SendToWalletButton from '../../../components/SendToWalletButton.svelte'
+  import Form from '$lib/form/Form.svelte'
+  import SendToWalletButton from '$lib/SendToWalletButton.svelte'
 
   type Resource =
     | FungibleResource

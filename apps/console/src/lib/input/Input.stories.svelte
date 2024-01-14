@@ -1,14 +1,10 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Input from './Input.svelte'
-  import Label from './Label.svelte'
+  import Label from '../Label.svelte'
   import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
 
   let value = ''
-
-  $: {
-    console.log(value)
-  }
 </script>
 
 <Meta title="Dev console / Form / Input" />
@@ -32,7 +28,7 @@
     <div class="variation">
       <Label>With checkbox</Label>
       <Input placeholder="Enter name" bind:value
-        ><div slot="before" style:margin-right="1rem">
+        ><div style:margin-right="1rem">
           <Checkbox checked>Fixed</Checkbox>
         </div></Input
       >
