@@ -1,8 +1,8 @@
 <script lang="ts">
   import { z } from '@common/zod'
   import { derived, writable, type Writable } from 'svelte/store'
-  import Form, { type FormItem } from '../../../components/Form.svelte'
-  import OwnerRole from '../../../components/OwnerRole.svelte'
+  import Form, { type FormItem } from '$lib/form/Form.svelte'
+  import OwnerRole from '$lib/OwnerRole.svelte'
   import type {
     OwnerAccessRuleUpdatable,
     AccessRule
@@ -21,7 +21,7 @@
   import { goto } from '$app/navigation'
   import { getTransactionDetails } from '@api/_deprecated/gateway'
   import { onMount } from 'svelte'
-  import SendToWalletButton from '../../../components/SendToWalletButton.svelte'
+  import SendToWalletButton from '$lib/SendToWalletButton.svelte'
 
   export let action: string = ''
 

@@ -1,43 +1,38 @@
 <script>
   import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import Select from './Select.svelte'
-  import Label from './Label.svelte'
+  import Input from '../input/Input.svelte'
+  import Textarea from '../Textarea.svelte'
+  import Select from '../select/Select.svelte'
+  import Label from '../Label.svelte'
 </script>
 
-<Meta title="Dev console / Form / Select" />
+<Meta title="Dev console / Form / All" />
 
 <Story name="Primary">
   <div class="content">
     <div class="variation">
-      <Label>Owner role</Label>
-      <Select placeholder="Select owner role" />
+      <Label>Name</Label>
+      <Input placeholder="Enter name" />
     </div>
-
-    <div class="variation">
-      <Label disabled>Owner role</Label>
-      <Select placeholder="Select owner role" disabled />
-    </div>
-
     <div class="variation">
       <Label>Owner role</Label>
       <Select
         placeholder="Select owner role"
-        selected={1}
+        selected="1"
         items={[
           {
-            id: 1,
+            id: '1',
             label:
               'resource_tdx_2_1nfxxxxxxxxxxpkgwnrxxxxxxxxx002558553505xxxxxxxxxfzgzzk'
           },
-          { id: 2, label: 'Item 2' },
-          { id: 3, label: 'Item 3' }
+          { id: '2', label: 'Item 2' },
+          { id: '3', label: 'Item 3' }
         ]}
       />
     </div>
-
     <div class="variation">
-      <Label>Owner role</Label>
-      <Select loading placeholder="Select owner role" />
+      <Label>Description</Label>
+      <Textarea placeholder="Enter description" />
     </div>
   </div>
 </Story>
@@ -48,6 +43,6 @@
     background-color: #f4f5f9;
   }
   .variation {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 </style>

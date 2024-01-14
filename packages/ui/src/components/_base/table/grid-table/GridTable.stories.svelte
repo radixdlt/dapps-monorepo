@@ -1,5 +1,9 @@
+<script lang="ts" context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
+  import { Story } from '@storybook/addon-svelte-csf'
   import GridTable from './GridTable.svelte'
 
   const columns = [
@@ -44,8 +48,6 @@
 
   const columnIds = columns.map((column) => column.id)
 </script>
-
-<Meta title="Base Components / Grid Table" />
 
 <Story name="Primary">
   <GridTable {columns}>

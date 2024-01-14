@@ -184,6 +184,9 @@
 </Theme>
 
 <style lang="scss" global>
+  body {
+    overflow: hidden;
+  }
   .logo {
     background-size: contain;
     background-repeat: no-repeat;

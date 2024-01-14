@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import Form, { type FormItem } from '../../../components/Form.svelte'
+  import Form, { type FormItem } from '$lib/form/Form.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
   import { string } from 'zod'
 

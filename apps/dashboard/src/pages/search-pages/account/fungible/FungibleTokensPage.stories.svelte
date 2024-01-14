@@ -1,9 +1,11 @@
-<script lang="ts">
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import FungibleTokensPage from './FungibleTokensPage.svelte'
+<script context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Search pages / Account / Fungible token tab" />
+<script lang="ts">
+  import { Story } from '@storybook/addon-svelte-csf'
+  import FungibleTokensPage from './FungibleTokensPage.svelte'
+</script>
 
 <Story name="Primary">
   <FungibleTokensPage

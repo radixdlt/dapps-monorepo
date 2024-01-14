@@ -1,32 +1,33 @@
+<script context="module">
+  export const meta = {
+    argTypes: {
+      placement: {
+        options: [
+          'right',
+          'right-start',
+          'right-end',
+          'left',
+          'left-start',
+          'left-end',
+          'top',
+          'top-start',
+          'top-end',
+          'bottom',
+          'bottom-start',
+          'bottom-end'
+        ],
+        control: { type: 'select' }
+      }
+    }
+  }
+</script>
+
 <script>
   import { Meta, Story, Template } from '@storybook/addon-svelte-csf'
   import Popover from './Popover.svelte'
 
   let show = false
 </script>
-
-<Meta
-  title="Popover"
-  argTypes={{
-    placement: {
-      options: [
-        'right',
-        'right-start',
-        'right-end',
-        'left',
-        'left-start',
-        'left-end',
-        'top',
-        'top-start',
-        'top-end',
-        'bottom',
-        'bottom-start',
-        'bottom-end'
-      ],
-      control: { type: 'select' }
-    }
-  }}
-/>
 
 <Template let:args>
   <div style:padding="50px">

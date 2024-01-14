@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Account from './Account.svelte'
@@ -47,8 +51,6 @@
     }
   ]
 </script>
-
-<Meta title="Base Components / Account" />
 
 <Story name="Primary">
   {#each accounts as account}

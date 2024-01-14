@@ -1,12 +1,11 @@
-<script lang="ts">
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf'
+<script lang="ts" context="module">
+  import { Template, Story } from '@storybook/addon-svelte-csf'
   import Address from './Address.svelte'
+
+  export const meta = {}
 </script>
 
-<Meta title="Base Components / Address" component={Address} />
-
 <Template let:args>
-  <h1>Account</h1>
   <Address
     short={args.short}
     autoShorten={args.autoShorten}

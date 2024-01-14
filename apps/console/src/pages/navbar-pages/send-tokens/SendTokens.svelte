@@ -9,10 +9,10 @@
 </script>
 
 <script lang="ts">
-  import Label from '@components/../dev-console/form/Label.svelte'
+  import Label from '$lib/Label.svelte'
   import Box from '@components/_base/box/Box.svelte'
-  import Input from '@components/../dev-console/form/Input.svelte'
-  import Select from '@components/../dev-console/form/Select.svelte'
+  import Input from '$lib/input/Input.svelte'
+  import Select from '$lib/select/Select.svelte'
   import { goto } from '$app/navigation'
   import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'

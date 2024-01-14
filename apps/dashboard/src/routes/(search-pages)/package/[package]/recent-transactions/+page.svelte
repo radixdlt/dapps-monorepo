@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LayoutData } from '../$types'
-  import RecentTransactions from '@dashboard/components/recent-transactions/RecentTransactions.svelte'
+  import RecentTransactions from '$lib/recent-transactions/RecentTransactions.svelte'
 
   export let data: LayoutData
 </script>

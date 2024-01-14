@@ -1,3 +1,7 @@
+<script context="module">
+  export const meta = {}
+</script>
+
 <script lang="ts">
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import FungibleTokenCard from './FungibleTokenCard.svelte'
@@ -62,8 +66,6 @@
     }
   ]
 </script>
-
-<Meta title="FungibleTokenCard" />
 
 <Story name="Primary">
   {#each tokens as token, index}

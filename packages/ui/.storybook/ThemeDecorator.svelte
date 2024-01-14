@@ -7,5 +7,7 @@
 </Theme>
 
 <style lang="scss" global>
-  
+  .common {
+    height: unset !important;
+  }
 </style>

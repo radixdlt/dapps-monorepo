@@ -3,11 +3,9 @@ import { mergeConfig, searchForWorkspaceRoot } from 'vite'
 export default {
   stories: [
     '../src/**/*.stories.mdx',
-    '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)',
-    '../../../apps/**/src/**/*.stories.@(js|jsx|ts|tsx|svelte)'
+    '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)'
   ],
   addons: [
-    'storybook-addon-mock',
     '@storybook/addon-links',
     '@storybook/addon-svelte-csf',
     '@storybook/addon-essentials',

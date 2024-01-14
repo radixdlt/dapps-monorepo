@@ -1,9 +1,11 @@
-<script>
-  import { Meta, Story } from '@storybook/addon-svelte-csf'
-  import Switch from './Switch.svelte'
+<script context="module">
+  export const meta = {}
 </script>
 
-<Meta title="Base Components / Switch" />
+<script>
+  import { Story } from '@storybook/addon-svelte-csf'
+  import Switch from './Switch.svelte'
+</script>
 
 <Story name="Primary">
   <Switch />
