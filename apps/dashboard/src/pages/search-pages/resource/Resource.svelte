@@ -5,7 +5,7 @@
   import SummaryTab from '../SummaryTab.svelte'
   import type { ComponentProps } from 'svelte'
   import { formatTokenValue } from '@utils'
-  import AuthConfigurationTab from '../../../components/auth/AuthConfigurationTab.svelte'
+  import AuthConfigurationTab from '$lib/auth/AuthConfigurationTab.svelte'
   import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
   import type { FungibleResource } from '@api/utils/entities/resource/fungible'
   import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'

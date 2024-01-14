@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AuthConfigurationTab from '../../../../../components/auth/AuthConfigurationTab.svelte'
+  import AuthConfigurationTab from '$lib/auth/AuthConfigurationTab.svelte'
   import type { PageData } from './$types'
 
   export let data: PageData
