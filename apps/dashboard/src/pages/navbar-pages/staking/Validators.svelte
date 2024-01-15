@@ -18,7 +18,6 @@
   }>()
 
   export const selectedValidators = writable<Record<string, boolean>>({})
-  export const accountsWithStakes = writable<AccountWithStakes[]>([])
 </script>
 
 <script lang="ts">
@@ -39,8 +38,10 @@
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import AvailableToStake from './available-to-stake/AvailableToStake.svelte'
 
   export let validators: Promise<ValidatorListItem<true, true, true>[]>
+  export let totalXrdBalance: Promise<string>
   export let filteredValidators:
     | ValidatorListItem<true, true, true>[]
     | undefined = undefined
@@ -133,6 +134,10 @@
       have connected.
     </div>
   {/if}
+
+  <div class="available-to-stake">
+    <AvailableToStake xrdAvailableToStake={totalXrdBalance} />
+  </div>
 </div>
 
 {#if $connected}
@@ -309,6 +314,10 @@
         border-radius: 50%;
         background: var(--color-grey-4);
       }
+    }
+
+    .available-to-stake {
+      margin-left: auto;
     }
   }
 </style>

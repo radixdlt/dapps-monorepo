@@ -69,10 +69,13 @@
         filteredValidators = filtered
       }
     }
+
+  let totalXrdBalance = data.totalXrdBalance
 </script>
 
 <Validators
   validators={data.promises.validators}
+  totalXrdBalance={$totalXrdBalance}
   {filteredValidators}
   on:show-claim-all={() => goto('/network-staking/claim-multiple')}
   on:show-claim-single={(e) => goto(`/network-staking/claim/${e.detail}`)}
