@@ -11,6 +11,7 @@ import {
   type UnstakingInfo,
   getStakedInfo
 } from '@api/_deprecated/utils/staking'
+import { getXRDBalance } from '@dashboard/pages/navbar-pages/staking/stake-unstake/stake/getXrdBalance'
 
 export type AccumulatedStakes = {
   [validator: string]: {
@@ -135,8 +136,15 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
     })
   )
 
+  const totalXrdBalance = derived(accounts, async ($accounts) =>
+    (await Promise.all($accounts.map((a) => getXRDBalance(a.address))))
+      .reduce((acc, curr) => acc.plus(curr), new BigNumber(0))
+      .toString()
+  )
+
   return {
     validatorAccumulatedStakes,
-    stakeInfo
+    stakeInfo,
+    totalXrdBalance
   }
 }
