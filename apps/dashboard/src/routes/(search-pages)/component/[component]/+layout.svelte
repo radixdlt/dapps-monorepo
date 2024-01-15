@@ -26,6 +26,10 @@
       {
         id: 'auth',
         label: 'Configuration'
+      },
+      {
+        id: 'state',
+        label: 'Internal State'
       }
     ]
   ]}
