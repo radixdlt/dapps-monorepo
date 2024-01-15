@@ -28,8 +28,8 @@ type ComponentState = {
 }
 
 const systemMetadata = createSystemMetadata({
-  owner_badge: 'NonFungibleGlobalId',
-  pool_vault_number: 'String',
+  owner_badge: 'NonFungibleLocalId',
+  pool_vault_number: 'U8',
   pool_resources: 'GlobalAddressArray',
   pool_unit: 'GlobalAddress'
 })
