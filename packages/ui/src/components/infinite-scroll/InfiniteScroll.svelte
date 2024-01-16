@@ -2,6 +2,7 @@
   import { onDestroy, createEventDispatcher, onMount } from 'svelte'
 
   export let threshold = 5
+  export let middlePageMode = false
 
   const dispatch = createEventDispatcher()
   let component: HTMLElement
@@ -65,6 +66,15 @@
   })
 
   const onScroll = (e: any) => {
+    if (middlePageMode) {
+      if (
+        component.parentElement?.clientHeight &&
+        component.parentElement?.clientHeight - e.target.scrollTop < 2500
+      ) {
+        dispatch('thresholdReached')
+      }
+    }
+
     const offset =
       e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop
 
