@@ -22,7 +22,9 @@
       You've selected {count}
       {` ${count === 1 ? 'validator' : 'validators'}`}
     </div>
-    <button on:click={() => dispatch('clear-all')}>Clear all</button>
+    {#if count > 0}
+      <button on:click={() => dispatch('clear-all')}>Clear all</button>
+    {/if}
   </div>
   <ButtonNew
     on:click={() => {
