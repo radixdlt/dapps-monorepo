@@ -26,7 +26,15 @@
   const loadedLaterNfts: Record<string, GeneralNft[]> = {}
   let isLoading = false
 
-  let currentCursor: string | null | undefined = null
+  let currentCursors: Record<string, string | null | undefined> = {}
+
+  $: {
+    nonFungibleResources.then((data) => {
+      data.forEach((resource) => {
+        currentCursors[resource.address] = null
+      })
+    })
+  }
 
   $: data = Promise.all([stateVersion, account, nfts])
 
@@ -39,8 +47,9 @@
   const fetchMore = (data: GetNonFungibleIdsPageWithDataRequest) => {
     if (
       isLoading ||
-      currentCursor === undefined ||
-      (data.cursor === undefined && currentCursor === null)
+      currentCursors[data.resourceAddress] === undefined ||
+      (data.cursor === undefined &&
+        currentCursors[data.resourceAddress] === null)
     ) {
       return
     }
@@ -48,9 +57,9 @@
 
     getNonFungiblesIdsPageWithData({
       ...data,
-      cursor: currentCursor || data.cursor
+      cursor: currentCursors[data.resourceAddress] || data.cursor
     }).then(([response, nftDataResponse]) => {
-      currentCursor = response.next_cursor
+      currentCursors[data.resourceAddress] = response.next_cursor
       if (!loadedLaterNfts[data.resourceAddress]) {
         loadedLaterNfts[data.resourceAddress] = []
       }
@@ -144,6 +153,7 @@
         </div>
 
         <InfiniteScroll
+          middlePageMode={true}
           on:thresholdReached={() => {
             fetchMore({
               stateVersion,
