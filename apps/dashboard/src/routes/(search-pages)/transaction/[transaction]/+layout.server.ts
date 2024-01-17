@@ -1,7 +1,7 @@
-import { getTransactionDetailsNew } from '@api/_deprecated/gateway'
-import { CURRENT_NETWORK } from '../../../../../../../packages/ui/src/network'
+import { getTransactionDetailsNew } from '@common/api/_deprecated/gateway'
+import { CURRENT_NETWORK } from '@common/network'
 import type { LayoutServerLoad } from './$types'
-import { RadixEngineToolkit } from '@common/ret'
+import { RadixEngineToolkit } from '@common/utils/ret'
 
 export const load: LayoutServerLoad = ({ params }) => {
   const details = getTransactionDetailsNew(params.transaction)

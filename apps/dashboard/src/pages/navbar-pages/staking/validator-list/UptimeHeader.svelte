@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
+  import type { Validator } from '@common/api/_deprecated/utils/entities/validator'
 
   export type UptimeValue = keyof Validator<
     unknown,
@@ -9,8 +9,8 @@
 </script>
 
 <script lang="ts">
-  import SimplePicker from '@components/_base/picker/simple-picker/SimplePicker.svelte'
-  import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
+  import SimplePicker from '@svelte-ui/components/_base/picker/simple-picker/SimplePicker.svelte'
+  import BasicHeader from '@svelte-ui/components/_base/table/basic-header/BasicHeader.svelte'
   import type { ComponentProps } from 'svelte'
 
   const options: {

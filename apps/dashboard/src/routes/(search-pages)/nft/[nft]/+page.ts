@@ -1,15 +1,15 @@
-import { callApi } from '@api/_deprecated/gateway'
+import { callApi } from '@common/api/_deprecated/gateway'
 import type { PageLoad } from './$types'
-import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
+import { getLinkedDappDefinitions } from '@common/api/utils/two-way-linking'
 import {
   getDappDefinitionData,
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
 import { map, pipe } from 'ramda'
-import { transformNft } from '@api/utils/nfts'
+import { transformNft } from '@common/api/utils/nfts'
 import { handleGatewayResult } from '../../../../utils'
-import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
+import { transformNonFungibleResource } from '@common/api/utils/entities/resource/non-fungible'
 import { errorPage } from '@dashboard/stores'
 
 export const load: PageLoad = async ({ params }) => {

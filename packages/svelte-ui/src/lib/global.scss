@@ -1,0 +1,207 @@
+@use './mixins';
+
+/* Radix colors */
+body {
+	/* Core colors */
+	--color-radix-green-1: #00ab84;
+	--color-radix-green-2: #00c389;
+	--color-radix-green-3: #21ffbe;
+	--color-radix-blue-1: #060f8f;
+	--color-radix-blue-2: #052cc0;
+	--color-radix-blue-3: #20e4ff;
+	--color-light: #ffffff;
+	--color-dark: #000000;
+
+	/* Accent colors */
+	--color-accent-red: #ef4136;
+	--color-accent-blue: #00aeef;
+	--color-accent-yellow: #fff200;
+	--color-alert-1: #e59700;
+	--color-alert-2: #ffe9be;
+	--color-radix-error-red-1: #c82020;
+	--color-radix-error-red-2: #fcebeb;
+
+	/* Neutral colors */
+	--color-grey-1: #003057;
+	--color-grey-2: #8a8fa4;
+	--color-grey-3: #ced0d6;
+	--color-grey-4: #e2e5ed;
+	--color-grey-5: #f4f5f9;
+}
+
+/* spacing */
+body {
+	--spacing-unit: 0.6em;
+	--spacing-xs: calc(0.25 * var(--spacing-unit));
+	--spacing-sm: calc(0.5 * var(--spacing-unit));
+	--spacing-md: calc(0.75 * var(--spacing-unit));
+	--spacing-lg: calc(1.25 * var(--spacing-unit));
+	--spacing-xl: calc(2 * var(--spacing-unit));
+	--spacing-2xl: calc(3.25 * var(--spacing-unit));
+	--spacing-3xl: calc(5.25 * var(--spacing-unit));
+	--spacing-4xl: calc(8.5 * var(--spacing-unit));
+}
+
+/* typography */
+body {
+	--font-family: 'IBM Plex Sans';
+	--text-base-size: 0.8rem;
+	--text-scale-ratio: 1.15;
+	--text-xs: calc(var(--text-base-size) / (var(--text-scale-ratio) * var(--text-scale-ratio)));
+	--text-sm: calc(var(--text-xs) * var(--text-scale-ratio));
+	--text-md: calc(var(--text-sm) * var(--text-scale-ratio));
+	--text-lg: calc(var(--text-md) * var(--text-scale-ratio));
+	--text-xl: calc(var(--text-lg) * var(--text-scale-ratio));
+	--text-2xl: calc(var(--text-xl) * var(--text-scale-ratio));
+	--text-3xl: calc(var(--text-2xl) * var(--text-scale-ratio));
+	--text-4xl: calc(var(--text-3xl) * var(--text-scale-ratio));
+
+	--font-weight-light: 400;
+	--font-weight-bold-1: 500;
+	--font-weight-bold-2: 600;
+	--font-weight-bold-3: 700;
+}
+
+/* common utilities */
+.common {
+	/* borders */
+	--border-radius-sm: 2px;
+	--border-radius-md: 4px;
+	--border-radius-lg: 8px;
+	--border-radius-xl: 12px;
+	--border: 1px solid;
+	--border-divider: 2px solid;
+
+	/* shadows */
+	--shadow: 0px 6.72099px 11px rgba(0, 0, 0, 0.06);
+	--shadow-sm: 0px 3px 4px 0px rgba(0, 0, 0, 0.1);
+	--shadow-hover: 0px 6.720985412597656px 13px 0px #00000030;
+
+	/* transitions */
+	--transition-hover-card: all 0.1s ease-in-out;
+	--transform-hover-card: translate(-0.1rem, -0.1rem);
+}
+
+/* global styles */
+body {
+	--radix-connect-button-border-radius: 12px;
+	margin: 0;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active,
+input:hover,
+input:focus {
+	text-decoration: none;
+}
+
+a {
+	font-weight: var(--font-weight-bold-1);
+	cursor: pointer;
+}
+
+h1 h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+span,
+input,
+button,
+select {
+	all: unset;
+	box-sizing: border-box;
+}
+
+button {
+	cursor: pointer;
+}
+
+h1 {
+	margin: 0;
+	display: block;
+	font-size: var(--text-3xl);
+	font-weight: var(--font-weight-bold-2);
+	margin-bottom: var(--spacing-md);
+}
+
+h2 {
+	margin: 0;
+	display: block;
+	font-size: var(--text-2xl);
+	font-weight: var(--font-weight-bold-2);
+	margin-bottom: var(--spacing-sm);
+}
+
+h3 {
+	margin: 0;
+	display: block;
+	font-size: var(--text-xl);
+	font-weight: var(--font-weight-bold-2);
+	margin-bottom: var(--spacing-xs);
+}
+
+h4 {
+	margin: 0;
+	display: block;
+	font-size: var(--text-lg);
+	font-weight: var(--font-weight-bold-2);
+	margin-bottom: var(--spacing-xs);
+}
+
+p {
+	display: block;
+}
+
+* {
+	font-family: var(--font-family);
+	font-size: var(--text-base-size);
+	box-sizing: border-box;
+}
+
+/* 3rd party libs */
+body {
+	--cooltipz-bg-color: var(--color-grey-1);
+	--cooltipz-border-radius: 0.5rem;
+	--cooltipz-font-size: 16px;
+	--cooltipz-font-family: var(--font-family);
+}
+
+.subtext {
+	color: var(--theme-subtext);
+}
+
+.dotted-overflow {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.disabled {
+	opacity: 50%;
+	pointer-events: none;
+}
+
+.card {
+	box-shadow: var(--shadow);
+	border-radius: var(--border-radius-lg);
+	background: var(--theme-surface-2);
+	border: var(--border) var(--theme-border);
+}
+
+.mobile-only {
+	@include mixins.desktop {
+		display: none;
+	}
+}
+
+.desktop-only {
+	@include mixins.mobile {
+		display: none;
+	}
+}

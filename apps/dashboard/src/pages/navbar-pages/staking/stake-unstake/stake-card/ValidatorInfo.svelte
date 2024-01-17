@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import Address from '@components/_base/address/Address.svelte'
-  import { formatTokenValue } from '@utils'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import Address from '@svelte-ui/components/_base/address/Address.svelte'
+  import { formatTokenValue } from '@common/utils/formatting'
 
   export let name: string | undefined = undefined
   export let address: string

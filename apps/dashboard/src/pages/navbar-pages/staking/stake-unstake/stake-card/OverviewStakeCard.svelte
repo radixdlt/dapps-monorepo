@@ -1,14 +1,14 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
   import StakeCard from './StakeCard.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue } from '@common/utils/formatting'
   import BigNumber from 'bignumber.js'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import { XRDToken } from '@constants'
-  import Popover from '@components/_base/popover/Popover.svelte'
-  import FeeWarning from '@components/_base/popover/FeeWarning.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import { XRDToken } from '@common/utils/constants'
+  import Popover from '@svelte-ui/components/_base/popover/Popover.svelte'
+  import FeeWarning from '@svelte-ui/components/_base/popover/FeeWarning.svelte'
 
   export let amountToStake: string
   export let tokenAmountDisabled = false

@@ -4,7 +4,7 @@ import {
   DataRequestStateClient,
   RadixDappToolkit,
   RadixDappToolkitOptions
-} from '@common/rdt'
+} from '@common/utils/rdt'
 import { appLogger } from '../logger/state'
 import {
   bootstrapNetwork,
@@ -14,8 +14,8 @@ import { createObservableHook } from '../helpers/create-observable-hook'
 import { setAccounts } from '../account/state'
 import { addEntities } from '../entity/state'
 import { createChallenge } from '../helpers/create-challenge'
-import { RdtGatewayApiClient } from '@common/rdt'
-import { GatewayClient } from '@common/rdt'
+import { RdtGatewayApiClient } from '@common/utils/rdt'
+import { GatewayClient } from '@common/utils/rdt'
 import {
   RadixNetwork,
   RadixNetworkConfigById

@@ -1,4 +1,3 @@
-import { okAsync } from 'neverthrow'
 import { appLogger } from '../helpers/logger'
 import { AuthController } from './controller'
 import { AuthModel } from './model'
@@ -7,7 +6,7 @@ import {
   type Context,
   createMockContext
 } from '../db/context'
-import type { SignedChallenge } from '@common/rdt'
+import type { SignedChallenge } from '@common/utils/rdt'
 import { UserModel } from '../user/model'
 
 let mockCtx: MockContext

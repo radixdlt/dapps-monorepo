@@ -1,7 +1,7 @@
 <script lang="ts">
   // @ts-ignore
   import Slider from '@bulatdashiev/svelte-slider'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import SliderHandleIcon from '@icons/slider-handle.svg'
 
   export let values: number[] = []

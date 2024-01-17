@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import type { Entity } from '@api/utils/entities'
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import type { Entity } from '@common/api/utils/entities'
+  import NftImage from '@svelte-ui/components/_base/nft-image/NftImage.svelte'
 
   export let entity: Promise<Entity>
 

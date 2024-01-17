@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
+  import Box from '@svelte-ui/components/_base/box/Box.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
 </script>
 
 <center>

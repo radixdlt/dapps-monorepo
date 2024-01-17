@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import ButtonNew from '@svelte-ui/components/_base/button/ButtonNew.svelte'
   import { createEventDispatcher } from 'svelte'
 
   const dispatch = createEventDispatcher<{

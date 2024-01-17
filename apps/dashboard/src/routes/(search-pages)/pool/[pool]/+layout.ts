@@ -4,7 +4,7 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformPool } from '@api/utils/entities/component/pool'
+import { transformPool } from '@common/api/utils/entities/component/pool'
 
 export const prerender = false
 

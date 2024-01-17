@@ -1,5 +1,5 @@
 <script>
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import FilterList from '@icons/filter-list.svg'
 </script>
 

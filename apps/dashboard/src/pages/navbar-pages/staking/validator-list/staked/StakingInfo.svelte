@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import { formatTokenValue, formatXRDValue } from '@utils'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import { formatTokenValue, formatXRDValue } from '@common/utils/formatting'
   import BigNumber from 'bignumber.js'
   import ReadyToClaim from '../../ready-to-claim/ReadyToClaim.svelte'
-  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import ButtonNew from '@svelte-ui/components/_base/button/ButtonNew.svelte'
   import { accumulatedStakes } from '../../../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import type { TransformedValidator } from '../ValidatorList.svelte'
 

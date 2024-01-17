@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TransactionBalanceChanges } from '@common/gateway-sdk'
+  import type { TransactionBalanceChanges } from '@common/utils/gateway-sdk'
 
   export let entityAddress: string
   export let balanceChanges: TransactionBalanceChanges | undefined

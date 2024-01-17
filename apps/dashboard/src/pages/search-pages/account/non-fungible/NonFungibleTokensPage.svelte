@@ -1,22 +1,22 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
   import {
     getNonFungiblesIdsPageWithData,
     type GetNonFungibleIdsPageWithDataRequest
-  } from '@api/_deprecated/gateway'
-  import { transformNft } from '@api/utils/nfts'
-  import type { GeneralNft } from '@api/utils/nfts/general-nft'
-  import NFTAccordion from '@components/_base/accordion/NFTAccordion.svelte'
-  import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
-  import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
+  } from '@common/api/_deprecated/gateway'
+  import { transformNft } from '@common/api/utils/nfts'
+  import type { GeneralNft } from '@common/api/utils/nfts/general-nft'
+  import NFTAccordion from '@svelte-ui/components/_base/accordion/NFTAccordion.svelte'
+  import InfiniteScroll from '@svelte-ui/components/infinite-scroll/InfiniteScroll.svelte'
+  import NonFungibleTokenCard from '@svelte-ui/components/non-fungible-token-card/NonFungibleTokenCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import NoTokens from '../NoTokens.svelte'
   import type {
     DefaultNonFungibleResource,
     NonFungibleResource
-  } from '@api/utils/entities/resource/non-fungible/index'
-  import type { ClaimNftCollection } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
-  import type { Account } from '@api/utils/entities/component/account'
+  } from '@common/api/utils/entities/resource/non-fungible/index'
+  import type { ClaimNftCollection } from '@common/api/utils/entities/resource/non-fungible/claim-nft-collection'
+  import type { Account } from '@common/api/utils/entities/component/account'
 
   export let nonFungibleResources: Promise<NonFungibleResource[]>
   export let nfts: Promise<GeneralNft[]>

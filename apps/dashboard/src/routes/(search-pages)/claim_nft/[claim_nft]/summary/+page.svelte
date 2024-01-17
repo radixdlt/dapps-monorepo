@@ -1,8 +1,8 @@
 <script lang="ts">
   import SummaryTab from '@dashboard/pages/search-pages/SummaryTab.svelte'
   import type { LayoutData } from '../$types'
-  import { formatTokenValue } from '@utils'
-  import { getStringMetadata } from '@api/utils/metadata'
+  import { formatTokenValue } from '@common/utils/formatting'
+  import { getStringMetadata } from '@common/api/utils/metadata'
 
   export let data: LayoutData
 </script>

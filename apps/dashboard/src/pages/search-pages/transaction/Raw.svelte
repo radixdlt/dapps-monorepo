@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import CodeBox from '@components/code-box/CodeBox.svelte'
-  import type { TransactionReceipt } from '@common/gateway-sdk'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import CodeBox from '@svelte-ui/components/code-box/CodeBox.svelte'
+  import type { TransactionReceipt } from '@common/utils/gateway-sdk'
 
   export let receipt: Promise<TransactionReceipt | undefined>
 </script>

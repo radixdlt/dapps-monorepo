@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRdt } from './useRdt'
-import { WalletData } from '@common/rdt'
+import { WalletData } from '@common/utils/rdt'
 
 export const useRdtState = () => {
   const rdt = useRdt()

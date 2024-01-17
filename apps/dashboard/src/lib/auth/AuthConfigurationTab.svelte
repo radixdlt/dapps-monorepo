@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AuthInfo } from '@api/_deprecated/utils/auth'
+  import type { AuthInfo } from '@common/api/_deprecated/utils/auth'
   import RuleRow from './RuleRow.svelte'
 
   export let auth: AuthInfo

@@ -6,8 +6,8 @@ import { Code } from '../components/Code'
 
 import { useDAppDefinitionAddress } from '../rdt/rdt'
 import { useNetworkId } from '../network/state'
-import { DataRequestBuilder } from '@common/rdt'
-import { Rola, RolaError } from '@common/rola'
+import { DataRequestBuilder } from '@common/utils/rdt'
+import { Rola, RolaError } from '@common/utils/rola'
 import { useState } from 'react'
 export const RolaPage = () => {
   const dAppDefinitionAddress = useDAppDefinitionAddress()

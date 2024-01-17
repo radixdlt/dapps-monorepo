@@ -1,12 +1,12 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import StakeCard from './StakeCard.svelte'
   import ValidatorInfo from './ValidatorInfo.svelte'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import TrashIcon from '@icons/trash.svg'
-  import { XRDToken } from '@constants'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { XRDToken } from '@common/utils/constants'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let rightColumnWidth: string
   export let validator: ValidatorListItem

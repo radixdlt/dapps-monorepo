@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { AccessRule } from '@api/_deprecated/utils/auth'
-  import Accordion from '@components/_base/accordion/Accordion.svelte'
-  import Row from '@components/info-box/Row.svelte'
+  import type { AccessRule } from '@common/api/_deprecated/utils/auth'
+  import Accordion from '@svelte-ui/components/_base/accordion/Accordion.svelte'
+  import Row from '@svelte-ui/components/info-box/Row.svelte'
 
   export let accessRule: AccessRule
   export let accessRuleName: string

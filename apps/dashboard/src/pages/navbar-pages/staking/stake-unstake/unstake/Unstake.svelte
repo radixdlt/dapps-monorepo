@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { Account } from '@stores'
+  import type { Account } from '@svelte-ui/stores'
   import StakePanel from '../StakePanel.svelte'
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
   import { getUnstakeManifest } from '../manifests'
-  import { getValidators } from '@api/_deprecated/utils/entities/validator'
-  import { RET_DECIMAL_PRECISION } from '@constants'
-  import { formatXRDValue } from '@utils'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { getValidators } from '@common/api/_deprecated/utils/entities/validator'
+  import { RET_DECIMAL_PRECISION } from '@common/utils/constants'
+  import { formatXRDValue } from '@common/utils/formatting'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let stakes: {
     account: Account

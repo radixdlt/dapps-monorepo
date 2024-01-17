@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Metadata from '@components/metadata/Metadata.svelte'
+  import Metadata from '@svelte-ui/components/metadata/Metadata.svelte'
   import { metadataItem } from './utils'
-  import type { Entity } from '@api/utils/entities'
+  import type { Entity } from '@common/api/utils/entities'
   import RedeemableTokens from './RedeemableTokens.svelte'
   import AssociatedDapps from './AssociatedDapps.svelte'
-  import Tags from '@components/_base/tags/Tags.svelte'
-  import Row from '@components/info-box/Row.svelte'
+  import Tags from '@svelte-ui/components/_base/tags/Tags.svelte'
+  import Row from '@svelte-ui/components/info-box/Row.svelte'
   import type { ComponentProps } from 'svelte'
   import Behaviors from './Behaviors.svelte'
-  import type { Resource } from '@api/utils/entities/resource'
+  import type { Resource } from '@common/api/utils/entities/resource'
 
   export let useOfficialRadixTag = Promise.resolve(false)
   export let standardMetadata: Promise<Entity['metadata']['expected']>

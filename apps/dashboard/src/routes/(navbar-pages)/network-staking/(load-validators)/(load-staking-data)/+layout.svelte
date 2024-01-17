@@ -25,7 +25,7 @@
     StakedInfo,
     UnstakingInfo,
     ReadyToClaimInfo
-  } from '@api/_deprecated/utils/staking'
+  } from '@common/api/_deprecated/utils/staking'
 
   export let data: LayoutData
 

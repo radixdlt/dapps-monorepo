@@ -1,7 +1,7 @@
-import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig } from 'vitest/config'
 import { aliases } from '../../aliases'
 import path from 'path'
+import { sveltekit } from '@sveltejs/kit/vite'
 
 const mappedAliases = Object.entries(aliases()).reduce(
   (obj, [key, value]) => ({
@@ -12,7 +12,7 @@ const mappedAliases = Object.entries(aliases()).reduce(
 )
 
 export default defineConfig({
-  plugins: [svelte({ hot: !process.env.VITEST })],
+  plugins: [sveltekit()],
   resolve: {
     alias: {
       ...mappedAliases,
@@ -20,7 +20,7 @@ export default defineConfig({
     }
   },
   test: {
-    setupFiles: ['../../packages/ui/setup-tests.ts'],
+    setupFiles: ['../../setup-tests.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     globals: true,
     environment: 'jsdom',

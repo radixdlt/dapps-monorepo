@@ -1,4 +1,4 @@
-import type { TransactionStatus } from '@common/gateway-sdk'
+import type { TransactionStatus } from '@common/utils/gateway-sdk'
 import type { PageLoad } from './$types'
 
 export const prerender = false

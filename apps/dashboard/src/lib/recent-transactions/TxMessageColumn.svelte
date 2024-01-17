@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Tooltip from '@components/_base/tooltip/Tooltip.svelte'
+  import Tooltip from '@svelte-ui/components/_base/tooltip/Tooltip.svelte'
   import TxMessage from './TxMessage.svg'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
 
   export let message: string
 </script>

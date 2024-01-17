@@ -1,20 +1,20 @@
 <script lang="ts">
   import StakePanel from '../../StakePanel.svelte'
   import { selectedValidators } from '../../../Validators.svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
   import OverviewStakeCardMultiple from '../../stake-card/OverviewStakeCardMultiple.svelte'
   import StakeCardMultiple from '../../stake-card/StakeCardMultiple.svelte'
   import DistributeSwitch from './DistributeSwitch.svelte'
   import BigNumber from 'bignumber.js'
   import AccountSection from '../../AccountSection.svelte'
-  import { xrdAddress, type Account } from '@stores'
+  import { xrdAddress, type Account } from '@svelte-ui/stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getMultipleStakeManifest } from '../../manifests'
-  import { removeThousandsSeparator } from '@utils/format-amount'
+  import { removeThousandsSeparator } from '@common/utils/formatting'
   import type { ComponentEvents } from 'svelte'
-  import { RET_DECIMAL_PRECISION } from '@constants'
-  import { TransactionStatus } from '@common/gateway-sdk'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { RET_DECIMAL_PRECISION } from '@common/utils/constants'
+  import { TransactionStatus } from '@common/utils/gateway-sdk'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let validators: ValidatorListItem[]
   export let currentlyStaked: Promise<{

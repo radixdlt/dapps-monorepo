@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PercentageInput from '@components/_base/input/PercentageInput.svelte'
+  import PercentageInput from '@svelte-ui/components/_base/input/PercentageInput.svelte'
   import HistogramFilter from './histogram-filter/HistogramFilter.svelte'
   import BigNumber from 'bignumber.js'
 

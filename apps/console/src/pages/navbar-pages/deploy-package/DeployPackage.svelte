@@ -1,20 +1,21 @@
 <script lang="ts">
   import { Buffer } from 'buffer'
-  import FileUpload from '@components/file-upload/FileUpload.svelte'
+  import FileUpload from '@svelte-ui/components/file-upload/FileUpload.svelte'
   import { derived, writable } from 'svelte/store'
   import Select from '$lib/select/Select.svelte'
   import Label from '$lib/Label.svelte'
-  import { accounts, dAppToolkit } from '@stores'
+  import { accounts, dAppToolkit } from '@svelte-ui/stores'
   import {
     getAccountData,
     type FungibleResource,
     type NonFungibleResource,
     type TransformedNonFungible
-  } from '@api/_deprecated/utils/entities/resource'
-  import { shortenAddress, typedError } from '@utils'
+  } from '@common/api/_deprecated/utils/entities/resource'
+  import { shortenAddress } from '@common/utils/formatting'
+  import { typedError } from '@common/utils/error'
   import { getDeployPackageManifest, sborDecodeSchema } from './side-effects'
   import { ResultAsync } from 'neverthrow'
-  import { getTransactionDetails as getTransactionDetailsFn } from '@api/_deprecated/gateway'
+  import { getTransactionDetails as getTransactionDetailsFn } from '@common/api/_deprecated/gateway'
   import { goto } from '$app/navigation'
   import type {
     AccessRule,

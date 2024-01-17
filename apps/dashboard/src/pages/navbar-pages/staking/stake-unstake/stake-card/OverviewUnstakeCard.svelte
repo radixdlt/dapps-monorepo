@@ -1,12 +1,12 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import StakeCard from './StakeCard.svelte'
-  import type { Account } from '@stores'
+  import type { Account } from '@svelte-ui/stores'
   import UnstakeIcon from '@icons/unstaking.svg'
   import TokenAmountCard from './token-amount-card/TokenAmountCard.svelte'
   import BigNumber from 'bignumber.js'
-  import { formatXRDValue } from '@utils'
-  import { XRDToken } from '@constants'
+  import { formatXRDValue } from '@common/utils/formatting'
+  import { XRDToken } from '@common/utils/constants'
   import ValidatorInfo from './ValidatorInfo.svelte'
 
   export let amountToUnstake: string = '0'

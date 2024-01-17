@@ -2,10 +2,10 @@
   import type { LayoutData } from '../$types'
   import type { Token } from '@dashboard-pages/search-pages/account/types'
   import FungibleTokensPage from '@dashboard-pages/search-pages/account/fungible/FungibleTokensPage.svelte'
-  import { xrdAddress as xrdAddressStore } from '@stores'
+  import { xrdAddress as xrdAddressStore } from '@svelte-ui/stores'
   import { indexBy, prop } from 'ramda'
-  import type { FungibleResource } from '@api/utils/entities/resource/fungible'
-  import type { Account } from '@api/utils/entities/component/account'
+  import type { FungibleResource } from '@common/api/utils/entities/resource/fungible'
+  import type { Account } from '@common/api/utils/entities/component/account'
 
   export let data: LayoutData
 

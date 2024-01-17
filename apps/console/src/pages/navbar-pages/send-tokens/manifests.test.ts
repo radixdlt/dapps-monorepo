@@ -1,4 +1,4 @@
-import { RadixEngineToolkit } from '@common/ret'
+import { RadixEngineToolkit } from '@common/utils/ret'
 import { getSendNFTManifest, getSendTokenManifest } from './manifests'
 
 describe('send tokens manifests', () => {

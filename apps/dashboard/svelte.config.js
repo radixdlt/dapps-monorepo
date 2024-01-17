@@ -1,4 +1,4 @@
-import sharedConfig from '../../packages/ui/svelte.config.js'
+import sharedConfig from '../../packages/svelte-ui/src/lib/common-svelte-config.js'
 
 globalThis.self = globalThis
 

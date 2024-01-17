@@ -1,6 +1,6 @@
 <script lang="ts">
-  import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
-  import CardRow from '@components/info-box/CardRow.svelte'
+  import TokenIcon from '@svelte-ui/components/_base/token-icon/TokenIcon.svelte'
+  import CardRow from '@svelte-ui/components/info-box/CardRow.svelte'
 
   export let tokens: {
     iconUrl?: string

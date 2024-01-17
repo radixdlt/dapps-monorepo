@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { NonFungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
-  import { resourcesCacheClient } from '@api/utils/resource-cache-client'
+  import type { NonFungibleResource } from '@common/api/_deprecated/utils/entities/resource'
+  import type { NonFungible } from '@common/api/utils/nfts'
+  import { resourcesCacheClient } from '@common/api/utils/resource-cache-client'
   import type {
     TransactionBalanceChanges,
     TransactionFungibleBalanceChanges,
     TransactionNonFungibleBalanceChanges
-  } from '@common/gateway-sdk'
-  import { formatTokenValue } from '@utils'
+  } from '@common/utils/gateway-sdk'
+  import { formatTokenValue } from '@common/utils/formatting'
   import BigNumber from 'bignumber.js'
 
   export let entityAddress: string

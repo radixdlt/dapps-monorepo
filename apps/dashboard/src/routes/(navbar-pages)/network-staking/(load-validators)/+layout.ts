@@ -1,12 +1,12 @@
 import { bookmarkedValidatorsApi } from '../../../../server/validators/validators-api'
 import type { LayoutLoad } from './$types'
 import { bookmarkedValidatorsStore } from '../../../../stores'
-import type { NetworkConfigurationResponse } from '@common/gateway-sdk'
-import { networkConfiguration } from '@stores'
+import type { NetworkConfigurationResponse } from '@common/utils/gateway-sdk'
+import { networkConfiguration } from '@svelte-ui/stores'
 import { ResultAsync } from 'neverthrow'
 import { handleGatewayResult } from '../../../../utils'
 import { pipe } from 'ramda'
-import { getValidators } from '@api/utils/entities/component/validator'
+import { getValidators } from '@common/api/utils/entities/component/validator'
 
 export type Bookmarked = { [validator: string]: boolean }
 

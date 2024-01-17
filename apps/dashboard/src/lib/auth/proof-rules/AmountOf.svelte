@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AmountOfProofRule } from '@api/_deprecated/utils/auth'
+  import type { AmountOfProofRule } from '@common/api/_deprecated/utils/auth'
   import ResourceProofRule from './ResourceProofRule.svelte'
 
   export let rule: AmountOfProofRule

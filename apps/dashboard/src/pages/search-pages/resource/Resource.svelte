@@ -1,14 +1,14 @@
 <script lang="ts">
-  import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
-  import Metadata from '@components/metadata/Metadata.svelte'
+  import PillsMenu from '@svelte-ui/components/_base/pills-menu/PillsMenu.svelte'
+  import Metadata from '@svelte-ui/components/metadata/Metadata.svelte'
   import type { metadataItem } from '../utils'
   import SummaryTab from '../SummaryTab.svelte'
   import type { ComponentProps } from 'svelte'
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue } from '@common/utils/formatting'
   import AuthConfigurationTab from '$lib/auth/AuthConfigurationTab.svelte'
-  import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
-  import type { FungibleResource } from '@api/utils/entities/resource/fungible'
-  import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
+  import type { NonFungibleResource } from '@common/api/utils/entities/resource/non-fungible'
+  import type { FungibleResource } from '@common/api/utils/entities/resource/fungible'
+  import type { PoolUnit } from '@common/api/utils/entities/resource/fungible/pool-unit'
 
   export let resource: Promise<
     NonFungibleResource | FungibleResource | PoolUnit

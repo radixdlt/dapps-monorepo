@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { xrdAddress } from '@stores'
+  import { xrdAddress } from '@svelte-ui/stores'
   export let fee: string
 </script>
 

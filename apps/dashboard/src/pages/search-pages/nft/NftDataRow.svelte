@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { transformTupleGlobalIdToAddress } from '@api/utils/nft-data'
-  import Accordion from '@components/_base/accordion/Accordion.svelte'
-  import Address from '@components/_base/address/Address.svelte'
-  import Link from '@components/_base/link/Link.svelte'
-  import Row from '@components/info-box/Row.svelte'
+  import { transformTupleGlobalIdToAddress } from '@common/api/utils/nft-data'
+  import Accordion from '@svelte-ui/components/_base/accordion/Accordion.svelte'
+  import Address from '@svelte-ui/components/_base/address/Address.svelte'
+  import Link from '@svelte-ui/components/_base/link/Link.svelte'
+  import Row from '@svelte-ui/components/info-box/Row.svelte'
   import type {
     ProgrammaticScryptoSborValue,
     ProgrammaticScryptoSborValueArray

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue } from '@common/utils/formatting'
   import type BigNumber from 'bignumber.js'
 
   export let change: BigNumber | 'added' | 'removed'

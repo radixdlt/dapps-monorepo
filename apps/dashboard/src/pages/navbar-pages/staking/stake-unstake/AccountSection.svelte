@@ -1,6 +1,6 @@
 <script lang="ts">
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
-  import type { Account } from '@stores'
+  import AccountPicker from '@svelte-ui/components/_base/picker/account-picker/AccountPicker.svelte'
+  import type { Account } from '@svelte-ui/stores'
 
   export let selectedAccount: Account
 </script>

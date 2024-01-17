@@ -1,7 +1,10 @@
 import { BehaviorSubject } from 'rxjs'
 import { createObservableHook } from '../helpers/create-observable-hook'
 import { appLogger } from '../logger/state'
-import { GatewayApiClient, RadixNetworkConfigById } from '@common/gateway-sdk'
+import {
+  GatewayApiClient,
+  RadixNetworkConfigById
+} from '@common/utils/gateway-sdk'
 import { DEFAULT_NETWORK_ID } from '../helpers/get-network-id'
 
 export const bootstrapNetwork = (networkId: number) => {

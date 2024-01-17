@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Button from '@components/_base/button/ButtonNew.svelte'
+  import Button from '@svelte-ui/components/_base/button/ButtonNew.svelte'
   import { writable } from 'svelte/store'
-  import type { Account } from '@stores'
-  import { query } from '@api/query'
+  import type { Account } from '@svelte-ui/stores'
+  import { query } from '@common/api/query'
   import {
     getFormattedAccounts,
     type FormattedAccount,
     getTxManifest
   } from './side-effects'
-  import Text from '@components/_base/text/Text.svelte'
-  import StackList from '@components/stack-list/StackList.svelte'
-  import Icon from '@components/_base/icon/Icon.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
+  import StackList from '@svelte-ui/components/stack-list/StackList.svelte'
+  import Icon from '@svelte-ui/components/_base/icon/Icon.svelte'
+  import LoadingSpinner from '@svelte-ui/components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import TrashIcon from '@icons/trash.svg'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
-  import type { Account as AccountType } from '@stores'
+  import Checkbox from '@svelte-ui/components/_base/checkbox/Checkbox.svelte'
+  import AccountPicker from '@svelte-ui/components/_base/picker/account-picker/AccountPicker.svelte'
+  import type { Account as AccountType } from '@svelte-ui/stores'
 
   export let accounts: Account[]
 

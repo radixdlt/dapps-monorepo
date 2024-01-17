@@ -1,8 +1,8 @@
 <script lang="ts">
   import ExternalLink from '@icons/external.svg'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import Button from '@components/_base/button/ButtonNew.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import Button from '@svelte-ui/components/_base/button/ButtonNew.svelte'
+  import LoadingSpinner from '@svelte-ui/components/_base/button/loading-spinner/LoadingSpinner.svelte'
 
   export let disabled = false
   export let loading = false

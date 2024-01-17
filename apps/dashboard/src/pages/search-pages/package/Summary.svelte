@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Package } from '@api/utils/entities/package'
+  import type { Package } from '@common/api/utils/entities/package'
   import SummaryMetadata from '../SummaryMetadata.svelte'
   import type { metadataItem } from '../utils'
 

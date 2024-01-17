@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
-  import PoolUnitCard from '@components/pool-unit-card/PoolUnitCard.svelte'
+  import PoolUnitCard from '@svelte-ui/components/pool-unit-card/PoolUnitCard.svelte'
   import type PoolUnits from './PoolUnits.svelte'
 
   export let poolUnits: Awaited<ComponentProps<PoolUnits>['poolData']>

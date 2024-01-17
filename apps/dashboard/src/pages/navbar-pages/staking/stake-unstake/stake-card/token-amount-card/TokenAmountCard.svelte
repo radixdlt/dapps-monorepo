@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Account from '@components/_base/account/Account.svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import AmountInput from '@components/_base/input/AmountInput.svelte'
-  import type { Account as AccountT } from '@stores'
+  import Account from '@svelte-ui/components/_base/account/Account.svelte'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import AmountInput from '@svelte-ui/components/_base/input/AmountInput.svelte'
+  import type { Account as AccountT } from '@svelte-ui/stores'
   import { createEventDispatcher } from 'svelte'
 
   export let token: {

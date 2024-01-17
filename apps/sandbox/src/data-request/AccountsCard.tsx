@@ -8,7 +8,7 @@ import FormLabel from '@mui/joy/FormLabel'
 import { useDataRequestState } from './state'
 import { Card } from '../components/Card'
 import { dataRequestStateClient } from '../rdt/rdt'
-import { DataRequestBuilder } from '@common/rdt'
+import { DataRequestBuilder } from '@common/utils/rdt'
 
 export const AccountsCard = () => {
   const dataRequestState = useDataRequestState()

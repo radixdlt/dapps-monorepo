@@ -1,5 +1,5 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import DateAndTxIdColumn from './DateAndTxIdColumn.svelte'
   import TxMessageColumn from './TxMessageColumn.svelte'
   import ChevronRight from '@icons/chevron-right.svg'

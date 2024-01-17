@@ -1,10 +1,10 @@
 <script lang="ts">
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
+  import NftImage from '@svelte-ui/components/_base/nft-image/NftImage.svelte'
+  import TokenIcon from '@svelte-ui/components/_base/token-icon/TokenIcon.svelte'
   import Cross from '@icons/cross-2.svg'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { formatTokenValue, shortenAddress } from '@utils'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import { formatTokenValue, shortenAddress } from '@common/utils/formatting'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
 
   export let resourceAddress: string
   export let iconUrl: Promise<string | undefined> | undefined

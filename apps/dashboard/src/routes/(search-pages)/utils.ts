@@ -1,21 +1,21 @@
-import { callApi } from '@api/gateway'
-import { getStringMetadata } from '@api/_deprecated/utils/metadata'
-import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
+import { callApi } from '@common/api/gateway'
+import { getStringMetadata } from '@common/api/_deprecated/utils/metadata'
+import { getLinkedDappDefinitions } from '@common/api/utils/two-way-linking'
+import type { StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk'
 import { err, ok } from 'neverthrow'
 import { andThen, flatten, map, pipe } from 'ramda'
 import type {
   LedgerStateSelector,
   StateEntityDetailsOptions
-} from '@common/rdt'
+} from '@common/utils/rdt'
 import { handleGatewayResult } from '../../utils'
 import type {
   AuthInfo,
   NonFungibleRequirement,
   ResourceRequirement
-} from '@api/_deprecated/utils/auth'
-import { transformFungibleResource } from '@api/_deprecated/utils/entities/resource'
-import { transformNft } from '@api/utils/nfts'
+} from '@common/api/_deprecated/utils/auth'
+import { transformFungibleResource } from '@common/api/_deprecated/utils/entities/resource'
+import { transformNft } from '@common/api/utils/nfts'
 
 export const getDappDefinitionData = ({
   metadata,

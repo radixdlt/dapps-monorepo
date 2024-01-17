@@ -1,11 +1,10 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
-  import { formatTokenValue, truncateNumber } from '@utils'
-  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import { formatTokenValue, truncateNumber } from '@common/utils/formatting'
+  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@common/utils/constants'
   import WarningIcon from '@icons/warning.svg'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let validator: Promise<ValidatorListItem>
 </script>

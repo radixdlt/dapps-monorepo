@@ -23,22 +23,22 @@
 
 <script lang="ts">
   import ValidatorList from './validator-list/ValidatorList.svelte'
-  import Icon from '@components/_base/icon/IconNew.svelte'
+  import Icon from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import StakingCard from '../../../lib/staking-card/StakingCard.svelte'
-  import { connected, type Account } from '@stores'
-  import { useContext } from '@utils'
+  import { connected, type Account } from '@svelte-ui/stores'
+  import { useContext } from '@svelte-ui/utils'
   import { writable, type Writable } from 'svelte/store'
   import SelectedValidators from './selected-validators/SelectedValidators.svelte'
   import FilterButton from './filter-button/FilterButton.svelte'
   import { goto } from '$app/navigation'
   import BigNumber from 'bignumber.js'
   import { createEventDispatcher } from 'svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
-  import type { StakeInfo } from '@api/_deprecated/utils/staking'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
+  import type { Validator } from '@common/api/_deprecated/utils/entities/validator'
+  import type { StakeInfo } from '@common/api/_deprecated/utils/staking'
   import { stakeInfo } from '../../../routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let validators: Promise<ValidatorListItem<true, true, true>[]>
   export let filteredValidators:

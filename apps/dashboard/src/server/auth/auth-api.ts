@@ -1,5 +1,5 @@
-import type { SignedChallenge } from '@common/rdt'
-import { fetchWrapper } from '@utils'
+import type { SignedChallenge } from '@common/utils/rdt'
+import { fetchWrapper } from '@common/utils/fetch'
 
 export const authApi = {
   login: (signedChallenge: SignedChallenge, serverFetch?: typeof fetch) =>

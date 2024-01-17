@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Divider from '@components/_base/divider/Divider.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import Checkmark from '@icons/green-check.svg'
   import Cross from '@icons/cross-red.svg'
   import type { ComponentProps } from 'svelte'
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import type { TransactionIntentStatus } from '@common/gateway-sdk'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import type { TransactionIntentStatus } from '@common/utils/gateway-sdk'
 
   export let status: Promise<TransactionIntentStatus>
   export let timestamp: Promise<Date | undefined>

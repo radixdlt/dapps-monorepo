@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { connected } from '@stores'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import { connected } from '@svelte-ui/stores'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { bookmarkedValidatorsStore } from '../../../../stores'
   import { setFavoriteValidator } from '../../../../server/validators/validators-api'
   import BookmarkEmptyIcon from '@icons/bookmark-empty.svg'
   import BookmarkFilledIcon from '@icons/bookmark-filled.svg'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let validator: Promise<ValidatorListItem> | ValidatorListItem
   export let withText = false

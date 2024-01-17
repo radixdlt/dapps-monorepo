@@ -1,20 +1,24 @@
 <script lang="ts">
-  import '@fonts'
-  import { featureFlags } from '@featureFlags'
-  import { darkTheme, getCssText } from '@styles'
+  import '../fonts.css'
+  import { featureFlags } from '../feature-flags'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, dAppToolkit, selectedAccount, storage } from '@stores'
+  import {
+    accounts,
+    dAppToolkit,
+    selectedAccount,
+    storage
+  } from '@svelte-ui/stores'
   import {
     RadixDappToolkit,
     Account,
     DataRequestBuilder,
     createLogger
-  } from '@common/rdt'
-  import { CURRENT_NETWORK } from '@networks'
-  import Theme from '@components/_base/theme/Theme.svelte'
-  import { accountLabel } from '@utils'
-  import Layout from '@components/layout/Layout.svelte'
+  } from '@common/utils/rdt'
+  import { CURRENT_NETWORK } from '../network'
+  import Theme from '@svelte-ui/components/_base/theme/Theme.svelte'
+  import { accountLabel } from '@common/utils/formatting'
+  import Layout from '@svelte-ui/components/layout/Layout.svelte'
   import LayersIcon from '@icons/layers.svg'
   import NftsIcon from '@icons/nfts.svg'
   import TokensIcon from '@icons/tokens.svg'
@@ -22,10 +26,11 @@
   import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import CreateTokenIcon from '@icons/create-token.svg'
   import NetworkTagIcon from '@icons/network-tag.svg'
-  import { resolveRDT } from '../../../../packages/ui/src/radix'
+  import { resolveRDT } from '@common/utils/rdt'
   import LogoIcon from '@images/console-logo.svg'
   import { PUBLIC_NETWORK_NAME } from '$env/static/public'
-  import { NETWORK_CONFIG } from '@constants'
+  import { NETWORK_CONFIG } from '@common/utils/constants'
+  import { showSidebar } from '@svelte-ui'
 
   let mounted = false
 
@@ -63,12 +68,6 @@
 
     resolveRDT(rdt)
   })
-
-  $: if (mounted) {
-    document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
-      darkTheme
-    )
-  }
 
   navigating
 
@@ -158,9 +157,6 @@
   >
   <!-- End Google Tag Manager (noscript) -->
 {/if}
-<!-- enables SSR of css -->
-<!-- eslint-disable-next-line -->
-{@html `<${''}style id="stitches">${getCssText()}</${''}style>`}
 
 <Theme theme="light">
   {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
@@ -170,7 +166,13 @@
     </div>
   {/if}
   {#if mounted}
-    <Layout {routes} {hideSearch} {showDesktopSidebar}>
+    <Layout
+      {routes}
+      {hideSearch}
+      {showDesktopSidebar}
+      currentNetworkId={CURRENT_NETWORK.id}
+      on:click={() => showSidebar.set(true)}
+    >
       <!-- svelte-ignore a11y-missing-content -->
       <a
         slot="logo"

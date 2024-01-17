@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
-  import SimplePicker from '@components/_base/picker/simple-picker/SimplePicker.svelte'
+  import type { Validator } from '@common/api/_deprecated/utils/entities/validator'
+  import SimplePicker from '@svelte-ui/components/_base/picker/simple-picker/SimplePicker.svelte'
   import type { UptimeValue } from '../validator-list/UptimeHeader.svelte'
-  import { truncateNumber } from '@utils'
+  import { truncateNumber } from '@common/utils/formatting'
 
   export let uptimes: Validator<unknown, true, unknown>['uptimePercentages']
 

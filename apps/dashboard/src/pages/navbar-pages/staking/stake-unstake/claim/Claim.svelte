@@ -1,15 +1,15 @@
 <script lang="ts">
   import StakePanel from '../StakePanel.svelte'
   import TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
-  import { formatTokenValue } from '@utils'
+  import { formatTokenValue } from '@common/utils/formatting'
   import BigNumber from 'bignumber.js'
-  import type { Account } from '@stores'
-  import { XRDToken } from '@constants'
+  import type { Account } from '@svelte-ui/stores'
+  import { XRDToken } from '@common/utils/constants'
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
   import ValidatorInfo from '../stake-card/ValidatorInfo.svelte'
-  import type { ClaimNft } from '@api/_deprecated/utils/nfts/claim-nft'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import type { ClaimNft } from '@common/api/_deprecated/utils/nfts/claim-nft'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let readyToClaim: {
     validator: ValidatorListItem

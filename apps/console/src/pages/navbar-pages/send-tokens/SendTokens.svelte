@@ -10,21 +10,20 @@
 
 <script lang="ts">
   import Label from '$lib/Label.svelte'
-  import Box from '@components/_base/box/Box.svelte'
+  import Box from '@svelte-ui/components/_base/box/Box.svelte'
   import Input from '$lib/input/Input.svelte'
   import Select from '$lib/select/Select.svelte'
   import { goto } from '$app/navigation'
-  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
-  import type { Account } from '@stores'
-  import { shortenAddress } from '@utils'
+  import SendTxButton from '@svelte-ui/components/send-tx-button/SendTxButton.svelte'
+  import AccountPicker from '@svelte-ui/components/_base/picker/account-picker/AccountPicker.svelte'
+  import type { Account } from '@svelte-ui/stores'
+  import { shortenAddress } from '@common/utils/formatting'
   import { createBadgeProof } from '../dapp-definition/side-effects'
-  import { address } from '@radixdlt/radix-engine-toolkit'
   import {
     getAccountData,
     type Resources,
     type TransformedNonFungible
-  } from '@api/_deprecated/utils/entities/resource'
+  } from '@common/api/_deprecated/utils/entities/resource'
 
   let resources: Promise<Resources[number]> = new Promise((resolve) => {})
 

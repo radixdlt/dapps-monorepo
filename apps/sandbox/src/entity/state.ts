@@ -7,7 +7,7 @@ import {
   FungibleResourcesCollectionItemVaultAggregated,
   NonFungibleResourcesCollectionItemVaultAggregated,
   StateEntityDetailsResponseComponentDetails
-} from '@common/gateway-sdk'
+} from '@common/utils/gateway-sdk'
 import { createObservableHook } from '../helpers/create-observable-hook'
 import { getStringMetadata } from '../helpers/find-metadata'
 

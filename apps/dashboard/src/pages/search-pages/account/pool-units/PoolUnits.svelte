@@ -1,12 +1,12 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import Accordion from '@components/_base/accordion/Accordion.svelte'
-  import BasicTable from '@components/_base/table/basic-table/BasicTable.svelte'
-  import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import Accordion from '@svelte-ui/components/_base/accordion/Accordion.svelte'
+  import BasicTable from '@svelte-ui/components/_base/table/basic-table/BasicTable.svelte'
+  import TokenIcon from '@svelte-ui/components/_base/token-icon/TokenIcon.svelte'
   import type BigNumber from 'bignumber.js'
   import type { ComponentProps } from 'svelte'
   import PoolUnitCards from './PoolUnitCards.svelte'
-  import { formatXRDValue } from '@utils'
+  import { formatXRDValue } from '@common/utils/formatting'
 
   export let stakeInfo: Promise<
     {

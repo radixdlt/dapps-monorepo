@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { z } from '@common/zod'
-  import { derived, writable, type Writable } from 'svelte/store'
+  import { z } from '@common/utils/zod'
+  import { derived, writable } from 'svelte/store'
   import Form, { type FormItem } from '$lib/form/Form.svelte'
   import OwnerRole from '$lib/OwnerRole.svelte'
   import type {
     OwnerAccessRuleUpdatable,
     AccessRule
   } from '../../../helpers/simple-access-rule-builder'
-  import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
-  import type { Account as AccountType } from '@stores'
+  import AccountPicker from '@svelte-ui/components/_base/picker/account-picker/AccountPicker.svelte'
+  import type { Account as AccountType } from '@svelte-ui/stores'
   import { createFungibleTokenManifest } from '../../../helpers/create-fungible-token-manifest'
-  import { dAppToolkit } from '@stores'
+  import { dAppToolkit } from '@svelte-ui/stores'
   import {
     MetadataType,
     stringArrayMetadata,
@@ -19,7 +19,7 @@
   import Nft, { type NftData } from './Nft.svelte'
   import { createNonFungibleTokenManifest } from '../../../helpers/create-non-fungible-token-manifest'
   import { goto } from '$app/navigation'
-  import { getTransactionDetails } from '@api/_deprecated/gateway'
+  import { getTransactionDetails } from '@common/api/_deprecated/gateway'
   import { onMount } from 'svelte'
   import SendToWalletButton from '$lib/SendToWalletButton.svelte'
 

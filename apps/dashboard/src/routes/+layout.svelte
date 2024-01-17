@@ -1,8 +1,7 @@
 <script lang="ts">
-  import '@fonts'
-  import Layout from '@components/layout/Layout.svelte'
-  import { featureFlags } from '@featureFlags'
-  import { darkTheme } from '@styles'
+  import '../fonts.css'
+  import Layout from '@svelte-ui/components/layout/Layout.svelte'
+  import { featureFlags } from '../feature-flags'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
   import {
@@ -11,32 +10,33 @@
     networkConfiguration,
     selectedAccount,
     storage
-  } from '@stores'
+  } from '@svelte-ui/stores'
   import {
     Account,
     DataRequestBuilder,
     RadixDappToolkit,
     createLogger
-  } from '@common/rdt'
-  import { CURRENT_NETWORK } from '@networks'
-  import Theme from '@components/_base/theme/Theme.svelte'
-  import { accountLabel } from '@utils'
+  } from '@common/utils/rdt'
+  import { CURRENT_NETWORK } from '../network'
+  import Theme from '@svelte-ui/components/_base/theme/Theme.svelte'
+  import { accountLabel } from '@common/utils/formatting'
   import { authApi } from '../server/auth/auth-api'
   import ValidatorsIcon from '@icons/validators-menu.svg'
-  import { resolveRDT } from '../../../../packages/ui/src/radix'
+  import { resolveRDT } from '@common/utils/rdt'
   import LogoIcon from '@images/dashboard-logo.svg'
-  import Footer from '@components/footer/Footer.svelte'
+  import Footer from '@svelte-ui/components/footer/Footer.svelte'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
-  import { callApi } from '@api/_deprecated/gateway'
+  import { callApi } from '@common/api/_deprecated/gateway'
   import { errorPage } from '../stores'
   import { PUBLIC_NETWORK_NAME } from '$env/static/public'
-  import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@constants'
-  import Dialog from '@components/_base/dialog/Dialog.svelte'
-  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import { NETWORK_CONFIG, NON_EXTERNAL_ORIGINS } from '@common/utils/constants'
+  import Dialog from '@svelte-ui/components/_base/dialog/Dialog.svelte'
+  import ButtonNew from '@svelte-ui/components/_base/button/ButtonNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import Cross from '@icons/cross-2.svg'
   import External from '@icons/external-white.svg'
   import ExternalBlack from '@icons/external-black.svg'
+  import { showSidebar } from '@svelte-ui'
 
   let mounted = false
 
@@ -125,12 +125,6 @@
     }
   ]
 
-  $: if (mounted) {
-    document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
-      darkTheme
-    )
-  }
-
   navigating
 
   let hideSearch = false
@@ -184,7 +178,12 @@
     </div>
   {/if}
   {#if mounted}
-    <Layout {hideSearch} {routes}>
+    <Layout
+      {hideSearch}
+      {routes}
+      currentNetworkId={CURRENT_NETWORK.id}
+      on:click={() => showSidebar.set(true)}
+    >
       <!-- svelte-ignore a11y-missing-content -->
 
       <a

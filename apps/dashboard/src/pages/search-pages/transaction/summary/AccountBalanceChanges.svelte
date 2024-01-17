@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Address from '@components/_base/address/Address.svelte'
-  import Divider from '@components/_base/divider/Divider.svelte'
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
+  import Address from '@svelte-ui/components/_base/address/Address.svelte'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
+  import NftImage from '@svelte-ui/components/_base/nft-image/NftImage.svelte'
+  import TokenIcon from '@svelte-ui/components/_base/token-icon/TokenIcon.svelte'
   import Change from './Change.svelte'
   import BigNumber from 'bignumber.js'
-  import { xrdAddress } from '@stores'
+  import { xrdAddress } from '@svelte-ui/stores'
 
   type _BalanceChange<T extends 'fungible' | 'non-fungible' | 'fee'> = {
     type: T

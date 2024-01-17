@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
+  import ButtonNew from '@svelte-ui/components/_base/button/ButtonNew.svelte'
   import { selectedValidators } from '../Validators.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import MultipleStaking from '@icons/multiple-staking.svg'
   import { createEventDispatcher } from 'svelte'
 

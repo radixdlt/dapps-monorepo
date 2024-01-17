@@ -21,16 +21,22 @@
 
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
-  import { connected } from '@stores'
+  import { connected } from '@svelte-ui/stores'
   import { bookmarkedValidatorsStore } from '../../../../stores'
-  import GridTable from '@components/_base/table/grid-table/GridTable.svelte'
+  import GridTable from '@svelte-ui/components/_base/table/grid-table/GridTable.svelte'
   import type { UptimeValue } from './UptimeHeader.svelte'
-  import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
-  import type { Direction, SortableValues } from '@components/_base/table/types'
-  import { sortBigNumber, sortBasic } from '@components/_base/table/sorting'
+  import BasicHeader from '@svelte-ui/components/_base/table/basic-header/BasicHeader.svelte'
+  import type {
+    Direction,
+    SortableValues
+  } from '@svelte-ui/components/_base/table/types'
+  import {
+    sortBigNumber,
+    sortBasic
+  } from '@svelte-ui/components/_base/table/sorting'
   import UptimeHeader from './UptimeHeader.svelte'
   import ValidatorRow from './ValidatorRow.svelte'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
   import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
 
   interface $$Slots {

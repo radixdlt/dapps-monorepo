@@ -1,5 +1,5 @@
 <script>
-  import Card from '@components/_base/card/Card.svelte'
+  import Card from '@svelte-ui/components/_base/card/Card.svelte'
 </script>
 
 <div>

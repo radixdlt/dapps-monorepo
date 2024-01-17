@@ -1,11 +1,12 @@
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import Button from '@components/_base/button/Button.svelte'
+  import Box from '@svelte-ui/components/_base/box/Box.svelte'
+  import LoadingSpinner from '@svelte-ui/components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
+  import Button from '@svelte-ui/components/_base/button/Button.svelte'
   import { writable } from 'svelte/store'
   import { convertOlympiaToBabylonAddress } from './side-effects'
-  import Address from '@components/_base/address/Address.svelte'
+  import Address from '@svelte-ui/components/_base/address/Address.svelte'
+  import { CURRENT_NETWORK } from '../../../network'
   const olympiaAddress = writable('')
   const babylonAddress = writable('')
   const loading = writable(false)
@@ -46,6 +47,7 @@
         <Text size="medium">Babylon address</Text>
         <Address
           includeDashboardHost={true}
+          currentNetworkId={CURRENT_NETWORK.id}
           value={$babylonAddress}
           short={false}
           --background="var(--theme-surface-3)"

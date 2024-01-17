@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import SummaryTab from '../SummaryTab.svelte'
-  import { formatTokenValue } from '@utils'
-  import type { StakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
+  import { formatTokenValue } from '@common/utils/formatting'
+  import type { StakeUnit } from '@common/api/utils/entities/resource/fungible/stake-unit'
 
   export let stakeUnit: Promise<StakeUnit>
   export let associatedDapps: ComponentProps<SummaryTab>['associatedDapps']

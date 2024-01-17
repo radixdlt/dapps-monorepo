@@ -51,9 +51,9 @@
   import Input from '../input/Input.svelte'
   import Textarea from '../Textarea.svelte'
   import Label from '../Label.svelte'
-  import type { ZodSchema, z } from '@common/zod'
+  import type { ZodSchema, z } from '@common/utils/zod'
   import { writable } from 'svelte/store'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Checkbox from '@svelte-ui/components/_base/checkbox/Checkbox.svelte'
 
   export let items: FormItem[] = []
   export let state = writable<Record<string, string>>({})

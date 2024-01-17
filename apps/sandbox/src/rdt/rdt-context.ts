@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { RadixDappToolkit } from '@common/rdt'
+import { RadixDappToolkit } from '@common/utils/rdt'
 
 export type Rdt = ReturnType<typeof RadixDappToolkit>
 

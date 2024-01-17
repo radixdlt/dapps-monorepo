@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { getRecentNetworkTransactions } from '@api/_deprecated/gateway'
-  import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
+  import { getRecentNetworkTransactions } from '@common/api/_deprecated/gateway'
+  import PaginatedTable from '@svelte-ui/components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
   import {
     chevronColumnDefinition,
@@ -11,11 +11,11 @@
     mobileHeaderColumnDefinition,
     recentTransactionsTableConfig
   } from './ColumnDefinition.svelte'
-  import { TransactionStatus } from '@common/gateway-sdk'
-  import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
-  import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
-  import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
-  import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
+  import { TransactionStatus } from '@common/utils/gateway-sdk'
+  import TableRow from '@svelte-ui/components/_base/table/basic-table/TableRow.svelte'
+  import BasicRow from '@svelte-ui/components/_base/table/basic-table/BasicRow.svelte'
+  import BasicColumn from '@svelte-ui/components/_base/table/basic-table/BasicColumn.svelte'
+  import ResponsiveTableCell from '@svelte-ui/components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import CommittedFailureColumn from './CommittedFailureColumn.svelte'
 
   const queryFunction = (cursor?: string) => {

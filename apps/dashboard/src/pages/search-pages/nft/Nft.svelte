@@ -1,10 +1,10 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import NftImage from '@svelte-ui/components/_base/nft-image/NftImage.svelte'
   import Resource from '../resource/Resource.svelte'
   import NftDataRow from './NftDataRow.svelte'
-  import type { NonFungible } from '@api/utils/nfts'
-  import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
+  import type { NonFungible } from '@common/api/utils/nfts'
+  import type { NonFungibleResource } from '@common/api/utils/entities/resource/non-fungible'
 
   export let nft: Promise<NonFungible>
   export let resource: Promise<NonFungibleResource>

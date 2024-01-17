@@ -1,13 +1,13 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import type { Resources } from '@api/_deprecated/utils/entities/resource'
-  import CheckedList from '@components/_base/checked-list/CheckedList.svelte'
-  import Text from '@components/_base/text/Text.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import type { Resources } from '@common/api/_deprecated/utils/entities/resource'
+  import CheckedList from '@svelte-ui/components/_base/checked-list/CheckedList.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
   import { getSendNFTManifest } from '../manifests'
   import Label from '$lib/Label.svelte'
-  import { RadixNetworkConfigById } from '@common/gateway-sdk'
-  import { CURRENT_NETWORK } from '@networks'
-  import type { NonFungible } from '@api/_deprecated/utils/nfts'
+  import { RadixNetworkConfigById } from '@common/utils/gateway-sdk'
+  import { CURRENT_NETWORK } from '../../../../network'
+  import type { NonFungible } from '@common/api/_deprecated/utils/nfts'
 
   export let resources: Promise<Resources[number]['nonFungible']>
   export let selectedFromAccount: string = ''

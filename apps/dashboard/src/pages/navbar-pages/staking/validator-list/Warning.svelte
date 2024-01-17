@@ -1,5 +1,5 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import WarningIcon from '@icons/warning.svg'
   import WarningPanel from '../WarningPanel.svelte'
 </script>

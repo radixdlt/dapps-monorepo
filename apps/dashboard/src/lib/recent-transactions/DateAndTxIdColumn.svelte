@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { shortenAddress } from '@utils'
+  import { shortenAddress } from '@common/utils/formatting'
 
   export let id: string
   export let date: string

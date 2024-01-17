@@ -1,11 +1,11 @@
 import {
   ManifestSborStringRepresentation,
   RadixEngineToolkit
-} from '@common/ret'
+} from '@common/utils/ret'
 import { getDeployPackageManifest } from './side-effects'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { RadixNetwork } from '@common/gateway-sdk'
+import { RadixNetwork } from '@common/utils/gateway-sdk'
 
 describe('Deploy Package Transaction Manifests', () => {
   const NETWORK_ID = RadixNetwork.RCnetV3

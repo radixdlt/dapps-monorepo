@@ -1,9 +1,9 @@
 <script lang="ts">
-  import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
+  import SidePanel from '@svelte-ui/components/_base/side-panel/SidePanel.svelte'
   import InfoBox from './InfoBox.svelte'
-  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
-  import { TransactionStatus } from '@common/gateway-sdk'
-  import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
+  import SendTxButton from '@svelte-ui/components/send-tx-button/SendTxButton.svelte'
+  import { TransactionStatus } from '@common/utils/gateway-sdk'
+  import SidePanelHeader from '@svelte-ui/components/_base/side-panel/SidePanelHeader.svelte'
   import { createEventDispatcher } from 'svelte'
 
   export let sidePanelHeader: string

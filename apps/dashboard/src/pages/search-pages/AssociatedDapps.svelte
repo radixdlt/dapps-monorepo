@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import NftImage from '@components/_base/nft-image/NftImage.svelte'
-  import CardRow from '@components/info-box/CardRow.svelte'
-  import { addressToRoute } from '@utils'
+  import { addressToRoute } from '@dashboard/utils'
+  import NftImage from '@svelte-ui/components/_base/nft-image/NftImage.svelte'
+  import CardRow from '@svelte-ui/components/info-box/CardRow.svelte'
 
   export let cardInfo: { iconUrl: string; text: string; address: string }[]
 

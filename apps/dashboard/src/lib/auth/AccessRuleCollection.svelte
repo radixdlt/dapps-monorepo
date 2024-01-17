@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { AccessRuleNode } from '@api/_deprecated/utils/auth'
+  import type { AccessRuleNode } from '@common/api/_deprecated/utils/auth'
   import AccessRule from './AccessRule.svelte'
   import ComplexAuthRule from './ComplexAuthRule.svelte'
-  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/_deprecated/utils/nfts'
+  import type { FungibleResource } from '@common/api/_deprecated/utils/entities/resource'
+  import type { NonFungible } from '@common/api/_deprecated/utils/nfts'
 
   export let accessRules: AccessRuleNode[]
   export let type: 'All Of' | 'Any Of' | `${number} Out Of`

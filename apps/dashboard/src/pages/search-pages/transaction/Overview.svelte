@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { getTransactionDetailsNew } from '@api/_deprecated/gateway'
-  import CodeBox from '@components/code-box/CodeBox.svelte'
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
-  import AddressesList from '@components/_base/address/AddressesList.svelte'
+  import type { getTransactionDetailsNew } from '@common/api/_deprecated/gateway'
+  import CodeBox from '@svelte-ui/components/code-box/CodeBox.svelte'
+  import InfoBox from '@svelte-ui/components/info-box/InfoBox.svelte'
+  import AwaitedRow from '@svelte-ui/components/info-box/AwaitedRow.svelte'
+  import AddressesList from '@svelte-ui/components/_base/address/AddressesList.svelte'
 
   export let tx: Promise<
     ReturnType<

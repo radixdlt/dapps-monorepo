@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
-  import type { CommittedTransactionInfo } from '@common/gateway-sdk'
+  import type { CommittedTransactionInfo } from '@common/utils/gateway-sdk'
   import TxMessageColumn from './TxMessageColumn.svelte'
   import MobileHeaderColumn from './MobileHeaderColumn.svelte'
   import FeeColumn from './FeeColumn.svelte'
   import DateAndTxIdColumn from './DateAndTxIdColumn.svelte'
   import OtherBalanceChangesColumn from './OtherBalanceChangesColumn.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
   import ChevronRight from '@icons/chevron-right.svg'
   import { goto } from '$app/navigation'
 

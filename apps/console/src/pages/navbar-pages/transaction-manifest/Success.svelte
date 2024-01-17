@@ -1,10 +1,10 @@
 <script lang="ts">
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Row from '@components/info-box/Row.svelte'
-  import Success from '@components/success/Success.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { RadixNetworkConfigById } from '@common/gateway-sdk'
-  import { CURRENT_NETWORK } from '@networks'
+  import InfoBox from '@svelte-ui/components/info-box/InfoBox.svelte'
+  import Row from '@svelte-ui/components/info-box/Row.svelte'
+  import Success from '@svelte-ui/components/success/Success.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
+  import { RadixNetworkConfigById } from '@common/utils/gateway-sdk'
+  import { CURRENT_NETWORK } from '../../../network'
 
   export let txID: string
   const dashboardUrl = RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl

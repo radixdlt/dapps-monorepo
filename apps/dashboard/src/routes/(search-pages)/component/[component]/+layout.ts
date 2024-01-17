@@ -4,7 +4,7 @@ import {
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils'
-import { transformComponent } from '@api/utils/entities/component'
+import { transformComponent } from '@common/api/utils/entities/component'
 
 export const load: LayoutLoad = ({ params }) => {
   const entity = getLookupEntity(params.component)

@@ -1,5 +1,5 @@
-import { getAccountData } from '@api/_deprecated/utils/entities/resource'
-import { xrdAddress } from '@stores'
+import { getAccountData } from '@common/api/_deprecated/utils/entities/resource'
+import { xrdAddress } from '@svelte-ui/stores'
 
 let xrd: string | undefined
 

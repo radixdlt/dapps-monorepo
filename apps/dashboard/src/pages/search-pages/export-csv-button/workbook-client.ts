@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs'
-import type { CommittedTransactionInfo } from '@common/gateway-sdk'
+import type { CommittedTransactionInfo } from '@common/utils/gateway-sdk'
 import dayjs from 'dayjs'
-import type { ResourceCacheClient } from '@api/utils/resource-cache-client'
+import type { ResourceCacheClient } from '@common/api/utils/resource-cache-client'
 
 export type WorkbookClient = ReturnType<typeof WorkbookClient>
 

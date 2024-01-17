@@ -1,6 +1,6 @@
 <script lang="ts">
-  import PercentageInput from '@components/_base/input/PercentageInput.svelte'
-  import SimplePicker from '@components/_base/picker/simple-picker/SimplePicker.svelte'
+  import PercentageInput from '@svelte-ui/components/_base/input/PercentageInput.svelte'
+  import SimplePicker from '@svelte-ui/components/_base/picker/simple-picker/SimplePicker.svelte'
 
   type T = $$Generic
 

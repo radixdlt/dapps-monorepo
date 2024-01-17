@@ -1,12 +1,12 @@
 import {
   getAccountData,
   type DecoratedAccount
-} from '@api/_deprecated/utils/entities/resource'
-import type { Account } from '@stores'
+} from '@common/api/_deprecated/utils/entities/resource'
+import type { Account } from '@svelte-ui/stores'
 import {
   getStringMetadata,
   getVectorMetadata
-} from '@api/_deprecated/utils/metadata'
+} from '@common/api/_deprecated/utils/metadata'
 
 export type FormattedAccount = Awaited<
   ReturnType<typeof getFormattedAccounts>

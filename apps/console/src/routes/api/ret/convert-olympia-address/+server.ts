@@ -1,6 +1,6 @@
-import { RadixEngineToolkit } from '@common/ret'
+import { RadixEngineToolkit } from '@common/utils/ret'
 import { error, json } from '@sveltejs/kit'
-import { CURRENT_NETWORK } from '@networks'
+import { CURRENT_NETWORK } from '../../../../network'
 import type { RequestEvent } from './$types'
 
 export const POST = async ({ request }: RequestEvent) => {

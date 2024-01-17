@@ -10,7 +10,7 @@ import { rdt } from '../rdt/rdt'
 import {
   OneTimeDataRequestBuilder,
   OneTimeDataRequestBuilderItem
-} from '@common/rdt'
+} from '@common/utils/rdt'
 import { useState } from 'react'
 export const OneTimeDataRequestsPage = () => {
   const [state, setState] = useState<{

@@ -1,10 +1,10 @@
-import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible/index.js'
+import { transformNonFungibleResource } from '@common/api/utils/entities/resource/non-fungible/index.js'
 import {
   getAssociatedDapps,
   getLookupEntity,
   getResourcesFromAuth
 } from '../../utils.js'
-import type { ClaimNftCollection } from '@api/utils/entities/resource/non-fungible/claim-nft-collection.js'
+import type { ClaimNftCollection } from '@common/api/utils/entities/resource/non-fungible/claim-nft-collection.js'
 
 export const load = ({ params }) => {
   const entity = getLookupEntity(params.claim_nft)

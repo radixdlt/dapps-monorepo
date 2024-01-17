@@ -1,12 +1,12 @@
 <script lang="ts">
-  import DatePickerInput from '@components/_base/date-picker/DatePickerInput.svelte'
-  import dayjs from '@common/dayjs'
+  import DatePickerInput from '@svelte-ui/components/_base/date-picker/DatePickerInput.svelte'
+  import dayjs from '@common/utils/dayjs'
   import { onMount } from 'svelte'
-  import DatePickerCalendar from '@components/_base/date-picker/DatePickerCalendar.svelte'
+  import DatePickerCalendar from '@svelte-ui/components/_base/date-picker/DatePickerCalendar.svelte'
   import { fly } from 'svelte/transition'
 
   import IosShare from './IosShare.svelte'
-  import LoadingSpinner from '@components/_base/button/loading-spinner/LoadingSpinner.svelte'
+  import LoadingSpinner from '@svelte-ui/components/_base/button/loading-spinner/LoadingSpinner.svelte'
   import { exportTransactions } from './side-effects'
 
   export let entityAddress: string

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import InfoBox from '@components/info-box/InfoBox.svelte'
-  import Row from '@components/info-box/Row.svelte'
-  import Success from '@components/success/Success.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { TransactionStatus } from '@common/gateway-sdk'
+  import InfoBox from '@svelte-ui/components/info-box/InfoBox.svelte'
+  import Row from '@svelte-ui/components/info-box/Row.svelte'
+  import Success from '@svelte-ui/components/success/Success.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
+  import { TransactionStatus } from '@common/utils/gateway-sdk'
 
   export let txID: string
   export let txStatus: TransactionStatus

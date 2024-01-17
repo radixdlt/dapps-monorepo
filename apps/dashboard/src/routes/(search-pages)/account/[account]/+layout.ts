@@ -3,32 +3,32 @@ import {
   getStakedInfo,
   getUnstakeAndClaimInfo,
   type StakeInfo
-} from '@api/utils/staking'
+} from '@common/api/utils/staking'
 import BigNumber from 'bignumber.js'
 import { andThen, flatten, map, pipe } from 'ramda'
 import type { AccumulatedStakes } from '../../../(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/proxy+layout'
 import { handleGatewayResult } from '../../../../utils'
-import { callApi } from '@api/gateway'
+import { callApi } from '@common/api/gateway'
 import { errorPage } from '../../../../stores'
 import {
   getRedeemablePoolTokenAmount,
   transformPool
-} from '@api/utils/entities/component/pool'
-import { transformFungibleResource } from '@api/utils/entities/resource/fungible'
+} from '@common/api/utils/entities/component/pool'
+import { transformFungibleResource } from '@common/api/utils/entities/resource/fungible'
 import {
   transformAccount,
   type Account
-} from '@api/utils/entities/component/account'
-import { getValidators } from '@api/utils/entities/component/validator'
+} from '@common/api/utils/entities/component/account'
+import { getValidators } from '@common/api/utils/entities/component/validator'
 import { ResultAsync } from 'neverthrow'
-import { transformNft } from '@api/utils/nfts'
-import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
-import type { EntityType } from '@api/utils/entities/component'
-import { http } from '@common/http'
+import { transformNft } from '@common/api/utils/nfts'
+import { transformNonFungibleResource } from '@common/api/utils/entities/resource/non-fungible'
+import type { EntityType } from '@common/api/utils/entities/component'
+import { http } from '@common/utils/http'
 import {
   getPoolUnits,
   type PoolUnit
-} from '@api/utils/entities/resource/fungible/pool-unit'
+} from '@common/api/utils/entities/resource/fungible/pool-unit'
 import { getResourcesFromAuth, handleLookupGatewayResult } from '../../utils'
 
 const ERROR_MSG = 'Failed to load account data.'

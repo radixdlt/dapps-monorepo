@@ -2,8 +2,8 @@
   import {
     TransactionStatus,
     RadixNetworkConfigById
-  } from '@common/gateway-sdk'
-  import { CURRENT_NETWORK } from '@networks'
+  } from '@common/utils/gateway-sdk'
+  import { CURRENT_NETWORK } from '../../../network'
 
   export let txID: string
   export let txStatus: TransactionStatus

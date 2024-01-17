@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Divider from '@components/_base/divider/Divider.svelte'
-  import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
+  import Divider from '@svelte-ui/components/_base/divider/Divider.svelte'
+  import SidePanel from '@svelte-ui/components/_base/side-panel/SidePanel.svelte'
   import HistogramFilterCard from './histogram-filter-card/HistogramFilterCard.svelte'
   import ManualFilterCard from './manual-filter-card/ManualFilterCard.svelte'
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
-  import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
+  import SidePanelHeader from '@svelte-ui/components/_base/side-panel/SidePanelHeader.svelte'
+  import type { Validator } from '@common/api/_deprecated/utils/entities/validator'
 
   export let open: boolean
   export let feeValues: number[]

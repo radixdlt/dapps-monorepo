@@ -1,7 +1,7 @@
 import type {
   EntityMetadataItem,
   MetadataTypedValue
-} from '@common/gateway-sdk'
+} from '@common/utils/gateway-sdk'
 
 export const metadataItem = (
   key: string,

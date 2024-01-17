@@ -1,4 +1,4 @@
-import { RadixEngineToolkit } from '@common/ret'
+import { RadixEngineToolkit } from '@common/utils/ret'
 import { getTxManifest } from './side-effects'
 
 describe('dApp definition TX manifest', () => {

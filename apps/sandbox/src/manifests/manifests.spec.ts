@@ -1,7 +1,7 @@
 import {
   ManifestSborStringRepresentation,
   RadixEngineToolkit
-} from '@common/ret'
+} from '@common/utils/ret'
 
 import { createToken } from './tokens'
 import { readFileSync } from 'fs'

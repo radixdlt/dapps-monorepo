@@ -1,25 +1,15 @@
 module.exports.aliases = () => {
   const root = `${process.cwd()}/../../`
 
-  const uiRoot = `${root}/packages/ui`
+  const svelteUiRoot = `${root}/packages/svelte-ui`
   const commonRoot = `${root}/packages/common`
   const dashboardRoot = `${root}/apps/dashboard`
 
   return {
-    '@components': `${uiRoot}/src/components`,
-    '@styles': `${uiRoot}/src/styles.ts`,
-    '@utils': `${uiRoot}/src/utils`,
-    '@directives': `${uiRoot}/src/directives`,
-    '@api': `${uiRoot}/src/api`,
+    '@svelte-ui': `${svelteUiRoot}/src/lib`,
     '@common': `${commonRoot}/src`,
-    '@constants': `${uiRoot}/src/constants`,
-    '@stores': `${uiRoot}/src/stores`,
-    '@icons': `${uiRoot}/static/icons`,
-    '@images': `${uiRoot}/static/images`,
-    '@fonts': `${uiRoot}/src/fonts.css`,
-    '@networks': `${uiRoot}/src/network`,
-    '@featureFlags': `${uiRoot}/src/feature-flags`,
-
+    '@icons': `${commonRoot}/src/static/icons`,
+    '@images': `${commonRoot}/src/static/images`,
     '@dashboard': `${dashboardRoot}/src`,
     '@dashboard-pages': `${dashboardRoot}/src/pages`
   }

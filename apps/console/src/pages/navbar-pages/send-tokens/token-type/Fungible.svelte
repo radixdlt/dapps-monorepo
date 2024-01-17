@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import { query } from '@api/query'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import { query } from '@common/api/query'
   import Input from '$lib/input/Input.svelte'
   import Select from '$lib/select/Select.svelte'
-  import Text from '@components/_base/text/Text.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
   import { getSendTokenManifest } from '../manifests'
   import Label from '$lib/Label.svelte'
-  import { formatTokenValue, shortenAddress } from '@utils'
-  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
+  import { formatTokenValue, shortenAddress } from '@common/utils/formatting'
+  import type { FungibleResource } from '@common/api/_deprecated/utils/entities/resource'
 
   export let resources: Promise<FungibleResource[]>
   export let selectedFromAccount: string = ''

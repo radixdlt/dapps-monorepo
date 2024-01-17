@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import SendTxButton from '@components/send-tx-button/SendTxButton.svelte'
+  import SendTxButton from '@svelte-ui/components/send-tx-button/SendTxButton.svelte'
 
   let component: HTMLTextAreaElement
   const adjustHeight = () => {

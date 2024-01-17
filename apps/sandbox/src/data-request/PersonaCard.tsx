@@ -3,7 +3,7 @@ import Checkbox from '@mui/joy/Checkbox'
 import { useDataRequestState } from './state'
 import { Card } from '../components/Card'
 import { dataRequestStateClient } from '../rdt/rdt'
-import { DataRequestBuilder } from '@common/rdt'
+import { DataRequestBuilder } from '@common/utils/rdt'
 
 export const PersonaCard = () => {
   const dataRequestState = useDataRequestState()

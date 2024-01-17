@@ -2,7 +2,7 @@
   import { Meta, Story } from '@storybook/addon-svelte-csf'
   import Input from './Input.svelte'
   import Label from '../Label.svelte'
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Checkbox from '@svelte-ui/components/_base/checkbox/Checkbox.svelte'
 
   let value = ''
 </script>

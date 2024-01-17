@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Box from '@components/_base/box/Box.svelte'
-  import Text from '@components/_base/text/Text.svelte'
-  import { accounts, connected } from '@stores'
-  import { accountLabel } from '@utils'
+  import Box from '@svelte-ui/components/_base/box/Box.svelte'
+  import Text from '@svelte-ui/components/_base/text/Text.svelte'
+  import { accounts, connected } from '@svelte-ui/stores'
+  import { accountLabel } from '@common/utils/formatting'
 
   export let title: string
 

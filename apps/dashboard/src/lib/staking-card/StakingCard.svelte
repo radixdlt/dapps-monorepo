@@ -1,8 +1,8 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import Button from '@components/_base/button/ButtonNew.svelte'
-  import Icon from '@components/_base/icon/IconNew.svelte'
-  import { formatTokenValue } from '@utils'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import Button from '@svelte-ui/components/_base/button/ButtonNew.svelte'
+  import Icon from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import { formatTokenValue } from '@common/utils/formatting'
   import StakingIcon from '@icons/staking.svg'
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'

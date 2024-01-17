@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Checkbox from '@components/_base/checkbox/Checkbox.svelte'
+  import Checkbox from '@svelte-ui/components/_base/checkbox/Checkbox.svelte'
   import { selectedValidators } from '../Validators.svelte'
-  import { connected } from '@stores'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { connected } from '@svelte-ui/stores'
+  import type { ValidatorListItem } from '@common/api/utils/entities/component/validator'
 
   export let text: string
   export let validator: Promise<ValidatorListItem>

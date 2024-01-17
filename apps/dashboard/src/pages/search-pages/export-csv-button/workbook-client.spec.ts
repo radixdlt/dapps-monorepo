@@ -1,6 +1,6 @@
-import dayjs from '@common/dayjs'
+import dayjs from '@common/utils/dayjs'
 import { WorkbookClient } from './workbook-client'
-import { ResourceCacheClient } from '@api/utils/resource-cache-client'
+import { ResourceCacheClient } from '@common/api/utils/resource-cache-client'
 
 describe('workbook client', () => {
   it('should initialize without throw', () => {

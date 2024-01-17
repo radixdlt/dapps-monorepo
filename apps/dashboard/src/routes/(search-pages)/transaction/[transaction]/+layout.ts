@@ -1,6 +1,9 @@
-import { callApi, getTransactionDetailsNew } from '@api/_deprecated/gateway'
+import {
+  callApi,
+  getTransactionDetailsNew
+} from '@common/api/_deprecated/gateway'
 import type { LayoutLoad } from './$types'
-import { transformResource } from '@api/_deprecated/utils/entities/resource'
+import { transformResource } from '@common/api/_deprecated/utils/entities/resource'
 import { ResultAsync } from 'neverthrow'
 import type { ComponentProps } from 'svelte'
 import type Summary from '@dashboard-pages/search-pages/transaction/summary/Summary.svelte'
@@ -8,14 +11,13 @@ import type {
   TransactionFungibleBalanceChanges,
   TransactionFungibleFeeBalanceChanges,
   TransactionNonFungibleBalanceChanges
-} from '@common/gateway-sdk'
-import { getNftData } from '@api/_deprecated/utils/nft-data'
+} from '@common/utils/gateway-sdk'
+import { getNftData } from '@common/api/_deprecated/utils/nft-data'
 import { pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 
-import type { EntityType } from '@common/ret'
-import { http } from '@common/http'
-import { typedError } from '@utils'
+import type { EntityType } from '@common/utils/ret'
+import { http } from '@common/utils/http'
 
 const ERROR_MSG = 'Failed to load transaction data.'
 

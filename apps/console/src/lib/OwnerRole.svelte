@@ -2,14 +2,14 @@
   import { derived, writable } from 'svelte/store'
   import Select from '$lib/select/Select.svelte'
   import Label from '$lib/Label.svelte'
-  import { accounts } from '@stores'
+  import { accounts } from '@svelte-ui/stores'
   import {
     getAccountData,
     type FungibleResource,
     type NonFungibleResource,
     type TransformedNonFungible
-  } from '@api/_deprecated/utils/entities/resource'
-  import { shortenAddress } from '@utils'
+  } from '@common/api/_deprecated/utils/entities/resource'
+  import { shortenAddress } from '@common/utils/formatting'
   import type { AccessRule } from '../helpers/simple-access-rule-builder'
   import { goto } from '$app/navigation'
   import { createEventDispatcher } from 'svelte'

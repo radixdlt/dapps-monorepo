@@ -1,6 +1,6 @@
 <script lang="ts">
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
+  import IconNew from '@svelte-ui/components/_base/icon/IconNew.svelte'
+  import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@common/utils/constants'
   import WarningIcon from '@icons/warning.svg'
   import WarningPanel from './WarningPanel.svelte'
 </script>

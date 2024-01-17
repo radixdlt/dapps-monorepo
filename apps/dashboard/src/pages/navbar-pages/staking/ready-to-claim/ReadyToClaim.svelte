@@ -1,7 +1,7 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
+  import SkeletonLoader from '@svelte-ui/components/_base/skeleton-loader/SkeletonLoader.svelte'
   import BigNumber from 'bignumber.js'
-  import { formatTokenValue, timeToEpoch } from '@utils'
+  import { timeToEpoch } from '@common/utils/radix'
   import {
     currentEpoch,
     stakeInfo

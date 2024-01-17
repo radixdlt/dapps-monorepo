@@ -1,4 +1,4 @@
-import { fetchWrapper } from '@utils'
+import { fetchWrapper } from '@common/utils/fetch'
 import { authApi } from '../auth/auth-api'
 
 export const bookmarkedValidatorsApi = {

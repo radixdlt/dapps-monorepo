@@ -4,7 +4,7 @@
   import OverviewStakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
   import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
-  import { xrdAddress, type Account } from '@stores'
+  import { xrdAddress, type Account } from '@svelte-ui/stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
 

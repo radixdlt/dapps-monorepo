@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Address from '@components/_base/address/Address.svelte'
-  import PillsMenu from '@components/_base/pills-menu/PillsMenu.svelte'
+  import Address from '@svelte-ui/components/_base/address/Address.svelte'
+  import PillsMenu from '@svelte-ui/components/_base/pills-menu/PillsMenu.svelte'
   import { createEventDispatcher } from 'svelte'
 
   export let title: string

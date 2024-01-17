@@ -2,7 +2,7 @@
   import NonFungibleTokensPage from '@dashboard-pages/search-pages/account/non-fungible/NonFungibleTokensPage.svelte'
   import type { LayoutData } from '../$types'
   import { goto } from '$app/navigation'
-  import type { GeneralNft } from '@api/utils/nfts/general-nft'
+  import type { GeneralNft } from '@common/api/utils/nfts/general-nft'
 
   export let data: LayoutData
 

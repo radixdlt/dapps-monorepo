@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Switch from '@components/_base/switch/Switch.svelte'
+  import Switch from '@svelte-ui/components/_base/switch/Switch.svelte'
 
   export let title: string
   export let description: string
