@@ -5,7 +5,7 @@ import type { Package } from './package';
 import type { PoolUnit } from './pool-unit';
 import type { Resource } from './resource';
 import type { Validator } from './validator';
-import type { EntityMetadataItem } from '@common/utils/gateway-sdk';
+import type { EntityMetadataItem, StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk';
 export type Entity = Package | Validator | Resource | PoolUnit | Component;
 export type _Entity<Type extends string, StandardMetadata extends (keyof KnownStandardTypes)[], HasAuth = true> = {
     type: Type;
@@ -31,8 +31,8 @@ export type _Entity<Type extends string, StandardMetadata extends (keyof KnownSt
 } : {});
 export declare const transformEntity: (standardMetadata: (keyof KnownStandardTypes)[]) => <E extends {
     address: string;
-    metadata: StateEntityDetailsVaultResponseItem;
-    details?: any;
+    metadata: StateEntityDetailsVaultResponseItem['metadata'];
+    details?: StateEntityDetailsVaultResponseItem['details'];
 }>(entity: E) => {
     address: string;
     entity: E;
@@ -40,60 +40,60 @@ export declare const transformEntity: (standardMetadata: (keyof KnownStandardTyp
         standard: {
             symbol: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
-            };
-            pool: {
-                item: EntityMetadataItem;
-                value: MetadataGlobalAddressValueTypeEnum;
-            };
-            validator: {
-                item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             name: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
-            };
-            tags: {
-                item: EntityMetadataItem;
-                value: MetadataStringArrayValueTypeEnum;
+                value: string;
             };
             description: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
-            key_image_url: {
+            tags: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: string[];
             };
             owner_badge: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             pool_vault_number: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             pool_resources: {
                 item: EntityMetadataItem;
-                value: MetadataStringArrayValueTypeEnum;
+                value: string[];
             };
             pool_unit: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
+            };
+            validator: {
+                item: EntityMetadataItem;
+                value: string;
             };
             icon_url: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: URL;
             };
             info_url: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: URL;
+            };
+            pool: {
+                item: EntityMetadataItem;
+                value: string;
+            };
+            key_image_url: {
+                item: EntityMetadataItem;
+                value: URL;
             };
         };
         explicit: EntityMetadataItem[];
-        nonStandard: any;
-        all: any;
+        nonStandard: EntityMetadataItem[];
+        all: EntityMetadataItem[];
     };
     auth: AuthInfo;
 };

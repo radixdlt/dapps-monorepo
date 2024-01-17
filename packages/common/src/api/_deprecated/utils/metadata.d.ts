@@ -1,4 +1,4 @@
-import type { MetadataGlobalAddressValueTypeEnum, MetadataStringArrayValueTypeEnum, MetadataStringValueTypeEnum, MetadataUrlValueTypeEnum, StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk';
+import type { EntityMetadataCollection, EntityMetadataItem, MetadataGlobalAddressValueTypeEnum, MetadataStringArrayValueTypeEnum, MetadataStringValueTypeEnum, MetadataUrlValueTypeEnum, StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk';
 export type KnownStandardTypes = {
     name: MetadataStringValueTypeEnum;
     description: MetadataStringValueTypeEnum;
@@ -14,8 +14,13 @@ export type KnownStandardTypes = {
     pool: MetadataGlobalAddressValueTypeEnum;
     key_image_url: MetadataUrlValueTypeEnum;
 };
-export type MetadataTypeToNativeType = {};
-export declare const getMetadataItem: (key: string) => (metadata?: any) => any;
+export type MetadataTypeToNativeType = {
+    [MetadataStringValueTypeEnum.String]: string;
+    [MetadataUrlValueTypeEnum.Url]: URL;
+    [MetadataStringArrayValueTypeEnum.StringArray]: string[];
+    [MetadataGlobalAddressValueTypeEnum.GlobalAddress]: string;
+};
+export declare const getMetadataItem: (key: string) => (metadata?: EntityMetadataCollection) => EntityMetadataItem | undefined;
 export declare const getEnumStringMetadataValue: (item: EntityMetadataItem) => string;
 export declare const getStringMetadataValue: (item: EntityMetadataItem) => string;
 export declare const getVectorMetadataValue: (item: EntityMetadataItem) => string[];
@@ -23,14 +28,14 @@ export declare const getEnumStringMetadata: (key: string) => (metadata: EntityMe
 export declare const getStringMetadata: (key: string) => (metadata: EntityMetadataCollection) => string;
 export declare const getVectorMetadata: (key: string) => (metadata: EntityMetadataCollection) => string[];
 export declare const transformMetadata: <T extends (keyof KnownStandardTypes)[]>(metadata: {
-    metadata: StateEntityDetailsVaultResponseItem;
-    explicit_metadata?: any;
+    metadata: StateEntityDetailsVaultResponseItem['metadata'];
+    explicit_metadata?: StateEntityDetailsVaultResponseItem['explicit_metadata'];
 }, standardEntries: T) => {
     standard: { [K in T[number]]: {
         item: EntityMetadataItem;
         value: MetadataTypeToNativeType[KnownStandardTypes[K]];
     }; };
     explicit: EntityMetadataItem[];
-    nonStandard: any;
-    all: any;
+    nonStandard: EntityMetadataItem[];
+    all: EntityMetadataItem[];
 };

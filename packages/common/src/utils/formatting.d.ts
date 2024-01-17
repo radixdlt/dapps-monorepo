@@ -14,7 +14,7 @@ export declare const getAddressPrefix: (address: string) => AddressPrefix;
 export declare const formatTokenValue: (input: string | number | BigNumber, options?: Partial<{
     maxPlaces: number;
     thousandsSeparator: string;
-}> | undefined) => {
+}>) => {
     rounded: string;
     value: string;
     suffix: string;

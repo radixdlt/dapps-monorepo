@@ -1,4 +1,4 @@
-import type { EntityMetadataItem, FungibleResourcesVaultCollection, StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk';
+import type { EntityMetadataItem, FungibleResourcesCollectionItemVaultAggregated, FungibleResourcesVaultCollection, LedgerStateSelector, StateEntityDetailsOptions, StateEntityDetailsVaultResponseItem } from '@common/utils/gateway-sdk';
 import { type _Entity } from '.';
 import { type NonFungible } from '../nfts';
 import { type GetEntityTypesFn, type GetEntityDetailsFn } from './pool-unit';
@@ -30,12 +30,12 @@ export type Behavior = 'simple' | 'supply-increase' | 'supply-decrease' | 'suppl
 export declare const getBehaviors: (auth: AuthInfo) => "simple" | Behavior[];
 export declare const _transformResource: <E extends {
     address: string;
-    metadata: StateEntityDetailsVaultResponseItem;
-    details?: any;
+    metadata: import("@common/utils/gateway-sdk").EntityMetadataCollection;
+    details?: import("@common/utils/gateway-sdk").StateEntityDetailsResponseItemDetails | undefined;
 }>(entity: E) => {
     readonly type: "resource";
-    readonly totalSupply: any;
-    readonly divisibility: any;
+    readonly totalSupply: string;
+    readonly divisibility: number;
     readonly behaviors: "simple" | Behavior[];
     readonly address: string;
     readonly entity: E;
@@ -43,65 +43,65 @@ export declare const _transformResource: <E extends {
         standard: {
             symbol: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
-            };
-            pool: {
-                item: EntityMetadataItem;
-                value: MetadataGlobalAddressValueTypeEnum;
-            };
-            validator: {
-                item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             name: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
-            };
-            tags: {
-                item: EntityMetadataItem;
-                value: MetadataStringArrayValueTypeEnum;
+                value: string;
             };
             description: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
-            key_image_url: {
+            tags: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: string[];
             };
             owner_badge: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             pool_vault_number: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
             };
             pool_resources: {
                 item: EntityMetadataItem;
-                value: MetadataStringArrayValueTypeEnum;
+                value: string[];
             };
             pool_unit: {
                 item: EntityMetadataItem;
-                value: MetadataStringValueTypeEnum;
+                value: string;
+            };
+            validator: {
+                item: EntityMetadataItem;
+                value: string;
             };
             icon_url: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: URL;
             };
             info_url: {
                 item: EntityMetadataItem;
-                value: MetadataUrlValueTypeEnum;
+                value: URL;
+            };
+            pool: {
+                item: EntityMetadataItem;
+                value: string;
+            };
+            key_image_url: {
+                item: EntityMetadataItem;
+                value: URL;
             };
         };
         explicit: EntityMetadataItem[];
-        nonStandard: any;
-        all: any;
+        nonStandard: EntityMetadataItem[];
+        all: EntityMetadataItem[];
     };
     readonly auth: AuthInfo;
 };
 export declare const transformNonFungibleResource: (entity: StateEntityDetailsVaultResponseItem) => NonFungibleResource;
-export declare const transformFungibleResource: (entity: StateEntityDetailsVaultResponseItem, fungible?: any) => FungibleResource;
+export declare const transformFungibleResource: (entity: StateEntityDetailsVaultResponseItem, fungible?: FungibleResourcesCollectionItemVaultAggregated) => FungibleResource;
 export type TransformedNonFungible = {
     resource: NonFungibleResource;
     ownedNonFungibles: number;
@@ -112,34 +112,41 @@ export type TransformedNonFungible = {
 export declare const transformFungible: (accountResourceItems: {
     account: string;
     items: FungibleResourcesVaultCollection['items'];
-}[], stateOptions?: any, ledgerState?: any) => Promise<{
+}[], stateOptions?: StateEntityDetailsOptions, ledgerState?: LedgerStateSelector) => Promise<{
     account: string;
     items: FungibleResource[];
 }[]>;
-export declare const transformResource: (entity: StateEntityDetailsVaultResponseItem, getEntityTypesFn: GetEntityTypesFn, getEntityDetailsFn: GetEntityDetailsFn) => Promise<FungibleResource | NonFungibleResource | import("./pool-unit").PoolUnit>;
-export declare const transformResources: (stateOptions?: any, ledgerState?: any, getNonFungiblesForResources?: string[]) => (accountEntities: StateEntityDetailsVaultResponseItem[], options?: Partial<{
+export declare const transformResource: (entity: StateEntityDetailsVaultResponseItem, getEntityTypesFn: GetEntityTypesFn, getEntityDetailsFn: GetEntityDetailsFn) => Promise<FungibleResource | import("./pool-unit").PoolUnit | NonFungibleResource>;
+export declare const transformResources: (stateOptions?: StateEntityDetailsOptions, ledgerState?: LedgerStateSelector, getNonFungiblesForResources?: string[]) => (accountEntities: StateEntityDetailsVaultResponseItem[], options?: Partial<{
     fungibles: boolean;
     nfts: boolean;
-}> | undefined) => Promise<{
-    accountAddress: any;
+}>) => Promise<{
+    accountAddress: string;
     details: StateEntityDetailsVaultResponseItem;
     fungible: FungibleResource[];
-    nonFungible: any;
+    nonFungible: TransformedNonFungible[];
 }[]>;
 export type Resources = Awaited<ReturnType<typeof getAccountData>>;
 export declare const getFungibleResource: (name: string) => (resources: Omit<Resources[number], 'details' | 'accountAddress'>) => FungibleResource;
 export declare const getNonFungibleResource: (name: string) => (resources: Omit<Resources[number], 'details' | 'accountAddress'>) => NonFungibleResource;
-export declare const getAccountData: (accounts: string[], options?: any, ledgerState?: any, getNonFungiblesForResources?: string[]) => Promise<{
-    accountAddress: any;
+export declare const getAccountData: (accounts: string[], options?: StateEntityDetailsOptions, ledgerState?: LedgerStateSelector, getNonFungiblesForResources?: string[]) => Promise<{
+    accountAddress: string;
     details: StateEntityDetailsVaultResponseItem;
     fungible: FungibleResource[];
-    nonFungible: any;
+    nonFungible: TransformedNonFungible[];
 }[]>;
 export declare const getAccountFungibleTokens: (accounts: string) => Promise<{
-    accountAddress: any;
+    accountAddress: string;
     details: StateEntityDetailsVaultResponseItem;
     fungible: FungibleResource[];
-    nonFungible: any;
+    nonFungible: TransformedNonFungible[];
 }>;
-export declare const getAccountDataNew: (accounts: string[], options?: any, ledgerState?: any, getNonFungiblesForResources?: string[]) => any;
+export declare const getAccountDataNew: (accounts: string[], options?: StateEntityDetailsOptions, ledgerState?: LedgerStateSelector, getNonFungiblesForResources?: string[]) => import("neverthrow").ResultAsync<{
+    accountAddress: string;
+    details: StateEntityDetailsVaultResponseItem;
+    fungible: FungibleResource[];
+    nonFungible: TransformedNonFungible[];
+}[], import("@common/utils/gateway-sdk").ErrorResponse | {
+    message: string;
+}>;
 export {};

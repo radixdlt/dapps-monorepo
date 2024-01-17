@@ -42,4 +42,7 @@ export declare const transformValidatorResponse: <WithOwner extends string | und
     validators: Validator<WithOwner extends string ? true : false, WithUptime, WithStakeUnits>[];
     ledger_state: LedgerState;
 }, ErrorResponse>;
-export declare const getValidators: <WithOwner extends string | undefined, WithUptime extends boolean, WithStakeUnits extends boolean>(validatorOwnerBadge: WithOwner, withUptime: WithUptime, withStakeUnits: WithStakeUnits) => any;
+export declare const getValidators: <WithOwner extends string | undefined, WithUptime extends boolean, WithStakeUnits extends boolean>(validatorOwnerBadge: WithOwner, withUptime: WithUptime, withStakeUnits: WithStakeUnits) => ResultAsync<{
+    validators: Validator<WithOwner extends string ? true : false, WithUptime, WithStakeUnits>[];
+    ledger_state: LedgerState;
+}, ErrorResponse>;

@@ -1,0 +1,31 @@
+export declare const CURRENT_NETWORK: {
+    readonly id: 34;
+    readonly url: "https://hammunet-gateway.radixdlt.com";
+    readonly consoleDappAddress: "account_tdx_22_16xygyhqp3x3awxlz3c5dzrm7jqghgpgs776v4af0yfr7xljqfw9zgy";
+    readonly dashboardDappAddress: "account_tdx_22_16xygyhqp3x3awxlz3c5dzrm7jqghgpgs776v4af0yfr7xljqfw9zgy";
+} | {
+    readonly id: 33;
+    readonly url: "https://enkinet-gateway.radixdlt.com";
+    readonly consoleDappAddress: "account_tdx_21_129c3uarzmguw2rtmmuq3hv0eycktvj3achtzzkh5qra4ctsv6nl5fu";
+    readonly dashboardDappAddress: "account_tdx_21_129c3uarzmguw2rtmmuq3hv0eycktvj3achtzzkh5qra4ctsv6nl5fu";
+} | {
+    readonly id: 32;
+    readonly url: "https://gilganet-gateway.radixdlt.com";
+    readonly consoleDappAddress: "account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6";
+    readonly dashboardDappAddress: "account_tdx_22_1prtqhxd5mmq2nj3mrhcztxphauy29qeuk5walu49spjsqpjxr6";
+} | {
+    readonly id: 36;
+    readonly url: "https://mardunet-gateway.radixdlt.com";
+    readonly consoleDappAddress: "account_tdx_24_thisdummyvalue12345";
+    readonly dashboardDappAddress: "account_tdx_24_thisdummyvalue12345";
+} | {
+    readonly id: 2;
+    readonly url: "https://babylon-stokenet-gateway.radixdlt.com";
+    readonly consoleDappAddress: "account_tdx_2_128evrrwfp8gj9240qq0m06ukhwaj2cmejluxxreanzjwq62vmlf8r4";
+    readonly dashboardDappAddress: "account_tdx_2_12xdm5g7xdhh73zkh7xkty0dsxw4rw0jl0sq4lr3erpc3xdn54zx0le";
+} | {
+    readonly id: 1;
+    readonly url: "https://mainnet.radixdlt.com";
+    readonly consoleDappAddress: "account_rdx12xe5q56q0cen0vunfsh352tslz6vyfwf4qujcez5vdjmlm0rzcngs8";
+    readonly dashboardDappAddress: "account_rdx12x0xfz2yumu2qsh6yt0v8xjfc7et04vpsz775kc3yd3xvle4w5d5k5";
+};

@@ -10,7 +10,7 @@ type FungibleResourceWithPoolAddress = FungibleResource & {
     poolAddress: string;
 };
 export declare const resourceToPoolUnit: (resource: FungibleResource) => PoolUnit;
-export declare const hasPoolMetadataSet: (resource: FungibleResource) => any;
+export declare const hasPoolMetadataSet: (resource: FungibleResource) => boolean;
 export declare const verify2WayLinking: (getEntityDetailsFn: GetEntityDetailsFn) => (resources: FungibleResourceWithPoolAddress[]) => Promise<FungibleResourceWithPoolAddress[]>;
 export declare const verifyPoolUnit: (getEntityTypesFn: GetEntityTypesFn, getEntityDetailsFn: GetEntityDetailsFn) => (resources: FungibleResource[]) => Promise<FungibleResourceWithPoolAddress[]>;
 export declare const getPoolUnits: (resources: FungibleResource[], getEntityTypesFn: GetEntityTypesFn, getEntityDetailsFn: GetEntityDetailsFn) => Promise<PoolUnit[]>;
