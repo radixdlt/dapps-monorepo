@@ -32,7 +32,11 @@
         "storybook-static/**"
       ]
     },
-    "svelte:check": {},
+    "svelte:check": {
+      "dependsOn": [
+        "svelte-ui#package"
+      ]
+    },
     "format": {},
     "prettier": {},
     "prettier:fix": {},
