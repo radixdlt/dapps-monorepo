@@ -7,7 +7,8 @@ export const Network = {
   ENKINET: 'enkinet',
   GILGANET: 'gilganet',
   MARDUNET: 'mardunet',
-  STOKENET: 'stokenet'
+  STOKENET: 'stokenet',
+  DUMUNET: 'dumunet'
 } as const
 
 export const NETWORK_CONFIG = {
@@ -56,6 +57,14 @@ export const NETWORK_CONFIG = {
       'account_rdx12xe5q56q0cen0vunfsh352tslz6vyfwf4qujcez5vdjmlm0rzcngs8',
     dashboardDappAddress:
       'account_rdx12x0xfz2yumu2qsh6yt0v8xjfc7et04vpsz775kc3yd3xvle4w5d5k5'
+  },
+  [Network.DUMUNET]: {
+    id: RadixNetwork.Dumunet,
+    url: 'https://dumunet-gateway.radixdlt.com',
+    consoleDappAddress:
+      'account_tdx_25_168e8u653alt59xm8ple6khu6cgce9cfx9mlza6wxf7qs3wwdyt96gk',
+    dashboardDappAddress:
+      'account_tdx_25_168e8u653alt59xm8ple6khu6cgce9cfx9mlza6wxf7qs3wwdyt96gk'
   }
 } as const
 
