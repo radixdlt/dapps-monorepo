@@ -63,7 +63,7 @@ jobs:
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     steps:
       - name: Dump context
         uses: RDXWorks-actions/ghaction-dump-context@master
@@ -73,7 +73,7 @@ jobs:
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -92,7 +92,7 @@ jobs:
         
 
   setup-tags:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -150,7 +150,7 @@ jobs:
       network-name: ${{steps.network.outputs.network-name}}
 
   snyk-scan-deps-licences:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -169,7 +169,7 @@ jobs:
           args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
   snyk-scan-code:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -190,7 +190,7 @@ jobs:
           command: code test
 
   snyk-sbom:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - snyk-scan-deps-licences
       - snyk-scan-code
@@ -219,7 +219,7 @@ jobs:
           release-tag: ${{ github.event.release.tag_name }}
 
   snyk-monitor:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - setup-tags
@@ -242,7 +242,7 @@ jobs:
           command: monitor
 
   snyk-container-monitor:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - setup-tags
@@ -260,7 +260,7 @@ jobs:
           target_ref: ${{ github.ref_name }}
 
   sonar:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -298,7 +298,7 @@ jobs:
       - snyk-scan-code
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
-      runs_on: ubuntu-latest
+      runs_on: selfhosted-ubuntu-22.04
       image_registry: 'docker.io'
       image_organization: 'radixdlt'
       target: 'dashboard'
@@ -323,7 +323,7 @@ jobs:
       - snyk-scan-code
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
-      runs_on: ubuntu-latest
+      runs_on: selfhosted-ubuntu-22.04
       image_registry: 'docker.io'
       image_organization: 'radixdlt'
       target: 'storybook'
@@ -342,7 +342,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - push-dashboard
       - push-storybook
@@ -377,7 +377,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     environment: dev
     needs:
       - push-dashboard
@@ -409,7 +409,7 @@ jobs:
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     environment: enkinet
     needs:
       - push-dashboard
@@ -441,7 +441,7 @@ jobs:
   deploy_hammunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     environment: hammunet
     needs:
       - push-dashboard
@@ -473,7 +473,7 @@ jobs:
   deploy_mardunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     environment: mardunet
     needs:
       - push-dashboard
@@ -547,7 +547,7 @@ jobs:
       step_name: 'deploy-mainnet'
 
   # storybook-tests:
-  #   runs-on: ubuntu-latest
+  #   runs-on: selfhosted-ubuntu-22.04
   #   permissions:
   #     id-token: write
   #     pull-requests: read
