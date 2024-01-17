@@ -88,7 +88,7 @@ jobs:
           release_network_name: ${{ env.release_network }}
 
       - name: Turbo Worfkflow
-        run: npx turbo run lint prettier coverage svelte:check --filter=console
+        run: npx turbo run package lint prettier coverage svelte:check --filter=console
 
   setup-tags:
     runs-on: ubuntu-latest
