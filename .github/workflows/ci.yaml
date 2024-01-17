@@ -88,7 +88,7 @@ jobs:
           release_network_name: ${{ env.release_network }}
       
       - name: Turbo Worfkflow
-        run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
+        run: npx turbo run package db:generate lint prettier coverage svelte:check --filter=dashboard
         
 
   setup-tags:
