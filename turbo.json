@@ -9,7 +9,7 @@
     },
     "build": {
       "dependsOn": [
-        "svelte-ui#package",
+        "^svelte-ui#package",
         "db:generate",
         "build:storybook"
       ],
