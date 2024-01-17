@@ -2,7 +2,7 @@
 	"name": "svelte-ui",
 	"version": "0.0.1",
 	"scripts": {
-		"package": "svelte-package && publint",
+		"build": "svelte-package && publint",
 		"prepublishOnly": "npm run package",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

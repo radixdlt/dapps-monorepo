@@ -1,1 +1,1 @@
-export * from '@radixdlt/babylon-gateway-api-sdk'
+export * from '@radixdlt/babylon-gateway-api-sdk';
