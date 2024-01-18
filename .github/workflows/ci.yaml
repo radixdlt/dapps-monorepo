@@ -157,11 +157,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-scan-deps-licences'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Run Snyk to check for deps vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -176,11 +176,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-scan-code'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Run Snyk to check for code vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -199,11 +199,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-sbom'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Generate SBOM # check SBOM can be generated but nothing is done with it
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -229,11 +229,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'snyk-monitor'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Enable Snyk online monitoring to check for vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -251,10 +251,10 @@ jobs:
     steps:
       - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'dashboard'
-          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
-          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials'
+          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
           image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
           target_ref: ${{ github.ref_name }}
@@ -274,11 +274,11 @@ jobs:
           node-version: 20.3.0
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-dapps-monorepo-secrets-read-access'
           app_name: 'dashboard'
           step_name: 'sonar'
           secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/dashboard/sonar-token-uQM7l6'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/dapps-monorepo/dashboard/sonar-token-uQM7l6'
           parse_json: true
       # - name: Run story book tests
       #   run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
@@ -504,47 +504,65 @@ jobs:
 
   deploy_stokenet:
     if: github.event_name == 'release' && github.event.action == 'prereleased'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    runs-on: ubuntu-latest
+    environment: stokenet
     needs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    with:
-      env_name: stokenet
-      namespace: dashboard-stokenet
-      create_subns: false
-      restart_pods: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-stokenet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
-      github_environment: stokenet
-      app_name: 'dashboard'
-      step_name: 'deploy-stokenet'
+    steps:
+      - name: Trigger ansible job to deploy stokeent
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: "https://jenkins-preprod.radixdlt.com"
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "stokenet",
+              "namespace" : "dashboard-stokenet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-stokenet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
   deploy_mainnet:
     if: github.event_name == 'release' && github.event.action == 'released'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    runs-on: ubuntu-latest
+    environment: mainnet
     needs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    with:
-      env_name: mainnet
-      namespace: dashboard-mainnet
-      create_subns: false
-      restart_pods: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dashboard-mainnet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/dashboard
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}
-      github_environment: mainnet
-      app_name: 'dashboard'
-      step_name: 'deploy-mainnet'
+    steps:
+      - name: Trigger ansible job to deploy mainnet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: "https://jenkins-preprod.radixdlt.com"
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "mainnet",
+              "namespace" : "dashboard-mainnet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-mainnet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
   # storybook-tests:
   #   runs-on: ubuntu-latest
@@ -568,11 +586,11 @@ jobs:
   #         cache: yarn
   #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
   #       with:
-  #         role_name: "arn:aws:iam::308190735829:role/gh-dapps-monorepo-secrets-read-access"
+  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-dapps-monorepo-secrets-read-access"
   #         app_name: "dashboard"
   #         step_name: "unit-tests"
   #         secret_prefix: "GH"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI"
+  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/dapps-monorepo/npm-token-gt8FBI"
   #         parse_json: true
   #     - uses: ./.github/actions/build
   #       with:

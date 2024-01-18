@@ -85,11 +85,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'sandbox'
           step_name: 'snyk-scan-deps-licenses'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Run Snyk to check for deps vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -109,11 +109,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'sandbox'
           step_name: 'snyk-scan-code'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Run Snyk to check for code vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -132,11 +132,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'sandbox'
           step_name: 'snyk-sbom'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Generate SBOM # check SBOM can be generated but nothing is done with it
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -246,11 +246,11 @@ jobs:
       - uses: RDXWorks-actions/checkout@main
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'sandbox'
           step_name: 'snyk-monitor'
           secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
       - name: Enable Snyk online monitoring to check for vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
@@ -273,11 +273,11 @@ jobs:
     steps:
       - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
         with:
-          role_name: 'arn:aws:iam::308190735829:role/gh-common-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'sandbox'
           step_name: 'snyk-container-monitor'
-          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/dockerhub-credentials'
-          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/snyk-credentials-rXRpuX'
+          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials'
+          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
           snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
           image: docker.io/radixdlt/dapps-sandbox:${{ needs.setup-build-args.outputs.tag_with_network }}
@@ -350,44 +350,62 @@ jobs:
 
   deploy_stokenet:
     if: github.event_name == 'release' && github.event.action == 'prereleased'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    runs-on: ubuntu-latest
+    environment: sandbox-stokenet
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    with:
-      env_name: stokenet
-      restart_pods: false
-      namespace: dapps-sandbox-stokenet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-sandbox-stokenet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/sandbox
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}
-      github_environment: sandbox-stokenet
-      app_name: 'sandbox'
-      step_name: 'deploy-stokenet'
+    steps:
+      - name: Trigger ansible job to deploy stokenet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: "https://jenkins-preprod.radixdlt.com"
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "stokenet",
+              "namespace" : "dapps-sandbox-stokenet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-stokenet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
   deploy_mainnet:
     if: github.event_name == 'release' && github.event.action == 'released'
-    uses: radixdlt/iac-resuable-artifacts/.github/workflows/deploy.yml@v0.11.0
+    runs-on: ubuntu-latest
+    environment: sandbox-mainnet
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    with:
-      env_name: mainnet
-      restart_pods: false
-      namespace: dapps-sandbox-mainnet
-      create_subns: false
-      aws_region: eu-west-2
-      role_to_assume: 'arn:aws:iam::821496737932:role/gh-dapps-sandbox-mainnet-deployer'
-      eks_cluster: rtlj-prod
-      helm_folder: deploy/helm/sandbox
-      helmfile_extra_vars: >-
-        ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}
-      github_environment: sandbox-mainnet
-      app_name: 'sandbox'
-      step_name: 'deploy-mainnet'
+    steps:
+      - name: Trigger ansible job to deploy mainnet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: "https://jenkins-preprod.radixdlt.com"
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "mainnet",
+              "namespace" : "dapps-sandbox-mainnet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-mainnet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
