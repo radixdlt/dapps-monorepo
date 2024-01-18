@@ -56,3 +56,34 @@ export const getSendNFTManifest = (
       ``
     )}
   `
+
+export const createBadgeProof = (badgeAddresses: string[], address: string) => {
+  const transactionManifest: string[] = []
+
+  for (const badgeAddress of badgeAddresses) {
+    const isNonFungible = badgeAddress.includes(':')
+    const [resourceAddress, id] = badgeAddress.split(':')
+
+    transactionManifest.push(
+      isNonFungible
+        ? `
+        CALL_METHOD
+          Address("${address}")
+          "create_proof_of_non_fungibles"
+          Address("${resourceAddress}")
+          Array<NonFungibleLocalId>(NonFungibleLocalId("${id}"))
+        ;
+        `
+        : `
+        CALL_METHOD
+          Address("${address}")
+          "create_proof_of_amount"
+          Address("${badgeAddress}")
+          Decimal("1")
+        ;
+        `
+    )
+  }
+  console.log(transactionManifest)
+  return transactionManifest.join(' ')
+}

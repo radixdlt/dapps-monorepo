@@ -18,12 +18,12 @@
   import AccountPicker from '@components/_base/picker/account-picker/AccountPicker.svelte'
   import type { Account } from '@stores'
   import { shortenAddress } from '@utils'
-  import { createBadgeProof } from '../dapp-definition/side-effects'
   import {
     getAccountData,
     type Resources,
     type TransformedNonFungible
   } from '@api/_deprecated/utils/entities/resource'
+  import { createBadgeProof } from './manifests'
 
   let resources: Promise<Resources[number]> = new Promise((resolve) => {})
 
