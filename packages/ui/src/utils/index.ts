@@ -175,23 +175,34 @@ export const formatTokenValue = (
   input: string | number | BigNumber,
   options?: Partial<{ maxPlaces: number; thousandsSeparator: string }>
 ) => {
-  const removeCommasFromString = (input: string | number | BigNumber) =>
-    typeof input === 'string' ? input.split(',').join('') : input
+  const removeCommasFromString = <T>(input: T): T =>
+    typeof input === 'string' ? (input.split(',').join('') as T) : input
   const stringToBigInt = (input: string) => new BigNumber(input)
   const splitIntegerAndDecimals = (input: string) => input.split('.')
   const round =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
-      const [integer] = splitIntegerAndDecimals(stringValue)
+    (bigNumberInput: BigNumber) => {
+      const [integer, decimals] = splitIntegerAndDecimals(stringValue)
+
       if (integer.length >= maxPlaces)
-        return input.decimalPlaces(1, BigNumber.ROUND_UP)
+        return bigNumberInput.decimalPlaces(1, BigNumber.ROUND_UP)
+
       const decimalPlaces = maxPlaces - integer.length
-      return input.decimalPlaces(decimalPlaces, BigNumber.ROUND_HALF_UP)
+      const rounded = bigNumberInput.decimalPlaces(
+        decimalPlaces,
+        BigNumber.ROUND_HALF_UP
+      )
+
+      return rounded.eq(BigNumber(0)) && decimals && decimals.length > 0
+        ? '~0'
+        : rounded
     }
 
   const addSuffix =
     (stringValue: string, maxPlaces = 8) =>
-    (input: BigNumber) => {
+    (input: BigNumber | string) => {
+      if (typeof input === 'string')
+        return { rounded: '~0', suffix: '', value: '~0' }
       const [integer] = splitIntegerAndDecimals(stringValue)
 
       let suffix = ''
@@ -224,9 +235,9 @@ export const formatTokenValue = (
       }
 
       return {
-        rounded: updatedValue.toString(),
+        rounded: updatedValue.toFixed(),
         suffix,
-        value: input.toString()
+        value: input.toFixed()
       }
     }
 
@@ -238,8 +249,7 @@ export const formatTokenValue = (
         .filter((value) => value !== undefined)
         .join('.')
     }
-
-  const strInput = new BigNumber(removeCommasFromString(input)).toString()
+  const strInput = new BigNumber(removeCommasFromString(input)).toFixed()
 
   return pipe(
     stringToBigInt,
