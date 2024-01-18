@@ -11,7 +11,6 @@
   } from '@api/_deprecated/utils/entities/resource'
   import { shortenAddress } from '@utils'
   import type { AccessRule } from '../helpers/simple-access-rule-builder'
-  import { goto } from '$app/navigation'
   import { createEventDispatcher } from 'svelte'
 
   type Resource =

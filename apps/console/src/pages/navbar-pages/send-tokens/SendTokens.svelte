@@ -19,7 +19,6 @@
   import type { Account } from '@stores'
   import { shortenAddress } from '@utils'
   import { createBadgeProof } from '../dapp-definition/side-effects'
-  import { address } from '@radixdlt/radix-engine-toolkit'
   import {
     getAccountData,
     type Resources,
