@@ -77,7 +77,9 @@
   import type { SvelteComponent } from 'svelte'
   import PadlockIcon from '@icons/validators-menu.svg'
   import IconNew from '@components/_base/icon/IconNew.svelte'
-
+  import TrashIcon from '@icons/trash.svg'
+  import RestoreIcon from '@icons/replay_black_24dp.svg'
+  import Tooltip from '@components/_base/tooltip/Tooltip.svelte'
   export let items: FormItem[] = []
   export let state = writable<Record<string, any>>({})
   export let disabled = false
@@ -98,10 +100,29 @@
 {#each items as item}
   {#if item.showCondition && !item.showCondition($state)}{''}{:else}
     <div class="form-item">
-      {#if item.label}<Label {disabled}
-          >{item.label}{#if showPadLockWhenDisabled && disabledFields[item.key]}
-            <IconNew icon={PadlockIcon} />{/if}</Label
-        >{/if}
+      {#if item.label}
+        <Label {disabled}>
+          {item.label}
+
+          {#if showPadLockWhenDisabled && disabledFields[item.key]}
+            <IconNew icon={PadlockIcon} />
+          {/if}
+
+          {#if initialState && $initialState && JSON.stringify($initialState[item.key]) !== JSON.stringify($state[item.key])}
+            <Tooltip
+              text="Click to restore current on-network value"
+              headerText="Value has changed"
+            >
+              <button
+                class="restore-icon"
+                on:click={() => {
+                  $state[item.key] = $initialState?.[item.key]
+                }}><IconNew --size="1rem" icon={RestoreIcon} /></button
+              >
+            </Tooltip>
+          {/if}
+        </Label>
+      {/if}
       {#if item.formItemType === 'input'}
         <div class="with-action">
           {#if item.startDecorator}
@@ -205,33 +226,20 @@
                 class:disabled={disabled || disabledFields[item.key]}
                 on:click={() =>
                   ($state[item.key] = $state[item.key].toSpliced(index, 1))}
-                >Remove</button
               >
+                <IconNew icon={TrashIcon} --size="1.3rem" faded />
+              </button>
             {/if}
           </div>
         {/each}
-      {/if}
-      {#if initialState && $initialState}
-        {#if JSON.stringify($initialState[item.key]) !== JSON.stringify($state[item.key])}
-          <div class="restore-original-value">
-            Value of "{item.label}" field has changed.
-            <button
-              class="restore-button"
-              on:click={() => {
-                $state[item.key] = $initialState?.[item.key]
-              }}>Restore to original value</button
-            >
-          </div>
-        {/if}
       {/if}
     </div>
   {/if}
 {/each}
 
 <style lang="scss">
-  .restore-button {
-    text-decoration: underline;
-    margin-top: 0.5rem;
+  .restore-icon {
+    transform: translateY(1px);
   }
 
   .form-item {
@@ -260,6 +268,8 @@
   }
 
   .add-button {
+    color: var(--theme-button-primary);
+    font-weight: var(--font-weight-bold-1);
     position: absolute;
     right: 0;
     top: 0;

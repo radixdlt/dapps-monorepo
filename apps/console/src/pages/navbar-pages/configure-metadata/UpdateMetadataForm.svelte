@@ -6,13 +6,17 @@
   import Form from '$lib/form/Form.svelte'
   import { callApi } from '@api/gateway'
   import Select from '$lib/select/Select.svelte'
+  import Divider from '@components/_base/divider/Divider.svelte'
   import { transformMetadata, type ExpectedMetadata } from '@api/utils/metadata'
   import { err, ok } from 'neverthrow'
   import { dAppToolkit } from '@stores'
   import { createBadgeProof } from './side-effects'
   import type { FormItem } from '$lib/form/Form.svelte'
   import SendToWalletButton from '$lib/SendToWalletButton.svelte'
-  export let type: string
+  import IconNew from '@components/_base/icon/IconNew.svelte'
+  import TrashIcon from '@icons/trash.svg'
+
+  import RestoreIcon from '@icons/replay_black_24dp.svg'
   export let entityAddress: string
   export let explicitMetadata: string[]
   export let defaultFormState = {}
@@ -103,9 +107,9 @@
   ) =>
     items
       .map((item) =>
-        item?.transformValue
-          ? item.transformValue(formValues[item.key])
-          : undefined
+        $lockedState[item.key] || !item?.transformValue
+          ? undefined
+          : item.transformValue(formValues[item.key])
       )
       .filter(Boolean)
       .join('')
@@ -113,11 +117,9 @@
   const handleSendTransaction = async () => {
     $transactionStatus = 'loading'
 
-    const transactionManifest = `${getTransactionManifest(
-      $formState,
-      metaDataFormItems
-    )}
-    ${createBadgeProof($proofs || [])}
+    const transactionManifest = `
+      ${createBadgeProof($proofs || [])} 
+      ${getTransactionManifest($formState, metaDataFormItems)}
     `
 
     console.log(transactionManifest)
@@ -135,8 +137,6 @@
   const getNfIds = (ids: string[]) => ids.map((id) => ({ id, label: id }))
 </script>
 
-<h3>{type}</h3>
-
 {#if $status === 'loading'}
   <SkeletonLoader />
 {:else if $status === 'success'}
@@ -150,6 +150,8 @@
       initialState={initialFormState}
     />
 
+    <Divider />
+
     <div class="badges-header">
       <h3>Badges</h3>
 
@@ -162,7 +164,7 @@
               resource: {}
             }
           ])
-        }}>Add Badge</button
+        }}>+ Add Badge</button
       >
     </div>
 
@@ -197,22 +199,28 @@
         <button
           on:click={() => {
             proofs.set([...$proofs.toSpliced(index, 1)])
-          }}>Remove</button
+          }}
+        >
+          <IconNew icon={TrashIcon} --size="1.3rem" faded /></button
         >
       </div>
     {/each}
   </div>
-
+  <Divider />
   {#if $hasDataChanged}
     <div class="data-has-changed">
-      Metadata has been updated. In order to commit the changes, you need to
-      send transaction to Radix Wallet. <button
-        class="restore-button"
-        on:click={() => {
-          formState.set(JSON.parse(JSON.stringify($initialFormState)))
-        }}>Restore original values.</button
-      >
+      Form values have been updated. In order to commit the changes, you need to
+      send transaction to Radix Wallet.
     </div>
+    <button
+      class="restore-button"
+      on:click={() => {
+        formState.set(JSON.parse(JSON.stringify($initialFormState)))
+      }}
+      >Restore current on-network values <div class="icon-shift">
+        <IconNew --size="1rem" icon={RestoreIcon} />
+      </div></button
+    >
   {/if}
 
   <SendToWalletButton
@@ -228,22 +236,40 @@
   .data-has-changed {
     margin-bottom: 1rem;
   }
+
   .restore-button {
-    text-decoration: underline;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    height: 2rem;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0 var(--spacing-2xl);
+    border-radius: var(--border-radius-lg);
+    color: var(--color-grey-1);
+    background: var(--color-grey-3);
+    font-weight: var(--font-weight-bold-1);
+  }
+
+  .icon-shift {
+    transform: translateY(1px);
   }
 
   .badges-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .add-button {
+    color: var(--theme-button-primary);
+    font-weight: var(--font-weight-bold-1);
   }
 
   .badge-select {
     width: 100%;
-  }
-
-  h3 {
-    margin-bottom: 1rem;
   }
 
   .with-action {

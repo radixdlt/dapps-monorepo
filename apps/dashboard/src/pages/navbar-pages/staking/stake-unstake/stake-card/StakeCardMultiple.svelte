@@ -27,7 +27,7 @@
     on:click={() =>
       dispatchRemoveEvent('remove', { validator: validator.address })}
   >
-    <IconNew icon={TrashIcon} --size="1rem" faded />
+    <IconNew icon={TrashIcon} --size="1.3rem" faded />
     <div class="subtext">Remove</div>
   </div>
 

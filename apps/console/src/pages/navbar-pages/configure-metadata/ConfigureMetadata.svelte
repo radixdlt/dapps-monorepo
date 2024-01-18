@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
   import EntitySearchInput from './EntitySearchInput.svelte'
-
+  import Divider from '@components/_base/divider/Divider.svelte'
   import type { Entity } from './EntitySearchInput.svelte'
   import UpdateMetadataForm from './UpdateMetadataForm.svelte'
   import {
@@ -102,6 +102,13 @@
     component: MetadataForDisplay
   }
 
+  const divider: FormItem = {
+    key: '',
+    showCondition: () => true,
+    formItemType: 'svelteComponent',
+    component: Divider
+  }
+
   const dAppDefinitionsFormItem: FormItem = {
     key: 'dapp_definitions',
     label: 'dapp_definitions',
@@ -112,8 +119,10 @@
     startDecoratorPropertiesFn: () => ({
       entityAddress: $entityDetails?.address
     }),
-    addLabel: 'Add dApp definition',
-    showCondition: (formState) => formState.account_type === 'dapp definition',
+    addLabel: '+ Add dApp definition',
+    showCondition: (formState) =>
+      formState.account_type === 'dapp definition' ||
+      formState.dapp_definitions.length,
     transformValue: function (value: string[]) {
       const entityAddresses = value
         .map((value) => value.trim())
@@ -135,7 +144,8 @@
     formItemType: 'textarea',
     rows: 3,
     metadata: { type: MetadataType.String },
-    showCondition: (formState) => formState.account_type === 'dapp definition',
+    showCondition: (formState) =>
+      formState.account_type === 'dapp definition' || formState.description,
     transformValue: function (value) {
       return value === ''
         ? removeMetadata($entityDetails?.address || '', this.key)
@@ -149,7 +159,8 @@
     placeholder: 'dApp name (truncated after 32 characters)',
     formItemType: 'input',
     metadata: { type: MetadataType.String },
-    showCondition: (formState) => formState.account_type === 'dapp definition',
+    showCondition: (formState) =>
+      formState.account_type === 'dapp definition' || formState.name,
     transformValue: function (value) {
       return value === ''
         ? removeMetadata($entityDetails?.address || '', this.key)
@@ -166,7 +177,8 @@
       message: 'Must provide URL that starts with https://'
     }),
     metadata: { type: MetadataType.Url },
-    showCondition: (formState) => formState.account_type === 'dapp definition',
+    showCondition: (formState) =>
+      formState.account_type === 'dapp definition' || formState.icon_url,
     transformValue: function (value: string) {
       return value === ''
         ? removeMetadata($entityDetails?.address || '', this.key)
@@ -191,22 +203,29 @@
         ? setStringArrayMetaData($entityDetails?.address || '', this.key, tags)
         : removeMetadata($entityDetails?.address || '', this.key)
     },
-    showCondition: (formState) => formState.account_type === 'dapp definition'
+    showCondition: (formState) =>
+      formState.account_type === 'dapp definition' || formState.tags
   }
 
   const accountMetadataFormItems: FormItem[] = [
+    divider,
     {
       ...metadataForDisplay,
-      showCondition: (formState) => formState.account_type === 'dapp definition'
+      showCondition: (formState) =>
+        formState.account_type === 'dapp definition' ||
+        formState.name ||
+        formState.description ||
+        formState.tags ||
+        formState.icon_url
     },
     {
       key: 'account_type',
-      label: 'Is dApp definition?',
+      label: 'account_type',
       placeholder: '',
       formItemType: 'select',
       items: [
-        { id: 'dapp definition', label: 'Yes' },
-        { id: 'false', label: 'No' }
+        { id: 'dapp definition', label: 'dapp definition' },
+        { id: 'false', label: '-- not set --' }
       ],
       transformValue: function (value) {
         return value === 'dapp definition'
@@ -219,8 +238,20 @@
     tagsFormItem,
     iconUrlFormItem,
     {
+      ...divider,
+      showCondition: (formState) =>
+        formState.account_type === 'dapp definition' ||
+        formState.claimed_entities.length ||
+        formState.claimed_websites.length ||
+        formState.dapp_definitions.length
+    },
+    {
       ...metadataForVerification,
-      showCondition: (formState) => formState.account_type === 'dapp definition'
+      showCondition: (formState) =>
+        formState.account_type === 'dapp definition' ||
+        formState.claimed_entities.length ||
+        formState.claimed_websites.length ||
+        formState.dapp_definitions.length
     },
     {
       key: 'claimed_entities',
@@ -232,9 +263,10 @@
       startDecoratorPropertiesFn: () => ({
         entityAddress: $entityDetails?.address
       }),
-      addLabel: 'Add Claimed Entity',
+      addLabel: '+ Add Claimed Entity',
       showCondition: (formState) =>
-        formState.account_type === 'dapp definition',
+        formState.account_type === 'dapp definition' ||
+        formState.claimed_entities.length,
       transformValue: function (value: string[]) {
         const entityAddresses = value
           .map((value) => value.trim())
@@ -258,9 +290,10 @@
         entityAddress: $entityDetails?.address
       }),
       metadata: {},
-      addLabel: 'Add Claimed Website',
+      addLabel: '+ Add Claimed Website',
       showCondition: (formState: Record<string, any>) =>
-        formState.account_type === 'dapp definition',
+        formState.account_type === 'dapp definition' ||
+        formState.claimed_websites.length,
       transformValue: function (value: string[]) {
         const entityAddresses = value
           .map((value) => value.trim())
@@ -278,6 +311,7 @@
   ]
 
   const fungibleResourceMetadataFormItems: FormItem[] = [
+    divider,
     metadataForDisplay,
     {
       ...nameFormItem,
@@ -330,6 +364,7 @@
           : setUrlMetaData($entityDetails?.address || '', this.key, value)
       }
     },
+    divider,
     metadataForVerification,
     {
       ...dAppDefinitionsFormItem,
@@ -337,15 +372,16 @@
     }
   ]
 
-  const nonFungibleResourceMetadataFormItems = [
+  const nonFungibleResourceMetadataFormItems: FormItem[] = [
     ...fungibleResourceMetadataFormItems.filter((item) => item.key !== 'symbol')
   ]
 
   const componentMetadataFormItems: FormItem[] = [
+    divider,
     metadataForDisplay,
     {
       ...nameFormItem,
-      placeholder: 'Simple name',
+      placeholder: 'Simple name of the component',
       showCondition: () => true
     },
     {
@@ -358,6 +394,7 @@
       placeholder: 'List of descriptive tags',
       showCondition: () => true
     },
+    divider,
     metadataForVerification,
     {
       key: 'dapp_definition',
@@ -379,6 +416,7 @@
   ]
 
   const validatorMetadataFormItems: FormItem[] = [
+    divider,
     metadataForDisplay,
     {
       ...nameFormItem,
@@ -414,7 +452,7 @@
   ]
 </script>
 
-<div style:width="35rem">
+<div style:width="37rem">
   <EntitySearchInput
     {query}
     onEntityDetails={(value) => ($entityDetails = value)}
@@ -424,7 +462,6 @@
     <UpdateMetadataForm
       on:entityUpdated={() => entityDetails.set(undefined)}
       {accountsResources}
-      type={$entityDetails.type}
       entityAddress={$entityDetails.address}
       explicitMetadata={[
         'account_type',
@@ -475,7 +512,6 @@
     <UpdateMetadataForm
       on:entityUpdated={() => entityDetails.set(undefined)}
       {accountsResources}
-      type="Fungible Resource"
       entityAddress={$entityDetails.address}
       explicitMetadata={[
         'dapp_definitions',
@@ -518,7 +554,6 @@
     <UpdateMetadataForm
       on:entityUpdated={() => entityDetails.set(undefined)}
       {accountsResources}
-      type="Non Fungible Resource"
       entityAddress={$entityDetails.address}
       explicitMetadata={[
         'dapp_definitions',
@@ -558,7 +593,6 @@
     <UpdateMetadataForm
       on:entityUpdated={() => entityDetails.set(undefined)}
       {accountsResources}
-      type={$entityDetails.type}
       entityAddress={$entityDetails.address}
       explicitMetadata={['dapp_definition', 'name', 'description', 'tags']}
       expectedMetadataResponse={createStandardMetadata({
@@ -581,7 +615,6 @@
     <UpdateMetadataForm
       on:entityUpdated={() => entityDetails.set(undefined)}
       {accountsResources}
-      type={$entityDetails.type}
       entityAddress={$entityDetails.address}
       explicitMetadata={['name', 'description', 'icon_url', 'info_url']}
       expectedMetadataResponse={createStandardMetadata({

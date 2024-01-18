@@ -8,8 +8,10 @@
   style:margin-top="var(--spacing-xl)"
   style:margin-bottom="var(--spacing-sm)"
 >
-  <div style:font-weight="bold">{header}</div>
-  <div>
+  <div style:font-weight="bold" style:margin-bottom="var(--spacing-md)">
+    {header}
+  </div>
+  <div style:margin-bottom="var(--spacing-md)">
     {text}
   </div>
   <a href={link} target="_blank">More information</a>
