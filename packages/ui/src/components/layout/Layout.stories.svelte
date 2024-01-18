@@ -10,7 +10,6 @@
   import TransactionsIcon from '@icons/transactions.svg'
   import TokensIcon from '@icons/tokens.svg'
   import NftsIcon from '@icons/nfts.svg'
-  import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { isMobile } from '@utils'
 
@@ -37,11 +36,6 @@
           text: 'Send NFTs',
           icon: NftsIcon,
           path: '/send-nft'
-        },
-        {
-          text: 'Manage dApp Definition',
-          icon: DappMetadataIcon,
-          path: '/dapp-metadata'
         },
         {
           text: 'Network Staking',

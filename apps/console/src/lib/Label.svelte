@@ -9,5 +9,8 @@
     font-weight: 500;
     margin-bottom: 0.75rem;
     user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 </style>

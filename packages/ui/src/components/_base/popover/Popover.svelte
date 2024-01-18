@@ -27,7 +27,7 @@
   })
 </script>
 
-<div use:popperRef>
+<div class="wrapper" use:popperRef>
   <slot />
 </div>
 
@@ -44,6 +44,9 @@
 {/if}
 
 <style lang="scss">
+  .wrapper {
+    display: inline-flex;
+  }
   .popover {
     color: var(--color-light);
     border-radius: var(--border-radius-md);

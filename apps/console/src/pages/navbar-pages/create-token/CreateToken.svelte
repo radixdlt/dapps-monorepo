@@ -728,7 +728,6 @@
       bind:accessRule
       disabled={$isFormDisabled}
       on:create-badge={() => {
-        debugger
         createNewBadgeAction()
       }}
       {selectedOwnerRole}

@@ -28,8 +28,8 @@
   import NftsIcon from '@icons/nfts.svg'
   import TokensIcon from '@icons/tokens.svg'
   import TransactionsIcon from '@icons/transactions.svg'
-  import DappMetadataIcon from '@icons/dapp-metadata.svg'
   import CreateTokenIcon from '@icons/create-token.svg'
+  import ConfigureMetadataIcon from '@icons/configure-metadata.svg'
   import NetworkTagIcon from '@icons/network-tag.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/console-logo.svg'
@@ -96,6 +96,11 @@
       icon: CreateTokenIcon,
       path: '/create-token'
     },
+    {
+      text: 'Configure Metadata',
+      icon: ConfigureMetadataIcon,
+      path: '/configure-metadata'
+    },
     ...(featureFlags().getFlag('send-nft')?.enabled
       ? [
           {
@@ -118,11 +123,6 @@
       text: 'Send Raw Transaction',
       icon: TransactionsIcon,
       path: '/transaction-manifest'
-    },
-    {
-      text: 'Manage dApp Definition',
-      icon: DappMetadataIcon,
-      path: '/dapp-metadata'
     },
     {
       text: 'Convert Olympia Address',

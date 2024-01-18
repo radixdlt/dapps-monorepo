@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   export type Item = {
-    id: string
+    id: any
     label: string
   }
 </script>

@@ -28,8 +28,13 @@
   <div
     on:mouseenter={() => (show = !!text && true)}
     on:mouseleave={() => (show = false)}
+    class="wrapper"
   >
-    <div on:click={handleTooltipClick} on:keypress={handleTooltipClick}>
+    <div
+      class="wrapper"
+      on:click={handleTooltipClick}
+      on:keypress={handleTooltipClick}
+    >
       <slot />
     </div>
   </div>
@@ -40,6 +45,10 @@
 </Popover>
 
 <style lang="scss">
+  .wrapper {
+    display: contents;
+  }
+
   .content {
     max-width: 500px;
   }

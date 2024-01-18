@@ -16,7 +16,8 @@
     "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern apps/*/src packages/*/src",
     "format": "npm run prettier:fix && npm run lint:fix",
     "dev:dashboard": "turbo run dev --filter=dashboard",
-    "dev:console": "turbo run dev --filter=console"
+    "dev:console": "turbo run dev --filter=console",
+    "dev:sandbox": "turbo run dev --filter=sandbox"
   },
   "license": "Apache-2.0",
   "devDependencies": {
