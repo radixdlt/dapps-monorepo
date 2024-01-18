@@ -6,6 +6,7 @@
 </script>
 
 <Summary
+  _package={data.promises.package}
   metadata={data.promises.package.then(({ metadata }) => metadata)}
   associatedDapps={data.promises.associatedDapps}
   nonMetadataItems={Promise.resolve([])}
