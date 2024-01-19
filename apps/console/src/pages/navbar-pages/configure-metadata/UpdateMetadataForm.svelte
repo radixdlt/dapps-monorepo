@@ -15,8 +15,8 @@
   import SendToWalletButton from '$lib/SendToWalletButton.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import TrashIcon from '@icons/trash.svg'
-
   import RestoreIcon from '@icons/replay_black_24dp.svg'
+
   export let entityAddress: string
   export let explicitMetadata: string[]
   export let defaultFormState = {}
@@ -31,7 +31,6 @@
   const dispatchTxFinished = createEventDispatcher()
 
   const { walletApi } = $dAppToolkit!
-
   const getMetadata = (address: string) =>
     callApi('getEntityDetailsVaultAggregated', [address], {
       explicitMetadata
@@ -209,15 +208,16 @@
   <Divider />
   {#if $hasDataChanged}
     <div class="data-has-changed">
-      Form values have been updated. In order to commit the changes, you need to
-      send transaction to Radix Wallet.
+      You have made edits to the current on-network values. In order to commit
+      your edits, click "Send to the Radix Wallet" to approve the needed
+      transaction.
     </div>
     <button
       class="restore-button"
       on:click={() => {
         formState.set(JSON.parse(JSON.stringify($initialFormState)))
       }}
-      >Restore current on-network values <div class="icon-shift">
+      >Reset All Edits <div class="icon-shift">
         <IconNew --size="1rem" icon={RestoreIcon} />
       </div></button
     >
