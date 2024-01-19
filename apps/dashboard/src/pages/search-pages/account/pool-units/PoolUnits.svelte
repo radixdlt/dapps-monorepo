@@ -23,11 +23,14 @@
         name?: string
         icon?: string
         address: string
+        accountAmount: string
+        poolAddress: string
       }
       poolTokens:
         | {
             name?: string
             icon?: string
+            address: string
             redeemableAmount: BigNumber
           }[]
     }[]
@@ -156,7 +159,7 @@
         border-bottom: 1px solid var(--theme-border-separator);
       }
     }
-    :global(.content) {
+    :global(.accordion > .content) {
       padding-bottom: 1rem;
     }
   }
