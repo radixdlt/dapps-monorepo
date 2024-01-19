@@ -17,10 +17,11 @@
   }
 
   const texts = {
-    verified: 'URL has valid `.well-known/radix.json` deployed',
+    verified: 'Website has valid `.well-known/radix.json` confirming claim',
     notVerified:
-      "URL can't be verified. Make sure `.well-known/radix.json` is deployed correctly",
-    error: "Can't check URL"
+      "`.well-known/radix.json` file is not currently confirming this dApp Definition's claim",
+    error:
+      'Website does not have `.well-known/radix.json` file or is not reachable'
   }
 
   const isValidUrl = (url: string) => {

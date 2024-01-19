@@ -16,9 +16,10 @@
   }
 
   const texts = {
-    verified: 'Entity has valid two-way link',
-    notVerified: 'Entiy is not correctly linked',
-    error: "Can't check entity linking status"
+    verified: 'Entity has valid two-way claim',
+    notVerified:
+      "Entity is not correctly confirming this dApp Definition's claim",
+    error: "Can't check entity two-way claim status"
   }
 
   $: {
