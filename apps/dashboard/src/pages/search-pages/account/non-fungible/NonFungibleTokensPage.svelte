@@ -15,8 +15,10 @@
     DefaultNonFungibleResource,
     NonFungibleResource
   } from '@api/utils/entities/resource/non-fungible/index'
-  import type { ClaimNftCollection } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
   import type { Account } from '@api/utils/entities/component/account'
+  import { groupBy } from '@common/groupBy'
+  import { keyBy } from '@common/keyBy'
+  import type { EntityNonFungible } from '@api/utils/entities'
 
   export let nonFungibleResources: Promise<NonFungibleResource[]>
   export let nfts: Promise<GeneralNft[]>
@@ -36,7 +38,44 @@
     })
   }
 
-  $: data = Promise.all([stateVersion, account, nfts])
+  $: data = Promise.all([
+    nonFungibleResources,
+    stateVersion,
+    account,
+    nfts
+  ]).then(([nonFungibleResources, stateVersion, account, nfts]) => {
+    const nftsMap = groupBy(
+      nfts,
+      (nft: GeneralNft) => nft.address.resourceAddress
+    )
+    const accountResourceMap = keyBy(
+      account.resources.nonFungible,
+      (res) => res.address
+    )
+    const filteredNonFungibleResources = nonFungibleResources.filter(
+      (resource) => {
+        return (
+          resource.nonFungibleType !== 'claim-nft-collection' &&
+          resource.totalSupply !== '0' &&
+          nftsMap[resource.address]
+        )
+      }
+    ) as DefaultNonFungibleResource[]
+
+    return [
+      filteredNonFungibleResources,
+      stateVersion,
+      account.address,
+      accountResourceMap,
+      nftsMap
+    ] as [
+      DefaultNonFungibleResource[],
+      number,
+      string,
+      Record<string, EntityNonFungible>,
+      Record<string, GeneralNft[]>
+    ]
+  })
 
   let width: number
 
@@ -73,59 +112,32 @@
       isLoading = false
     })
   }
-
-  const isClaimNftResource = (
-    resource: NonFungibleResource
-  ): resource is ClaimNftCollection =>
-    resource.nonFungibleType === 'claim-nft-collection'
-
-  const filterOutClaimNfts = (
-    nonFungibleResources: Promise<NonFungibleResource[]>
-  ): Promise<DefaultNonFungibleResource[]> => {
-    return nonFungibleResources.then((nonFungibleResources) => {
-      return nonFungibleResources.filter(
-        (resource) => !isClaimNftResource(resource)
-      ) as DefaultNonFungibleResource[]
-    })
-  }
 </script>
 
-{#await Promise.all([filterOutClaimNfts(nonFungibleResources), data])}
+{#await data}
   {#each Array(3) as _}
     <NFTAccordion data={new Promise(() => {})} />
   {/each}
-{:then [nonFungibleResources, [stateVersion, account, nfts]]}
+{:then [nonFungibleResources, stateVersion, accountAddress, accountResourceMap, nftsMap]}
   {#if nonFungibleResources.length === 0}
     <NoTokens>No NFT's found</NoTokens>
   {:else}
     {#each nonFungibleResources as resource}
-      {@const nonFungibles = nfts.filter(
-        (nft) => nft.address.resourceAddress === resource.address
-      )}
-
-      {@const nbrOfNfts =
-        account.resources.nonFungible
-          .find((nonFungible) => nonFungible.address === resource.address)
-          ?.vaults.map((vault) => vault.total_count)
-          .reduce((a, b) => a + b, 0) ?? 0}
-
-      {@const ownedNonFungible = account.resources.nonFungible.find(
-        (nonFungible) => nonFungible.address === resource.address
-      )}
+      {@const ownedNonFungible = accountResourceMap[resource.address]}
 
       <NFTAccordion
         data={{
           name: resource.metadata.expected.name?.typed.value,
           address: resource.address,
           imageUrl: resource.metadata.expected.icon_url?.typed.value,
-          count: nbrOfNfts,
+          count: ownedNonFungible.nbrOfNfts,
           tags: resource.metadata.expected.tags?.typed.values,
           totalCount: Number(resource.totalSupply)
         }}
       >
         <div bind:clientWidth={width}>
           <div class="nft-cards" class:center={width < 500}>
-            {#each nonFungibles as { address, nftData: { expected: { name, key_image_url } } }}
+            {#each nftsMap[resource.address] as { address, nftData: { expected: { name, key_image_url } } }}
               <NonFungibleTokenCard
                 imgUrl={key_image_url?.value}
                 name={name?.value}
@@ -157,7 +169,7 @@
           on:thresholdReached={() => {
             fetchMore({
               stateVersion,
-              componentAddress: account.address,
+              componentAddress: accountAddress,
               cursor: ownedNonFungible?.vaults[0].next_cursor ?? undefined,
               vaultAddress: ownedNonFungible?.vaults[0].vault_address ?? '',
               resourceAddress: resource.address
