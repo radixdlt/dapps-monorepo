@@ -32,6 +32,21 @@ export type Entity =
   | Component
   | StakeUnit
 
+export type EntityNonFungible = {
+  address: string
+  nbrOfNfts: number
+  ids: string[]
+  explicitMetadata?: EntityMetadataItem[]
+  vaults: NonFungibleResourcesCollectionItemVaultAggregatedVaultItem[]
+}
+
+export type EntityFungible = {
+  address: string
+  value: string
+  explicitMetadata?: EntityMetadataItem[]
+  vaults: FungibleResourcesCollectionItemVaultAggregatedVaultItem[]
+}
+
 export type _Entity<
   Type extends string,
   _ExpectedMetadata extends ExpectedMetadata
@@ -50,19 +65,8 @@ export type _Entity<
   }
   auth: AuthInfo
   resources: {
-    fungible: {
-      address: string
-      value: string
-      explicitMetadata?: EntityMetadataItem[]
-      vaults: FungibleResourcesCollectionItemVaultAggregatedVaultItem[]
-    }[]
-    nonFungible: {
-      address: string
-      nbrOfNfts: number
-      ids: string[]
-      explicitMetadata?: EntityMetadataItem[]
-      vaults: NonFungibleResourcesCollectionItemVaultAggregatedVaultItem[]
-    }[]
+    fungible: EntityFungible[]
+    nonFungible: EntityNonFungible[]
   }
 }
 
