@@ -94,11 +94,17 @@ const getPoolUnitData =
         (pool) => pool.address === unit.metadata.expected.pool.typed.value
       )!
 
+      const poolUnitsBalance = account.resources.fungible.find(
+        (resource) => resource.address === unit.address
+      )!.value
+
       return {
         poolUnit: {
+          poolAddress: unit.metadata.expected.pool.typed.value,
           address: unit.address,
           name: unit.metadata.expected.name?.typed.value,
-          icon: unit.metadata.expected.icon_url?.typed.value
+          icon: unit.metadata.expected.icon_url?.typed.value,
+          accountAmount: poolUnitsBalance
         },
         poolTokens: pool.metadata.expected.pool_resources.typed.values.map(
           (poolToken) => {
@@ -109,11 +115,12 @@ const getPoolUnitData =
             return {
               name: token.metadata.expected.name?.typed.value,
               icon: token.metadata.expected.icon_url?.typed.value,
+              address: token.address,
               redeemableAmount: getRedeemablePoolTokenAmount(
                 token,
                 unit,
-                account,
-                pool
+                pool,
+                poolUnitsBalance
               )
             }
           }

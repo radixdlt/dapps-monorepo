@@ -91,7 +91,7 @@
         border-bottom: 1px solid var(--theme-border-separator);
       }
     }
-    :global(.content) {
+    :global(.accordion > .content) {
       padding-bottom: 1rem;
     }
   }

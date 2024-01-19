@@ -59,13 +59,9 @@ export const transformPool = (
 export const getRedeemablePoolTokenAmount = (
   poolToken: FungibleResource,
   poolUnitResource: PoolUnit,
-  account: Account,
-  pool: Pool
+  pool: Pool,
+  poolUnitsBalance: string
 ) => {
-  const poolUnitsBalance = account.resources.fungible.find(
-    (resource) => resource.address === poolUnitResource.address
-  )!.value
-
   const poolVaultBalance = pool.resources.fungible.find(
     (resource) => resource.address === poolToken.address
   )!.value

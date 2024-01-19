@@ -10,10 +10,13 @@
       name?: string
       icon?: string
       address: string
+      accountAmount: string
+      poolAddress: string
     }
     poolTokens: {
       name?: string
       icon?: string
+      address: string
       redeemableAmount: BigNumber
     }[]
   }
@@ -21,11 +24,11 @@
 
 <div class="pool-unit-card">
   <div class="pool-unit-resource row card">
-    <div class="icon-and-name">
+    <a class="icon-and-name" href={`/pool/${poolUnit.poolUnit.poolAddress}`}>
       <NftImage url={poolUnit.poolUnit.icon} />
       <div class="name-and-address">
         <div class="bold-text">
-          {poolUnit.poolUnit.name}
+          {poolUnit.poolUnit.name || ''}
         </div>
         <Address
           value={poolUnit.poolUnit.address}
@@ -33,15 +36,18 @@
           --background="var(--color-grey-5)"
         />
       </div>
-    </div>
+      <div class="pool-resource-amount">
+        {formatTokenValue(poolUnit.poolUnit.accountAmount).displayValue}
+      </div>
+    </a>
   </div>
 
   {#each poolUnit.poolTokens as token}
     <div class="pool-token row card">
-      <div class="icon-and-name">
+      <a class="icon-and-name" href={`/resource/${token.address}`}>
         <TokenIcon iconUrl={token.icon} />
         {token.name}
-      </div>
+      </a>
       <div class="bold-text">
         {formatTokenValue(token.redeemableAmount).displayValue}
       </div>
@@ -50,6 +56,11 @@
 </div>
 
 <style lang="scss">
+  .pool-resource-amount {
+    margin-left: auto;
+    font-weight: var(--font-weight-bold-2);
+    font-size: var(--text-lg);
+  }
   .pool-unit-card {
     display: flex;
     flex-direction: column;
@@ -87,6 +98,8 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
+    color: var(--theme-text-primary);
+    font-weight: var(--font-weight-light);
   }
 
   .bold-text {
