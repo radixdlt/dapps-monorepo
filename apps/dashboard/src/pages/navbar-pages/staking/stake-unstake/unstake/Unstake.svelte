@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Account } from '@stores'
+  import { type Account, xrdAddress } from '@stores'
   import StakePanel from '../StakePanel.svelte'
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'
@@ -71,6 +71,7 @@
       accountAddress: string
       validatorAddress: string
       stakeUnitResource: string
+      claimResource: string
       amount: string
     }[] = []
 
@@ -93,6 +94,7 @@
           accountAddress: stake.account.address,
           validatorAddress: stake.validator.address,
           stakeUnitResource: stake.validator.stakeUnitResourceAddress,
+          claimResource: stake.validator.unstakeClaimResourceAddress,
           amount: stakeUnitsAmount
         })
       }

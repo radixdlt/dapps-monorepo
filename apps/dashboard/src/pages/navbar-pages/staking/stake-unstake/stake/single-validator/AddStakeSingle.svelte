@@ -1,15 +1,18 @@
 <script lang="ts">
-  import type { ComponentProps } from 'svelte'
   import StakePanel from '../../StakePanel.svelte'
   import OverviewStakeCardSingle from '../../stake-card/OverviewStakeCardSingle.svelte'
-  import type ValidatorInfo from '../../stake-card/ValidatorInfo.svelte'
   import AccountSection from '../../AccountSection.svelte'
   import { xrdAddress, type Account } from '@stores'
   import { getXRDBalance } from '../getXrdBalance'
   import { getStakeManifest } from '../../manifests'
   import { track } from '@dashboard/routes/+layout.svelte'
 
-  export let validator: ComponentProps<ValidatorInfo>
+  export let validator: {
+    name?: string
+    address: string
+    stakeUnitResourceAddress: string
+    currentlyStakingAmount: Promise<string>
+  }
 
   let xrd: string
 
@@ -39,6 +42,7 @@
     const manifest = getStakeManifest(
       selectedAccount.address,
       validator.address,
+      validator.stakeUnitResourceAddress,
       stakeAmount,
       xrd
     )
