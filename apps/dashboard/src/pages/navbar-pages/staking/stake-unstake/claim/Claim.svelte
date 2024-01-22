@@ -61,6 +61,7 @@
         readyToClaim.map((claim) => ({
           id: claim.claimNft.id,
           accountAddress: claim.account.address,
+          amount: claim.xrdAmount,
           validatorAddress: claim.validator.address,
           unstakeClaimResource: claim.validator.unstakeClaimResourceAddress
         }))

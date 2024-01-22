@@ -133,12 +133,16 @@ export const getClaimManifest = (
     accountAddress: string
     validatorAddress: string
     unstakeClaimResource: string
+    amount: string
     id: string
   }[]
 ) =>
   claims
     .map(
-      ({ accountAddress, validatorAddress, unstakeClaimResource, id }, i) => `
+      (
+        { accountAddress, validatorAddress, unstakeClaimResource, id, amount },
+        i
+      ) => `
     CALL_METHOD
       Address("${accountAddress}")
       "withdraw_non_fungibles"
@@ -154,8 +158,9 @@ export const getClaimManifest = (
       "claim_xrd"
       Bucket("bucket${i}");
 
-    TAKE_ALL_FROM_WORKTOP
+    TAKE_FROM_WORKTOP
       Address("${xrdAddress}")
+      Decimal("${amount}")
       Bucket("bucket${i}xrd");
 
     CALL_METHOD

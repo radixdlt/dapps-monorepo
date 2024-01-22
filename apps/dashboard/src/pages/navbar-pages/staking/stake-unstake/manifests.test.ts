@@ -57,6 +57,7 @@ const fixtures = [
         {
           accountAddress:
             'account_tdx_d_16996e320lnez82q6430eunaz9l3n5fnwk6eh9avrmtmj22e7m9lvl2',
+          amount: '1',
           validatorAddress:
             'validator_tdx_d_1sdercqmrle9e9tz47asy2kwj8d3pd839zfg4gwlsz8az06txkdcghx',
           unstakeClaimResource:
