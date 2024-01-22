@@ -14,6 +14,7 @@
     validator={{
       address: validator.address,
       name: validator.metadata.expected.name?.typed.value,
+      stakeUnitResourceAddress: validator.stakeUnitResourceAddress,
       currentlyStakingAmount: $stakes.then((stakes) =>
         stakes
           .reduce((sum, { staked }) => sum.plus(staked), new BigNumber(0))

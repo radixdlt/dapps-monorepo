@@ -3,7 +3,7 @@
   import TokenAmountCard from '../stake-card/token-amount-card/TokenAmountCard.svelte'
   import { formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
-  import type { Account } from '@stores'
+  import { xrdAddress, type Account } from '@stores'
   import { XRDToken } from '@constants'
   import { getClaimManifest } from '../manifests'
   import StakeCard from '../stake-card/StakeCard.svelte'
@@ -57,6 +57,7 @@
     track('click:send-tx-claim')
     e.detail(
       getClaimManifest(
+        $xrdAddress || '',
         readyToClaim.map((claim) => ({
           id: claim.claimNft.id,
           accountAddress: claim.account.address,

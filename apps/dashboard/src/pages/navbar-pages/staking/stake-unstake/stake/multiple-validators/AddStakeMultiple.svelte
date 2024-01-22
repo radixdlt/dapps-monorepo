@@ -15,7 +15,6 @@
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@common/gateway-sdk'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
-  import { track } from '@dashboard/routes/+layout.svelte'
 
   export let validators: ValidatorListItem[]
   export let currentlyStaked: Promise<{
@@ -35,17 +34,20 @@
   let stakeAmounts: {
     validator: string
     amount: string
+    stakeUnitResourceAddress: string
   }[] = []
 
   $: stakeAmounts = Array.from({ length: validators.length }, (_, i) => ({
     validator: validators[i].address,
-    amount: stakeAmounts[i]?.amount ?? '0'
+    amount: stakeAmounts[i]?.amount ?? '0',
+    stakeUnitResourceAddress: validators[i].stakeUnitResourceAddress
   }))
 
   let distributeEqually = true
 
   $: if (distributeEqually) {
     stakeAmounts = stakeAmounts.map((stake) => ({
+      stakeUnitResourceAddress: stake.stakeUnitResourceAddress,
       validator: stake.validator,
       amount: totalXRDAmount
         ? new BigNumber(totalXRDAmount)
