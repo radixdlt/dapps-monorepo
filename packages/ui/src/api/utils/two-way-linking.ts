@@ -10,12 +10,12 @@ const getDappDefinitions = (metadata: EntityMetadataCollection) => {
 
   const dappDefinition = getStringMetadata('dapp_definition')(metadata)
 
-  if (dappDefinition !== '' || dappDefinition !== undefined)
+  if (dappDefinition !== '' && dappDefinition !== undefined)
     dappDefinitions.push(dappDefinition)
 
   const dappDefinitionsVector = getVectorMetadata('dapp_definitions')(metadata)
 
-  if (dappDefinitionsVector.length > 0 || dappDefinitionsVector !== undefined)
+  if (dappDefinitionsVector.length > 0 && dappDefinitionsVector !== undefined)
     dappDefinitions.push(...dappDefinitionsVector)
 
   return dappDefinitions

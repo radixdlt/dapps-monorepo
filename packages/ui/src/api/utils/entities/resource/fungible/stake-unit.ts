@@ -59,7 +59,9 @@ const getEntityDetails = (address: string) =>
 export const verifyStakeUnit = async (
   entity: StateEntityDetailsVaultResponseItem
 ) => {
-  const result = await ok(getValidatorMetadataValue(entity))
+  const validatorMetadataValue = getValidatorMetadataValue(entity)
+  if (!validatorMetadataValue) return false
+  const result = await ok(validatorMetadataValue)
     .asyncAndThen(getEntityDetails)
     .map(([entity]) => getPoolUnitMetadataValue(entity))
     .map((poolUnit) => poolUnit === entity.address)
