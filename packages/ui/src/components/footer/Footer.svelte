@@ -8,7 +8,7 @@
   <div class="footer">
     <a href="https://www.radixdlt.com/privacy-policy" target="_blank"
       >Privacy Notice</a
-    >
+    >|
     <a href="http://www.radixdlt.com/terms/dashboardEULA"
       >Terms and Conditions</a
     >
@@ -18,7 +18,7 @@
 <style>
   .footer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: var(--spacing-md);
