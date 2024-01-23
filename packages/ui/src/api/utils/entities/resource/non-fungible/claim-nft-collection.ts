@@ -71,7 +71,9 @@ export const resourceToClaimNftCollection = (
 export const verifyClaimNft = async (
   entity: StateEntityDetailsVaultResponseItem
 ) => {
-  const result = await ok(getValidatorMetadataValue(entity))
+  const validatorMetadataValue = getValidatorMetadataValue(entity)
+  if (!validatorMetadataValue) return false
+  const result = await ok(validatorMetadataValue)
     .asyncAndThen(getEntityDetails)
     .map(([entity]) => getClaimNftMetadataValue(entity))
     .map((claimNft) => claimNft === entity.address)

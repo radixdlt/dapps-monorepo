@@ -577,27 +577,3 @@ export const getAccountFungibleTokens = (accounts: string) =>
     ),
     andThen((data) => data[0])
   )()
-
-export const getAccountDataNew = (
-  accounts: string[],
-  options?: StateEntityDetailsOptions,
-  ledgerState?: LedgerStateSelector,
-  getNonFungiblesForResources?: string[]
-) =>
-  pipe(
-    () =>
-      callApi(
-        'getEntityDetailsVaultAggregated',
-        accounts,
-        options,
-        ledgerState
-      ).andThen((entities) =>
-        entities.length === 0
-          ? err({ message: 'Entity not found.' })
-          : ok(entities)
-      ),
-    (result) =>
-      result.map(
-        transformResources(options, ledgerState, getNonFungiblesForResources)
-      )
-  )()
