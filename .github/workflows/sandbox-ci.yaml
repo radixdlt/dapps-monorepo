@@ -63,7 +63,7 @@ jobs:
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     steps:
       - name: Dump context
         uses: RDXWorks-actions/ghaction-dump-context@master
@@ -73,7 +73,7 @@ jobs:
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   snyk-scan-deps-licences:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     permissions:
@@ -97,7 +97,7 @@ jobs:
           args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
   snyk-scan-code:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     permissions:
@@ -123,7 +123,7 @@ jobs:
           command: code test
 
   snyk-sbom:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     permissions: write-all
     needs:
       - snyk-scan-deps-licences
@@ -152,7 +152,7 @@ jobs:
           release-tag: ${{ github.event.release.tag_name }}
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
     - trigger
     - snyk-scan-deps-licences
@@ -175,7 +175,7 @@ jobs:
         uses: RDXWorks-actions/ghaction-dump-context@master
 
   setup-build-args:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - trigger
     name: Setup build argument values for docker
@@ -215,7 +215,7 @@ jobs:
       - setup-build-args
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
-      runs_on: ubuntu-latest
+      runs_on: selfhosted-ubuntu-22.04
       image_registry: 'docker.io'
       image_organization: 'radixdlt'
       target: 'sandbox'
@@ -233,7 +233,7 @@ jobs:
         IS_PUBLIC=${{needs.setup-build-args.outputs.is_public}}
 
   snyk-monitor:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - push-sandbox
@@ -259,7 +259,7 @@ jobs:
           command: monitor
 
   snyk-container-monitor:
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - build
@@ -285,7 +285,7 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - push-sandbox
       - setup-build-args
@@ -320,7 +320,7 @@ jobs:
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: selfhosted-ubuntu-22.04
     needs:
       - push-sandbox
       - setup-build-args
