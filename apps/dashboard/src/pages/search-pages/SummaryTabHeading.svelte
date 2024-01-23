@@ -6,16 +6,16 @@
   export let entity: Promise<Entity>
 
   $: iconUrl = entity.then(
-    (entity) => (entity.metadata.expected as any).icon_url?.typed.value as URL
+    (entity) =>
+      (entity.metadata.expected as any).icon_url?.typed.value as string
   )
 
   $: name = entity.then(
-    (entity) => (entity.metadata.expected as any).name?.typed.value as string
+    (entity) => entity.metadata.expected.name?.typed.value as string
   )
 
   $: description = entity.then(
-    (entity) =>
-      (entity.metadata.expected as any).description?.typed.value as string
+    (entity) => entity.metadata.expected.description?.typed.value as string
   )
 
   $: symbol = entity.then(
@@ -32,7 +32,7 @@
     <SkeletonLoader />
   {:then [iconUrl, name, symbol, displayName]}
     {#if iconUrl}
-      <NftImage url={iconUrl.href} />
+      <NftImage url={iconUrl} />
     {/if}
     {#if name}
       <h2>
