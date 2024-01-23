@@ -33,13 +33,9 @@ export const getUnstakeAndClaimInfo =
   (validators: ValidatorListItem[]) =>
   (nfts: NonFungible[]) =>
   (account: Account, currentEpoch: number) => {
-    const claimNfts = account.resources.nonFungible
-      .map((resource) =>
-        nfts.find((nft) => nft.address.resourceAddress === resource.address)
-      )
-      .filter((nft): nft is NonNullable<typeof nft> => !isNil(nft))
-      .flat()
-      .filter((nft): nft is ClaimNft => nft.type === 'claimNft')
+    const claimNfts = nfts.filter(
+      (nft): nft is ClaimNft => nft.type === 'claimNft'
+    )
 
     let unstaking: UnstakingInfo[] = []
     let readyToClaim: ReadyToClaimInfo[] = []
