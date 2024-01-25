@@ -134,7 +134,7 @@ export const setOriginArrayMetaData = (
       Address("${address}")
       "${key}"
       Enum<Metadata::OriginArray>(
-        Array<String>(${value.join(', ')})
+        Array<String>(${value.map((origin) => `"${origin}"`).join(', ')})
       )
     ;
 `
