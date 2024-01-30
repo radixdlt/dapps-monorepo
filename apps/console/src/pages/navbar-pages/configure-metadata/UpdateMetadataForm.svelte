@@ -16,6 +16,7 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import TrashIcon from '@icons/trash.svg'
   import RestoreIcon from '@icons/replay_black_24dp.svg'
+  import { track } from '../../../routes/+layout.svelte'
 
   export let entityAddress: string
   export let explicitMetadata: string[]
@@ -114,6 +115,7 @@
       .join('')
 
   const handleSendTransaction = async () => {
+    track('click:configure-metadata')
     $transactionStatus = 'loading'
 
     const transactionManifest = `
