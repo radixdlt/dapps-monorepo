@@ -9,6 +9,7 @@ environments:
   dev: {}
   pr: {}
   enkinet: {}
+  dumunet: {}
   hammunet: {}
   gilganet: {}
   mardunet: {}

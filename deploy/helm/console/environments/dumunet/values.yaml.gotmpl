@@ -1,0 +1,43 @@
+{{ $IMAGE_TAG := .StateValues.ci.tag }} 
+
+console:
+  image: 
+      tag: {{$IMAGE_TAG}}
+
+  params:
+    URL: https://dumunet-console.rdx-works-main.extratools.works
+    PUBLIC_NETWORK_NAME: "dumunet"
+
+  secrets:
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: dumunet-console.rdx-works-main.extratools.works
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+
+  resources:
+    limits:
+      cpu: 475m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 256Mi
+
+developerAccess:
+  pod:
+    exec:
+      enabled: true
+
+alertmanager:
+  env: "dev"
+  nameOverride: "console-amcfg"
+  slackConfig:
+    channel: "feed--alerts-dapps-dev"
+  secrets:
+    region: eu-west-2
+    name: "rdx-works-main-dev/eks/dapps/dev/alertmanager-integration-keys"
