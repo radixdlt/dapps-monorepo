@@ -55,9 +55,15 @@
     />
   {:else if metadataTypedValue.type === 'U8Array'}
     {metadataTypedValue.value_hex}
-  {:else if metadataTypedValue.type === 'BoolArray' || metadataTypedValue.type === 'DecimalArray' || metadataTypedValue.type === 'I32Array' || metadataTypedValue.type === 'I64Array' || metadataTypedValue.type === 'InstantArray' || metadataTypedValue.type === 'NonFungibleLocalIdArray' || metadataTypedValue.type === 'StringArray' || metadataTypedValue.type === 'U32Array' || metadataTypedValue.type === 'U64Array'}
+  {:else if metadataTypedValue.type === 'BoolArray' || metadataTypedValue.type === 'DecimalArray' || metadataTypedValue.type === 'I32Array' || metadataTypedValue.type === 'I64Array' || metadataTypedValue.type === 'NonFungibleLocalIdArray' || metadataTypedValue.type === 'StringArray' || metadataTypedValue.type === 'U32Array' || metadataTypedValue.type === 'U64Array'}
     {metadataTypedValue.values.join(', ')}
-  {:else if metadataTypedValue.type === 'Bool' || metadataTypedValue.type === 'Decimal' || metadataTypedValue.type === 'I32' || metadataTypedValue.type === 'I64' || metadataTypedValue.type === 'Instant' || metadataTypedValue.type === 'NonFungibleLocalId' || metadataTypedValue.type === 'String' || metadataTypedValue.type === 'U32' || metadataTypedValue.type === 'U64' || metadataTypedValue.type === 'U8'}
+  {:else if metadataTypedValue.type === 'Bool' || metadataTypedValue.type === 'Decimal' || metadataTypedValue.type === 'I32' || metadataTypedValue.type === 'I64' || metadataTypedValue.type === 'NonFungibleLocalId' || metadataTypedValue.type === 'String' || metadataTypedValue.type === 'U32' || metadataTypedValue.type === 'U64' || metadataTypedValue.type === 'U8'}
     {metadataTypedValue.value}
+  {:else if metadataTypedValue.type === 'Instant'}
+    {new Date(Number(metadataTypedValue.value) * 1000)}
+  {:else if metadataTypedValue.type === 'InstantArray'}
+    {metadataTypedValue.values
+      .map((value) => new Date(Number(value) * 1000))
+      .join(', ')}
   {/if}
 {/if}

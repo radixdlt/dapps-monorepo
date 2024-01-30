@@ -22,27 +22,49 @@
     )
   }
 
-  const isSimpleKind = (kind: string) => {
-    return [
-      'String',
-      'U8',
-      'U16',
-      'U32',
-      'U64',
-      'U128',
-      'I32',
-      'I64',
-      'I16',
-      'I8',
-      'I128',
-      'Bool',
-      'Decimal',
-      'PreciseDecimal'
-    ].includes(kind)
+  const simpleKind = [
+    'String',
+    'U8',
+    'U16',
+    'U32',
+    'U64',
+    'U128',
+    'I32',
+    'I64',
+    'I16',
+    'I8',
+    'I128',
+    'Bool',
+    'Decimal',
+    'PreciseDecimal'
+  ] as const
+
+  type SimpleKind = (typeof simpleKind)[number]
+
+  const isSimpleKind = (kind: string): kind is SimpleKind => {
+    return simpleKind.includes(kind as SimpleKind)
+  }
+
+  const isSimpleElement = (
+    element: ProgrammaticScryptoSborValue
+  ): element is Extract<ProgrammaticScryptoSborValue, { kind: SimpleKind }> => {
+    return isSimpleKind(element.kind)
   }
 
   const stringifyArray = (value: ProgrammaticScryptoSborValueArray): string => {
-    return value.elements.map((element: any) => element.value).join(', ')
+    return value.elements
+      .map((element) => {
+        if (isSimpleElement(element)) {
+          if (element.kind === 'I64' && element.type_name === 'Instant') {
+            return new Date(Number(element.value) * 1000)
+          }
+
+          return element.value
+        } else {
+          return JSON.stringify(element, null, 2)
+        }
+      })
+      .join(', ')
   }
 </script>
 
@@ -60,7 +82,7 @@
 
       <svelte:fragment slot="content">
         {#if value.kind === 'Array'}
-          {#if isSimpleKind(value.element_kind) && value.elements.every( (element) => isSimpleKind(element.kind) )}
+          {#if isSimpleKind(value.element_kind) && value.elements.every( (element) => isSimpleElement(element) )}
             <pre>{stringifyArray(value)}</pre>
           {:else}
             <pre>{JSON.stringify(value, null, 2)}</pre>
@@ -85,6 +107,8 @@
     <div slot="right" class="right-slot">
       {#if value.kind === 'String' && value.type_name === 'Url'}
         <Link url={value.value} external />
+      {:else if value.kind === 'I64' && value.type_name === 'Instant'}
+        {new Date(Number(value.value) * 1000)}
       {:else if value.kind === 'NonFungibleLocalId' || value.kind === 'String' || value.kind === 'U8' || value.kind === 'U16' || value.kind === 'U32' || value.kind === 'U64' || value.kind === 'U128' || value.kind === 'I32' || value.kind === 'I64' || value.kind === 'I16' || value.kind === 'I8' || value.kind === 'I128' || value.kind === 'Bool' || value.kind === 'Decimal' || value.kind === 'PreciseDecimal'}
         {value.value}
       {:else if value.kind === 'Reference'}
