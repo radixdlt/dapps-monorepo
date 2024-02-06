@@ -96,6 +96,7 @@
   .stake {
     margin-top: var(--spacing-2xl);
     gap: var(--spacing-3xl);
+    align-items: flex-start;
   }
 
   .heading-text {
