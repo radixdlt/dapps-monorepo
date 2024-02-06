@@ -37,6 +37,7 @@ export const getMultipleStakeManifest = (
   stakes: {
     validator: string
     amount: string
+    preciseAmount: string
     stakeUnitResourceAddress: string
   }[],
   xrdAddress: string
@@ -47,18 +48,18 @@ export const getMultipleStakeManifest = (
         Address("${xrdAddress}")
         Decimal("${stakes
           .reduce(
-            (acc, { amount }) => acc.plus(new BigNumber(amount)),
+            (acc, { preciseAmount }) => acc.plus(new BigNumber(preciseAmount)),
             new BigNumber(0)
           )
-          .toString()}");
+          .toFixed()}");
 
         
         ${stakes
           .map(
-            ({ validator, amount, stakeUnitResourceAddress }, i) => `
+            ({ validator, preciseAmount, stakeUnitResourceAddress }, i) => `
             TAKE_FROM_WORKTOP
               Address("${xrdAddress}")
-              Decimal("${amount}")
+              Decimal("${preciseAmount}")
               Bucket("bucket${i}");
 
             CALL_METHOD
