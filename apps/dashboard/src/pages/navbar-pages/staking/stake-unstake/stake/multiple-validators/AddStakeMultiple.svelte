@@ -15,6 +15,7 @@
   import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@common/gateway-sdk'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import { formatTokenValue } from '@utils'
 
   export let validators: ValidatorListItem[]
   export let currentlyStaked: Promise<{
@@ -34,12 +35,14 @@
   let stakeAmounts: {
     validator: string
     amount: string
+    preciseAmount: string
     stakeUnitResourceAddress: string
   }[] = []
 
   $: stakeAmounts = Array.from({ length: validators.length }, (_, i) => ({
     validator: validators[i].address,
     amount: stakeAmounts[i]?.amount ?? '0',
+    preciseAmount: stakeAmounts[i]?.preciseAmount ?? '0',
     stakeUnitResourceAddress: validators[i].stakeUnitResourceAddress
   }))
 
@@ -49,19 +52,30 @@
     stakeAmounts = stakeAmounts.map((stake) => ({
       stakeUnitResourceAddress: stake.stakeUnitResourceAddress,
       validator: stake.validator,
-      amount: totalXRDAmount
+      preciseAmount: totalXRDAmount
         ? new BigNumber(totalXRDAmount)
             .dividedBy(validators.length)
             .toFixed(RET_DECIMAL_PRECISION)
+        : '0',
+      amount: totalXRDAmount
+        ? formatTokenValue(
+            new BigNumber(totalXRDAmount).dividedBy(validators.length)
+          ).displayValue
         : '0'
     }))
   } else {
-    totalXRDAmount = new BigNumber(
-      stakeAmounts.reduce(
-        (acc, stake) => acc.plus(stake.amount),
-        new BigNumber(0)
+    totalXRDAmount = formatTokenValue(
+      new BigNumber(
+        stakeAmounts.reduce(
+          (acc, stake) => acc.plus(stake.amount),
+          new BigNumber(0)
+        )
       )
-    ).toString()
+    ).displayValue
+    stakeAmounts = stakeAmounts.map((stake) => ({
+      ...stake,
+      preciseAmount: stake.amount
+    }))
   }
 
   let tokenAmountInvalid = false

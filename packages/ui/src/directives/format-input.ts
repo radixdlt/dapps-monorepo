@@ -22,8 +22,8 @@ export const format = (
   }
 }
 
-const removeNonNumericCharacters = (value: string) =>
-  value.replace(/[^0-9.]/g, '')
+const removeNonNumericCharacters = (value?: string) =>
+  value?.replace(/[^0-9.]/g, '') || ''
 
 const removeLeadingZeros = (value: string) => {
   const newValue = value.replace(/^0+/, '')
@@ -35,6 +35,7 @@ export const number =
   (min?: string, max?: string, maxChars?: number, decimalPlaces = 18) =>
   (value: string) => {
     if (value === '') value = '0'
+    if (value === '~0') return '~0'
     const numericValue = removeNonNumericCharacters(value)
 
     // Split the value into integer and decimal parts
