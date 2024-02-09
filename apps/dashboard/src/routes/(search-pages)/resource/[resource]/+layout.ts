@@ -1,4 +1,4 @@
-import type { PageLoad } from './$types'
+import type { LayoutLoad } from './$types'
 import {
   getAssociatedDapps,
   getLookupEntity,
@@ -61,7 +61,7 @@ const getRedeemableTokens = async (poolUnit: PoolUnit) => {
   }))
 }
 
-export const load: PageLoad = async ({ params }) => {
+export const load: LayoutLoad = async ({ params }) => {
   if (isNFTAddress(params.resource)) {
     throw redirect(308, `/nft/${encodeURIComponent(params.resource)}`)
   }
