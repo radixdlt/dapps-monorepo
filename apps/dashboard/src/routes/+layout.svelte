@@ -17,7 +17,6 @@
   import {
     accounts,
     externalNavigationConfirmation,
-    networkConfiguration,
     selectedAccount,
     storage
   } from '@stores'
@@ -36,7 +35,6 @@
   import LogoIcon from '@images/dashboard-logo.svg'
   import Footer from '@components/footer/Footer.svelte'
   import ErrorPage from '@dashboard-pages/error-page/ErrorPage.svelte'
-  import { callApi } from '@api/_deprecated/gateway'
   import { errorPage } from '../stores'
   import {
     PUBLIC_NETWORK_NAME,
@@ -77,17 +75,6 @@
   }
 
   onMount(() => {
-    callApi('getNetworkConfiguration').then((res) =>
-      res.match(
-        networkConfiguration.set,
-        (e) =>
-          ($errorPage = {
-            ...e,
-            message: 'Something happened while loading network.'
-          })
-      )
-    )
-
     const updateAccounts = (value?: Account[]) => {
       if (value) {
         let _accounts = value.map((account) => ({
