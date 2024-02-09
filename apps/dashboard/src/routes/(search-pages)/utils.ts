@@ -13,7 +13,7 @@ import type {
   AuthInfo,
   NonFungibleRequirement,
   ResourceRequirement
-} from '@api/_deprecated/utils/auth'
+} from '@api/utils/auth'
 import { transformFungibleResource } from '@api/_deprecated/utils/entities/resource'
 import { transformNft } from '@api/utils/nfts'
 

@@ -25,7 +25,7 @@ import {
   type GetEntityTypesFn,
   type GetEntityDetailsFn
 } from './pool-unit'
-import { type AuthInfo, isAllowed } from '../auth'
+import { type AuthInfo, isAllowed } from '../../../utils/auth'
 import { err, ok } from 'neverthrow'
 
 type _Resource<T extends 'fungible' | 'non-fungible'> = _Entity<

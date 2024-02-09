@@ -9,7 +9,7 @@ import type {
   StateEntityDetailsResponseNonFungibleResourceDetails
 } from '@common/gateway-sdk'
 import { getBehaviors, type Behavior } from './behaviors'
-import { getAuthInfo } from '@api/_deprecated/utils/auth'
+import { getAuthInfo } from '@api/utils/auth'
 import { transformFungibleResource } from './fungible'
 import {
   getPoolUnits,

@@ -1,4 +1,4 @@
-import { isAllowed, type AuthInfo } from '@api/_deprecated/utils/auth'
+import { isAllowed, type AuthInfo } from '@api/utils/auth'
 import { isNil, map, pipe, reject } from 'ramda'
 
 type RoleKey =

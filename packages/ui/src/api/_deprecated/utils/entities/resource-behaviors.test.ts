@@ -1,5 +1,9 @@
 import { clone } from 'ramda'
-import type { AuthInfo, AccessRule, ProtectedAccessRule } from '../auth'
+import type {
+  AuthInfo,
+  AccessRule,
+  ProtectedAccessRule
+} from '../../../utils/auth'
 import { getBehaviors } from './resource'
 
 const mockAuthRule: ProtectedAccessRule = {

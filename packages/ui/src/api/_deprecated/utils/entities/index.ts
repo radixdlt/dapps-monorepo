@@ -1,4 +1,4 @@
-import { getAuthInfo, type AuthInfo } from '../auth'
+import { getAuthInfo, type AuthInfo } from '../../../utils/auth'
 import {
   transformMetadata,
   type KnownStandardTypes,
