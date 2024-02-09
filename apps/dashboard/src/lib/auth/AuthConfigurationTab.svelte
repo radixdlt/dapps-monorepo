@@ -7,6 +7,7 @@
   import type { NonFungible } from '@api/utils/nfts'
   import type { AccessRule, ProofRule } from '@api/utils/auth'
   import { ResultAsync } from 'neverthrow'
+  import { groupBy } from 'ramda'
 
   export let auth: AuthInfo
   export let hideRules: Set<string> = new Set()
@@ -76,19 +77,39 @@
       nonFungibles: resourcesCacheClient.nonFungibleResourcesData
     })
   })
+
+  $: modules = groupBy((entry) => entry[1].module, Object.entries(auth.rules))
 </script>
 
 <div class="card">
+  <h3>Administrative Roles</h3>
   <RuleRow
     accessRule={auth.owner}
     accessRuleName="Owner"
     tokenInfo={$tokenInfo}
   />
-  {#each Object.entries(auth.rules).filter((entry) => !hideRules.has(entry[0])) as entry}
-    <RuleRow
-      accessRule={entry[1].rule}
-      accessRuleName={entry[0]}
-      tokenInfo={$tokenInfo}
-    />
-  {/each}
 </div>
+
+{#each Object.entries(modules) as [module, rules]}
+  <div class="card">
+    <h3>{module} Roles</h3>
+    {#each Object.entries(rules).filter((entry) => !hideRules.has(entry[0])) as [_, entry]}
+      <RuleRow
+        accessRule={entry[1].rule}
+        accessRuleName={entry[0]}
+        tokenInfo={$tokenInfo}
+      />
+    {/each}
+  </div>
+{/each}
+
+<style lang="scss">
+  .card {
+    h3 {
+      margin-bottom: var(--spacing-md);
+    }
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+</style>

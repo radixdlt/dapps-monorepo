@@ -1,3 +1,4 @@
+import type { ObjectModuleId } from '@common/gateway-sdk'
 import type {
   ComponentEntityRoleAssignmentEntry,
   ComponentEntityRoleAssignments
@@ -103,6 +104,7 @@ export type AuthInfo = {
   owner: AccessRule
   rules: {
     [key: string]: {
+      module: ObjectModuleId
       rule: AccessRule
       updaters: string[]
     }
@@ -140,28 +142,14 @@ const getEntryInfo = (entry: ComponentEntityRoleAssignmentEntry) => {
   const rule = assignment.explicit_rule as AccessRule | undefined
 
   const roleKey = entry.role_key.name
+  const module = entry.role_key.module
   const updaterRoles = entry.updater_roles?.map((role) => role.name) || []
 
-  if (rule) {
-    if (rule.type === 'AllowAll' || rule.type === 'DenyAll') {
-      return {
-        roleKey,
-        assignment: rule,
-        updaterRoles
-      }
-    } else {
-      return {
-        roleKey,
-        assignment: rule,
-        updaterRoles
-      }
-    }
-  } else {
-    return {
-      roleKey,
-      assignment: { type: 'Owner' as const },
-      updaterRoles
-    }
+  return {
+    roleKey,
+    module,
+    assignment: rule ? rule : { type: 'Owner' as const },
+    updaterRoles
   }
 }
 
@@ -173,6 +161,7 @@ export const getAuthInfo = (
     (acc, entry) => ({
       ...acc,
       [entry.roleKey]: {
+        module: entry.module,
         rule: entry.assignment,
         updaters: entry.updaterRoles
       }
