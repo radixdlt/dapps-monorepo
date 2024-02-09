@@ -46,6 +46,7 @@
   }
 
   const assignScrollableParent = () => {
+    scrollableParent?.removeEventListener('scroll', onScroll)
     scrollableParent = findParentWithScroll(component)
     scrollableParent?.addEventListener('scroll', onScroll)
     if (!scrollableParent) {

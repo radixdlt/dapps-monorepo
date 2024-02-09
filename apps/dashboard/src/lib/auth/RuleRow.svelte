@@ -1,10 +1,17 @@
 <script lang="ts">
-  import type { AccessRule } from '@api/_deprecated/utils/auth'
+  import type { AccessRule } from '@api/utils/auth'
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import Row from '@components/info-box/Row.svelte'
+  import ComplexAuthRule from './ComplexAuthRule.svelte'
+  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
+  import type { NonFungible } from '@api/utils/nfts'
 
   export let accessRule: AccessRule
   export let accessRuleName: string
+  export let tokenInfo: {
+    fungibles: Map<string, FungibleResource>
+    nonFungibles: Map<`${string}:${string}`, NonFungible>
+  }
 </script>
 
 {#if accessRule.type !== 'Protected'}
@@ -21,13 +28,7 @@
         <Accordion header={accessRuleName}>
           <svelte:fragment slot="content">
             <div class="accordion-content">
-              <!--
-                    <ComplexAuthRule
-                      rule={entry[1].rule.access_rule}
-                      {tokenInfo}
-                    />
-                  -->
-              <pre>{JSON.stringify(accessRule.access_rule, null, 2)}</pre>
+              <ComplexAuthRule rule={accessRule.access_rule} {tokenInfo} />
             </div>
           </svelte:fragment>
         </Accordion>
@@ -50,9 +51,19 @@
         margin-bottom: 0;
       }
     }
+
+    :global(.icon) {
+      @include mixins.desktop {
+        margin-right: 0;
+      }
+    }
   }
 
   .accordion-content {
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+
+    :global(> div > .access-rule) {
+      background-color: var(--color-grey-5);
+    }
   }
 </style>

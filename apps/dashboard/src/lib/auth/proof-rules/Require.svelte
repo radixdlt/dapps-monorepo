@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Requirement } from '@api/_deprecated/utils/auth'
+  import type { Requirement } from '@api/utils/auth'
   import ResourceProofRule from './ResourceProofRule.svelte'
 
   export let requirement: Requirement
-  export let iconUrl: Promise<string | undefined> | undefined
-  export let name: Promise<string | undefined> | undefined
+  export let iconUrl: string | undefined
+  export let name: string | undefined
 
   $: resourceAddress =
     requirement.type === 'Resource'

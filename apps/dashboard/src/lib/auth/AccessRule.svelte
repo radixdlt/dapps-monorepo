@@ -2,7 +2,7 @@
   export let name: string
 </script>
 
-<div class="access-rule card">
+<div class="access-rule">
   <div class="header">
     <h4 class="name">
       {name}
@@ -14,11 +14,11 @@
 
 <style>
   .access-rule {
-    background: linear-gradient(
-      45deg,
-      var(--color) 10%,
-      var(--theme-surface-2)
-    );
+    width: 100%;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    background: var(--theme-surface-2);
+    border: var(--border) var(--theme-border);
   }
 
   .header {
@@ -30,5 +30,8 @@
 
   .name {
     text-transform: uppercase;
+    color: var(--color-grey-2);
+    font-weight: var(--font-weight-bold-1);
+    font-size: var(--text-md);
   }
 </style>

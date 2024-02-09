@@ -4,18 +4,18 @@
     ProofRule,
     RequireProofRule,
     Requirement
-  } from '@api/_deprecated/utils/auth'
+  } from '@api/utils/auth'
   import Require from './Require.svelte'
   import AmountOf from './AmountOf.svelte'
   import AccessRuleCollection from '../AccessRuleCollection.svelte'
   import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/_deprecated/utils/nfts'
+  import type { NonFungible } from '@api/utils/nfts'
   import type { GeneralNft } from '@api/_deprecated/utils/nfts/general-nft'
 
   export let proofRule: ProofRule
   export let tokenInfo: {
-    fungibles: Promise<FungibleResource[]>
-    nonFungibles: Promise<NonFungible[]>
+    fungibles: Map<string, FungibleResource>
+    nonFungibles: Map<`${string}:${string}`, NonFungible>
   }
 
   const accessRuleFromRequirement = (requirement: Requirement) =>
@@ -31,46 +31,31 @@
     if (proofRule.type === 'Require') {
       if (proofRule.requirement.type === 'Resource') {
         const resource = proofRule.requirement.resource
-        const token = tokenInfo.fungibles.then((fungibles) =>
-          fungibles.find(({ address }) => address === resource)
-        )
+        const token = tokenInfo.fungibles.get(resource)
 
         return {
-          name: token.then((token) => token?.metadata.standard.name?.value),
-          iconUrl: token.then(
-            (token) => token?.metadata.standard.icon_url?.value?.href
-          )
+          name: token?.metadata.standard.name?.value,
+          iconUrl: token?.metadata.standard.icon_url?.value?.href
         }
       } else {
         const resource = proofRule.requirement.non_fungible.resource_address
         const id = proofRule.requirement.non_fungible.local_id.simple_rep
 
-        const token = tokenInfo.nonFungibles.then(
-          (nonFungibles) =>
-            nonFungibles.find(
-              (nft) => nft.address.resourceAddress === resource && nft.id === id
-            ) as GeneralNft
-        )
+        const token = tokenInfo.nonFungibles.get(`${resource}:${id}`)
 
         return {
-          name: token.then((token) => token?.nftData.standard.name?.value),
-          iconUrl: token.then(
-            (token) => token?.nftData.standard.key_image_url?.value
-          )
+          name: token?.nftData.expected.name?.value,
+          iconUrl: (token?.nftData.expected as any).key_image_url?.value
         }
       }
     }
 
     if (proofRule.type === 'AmountOf') {
-      const token = tokenInfo.fungibles.then((fungibles) =>
-        fungibles.find(({ address }) => address === proofRule.resource)
-      )
+      const token = tokenInfo.fungibles.get(proofRule.resource)
 
       return {
-        name: token.then((token) => token?.metadata.standard.name?.value),
-        iconUrl: token.then(
-          (token) => token?.metadata.standard.icon_url?.value?.href
-        )
+        name: token?.metadata.standard.name?.value,
+        iconUrl: token?.metadata.standard.icon_url?.value?.href
       }
     }
 

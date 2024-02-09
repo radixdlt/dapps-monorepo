@@ -37,8 +37,13 @@ export type NonFungibleAddress<
 
 export const transformNft = (
   resource_address: NonFungibleResourcesCollectionItemVaultAggregated['resource_address'],
-  { non_fungible_id, data }: StateNonFungibleDetailsResponseItem
+  responseItem: StateNonFungibleDetailsResponseItem | undefined
 ): NonFungible => {
+  if (responseItem === undefined) {
+    return {} as NonFungible
+  }
+
+  const { non_fungible_id, data } = responseItem
   const type = isUnstakeData(data) ? 'claimNft' : 'generalNft'
 
   const partial = {
