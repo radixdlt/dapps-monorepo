@@ -12,7 +12,6 @@
   import { getMultipleStakeManifest } from '../../manifests'
   import { removeThousandsSeparator } from '@utils/format-amount'
   import type { ComponentEvents } from 'svelte'
-  import { RET_DECIMAL_PRECISION } from '@constants'
   import { TransactionStatus } from '@common/gateway-sdk'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
   import { formatTokenValue } from '@utils'
@@ -35,47 +34,39 @@
   let stakeAmounts: {
     validator: string
     amount: string
-    preciseAmount: string
+    preciseAmount: BigNumber
     stakeUnitResourceAddress: string
   }[] = []
 
   $: stakeAmounts = Array.from({ length: validators.length }, (_, i) => ({
     validator: validators[i].address,
     amount: stakeAmounts[i]?.amount ?? '0',
-    preciseAmount: stakeAmounts[i]?.preciseAmount ?? '0',
+    preciseAmount: stakeAmounts[i]?.preciseAmount ?? BigNumber(0),
     stakeUnitResourceAddress: validators[i].stakeUnitResourceAddress
   }))
 
   let distributeEqually = true
 
   $: if (distributeEqually) {
+    const singleValidatorValue = new BigNumber(totalXRDAmount).dividedBy(
+      validators.length
+    )
     stakeAmounts = stakeAmounts.map((stake) => ({
       stakeUnitResourceAddress: stake.stakeUnitResourceAddress,
       validator: stake.validator,
-      preciseAmount: totalXRDAmount
-        ? new BigNumber(totalXRDAmount)
-            .dividedBy(validators.length)
-            .toFixed(RET_DECIMAL_PRECISION)
-        : '0',
+      preciseAmount: totalXRDAmount ? singleValidatorValue : new BigNumber(0),
       amount: totalXRDAmount
-        ? formatTokenValue(
-            new BigNumber(totalXRDAmount).dividedBy(validators.length)
-          ).displayValue
+        ? formatTokenValue(singleValidatorValue).displayValue
         : '0'
     }))
   } else {
-    totalXRDAmount = formatTokenValue(
-      new BigNumber(
-        stakeAmounts.reduce(
-          (acc, stake) => acc.plus(stake.amount),
-          new BigNumber(0)
-        )
+    const aggregatedValue = new BigNumber(
+      stakeAmounts.reduce(
+        (acc, stake) => acc.plus(stake.preciseAmount ?? new BigNumber(0)),
+        new BigNumber(0)
       )
-    ).displayValue
-    stakeAmounts = stakeAmounts.map((stake) => ({
-      ...stake,
-      preciseAmount: stake.amount
-    }))
+    )
+    totalXRDAmount = aggregatedValue.toFixed()
   }
 
   let tokenAmountInvalid = false
@@ -95,6 +86,7 @@
   const handleStakeInput =
     (i: number) => (e: ComponentEvents<StakeCardMultiple>['input']) => {
       stakeAmounts[i].amount = removeThousandsSeparator(e.detail)
+      stakeAmounts[i].preciseAmount = new BigNumber(stakeAmounts[i].amount)
     }
 
   const removeValidator = (i: number) => {
