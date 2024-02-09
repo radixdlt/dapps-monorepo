@@ -266,6 +266,7 @@ const config = {
           'https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location',
           'https://region1.google-analytics.com/',
           'https://analytics.tiktok.com/',
+          'https://www.redditstatic.com/',
           'https://api.eu.amplitude.com/2/httpapi'
         ],
         'script-src': [

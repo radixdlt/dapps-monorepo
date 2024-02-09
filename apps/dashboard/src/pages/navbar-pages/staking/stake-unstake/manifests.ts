@@ -1,3 +1,4 @@
+import { RET_DECIMAL_PRECISION } from '@constants'
 import BigNumber from 'bignumber.js'
 
 export const getStakeManifest = (
@@ -37,7 +38,7 @@ export const getMultipleStakeManifest = (
   stakes: {
     validator: string
     amount: string
-    preciseAmount: string
+    preciseAmount: BigNumber
     stakeUnitResourceAddress: string
   }[],
   xrdAddress: string
@@ -48,10 +49,10 @@ export const getMultipleStakeManifest = (
         Address("${xrdAddress}")
         Decimal("${stakes
           .reduce(
-            (acc, { preciseAmount }) => acc.plus(new BigNumber(preciseAmount)),
+            (acc, { preciseAmount }) => acc.plus(preciseAmount),
             new BigNumber(0)
           )
-          .toFixed()}");
+          .toFixed(RET_DECIMAL_PRECISION)}");
 
         
         ${stakes
@@ -59,7 +60,7 @@ export const getMultipleStakeManifest = (
             ({ validator, preciseAmount, stakeUnitResourceAddress }, i) => `
             TAKE_FROM_WORKTOP
               Address("${xrdAddress}")
-              Decimal("${preciseAmount}")
+              Decimal("${preciseAmount.toFixed(RET_DECIMAL_PRECISION)}")
               Bucket("bucket${i}");
 
             CALL_METHOD
