@@ -15,6 +15,7 @@
   import { TransactionStatus } from '@common/gateway-sdk'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
   import { formatTokenValue } from '@utils'
+  import { RET_DECIMAL_PRECISION } from '@constants'
 
   export let validators: ValidatorListItem[]
   export let currentlyStaked: Promise<{
@@ -48,9 +49,9 @@
   let distributeEqually = true
 
   $: if (distributeEqually) {
-    const singleValidatorValue = new BigNumber(totalXRDAmount).dividedBy(
-      validators.length
-    )
+    const singleValidatorValue = new BigNumber(totalXRDAmount)
+      .dividedBy(validators.length)
+      .decimalPlaces(RET_DECIMAL_PRECISION)
     stakeAmounts = stakeAmounts.map((stake) => ({
       stakeUnitResourceAddress: stake.stakeUnitResourceAddress,
       validator: stake.validator,
