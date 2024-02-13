@@ -2,7 +2,10 @@ import type { LayoutLoad } from './$types'
 import {
   getStakedInfo,
   getUnstakeAndClaimInfo,
-  type StakeInfo
+  type ReadyToClaimInfo,
+  type StakedInfo,
+  type StakeInfo,
+  type UnstakingInfo
 } from '@api/utils/staking'
 import BigNumber from 'bignumber.js'
 import { andThen, flatten, map, pipe } from 'ramda'
@@ -19,7 +22,10 @@ import {
   transformAccount,
   type Account
 } from '@api/utils/entities/component/account'
-import { getValidators } from '@api/utils/entities/component/validator'
+import {
+  getValidators,
+  type ValidatorListItem
+} from '@api/utils/entities/component/validator'
 import { ResultAsync } from 'neverthrow'
 import { transformNft } from '@api/utils/nfts'
 import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
@@ -225,9 +231,20 @@ export const load: LayoutLoad = ({ params }) => {
         ] as const
     )
     .then(([staked, unstakeAndClaim]) => {
-      const accumulatedStakes: AccumulatedStakes & {
-        [validator: string]: { validatorName: string }
-      } = {}
+      let totalStaked = BigNumber(0)
+      let totalUnstaking = BigNumber(0)
+      let totalReadyToClaim = BigNumber(0)
+      const accumulatedStakes: Record<
+        string,
+        {
+          validator: ValidatorListItem
+          staked: StakedInfo[]
+          unstaking: UnstakingInfo[]
+          readyToClaim: ReadyToClaimInfo[]
+          accumulatedStakes: BigNumber
+          accumulatedLiquidStakeUnits: BigNumber
+        }
+      > = {}
 
       const stakeInfo: StakeInfo[] = [
         ...staked,
@@ -237,60 +254,47 @@ export const load: LayoutLoad = ({ params }) => {
 
       for (const stake of stakeInfo) {
         const validator = stake.validator.address
-        const validatorName =
-          stake.validator.metadata.expected.name?.typed.value
 
         if (!accumulatedStakes[validator]) {
           accumulatedStakes[validator] = {
-            validatorName: validatorName || '',
-            accumulatedStakes: '0',
-            accumulatedUnstaking: '0',
-            accumulatedReadyToClaim: '0'
+            validator: stake.validator,
+            staked: [],
+            unstaking: [],
+            readyToClaim: [],
+            accumulatedStakes: BigNumber(0),
+            accumulatedLiquidStakeUnits: BigNumber(0)
           }
         }
 
         switch (stake.type) {
           case 'staked':
-            accumulatedStakes[validator].accumulatedStakes = new BigNumber(
-              accumulatedStakes[validator].accumulatedStakes
-            )
-              .plus(stake.xrdAmount)
-              .toFixed()
+            accumulatedStakes[validator].staked.push(stake)
+            accumulatedStakes[validator].accumulatedStakes = accumulatedStakes[
+              validator
+            ].accumulatedStakes.plus(stake.xrdAmount)
+            totalStaked = totalStaked.plus(stake.xrdAmount)
+            accumulatedStakes[validator].accumulatedLiquidStakeUnits =
+              accumulatedStakes[validator].accumulatedLiquidStakeUnits.plus(
+                stake.stakeUnitsAmount
+              )
             break
           case 'unstaking':
-            accumulatedStakes[validator].accumulatedUnstaking = new BigNumber(
-              accumulatedStakes[validator].accumulatedUnstaking
-            )
-              .plus(stake.xrdAmount)
-              .toFixed()
+            accumulatedStakes[validator].unstaking.push(stake)
+            totalUnstaking = totalUnstaking.plus(stake.xrdAmount)
             break
           case 'readyToClaim':
-            accumulatedStakes[validator].accumulatedReadyToClaim =
-              new BigNumber(
-                accumulatedStakes[validator].accumulatedReadyToClaim
-              )
-                .plus(stake.xrdAmount)
-                .toFixed()
+            accumulatedStakes[validator].readyToClaim.push(stake)
+            totalReadyToClaim = totalReadyToClaim.plus(stake.xrdAmount)
             break
         }
       }
 
-      return Object.entries(accumulatedStakes).map(
-        ([
-          _,
-          {
-            validatorName,
-            accumulatedStakes,
-            accumulatedUnstaking,
-            accumulatedReadyToClaim
-          }
-        ]) => ({
-          validatorName,
-          staking: new BigNumber(accumulatedStakes),
-          unstaking: new BigNumber(accumulatedUnstaking),
-          readyToClaim: new BigNumber(accumulatedReadyToClaim)
-        })
-      )
+      return {
+        accumulatedStakes,
+        totalStaked,
+        totalUnstaking,
+        totalReadyToClaim
+      }
     })
 
   const poolData = pipe(

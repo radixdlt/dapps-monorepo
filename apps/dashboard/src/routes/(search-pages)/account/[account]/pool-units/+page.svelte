@@ -5,7 +5,4 @@
   export let data: PageData
 </script>
 
-<PoolUnits
-  stakeInfo={data.promises.stakeInfo}
-  poolData={data.promises.poolData}
-/>
+<PoolUnits poolData={data.promises.poolData} />

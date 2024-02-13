@@ -7,6 +7,7 @@
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
   import BigNumber from 'bignumber.js'
+  import StakingCardSection from './StakingCardSection.svelte'
 
   export let staking: Promise<string>
   export let unstaking: Promise<string>
@@ -21,58 +22,33 @@
 
 <div class="card staking-card">
   <div class="section">
-    <div class="stake-display">
-      <div class="text-with-icon">
-        <Icon icon={StakingIcon} --size="1.5rem" />
-        <div class="title-text">STAKED</div>
-      </div>
-      <div class="amount-text">
-        {#await staking}
-          <SkeletonLoader />
-        {:then staking}
-          {formatTokenValue(staking).displayValue} XRD
-        {/await}
-      </div>
+    <StakingCardSection icon={StakingIcon} titleText="STAKED" amount={staking}>
       <div class:slot-section={showSlotSection}>
         <slot name="staking-section" />
       </div>
-    </div>
+    </StakingCardSection>
   </div>
   <div class="section">
-    <div class="stake-display">
-      <div class="text-with-icon">
-        <Icon icon={UnstakingIcon} --size="1.5rem" />
-        <div class="title-text">UNSTAKING</div>
-      </div>
-      <div class="amount-text">
-        {#await unstaking}
-          <SkeletonLoader />
-        {:then unstaking}
-          {formatTokenValue(unstaking).displayValue} XRD
-        {/await}
-      </div>
+    <StakingCardSection
+      icon={UnstakingIcon}
+      titleText="UNSTAKING"
+      amount={unstaking}
+    >
       <div class:slot-section={showSlotSection}>
         <slot name="unstaking-section" />
       </div>
-    </div>
+    </StakingCardSection>
   </div>
   <div class="section last-section">
-    <div class="stake-display">
-      <div class="text-with-icon">
-        <Icon icon={ClaimIcon} --size="1.5rem" />
-        <div class="title-text">READY TO CLAIM</div>
-      </div>
-      <div class="amount-text">
-        {#await readyToClaim}
-          <SkeletonLoader />
-        {:then readyToClaim}
-          {formatTokenValue(readyToClaim).displayValue} XRD
-        {/await}
-      </div>
+    <StakingCardSection
+      icon={ClaimIcon}
+      titleText="READY TO CLAIM"
+      amount={readyToClaim}
+    >
       <div class:slot-section={showSlotSection}>
         <slot name="claim-section" />
       </div>
-    </div>
+    </StakingCardSection>
     <div>
       {#await readyToClaim}
         <Button disabled={true} size="big" on:click>{claimText}</Button>
@@ -107,31 +83,6 @@
     border-right: none;
     display: flex;
     gap: var(--spacing-xl);
-  }
-
-  .text-with-icon {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: var(--spacing-sm);
-  }
-
-  .title-text {
-    @extend .dotted-overflow;
-    font-weight: var(--font-weight-bold-1);
-    color: var(--color-grey-2);
-  }
-
-  .amount-text {
-    @extend .dotted-overflow;
-    font-weight: var(--font-weight-bold-3);
-    font-size: var(--text-2xl);
-  }
-
-  .stake-display {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
   }
 
   .slot-section {

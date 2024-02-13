@@ -15,7 +15,8 @@
     [
       { id: 'tokens', label: 'Tokens' },
       { id: 'nfts', label: 'NFTs' },
-      { id: 'pool-units', label: 'Pool Units' }
+      { id: 'pool-units', label: 'Pool Units' },
+      { id: 'staking', label: 'Staking' }
     ],
     [
       { id: 'recent-transactions', label: 'Recent Transactions' },
