@@ -33,7 +33,9 @@ export const load: LayoutLoad = () => {
     let unsub = networkConfiguration.subscribe((config) => {
       if (config) {
         resolve(config)
-        unsub()
+        if (unsub) {
+          unsub()
+        }
       }
     })
   })

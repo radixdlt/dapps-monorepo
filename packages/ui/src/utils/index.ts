@@ -266,7 +266,7 @@ export const formatTokenValue = (
   )(strInput)
 }
 
-export const formatXRDValue = (value: string) =>
+export const formatXRDValue = (value: string | BigNumber) =>
   `${formatTokenValue(value).displayValue} ${XRD_SYMBOL}`
 
 export const isMobile = () =>

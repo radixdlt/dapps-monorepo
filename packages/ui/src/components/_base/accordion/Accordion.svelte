@@ -37,8 +37,7 @@
     transition: transform 0.3s ease-in-out;
 
     @include mixins.desktop {
-      margin-right: 2rem;
-      margin-left: 0.25rem;
+      margin-left: 0.5rem;
     }
   }
 
