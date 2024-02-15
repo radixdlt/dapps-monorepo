@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type Account, xrdAddress } from '@stores'
+  import { type Account } from '@stores'
   import StakePanel from '../StakePanel.svelte'
   import OverviewUnstakeCard from '../stake-card/OverviewUnstakeCard.svelte'
   import BigNumber from 'bignumber.js'

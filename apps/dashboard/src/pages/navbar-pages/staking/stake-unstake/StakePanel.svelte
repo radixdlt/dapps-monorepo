@@ -85,7 +85,7 @@
     flex-direction: column;
 
     .stake-button {
-      margin-top: auto;
+      margin-top: var(--spacing-md);
     }
   }
 
