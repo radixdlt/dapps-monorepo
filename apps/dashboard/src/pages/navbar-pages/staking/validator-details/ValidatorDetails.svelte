@@ -108,7 +108,6 @@
             (accum) => accum[v.address].accumulatedReadyToClaim
           )
         )}
-        claimText="Claim"
         validatorAddress={validator.then((v) => v.address)}
         acceptsStake={validator.then((v) => v.acceptsStake)}
         showTopValidatorWarning={validator.then(

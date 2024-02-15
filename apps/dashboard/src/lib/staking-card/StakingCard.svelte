@@ -1,31 +1,18 @@
 <script lang="ts">
-  import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import Button from '@components/_base/button/ButtonNew.svelte'
-  import Icon from '@components/_base/icon/IconNew.svelte'
-  import { formatTokenValue } from '@utils'
   import StakingIcon from '@icons/staking.svg'
   import UnstakingIcon from '@icons/unstaking.svg'
   import ClaimIcon from '@icons/claim.svg'
-  import BigNumber from 'bignumber.js'
   import StakingCardSection from './StakingCardSection.svelte'
 
   export let staking: Promise<string>
   export let unstaking: Promise<string>
   export let readyToClaim: Promise<string>
-  export let claimText: string
-
-  $: showSlotSection =
-    !!$$slots['staking-section'] ||
-    !!$$slots['unstaking-section'] ||
-    !!$$slots['claim-section']
 </script>
 
 <div class="card staking-card">
   <div class="section">
     <StakingCardSection icon={StakingIcon} titleText="STAKED" amount={staking}>
-      <div class:slot-section={showSlotSection}>
-        <slot name="staking-section" />
-      </div>
+      <slot name="staking-section" />
     </StakingCardSection>
   </div>
   <div class="section">
@@ -34,9 +21,7 @@
       titleText="UNSTAKING"
       amount={unstaking}
     >
-      <div class:slot-section={showSlotSection}>
-        <slot name="unstaking-section" />
-      </div>
+      <slot name="unstaking-section" />
     </StakingCardSection>
   </div>
   <div class="section last-section">
@@ -45,36 +30,22 @@
       titleText="READY TO CLAIM"
       amount={readyToClaim}
     >
-      <div class:slot-section={showSlotSection}>
-        <slot name="claim-section" />
-      </div>
+      <slot name="claim-section" />
     </StakingCardSection>
-    <div>
-      {#await readyToClaim}
-        <Button disabled={true} size="big" on:click>{claimText}</Button>
-      {:then readyToClaim}
-        <Button disabled={new BigNumber(readyToClaim).eq(0)} size="big" on:click
-          >{claimText}</Button
-        >
-      {/await}
-    </div>
+    <slot name="additional-section" />
   </div>
 </div>
 
 <style lang="scss">
   .staking-card {
-    display: grid;
-    grid: 1fr / auto auto auto;
+    display: flex;
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
     max-width: 80rem;
   }
 
   .section {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    width: 33.33%;
     border-right: var(--border-divider) var(--theme-border);
     padding: 0 var(--spacing-lg);
   }
@@ -83,9 +54,5 @@
     border-right: none;
     display: flex;
     gap: var(--spacing-xl);
-  }
-
-  .slot-section {
-    height: 2.5rem;
   }
 </style>

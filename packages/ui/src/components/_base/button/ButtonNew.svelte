@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let size: 'small' | 'big'
+  export let size: 'small' | 'big' = 'big'
+  export let secondary = false
   export let disabled = false
 </script>
 
@@ -7,6 +8,7 @@
   on:click
   class:small={size === 'small'}
   class:big={size === 'big'}
+  class:secondary
   class:disabled
 >
   <slot />
@@ -25,6 +27,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &.secondary {
+      color: var(--color-grey-1);
+      background: var(--color-grey-4);
+
+      &:hover {
+        background: var(--color-grey-3);
+      }
+
+      &:active {
+        background: var(--color-grey-2);
+      }
+    }
+
+    &:hover {
+      background: var(--color-radix-blue-1);
+    }
+
+    &:active {
+      background: var(--color-grey-1);
+    }
   }
 
   .small {
@@ -34,6 +57,7 @@
 
   .big {
     height: 2rem;
+    font-weight: var(--font-weight-bold-2);
     padding: 0 var(--spacing-2xl);
   }
 </style>

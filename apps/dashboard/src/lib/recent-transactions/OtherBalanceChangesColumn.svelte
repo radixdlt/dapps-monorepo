@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { TransactionBalanceChanges } from '@common/gateway-sdk'
 
-  export let entityAddress: string
+  export let entityAddress: string | undefined
   export let balanceChanges: TransactionBalanceChanges | undefined
 
   let accountBalanceChanges: Set<string>
@@ -14,7 +14,7 @@
   }
 
   const updateOtherBalanceChangesCount = (
-    _entityAddress: string,
+    _entityAddress: string | undefined,
     _balanceChanges?: TransactionBalanceChanges
   ) => {
     const addToBalanceChangesSets = (

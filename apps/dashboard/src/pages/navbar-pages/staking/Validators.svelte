@@ -24,6 +24,8 @@
   import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from '../../../lib/staking-card/StakingCard.svelte'
+
+  import ButtonNew from '@components/_base/button/ButtonNew.svelte'
   import { connected, type Account } from '@stores'
   import { useContext } from '@utils'
   import { writable, type Writable } from 'svelte/store'
@@ -147,12 +149,22 @@
       staking={totalStaked}
       unstaking={totalUnstaking}
       readyToClaim={totalReadyToClaim}
-      claimText="Claim All"
-      on:click={() => {
-        track('click:claim-all')
-        dispatch('show-claim-all')
-      }}
-    />
+    >
+      <div slot="additional-section">
+        {#await totalReadyToClaim}
+          <ButtonNew disabled={true} size="big" on:click>Claim All</ButtonNew>
+        {:then readyToClaim}
+          <ButtonNew
+            disabled={new BigNumber(readyToClaim).eq(0)}
+            size="big"
+            on:click={() => {
+              track('click:claim-all')
+              dispatch('show-claim-all')
+            }}>Claim All</ButtonNew
+          >
+        {/await}
+      </div>
+    </StakingCard>
 
     <ValidatorList
       validators={validators.then((v) =>
@@ -171,7 +183,6 @@
         let:ValidatorRow
         let:selectedUptime
         let:validators
-        let:columnIds
       >
         {#await validators}
           {#each Array(3) as _}
@@ -290,6 +301,12 @@
     font-size: var(--text-sm);
     color: var(--theme-button-primary);
     gap: var(--spacing-md);
+  }
+
+  [slot='additional-section'] {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
   }
 
   .header-section {
