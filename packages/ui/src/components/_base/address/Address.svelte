@@ -11,6 +11,7 @@
   export let autoShorten = false
   export let preventNavigation = false
   export let includeDashboardHost = false
+  export let maxNftIdLength = 18
 
   const currentDashboardUrl =
     RadixNetworkConfigById[CURRENT_NETWORK.id].dashboardUrl
@@ -28,7 +29,7 @@
     {value}
     shorten={short || autoShorten
       ? {
-          fn: shortenAddress,
+          fn: (address) => shortenAddress(address, maxNftIdLength),
           behavior: autoShorten ? 'responsive' : 'always'
         }
       : undefined}
