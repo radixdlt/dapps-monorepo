@@ -2,15 +2,11 @@
   import type { AccessRuleNode } from '@api/utils/auth'
   import AccessRule from './AccessRule.svelte'
   import ComplexAuthRule from './ComplexAuthRule.svelte'
-  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
+  import type { TokenInfo } from './TokenInfo'
 
   export let accessRules: AccessRuleNode[]
-  export let type: 'All Of' | 'Any Of' | `${number} Out Of`
-  export let tokenInfo: {
-    fungibles: Map<string, FungibleResource>
-    nonFungibles: Map<`${string}:${string}`, NonFungible>
-  }
+  export let type: 'All Of' | 'Any Of' | `At Least ${number} Of`
+  export let tokenInfo: TokenInfo
 </script>
 
 <AccessRule

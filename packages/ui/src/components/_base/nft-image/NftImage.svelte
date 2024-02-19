@@ -8,6 +8,7 @@
   export let width = 1024
   export let height = 1024
   export let defaultImageUrl: string | undefined = undefined
+  export let simple: boolean = false
 
   let imageNotFound = false
   let imageLoaded = false
@@ -30,7 +31,7 @@
       : safeUrl.url
 </script>
 
-<div class="wrapper {size}">
+<div class="wrapper {size}" class:simple>
   <div
     class="token-icon"
     class:loaded={imageLoaded}
@@ -59,9 +60,17 @@
     border-radius: var(--border-radius-lg);
     width: var(--size, 3.25rem);
     height: var(--size, 3.25rem);
+    min-width: var(--size, 3.25rem);
+    min-height: var(--size, 3.25rem);
     box-shadow: var(--shadow);
     max-width: 100%;
     max-height: 100%;
+
+    &.simple {
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
 
     &.large {
       width: 19rem;
