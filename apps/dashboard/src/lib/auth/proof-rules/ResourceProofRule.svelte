@@ -19,16 +19,16 @@
 <div class="resource-proof-rule">
   <div class="resource-header">
     {#if nftId}
-      <NftImage simple url={nftIconUrl} --size="24px" />
+      <NftImage simple url={nftIconUrl || resourceIconUrl} --size="24px" />
     {:else}
       <TokenIcon iconUrl={resourceIconUrl} --size="24px" />
     {/if}
 
-    <div class="elipsis">
+    <div class="dotted-overflow">
       {resourceSymbol || resourceName || nftName || ''}
     </div>
 
-    <div class="amount elipsis">
+    <div class="amount dotted-overflow">
       {#if amount}
         {formatTokenValue(amount).displayValue}
       {:else}
@@ -40,6 +40,7 @@
     <Address
       --background="var(--theme-surface-1)"
       value={`${resourceAddress}:${nftId}`}
+      maxNftIdLength={22}
       short
     />
   {:else}
@@ -69,12 +70,6 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-  }
-
-  .elipsis {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   .amount {
