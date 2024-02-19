@@ -3,15 +3,11 @@
   import Accordion from '@components/_base/accordion/Accordion.svelte'
   import Row from '@components/info-box/Row.svelte'
   import ComplexAuthRule from './ComplexAuthRule.svelte'
-  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
+  import type { TokenInfo } from './TokenInfo'
 
   export let accessRule: AccessRule
   export let accessRuleName: string
-  export let tokenInfo: {
-    fungibles: Map<string, FungibleResource>
-    nonFungibles: Map<`${string}:${string}`, NonFungible>
-  }
+  export let tokenInfo: TokenInfo
 </script>
 
 {#if accessRule.type !== 'Protected'}

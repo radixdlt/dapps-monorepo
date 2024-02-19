@@ -20,7 +20,7 @@
     <div class="subheader-icon">
       <div class="subheader"><slot name="subheader" /></div>
 
-      <div class="icon" style:transform={`rotate(${isOpened ? '180deg' : 0})`}>
+      <div class="icon" style:transform={`rotate(${isOpened ? 0 : '180deg'})`}>
         <IconNew icon={PickerExpand} size="small" />
       </div>
     </div>

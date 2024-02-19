@@ -3,11 +3,11 @@
   import RuleRow from './RuleRow.svelte'
   import { resourcesCacheClient } from '@api/utils/resource-cache-client'
   import { writable } from 'svelte/store'
-  import type { FungibleResource } from '@api/_deprecated/utils/entities/resource'
-  import type { NonFungible } from '@api/utils/nfts'
+
   import type { AccessRule, ProofRule } from '@api/utils/auth'
   import { ResultAsync } from 'neverthrow'
   import { groupBy } from 'ramda'
+  import type { TokenInfo } from './TokenInfo'
 
   export let auth: AuthInfo
   export let hideRules: Set<string> = new Set()
@@ -57,13 +57,13 @@
     }
   }
 
+  /**
+   *  Iterate over rules and capture all unique fungibles, non-fungibles and global NFT ids
+   */
   analyseAccessRule(auth.owner)
   Object.values(auth.rules).forEach((entry) => analyseAccessRule(entry.rule))
 
-  const tokenInfo = writable<{
-    fungibles: Map<string, FungibleResource>
-    nonFungibles: Map<`${string}:${string}`, NonFungible>
-  }>()
+  const tokenInfo = writable<TokenInfo>()
 
   ResultAsync.combine([
     resourcesCacheClient.queryFungibles(Array.from(uniqueFungibles)),
@@ -74,7 +74,8 @@
   ]).map(() => {
     tokenInfo.set({
       fungibles: resourcesCacheClient.fungibleResources,
-      nonFungibles: resourcesCacheClient.nonFungibleResourcesData
+      nonFungibles: resourcesCacheClient.nonFungibleResourcesData,
+      nonFungibleResources: resourcesCacheClient.nonFungibleResources
     })
   })
 
