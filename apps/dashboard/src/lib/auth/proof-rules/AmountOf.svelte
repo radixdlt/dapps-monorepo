@@ -4,11 +4,9 @@
   import type { TokenInfo } from '../TokenInfo'
 
   export let rule: AmountOfProofRule
-
   export let tokenInfo: TokenInfo
-  let token = tokenInfo.fungibles.get(rule.resource)
 
-  $: token = tokenInfo.fungibles.get(rule.resource)
+  let token = tokenInfo.fungibles.get(rule.resource)
 </script>
 
 <ResourceProofRule

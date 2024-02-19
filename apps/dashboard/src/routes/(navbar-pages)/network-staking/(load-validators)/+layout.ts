@@ -7,6 +7,7 @@ import { ResultAsync } from 'neverthrow'
 import { handleGatewayResult } from '../../../../utils'
 import { pipe } from 'ramda'
 import { getValidators } from '@api/utils/entities/component/validator'
+import type { Unsubscriber } from 'svelte/store'
 
 export type Bookmarked = { [validator: string]: boolean }
 
@@ -30,7 +31,8 @@ export const load: LayoutLoad = () => {
     })
 
   const networkConfig = new Promise<NetworkConfigurationResponse>((resolve) => {
-    let unsub = networkConfiguration.subscribe((config) => {
+    let unsub: Unsubscriber
+    unsub = networkConfiguration.subscribe((config) => {
       if (config) {
         resolve(config)
         if (unsub) {

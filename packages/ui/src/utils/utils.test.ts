@@ -27,7 +27,7 @@ describe('#utils', () => {
 
   it('Should shorten address', () => {
     const originalAddress = '01234----456789'
-    const expected = '0123...456789'
+    const expected = '0123…456789'
     const result = shortenAddress(originalAddress)
     expect(result).toEqual(expected)
   })
@@ -36,6 +36,13 @@ describe('#utils', () => {
     const originalAddress = ''
     const expected = ''
     const result = shortenAddress(originalAddress)
+    expect(result).toEqual(expected)
+  })
+
+  it('should shorten nft id separately', () => {
+    const originalId = 'resource_abcdef:456789'
+    const expected = 'reso…abcdef:456789'
+    const result = shortenAddress(originalId)
     expect(result).toEqual(expected)
   })
 
@@ -100,7 +107,7 @@ describe('#utils', () => {
         address:
           'account_tdx_b_1pqdy2mvxrkyycaj0c8c2g8xekf3me27f3hvl9q52cqcs7x2w96'
       }
-      expect(accountLabel(account)).toBe('Main Account (acco...7x2w96)')
+      expect(accountLabel(account)).toBe('Main Account (acco…7x2w96)')
     })
   })
 
