@@ -46,6 +46,13 @@ describe('#utils', () => {
     expect(result).toEqual(expected)
   })
 
+  it('should shorten nft id correctly', () => {
+    const originalId = 'resource_abcdef:{325324564785563}'
+    const expected = 'reso…abcdef:{3253…5563}'
+    const result = shortenAddress(originalId)
+    expect(result).toEqual(expected)
+  })
+
   it('Should return whole units', () => {
     const originalValue = '100000000000000000000'
     const expected = 100

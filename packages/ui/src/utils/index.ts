@@ -39,7 +39,7 @@ export const shortenAddress = (
 
 export const shortenNftID = (id: string, maxNftIdLength = 18) => {
   if (id.startsWith('{')) {
-    return `${id.slice(0, 4)}…${id.slice(id.length - 4, id.length)}`
+    return `${id.slice(0, 5)}…${id.slice(id.length - 5, id.length)}`
   }
 
   const difference = id.length - maxNftIdLength
