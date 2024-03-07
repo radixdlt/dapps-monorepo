@@ -10,7 +10,7 @@
   {#await receipt}
     <SkeletonLoader count={10} />
   {:then receipt}
-    <CodeBox text={JSON.stringify(receipt, null, 2)} />
+    <CodeBox text={JSON.stringify(receipt || '', null, 2)} />
   {/await}
 </div>
 

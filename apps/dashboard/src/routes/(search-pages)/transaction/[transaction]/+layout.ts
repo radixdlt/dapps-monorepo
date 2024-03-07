@@ -43,10 +43,9 @@ const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
   )()
 
 export const load: LayoutLoad = ({ params, data }) => {
-  const details = pipe(
-    () => getTransactionDetailsNew(params.transaction),
-    handleGatewayResult()
-  )()
+  const details = getTransactionDetailsNew(params.transaction).unwrapOr(
+    undefined
+  )
 
   const status = pipe(
     () => callApi('getStatus', params.transaction),
@@ -54,6 +53,8 @@ export const load: LayoutLoad = ({ params, data }) => {
   )()
 
   const balanceChangeEntities = details.then(async (tx) => {
+    if (!tx) return undefined
+
     const entities = tx.balanceChanges
       ? Array.from(
           new Set([
@@ -77,7 +78,7 @@ export const load: LayoutLoad = ({ params, data }) => {
 
   const balanceChanges = Promise.all([details, balanceChangeEntities]).then(
     async ([tx, entitiesResult]) => {
-      if (!tx.balanceChanges || !entitiesResult) return undefined
+      if (!tx || !tx.balanceChanges || !entitiesResult) return undefined
 
       if (entitiesResult.isErr()) throw entitiesResult.error
 

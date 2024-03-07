@@ -76,11 +76,11 @@
     </div>
   </div>
 
-  <div class="changes-list">
-    {#await balanceChanges}
-      <SkeletonLoader />
-    {:then balanceChanges}
-      {#if balanceChanges && balanceChanges.length > 0}
+  {#await balanceChanges}
+    <SkeletonLoader />
+  {:then balanceChanges}
+    {#if balanceChanges && balanceChanges.length > 0}
+      <div class="changes-list">
         <h3 class="section-header">Asset Balance Changes</h3>
         {#each balanceChanges as changes}
           <AccountBalanceChanges
@@ -88,9 +88,9 @@
             balanceChanges={changes.balanceChanges}
           />
         {/each}
-      {/if}
-    {/await}
-  </div>
+      </div>
+    {/if}
+  {/await}
 </div>
 
 <style lang="scss">
