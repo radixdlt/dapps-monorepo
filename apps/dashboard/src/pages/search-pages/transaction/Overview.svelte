@@ -6,48 +6,47 @@
   import AddressesList from '@components/_base/address/AddressesList.svelte'
 
   export let tx: Promise<
-    ReturnType<
-      Awaited<ReturnType<typeof getTransactionDetailsNew>>['_unsafeUnwrap']
-    >
+    | ReturnType<
+        Awaited<ReturnType<typeof getTransactionDetailsNew>>['_unsafeUnwrap']
+      >
+    | undefined
   >
   export let manifest: Promise<string | undefined>
 </script>
 
 <div class="surface-2">
   <InfoBox>
-    <AwaitedRow
-      text="Status"
-      promise={tx.then(({ status, receipt }) => ({ status, receipt }))}
-      let:data
-    >
-      {#if data.status === 'CommittedSuccess'}
-        <span class="text-success">Committed Success</span>
-      {:else if data.status === 'CommittedFailure' || data.status === 'Rejected'}
-        <span style:text-align="right">
-          <div class="text-error">
-            {data.status}
-          </div>
-          <div class="subtext">
-            {data.receipt?.error_message}
-          </div>
-        </span>
-      {:else}
-        {data}
+    <AwaitedRow text="Status" promise={tx} let:data>
+      {#if data}
+        {#if data.status === 'CommittedSuccess'}
+          <span class="text-success">Committed Success</span>
+        {:else if data.status === 'CommittedFailure' || data.status === 'Rejected'}
+          <span style:text-align="right">
+            <div class="text-error">
+              {data.status}
+            </div>
+            <div class="subtext">
+              {data.receipt?.error_message}
+            </div>
+          </span>
+        {:else}
+          {data}
+        {/if}
       {/if}
     </AwaitedRow>
 
     <AwaitedRow
       text="State Version"
-      promise={tx.then(({ stateVersion }) => stateVersion)}
+      promise={tx.then((tx) => tx?.stateVersion || '')}
     />
-    <AwaitedRow text="Epoch" promise={tx.then(({ epoch }) => epoch)} />
-    <AwaitedRow text="Round" promise={tx.then(({ round }) => round)} />
-    <AwaitedRow text="Date" promise={tx.then(({ date }) => date)} />
-    <AwaitedRow text="Fee" promise={tx.then(({ fee }) => fee)} />
+    <AwaitedRow text="Epoch" promise={tx.then((tx) => tx?.epoch || '')} />
+    <AwaitedRow text="Round" promise={tx.then((tx) => tx?.round || '')} />
+    <AwaitedRow text="Date" promise={tx.then((tx) => tx?.date || '')} />
+    <AwaitedRow text="Fee" promise={tx.then((tx) => tx?.fee || '')} />
 
     <AwaitedRow
       text="Message"
-      promise={tx.then(({ message }) => message)}
+      promise={tx.then((tx) => tx?.message || '')}
       let:data
     >
       {data ?? 'N/A'}
@@ -55,8 +54,10 @@
 
     <AwaitedRow
       text="Created Entities"
-      promise={tx.then(({ createdEntities }) =>
-        createdEntities.map(({ entity_address }) => entity_address)
+      promise={tx.then((tx) =>
+        tx?.createdEntities
+          ? tx.createdEntities.map(({ entity_address }) => entity_address)
+          : []
       )}
       let:data
     >
@@ -69,7 +70,7 @@
 
     <AwaitedRow
       text="Affected Entities"
-      promise={tx.then(({ affectedEntities }) => affectedEntities)}
+      promise={tx.then((tx) => tx?.affectedEntities || [])}
       let:data
     >
       {#if data.length === 0}
@@ -93,7 +94,7 @@
 
     <AwaitedRow
       text="Events"
-      promise={tx.then(({ events }) => events)}
+      promise={tx.then((tx) => tx?.events || '')}
       modifiers="label-full"
       let:data
     >

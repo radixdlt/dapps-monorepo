@@ -8,6 +8,6 @@
 <Summary
   balanceChanges={data.promises.balanceChanges}
   status={data.promises.status.then((status) => status.intent_status)}
-  timestamp={data.promises.tx.then((tx) => (tx.date ? tx.date : undefined))}
-  message={data.promises.tx.then((tx) => tx.message)}
+  timestamp={data.promises.tx.then((tx) => (tx?.date ? tx.date : undefined))}
+  message={data.promises.tx.then((tx) => tx?.message)}
 />
