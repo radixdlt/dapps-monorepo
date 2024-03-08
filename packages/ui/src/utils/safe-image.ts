@@ -1,4 +1,9 @@
-import { SAFE_IMAGE_SERVICE_URL } from '@constants'
+import { RadixNetwork } from '@common/gateway-sdk'
+import {
+  DEV_SAFE_IMAGE_SERVICE_URL,
+  PROD_SAFE_IMAGE_SERVICE_URL
+} from '@constants'
+import { CURRENT_NETWORK } from '@networks'
 
 const validUrl = (url: string) => {
   try {
@@ -20,7 +25,11 @@ export const getSafeImageUrl = ({
 }) => {
   if (!url) return { url, valid: false }
 
-  const baseUrl = new URL(SAFE_IMAGE_SERVICE_URL)
+  const baseUrl = new URL(
+    CURRENT_NETWORK.id === RadixNetwork.Mainnet
+      ? PROD_SAFE_IMAGE_SERVICE_URL
+      : DEV_SAFE_IMAGE_SERVICE_URL
+  )
   const params = new URLSearchParams({
     imageSize: `${width}x${height}`,
     imageOrigin: url

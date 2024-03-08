@@ -253,6 +253,7 @@ const config = {
           'https://analytics.twitter.com/',
           'https://www.facebook.com/tr/',
           'https://image-service-dev.extratools.works',
+          'https://image-service.radixdlt.com',
           ...googleTopLevelDomains
         ],
         'connect-src': [
