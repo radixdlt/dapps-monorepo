@@ -5,7 +5,11 @@
 
   export let title: string
   export let address: string
-  export let menuItems: { id: string; label: string }[][] = []
+  export let menuItems: {
+    id: string
+    label: string
+    disabled?: Promise<boolean>
+  }[][] = []
   export let activeTab: string = ''
 
   const dispatch = createEventDispatcher()

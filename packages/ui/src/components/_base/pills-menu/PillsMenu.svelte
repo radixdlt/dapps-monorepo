@@ -2,7 +2,11 @@
   import { onMount } from 'svelte'
   import Pill from './Pill.svelte'
   export let active: string | undefined
-  export let items: { id: string; label: string }[][] = []
+  export let items: {
+    id: string
+    label: string
+    disabled?: Promise<boolean>
+  }[][] = []
   export let onClick = (id: string) => {}
   export let scrollIntoView = true
 
@@ -25,6 +29,7 @@
         <Pill
           --pill-margin-right={itemGroup.length - 1 === itemIndex ? '' : '1rem'}
           active={item.id === active}
+          disabled={item.disabled}
           on:click={() => {
             active = item.id
             onClick(item.id)
