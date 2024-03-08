@@ -13,8 +13,16 @@
   menuItems={[
     [
       { id: 'summary', label: 'Summary' },
-      { id: 'details', label: 'Details' },
-      { id: 'raw-receipt', label: 'Raw receipt' }
+      {
+        id: 'details',
+        label: 'Details',
+        disabled: data.promises.tx.then((tx) => !tx)
+      },
+      {
+        id: 'raw-receipt',
+        label: 'Raw receipt',
+        disabled: data.promises.tx.then((tx) => !tx)
+      }
     ]
   ]}
   on:navigate={({ detail }) => {

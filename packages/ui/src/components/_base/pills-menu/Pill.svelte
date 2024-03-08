@@ -1,8 +1,15 @@
 <script>
   export let active = false
+  export let disabled = Promise.resolve(false)
 </script>
 
-<button class="pill" class:active on:click><slot /></button>
+{#await disabled}
+  <button class="pill" class:active on:click><slot /></button>
+{:then resolvedDisabled}
+  <button class="pill" class:active class:disabled={resolvedDisabled} on:click
+    ><slot /></button
+  >
+{/await}
 
 <style lang="scss">
   .pill {
@@ -14,6 +21,11 @@
     &.active {
       background: var(--theme-text-primary);
       color: var(--theme-text-secondary);
+    }
+    &.disabled {
+      opacity: 0.6;
+      filter: grayscale(1);
+      pointer-events: none;
     }
     white-space: nowrap;
     transition: background-color 0.1s ease-in-out;
