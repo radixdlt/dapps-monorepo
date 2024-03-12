@@ -308,6 +308,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy PR
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -342,6 +348,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy dev
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -373,6 +385,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy enkinet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -404,6 +422,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy dumunet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -435,6 +459,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy hammunet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -465,6 +495,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy stokenet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
@@ -495,6 +531,12 @@ jobs:
       - push-console
       - setup-tags
     steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-jl5Bqe"
       - name: Trigger ansible job to deploy mainnet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
