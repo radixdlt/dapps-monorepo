@@ -291,7 +291,13 @@ jobs:
       - setup-build-args
       - build
     steps:
-      - name: Trigger ansible job to deploy PR
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy PR
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
           jenkins_url: ${{ secrets.JENKINS_URL }}
@@ -326,7 +332,13 @@ jobs:
       - setup-build-args
       - build
     steps:
-      - name: Trigger ansible job to deploy dev
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy dev
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
           jenkins_url: ${{ secrets.JENKINS_URL }}
@@ -357,7 +369,13 @@ jobs:
       - setup-build-args
       - build
     steps:
-      - name: Trigger ansible job to deploy stokenet
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy stokenet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
           jenkins_url: ${{ secrets.JENKINS_URL }}
@@ -388,7 +406,13 @@ jobs:
       - setup-build-args
       - build
     steps:
-      - name: Trigger ansible job to deploy mainnet
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy mainnet
         uses: RDXWorks-actions/jenkins-job-trigger-action@master
         with:
           jenkins_url: ${{ secrets.JENKINS_URL }}
