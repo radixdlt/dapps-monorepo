@@ -1,7 +1,7 @@
 <script context="module">
   amplitude.init(PUBLIC_AMPLITUDE_API_KEY, {
     serverZone: 'EU',
-    defaultTracking: true
+    defaultTracking: false
   })
 
   export const track = amplitude.track
