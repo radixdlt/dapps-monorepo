@@ -2,6 +2,7 @@ import ExcelJS from 'exceljs'
 import type { CommittedTransactionInfo } from '@common/gateway-sdk'
 import dayjs from 'dayjs'
 import type { ResourceCacheClient } from '@api/utils/resource-cache-client'
+import { getMostRelevantManifestClass } from './get-most-relevant-manifest-class'
 
 export type WorkbookClient = ReturnType<typeof WorkbookClient>
 
@@ -20,6 +21,7 @@ export const WorkbookClient = ({
     'Transaction ID',
     'Timestamp',
     'Fee',
+    'Transaction Type',
     'Message',
     'Resource',
     'Resource Name',
@@ -34,7 +36,13 @@ export const WorkbookClient = ({
         .forEach((tx) => {
           let txRecorded = false
           const message = (tx?.message as any)?.content?.value
-          const txInfo = [tx.intent_hash, tx.confirmed_at, tx.fee_paid, message]
+          const txInfo = [
+            tx.intent_hash,
+            tx.confirmed_at,
+            tx.fee_paid,
+            getMostRelevantManifestClass(tx.manifest_classes),
+            message
+          ]
 
           if (!tx.balance_changes) {
             txRecorded = true
