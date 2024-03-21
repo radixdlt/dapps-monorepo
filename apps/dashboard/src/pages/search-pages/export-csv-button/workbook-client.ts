@@ -2,7 +2,7 @@ import ExcelJS from 'exceljs'
 import type { CommittedTransactionInfo } from '@common/gateway-sdk'
 import dayjs from 'dayjs'
 import type { ResourceCacheClient } from '@api/utils/resource-cache-client'
-import { getMostRelevantManifestClass } from './get-most-relevant-manifest-class'
+import { getMostRelevantManifestClass } from '@api/helpers/get-most-relevant-manifest-class'
 
 export type WorkbookClient = ReturnType<typeof WorkbookClient>
 

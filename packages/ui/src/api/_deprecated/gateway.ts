@@ -1,3 +1,4 @@
+import { getMostRelevantManifestClass } from '../helpers/get-most-relevant-manifest-class'
 import { fromPromise, type ResultAsync } from 'neverthrow'
 import { CURRENT_NETWORK } from '../../../src/network'
 import {
@@ -168,6 +169,9 @@ export const getTransactionDetailsNew = (
     message: (res.transaction.message as any)?.content?.value,
     encodedManifest: res.transaction.raw_hex,
     receipt: res.transaction.receipt,
+    manifestClass: getMostRelevantManifestClass(
+      res.transaction.manifest_classes
+    ),
     events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
     affectedEntities: res.transaction.affected_global_entities || [],
     createdEntities:
