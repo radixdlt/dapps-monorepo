@@ -12,6 +12,7 @@
   const message = Promise.resolve(
     'This transaction represents not just a transfer of cryptocurrency, but also a transfer of gratitude and recognition for your exceptional contributions.'
   )
+  const manifestClass = Promise.resolve('General')
   const balanceChanges: ComponentProps<Summary>['balanceChanges'] =
     Promise.resolve([
       {
@@ -95,5 +96,5 @@
 </script>
 
 <Story name="primary">
-  <Summary {timestamp} {status} {message} {balanceChanges} />
+  <Summary {timestamp} {status} {message} {balanceChanges} {manifestClass} />
 </Story>
