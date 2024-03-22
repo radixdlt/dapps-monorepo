@@ -5,8 +5,6 @@
 
   import type { BasicTableColumn } from './BasicRow.svelte'
 
-  import ResponsiveTableCell from './ResponsiveTableCell.svelte'
-  import TableRow from './TableRow.svelte'
   import type { ComponentProps } from 'svelte'
   import Table from '../Table.svelte'
   import BasicHeader from '../basic-header/BasicHeader.svelte'
@@ -95,14 +93,6 @@
 
 <style lang="scss">
   @use '../shared.scss';
-
-  .cell-text {
-    font-weight: var(--font-weight-bold-2);
-
-    @include mixins.desktop {
-      font-weight: var(--font-weight-bold-1);
-    }
-  }
 
   .basic-table {
     :global(table) {
