@@ -8,6 +8,7 @@
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import type { TransactionIntentStatus } from '@common/gateway-sdk'
+  import { getManifestClassDescription } from '@api/helpers/get-most-relevant-manifest-class'
 
   export let status: Promise<TransactionIntentStatus>
   export let timestamp: Promise<Date | undefined>
@@ -62,14 +63,15 @@
   <div class="message-box">
     <div class="header">
       <div class="header-section">
-        {#await timestamp}
+        {#await Promise.all([manifestClass, timestamp])}
           <SkeletonLoader />
-        {:then timestamp}
+        {:then [manifestClass, timestamp]}
           <div>{timestamp ?? ''}</div>
-        {/await}
-
-        {#await manifestClass then manifestClass}
-          <div class="manifest-class">{manifestClass || ''}</div>
+          {#if timestamp}
+            <div class="manifest-class">
+              {getManifestClassDescription(manifestClass)}
+            </div>
+          {/if}
         {/await}
       </div>
       {#await status}
