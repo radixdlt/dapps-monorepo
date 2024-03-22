@@ -6,20 +6,40 @@
   export let message: string
 </script>
 
-{#if message}
-  <Tooltip text={' '} headerText={message}>
-    <div class="message-background">
-      <IconNew icon={TxMessage} size="large" --size="20px" />
+<div class="message-wrapper">
+  {#if message}
+    <Tooltip text={' '} headerText={message}>
+      <div class="message-background">
+        <IconNew icon={TxMessage} />
+      </div>
+    </Tooltip>
+  {:else}
+    <div class="message-background empty">
+      <IconNew icon={TxMessage} />
     </div>
-  </Tooltip>
-{/if}
+  {/if}
+</div>
 
 <style lang="scss">
+  .message-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
   .message-background {
     margin: 0 auto;
-    max-width: 32px;
+    width: 36px;
+    height: 36px;
     background: var(--color-grey-5);
-    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--border-radius-md);
+
+    &.empty {
+      :global(img) {
+        opacity: 0.15;
+      }
+    }
   }
 </style>
