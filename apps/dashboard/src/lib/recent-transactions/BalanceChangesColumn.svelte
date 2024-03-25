@@ -36,12 +36,24 @@
               iconUrl={fungible?.metadata.standard.icon_url?.value.href}
               --size="24px"
             />
-
-            <a href="/resource/{change.address}">
-              {fungible?.metadata.standard.symbol?.value ||
-                fungible?.metadata.standard.name?.value ||
-                ''}
-            </a>
+            {#if fungible?.validator}
+              <div class="nft-info">
+                <a href="/resource/{change.address}">
+                  {fungible?.metadata.standard.symbol?.value ||
+                    fungible?.metadata.standard.name?.value ||
+                    ''}
+                </a>
+                <span class="secondary-text">
+                  {fungible?.validator.name || ''}
+                </span>
+              </div>
+            {:else}
+              <a href="/resource/{change.address}">
+                {fungible?.metadata.standard.symbol?.value ||
+                  fungible?.metadata.standard.name?.value ||
+                  ''}
+              </a>
+            {/if}
             <span class="fungible-value">
               {formatTokenValue(change.amount).displayValue}</span
             >
@@ -69,7 +81,11 @@
                 {nonFungible?.displayName || ''}
               </a>
               <span class="secondary-text">
-                {nonFungibleData?.nftData.expected.name?.value || ''}
+                {#if nonFungible?.validator}
+                  {nonFungible?.validator.name || ''}
+                {:else}
+                  {nonFungibleData?.nftData.expected.name?.value || ''}
+                {/if}
               </span>
             </div>
           </div>

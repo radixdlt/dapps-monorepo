@@ -1,3 +1,4 @@
+import { ResultAsync, okAsync } from 'neverthrow'
 import { BehaviorSubject, combineLatest, map, distinctUntilChanged } from 'rxjs'
 import { callApi } from '@api/gateway'
 import {
@@ -8,7 +9,15 @@ import {
   type NonFungibleResource
 } from '../_deprecated/utils/entities/resource'
 import { transformNft, type NonFungible, type NonFungibleAddress } from './nfts'
-import type { StreamTransactionsResponse } from '@common/gateway-sdk'
+import type {
+  StateEntityDetailsResponseItem,
+  StreamTransactionsResponse
+} from '@common/gateway-sdk'
+import { addValidator } from '@api/_deprecated/utils/add-validator'
+
+export type ValidatorExtension = {
+  validator?: StateEntityDetailsResponseItem & { name?: string }
+}
 
 export type ResourceCacheClient = ReturnType<typeof ResourceCacheClient>
 export const ResourceCacheClient = () => {
@@ -18,8 +27,14 @@ export const ResourceCacheClient = () => {
 
   const queriedResources = new Set<string>()
 
-  const fungibleResources = new Map<string, FungibleResource>()
-  const nonFungibleResources = new Map<string, NonFungibleResource>()
+  const fungibleResources = new Map<
+    string,
+    FungibleResource & ValidatorExtension
+  >()
+  const nonFungibleResources = new Map<
+    string,
+    NonFungibleResource & ValidatorExtension
+  >()
   const NonFungibles = new Map<
     NonFungibleAddress['nonFungibleAddress'],
     NonFungible
@@ -32,22 +47,25 @@ export const ResourceCacheClient = () => {
     addressesToQuery.forEach((address) => queriedResources.add(address))
 
     if (addressesToQuery.length === 0) {
-      return
+      return okAsync([])
     }
 
     isLoadingFungibles.next(true)
 
-    return callApi('getEntityDetailsVaultAggregated', addressesToQuery).map(
-      (entities) => {
-        entities.forEach((entity) => {
-          fungibleResources.set(
-            entity.address,
-            transformFungibleResource(entity)
+    return callApi('getEntityDetailsVaultAggregated', addressesToQuery)
+      .andThen((entities) =>
+        ResultAsync.combine(
+          entities.map((entity) =>
+            addValidator(transformFungibleResource(entity))
           )
+        )
+      )
+      .map((entities) => {
+        entities.forEach((entity) => {
+          fungibleResources.set(entity.address, entity)
         })
         isLoadingFungibles.next(false)
-      }
-    )
+      })
   }
 
   const queryNonFungiblesData = (
@@ -59,7 +77,7 @@ export const ResourceCacheClient = () => {
     addresses.forEach((address) => queriedResources.add(address))
 
     if (addressesToQuery.length === 0) {
-      return
+      return okAsync([])
     }
 
     isLoadingNonFungiblesData.next(true)
@@ -75,7 +93,7 @@ export const ResourceCacheClient = () => {
       }
     })
 
-    return Promise.all(
+    return ResultAsync.combine(
       Array.from(individualResources.entries()).map(([address, nftIds]) =>
         callApi('getNonFungibleData', address, nftIds).map((data) => {
           data.forEach((nftDetails) => {
@@ -86,7 +104,7 @@ export const ResourceCacheClient = () => {
           })
         })
       )
-    ).then((data) => {
+    ).map((data) => {
       isLoadingNonFungiblesData.next(false)
       return data
     })
@@ -99,22 +117,28 @@ export const ResourceCacheClient = () => {
     addresses.forEach((address) => queriedResources.add(address))
 
     if (addressesToQuery.length === 0) {
-      return
+      return okAsync([])
     }
 
     isLoadingNonFungibles.next(true)
 
-    return callApi('getEntityDetailsVaultAggregated', addressesToQuery).map(
-      (entities) => {
+    return callApi('getEntityDetailsVaultAggregated', addressesToQuery)
+      .andThen((entities) =>
+        ResultAsync.combine(
+          entities.map((entity) =>
+            addValidator(transformFungibleResource(entity))
+          )
+        )
+      )
+      .map((entities) => {
         entities.forEach((entity) => {
           nonFungibleResources.set(
             entity.address,
-            transformNonFungibleResource(entity)
+            entity as unknown as NonFungibleResource
           )
         })
         isLoadingNonFungibles.next(false)
-      }
-    )
+      })
   }
 
   const addFungibles = (resources: FungibleResource[]) => {
