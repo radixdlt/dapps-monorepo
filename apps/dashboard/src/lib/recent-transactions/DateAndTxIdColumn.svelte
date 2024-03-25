@@ -14,7 +14,9 @@
   <span class="bolder subtext">
     <a href={`/transaction/${id}`}>{shortenAddress(id)}</a>
   </span>
-  <span class="date subtext">{day} {month} {year !== currentYear ? year : ''} • {hours}:{minutes}</span>
+  <span class="date subtext"
+    >{day} {month} {year !== currentYear ? year : ''} • {hours}:{minutes}</span
+  >
 </div>
 
 <style lang="scss">
