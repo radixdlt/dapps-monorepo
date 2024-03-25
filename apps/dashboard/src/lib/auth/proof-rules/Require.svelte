@@ -12,7 +12,6 @@
   let nftId: string | undefined
   let resourceIconUrl: string | undefined
   let nftName: string | undefined
-  let nftIconUrl: string | undefined
 
   if (requirement.type === 'Resource') {
     const token = tokenInfo.fungibles.get(requirement.resource)
@@ -28,7 +27,6 @@
     resourceName = resource?.metadata.standard.name?.value
     resourceIconUrl = resource?.metadata.standard.icon_url?.value.href
     nftName = nft?.nftData.expected.name?.value
-    nftIconUrl = (nft?.nftData.expected as any).key_image_url?.value
   }
 </script>
 
@@ -39,5 +37,4 @@
   {resourceIconUrl}
   {resourceSymbol}
   {nftName}
-  {nftIconUrl}
 />
