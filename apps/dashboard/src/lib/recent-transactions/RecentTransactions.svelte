@@ -1,9 +1,7 @@
 <script lang="ts">
   import {
-    chevronColumnDefinition,
     dateAndTxIdColumnDefinition,
-    getFeeColumnDefinition,
-    getOtherBalanceChangesColumnDefinition,
+    manifestClassColumnDefinition,
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     recentTransactionsTableConfig
@@ -13,57 +11,71 @@
   import { getRecentTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
-  import { queryAndCacheUniqueResources } from '@api/utils/resource-cache-client'
+  import { fillResourceCacheWithTransactionsData } from '@api/utils/resource-cache-client'
+  import {
+    createManifestClassProperty,
+    createBalanceChanges,
+    type StreamTransactionExtension
+  } from '@api/helpers/stream-transactions-extensions'
   import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
-  import { TransactionStatus } from '@common/gateway-sdk'
+  import {
+    TransactionStatus,
+    ManifestClass,
+    type CommittedTransactionInfo
+  } from '@common/gateway-sdk'
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import TableRow from '@components/_base/table/basic-table/TableRow.svelte'
   import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
-  import CommittedFailureColumn from './CommittedFailureColumn.svelte'
+  import InfoBar from '@components/info-bar/InfoBar.svelte'
 
   export let entityAddress: string
 
   const queryFunction = (cursor?: string) =>
-    queryAndCacheUniqueResources(getRecentTransactions(entityAddress, cursor))
-
-  const feeColumnDefinition = getFeeColumnDefinition({ alignment: 'right' })
+    createBalanceChanges(
+      entityAddress,
+      createManifestClassProperty(
+        getRecentTransactions(entityAddress, cursor).then((data) => {
+          fillResourceCacheWithTransactionsData(data)
+          return data
+        })
+      )
+    )
 
   const columns: ComponentProps<PaginatedTable<any>>['columns'] = [
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
-    feeColumnDefinition,
-    getOtherBalanceChangesColumnDefinition({ entityAddress }),
+    manifestClassColumnDefinition,
     {
-      id: 'balance-increases',
+      id: 'withdrawn',
       header: {
-        label: 'Balance Increases'
+        label: 'Withdrawn'
       },
       width: '190px',
-      alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {
-        entityAddress,
-        type: 'increases',
-        balanceChanges: '$$balance_changes'
+        balanceChanges: '$$withdrawals'
       }
     },
     {
-      id: 'balance-decreases',
+      id: 'deposited',
       header: {
-        label: 'Balance Decreases'
+        label: 'Deposited'
       },
       width: '190px',
-      alignment: 'right',
       component: BalanceChangesColumn,
       componentProps: {
-        entityAddress,
-        type: 'decreases',
-        balanceChanges: '$$balance_changes'
+        balanceChanges: '$$deposits'
       }
-    },
-    chevronColumnDefinition
+    }
   ]
+
+  const isCustomRow = (
+    entry: CommittedTransactionInfo & StreamTransactionExtension
+  ) =>
+    entry.transaction_status === TransactionStatus.CommittedFailure ||
+    entry.manifestClass === ManifestClass.AccountDepositSettingsUpdate ||
+    (entry.withdrawals.length === 0 && entry.deposits.length === 0)
 </script>
 
 <div class="export-button">
@@ -77,7 +89,7 @@
   {queryFunction}
 >
   <svelte:fragment slot="row" let:entry>
-    {#if entry.transaction_status === TransactionStatus.CommittedFailure}
+    {#if isCustomRow(entry)}
       <TableRow
         customClass="clickable"
         on:click={(ev) => recentTransactionsTableConfig.onRowClick?.(entry, ev)}
@@ -85,11 +97,25 @@
         <BasicColumn {entry} column={messageColumnDefinition} />
         <BasicColumn {entry} column={mobileHeaderColumnDefinition} />
         <BasicColumn {entry} column={dateAndTxIdColumnDefinition} />
-        <BasicColumn {entry} column={feeColumnDefinition} />
-        <ResponsiveTableCell colspan={3}>
-          <CommittedFailureColumn />
+        <BasicColumn {entry} column={manifestClassColumnDefinition} />
+        <ResponsiveTableCell colspan={2}>
+          {#if entry.manifestClass === ManifestClass.AccountDepositSettingsUpdate}
+            <InfoBar
+              type="default"
+              message="Updated Account Deposit Settings"
+            />
+          {:else if entry.transaction_status === TransactionStatus.CommittedFailure}
+            <InfoBar
+              type="error"
+              message="This transaction has been committed to the ledger as a failure."
+            />
+          {:else if !entry.withdrawals.length && !entry.deposits.length}
+            <InfoBar
+              type="default"
+              message="No deposits or withdrawals from this account in this transaction."
+            />
+          {/if}
         </ResponsiveTableCell>
-        <BasicColumn {entry} column={chevronColumnDefinition} />
       </TableRow>
     {:else}
       <BasicRow {columns} config={recentTransactionsTableConfig} {entry} />

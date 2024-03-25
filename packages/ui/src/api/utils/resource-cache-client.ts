@@ -1,4 +1,5 @@
-import { callApi } from '@api/_deprecated/gateway'
+import { BehaviorSubject, combineLatest, map, distinctUntilChanged } from 'rxjs'
+import { callApi } from '@api/gateway'
 import {
   transformFungibleResource,
   transformNonFungibleResource,
@@ -11,6 +12,10 @@ import type { StreamTransactionsResponse } from '@common/gateway-sdk'
 
 export type ResourceCacheClient = ReturnType<typeof ResourceCacheClient>
 export const ResourceCacheClient = () => {
+  const isLoadingFungibles = new BehaviorSubject<boolean>(false)
+  const isLoadingNonFungibles = new BehaviorSubject<boolean>(false)
+  const isLoadingNonFungiblesData = new BehaviorSubject<boolean>(false)
+
   const queriedResources = new Set<string>()
 
   const fungibleResources = new Map<string, FungibleResource>()
@@ -24,7 +29,13 @@ export const ResourceCacheClient = () => {
     const addressesToQuery = addresses.filter(
       (address) => !queriedResources.has(address)
     )
-    addresses.forEach((address) => queriedResources.add(address))
+    addressesToQuery.forEach((address) => queriedResources.add(address))
+
+    if (addressesToQuery.length === 0) {
+      return
+    }
+
+    isLoadingFungibles.next(true)
 
     return callApi('getEntityDetailsVaultAggregated', addressesToQuery).map(
       (entities) => {
@@ -34,6 +45,7 @@ export const ResourceCacheClient = () => {
             transformFungibleResource(entity)
           )
         })
+        isLoadingFungibles.next(false)
       }
     )
   }
@@ -45,6 +57,12 @@ export const ResourceCacheClient = () => {
       (address) => !queriedResources.has(address)
     )
     addresses.forEach((address) => queriedResources.add(address))
+
+    if (addressesToQuery.length === 0) {
+      return
+    }
+
+    isLoadingNonFungiblesData.next(true)
 
     const individualResources = new Map<string, string[]>()
     addressesToQuery.forEach((address) => {
@@ -68,7 +86,10 @@ export const ResourceCacheClient = () => {
           })
         })
       )
-    )
+    ).then((data) => {
+      isLoadingNonFungiblesData.next(false)
+      return data
+    })
   }
 
   const queryNonFungibles = (addresses: string[]) => {
@@ -76,6 +97,12 @@ export const ResourceCacheClient = () => {
       (address) => !queriedResources.has(address)
     )
     addresses.forEach((address) => queriedResources.add(address))
+
+    if (addressesToQuery.length === 0) {
+      return
+    }
+
+    isLoadingNonFungibles.next(true)
 
     return callApi('getEntityDetailsVaultAggregated', addressesToQuery).map(
       (entities) => {
@@ -85,6 +112,7 @@ export const ResourceCacheClient = () => {
             transformNonFungibleResource(entity)
           )
         })
+        isLoadingNonFungibles.next(false)
       }
     )
   }
@@ -121,7 +149,18 @@ export const ResourceCacheClient = () => {
     addNonFungiblesData,
     fungibleResources,
     nonFungibleResources,
-    nonFungibleResourcesData: NonFungibles
+    nonFungibleResourcesData: NonFungibles,
+    isLoading$: combineLatest([
+      isLoadingFungibles.asObservable(),
+      isLoadingNonFungibles.asObservable(),
+      isLoadingNonFungiblesData.asObservable()
+    ]).pipe(
+      map(
+        ([isFungiblesLoading, isNonFungiblesLoading, isDataLoading]) =>
+          isFungiblesLoading || isNonFungiblesLoading || isDataLoading
+      ),
+      distinctUntilChanged()
+    )
   }
 }
 
@@ -153,4 +192,35 @@ export const queryAndCacheUniqueResources = (
       .then(() => res)
       .catch(() => res)
   })
+}
+
+export const fillResourceCacheWithTransactionsData = (
+  streamTransactions: StreamTransactionsResponse
+): void => {
+  const uniqueNfts = new Set<string>()
+  const uniqueFungibleTokens = new Set<string>()
+  const uniqueLocalNfts = new Set<NftGlobalId>()
+
+  streamTransactions.items.forEach((transactionInfo) => {
+    transactionInfo.balance_changes?.fungible_balance_changes?.forEach(
+      (change) => {
+        uniqueFungibleTokens.add(change.resource_address)
+      }
+    )
+
+    transactionInfo.balance_changes?.non_fungible_balance_changes?.forEach(
+      (change) => {
+        uniqueNfts.add(change.resource_address)
+        ;[...change.added, ...change.removed].forEach((localId) => {
+          uniqueLocalNfts.add(`${change.resource_address}:${localId}`)
+        })
+      }
+    )
+  })
+
+  Promise.all([
+    resourcesCacheClient.queryFungibles(Array.from(uniqueFungibleTokens)),
+    resourcesCacheClient.queryNonFungibles(Array.from(uniqueNfts)),
+    resourcesCacheClient.queryNonFungiblesData(Array.from(uniqueLocalNfts))
+  ])
 }

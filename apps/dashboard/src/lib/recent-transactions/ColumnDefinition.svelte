@@ -8,10 +8,14 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import ChevronRight from '@icons/chevron-right.svg'
   import { goto } from '$app/navigation'
+  import {
+    getManifestClassDescription,
+    getMostRelevantManifestClass
+  } from '@api/helpers/get-most-relevant-manifest-class'
 
   export const messageColumnDefinition = {
     id: 'message',
-    width: '60px',
+    width: '50px',
     hideMobile: true,
     component: TxMessageColumn,
     componentProps: {
@@ -62,9 +66,8 @@
   }
 
   export const getOtherBalanceChangesColumnDefinition = ({
-    entityAddress,
     label
-  }: { entityAddress?: string; label?: string } = {}) => {
+  }: { label?: string } = {}) => {
     return {
       id: 'other-balance-changes',
       width: '190px',
@@ -74,10 +77,21 @@
       alignment: 'right' as const,
       component: OtherBalanceChangesColumn,
       componentProps: {
-        ...(entityAddress ? { entityAddress } : undefined),
         balanceChanges: '$$balance_changes'
       }
     }
+  }
+
+  export const manifestClassColumnDefinition = {
+    id: 'manifest-class',
+    width: '130px',
+    header: {
+      label: 'Type'
+    },
+    renderAs: (tx: CommittedTransactionInfo) =>
+      getManifestClassDescription(
+        getMostRelevantManifestClass(tx.manifest_classes)
+      )
   }
 
   export const getFeeColumnDefinition = ({
