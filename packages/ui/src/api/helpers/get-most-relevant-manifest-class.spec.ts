@@ -34,9 +34,9 @@ describe('get most relevant manifest class', () => {
     expect(result).toEqual(ManifestClass.PoolRedemption)
   })
 
-  it('should return empty string for empty input', () => {
-    expect(getMostRelevantManifestClass(null)).toEqual('')
-    expect(getMostRelevantManifestClass(undefined)).toEqual('')
-    expect(getMostRelevantManifestClass([])).toEqual('')
+  it('should return undefined for empty input', () => {
+    expect(getMostRelevantManifestClass(null)).toEqual(undefined)
+    expect(getMostRelevantManifestClass(undefined)).toEqual(undefined)
+    expect(getMostRelevantManifestClass([])).toEqual(undefined)
   })
 })

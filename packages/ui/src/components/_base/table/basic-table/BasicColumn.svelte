@@ -55,3 +55,9 @@
     </span>
   {/if}
 </ResponsiveTableCell>
+
+<style lang="scss">
+  .cell-text {
+    font-weight: var(--font-weight-bold-2);
+  }
+</style>

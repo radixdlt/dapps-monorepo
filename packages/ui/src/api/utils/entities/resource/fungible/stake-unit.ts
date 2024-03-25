@@ -18,24 +18,28 @@ const systemMetadata = createSystemMetadata({
 export type StakeUnit = Omit<FungibleResource, 'type'> &
   _Entity<'stakeUnit', typeof systemMetadata>
 
-export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => ({
-  ...resource,
-  type: 'stakeUnit',
-  metadata: {
-    ...resource.metadata,
-    standard: {
-      ...resource.metadata.expected,
-      ...transformMetadata(
-        {
-          metadata: {
-            items: resource.metadata.all
-          }
-        },
-        systemMetadata
-      ).expected
-    }
-  } as any // svelte-check complains otherwise
-})
+export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => {
+  const expected = transformMetadata(
+    {
+      metadata: {
+        items: resource.metadata.all
+      }
+    },
+    systemMetadata
+  ).expected
+  return {
+    ...resource,
+    type: 'stakeUnit',
+    metadata: {
+      ...resource.metadata,
+      standard: {
+        ...resource.metadata.expected,
+        ...expected
+      },
+      expected
+    } as any // svelte-check complains otherwise
+  }
+}
 
 export const isStakeUnit = async (
   entity: StateEntityDetailsVaultResponseItem
