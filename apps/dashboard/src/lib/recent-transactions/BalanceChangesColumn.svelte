@@ -125,6 +125,7 @@
   }
 
   .nft-info {
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
   }

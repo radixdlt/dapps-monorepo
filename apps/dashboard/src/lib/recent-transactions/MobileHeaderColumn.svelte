@@ -10,7 +10,10 @@
 </script>
 
 <div class="header-column">
-  <TxMessageColumn {message} />
+  <div class="message">
+    <TxMessageColumn {message} />
+  </div>
+
   <DateAndTxIdColumn {id} {date} />
   <div class="ml-auto">
     <IconNew icon={ChevronRight} />
@@ -18,6 +21,9 @@
 </div>
 
 <style lang="scss">
+  .message {
+    max-width: 100px;
+  }
   .header-column {
     display: flex;
     align-items: center;

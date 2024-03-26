@@ -15,8 +15,12 @@
 
   export const messageColumnDefinition = {
     id: 'message',
-    width: '50px',
+    width: '100px',
     hideMobile: true,
+    header: {
+      label: 'Message',
+      alignment: 'center' as const
+    },
     component: TxMessageColumn,
     componentProps: {
       message: (tx: CommittedTransactionInfo) => {
@@ -43,7 +47,7 @@
   export const dateAndTxIdColumnDefinition = {
     id: 'date-and-tx-id',
     hideMobile: true,
-    width: '140px',
+    width: '150px',
     header: {
       label: 'ID/DATE (GMT +00)'
     },
@@ -70,7 +74,7 @@
   }: { label?: string } = {}) => {
     return {
       id: 'other-balance-changes',
-      width: '190px',
+      width: '300px',
       header: {
         label: label || 'Other Balance Changes'
       },
@@ -99,7 +103,7 @@
   }: { alignment?: 'right' } = {}) => {
     return {
       id: 'fee',
-      width: '160px',
+      width: '130px',
       ...(alignment ? { alignment } : undefined),
       header: {
         label: 'Transaction Fee'

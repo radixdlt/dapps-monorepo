@@ -51,7 +51,6 @@
       header: {
         label: 'Withdrawn'
       },
-      width: '190px',
       component: BalanceChangesColumn,
       componentProps: {
         balanceChanges: '$$withdrawals'
@@ -62,7 +61,6 @@
       header: {
         label: 'Deposited'
       },
-      width: '190px',
       component: BalanceChangesColumn,
       componentProps: {
         balanceChanges: '$$deposits'

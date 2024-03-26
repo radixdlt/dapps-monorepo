@@ -6,9 +6,9 @@
   export let data: PageData
 </script>
 
-{#await Promise.all( [data.promises.nft, data.promises.authResources] ) then [nft, tokenInfo]}
+{#await data.promises.nft then nft}
   <SearchPage
-    title={nft.type === 'generalNft'
+    title={nft?.type === 'generalNft'
       ? 'Non Fungible'
       : 'Radix Network Stake Claim Non-fungible'}
     address={data.nftAddress}
