@@ -75,31 +75,22 @@ export const Header = ({
         }}
       >
         <radix-dapps-dropdown networkName={networkName}></radix-dapps-dropdown>
-        <Select
-          value={networkId}
-          onChange={(_, value) => {
-            setNetworkId(value as number)
-          }}
-        >
-          {IS_PUBLIC ? (
-            <>
-              <Option key="Mainnet" value={1}>
-                Mainnet ({1})
-              </Option>
-              <Option key="Stokenet" value={2}>
-                Stokenet ({2})
-              </Option>
-            </>
-          ) : (
-            Object.values(RadixNetworkConfig).map(
+        {!IS_PUBLIC && (
+          <Select
+            value={networkId}
+            onChange={(_, value) => {
+              setNetworkId(value as number)
+            }}
+          >
+            {Object.values(RadixNetworkConfig).map(
               ({ networkId, networkName }) => (
                 <Option key={networkName} value={networkId}>
                   {networkName} ({networkId})
                 </Option>
               )
-            )
-          )}
-        </Select>
+            )}
+          </Select>
+        )}
 
         <radix-connect-button></radix-connect-button>
       </Box>
