@@ -59,7 +59,7 @@ jobs:
     name: Check trigger
     if: >
       ( github.event.action == 'prereleased' && contains( github.event.release.tag_name, 'sandbox') ) ||
-      ( github.event.action == 'released' && github.event.release.prerelease && contains( github.event.release.tag_name, 'sandbox') ) ||
+      ( github.event.action == 'released' && contains( github.event.release.tag_name, 'sandbox') ) ||
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
