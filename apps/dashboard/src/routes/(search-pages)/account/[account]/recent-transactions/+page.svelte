@@ -5,19 +5,4 @@
   export let data: LayoutData
 </script>
 
-<div class="information">
-  List of balance changes on this specific account. Click on Transaction ID to
-  get more information.
-</div>
 <RecentTransactions entityAddress={data.account} />
-
-<style lang="scss">
-  .information {
-    color: var(--color-grey-2);
-    margin-bottom: var(--space-md);
-
-    @include mixins.desktop {
-      padding-top: var(--space-md);
-    }
-  }
-</style>
