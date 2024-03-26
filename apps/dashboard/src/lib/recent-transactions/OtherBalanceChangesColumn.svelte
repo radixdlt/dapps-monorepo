@@ -1,7 +1,5 @@
 <script lang="ts">
   import type { TransactionBalanceChanges } from '@common/gateway-sdk'
-
-  export let entityAddress: string | undefined
   export let balanceChanges: TransactionBalanceChanges | undefined
 
   let accountBalanceChanges: Set<string>
@@ -10,21 +8,16 @@
   $: {
     accountBalanceChanges = new Set<string>()
     componentBalanceChanges = new Set<string>()
-    updateOtherBalanceChangesCount(entityAddress, balanceChanges)
+    updateOtherBalanceChangesCount(balanceChanges)
   }
 
   const updateOtherBalanceChangesCount = (
-    _entityAddress: string | undefined,
     _balanceChanges?: TransactionBalanceChanges
   ) => {
     const addToBalanceChangesSets = (
       changes: { entity_address: string }[] = []
     ) => {
       changes.forEach((balanceChange) => {
-        if (balanceChange.entity_address === _entityAddress) {
-          return
-        }
-
         if (balanceChange.entity_address.startsWith('component_')) {
           componentBalanceChanges.add(balanceChange.entity_address)
         }

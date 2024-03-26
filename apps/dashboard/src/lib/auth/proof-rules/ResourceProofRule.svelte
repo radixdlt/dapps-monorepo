@@ -12,14 +12,13 @@
   export let resourceSymbol: string | undefined = undefined
 
   export let nftName: string | undefined = undefined
-  export let nftIconUrl: string | undefined = undefined
   export let nftId: string | undefined = undefined
 </script>
 
 <div class="resource-proof-rule">
   <div class="resource-header">
     {#if nftId}
-      <NftImage simple url={nftIconUrl || resourceIconUrl} --size="24px" />
+      <NftImage simple url={resourceIconUrl} --size="24px" />
     {:else}
       <TokenIcon iconUrl={resourceIconUrl} --size="24px" />
     {/if}

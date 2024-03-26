@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ManifestClass } from '@common/gateway-sdk'
   import Divider from '@components/_base/divider/Divider.svelte'
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import Checkmark from '@icons/checkmark-green.svg'

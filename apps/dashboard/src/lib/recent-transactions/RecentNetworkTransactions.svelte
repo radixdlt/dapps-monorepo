@@ -7,6 +7,7 @@
     dateAndTxIdColumnDefinition,
     getFeeColumnDefinition,
     getOtherBalanceChangesColumnDefinition,
+    manifestClassColumnDefinition,
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     recentTransactionsTableConfig
@@ -16,7 +17,7 @@
   import BasicRow from '@components/_base/table/basic-table/BasicRow.svelte'
   import BasicColumn from '@components/_base/table/basic-table/BasicColumn.svelte'
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
-  import CommittedFailureColumn from './CommittedFailureColumn.svelte'
+  import InfoBar from '@components/info-bar/InfoBar.svelte'
 
   const queryFunction = (cursor?: string) => {
     return getRecentNetworkTransactions(cursor).unwrapOr({
@@ -30,6 +31,7 @@
     messageColumnDefinition,
     mobileHeaderColumnDefinition,
     dateAndTxIdColumnDefinition,
+    manifestClassColumnDefinition,
     feeColumnDefinition,
     getOtherBalanceChangesColumnDefinition({
       label: 'Balance Changes'
@@ -53,9 +55,13 @@
         <BasicColumn {entry} column={messageColumnDefinition} />
         <BasicColumn {entry} column={mobileHeaderColumnDefinition} />
         <BasicColumn {entry} column={dateAndTxIdColumnDefinition} />
+        <BasicColumn {entry} column={manifestClassColumnDefinition} />
         <BasicColumn {entry} column={feeColumnDefinition} />
         <ResponsiveTableCell>
-          <CommittedFailureColumn />
+          <InfoBar
+            type="error"
+            message="This transaction has been committed to the ledger as a failure."
+          />
         </ResponsiveTableCell>
         <BasicColumn {entry} column={chevronColumnDefinition} />
       </TableRow>

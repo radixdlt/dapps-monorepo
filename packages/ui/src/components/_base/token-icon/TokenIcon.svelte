@@ -53,6 +53,8 @@
     background-size: cover;
     width: var(--size, 44px);
     height: var(--size, 44px);
+    min-width: var(--size, 44px);
+    min-height: var(--size, 44px);
     border-radius: 50%;
     overflow: hidden;
     display: flex;
