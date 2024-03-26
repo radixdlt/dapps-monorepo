@@ -6,7 +6,7 @@
   import type { NonFungible } from '@api/utils/nfts'
   import type { NonFungibleResource } from '@api/utils/entities/resource/non-fungible'
 
-  export let nft: Promise<NonFungible>
+  export let nft: Promise<NonFungible | undefined>
   export let resource: Promise<NonFungibleResource>
   export let associatedDapps: Promise<
     {
@@ -17,13 +17,13 @@
   >
 
   $: imageUrl = Promise.all([nft, resource]).then(([nft, resource]) =>
-    nft.type === 'generalNft'
+    nft?.type === 'generalNft'
       ? nft.nftData.expected.key_image_url?.value
       : resource.metadata.expected.icon_url?.typed.value
   )
 
   $: description = Promise.all([nft, resource]).then(([nft, resource]) =>
-    nft.type === 'generalNft'
+    nft?.type === 'generalNft'
       ? nft.nftData.expected.description?.value
       : resource.metadata.expected.description?.typed.value
   )
@@ -43,9 +43,16 @@
   <h2>
     {#await nft}
       <SkeletonLoader />
-    {:then { nftData: { expected: { name } } }}
-      {#if name?.value}
-        {name?.value}
+    {:then nft}
+      {#if nft}
+        {@const {
+          nftData: {
+            expected: { name }
+          }
+        } = nft}
+        {#if name?.value}
+          {name?.value}
+        {/if}
       {/if}
     {/await}
   </h2>
@@ -61,10 +68,14 @@
     {#await nft}
       <SkeletonLoader />
     {:then nft}
-      <NftDataRow value={{ kind: 'String', field_name: 'ID', value: nft.id }} />
-      {#each nft.type === 'generalNft' ? nft.nftData.nonStandard : Object.values(nft.nftData.expected).filter((data) => data.field_name !== 'name') as value}
-        <NftDataRow {value} />
-      {/each}
+      {#if nft}
+        <NftDataRow
+          value={{ kind: 'String', field_name: 'ID', value: nft.id }}
+        />
+        {#each nft.type === 'generalNft' ? nft.nftData.nonStandard : Object.values(nft.nftData.expected).filter((data) => data.field_name !== 'name') as value}
+          <NftDataRow {value} />
+        {/each}
+      {/if}
     {/await}
   </div>
 </div>

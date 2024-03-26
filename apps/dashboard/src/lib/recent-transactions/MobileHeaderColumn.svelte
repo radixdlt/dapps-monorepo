@@ -13,7 +13,7 @@
   <div class="message">
     <TxMessageColumn {message} />
   </div>
-  
+
   <DateAndTxIdColumn {id} {date} />
   <div class="ml-auto">
     <IconNew icon={ChevronRight} />

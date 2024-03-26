@@ -1,18 +1,15 @@
 import { callApi } from '@api/_deprecated/gateway'
 import type { PageLoad } from './$types'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
-import {
-  getDappDefinitionData,
-  getLookupEntity,
-  getResourcesFromAuth
-} from '../../utils'
+import { getDappDefinitionData, getLookupEntity } from '../../utils'
 import { map, pipe } from 'ramda'
 import { transformNft } from '@api/utils/nfts'
 import { handleGatewayResult } from '../../../../utils'
 import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
 import { errorPage } from '@dashboard/stores'
+import type { KnownAddresses } from '@common/ret'
 
-export const load: PageLoad = async ({ params }) => {
+export const load: PageLoad = async ({ params, fetch }) => {
   const [resourceAddress, nftId] = decodeURIComponent(params.nft).split(':')
 
   const resourceEntity = getLookupEntity(resourceAddress, {
@@ -26,9 +23,22 @@ export const load: PageLoad = async ({ params }) => {
 
   nftData.then((data) => {
     if (data.length === 0) {
-      errorPage.set({
-        message: 'NFT not found'
-      })
+      return fetch('/api/ret/known-addresses')
+        .then((response) => response.json())
+        .then(({ resourceAddresses }: KnownAddresses) => {
+          if (
+            ![
+              resourceAddresses.ed25519SignatureVirtualBadge,
+              resourceAddresses.packageOfDirectCallerVirtualBadge,
+              resourceAddresses.secp256k1SignatureVirtualBadge,
+              resourceAddresses.globalCallerVirtualBadge
+            ].includes(resourceAddress)
+          ) {
+            errorPage.set({
+              message: 'NFT not found'
+            })
+          }
+        })
     }
   })
 
@@ -42,11 +52,11 @@ export const load: PageLoad = async ({ params }) => {
     nftAddress: params.nft,
     promises: {
       nft: Promise.all([nftData, resourceEntity]).then(
-        ([nftData, { address }]) => transformNft(address, nftData[0])
+        ([nftData, { address }]) =>
+          nftData?.[0] ? transformNft(address, nftData?.[0]) : undefined
       ),
       resource,
-      associatedDapps,
-      authResources: resource.then(({ auth }) => getResourcesFromAuth(auth))
+      associatedDapps
     }
   }
 }
