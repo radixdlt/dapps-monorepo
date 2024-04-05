@@ -8,7 +8,7 @@
     "@radixdlt/babylon-gateway-api-sdk": "^1.4.0",
     "@radixdlt/radix-dapp-toolkit": "^1.4.4",
     "@radixdlt/radix-engine-toolkit": "1.0.0",
-    "@radixdlt/rola": "^1.0.4",
+    "@radixdlt/rola": "1.1.0",
     "dayjs": "^1.11.10",
     "zod": "^3.22.4"
   },
