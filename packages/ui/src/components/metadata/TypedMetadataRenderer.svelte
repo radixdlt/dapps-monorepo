@@ -60,10 +60,8 @@
   {:else if metadataTypedValue.type === 'Bool' || metadataTypedValue.type === 'Decimal' || metadataTypedValue.type === 'I32' || metadataTypedValue.type === 'I64' || metadataTypedValue.type === 'NonFungibleLocalId' || metadataTypedValue.type === 'String' || metadataTypedValue.type === 'U32' || metadataTypedValue.type === 'U64' || metadataTypedValue.type === 'U8'}
     {metadataTypedValue.value}
   {:else if metadataTypedValue.type === 'Instant'}
-    {new Date(Number(metadataTypedValue.value) * 1000)}
+    {new Date(metadataTypedValue.value)}
   {:else if metadataTypedValue.type === 'InstantArray'}
-    {metadataTypedValue.values
-      .map((value) => new Date(Number(value) * 1000))
-      .join(', ')}
+    {metadataTypedValue.values.map((value) => new Date(value)).join(', ')}
   {/if}
 {/if}
