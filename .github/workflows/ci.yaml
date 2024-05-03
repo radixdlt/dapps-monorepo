@@ -74,7 +74,6 @@ jobs:
           cmd: |
             phylum-ci \
               -vv \
-              --depfile apps/dashboard/package.json \
               --audit \
               --all-deps
 
