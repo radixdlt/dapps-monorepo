@@ -64,6 +64,7 @@ jobs:
     secrets:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
 
+
 #  trigger:
 #    name: Check trigger
 #    if: >
