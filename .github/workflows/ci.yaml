@@ -57,10 +57,10 @@ permissions:
 
 jobs:
   phylum-analyze:
-    - uses: radixdlt/public-iac-resuable-artifacts/phylum-analyze@DO-2469-phylum
-      with:
-        role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-        secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/phylum-credentials-4koyXP'
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@DO-2469-phylum
+    with:
+      role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+      secret_name: 'arn:aws:secretsmanager:eu-west-2:308190735829:secret:github-actions/common/phylum-credentials-4koyXP'
 #  trigger:
 #    name: Check trigger
 #    if: >
