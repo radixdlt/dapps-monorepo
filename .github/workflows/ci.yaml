@@ -75,7 +75,7 @@ jobs:
             phylum-ci \
               -vv \
               --depfile apps/dashboard/package.json \
-              --force-analysis \
+              --audit \
               --all-deps
 
 
