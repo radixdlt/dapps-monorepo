@@ -13,6 +13,7 @@
 
   export let nftName: string | undefined = undefined
   export let nftId: string | undefined = undefined
+  export let requirementType: 'AmountOf' | 'Resource' | 'NonFungible'
 </script>
 
 <div class="resource-proof-rule">
@@ -30,8 +31,10 @@
     <div class="amount dotted-overflow">
       {#if amount}
         {formatTokenValue(amount).displayValue}
-      {:else}
-        {nftName || 'ANY'}
+      {:else if requirementType === 'NonFungible'}
+        {nftName || ''}
+      {:else if requirementType === 'Resource'}
+        ANY
       {/if}
     </div>
   </div>
