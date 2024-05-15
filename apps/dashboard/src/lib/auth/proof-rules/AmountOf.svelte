@@ -10,6 +10,7 @@
 </script>
 
 <ResourceProofRule
+  requirementType={rule.type}
   amount={rule.amount}
   resourceAddress={rule.resource}
   resourceName={token?.metadata.standard.name?.value}

@@ -31,6 +31,7 @@
 </script>
 
 <ResourceProofRule
+  requirementType={requirement.type}
   {resourceName}
   {resourceAddress}
   {nftId}
