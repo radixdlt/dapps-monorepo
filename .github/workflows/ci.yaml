@@ -62,7 +62,7 @@ jobs:
       ( github.event.action == 'prereleased' && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event.action == 'released' && contains( github.event.release.tag_name, 'dashboard') ) ||
       ( github.event_name == 'workflow_dispatch' ) ||
-      ( github.event_name == 'push' ) ||
+      ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
     runs-on: selfhosted-ubuntu-22.04
     steps:
@@ -73,273 +73,273 @@ jobs:
           echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
-  # build:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - trigger
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Dump context
-  #       uses: RDXWorks-actions/ghaction-dump-context@master
-  #     - uses: ./.github/actions/build
-  #       with:
-  #         active_network_name: ${{ env.active_network }}
-  #         release_network_name: ${{ env.release_network }}
+  build:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - trigger
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Dump context
+        uses: RDXWorks-actions/ghaction-dump-context@master
+      - uses: ./.github/actions/build
+        with:
+          active_network_name: ${{ env.active_network }}
+          release_network_name: ${{ env.release_network }}
       
-  #     - name: Turbo Worfkflow
-  #       run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
+      - name: Turbo Worfkflow
+        run: npx turbo run db:generate lint prettier coverage svelte:check --filter=dashboard
         
 
-  # setup-tags:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - trigger
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Docker tags for dashboard
-  #       id: dashboard-tags
-  #       uses: RDXWorks-actions/metadata-action@master
-  #       with:
-  #         images: |
-  #           docker.io/radixdlt/dapps-dashboard
-  #         tags: |
-  #           type=sha,event=pr
-  #           type=sha,event=branch
-  #           type=semver,pattern={{version}}
-  #     - name: Docker tags for storybook
-  #       id: storybook-tags
-  #       uses: RDXWorks-actions/metadata-action@master
-  #       with:
-  #         images: |
-  #           docker.io/radixdlt/dapps-dashboard-storybook
-  #         tags: |
-  #           type=sha,event=pr
-  #           type=sha,event=branch
-  #           type=semver,pattern={{version}}
+  setup-tags:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - trigger
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Docker tags for dashboard
+        id: dashboard-tags
+        uses: RDXWorks-actions/metadata-action@master
+        with:
+          images: |
+            docker.io/radixdlt/dapps-dashboard
+          tags: |
+            type=sha,event=pr
+            type=sha,event=branch
+            type=semver,pattern={{version}}
+      - name: Docker tags for storybook
+        id: storybook-tags
+        uses: RDXWorks-actions/metadata-action@master
+        with:
+          images: |
+            docker.io/radixdlt/dapps-dashboard-storybook
+          tags: |
+            type=sha,event=pr
+            type=sha,event=branch
+            type=semver,pattern={{version}}
 
-  #     - name: Define network name
-  #       run: |
-  #         if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-  #           echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
-  #         elif [ "${{ github.event.action }}" = "released" ]; then
-  #           echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
-  #         elif [ "${{ github.event.action }}" = "prereleased" ]; then
-  #           echo "NETWORK_NAME=${{ env.prerelease_network }}" >> $GITHUB_ENV
-  #         elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
-  #           echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
-  #         fi
-  #     - id: network
-  #       run: |
-  #         echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
-  #     - id: tag-with-network
-  #       run: |
-  #         echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
-  #     - run: |
-  #         echo "$GITHUB_OUTPUT"
-  #   outputs:
-  #     dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
-  #     dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
-  #     dashboard-json: ${{ steps.dashboard-tags.outputs.json }}
-  #     storybook-tags: ${{ steps.storybook-tags.outputs.tags }}
-  #     storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
-  #     storybook-json: ${{ steps.storybook-tags.outputs.json }}
-  #     tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
-  #     network-name: ${{steps.network.outputs.network-name}}
+      - name: Define network name
+        run: |
+          if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "released" ]; then
+            echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.action }}" = "prereleased" ]; then
+            echo "NETWORK_NAME=${{ env.prerelease_network }}" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/main" -a "${{ github.event_name }}" = 'push' ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "NETWORK_NAME=${{ env.active_network }}" >> $GITHUB_ENV
+          fi
+      - id: network
+        run: |
+          echo "network-name=${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - id: tag-with-network
+        run: |
+          echo "tag-with-network=${{github.sha}}-${{ env.NETWORK_NAME }}" >> $GITHUB_OUTPUT
+      - run: |
+          echo "$GITHUB_OUTPUT"
+    outputs:
+      dashboard-tags: ${{ steps.dashboard-tags.outputs.tags }}
+      dashboard-labels: ${{ steps.dashboard-tags.outputs.labels }}
+      dashboard-json: ${{ steps.dashboard-tags.outputs.json }}
+      storybook-tags: ${{ steps.storybook-tags.outputs.tags }}
+      storybook-labels: ${{ steps.storybook-tags.outputs.labels }}
+      storybook-json: ${{ steps.storybook-tags.outputs.json }}
+      tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
+      network-name: ${{steps.network.outputs.network-name}}
 
-  # snyk-scan-deps-licences:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - trigger
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         step_name: 'snyk-scan-deps-licences'
-  #         secret_prefix: 'SNYK'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-  #         parse_json: true
-  #     - name: Run Snyk to check for deps vulnerabilities
-  #       uses: RDXWorks-actions/snyk-actions/node@master
-  #       with:
-  #         args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
+  snyk-scan-deps-licences:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - trigger
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'snyk-scan-deps-licences'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Run Snyk to check for deps vulnerabilities
+        uses: RDXWorks-actions/snyk-actions/node@master
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
-  # snyk-scan-code:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - trigger
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         step_name: 'snyk-scan-code'
-  #         secret_prefix: 'SNYK'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-  #         parse_json: true
-  #     - name: Run Snyk to check for code vulnerabilities
-  #       uses: RDXWorks-actions/snyk-actions/node@master
-  #       continue-on-error: true # temporary until code fix
-  #       with:
-  #         args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
-  #         command: code test
+  snyk-scan-code:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - trigger
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'snyk-scan-code'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Run Snyk to check for code vulnerabilities
+        uses: RDXWorks-actions/snyk-actions/node@master
+        continue-on-error: true # temporary until code fix
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
+          command: code test
 
-  # snyk-sbom:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - snyk-scan-deps-licences
-  #     - snyk-scan-code
-  #   permissions: write-all
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         step_name: 'snyk-sbom'
-  #         secret_prefix: 'SNYK'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-  #         parse_json: true
-  #     - name: Generate SBOM # check SBOM can be generated but nothing is done with it
-  #       uses: RDXWorks-actions/snyk-actions/node@master
-  #       with:
-  #         args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
-  #         command: sbom
-  #     - name: Upload SBOM
-  #       if: github.event_name == 'release'
-  #       uses: RDXWorks-actions/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a
-  #       with:
-  #         files: sbom.json
-  #         repo-token: ${{ secrets.GITHUB_TOKEN }}
-  #         release-tag: ${{ github.event.release.tag_name }}
+  snyk-sbom:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - snyk-scan-deps-licences
+      - snyk-scan-code
+    permissions: write-all
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'snyk-sbom'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Generate SBOM # check SBOM can be generated but nothing is done with it
+        uses: RDXWorks-actions/snyk-actions/node@master
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
+          command: sbom
+      - name: Upload SBOM
+        if: github.event_name == 'release'
+        uses: RDXWorks-actions/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a
+        with:
+          files: sbom.json
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.event.release.tag_name }}
 
-  # snyk-monitor:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-  #   needs:
-  #     - setup-tags
-  #     - push-dashboard
-  #     - push-storybook
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         step_name: 'snyk-monitor'
-  #         secret_prefix: 'SNYK'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-  #         parse_json: true
-  #     - name: Enable Snyk online monitoring to check for vulnerabilities
-  #       uses: RDXWorks-actions/snyk-actions/node@master
-  #       with:
-  #         args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --target-reference=${{ github.ref_name }}
-  #         command: monitor
+  snyk-monitor:
+    runs-on: selfhosted-ubuntu-22.04
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    needs:
+      - setup-tags
+      - push-dashboard
+      - push-storybook
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'snyk-monitor'
+          secret_prefix: 'SNYK'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
+      - name: Enable Snyk online monitoring to check for vulnerabilities
+        uses: RDXWorks-actions/snyk-actions/node@master
+        with:
+          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --target-reference=${{ github.ref_name }}
+          command: monitor
 
-  # snyk-container-monitor:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-  #   needs:
-  #     - setup-tags
-  #     - push-dashboard
-  #     - push-storybook
-  #   steps:
-  #     - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials'
-  #         snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-  #         snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
-  #         image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
-  #         target_ref: ${{ github.ref_name }}
+  snyk-container-monitor:
+    runs-on: selfhosted-ubuntu-22.04
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    needs:
+      - setup-tags
+      - push-dashboard
+      - push-storybook
+    steps:
+      - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'dashboard'
+          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials'
+          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
+          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
+          target_ref: ${{ github.ref_name }}
 
-  # sonar:
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   needs:
-  #     - trigger
-  #   steps:
-  #     - uses: RDXWorks-actions/checkout@main
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Use Node.js
-  #       uses: RDXWorks-actions/setup-node@main
-  #       with:
-  #         always-auth: true
-  #         node-version: 20.3.0
-  #     - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-  #       with:
-  #         role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-dapps-monorepo-secrets-read-access'
-  #         app_name: 'dashboard'
-  #         step_name: 'sonar'
-  #         secret_prefix: 'GH'
-  #         secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/dapps-monorepo/dashboard/sonar-token-uQM7l6'
-  #         parse_json: true
-  #     # - name: Run story book tests
-  #     #   run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
-  #     - name: SonarCloud Scan
-  #       uses: RDXWorks-actions/sonarcloud-github-action@master
-  #       with:
-  #         projectBaseDir: ./apps/dashboard
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
+  sonar:
+    runs-on: selfhosted-ubuntu-22.04
+    needs:
+      - trigger
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: RDXWorks-actions/setup-node@main
+        with:
+          always-auth: true
+          node-version: 20.3.0
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-dapps-monorepo-secrets-read-access'
+          app_name: 'dashboard'
+          step_name: 'sonar'
+          secret_prefix: 'GH'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/dapps-monorepo/dashboard/sonar-token-uQM7l6'
+          parse_json: true
+      # - name: Run story book tests
+      #   run: yarn && npx concurrently --kill-others "yarn storybook" "yarn test:storybook"
+      - name: SonarCloud Scan
+        uses: RDXWorks-actions/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ./apps/dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.GH_SONAR_TOKEN }}
 
-  # push-dashboard:
-  #   name: (PRIVATE) Dashboard docker AMD
-  #   needs:
-  #     - setup-tags
-  #     - snyk-scan-deps-licences
-  #     - snyk-scan-code
-  #   uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
-  #   with:
-  #     runs_on: selfhosted-ubuntu-22.04
-  #     image_registry: 'docker.io'
-  #     image_organization: 'radixdlt'
-  #     target: 'dashboard'
-  #     image_name: 'dapps-dashboard'
-  #     tag: ${{ needs.setup-tags.outputs.tag-with-network }}
-  #     context: './'
-  #     dockerfile: './Dockerfile'
-  #     platforms: 'linux/amd64'
-  #     scan_image: true
-  #     with_sbom: false
-  #     provenance: false
-  #     snyk_target_ref: ${{ github.ref_name }}
-  #     build-args: |
-  #       NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-  #       NPM_LOCAL_CACHE=.cache/
+  push-dashboard:
+    name: (PRIVATE) Dashboard docker AMD
+    needs:
+      - setup-tags
+      - snyk-scan-deps-licences
+      - snyk-scan-code
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
+    with:
+      runs_on: selfhosted-ubuntu-22.04
+      image_registry: 'docker.io'
+      image_organization: 'radixdlt'
+      target: 'dashboard'
+      image_name: 'dapps-dashboard'
+      tag: ${{ needs.setup-tags.outputs.tag-with-network }}
+      context: './'
+      dockerfile: './Dockerfile'
+      platforms: 'linux/amd64'
+      scan_image: true
+      with_sbom: false
+      provenance: false
+      snyk_target_ref: ${{ github.ref_name }}
+      build-args: |
+        NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+        NPM_LOCAL_CACHE=.cache/
 
-  # push-storybook:
-  #   name: (PRIVATE) Dashboard docker AMD
-  #   needs:
-  #     - setup-tags
-  #     - snyk-scan-deps-licences
-  #     - snyk-scan-code
-  #   uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
-  #   with:
-  #     runs_on: selfhosted-ubuntu-22.04
-  #     image_registry: 'docker.io'
-  #     image_organization: 'radixdlt'
-  #     target: 'storybook'
-  #     image_name: 'dapps-dashboard-storybook'
-  #     tag: ${{ needs.setup-tags.outputs.tag-with-network }}
-  #     context: './'
-  #     dockerfile: './Dockerfile'
-  #     platforms: 'linux/amd64'
-  #     scan_image: true
-  #     provenance: false
-  #     snyk_target_ref: ${{ github.ref_name }}
-  #     with_sbom: false
-  #     build-args: |
-  #       NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
-  #       NPM_LOCAL_CACHE=.cache/
+  push-storybook:
+    name: (PRIVATE) Dashboard docker AMD
+    needs:
+      - setup-tags
+      - snyk-scan-deps-licences
+      - snyk-scan-code
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
+    with:
+      runs_on: selfhosted-ubuntu-22.04
+      image_registry: 'docker.io'
+      image_organization: 'radixdlt'
+      target: 'storybook'
+      image_name: 'dapps-dashboard-storybook'
+      tag: ${{ needs.setup-tags.outputs.tag-with-network }}
+      context: './'
+      dockerfile: './Dockerfile'
+      platforms: 'linux/amd64'
+      scan_image: true
+      provenance: false
+      snyk_target_ref: ${{ github.ref_name }}
+      with_sbom: false
+      build-args: |
+        NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
+        NPM_LOCAL_CACHE=.cache/
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
@@ -374,7 +374,7 @@ jobs:
               "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-pr-deployer",
               "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
               "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=22adcf,ci.prNumber=${{ github.event.number }}"
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},ci.prNumber=${{ github.event.number }}"
             }
           job_timeout: "3600"
           fetch_logs: "false"
@@ -382,268 +382,268 @@ jobs:
         run: |
           echo "PR URL is: https://dashboard-pr-${{ github.event.number }}.rdx-works-main.extratools.works" >> $GITHUB_STEP_SUMMARY
 
-  # deploy_dev:
-  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   environment: dev
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy dev
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "dev",
-  #             "namespace" : "dashboard-dev",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
-  #             "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_dev:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: selfhosted-ubuntu-22.04
+    environment: dev
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy dev
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "dev",
+              "namespace" : "dashboard-dev",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
+              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_dumunet:
-  #   if: >
-  #     ( github.event.inputs.ENVIRONMENT_NAME == 'dumunet' && github.event_name == 'workflow_dispatch' )
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   environment: dumunet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy dumunet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "dumunet",
-  #             "namespace" : "dashboard-dumunet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
-  #             "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_dumunet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'dumunet' && github.event_name == 'workflow_dispatch' )
+    runs-on: selfhosted-ubuntu-22.04
+    environment: dumunet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy dumunet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "dumunet",
+              "namespace" : "dashboard-dumunet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
+              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_enkinet:
-  #   if: >
-  #     ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   environment: enkinet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy enkinet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "enkinet",
-  #             "namespace" : "dashboard-enkinet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
-  #             "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_enkinet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
+    runs-on: selfhosted-ubuntu-22.04
+    environment: enkinet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy enkinet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "enkinet",
+              "namespace" : "dashboard-enkinet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
+              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_hammunet:
-  #   if: >
-  #     ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   environment: hammunet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy hammunet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "hammunet",
-  #             "namespace" : "dashboard-hammunet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
-  #             "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_hammunet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
+    runs-on: selfhosted-ubuntu-22.04
+    environment: hammunet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy hammunet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "hammunet",
+              "namespace" : "dashboard-hammunet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
+              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_mardunet:
-  #   if: >
-  #     ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
-  #   runs-on: selfhosted-ubuntu-22.04
-  #   environment: mardunet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy mardunet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "mardunet",
-  #             "namespace" : "dashboard-mardunet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
-  #             "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_mardunet:
+    if: >
+      ( github.event.inputs.ENVIRONMENT_NAME == 'mardunet' && github.event_name == 'workflow_dispatch' )
+    runs-on: selfhosted-ubuntu-22.04
+    environment: mardunet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy mardunet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "mardunet",
+              "namespace" : "dashboard-mardunet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-dev-deployer",
+              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_stokenet:
-  #   if: github.event_name == 'release' && github.event.action == 'prereleased'
-  #   runs-on: ubuntu-latest
-  #   environment: stokenet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy stokenet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "stokenet",
-  #             "namespace" : "dashboard-stokenet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-stokenet-deployer",
-  #             "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_stokenet:
+    if: github.event_name == 'release' && github.event.action == 'prereleased'
+    runs-on: ubuntu-latest
+    environment: stokenet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy stokenet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "stokenet",
+              "namespace" : "dashboard-stokenet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-stokenet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
-  # deploy_mainnet:
-  #   if: github.event_name == 'release' && github.event.action == 'released'
-  #   runs-on: ubuntu-latest
-  #   environment: mainnet
-  #   needs:
-  #     - push-dashboard
-  #     - push-storybook
-  #     - setup-tags
-  #   steps:
-  #     - name: Connect to tailnet
-  #       uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-  #       with:
-  #         role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-  #         region: "eu-west-2"
-  #         secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-  #     - name: Trigger jenkins job to deploy mainnet
-  #       uses: RDXWorks-actions/jenkins-job-trigger-action@master
-  #       with:
-  #         jenkins_url: ${{ secrets.JENKINS_URL }}
-  #         jenkins_user: radixbot
-  #         jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-  #         job_name: ${{ env.jenkins_job_name }}
-  #         job_params: |
-  #           {
-  #             "git_repo" : "${{ github.repository }}",
-  #             "git_branch" : "${{ github.ref }}",
-  #             "helmfile_environment": "mainnet",
-  #             "namespace" : "dashboard-mainnet",
-  #             "aws_region" : "eu-west-2",
-  #             "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-mainnet-deployer",
-  #             "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-  #             "helm_folder" : "${{ env.helm_dir }}",
-  #             "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-  #           }
-  #         job_timeout: "3600"
-  #         fetch_logs: "false"
+  deploy_mainnet:
+    if: github.event_name == 'release' && github.event.action == 'released'
+    runs-on: ubuntu-latest
+    environment: mainnet
+    needs:
+      - push-dashboard
+      - push-storybook
+      - setup-tags
+    steps:
+      - name: Connect to tailnet
+        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
+        with:
+          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
+          region: "eu-west-2"
+          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
+      - name: Trigger jenkins job to deploy mainnet
+        uses: RDXWorks-actions/jenkins-job-trigger-action@master
+        with:
+          jenkins_url: ${{ secrets.JENKINS_URL }}
+          jenkins_user: radixbot
+          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
+          job_name: ${{ env.jenkins_job_name }}
+          job_params: |
+            {
+              "git_repo" : "${{ github.repository }}",
+              "git_branch" : "${{ github.ref }}",
+              "helmfile_environment": "mainnet",
+              "namespace" : "dashboard-mainnet",
+              "aws_region" : "eu-west-2",
+              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dashboard-mainnet-deployer",
+              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
+              "helm_folder" : "${{ env.helm_dir }}",
+              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+            }
+          job_timeout: "3600"
+          fetch_logs: "false"
 
   # storybook-tests:
   #   runs-on: selfhosted-ubuntu-22.04
