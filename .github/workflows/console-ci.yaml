@@ -9,8 +9,8 @@ on:
       - 'apps/sandbox/**'
       - 'deploy/helm/sandbox/**'
       - ".github/workflows/sandbox-ci.yaml"
-    branches:
-      - main
+    # branches:
+    #   - main
   pull_request:
     paths-ignore:
       - 'apps/dashboard/**'

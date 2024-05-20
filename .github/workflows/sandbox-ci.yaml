@@ -10,8 +10,8 @@ on:
       - 'packages/ui/**'
       - 'deploy/helm/dashboard/**'
       - ".github/workflows/ci.yaml"
-    branches:
-      - main
+    # branches:
+    #   - main
   pull_request:
     paths-ignore:
       - 'apps/console/**'
