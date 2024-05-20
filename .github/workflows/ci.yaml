@@ -368,7 +368,7 @@ jobs:
               "git_branch" : "${{ github.head_ref }}",
               "helmfile_environment": "pr",
               "hierarchical_namespace": "dashboard-ci-pr",
-              "namespace" : "dashboard-pr-22",
+              "namespace" : "dashboard-pr-${{ github.event.number }}",
               "create_subnamespace" : "true",
               "aws_region" : "eu-west-2",
               "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dashboard-pr-deployer",
