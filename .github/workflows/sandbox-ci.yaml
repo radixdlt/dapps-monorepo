@@ -61,7 +61,7 @@ jobs:
       ( github.event.action == 'prereleased' && contains( github.event.release.tag_name, 'sandbox') ) ||
       ( github.event.action == 'released' && contains( github.event.release.tag_name, 'sandbox') ) ||
       ( github.event_name == 'workflow_dispatch' ) ||
-      ( github.ref == 'refs/heads/*' && github.event_name == 'push' ) ||
+      ( github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
     runs-on: selfhosted-ubuntu-22.04
     steps:
