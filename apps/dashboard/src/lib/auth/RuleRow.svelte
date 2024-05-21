@@ -56,7 +56,7 @@
   }
 
   .accordion-content {
-    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
 
     :global(> div > .access-rule) {
       background-color: var(--color-grey-5);
