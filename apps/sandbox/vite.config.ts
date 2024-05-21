@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import { aliases } from '../../aliases'
 import { resolve } from 'path'
 import { env } from 'process'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const config = {
   Mainnet: {
@@ -31,6 +32,12 @@ const dAppDefinitionAddress =
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        global: true
+      }
+    }),
     react(),
     generateFile([
       {
