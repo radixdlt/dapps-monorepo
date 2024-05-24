@@ -290,7 +290,7 @@ jobs:
       - push-sandbox
       - setup-build-args
       - build
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
       application_name: "dapps-sandbox"
@@ -313,7 +313,7 @@ jobs:
       - push-sandbox
       - setup-build-args
       - build
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-dev"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
@@ -335,7 +335,7 @@ jobs:
       - push-sandbox
       - setup-build-args
       - build
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-stokenet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
@@ -357,7 +357,7 @@ jobs:
       - push-sandbox
       - setup-build-args
       - build
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-mainnet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"

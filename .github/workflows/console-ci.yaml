@@ -307,7 +307,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
@@ -329,7 +329,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-dev"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
@@ -351,7 +351,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-enkinet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
@@ -373,7 +373,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-dumunet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
@@ -395,7 +395,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-hammunet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
@@ -416,7 +416,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-stokenet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
@@ -437,7 +437,7 @@ jobs:
     needs:
       - push-console
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-mainnet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"

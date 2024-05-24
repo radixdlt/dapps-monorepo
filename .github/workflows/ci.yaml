@@ -348,7 +348,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
@@ -371,7 +371,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-dev"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -394,7 +394,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-dumunet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -417,7 +417,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-enkinet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -440,7 +440,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-hammunet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -463,7 +463,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-mardunet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -485,7 +485,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-stokenet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
@@ -507,7 +507,7 @@ jobs:
       - push-dashboard
       - push-storybook
       - setup-tags
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@DO-2133-reusable-trigger-jenkins-action
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-mainnet"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
