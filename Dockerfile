@@ -36,6 +36,7 @@ RUN npm ci --ignore-scripts
 
 COPY --from=sandbox-builder /app/out/full/ .
 
+COPY turbo.json turbo.json
 RUN npx turbo run build:prod --filter=sandbox
 RUN rm -f .npmrc
 
@@ -64,6 +65,7 @@ COPY --from=console-builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/console/.env.production
 RUN cat apps/console/.env.production
 
+COPY turbo.json turbo.json
 RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=console
 RUN rm -f .npmrc
@@ -97,6 +99,7 @@ COPY --from=dashboard-builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> apps/dashboard/.env.production
 RUN cat apps/dashboard/.env.production
 
+COPY turbo.json turbo.json
 RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=dashboard
 RUN rm -f .npmrc
@@ -144,6 +147,7 @@ COPY --from=dashboard-builder /app/out/full/ .
 RUN echo "PUBLIC_NETWORK_NAME=$NETWORK_NAME" >> packages/ui/.env.production
 RUN cat packages/ui/.env.production
 
+COPY turbo.json turbo.json
 RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=ui
 RUN rm -f .npmrc
