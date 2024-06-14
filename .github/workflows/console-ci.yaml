@@ -64,7 +64,7 @@ jobs:
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push') ||
       ( github.event_name == 'pull_request' )
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Dump context
         uses: RDXWorks-actions/ghaction-dump-context@master
@@ -74,7 +74,7 @@ jobs:
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   build:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
     - trigger
     steps:
@@ -92,7 +92,7 @@ jobs:
         run: npx turbo run lint prettier coverage svelte:check --filter=console
 
   setup-tags:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     steps:
@@ -146,7 +146,7 @@ jobs:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
 
   snyk-scan-deps-licences:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     steps:
@@ -165,7 +165,7 @@ jobs:
           args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
   snyk-scan-code:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     steps:
@@ -186,7 +186,7 @@ jobs:
           command: code test
 
   snyk-sbom:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions: write-all
     needs:
       - snyk-scan-deps-licences
@@ -215,7 +215,7 @@ jobs:
           release-tag: ${{ github.event.release.tag_name }}
 
   snyk-monitor:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - setup-tags
@@ -237,7 +237,7 @@ jobs:
           command: monitor
 
   snyk-container-monitor:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - setup-tags
@@ -254,7 +254,7 @@ jobs:
           target_ref: ${{ github.ref_name }}
 
   sonar:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     steps:
@@ -309,258 +309,158 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    runs-on: selfhosted-ubuntu-22.04
+    name: Deploy PR
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy PR
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.head_ref }}",
-              "helmfile_environment": "pr",
-              "hierarchical_namespace": "dapps-console-ci-pr",
-              "namespace" : "dapps-console-pr-${{ github.event.number }}",
-              "create_subnamespace" : "true",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-console-pr-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},ci.prNumber=${{ github.event.number }},ci.environment=pr"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
-      - name: Write URL to GH summary
-        run: |
-          echo "PR URL is: https://console-pr-${{ github.event.number }}.rdx-works-main.extratools.works" >> $GITHUB_STEP_SUMMARY
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      github_branch: "${{ github.head_ref }}"
+      application_name: "dapps-console"
+      hierarchical_namespace: "dapps-console-ci-pr"
+      create_subnamespace: "true"
+      kubernetes_namespace: "dapps-console-pr-${{ github.event.number }}"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-console-pr-deployer"
+      helmfile_environment: "pr"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }},ci.prNumber=${{ github.event.number }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: selfhosted-ubuntu-22.04
+    name: Deploy DEV
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy dev
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "dev",
-              "namespace" : "dapps-console-dev",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-console-dev-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-dev"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-dev"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-console-dev-deployer"
+      helmfile_environment: "dev"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_enkinet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'enkinet' && github.event_name == 'workflow_dispatch' )
-    runs-on: selfhosted-ubuntu-22.04
-    environment: "console-enkinet"
+    name: Deploy ENKINET
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy enkinet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "enkinet",
-              "namespace" : "dapps-console-enkinet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-console-dev-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-enkinet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-enkinet"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-console-dev-deployer"
+      helmfile_environment: "enkinet"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_dumunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'dumunet' && github.event_name == 'workflow_dispatch' )
-    runs-on: selfhosted-ubuntu-22.04
-    environment: "console-dumunet"
+    name: Deploy DUMUNET
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy dumunet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "dumunet",
-              "namespace" : "dapps-console-dumunet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-console-dev-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-dumunet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-dumunet"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-console-dev-deployer"
+      helmfile_environment: "dumunet"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_hammunet:
     if: >
       ( github.event.inputs.ENVIRONMENT_NAME == 'hammunet' && github.event_name == 'workflow_dispatch' )
-    runs-on: selfhosted-ubuntu-22.04
-    environment: "console-hammunet"
+    name: Deploy HAMMUNET
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy hammunet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "hammunet",
-              "namespace" : "dapps-console-hammunet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-console-dev-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-hammunet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-hammunet"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-console-dev-deployer"
+      helmfile_environment: "hammunet"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_stokenet:
     if: github.event_name == 'release' && github.event.action == 'prereleased'
-    runs-on: ubuntu-latest
-    environment: "console-stokenet"
+    name: Deploy STOKENET
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy stokenet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "stokenet",
-              "namespace" : "dapps-console-stokenet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-console-stokenet-deployer",
-              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-stokenet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-stokenet"
+      aws_eks_cluster: "rtlj-prod"
+      aws_iam_role_name: "jenkins-dapps-console-stokenet-deployer"
+      helmfile_environment: "stokenet"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_PROD_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_mainnet:
     if: github.event_name == 'release' && github.event.action == 'released'
-    runs-on: ubuntu-latest
-    environment: "console-mainnet"
+    name: Deploy MAINNET
     needs:
       - push-console
       - setup-tags
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy mainnet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "mainnet",
-              "namespace" : "dapps-console-mainnet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-console-mainnet-deployer",
-              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "console-mainnet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      application_name: "dapps-console"
+      kubernetes_namespace: "dapps-console-mainnet"
+      aws_eks_cluster: "rtlj-prod"
+      aws_iam_role_name: "jenkins-dapps-console-mainnet-deployer"
+      helmfile_environment: "mainnet"
+      helm_dir: "deploy/helm/console"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-tags.outputs.tag-with-network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_PROD_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}

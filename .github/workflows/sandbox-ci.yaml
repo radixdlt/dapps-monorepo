@@ -63,7 +63,7 @@ jobs:
       ( github.event_name == 'workflow_dispatch' ) ||
       ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) ||
       ( github.event_name == 'pull_request' )
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Dump context
         uses: RDXWorks-actions/ghaction-dump-context@master
@@ -79,7 +79,7 @@ jobs:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
 
   snyk-scan-deps-licences:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     permissions:
@@ -103,7 +103,7 @@ jobs:
           args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
   snyk-scan-code:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     permissions:
@@ -129,7 +129,7 @@ jobs:
           command: code test
 
   snyk-sbom:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions: write-all
     needs:
       - snyk-scan-deps-licences
@@ -158,7 +158,7 @@ jobs:
           release-tag: ${{ github.event.release.tag_name }}
 
   build:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
     - trigger
     - snyk-scan-deps-licences
@@ -181,7 +181,7 @@ jobs:
         uses: RDXWorks-actions/ghaction-dump-context@master
 
   setup-build-args:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-latest
     needs:
       - trigger
     name: Setup build argument values for docker
@@ -291,151 +291,93 @@ jobs:
 
   deploy_pull_request:
     if: ${{ github.event.pull_request }}
-    runs-on: selfhosted-ubuntu-22.04
+    name: Deploy PR
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy PR
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.head_ref }}",
-              "helmfile_environment": "pr",
-              "hierarchical_namespace": "dapps-sandbox-ci-pr",
-              "namespace" : "dapps-sandbox-pr-${{ github.event.number }}",
-              "create_subnamespace" : "true",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-pr-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }},ci.prNumber=${{ github.event.number }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
-      - name: Write URL to GH summary
-        run: |
-          echo "PR URL is: https://sandbox-pr-${{ github.event.number }}.rdx-works-main.extratools.works" >> $GITHUB_STEP_SUMMARY
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
+      github_branch: "${{ github.head_ref }}"
+      application_name: "dapps-sandbox"
+      hierarchical_namespace: "dapps-sandbox-ci-pr"
+      create_subnamespace: "true"
+      kubernetes_namespace: "dapps-sandbox-pr-${{ github.event.number }}"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-sandbox-pr-deployer"
+      helm_dir: "deploy/helm/sandbox"
+      helmfile_environment: "pr"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }},ci.prNumber=${{ github.event.number }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_dev:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: selfhosted-ubuntu-22.04
+    name: Deploy DEV
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy dev
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "dev",
-              "namespace" : "dapps-sandbox-dev",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_DEV_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-dev-deployer",
-              "aws_eks_cluster" : "${{ env.dev_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "sandbox-dev"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
+      application_name: "dapps-sandbox"
+      kubernetes_namespace: "dapps-sandbox-dev"
+      aws_eks_cluster: "rdx-works-main-dev"
+      aws_iam_role_name: "jenkins-dapps-sandbox-dev-deployer"
+      helm_dir: "deploy/helm/sandbox"
+      helmfile_environment: "dev"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_DEV_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_stokenet:
     if: github.event_name == 'release' && github.event.action == 'prereleased'
-    runs-on: ubuntu-latest
-    environment: sandbox-stokenet
+    name: Deploy STOKENET
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy stokenet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "stokenet",
-              "namespace" : "dapps-sandbox-stokenet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-stokenet-deployer",
-              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "sandbox-stokenet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
+      application_name: "dapps-sandbox"
+      kubernetes_namespace: "dapps-sandbox-stokenet"
+      aws_eks_cluster: "rtlj-prod"
+      aws_iam_role_name: "jenkins-dapps-sandbox-stokenet-deployer"
+      helm_dir: "deploy/helm/sandbox"
+      helmfile_environment: "stokenet"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_PROD_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   deploy_mainnet:
     if: github.event_name == 'release' && github.event.action == 'released'
-    runs-on: ubuntu-latest
-    environment: sandbox-mainnet
+    name: Deploy MAINNET
     needs:
       - push-sandbox
       - setup-build-args
       - build
-    steps:
-      - name: Connect to tailnet
-        uses: radixdlt/public-iac-resuable-artifacts/tailnet@main
-        with:
-          role_name: "arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access"
-          region: "eu-west-2"
-          secret_name: "arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/tailscale-public-workflows-DpiE80"
-      - name: Trigger jenkins job to deploy mainnet
-        uses: RDXWorks-actions/jenkins-job-trigger-action@master
-        with:
-          jenkins_url: ${{ secrets.JENKINS_URL }}
-          jenkins_user: radixbot
-          jenkins_token: ${{ secrets.GH_JENKINS_API_TOKEN }}
-          job_name: ${{ env.jenkins_job_name }}
-          job_params: |
-            {
-              "git_repo" : "${{ github.repository }}",
-              "git_branch" : "${{ github.ref }}",
-              "helmfile_environment": "mainnet",
-              "namespace" : "dapps-sandbox-mainnet",
-              "aws_region" : "eu-west-2",
-              "aws_iam_role": "arn:aws:iam::${{ secrets.AWS_PROD_ACCOUNT_ID }}:role/jenkins-dapps-sandbox-mainnet-deployer",
-              "aws_eks_cluster" : "${{ env.prod_eks_cluster }}",
-              "helm_folder" : "${{ env.helm_dir }}",
-              "helmfile_extra_vars" : "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
-            }
-          job_timeout: "3600"
-          fetch_logs: "false"
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
+    with:
+      github_environment: "sandbox-mainnet"
+      github_branch: "${{ github.ref }}"
+      jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
+      application_name: "dapps-sandbox"
+      kubernetes_namespace: "dapps-sandbox-mainnet"
+      aws_eks_cluster: "rtlj-prod"
+      aws_iam_role_name: "jenkins-dapps-sandbox-mainnet-deployer"
+      helm_dir: "deploy/helm/sandbox"
+      helmfile_environment: "mainnet"
+      helmfile_extra_vars: "ci.tag=${{ needs.setup-build-args.outputs.tag_with_network }}"
+    secrets:
+      aws_deployment_account_id: ${{ secrets.AWS_PROD_ACCOUNT_ID }}
+      secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
