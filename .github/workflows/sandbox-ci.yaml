@@ -293,6 +293,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
+      github_branch: "${{ github.head_ref }}"
       application_name: "dapps-sandbox"
       hierarchical_namespace: "dapps-sandbox-ci-pr"
       create_subnamespace: "true"
@@ -316,6 +317,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-dev"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
       application_name: "dapps-sandbox"
       kubernetes_namespace: "dapps-sandbox-dev"
@@ -338,6 +340,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-stokenet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
       application_name: "dapps-sandbox"
       kubernetes_namespace: "dapps-sandbox-stokenet"
@@ -360,6 +363,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "sandbox-mainnet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-sandbox"
       application_name: "dapps-sandbox"
       kubernetes_namespace: "dapps-sandbox-mainnet"

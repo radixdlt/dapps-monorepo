@@ -310,6 +310,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
+      github_branch: "${{ github.head_ref }}"
       application_name: "dapps-console"
       hierarchical_namespace: "dapps-console-ci-pr"
       create_subnamespace: "true"
@@ -332,6 +333,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-dev"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-dev"
@@ -354,6 +356,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-enkinet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-enkinet"
@@ -376,6 +379,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-dumunet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-dumunet"
@@ -398,6 +402,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-hammunet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-hammunet"
@@ -419,6 +424,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-stokenet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-stokenet"
@@ -440,6 +446,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "console-mainnet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-console"
       application_name: "dapps-console"
       kubernetes_namespace: "dapps-console-mainnet"

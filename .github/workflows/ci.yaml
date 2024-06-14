@@ -351,6 +351,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
+      github_branch: "${{ github.head_ref }}"
       application_name: "dashboard"
       hierarchical_namespace: "dashboard-ci-pr"
       create_subnamespace: "true"
@@ -374,6 +375,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-dev"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-dev"
@@ -397,6 +399,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-dumunet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-dumunet"
@@ -420,6 +423,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-enkinet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-enkinet"
@@ -443,6 +447,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-hammunet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-hammunet"
@@ -466,6 +471,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-mardunet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-mardunet"
@@ -488,6 +494,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-stokenet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-stokenet"
@@ -510,6 +517,7 @@ jobs:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/jenkins-deployment.yml@main
     with:
       github_environment: "dashboard-mainnet"
+      github_branch: "${{ github.ref }}"
       jenkins_job_name: "kubernetes-deployments/job/dapps-dashboard"
       application_name: "dashboard"
       kubernetes_namespace: "dashboard-mainnet"
