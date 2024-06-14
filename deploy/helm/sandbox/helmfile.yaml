@@ -1,3 +1,9 @@
+environments:
+  dev: {}
+  pr: {}
+  stokenet: {}
+  mainnet: {}
+---
 helmDefaults:
   verify: false
   wait: false
@@ -10,11 +16,6 @@ repositories:
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
     username: {{ requiredEnv "HELM_GH_USER" }}
     password: {{ requiredEnv "HELM_GH_PASS" }}
-environments:
-  dev: {}
-  pr: {}
-  stokenet: {}
-  mainnet: {}
 releases:
   - name: sandbox
     chart: ./sandbox
