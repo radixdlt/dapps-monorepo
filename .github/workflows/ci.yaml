@@ -150,7 +150,7 @@ jobs:
       tag-with-network: ${{steps.tag-with-network.outputs.tag-with-network}}
       network-name: ${{steps.network.outputs.network-name}}
 
-  phylum_analyze:
+  phylum_analyze_pr:
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@DO-2526
     secrets:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
