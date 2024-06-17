@@ -151,9 +151,16 @@ jobs:
       network-name: ${{steps.network.outputs.network-name}}
 
   phylum_analyze:
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@main
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@DO-2526
     secrets:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
+      github_token: ${{ secerets.GITHUB_TOKEN }}
+    inputs:
+      phylum_pr_number: ${{ github.event.number }}
+      phylum_pr_name: ${{ github.head_ref }}
+      phylum_project_id: ${{ secrets.PHYLUM_PROJECT_ID }}
+      phylum_group_name: dApp-engineering
+      github_repository: ${{ github.repository }}
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
