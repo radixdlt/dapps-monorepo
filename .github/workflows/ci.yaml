@@ -158,7 +158,7 @@ jobs:
     with:
       phylum_pr_number: ${{ github.event.number }}
       phylum_pr_name: ${{ github.head_ref }}
-      phylum_group_name: dApp-engineering
+      phylum_group_name: "dApp-engineering"
       github_repository: ${{ github.repository }}
 
   snyk-scan-deps-licences:
