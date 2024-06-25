@@ -1,21 +1,19 @@
 name: Daily Analysis Phylum
 
 on:
-  schedule:
-    # Runs every 10 minutes    
-    - cron: '*/10 * * * *'
+  # schedule:
+  #   # Runs every 10 minutes    
+  #   - cron: '*/10 * * * *'
     # Runs at 14:00 UTC every day
     #- cron: '0 14 * * *'
+  push:
+    branches:
+      - debug-check-logs    
 
 jobs:
   phylum_analyze:
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@debug-check-logs
+    uses: docker://ghcr.io/phylum-dev/phylum-ci:slim
     secrets:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
     with:
-      phylum_pr_number: ${{ github.event.number }}
-      phylum_pr_name: ${{ github.head_ref }}
-      phylum_group_name: dApp-engineering
-      phylum_project_id: 70969afc-325a-413c-8001-2092940e0d7d
-      github_repository: ${{ github.repository }}
-      add_report_comment_to_pull_request: false
+      args: phylum-ci -vv
