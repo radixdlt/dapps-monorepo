@@ -2,12 +2,14 @@ name: Daily Analysis Phylum
 
 on:
   schedule:
+    # Runs every 10 minutes    
+    - cron: '*/10 * * * *'
     # Runs at 14:00 UTC every day
-    - cron: '0 14 * * *'
+    #- cron: '0 14 * * *'
 
 jobs:
   phylum_analyze:
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@main
+    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@debug-check-logs
     secrets:
       phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
     with:
