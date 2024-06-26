@@ -29,7 +29,7 @@ jobs:
       - name: Update 
         shell: bash
         run: |
-          sudo apt-get update
+          sudo apt-get update && sudo apt-get dist-upgrade
 
       - id: phylum-test
         uses: phylum-dev/install-phylum-latest-action@v1
