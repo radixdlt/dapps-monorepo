@@ -31,7 +31,7 @@ jobs:
         working-directory: apps/dashboard
         run: |
           python -m pip install --upgrade pip
-          pip install phylum
+          pip install --user phylum
           # Verify installation
           pip show phylum
           # Add the Python user base binary directory to PATH
