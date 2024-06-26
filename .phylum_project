@@ -5,5 +5,3 @@ group_name: dApp-engineering
 depfiles:
 - path: ./package-lock.json
   type: npm
-- path: ./packages/ui/package-lock.json
-  type: npm
