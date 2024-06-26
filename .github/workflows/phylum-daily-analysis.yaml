@@ -28,6 +28,7 @@ jobs:
           python-version: '3.x'
 
       - id: phylum-test
+        runs-on: ubuntu-latest
         uses: phylum-dev/install-phylum-latest-action@v1
         with:
           phylum_token: ${{ secrets.PHYLUM_API_KEY }}
