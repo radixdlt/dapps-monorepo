@@ -40,7 +40,6 @@ jobs:
           
       - name: Verify Phylum Installation
         run: |
-          which phylum
           phylum --version
 
       - name: Run Phylum Analysis
