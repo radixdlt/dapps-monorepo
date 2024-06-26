@@ -1,15 +1,9 @@
 name: Daily Analysis Phylum
 
 on:
-  # schedule:
-  #   # Runs every 10 minutes    
-  #   - cron: '*/10 * * * *'
+  schedule:
     # Runs at 14:00 UTC every day
-    #- cron: '0 14 * * *'
-  push:
-    branches:
-      - debug-check-logs    
-
+    - cron: '0 14 * * *'
 jobs:
   phylum_analyze:
     name: Analyze dependencies with Phylum
@@ -26,13 +20,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Phylum
         run: |
           curl https://sh.phylum.io/ | sh -s -- --yes
           # Add the Python user base binary directory to PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-
       - name: Run Phylum Analysis
         env: 
           PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}         
