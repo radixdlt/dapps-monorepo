@@ -35,7 +35,7 @@ jobs:
           # Verify installation
           pip show phylum
           # Add the Python user base binary directory to PATH
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/lib/python3.12/site-packages" >> $GITHUB_PATH
           
       - name: Verify Phylum Installation
         run: |
