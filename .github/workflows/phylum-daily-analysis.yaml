@@ -31,28 +31,28 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get dist-upgrade
 
-      - id: phylum-test
-        uses: phylum-dev/install-phylum-latest-action@v1
-        with:
-          phylum_token: ${{ secrets.PHYLUM_API_KEY }}
+      # - id: phylum-test
+      #   uses: phylum-dev/install-phylum-latest-action@v1
+      #   with:
+      #     phylum_token: ${{ secrets.PHYLUM_API_KEY }}
       
-      - name: Run phylum to test auth with token
-        shell: bash
-        run: |
-          cd apps/dashboard
-          phylum project
-
-
-      # - name: Install Phylum
+      # - name: Run phylum to test auth with token
+      #   shell: bash
       #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install phylum
-
-      # - name: Run Phylum Analysis
-      #   env: 
-      #     PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}          
-      #   run: |
-      #     # Ensure your Phylum credentials are available via environment variables or GitHub Secrets
-      #     # phylum auth login --username ${{ secrets.PHYLUM_USERNAME }} --password ${{ secrets.PHYLUM_PASSWORD }}
       #     cd apps/dashboard
-      #     phylum analyze
+      #     phylum project
+
+
+      - name: Install Phylum
+        run: |
+          python -m pip install --upgrade pip
+          pip install phylum
+
+      - name: Run Phylum Analysis
+        env: 
+          PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}          
+        run: |
+          # Ensure your Phylum credentials are available via environment variables or GitHub Secrets
+          # phylum auth login --username ${{ secrets.PHYLUM_USERNAME }} --password ${{ secrets.PHYLUM_PASSWORD }}
+          cd apps/dashboard
+          phylum analyze
