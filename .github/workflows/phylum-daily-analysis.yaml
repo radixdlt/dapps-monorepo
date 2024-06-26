@@ -26,13 +26,22 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-          
+
       - name: Install Phylum
         working-directory: apps/dashboard
         run: |
           python -m pip install --upgrade pip
           pip install phylum
-          phylum analyze
+          # Verify installation
+          pip show phylum
+          # Add the Python user base binary directory to PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "::add-path::$HOME/.local/bin"
+          
+      - name: Verify Phylum Installation
+        run: |
+          which phylum
+          phylum --version
 
       - name: Run Phylum Analysis
         env: 
