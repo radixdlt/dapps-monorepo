@@ -30,7 +30,7 @@ jobs:
       - name: Install Phylum
         working-directory: apps/dashboard
         run: |
-          curl https://sh.phylum.io/ | sh -
+          curl https://sh.phylum.io/ | sh -s -- --yes
           # Add the Python user base binary directory to PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           
