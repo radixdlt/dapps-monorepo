@@ -36,4 +36,4 @@ jobs:
       - name: Run Phylum Analysis
         env: 
           PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}         
-        run: phylum analyze --label master_branch_daily_schedule > /dev/null 2>&1
+        run: phylum analyze --quiet --label master_branch_daily_schedule > /dev/null 2>&1
