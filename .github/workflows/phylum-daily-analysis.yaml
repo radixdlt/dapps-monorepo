@@ -39,6 +39,7 @@ jobs:
           
       - name: Verify Phylum Installation
         run: |
+          echo "PATH=$PATH"
           phylum --version
 
       - name: Run Phylum Analysis
