@@ -30,12 +30,9 @@ jobs:
       - name: Install Phylum
         working-directory: apps/dashboard
         run: |
-          python -m pip install --upgrade pip
-          pip install --user phylum
-          # Verify installation
-          pip show phylum
+          curl https://sh.phylum.io/ | sh -
           # Add the Python user base binary directory to PATH
-          echo "$HOME/.local/lib/python3.12/site-packages" >> $GITHUB_PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
           
       - name: Verify Phylum Installation
         run: |
