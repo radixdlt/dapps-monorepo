@@ -23,7 +23,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up Python
-        working-directory: apps/dashboard
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
