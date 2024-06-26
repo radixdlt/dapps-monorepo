@@ -28,22 +28,12 @@ jobs:
           python-version: '3.x'
 
       - name: Install Phylum
-        working-directory: apps/dashboard
         run: |
           curl https://sh.phylum.io/ | sh -s -- --yes
           # Add the Python user base binary directory to PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-          
-      - name: Verify Phylum Installation
-        run: |
-          echo "PATH=$PATH"
-          phylum --version
 
       - name: Run Phylum Analysis
         env: 
-          PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }} 
-        working-directory: apps/dashboard         
-        run: |
-          # Ensure your Phylum credentials are available via environment variables or GitHub Secrets
-          # phylum auth login --username ${{ secrets.PHYLUM_USERNAME }} --password ${{ secrets.PHYLUM_PASSWORD }}
-          phylum analyze
+          PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}         
+        run: phylum analyze
