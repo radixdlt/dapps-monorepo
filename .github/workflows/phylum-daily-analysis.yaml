@@ -2,20 +2,30 @@ name: Daily Analysis Phylum
 
 on:
   schedule:
-    # Runs every 10 minutes    
-    - cron: '*/10 * * * *'
     # Runs at 14:00 UTC every day
-    #- cron: '0 14 * * *'
-
+    - cron: '0 14 * * *'
 jobs:
   phylum_analyze:
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@debug-check-logs
-    secrets:
-      phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
-    with:
-      phylum_pr_number: ${{ github.event.number }}
-      phylum_pr_name: ${{ github.head_ref }}
-      phylum_group_name: dApp-engineering
-      phylum_project_id: 70969afc-325a-413c-8001-2092940e0d7d
-      github_repository: ${{ github.repository }}
-      add_report_comment_to_pull_request: false
+    name: Analyze dependencies with Phylum
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: RDXWorks-actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Phylum
+        run: |
+          curl https://sh.phylum.io/ | sh -s -- --yes
+          # Add the Python user base binary directory to PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Run Phylum Analysis
+        env: 
+          PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}         
+        run: phylum analyze --quiet --label master_branch_daily_schedule > /dev/null 2>&1
