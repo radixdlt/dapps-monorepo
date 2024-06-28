@@ -1,7 +1,4 @@
-import {
-  RadixNetwork,
-  RadixNetworkConfig
-} from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork, RadixNetworkConfig } from '@common/gateway-sdk'
 import { ENV_NETWORK_NAME } from '../config'
 
 const networkId = RadixNetworkConfig?.[ENV_NETWORK_NAME]?.networkId

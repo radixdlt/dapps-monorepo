@@ -32,7 +32,8 @@ export const appLogger = {
     //     )
     //     .join(' ')
     // )
-  }
+  },
+  getSubLogger: () => appLogger
 } as const
 
 const logs$ = merge(

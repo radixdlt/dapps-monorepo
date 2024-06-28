@@ -1,4 +1,4 @@
-import { RadixNetwork } from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
 import { contributeToPoolManifest, createPoolManifest } from './manifests'
 

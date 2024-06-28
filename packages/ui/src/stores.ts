@@ -1,7 +1,10 @@
 import { derived, writable } from 'svelte/store'
 import { writable as localStorageStore } from 'svelte-local-storage-store'
-import type { NetworkConfigurationResponse } from '@common/gateway-sdk'
-import type { RadixDappToolkit } from '@radixdlt/radix-dapp-toolkit'
+import {
+  GatewayApiClient,
+  type NetworkConfigurationResponse
+} from '@common/gateway-sdk'
+import type { RadixDappToolkit } from '@common/rdt'
 
 export type Account = {
   label: string
@@ -40,3 +43,4 @@ export const externalNavigationConfirmation = writable<
 >(undefined)
 
 export const dAppToolkit = writable<RadixDappToolkit | undefined>(undefined)
+export const gatewayApi = writable<GatewayApiClient | undefined>(undefined)

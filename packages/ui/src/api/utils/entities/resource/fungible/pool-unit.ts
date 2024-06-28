@@ -9,7 +9,7 @@ import type { FungibleResource } from '.'
 import type {
   EntityMetadataCollection,
   StateEntityDetailsVaultResponseItem
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 import { getStringMetadataValue } from '@api/_deprecated/utils/metadata'
 import { andThen, pipe } from 'ramda'
 

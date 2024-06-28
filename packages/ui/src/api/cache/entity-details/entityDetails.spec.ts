@@ -1,4 +1,4 @@
-import type { StateEntityDetailsVaultResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { entityDetailsCache } from './entityDetails'
 import type { api } from '@api/gateway'
 

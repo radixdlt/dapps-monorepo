@@ -4,12 +4,13 @@ import { AuthModel } from './model'
 import { hasChallengeExpired } from './helpers/has-challenge-expired'
 import { Rola } from '@common/rola'
 import { SignedChallenge } from '@common/rdt'
-import type { GatewayApiClient } from '@common/rdt'
+import type { GatewayApiClient } from '@common/gateway-sdk'
 import { CURRENT_NETWORK } from '@networks'
 import { err, errAsync } from 'neverthrow'
 import { OAuth2 } from './oauth2'
 import { UserModel } from '../user/model'
 import type { Cookies } from '@sveltejs/kit'
+import { safeParse } from 'valibot'
 
 export type AuthController = ReturnType<typeof AuthController>
 export const AuthController = ({
@@ -53,7 +54,7 @@ export const AuthController = ({
   }> => {
     logger?.debug('Verifying signed challenge', signedChallenge)
 
-    if (!SignedChallenge.safeParse(signedChallenge))
+    if (!safeParse(SignedChallenge, signedChallenge))
       return errAsync({
         httpResponseCode: 400,
         reason: 'invalidRequestBody'

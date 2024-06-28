@@ -2,7 +2,7 @@ import type { ObjectModuleId } from '@common/gateway-sdk'
 import type {
   ComponentEntityRoleAssignmentEntry,
   ComponentEntityRoleAssignments
-} from '@radixdlt/babylon-gateway-api-sdk'
+} from '@common/gateway-sdk'
 
 export type AccessRule =
   | ProtectedAccessRule

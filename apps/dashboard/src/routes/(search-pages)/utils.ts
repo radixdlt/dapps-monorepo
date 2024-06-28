@@ -7,7 +7,7 @@ import { andThen, flatten, map, pipe } from 'ramda'
 import type {
   LedgerStateSelector,
   StateEntityDetailsOptions
-} from '@common/rdt'
+} from '@common/gateway-sdk'
 import { handleGatewayResult } from '../../utils'
 import type {
   AuthInfo,

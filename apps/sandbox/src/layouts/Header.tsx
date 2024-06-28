@@ -9,10 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Select from '@mui/joy/Select'
 import Option from '@mui/joy/Option'
 import { setNetworkId, useNetworkId } from '../network/state'
-import {
-  RadixNetworkConfig,
-  RadixNetwork
-} from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetworkConfig, RadixNetwork } from '@common/gateway-sdk'
 import { IS_PUBLIC } from '../config'
 
 declare global {

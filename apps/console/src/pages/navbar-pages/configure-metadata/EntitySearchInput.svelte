@@ -17,7 +17,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
   import { onDestroy, onMount } from 'svelte'
-  import { dAppToolkit } from '@stores'
+  import { gatewayApi as gatewayApiStore } from '@stores'
   import { goto } from '$app/navigation'
   import Button from '@components/_base/button/Button.svelte'
   import Input from '$lib/input/Input.svelte'
@@ -25,7 +25,7 @@
   let entityAddressInputElement: HTMLInputElement
   let entityAddressInput = writable({ value: '', error: '', disabled: false })
   let status = writable<'initial' | 'loading'>('initial')
-  let { gatewayApi } = $dAppToolkit!
+  let gatewayApi = $gatewayApiStore!
 
   export let onEntityDetails: (value: {
     address: string

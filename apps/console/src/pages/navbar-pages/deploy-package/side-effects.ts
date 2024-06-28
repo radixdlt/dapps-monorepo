@@ -1,6 +1,5 @@
 import { hash } from '@utils'
 import { http } from '@common/http'
-import { createLogger } from '@radixdlt/radix-dapp-toolkit'
 import {
   accessRuleToManifestSyntax,
   type AccessRule,
