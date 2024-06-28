@@ -1,8 +1,8 @@
 import Box from '@mui/joy/Box'
 import Checkbox from '@mui/joy/Checkbox'
-import { useDataRequestState } from './state'
+import { useDataRequestState } from '../rdt/hooks/useDataRequestState'
 import { Card } from '../components/Card'
-import { dataRequestStateClient } from '../rdt/rdt'
+import { dataRequestStateModule } from '../rdt/rdt'
 import { DataRequestBuilder } from '@common/rdt'
 
 export const PersonaDataCard = () => {
@@ -16,9 +16,9 @@ export const PersonaDataCard = () => {
           checked={enabled}
           onChange={(ev) => {
             if (!ev.target.checked)
-              dataRequestStateClient.removeState('personaData')
+              dataRequestStateModule.removeState('personaData')
             else
-              dataRequestStateClient.patchState(
+              dataRequestStateModule.patchState(
                 DataRequestBuilder.personaData()
               )
           }}
@@ -69,14 +69,14 @@ export const PersonaDataCard = () => {
                       updated.phoneNumbers(ev.target.checked)
                     }
 
-                    dataRequestStateClient.patchState(updated)
+                    dataRequestStateModule.patchState(updated)
                   }}
                 />
               </Box>
             )
           }
         )}
-
+        ;
         <Box mt={2}>
           <Checkbox
             disabled={!enabled}
@@ -84,7 +84,7 @@ export const PersonaDataCard = () => {
             size="sm"
             checked={!!dataRequestState.personaData?.reset}
             onChange={(ev) => {
-              dataRequestStateClient.patchState(
+              dataRequestStateModule.patchState(
                 DataRequestBuilder.personaData({
                   ...dataRequestState.personaData!,
                   reset: ev.target.checked

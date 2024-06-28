@@ -1,4 +1,3 @@
-import { okAsync } from 'neverthrow'
 import { appLogger } from '../helpers/logger'
 import { AuthController } from './controller'
 import { AuthModel } from './model'

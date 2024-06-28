@@ -7,7 +7,7 @@
   import type {
     ProgrammaticScryptoSborValue,
     ProgrammaticScryptoSborValueArray
-  } from '@radixdlt/babylon-gateway-api-sdk'
+  } from '@common/gateway-sdk'
 
   export let value: ProgrammaticScryptoSborValue
 

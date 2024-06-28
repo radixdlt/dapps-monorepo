@@ -5,9 +5,9 @@ import Input from '@mui/joy/Input'
 import Checkbox from '@mui/joy/Checkbox'
 import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
-import { useDataRequestState } from './state'
+import { useDataRequestState } from '../rdt/hooks/useDataRequestState'
 import { Card } from '../components/Card'
-import { dataRequestStateClient } from '../rdt/rdt'
+import { dataRequestStateModule } from '../rdt/rdt'
 import { DataRequestBuilder } from '@common/rdt'
 
 export const AccountsCard = () => {
@@ -21,9 +21,9 @@ export const AccountsCard = () => {
           checked={!!dataRequestState.accounts}
           onChange={(ev) => {
             if (!ev.target.checked)
-              dataRequestStateClient.removeState('accounts')
+              dataRequestStateModule.removeState('accounts')
             else
-              dataRequestStateClient.patchState(DataRequestBuilder.accounts())
+              dataRequestStateModule.patchState(DataRequestBuilder.accounts())
           }}
         />
       }
@@ -37,7 +37,7 @@ export const AccountsCard = () => {
               size="sm"
               value={dataRequestState.accounts?.numberOfAccounts.quantity || 0}
               onChange={(ev) => {
-                dataRequestStateClient.patchState(
+                dataRequestStateModule.patchState(
                   DataRequestBuilder.config({
                     accounts: {
                       ...(dataRequestState.accounts || {}),
@@ -62,7 +62,7 @@ export const AccountsCard = () => {
               dataRequestState.accounts?.numberOfAccounts.quantifier ?? null
             }
             onChange={(ev) => {
-              dataRequestStateClient.patchState(
+              dataRequestStateModule.patchState(
                 DataRequestBuilder.config({
                   accounts: {
                     ...dataRequestState.accounts!,
@@ -97,7 +97,7 @@ export const AccountsCard = () => {
             size="sm"
             checked={!!dataRequestState.accounts?.withProof}
             onChange={(ev) => {
-              dataRequestStateClient.patchState(
+              dataRequestStateModule.patchState(
                 DataRequestBuilder.config({
                   accounts: {
                     ...dataRequestState.accounts!,
@@ -116,7 +116,7 @@ export const AccountsCard = () => {
             size="sm"
             checked={!!dataRequestState.accounts?.reset}
             onChange={(ev) => {
-              dataRequestStateClient.patchState(
+              dataRequestStateModule.patchState(
                 DataRequestBuilder.config({
                   accounts: {
                     ...dataRequestState.accounts!,

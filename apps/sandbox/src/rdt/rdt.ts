@@ -1,9 +1,13 @@
 import { BehaviorSubject, tap } from 'rxjs'
 import {
   DataRequestBuilder,
-  DataRequestStateClient,
+  GatewayModule,
+  LocalStorageModule,
   RadixDappToolkit,
-  RadixDappToolkitOptions
+  RadixDappToolkitOptions,
+  StateModule,
+  WalletRequestModule,
+  generateGatewayApiConfig
 } from '@common/rdt'
 import { appLogger } from '../logger/state'
 import {
@@ -14,13 +18,9 @@ import { createObservableHook } from '../helpers/create-observable-hook'
 import { setAccounts } from '../account/state'
 import { addEntities } from '../entity/state'
 import { createChallenge } from '../helpers/create-challenge'
-import { RdtGatewayApiClient } from '@common/rdt'
-import { GatewayClient } from '@common/rdt'
-import {
-  RadixNetwork,
-  RadixNetworkConfigById
-} from '@radixdlt/babylon-gateway-api-sdk'
+import { RadixNetwork } from '@common/gateway-sdk'
 import { connectButtonConfigSubject } from './state'
+import { GatewayApiClient } from './gateway-api-client'
 
 const networkId = networkIdSubject.value
 
@@ -77,22 +77,60 @@ export const useDAppDefinitionAddress = createObservableHook(
 
 bootstrapNetwork(networkId)
 
-export const gatewayApi = RdtGatewayApiClient({
-  basePath: RadixNetworkConfigById[networkId].gatewayUrl,
-  applicationName: 'Radix Sandbox dApp',
+const applicationName = 'Radix Sandbox dApp'
+const applicationVersion = '1.0.0'
+
+export const gatewayApi = GatewayApiClient({
+  networkId,
+  applicationName,
   dAppDefinitionAddress: dAppDefinitionAddress.value,
-  applicationVersion: '0.0.1'
+  applicationVersion
 })
 
-export const dataRequestStateClient = DataRequestStateClient({})
+const storageModule = LocalStorageModule(
+  `rdt:${dAppDefinitionAddress.value}:${networkId}`
+)
+
+const stateModule = StateModule({
+  logger: appLogger as any,
+  providers: {
+    storageModule: storageModule.getPartition('state')
+  }
+})
+
+const gatewayModule = GatewayModule({
+  logger: appLogger as any,
+  clientConfig: generateGatewayApiConfig({
+    networkId,
+    dAppDefinitionAddress: dAppDefinitionAddress.value,
+    applicationName,
+    applicationVersion
+  })
+})
+
+const walletRequestModule = WalletRequestModule({
+  logger: appLogger as any,
+  useCache: false,
+  networkId,
+  dAppDefinitionAddress: dAppDefinitionAddress.value,
+  providers: {
+    stateModule,
+    storageModule,
+    gatewayModule
+  }
+})
+
+export const dataRequestStateModule = walletRequestModule.dataRequestStateModule
 
 const options = {
   dAppDefinitionAddress: dAppDefinitionAddress.value,
   networkId,
   logger: appLogger as any,
   providers: {
-    gatewayClient: GatewayClient({ gatewayApi }),
-    dataRequestStateClient
+    stateModule,
+    storageModule,
+    gatewayModule,
+    walletRequestModule
   },
   useCache: false
 } satisfies RadixDappToolkitOptions

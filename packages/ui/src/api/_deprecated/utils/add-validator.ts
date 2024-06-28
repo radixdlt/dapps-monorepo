@@ -1,4 +1,4 @@
-import type { StateEntityDetailsResponseItem } from '@radixdlt/babylon-gateway-api-sdk'
+import type { StateEntityDetailsResponseItem } from '@common/gateway-sdk'
 import { callApi } from '../gateway'
 import type { FungibleResource, NonFungibleResource } from './entities/resource'
 import { okAsync, type ResultAsync } from 'neverthrow'

@@ -13,12 +13,18 @@
   import { darkTheme, getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import { accounts, dAppToolkit, selectedAccount, storage } from '@stores'
+  import {
+    accounts,
+    dAppToolkit,
+    gatewayApi,
+    selectedAccount,
+    storage
+  } from '@stores'
   import {
     RadixDappToolkit,
     Account,
     DataRequestBuilder,
-    createLogger
+    Logger
   } from '@common/rdt'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
@@ -39,6 +45,7 @@
   } from '$env/static/public'
   import { NETWORK_CONFIG } from '@constants'
   import * as amplitude from '@amplitude/analytics-browser'
+  import { GatewayApiClient } from '@common/gateway-sdk'
 
   let mounted = false
 
@@ -62,11 +69,17 @@
       dAppDefinitionAddress: CURRENT_NETWORK.consoleDappAddress,
       networkId: CURRENT_NETWORK.id,
       gatewayBaseUrl: CURRENT_NETWORK.url,
-      logger: createLogger(0),
+      logger: Logger(1),
       onDisconnect: () => updateAccounts([])
+    })
+    const gateway = GatewayApiClient.initialize({
+      networkId: CURRENT_NETWORK.id,
+      applicationName: 'Radix Console',
+      applicationDappDefinitionAddress: CURRENT_NETWORK.consoleDappAddress
     })
 
     dAppToolkit.set(rdt)
+    gatewayApi.set(gateway)
 
     rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
 

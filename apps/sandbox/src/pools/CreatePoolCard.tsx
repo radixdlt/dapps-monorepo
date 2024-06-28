@@ -17,7 +17,7 @@ import { createPoolManifest } from './manifests'
 import { useEntities } from '../entity/state'
 import { useLogger } from '../components/Logger'
 import { gatewayApi, rdt } from '../rdt/rdt'
-import { TransactionStatus } from '@radixdlt/babylon-gateway-api-sdk'
+import { TransactionStatus } from '@common/gateway-sdk'
 import { addPoolComponent } from './state'
 export const CreatePoolCard = () => {
   const [isLoading, setIsLoading] = useState(false)

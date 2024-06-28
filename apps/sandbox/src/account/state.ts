@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs'
 import { createObservableHook } from '../helpers/create-observable-hook'
-import { Account } from '@radixdlt/wallet-sdk'
 import { addEntities } from '../entity/state'
+import { Account } from '@common/rdt'
 
 const accounts = new BehaviorSubject<Account[]>([])
 

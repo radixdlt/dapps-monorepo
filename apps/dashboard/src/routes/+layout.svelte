@@ -24,7 +24,7 @@
     Account,
     DataRequestBuilder,
     RadixDappToolkit,
-    createLogger
+    Logger
   } from '@common/rdt'
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
@@ -90,7 +90,7 @@
     const rdt = RadixDappToolkit({
       dAppDefinitionAddress: CURRENT_NETWORK.dashboardDappAddress,
       networkId: CURRENT_NETWORK?.id,
-      logger: createLogger(0),
+      logger: Logger(1),
       onDisconnect: () => updateAccounts([])
     })
 
