@@ -7,7 +7,6 @@
   import PageNavigation from './PageNavigation.svelte'
   import type { ComponentProps } from 'svelte'
   import DappsDropdown from '@components/dapps-dropdown/DappsDropdown.svelte'
-  import { isMobile } from '@utils'
 
   export let hideSearch: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
@@ -24,24 +23,16 @@
       class="mobile-menu"
     />
     <slot name="logo" />
-
-    {#if !showDesktopSidebar}
-      <div class="desktop-only">
-        <PageNavigation {routes} />
-      </div>
-    {/if}
-
-    <div class="mobile-only mobile-dapps-dropdown"><DappsDropdown /></div>
   </div>
+  {#if !showDesktopSidebar}
+    <div class="desktop-only">
+      <PageNavigation {routes} />
+    </div>
+  {/if}
   {#if !hideSearch} <div class="search"><NetworkLookupSearch /></div> {/if}
   <div class="right-wrapper">
-    <div class="desktop-only">
-      <DappsDropdown />
-    </div>
-
-    {#if !isMobile()}
-      <div class="connect-button"><ConnectButton /></div>
-    {/if}
+    <DappsDropdown />
+    <ConnectButton />
   </div>
 </header>
 
@@ -61,33 +52,33 @@
     z-index: 2;
     height: 100%;
     padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
-    flex-direction: column;
     box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
 
     @include mixins.desktop {
       gap: var(--spacing-xl);
-      flex-direction: row;
+      flex-wrap: nowrap;
       padding: 0 var(--spacing-2xl) 0 var(--spacing-lg);
     }
   }
 
   .right-wrapper {
+    order: 2;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-lg);
+
+    @include mixins.desktop {
+      margin-left: auto;
+      order: 3;
+    }
   }
 
   .logo-wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    @include mixins.desktop {
-      width: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     button {
       flex: 0 0 auto;
@@ -109,6 +100,7 @@
   }
 
   .search {
+    order: 3;
     height: 2.5rem;
     width: 100%;
     max-width: 42.8125rem;
@@ -117,6 +109,7 @@
 
     @include mixins.desktop {
       margin: 1rem 0;
+      order: 2;
     }
   }
 
@@ -124,6 +117,15 @@
     align-self: flex-end;
     @include mixins.desktop {
       align-self: center;
+    }
+  }
+
+  @include mixins.mobile {
+    .logo-wrapper {
+      padding: 6px 0;
+    }
+    .right-wrapper {
+      --radix-connect-button-width: 50px;
     }
   }
 </style>
