@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dump context
-        uses: RDXWorks-actions/ghaction-dump-context@fix-pinned-version
+        uses: RDXWorks-actions/ghaction-dump-context@master
       - name: Info
         run: |
           echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
