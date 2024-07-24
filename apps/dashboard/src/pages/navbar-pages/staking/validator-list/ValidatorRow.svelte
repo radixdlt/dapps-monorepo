@@ -241,14 +241,13 @@
     display: grid;
 
     @include mixins.mobile {
-      grid-template-columns: 40px 60px 26px auto auto auto;
+      grid-template-columns: 60px repeat(5, 1fr) 50px 80px;
       grid-template-rows: 1fr 1fr 1fr;
       grid-template-areas:
-        'icon image name name name header'
-        'stake-label stake-label stake-label stake-value stake-value stake-value'
-        'accepts-label accepts-label accepts-label accepts-value accepts-value accepts-value'
-        '. . . . . .'
-        'select select select select select select';
+        'image name name name name name icon header'
+        'stake-label stake-label stake-label stake-label stake-value stake-value stake-value stake-value'
+        'accepts-label accepts-label accepts-label accepts-label accepts-label accepts-label accepts-value accepts-value'
+        '. . . . . . . .';
     }
 
     @include mixins.desktop {
@@ -377,6 +376,7 @@
     .apy-text-box-label {
       text-transform: uppercase;
       display: block;
+      font-size: var(--text-sm);
       color: var(--color-grey-2);
     }
   }
@@ -388,10 +388,6 @@
   .accepts-stake {
     display: flex;
     justify-content: center;
-
-    @include mixins.mobile {
-      margin-left: 22px;
-    }
   }
 
   .select {
@@ -406,6 +402,8 @@
     .icon,
     .select {
       grid-area: icon;
+      justify-content: center;
+      align-items: center;
     }
 
     .select {
@@ -429,15 +427,15 @@
 
     .apy {
       grid-column-start: 1;
-      justify-self: flex-start;
+      grid-column-end: 5;
     }
 
     .fee {
-      grid-column-start: 4;
+      grid-column-start: 5;
     }
 
     .uptime {
-      grid-column-start: 5;
+      grid-column-start: 6;
       grid-column-end: -1;
     }
 
