@@ -1,9 +1,19 @@
 name: Daily Analysis Phylum
 
+# on:
+#   schedule:
+#     # Runs at 14:00 UTC every day
+#     - cron: '0 14 * * *'
+
 on:
-  schedule:
-    # Runs at 14:00 UTC every day
-    - cron: '0 14 * * *'
+  push:
+    branches:
+      - DO-2613
+
+env:
+  PHYLUM_PROJECT_ID: 70969afc-325a-413c-8001-2092940e0d7d
+  DEFAULT_BRANCH: main
+  PHYLUM_GROUP_NAME: dApp-engineering
 jobs:
   phylum_analyze:
     name: Analyze dependencies with Phylum
@@ -27,10 +37,27 @@ jobs:
       - name: Run Phylum Analysis
         env: 
           PHYLUM_API_KEY: ${{ secrets.PHYLUM_API_KEY }}         
-        run: phylum analyze --quiet --label master_branch_daily_schedule > /dev/null 2>&1 || 
-          if [ $? -eq 100 ]; then 
-            echo "Phylum Analysis returned exit code 100, but continuing."; 
+        run: phylum analyze --quiet --label ${DEFAULT_BRANCH}_branch_daily_schedule > /dev/null 2>&1 || 
+          exit_code=$?
+          if [ $exit_code -eq 100 ]; then 
+            echo "Phylum Analysis returned exit code 100, but continuing.";
+            echo "phylum_analyze_status=failure" >> $GITHUB_ENV 
             exit 0; 
+          if [ $exit_code -eq 0 ]; then
+            echo "phylum_analyze_status=success" >> $GITHUB_ENV
+            exit 0;
           else 
+            echo "phylum_analyze_status=failure" >> $GITHUB_ENV 
             exit $?; 
           fi
+      - name: Slack notification
+        if: always()
+        uses: RDXWorks-actions/notify-slack-action@master
+        with:
+          status: ${{ env.phylum_analyze_status }}
+          notify_when: 'failure'
+          notification_title: ':clock3: Phylum Scheduled Daily Analysis:'
+          message_format: 'Automatic phylum analysis has found vulnerabilities on dapps-monorepo :boom:'
+          footer: "Linked Analysis <{repo_url}|{repo}> | <{https://app.phylum.io/projects/${PHYLUM_PROJECT_ID}?label=${DEFAULT_BRANCH}_branch_daily_schedule&group=${PHYLUM_GROUP_NAME}}|View Inform> "
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DAPP_ENGINEERING_WEBHOOK }}
