@@ -43,7 +43,7 @@ jobs:
             echo "Phylum Analysis returned exit code 100, but continuing.";
             echo "phylum_analyze_status=failure" >> $GITHUB_ENV 
             exit 0; 
-          if [ $exit_code -eq 0 ]; then
+          elif [ $exit_code -eq 0 ]; then
             echo "phylum_analyze_status=success" >> $GITHUB_ENV
             exit 0;
           else 
