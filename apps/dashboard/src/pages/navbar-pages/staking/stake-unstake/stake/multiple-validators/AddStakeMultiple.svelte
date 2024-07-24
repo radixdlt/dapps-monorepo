@@ -139,11 +139,7 @@
 
     <Divider />
 
-    <div class="validator-list-header">
-      <div>Validator name</div>
-
-      <DistributeSwitch bind:on={distributeEqually} />
-    </div>
+    <DistributeSwitch bind:on={distributeEqually} />
 
     <div class="validator-card">
       {#each validators as validator, i}
@@ -177,15 +173,5 @@
     flex-direction: column;
     gap: var(--spacing-lg);
     margin-top: var(--spacing-lg);
-  }
-
-  .validator-list-header {
-    display: flex;
-    justify-content: space-between;
-
-    :nth-child(1) {
-      align-self: end;
-      color: var(--theme-subtext);
-    }
   }
 </style>
