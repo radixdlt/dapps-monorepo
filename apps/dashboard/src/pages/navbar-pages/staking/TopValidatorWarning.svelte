@@ -33,6 +33,9 @@
       color: var(--color-alert-1);
     }
     display: flex;
+    @include mixins.mobile {
+      flex-wrap: wrap;
+    }
     gap: var(--spacing-lg);
   }
 

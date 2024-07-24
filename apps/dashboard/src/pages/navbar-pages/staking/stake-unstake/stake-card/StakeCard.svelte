@@ -29,6 +29,10 @@
       gap: var(--spacing-md);
       align-items: center;
 
+      @include mixins.mobile {
+        flex-wrap: wrap;
+      }
+
       overflow: hidden;
 
       .icon {

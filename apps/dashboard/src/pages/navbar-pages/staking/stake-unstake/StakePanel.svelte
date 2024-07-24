@@ -73,6 +73,9 @@
     display: flex;
     justify-content: space-between;
     padding-right: var(--spacing-lg);
+    @include mixins.mobile {
+      flex-wrap: wrap;
+    }
 
     .align-left {
       text-align: left;

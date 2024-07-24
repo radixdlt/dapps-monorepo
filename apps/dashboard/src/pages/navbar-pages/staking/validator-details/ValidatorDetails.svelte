@@ -85,7 +85,17 @@
       {#await validator}
         <SkeletonLoader />
       {:then { address }}
-        <Address value={address} --background="var(--theme-surface-3)" />
+        <div class="mobile-only">
+          <Address
+            value={address}
+            short
+            --background="var(--theme-surface-3)"
+          />
+        </div>
+
+        <div class="desktop-only">
+          <Address value={address} --background="var(--theme-surface-3)" />
+        </div>
       {/await}
     </div>
   </div>
@@ -163,6 +173,10 @@
     display: flex;
     justify-content: space-between;
     gap: var(--spacing-lg);
+
+    h1 {
+      white-space: pre-wrap;
+    }
   }
   .header {
     display: flex;

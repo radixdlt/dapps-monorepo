@@ -18,7 +18,7 @@
 
 <div
   class="grid-table"
-  style:grid-template-columns="repeat({columns.length}, auto)"
+  style="--grid-template-columns-length: {columns.length}"
 >
   {#each columns as column, i}
     <div
@@ -42,13 +42,20 @@
 <style lang="scss">
   .grid-table {
     display: grid;
+    @include mixins.desktop {
+      grid-template-columns: repeat(var(--grid-template-columns-length), auto);
+    }
   }
 
   .header {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     height: 3rem;
+
+    @include mixins.desktop {
+      display: flex;
+    }
   }
 
   .left-aligned {

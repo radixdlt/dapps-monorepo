@@ -39,14 +39,30 @@
 <style lang="scss">
   .staking-card {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-lg);
     padding: var(--spacing-xl);
     max-width: 80rem;
+
+    @include mixins.desktop {
+      flex-wrap: nowrap;
+    }
   }
 
   .section {
-    width: 33.33%;
-    border-right: var(--border-divider) var(--theme-border);
+    width: 100%;
+
+    @include mixins.mobile {
+      &:not(:last-child) {
+        border-bottom: var(--border-divider) var(--theme-border);
+        padding-bottom: var(--spacing-lg);
+      }
+    }
+    @include mixins.desktop {
+      width: 33.33%;
+      border-right: var(--border-divider) var(--theme-border);
+    }
+
     padding: 0 var(--spacing-lg);
   }
 

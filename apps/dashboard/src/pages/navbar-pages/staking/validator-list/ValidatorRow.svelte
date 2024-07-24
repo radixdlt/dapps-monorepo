@@ -65,7 +65,7 @@
       </div>
     {/if}
 
-    <div class="padding" class:left-padded={!$connected}>
+    <div class="padding image" class:left-padded={!$connected}>
       {#if input === 'loading'}
         <NftImage />
       {:else}
@@ -79,16 +79,23 @@
     </div>
 
     <div class="name">
-      <div class="dotted-overflow" style:max-width="15ch">
+      <div class="dotted-overflow">
         {#if input === 'loading'}
           <SkeletonLoader width={100} />
         {:else}
           {input.validator.metadata.expected.name?.typed.value ?? ''}
+          <div class="mobile-only">
+            <Address
+              short
+              value={input.validator.address}
+              --background="var(--theme-surface-1)"
+            />
+          </div>
         {/if}
       </div>
     </div>
 
-    <div class="center">
+    <div class="center address desktop-only">
       {#if input === 'loading'}
         <SkeletonLoader width={80} />
       {:else}
@@ -100,7 +107,15 @@
       {/if}
     </div>
 
-    <div class="center padding" style:max-width="7rem">
+    <div class="mobile-only stake-label">
+      <span class="mobile-only">Total Stake (%)</span>
+    </div>
+
+    <div class="mobile-only accepts-label">
+      <span class="mobile-only">Accepts Stakes</span>
+    </div>
+
+    <div class="center padding stake-display">
       {#if input === 'loading'}
         <StakeDisplay validator={new Promise(() => {})} />
       {:else}
@@ -108,7 +123,7 @@
       {/if}
     </div>
 
-    <div class="center bold padding" style:white-space="nowrap">
+    <div class="center bold padding desktop-only" style:white-space="nowrap">
       {#if input === 'loading'}
         <SkeletonLoader width={80} />
       {:else}
@@ -117,19 +132,23 @@
     </div>
 
     <div class="apy apy-text-box no-overflow bold center">
+      <span class="mobile-only apy-text-box-label">Apy</span>
       {#if input === 'loading'}
         <SkeletonLoader width={80} />
       {:else}
-        {input.validator.percentageTotalStake
-          ? `${truncateNumber(input.validator.apy)}%`
-          : 'N/A'}
-        {#if input.validator.percentageTotalStake}
-          <span class="subtext">per year</span>
-        {/if}
+        <div>
+          {input.validator.percentageTotalStake
+            ? `${truncateNumber(input.validator.apy)}%`
+            : 'N/A'}
+          {#if input.validator.percentageTotalStake}
+            <span class="subtext">per year</span>
+          {/if}
+        </div>
       {/if}
     </div>
 
     <div class="apy-text-box no-overflow bold center fee">
+      <span class="mobile-only apy-text-box-label">Fee</span>
       {#if input === 'loading'}
         <SkeletonLoader width={50} />
       {:else}
@@ -139,7 +158,8 @@
       {/if}
     </div>
 
-    <div class="uptime apy-text-box no-overflow bold center">
+    <div class="uptime apy-text-box no-overflow bold center uptime">
+      <span class="mobile-only apy-text-box-label">Uptime</span>
       {#if input === 'loading'}
         <SkeletonLoader width={80} />
       {:else}
@@ -217,10 +237,25 @@
 
   .validator-row {
     cursor: pointer;
-    padding: var(--spacing-lg) var(--spacing-2xl);
+    padding: var(--spacing-lg);
     display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 1/-1;
+
+    @include mixins.mobile {
+      grid-template-columns: 40px 60px 26px auto auto auto;
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-areas:
+        'icon image name name name header'
+        'stake-label stake-label stake-label stake-value stake-value stake-value'
+        'accepts-label accepts-label accepts-label accepts-value accepts-value accepts-value'
+        '. . . . . .'
+        'select select select select select select';
+    }
+
+    @include mixins.desktop {
+      grid-template-columns: subgrid;
+      grid-column: 1/-1;
+      padding: var(--spacing-lg) var(--spacing-2xl);
+    }
 
     &.extension {
       @include warning-border;
@@ -281,15 +316,28 @@
 
   .padding {
     padding: 0 var(--spacing-md);
+    @include mixins.mobile {
+      padding: 0;
+    }
   }
 
   .left-padded {
     padding-left: var(--spacing-xl);
+    @include mixins.mobile {
+      padding-left: 0;
+    }
   }
 
   .name {
     display: flex;
     align-items: center;
+
+    @include mixins.desktop {
+      max-width: '15ch';
+    }
+    @include mixins.mobile {
+      font-weight: var(--font-weight-bold-1);
+    }
   }
 
   .no-overflow {
@@ -300,7 +348,10 @@
 
   .apy {
     display: flex;
-    gap: var(--spacing-md);
+    @include mixins.desktop {
+      gap: var(--spacing-md);
+    }
+
     border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
     background: var(--theme-surface-1);
     min-width: 8rem;
@@ -312,10 +363,22 @@
 
   .apy-text-box {
     align-self: center;
+    display: flex;
+    flex-direction: column;
     height: 2rem;
     border: 1px solid #e2e5ed;
     text-align: center;
     padding: var(--spacing-sm) 0;
+
+    @include mixins.mobile {
+      height: 3rem;
+    }
+
+    .apy-text-box-label {
+      text-transform: uppercase;
+      display: block;
+      color: var(--color-grey-2);
+    }
   }
 
   .uptime {
@@ -325,6 +388,10 @@
   .accepts-stake {
     display: flex;
     justify-content: center;
+
+    @include mixins.mobile {
+      margin-left: 22px;
+    }
   }
 
   .select {
@@ -333,5 +400,82 @@
 
   .full-width {
     grid-column: 1 / -1;
+  }
+
+  @include mixins.mobile {
+    .icon,
+    .select {
+      grid-area: icon;
+    }
+
+    .select {
+      grid-area: header;
+    }
+
+    .name,
+    .address {
+      grid-area: name;
+    }
+
+    .image {
+      grid-area: image;
+    }
+
+    .fee,
+    .uptime,
+    .apy {
+      grid-row-start: 4;
+    }
+
+    .apy {
+      grid-column-start: 1;
+      justify-self: flex-start;
+    }
+
+    .fee {
+      grid-column-start: 4;
+    }
+
+    .uptime {
+      grid-column-start: 5;
+      grid-column-end: -1;
+    }
+
+    .stake-display {
+      grid-area: stake-value;
+      grid-column-end: -1;
+
+      flex-direction: column;
+      align-items: end;
+    }
+
+    .accepts-stake {
+      grid-area: accepts-value;
+      justify-content: end;
+    }
+
+    .stake-label {
+      grid-area: stake-label;
+    }
+
+    .accepts-label {
+      grid-area: accepts-label;
+    }
+
+    .stake-label,
+    .accepts-label {
+      justify-content: start;
+      align-items: center;
+      display: flex;
+      color: var(--color-grey-2);
+      text-transform: uppercase;
+      font-weight: var(--font-weight-bold-1);
+    }
+  }
+
+  @include mixins.desktop {
+    .stake-display {
+      max-width: 7rem;
+    }
   }
 </style>

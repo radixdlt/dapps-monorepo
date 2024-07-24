@@ -198,12 +198,12 @@ body {
 
 .mobile-only {
   @include mixins.desktop {
-    display: none;
+    display: none !important;
   }
 }
 
 .desktop-only {
   @include mixins.mobile {
-    display: none;
+    display: none !important;
   }
 }
