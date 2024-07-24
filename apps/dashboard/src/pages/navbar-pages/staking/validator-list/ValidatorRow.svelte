@@ -241,8 +241,8 @@
     display: grid;
 
     @include mixins.mobile {
-      grid-template-columns: 60px repeat(5, 1fr) 50px 80px;
-      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-columns: 60px repeat(5, 1fr) 50px 40px;
+      grid-template-rows: auto 38px 38px minmax(auto, 50px);
       grid-template-areas:
         'image name name name name name icon header'
         'stake-label stake-label stake-label stake-label stake-value stake-value stake-value stake-value'
@@ -391,7 +391,18 @@
   }
 
   .select {
-    padding-right: var(--spacing-xl);
+    @include mixins.desktop {
+      padding-right: var(--spacing-xl);
+    }
+
+    @include mixins.mobile {
+      :global(button > label) {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 
   .full-width {

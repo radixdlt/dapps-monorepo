@@ -1,7 +1,4 @@
-import { Subject } from 'rxjs'
-
 export function hideHeader(node: HTMLElement) {
-  const scrollEventSubject = new Subject<Event>()
   let throttlePause: boolean = false
   let lastScrollTop = 0
   const throttle = (callback: () => void, time: number) => {
@@ -20,11 +17,6 @@ export function hideHeader(node: HTMLElement) {
   const handleScroll = (event: Event) => {
     throttle(() => {
       const { scrollTop } = event.target as Element
-      console.log(
-        scrollTop,
-        lastScrollTop,
-        scrollTop - lastScrollTop > 0 ? 'desc' : 'asc'
-      )
       if (scrollTop > lastScrollTop) {
         node.classList.add('collapsed')
         lastScrollTop = scrollTop
