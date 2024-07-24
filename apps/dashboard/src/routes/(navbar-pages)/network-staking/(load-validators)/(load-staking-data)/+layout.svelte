@@ -88,10 +88,10 @@
       data.promises.validators,
       data.promises.bookmarkedValidators
     ]).then(([validators, bookmarked]) => {
-      filteredValidators = applyFilter(
+      applyFilter(
         validators,
         bookmarked
-      )({ detail: DEFAULT_VALIDATORS_FILTER })
+      )({ detail: DEFAULT_VALIDATORS_FILTER } as CustomEvent<any>)
     })
   })
 

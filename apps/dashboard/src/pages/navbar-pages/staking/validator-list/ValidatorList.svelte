@@ -55,7 +55,7 @@
 
   $: transformedValidators = Promise.all([_validators, $currentEpoch]).then(
     ([validators, epoch]) =>
-      validators.map((validator) => ({
+      (validators || []).map((validator) => ({
         ...validator,
         '1day': validator.uptimePercentages['1day'],
         '1week': validator.uptimePercentages['1week'],

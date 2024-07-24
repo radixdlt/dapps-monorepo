@@ -5,7 +5,7 @@
     totalXRDStakeFilter: [0, 100] as [number, number],
     uptimeFilterPercentage: 0,
     uptimeFilter: {
-      timeframe: '1month',
+      timeframe: '1month' as '1month',
       percentage: 0
     },
     acceptsStakeFilter: true,
