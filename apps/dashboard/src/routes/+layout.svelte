@@ -49,7 +49,6 @@
   import ExternalBlack from '@icons/external-black.svg'
   // @ts-ignore
   import * as amplitude from '@amplitude/analytics-browser'
-
   let mounted = false
 
   const { createChallenge } = authApi

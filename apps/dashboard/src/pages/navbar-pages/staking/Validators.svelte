@@ -286,7 +286,8 @@
     z-index: 2;
 
     @include mixins.mobile {
-      margin-top: var(--spacing-xl);
+      margin-top: var(--spacing-lg);
+      top: var(--spacing-md);
     }
 
     @include mixins.desktop {

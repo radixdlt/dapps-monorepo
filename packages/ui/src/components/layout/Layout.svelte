@@ -2,7 +2,7 @@
   import Header from '@components/header/Header.svelte'
   import SidebarWithNavbar from '../sidebar-with-navbar/SidebarWithNavbar.svelte'
   import { page } from '$app/stores'
-
+  import { hideHeader } from '@directives/hide-header'
   export let routes: { text: string; icon: string; path: string }[] = []
   export let hideSearch: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
@@ -12,7 +12,7 @@
 
 <svelte:window bind:scrollY={scrollOffset} />
 
-<div class="layout">
+<div class="layout collapsed" use:hideHeader>
   <div class="header">
     <Header {showDesktopSidebar} {routes} {hideSearch}
       ><slot slot="logo" name="logo" /></Header
@@ -50,6 +50,17 @@
 
     @include mixins.desktop {
       grid-template-rows: 4.6875rem auto;
+    }
+
+    @include mixins.mobile {
+      transition: grid-template-rows 400ms ease;
+      &.collapsed {
+        grid-template-rows: 0 1fr;
+
+        .header {
+          transform: translateY(-95px);
+        }
+      }
     }
 
     .header {
