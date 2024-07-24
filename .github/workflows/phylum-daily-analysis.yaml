@@ -58,7 +58,7 @@ jobs:
           notify_when: 'failure'
           notification_title: ':clock3: Phylum Scheduled Daily Analysis:'
           message_format: 'Automatic phylum analysis has found vulnerabilities on dapps-monorepo :boom:'
-          footer: "Linked Repository <{repo_url}|{repo}> | <{https://app.phylum.io/projects/${{ env.PHYLUM_PROJECT_ID }}?label=${{ env.DEFAULT_BRANCH }}_branch_daily_schedule&group=${{ env.PHYLUM_GROUP_NAME }}}|View Inform> "
+          footer: "Linked Repository <{repo_url}|{repo}> | <https://app.phylum.io/projects/${{ env.PHYLUM_PROJECT_ID }}?label=${{ env.DEFAULT_BRANCH }}_branch_daily_schedule&group=${{ env.PHYLUM_GROUP_NAME }}|View Inform> "
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DAPP_ENGINEERING_WEBHOOK }}
 
