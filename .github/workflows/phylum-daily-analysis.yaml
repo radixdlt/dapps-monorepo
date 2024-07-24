@@ -50,7 +50,7 @@ jobs:
             echo "phylum_analyze_status=failure" >> $GITHUB_ENV 
             exit $?; 
           fi
-      - name: Slack notification
+      - name: Analysis Status Failure notification
         if: always()
         uses: RDXWorks-actions/notify-slack-action@master
         with:
@@ -58,6 +58,18 @@ jobs:
           notify_when: 'failure'
           notification_title: ':clock3: Phylum Scheduled Daily Analysis:'
           message_format: 'Automatic phylum analysis has found vulnerabilities on dapps-monorepo :boom:'
-          footer: "Linked Analysis <{repo_url}|{repo}> | <{https://app.phylum.io/projects/${PHYLUM_PROJECT_ID}?label=${DEFAULT_BRANCH}_branch_daily_schedule&group=${PHYLUM_GROUP_NAME}}|View Inform> "
+          footer: "Linked Repository <{repo_url}|{repo}> | <{https://app.phylum.io/projects/${{ env.PHYLUM_PROJECT_ID }}?label=${{ env.DEFAULT_BRANCH }}_branch_daily_schedule&group=${{ env.PHYLUM_GROUP_NAME }}|View Inform> "
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DAPP_ENGINEERING_WEBHOOK }}
+
+      # - name: Analysis Status Success notification
+      #   if: always()
+      #   uses: RDXWorks-actions/notify-slack-action@master
+      #   with:
+      #     status: ${{ env.phylum_analyze_status }}
+      #     notify_when: 'success'
+      #     notification_title: ':clock3: Scheduled Mainnet Backup Ledger:'
+      #     message_format: 'Automatic Mainnet ledger backup has succeed :rocket:'
+      #     footer: "Linked Repo <{repo_url}|{repo}> | <{run_url}|View Run> "
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DAPP_ENGINEERING_WEBHOOK }}
