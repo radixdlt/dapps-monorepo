@@ -124,7 +124,7 @@ jobs:
       - name: Define network name
         run: |
           if [ "${{ github.event_name}}" = 'workflow_dispatch' ]; then
-            echo "NETWORK_NAME="mainnet"" >> $GITHUB_ENV
+            echo "NETWORK_NAME="${{ github.event.inputs.ENVIRONMENT_NAME }}"" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "released" ]; then
             echo "NETWORK_NAME=${{ env.release_network }}" >> $GITHUB_ENV
           elif [ "${{ github.event.action }}" = "prereleased" ]; then
@@ -325,7 +325,7 @@ jobs:
       provenance: false
       snyk_target_ref: ${{ github.ref_name }}
       build-args: |
-        NETWORK_NAME=mainnet
+        NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
         NPM_LOCAL_CACHE=.cache/
 
   push-storybook:
