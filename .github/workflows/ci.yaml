@@ -160,7 +160,7 @@ jobs:
       phylum_group_name: dApp-engineering
       phylum_project_id: 70969afc-325a-413c-8001-2092940e0d7d
       github_repository: ${{ github.repository }}
-      add_report_comment_to_pull_request: false
+      add_report_comment_to_pull_request: true
 
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
