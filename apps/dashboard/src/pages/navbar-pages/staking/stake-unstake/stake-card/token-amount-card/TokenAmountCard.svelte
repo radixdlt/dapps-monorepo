@@ -82,18 +82,8 @@
   </div>
 
   {#if $$slots.footer}
-    <div
-      class="slot-content footer"
-      class:disabled
-      style:background={`${
-        invalid ? 'var(--invalid-background-color)' : 'var(--theme-surface-1)'
-      }`}
-      style:border-color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
-    >
-      <Divider
-        --spacing="none"
-        --color={`${invalid ? 'var(--invalid-border-color)' : ''}`}
-      />
+    <div class="slot-content footer" class:disabled class:invalid>
+      <Divider --spacing="none" />
       <div class="content">
         <slot name="footer" />
       </div>
@@ -161,5 +151,12 @@
     border-radius: 0 0 var(--card-border-radius) var(--card-border-radius);
     border: var(--border) var(--theme-border);
     border-top: none;
+    background-color: var(--theme-surface-1);
+
+    &.invalid {
+      border-color: var(--invalid-border-color);
+      background-color: var(--invalid-background-color);
+      --color: var(--invalid-border-color);
+    }
   }
 </style>

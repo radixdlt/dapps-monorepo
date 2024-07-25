@@ -12,12 +12,25 @@
     : (x: string) => x
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
+  const onFocus = (ev: any) => {
+    if (ev.target.value == 0) {
+      dispatch('input', { value: '' })
+    }
+  }
+
+  const onBlur = (ev: any) => {
+    if (ev.target.value == 0) {
+      dispatch('input', { value: '0' })
+    }
+  }
 </script>
 
 <div class="input-box" class:no-hover={readonly} class:editable={!readonly}>
   <InputNew
     type="number"
     {value}
+    on:focus={onFocus}
+    on:blur={onBlur}
     {maxlength}
     {readonly}
     {format}

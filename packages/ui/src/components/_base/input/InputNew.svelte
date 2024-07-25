@@ -22,6 +22,8 @@
   inputmode={type === 'number' ? 'decimal' : 'text'}
   {readonly}
   {maxlength}
+  on:focus
+  on:blur
   on:input={(e) => {
     value = e.currentTarget.value
   }}
