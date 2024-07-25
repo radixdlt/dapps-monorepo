@@ -10,7 +10,6 @@
   export let stakeButtonDisabled = false
   export let useBackdrop = false
   export let learnMoreUrl = ''
-  export let rightColumnWidth = '15rem'
 
   const dispatch = createEventDispatcher<{
     close: null | 'invalidate'
@@ -26,7 +25,7 @@
 
   <div class="flex">
     <div />
-    <slot name="account-picker" {rightColumnWidth} />
+    <slot name="account-picker" />
   </div>
 
   <div
@@ -36,12 +35,12 @@
     }`}
   >
     <h4><slot name="heading-text" /></h4>
-    <div class="align-left heading-subtext" style:width={rightColumnWidth}>
+    <div class="align-left heading-subtext">
       <slot name="heading-subtext" />
     </div>
   </div>
 
-  <slot name="content" {rightColumnWidth} />
+  <slot name="content" />
 
   <div class="stake flex">
     <div class="info">
@@ -50,7 +49,7 @@
         <slot name="info-box-explanation" slot="explanation" />
       </InfoBox>
     </div>
-    <div class="summary" style:width={rightColumnWidth}>
+    <div class="summary">
       <slot name="summary" />
       <div class="stake-button">
         <SendTxButton
@@ -61,7 +60,7 @@
             }
             dispatch('tx-response', e.detail)
           }}
-          buttonProps={{ size: 'big', disabled: stakeButtonDisabled }}
+          buttonProps={{ size: 'xl', disabled: stakeButtonDisabled }}
         />
       </div>
     </div>
@@ -83,6 +82,7 @@
   }
 
   .summary {
+    min-width: 20rem;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -103,6 +103,9 @@
   .stake {
     margin-top: var(--spacing-2xl);
     gap: var(--spacing-3xl);
+    @include mixins.mobile {
+      gap: var(--spacing-lg);
+    }
     align-items: flex-start;
   }
 
