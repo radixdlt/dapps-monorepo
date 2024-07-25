@@ -162,6 +162,7 @@ jobs:
       github_repository: ${{ github.repository }}
       add_report_comment_to_pull_request: true
 
+
   snyk-scan-deps-licences:
     runs-on: ubuntu-latest
     needs:
