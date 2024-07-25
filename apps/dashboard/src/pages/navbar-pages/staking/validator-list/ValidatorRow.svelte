@@ -332,7 +332,7 @@
     align-items: center;
 
     @include mixins.desktop {
-      max-width: '15ch';
+      max-width: 15ch;
     }
     @include mixins.mobile {
       font-weight: var(--font-weight-bold-1);
