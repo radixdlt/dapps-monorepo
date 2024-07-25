@@ -35,7 +35,10 @@
 
 <style lang="scss">
   .layout {
-    display: grid;
+    @include mixins.desktop {
+      display: grid;
+    }
+
     height: 100%;
     width: 100vw;
 
@@ -58,7 +61,7 @@
         grid-template-rows: 0 1fr;
 
         .header {
-          transform: translateY(-95px);
+          transform: translateY(-110px);
         }
       }
     }
@@ -67,6 +70,10 @@
       transition: transform 250ms ease;
       grid-area: header;
       z-index: 100;
+      @include mixins.mobile {
+        position: fixed;
+        width: 100%;
+      }
     }
 
     .content {
@@ -110,7 +117,9 @@
           max-width: 80rem;
           margin: 0 auto;
           padding: var(--spacing-md);
-
+          @include mixins.mobile {
+            padding-top: 110px;
+          }
           @include mixins.desktop {
             padding: var(--spacing-2xl);
           }
