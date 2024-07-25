@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { number } from '@directives/format-input'
   import InputNew from './InputNew.svelte'
   import { createEventDispatcher } from 'svelte'
   import { removeThousandsSeparator } from '@utils/format-amount'
@@ -10,13 +9,14 @@
   export let readonly = false
   export let format = readonly
     ? (value: string) => formatTokenValue(value, undefined).displayValue
-    : number().bind(null)
+    : (x: string) => x
 
   const dispatch = createEventDispatcher<{ input: { value: string } }>()
 </script>
 
 <div class="input-box" class:no-hover={readonly} class:editable={!readonly}>
   <InputNew
+    type="number"
     {value}
     {maxlength}
     {readonly}

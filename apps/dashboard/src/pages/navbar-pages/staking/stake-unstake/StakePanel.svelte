@@ -87,6 +87,10 @@
     display: flex;
     flex-direction: column;
 
+    @include mixins.mobile {
+      width: 100%;
+    }
+
     .stake-button {
       margin-top: var(--spacing-md);
     }

@@ -3,9 +3,12 @@
 
   export let value: string
   export let maxlength: number | undefined = undefined
-  export let format: (value: string) => string = (value) => value
+  export let format: (value: string) => string = (value) => {
+    console.log(value)
+    return value
+  }
   export let readonly = false
-
+  export let type = 'text'
   const dispatch = createEventDispatcher<{
     input: { value: string }
   }>()
@@ -18,7 +21,7 @@
 
 <input
   {value}
-  type="text"
+  {type}
   {readonly}
   {maxlength}
   on:input={(e) => {

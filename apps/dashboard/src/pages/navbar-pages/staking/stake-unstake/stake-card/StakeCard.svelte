@@ -23,15 +23,16 @@
     gap: var(--spacing-md);
     align-items: center;
     justify-content: space-between;
+     @include mixins.mobile {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-xl);
+      }
 
     .icon-and-info {
       display: flex;
       gap: var(--spacing-md);
       align-items: center;
-
-      @include mixins.mobile {
-        flex-wrap: wrap;
-      }
 
       overflow: hidden;
 
