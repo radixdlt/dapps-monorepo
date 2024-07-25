@@ -53,7 +53,7 @@
     }
 
     @include mixins.mobile {
-      transition: grid-template-rows 400ms ease;
+      transition: grid-template-rows 250ms ease;
       &.collapsed {
         grid-template-rows: 0 1fr;
 
@@ -64,6 +64,7 @@
     }
 
     .header {
+      transition: transform 250ms ease;
       grid-area: header;
       z-index: 100;
     }

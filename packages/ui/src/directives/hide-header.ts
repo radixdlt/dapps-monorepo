@@ -3,14 +3,14 @@ export function hideHeader(node: HTMLElement) {
 
   const handleScroll = (event: Event) => {
     const { scrollTop } = event.target as Element
-    if (scrollTop === 0) {
+    if (scrollTop === 0 || scrollTop <= 150) {
       lastScrollTop = 0
       node.classList.remove('collapsed')
       return
     }
 
     if (scrollTop > lastScrollTop) {
-      if (scrollTop === 0) {
+      if (scrollTop <= 500) {
         return
       }
       node.classList.add('collapsed')
