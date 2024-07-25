@@ -8,7 +8,7 @@
       timeframe: '1month' as '1month',
       percentage: 0
     },
-    acceptsStakeFilter: true,
+    acceptsStakeFilter: false,
     bookmarkedFilter: false
   }
 </script>
