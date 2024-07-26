@@ -177,14 +177,15 @@
   <!-- End Google Tag Manager (noscript) -->
 {/if}
 <Theme theme="light">
-  {#if CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
+  {@const isTestnet = CURRENT_NETWORK.id !== NETWORK_CONFIG['mainnet'].id}
+  {#if isTestnet}
     <div class="banner">
       This dApp is configured to use the testnet {PUBLIC_NETWORK_NAME}. It does
       not use the Radix Public Network mainnet.
     </div>
   {/if}
   {#if mounted}
-    <Layout {hideSearch} {routes}>
+    <Layout {hideSearch} {routes} {isTestnet}>
       <!-- svelte-ignore a11y-missing-content -->
 
       <a
@@ -192,7 +193,6 @@
         href="/"
         class="logo"
         style:background-image="url({LogoIcon})"
-        style:margin-bottom="var(--spacing-lg)"
       />
 
       <div class="page">
@@ -274,7 +274,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     width: 10.125rem;
-    height: 1.5rem;
+    height: 2rem;
     display: inline-flex;
     margin-left: var(--spacing-lg);
   }

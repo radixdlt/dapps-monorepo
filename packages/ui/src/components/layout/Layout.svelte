@@ -5,14 +5,14 @@
   import { hideHeader } from '@directives/hide-header'
   export let routes: { text: string; icon: string; path: string }[] = []
   export let hideSearch: boolean | undefined = undefined
+  export let isTestnet: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
 
   let scrollOffset: number
 </script>
 
 <svelte:window bind:scrollY={scrollOffset} />
-
-<div class="layout collapsed" use:hideHeader>
+<div class="layout collapsed" class:isTestnet use:hideHeader>
   <div class="header">
     <Header {showDesktopSidebar} {routes} {hideSearch}
       ><slot slot="logo" name="logo" /></Header
@@ -62,6 +62,10 @@
 
         .header {
           transform: translateY(-110px);
+        }
+
+        &.isTestnet .header {
+          transform: translateY(-150px);
         }
       }
     }
