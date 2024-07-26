@@ -36,7 +36,9 @@
     border: var(--border) var(--theme-border);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
-    max-width: 20rem;
+    @include mixins.desktop {
+      max-width: 20rem;
+    }
 
     .body {
       display: flex;

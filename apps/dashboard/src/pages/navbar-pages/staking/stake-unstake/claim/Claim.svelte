@@ -75,7 +75,7 @@
     >Claim{accumulatedClaims.length > 1 ? 's' : ''} to redeem:</svelte:fragment
   >
 
-  <svelte:fragment slot="content" let:rightColumnWidth>
+  <svelte:fragment slot="content">
     <div class="card-list">
       {#each accumulatedClaims as { validator, xrdAmount, account }}
         <StakeCard>
@@ -92,7 +92,6 @@
               {account}
               tokenAmount={xrdAmount}
               readonly={true}
-              --card-width={rightColumnWidth}
             />
           </svelte:fragment>
         </StakeCard>

@@ -40,9 +40,12 @@
   .stake-display {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
     gap: var(--spacing-md);
+
+    @include mixins.desktop {
+      justify-content: center;
+    }
   }
 
   .total {

@@ -5,7 +5,7 @@
   export let maxlength: number | undefined = undefined
   export let format: (value: string) => string = (value) => value
   export let readonly = false
-
+  export let type = 'text'
   const dispatch = createEventDispatcher<{
     input: { value: string }
   }>()
@@ -18,9 +18,12 @@
 
 <input
   {value}
-  type="text"
+  {type}
+  inputmode={type === 'number' ? 'decimal' : 'text'}
   {readonly}
   {maxlength}
+  on:focus
+  on:blur
   on:input={(e) => {
     value = e.currentTarget.value
   }}

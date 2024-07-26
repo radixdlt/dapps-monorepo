@@ -22,6 +22,7 @@
     justify-content: center;
     align-items: center;
     gap: var(--spacing-md);
+    padding-bottom: var(--spacing-3xl);
     margin-bottom: var(--spacing-2xl);
   }
 </style>

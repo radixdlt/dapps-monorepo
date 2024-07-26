@@ -1,3 +1,18 @@
+<script lang="ts" context="module">
+  export const DEFAULT_VALIDATORS_FILTER = {
+    feeFilter: [0, 100] as [number, number],
+    withinTop100Filter: true,
+    totalXRDStakeFilter: [0, 100] as [number, number],
+    uptimeFilterPercentage: 0,
+    uptimeFilter: {
+      timeframe: '1month' as '1month',
+      percentage: 0
+    },
+    acceptsStakeFilter: false,
+    bookmarkedFilter: false
+  }
+</script>
+
 <script lang="ts">
   import Divider from '@components/_base/divider/Divider.svelte'
   import SidePanel from '@components/_base/side-panel/SidePanel.svelte'
@@ -13,19 +28,21 @@
   export let totalXRDStakeValues: number[]
 
   export const reset = () => {
-    feeFilter = [0, 100]
-    totalXRDStakeFilter = [0, 100]
-    uptimeFilterPercentage = 0
-    acceptsStakeFilter = false
-    bookmarkedFilter = false
+    feeFilter = DEFAULT_VALIDATORS_FILTER.feeFilter
+    bookmarkedFilter = DEFAULT_VALIDATORS_FILTER.bookmarkedFilter
+    withinTop100Filter = DEFAULT_VALIDATORS_FILTER.withinTop100Filter
+    acceptsStakeFilter = DEFAULT_VALIDATORS_FILTER.acceptsStakeFilter
+    totalXRDStakeFilter = DEFAULT_VALIDATORS_FILTER.totalXRDStakeFilter
+    uptimeFilterPercentage = DEFAULT_VALIDATORS_FILTER.uptimeFilterPercentage
   }
-
-  let feeFilter: [number, number] = [0, 100]
-
-  let totalXRDStakeFilter: [number, number] = [0, 100]
-
-  let acceptsStakeFilter = false
-  let bookmarkedFilter = false
+  let {
+    feeFilter,
+    bookmarkedFilter,
+    withinTop100Filter,
+    acceptsStakeFilter,
+    totalXRDStakeFilter,
+    uptimeFilterPercentage
+  } = DEFAULT_VALIDATORS_FILTER
 
   const recentUptimeOptions: {
     label: string
@@ -55,8 +72,6 @@
     recentUptimeOptions.find((option) => option.default) ||
     recentUptimeOptions[0]
 
-  let uptimeFilterPercentage = 0
-
   $: uptimeFilter = {
     timeframe: selectedUptime.value,
     percentage: uptimeFilterPercentage
@@ -67,6 +82,7 @@
       feeFilter,
       totalXRDStakeFilter,
       uptimeFilter,
+      withinTop100Filter,
       acceptsStakeFilter,
       bookmarkedFilter
     })
@@ -75,6 +91,7 @@
   const dispatch = createEventDispatcher<{
     close: {
       feeFilter: typeof feeFilter
+      withinTop100Filter: boolean
       totalXRDStakeFilter: typeof totalXRDStakeFilter
       uptimeFilter: typeof uptimeFilter
       acceptsStakeFilter: boolean
@@ -87,6 +104,12 @@
   <SidePanelHeader text="Validator Filters" on:closeClick={onClose} />
 
   <div class="cards">
+    <SwitchFilterCard
+      title="Top 100"
+      description="Show only validators that currently generate APY"
+      bind:on={withinTop100Filter}
+    />
+
     <SwitchFilterCard
       title="Accepts Stake"
       description="Show only validators that currently accepts new stake"

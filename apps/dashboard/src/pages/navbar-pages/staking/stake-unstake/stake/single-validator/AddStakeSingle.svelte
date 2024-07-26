@@ -51,23 +51,18 @@
   }}
   on:close
 >
-  <svelte:fragment slot="account-picker" let:rightColumnWidth>
-    <AccountSection bind:selectedAccount --width={rightColumnWidth}>
-      <svelte:fragment slot="account-picker-text">
-        <h4>Stake XRD from account:</h4>
-      </svelte:fragment>
-    </AccountSection>
+  <svelte:fragment slot="account-picker">
+    <AccountSection bind:selectedAccount />
   </svelte:fragment>
 
   <svelte:fragment slot="heading-text">Validator to stake to:</svelte:fragment>
 
-  <svelte:fragment slot="content" let:rightColumnWidth>
+  <svelte:fragment slot="content">
     <OverviewStakeCardSingle
       {validator}
       {xrdBalance}
       bind:stakeAmount
       bind:tokenAmountInvalid={stakeButtonDisabled}
-      --card-width={rightColumnWidth}
     />
   </svelte:fragment>
 

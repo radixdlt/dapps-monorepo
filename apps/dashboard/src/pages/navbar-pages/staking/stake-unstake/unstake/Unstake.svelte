@@ -112,13 +112,12 @@
   on:click={unstake}
   sidePanelHeader="Request Unstake"
   on:close
-  rightColumnWidth="20rem"
 >
   <svelte:fragment slot="heading-text">
     Validator to request unstake from:
   </svelte:fragment>
 
-  <svelte:fragment slot="content" let:rightColumnWidth>
+  <svelte:fragment slot="content">
     <div class="card-list">
       {#each stakes as stake, i}
         <div class="add-stake-card">
@@ -131,7 +130,6 @@
             stakedAmount={stake.amount.toString()}
             bind:amountToUnstake={amountsToUnstake[i]}
             bind:invalid={invalidInputs[i]}
-            --card-width={rightColumnWidth}
           />
         </div>
       {/each}

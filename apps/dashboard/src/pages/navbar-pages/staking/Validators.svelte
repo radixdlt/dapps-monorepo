@@ -280,10 +280,19 @@
   }
 
   .selected-validators {
-    position: absolute;
+    position: sticky;
     top: var(--spacing-xl);
     right: var(--spacing-2xl);
     z-index: 2;
+
+    @include mixins.mobile {
+      margin-top: var(--spacing-lg);
+      top: var(--spacing-md);
+    }
+
+    @include mixins.desktop {
+      position: absolute;
+    }
   }
 
   #staked-validators {
@@ -312,8 +321,13 @@
   .header-section {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-2xl);
+
+    @include mixins.desktop {
+      flex-wrap: nowrap;
+    }
 
     .title {
       margin: 0;
@@ -336,8 +350,16 @@
       }
     }
 
-    .available-to-stake {
-      margin-left: auto;
+    @include mixins.mobile {
+      .available-to-stake {
+        width: 100%;
+      }
+    }
+
+    @include mixins.desktop {
+      .available-to-stake {
+        margin-left: auto;
+      }
     }
   }
 </style>

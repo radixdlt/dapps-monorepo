@@ -45,7 +45,7 @@
 
 <style lang="scss">
   .wrapper {
-    display: inline-flex;
+    display: block;
   }
   .popover {
     color: var(--color-light);

@@ -8,7 +8,6 @@
   import { XRDToken } from '@constants'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
 
-  export let rightColumnWidth: string
   export let validator: ValidatorListItem
   export let tokenAmount: string = '0'
   export let amountCardDisabled = false
@@ -20,7 +19,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<StakeCard --token-amount-card-width={rightColumnWidth} --shadow="none">
+<StakeCard --shadow="none">
   <div
     slot="icon"
     class="remove-icon"

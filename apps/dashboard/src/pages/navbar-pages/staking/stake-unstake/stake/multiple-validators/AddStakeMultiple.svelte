@@ -117,38 +117,28 @@
     }
   }}
 >
-  <svelte:fragment slot="account-picker" let:rightColumnWidth>
-    <AccountSection bind:selectedAccount --width={rightColumnWidth}>
-      <svelte:fragment slot="account-picker-text">
-        <h4>Stake XRD from account</h4>
-      </svelte:fragment>
-    </AccountSection>
+  <svelte:fragment slot="account-picker">
+    <AccountSection bind:selectedAccount />
   </svelte:fragment>
 
   <svelte:fragment slot="heading-text">Total staking amount</svelte:fragment>
 
-  <svelte:fragment slot="content" let:rightColumnWidth>
+  <svelte:fragment slot="content">
     <OverviewStakeCardMultiple
       {xrdBalance}
       nbrOfValidators={validators.length}
       bind:amountToStake={totalXRDAmount}
       bind:tokenAmountInvalid
       tokenAmountDisabled={!distributeEqually}
-      --card-width={rightColumnWidth}
     />
 
     <Divider />
 
-    <div class="validator-list-header">
-      <div>Validator name</div>
-
-      <DistributeSwitch bind:on={distributeEqually} />
-    </div>
+    <DistributeSwitch bind:on={distributeEqually} />
 
     <div class="validator-card">
       {#each validators as validator, i}
         <StakeCardMultiple
-          {rightColumnWidth}
           {validator}
           tokenAmount={stakeAmounts[i].amount}
           amountCardDisabled={distributeEqually}
@@ -177,15 +167,5 @@
     flex-direction: column;
     gap: var(--spacing-lg);
     margin-top: var(--spacing-lg);
-  }
-
-  .validator-list-header {
-    display: flex;
-    justify-content: space-between;
-
-    :nth-child(1) {
-      align-self: end;
-      color: var(--theme-subtext);
-    }
   }
 </style>

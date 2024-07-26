@@ -85,7 +85,10 @@
 
   .staking-box-grid {
     display: grid;
-    grid: 1fr / auto auto auto auto;
+    @include mixins.desktop {
+      grid: 1fr / auto auto auto auto;
+    }
+
     gap: var(--spacing-lg);
     align-items: center;
   }

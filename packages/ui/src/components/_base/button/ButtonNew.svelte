@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let size: 'small' | 'big' = 'big'
+  export let size: 'small' | 'big' | 'xl' = 'big'
   export let secondary = false
   export let disabled = false
 </script>
@@ -8,6 +8,7 @@
   on:click
   class:small={size === 'small'}
   class:big={size === 'big'}
+  class:xl={size === 'xl'}
   class:secondary
   class:disabled
 >
@@ -59,5 +60,9 @@
     height: 2rem;
     font-weight: var(--font-weight-bold-2);
     padding: 0 var(--spacing-2xl);
+  }
+
+  .xl {
+    height: 2.5rem;
   }
 </style>

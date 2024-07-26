@@ -19,8 +19,10 @@
   import { writable } from 'svelte/store'
   import type { AccumulatedStakes } from './proxy+layout'
   import { goto } from '$app/navigation'
-  import FilterDetails from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
-  import type { ComponentEvents } from 'svelte'
+  import FilterDetails, {
+    DEFAULT_VALIDATORS_FILTER
+  } from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
+  import { onMount, type ComponentEvents } from 'svelte'
   import type {
     StakedInfo,
     UnstakingInfo,
@@ -47,19 +49,30 @@
       validators: Awaited<typeof data.promises.validators>,
       bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
     ) =>
-    (e: ComponentEvents<FilterDetails>['close']) => {
-      const filtered = validators.filter(async (v) => {
-        const epoch = await $currentEpoch
+    async (e: ComponentEvents<FilterDetails>['close']) => {
+      const epoch = await $currentEpoch
+      const filtered = validators.filter((v) => {
+        const {
+          detail: {
+            feeFilter,
+            totalXRDStakeFilter,
+            acceptsStakeFilter,
+            bookmarkedFilter,
+            withinTop100Filter,
+            uptimeFilter
+          }
+        } = e
 
         return (
-          v.fee(epoch).percentage >= e.detail.feeFilter[0] &&
-          v.fee(epoch).percentage <= e.detail.feeFilter[1] &&
-          v.percentageTotalStake >= e.detail.totalXRDStakeFilter[0] &&
-          v.percentageTotalStake <= e.detail.totalXRDStakeFilter[1] &&
-          (e.detail.acceptsStakeFilter ? v.acceptsStake : true) &&
-          (e.detail.bookmarkedFilter ? bookmarked[v.address] : true) &&
-          (v.uptimePercentages[e.detail.uptimeFilter.timeframe] ?? 0) >=
-            e.detail.uptimeFilter.percentage
+          v.fee(epoch).percentage >= feeFilter[0] &&
+          v.fee(epoch).percentage <= feeFilter[1] &&
+          v.percentageTotalStake >= totalXRDStakeFilter[0] &&
+          v.percentageTotalStake <= totalXRDStakeFilter[1] &&
+          (withinTop100Filter ? !!v.percentageTotalStake : true) &&
+          (acceptsStakeFilter ? v.acceptsStake : true) &&
+          (bookmarkedFilter ? bookmarked[v.address] : true) &&
+          (v.uptimePercentages[uptimeFilter.timeframe] ?? 0) >=
+            uptimeFilter.percentage
         )
       })
 
@@ -69,6 +82,18 @@
         filteredValidators = filtered
       }
     }
+
+  onMount(() => {
+    Promise.all([
+      data.promises.validators,
+      data.promises.bookmarkedValidators
+    ]).then(([validators, bookmarked]) => {
+      applyFilter(
+        validators,
+        bookmarked
+      )({ detail: DEFAULT_VALIDATORS_FILTER } as CustomEvent<any>)
+    })
+  })
 
   let totalXrdBalance = data.totalXrdBalance
 </script>

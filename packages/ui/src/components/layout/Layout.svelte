@@ -2,17 +2,17 @@
   import Header from '@components/header/Header.svelte'
   import SidebarWithNavbar from '../sidebar-with-navbar/SidebarWithNavbar.svelte'
   import { page } from '$app/stores'
-
+  import { hideHeader } from '@directives/hide-header'
   export let routes: { text: string; icon: string; path: string }[] = []
   export let hideSearch: boolean | undefined = undefined
+  export let isTestnet: boolean | undefined = undefined
   export let showDesktopSidebar: boolean | undefined = undefined
 
   let scrollOffset: number
 </script>
 
 <svelte:window bind:scrollY={scrollOffset} />
-
-<div class="layout">
+<div class="layout collapsed" class:isTestnet use:hideHeader>
   <div class="header">
     <Header {showDesktopSidebar} {routes} {hideSearch}
       ><slot slot="logo" name="logo" /></Header
@@ -35,7 +35,10 @@
 
 <style lang="scss">
   .layout {
-    display: grid;
+    @include mixins.desktop {
+      display: grid;
+    }
+
     height: 100%;
     width: 100vw;
 
@@ -52,9 +55,29 @@
       grid-template-rows: 4.6875rem auto;
     }
 
+    @include mixins.mobile {
+      transition: grid-template-rows 250ms ease;
+      &.collapsed {
+        grid-template-rows: 0 1fr;
+
+        .header {
+          transform: translateY(-110px);
+        }
+
+        &.isTestnet .header {
+          transform: translateY(-150px);
+        }
+      }
+    }
+
     .header {
+      transition: transform 250ms ease;
       grid-area: header;
       z-index: 100;
+      @include mixins.mobile {
+        position: fixed;
+        width: 100%;
+      }
     }
 
     .content {
@@ -98,7 +121,9 @@
           max-width: 80rem;
           margin: 0 auto;
           padding: var(--spacing-md);
-
+          @include mixins.mobile {
+            padding-top: 110px;
+          }
           @include mixins.desktop {
             padding: var(--spacing-2xl);
           }

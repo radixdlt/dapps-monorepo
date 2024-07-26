@@ -27,7 +27,7 @@
   $: invalid = !validUnstakeAmount
 
   const setMax = () => {
-    amountToUnstake = stakedAmount
+    amountToUnstake = new BigNumber(stakedAmount).toFixed()
   }
 </script>
 

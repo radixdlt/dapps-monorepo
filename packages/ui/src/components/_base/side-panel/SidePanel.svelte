@@ -41,19 +41,23 @@
 
 <style lang="scss">
   .side-panel {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     width: var(--width, 55rem);
     max-width: 100vw;
     background: var(--color-grey-5);
-    z-index: 3;
+    z-index: 100;
     overflow-y: scroll;
     padding: var(--spacing-2xl) var(--spacing-3xl);
 
     @include mixins.mobile {
       padding: var(--spacing-xl) var(--spacing-lg);
+    }
+
+    @include mixins.desktop {
+      position: absolute;
     }
   }
 </style>

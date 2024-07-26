@@ -120,7 +120,7 @@
   {/each}
 {:then [nonFungibleResources, stateVersion, accountAddress, accountResourceMap, nftsMap]}
   {#if nonFungibleResources.length === 0}
-    <NoTokens>No NFT's found</NoTokens>
+    <NoTokens>No NFTs found</NoTokens>
   {:else}
     {#each nonFungibleResources as resource}
       {@const ownedNonFungible = accountResourceMap[resource.address]}
