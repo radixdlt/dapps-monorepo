@@ -84,22 +84,37 @@
 
   .card-content {
     display: flex;
-    padding: var(--spacing-2xl) 0;
 
-    & > :global(.stake-display) {
-      flex-grow: 1;
-      padding: 0 var(--spacing-2xl);
+    @include mixins.desktop {
+      padding: var(--spacing-2xl) 0;
 
-      &:first-child {
-        padding-left: 0;
+      & > :global(.stake-display) {
+        flex-grow: 1;
+        padding: 0 var(--spacing-2xl);
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        &:last-child {
+          padding-right: 0;
+        }
+
+        &:not(:last-child) {
+          border-right: var(--border-divider) var(--theme-border);
+        }
       }
+    }
 
-      &:last-child {
-        padding-right: 0;
-      }
+    @include mixins.mobile {
+      flex-direction: column;
 
-      &:not(:last-child) {
-        border-right: var(--border-divider) var(--theme-border);
+      & > :global(.stake-display) {
+        padding: var(--spacing-xl) 0;
+
+        &:not(:last-child) {
+          border-bottom: var(--border-divider) var(--theme-border);
+        }
       }
     }
   }
