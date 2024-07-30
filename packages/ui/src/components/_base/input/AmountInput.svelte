@@ -21,6 +21,8 @@
   const onBlur = (ev: any) => {
     if (ev.target.value == 0) {
       dispatch('input', { value: '0' })
+    } else if (ev.target.value.startsWith('.')) {
+      dispatch('input', { value: '0' + ev.target.value })
     }
   }
 </script>
