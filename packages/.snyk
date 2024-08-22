@@ -1,5 +1,0 @@
-ignore:
-  SNYK-JS-ELLIPTIC-7577916:
-    - '*':
-        reason: "Temporarily ignored until the library can be updated."
-        expires: 2024-12-31
