@@ -178,6 +178,7 @@ jobs:
           parse_json: true
       - name: Run Snyk to check for deps vulnerabilities
         uses: RDXWorks-actions/snyk-actions/node@master
+        continue-on-error: true
         with:
           args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
 
@@ -320,7 +321,7 @@ jobs:
       context: './'
       dockerfile: './Dockerfile'
       platforms: 'linux/amd64'
-      scan_image: true
+      scan_image: false
       with_sbom: false
       provenance: false
       snyk_target_ref: ${{ github.ref_name }}

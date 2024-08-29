@@ -204,9 +204,11 @@
   .content {
     display: flex;
     flex-direction: column;
-    width: 50%;
     gap: 2rem;
-    min-width: 37rem;
+    @include mixins.desktop {
+      width: 50%;
+      min-width: 37rem;
+    }
   }
   .form {
     width: 100%;

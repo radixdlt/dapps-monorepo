@@ -196,7 +196,12 @@
     </div>
   {/if}
   {#if mounted}
-    <Layout {routes} {hideSearch} {showDesktopSidebar}>
+    <Layout
+      {routes}
+      {hideSearch}
+      {showDesktopSidebar}
+      --layout-page-content-padding-top="70px"
+    >
       <!-- svelte-ignore a11y-missing-content -->
       <a
         slot="logo"

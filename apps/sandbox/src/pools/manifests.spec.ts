@@ -1,5 +1,5 @@
 import { RadixNetwork } from '@common/gateway-sdk'
-import { RadixEngineToolkit } from '@radixdlt/radix-engine-toolkit'
+import { RadixEngineToolkit } from '@common/ret'
 import { contributeToPoolManifest, createPoolManifest } from './manifests'
 
 describe('pools manifests', () => {
