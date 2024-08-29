@@ -373,11 +373,13 @@
         />
       </div>
     {/if}
-    <SendToWalletButton
-      disabled={$isSendToWalletButtonDisabled}
-      loading={$status === 'sendingToWallet'}
-      on:click={handleSendTransaction}
-    />
+    <div class="send-to-wallet">
+      <SendToWalletButton
+        disabled={$isSendToWalletButtonDisabled}
+        loading={$status === 'sendingToWallet'}
+        on:click={handleSendTransaction}
+      />
+    </div>
   </div>
 </div>
 
@@ -385,12 +387,21 @@
   .description {
     margin-bottom: 3rem;
   }
+
+  @include mixins.mobile {
+    .send-to-wallet {
+      margin-bottom: 3rem;
+    }
+  }
   .content {
     display: flex;
     flex-direction: column;
-    width: 50%;
     gap: 2rem;
-    min-width: 37rem;
+    @include mixins.desktop {
+      min-width: 37rem;
+      width: 50%;
+    }
+    max-width: 100%;
   }
   .form {
     width: 100%;

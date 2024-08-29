@@ -452,7 +452,7 @@
   ]
 </script>
 
-<div style:width="37rem">
+<div style:width="37rem" style:max-width="100%">
   <EntitySearchInput
     {query}
     onEntityDetails={(value) => ($entityDetails = value)}

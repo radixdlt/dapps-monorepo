@@ -1,7 +1,7 @@
 import {
   ManifestSborStringRepresentation,
   RadixEngineToolkit
-} from '@radixdlt/radix-engine-toolkit'
+} from '@common/ret'
 import { ResultAsync } from 'neverthrow'
 import { networkId } from '../network/state'
 import { firstValueFrom } from 'rxjs'

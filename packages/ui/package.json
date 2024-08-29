@@ -94,7 +94,6 @@
     "cooltipz-css": "^2.2.2",
     "crypto-js": "^4.1.1",
     "database": "*",
-    "elliptic": "^6.5.4",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.8",
     "jsonwebtoken": "^9.0.0",

@@ -122,7 +122,7 @@
           margin: 0 auto;
           padding: var(--spacing-md);
           @include mixins.mobile {
-            padding-top: 110px;
+            padding-top: var(--layout-page-content-padding-top, 110px);
           }
           @include mixins.desktop {
             padding: var(--spacing-2xl);

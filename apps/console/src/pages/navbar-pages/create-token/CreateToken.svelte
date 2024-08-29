@@ -781,22 +781,36 @@
   </div>
 {/if}
 
-<SendToWalletButton
-  disabled={$isSendToWalletButtonDisabled}
-  loading={$status === 'sendingToWallet'}
-  on:click={() => handleSendToWallet()}
-/>
+<div class="send-to-wallet">
+  <SendToWalletButton
+    disabled={$isSendToWalletButtonDisabled}
+    loading={$status === 'sendingToWallet'}
+    on:click={() => handleSendToWallet()}
+  />
+</div>
 
 <style lang="scss">
   .description {
     margin-bottom: 3rem;
   }
 
+  @include mixins.mobile {
+    .send-to-wallet {
+      margin-bottom: 3rem;
+    }
+  }
+
   .content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     flex-direction: column;
-    gap: 2rem;
+  }
+
+  @include mixins.desktop {
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
   }
 
   h3,
