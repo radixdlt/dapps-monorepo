@@ -73,3 +73,6 @@ dashboard:
   # Set it to true if you want to secret to be deployed.
   docker_secret: 
       enabled: true
+
+  alerts:
+    aws_infrastructure_enabled: false

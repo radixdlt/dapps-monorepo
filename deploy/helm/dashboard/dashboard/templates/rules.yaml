@@ -1,0 +1,74 @@
+{{- if .Values.alerts.aws_infrastructure_enabled }}
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "rdxworks-dashboard.fullname" . }}
+  labels:
+    {{- include "rdxworks-dashboard.labels" . | nindent 4 }}
+spec:
+  groups:
+
+  - name: DashboardRDS
+    rules:
+    - alert: RDSCpuUtilizationHigh
+      expr: aws_rds_cpuutilization_average *on(dbinstance_identifier) group_left(tag_radixdlt_rds_cluster) aws_resource_info{dbinstance_identifier=~"{{ .Values.alerts.rds_cluster_name }}.*"} > 80
+      for: 15m
+      labels:
+        severity: warning
+        tier: application
+        application: dashboard
+        namespace: {{ .Release.Namespace }}
+        cluster: {{ .Values.alerts.labels.cluster }}
+        env: {{ .Values.alerts.labels.env }}
+      annotations:
+        summary: {{`"High CPU utilization for {{ $labels.dbinstance_identifier }} instance."`}}
+        description: {{`"The CPU utilization of RDS {{ $labels.dbinstance_identifier }} instance is over 80% for 15mins."`}}
+        runbook_url: "https://runbooks.extratools.works"
+
+    - alert: RDSCpuUtilizationCritical
+      expr: aws_rds_cpuutilization_average *on(dbinstance_identifier) group_left(tag_radixdlt_rds_cluster) aws_resource_info{dbinstance_identifier=~"{{ .Values.alerts.rds_cluster_name }}.*"} > 90
+      for: 30m
+      labels:
+        severity: critical
+        tier: application
+        application: dashboard
+        namespace: {{ .Release.Namespace }}
+        cluster: {{ .Values.alerts.labels.cluster }}
+        env: {{ .Values.alerts.labels.env }}
+      annotations:
+        summary: {{`"High CPU utilization for {{ $labels.dbinstance_identifier }} instance."`}}
+        description: {{`"The CPU utilization of RDS {{ $labels.dbinstance_identifier }} instance is over 90% for 15mins."`}}
+        runbook_url: "https://runbooks.extratools.works"
+
+    - alert: RDSLowFreeRamHigh
+      expr: aws_rds_freeable_memory_average *on(dbinstance_identifier) group_left(tag_radixdlt_rds_cluster) aws_resource_info{dbinstance_identifier=~"{{ .Values.alerts.rds_cluster_name }}.*"} < {{ .Values.alerts.free_rds_ram_warning_threshold_in_bytes }}
+      for: 15m
+      labels:
+        severity: warning
+        tier: application
+        application: dashboard
+        namespace: {{ .Release.Namespace }}
+        cluster: {{ .Values.alerts.labels.cluster }}
+        env: {{ .Values.alerts.labels.env }}
+      annotations:
+        summary: {{`"Low free RAM for {{ $labels.dbinstance_identifier }} instance."`}}
+        description: "RDS instance is having less than {{ .Values.alerts.free_rds_ram_warning_threshold }} for 15mins"
+        runbook_url: "https://runbooks.extratools.works"
+
+    - alert: RDSLowFreeRamCritical
+      expr: aws_rds_freeable_memory_average *on(dbinstance_identifier) group_left(tag_radixdlt_rds_cluster) aws_resource_info{dbinstance_identifier=~"{{ .Values.alerts.rds_cluster_name }}.*"} < {{ .Values.alerts.free_rds_ram_critical_threshold_in_bytes }}
+      for: 15m
+      labels:
+        severity: critical
+        tier: application
+        application: dashboard
+        namespace: {{ .Release.Namespace }}
+        cluster: {{ .Values.alerts.labels.cluster }}
+        env: {{ .Values.alerts.labels.env }}
+      annotations:
+        summary: {{`"Low free RAM for {{ $labels.dbinstance_identifier }} instance."`}}
+        description: "RDS instance is having less than {{ .Values.alerts.free_rds_ram_critical_threshold }} for 15mins"
+        runbook_url: "https://runbooks.extratools.works"
+
+{{- end }}
