@@ -58,6 +58,17 @@ dashboard:
       cpu: 50m
       memory: 256Mi
 
+  alerts:
+    aws_infrastructure_enabled: true
+    rds_cluster_name: dashboard-dev
+    labels:
+      cluster: rdx-works-main-dev
+      env: dev
+    free_rds_ram_warning_threshold_in_bytes: "500000000"
+    free_rds_ram_warning_threshold: "500 MB"
+    free_rds_ram_critical_threshold_in_bytes: "250000000"
+    free_rds_ram_critical_threshold: "250 MB"
+
 developerAccess:
   pod:
     exec:
