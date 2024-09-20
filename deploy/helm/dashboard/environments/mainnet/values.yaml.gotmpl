@@ -58,6 +58,17 @@ dashboard:
       cpu: 500m
       memory: 1Gi
 
+  alerts:
+    aws_infrastructure_enabled: true
+    rds_cluster_name: dashboard-prod
+    labels:
+      cluster: rtlj-prod
+      env: mainnet
+    free_rds_ram_warning_threshold_in_bytes: "500000000"
+    free_rds_ram_warning_threshold: "500 MB"
+    free_rds_ram_critical_threshold_in_bytes: "250000000"
+    free_rds_ram_critical_threshold: "250 MB"
+
 developerAccess:
   pod:
     exec:
@@ -72,14 +83,3 @@ alertmanager:
     region: eu-west-2
     name: "rtlj-prod/eks/dapps/mainnet/alertmanager-integration-keys"
   enable_pagerduty_notifications: true
-
-alerts:
-  aws_infrastructure_enabled: true
-  rds_cluster_name: dashboard-prod
-  labels:
-    cluster: rtlj-prod
-    env: mainnet
-  free_rds_ram_warning_threshold_in_bytes: "500000000"
-  free_rds_ram_warning_threshold: "500 MB"
-  free_rds_ram_critical_threshold_in_bytes: "250000000"
-  free_rds_ram_critical_threshold: "250 MB"
