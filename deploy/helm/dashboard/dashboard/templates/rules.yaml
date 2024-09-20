@@ -58,7 +58,7 @@ spec:
 
     - alert: RDSLowFreeRamCritical
       expr: aws_rds_freeable_memory_average *on(dbinstance_identifier) group_left(tag_radixdlt_rds_cluster) aws_resource_info{dbinstance_identifier=~"{{ .Values.dashboard.alerts.rds_cluster_name }}.*"} < {{ .Values.dashboard.alerts.free_rds_ram_critical_threshold_in_bytes }}
-      for: 15m
+      for: 30m
       labels:
         severity: critical
         tier: application
