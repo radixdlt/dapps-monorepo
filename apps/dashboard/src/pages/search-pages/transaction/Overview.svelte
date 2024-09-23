@@ -4,6 +4,7 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import AwaitedRow from '@components/info-box/AwaitedRow.svelte'
   import AddressesList from '@components/_base/address/AddressesList.svelte'
+    import { fullDateFormatter } from '@dashboard/lib/formatters/full-date'
 
   export let tx: Promise<
     | ReturnType<
@@ -41,7 +42,7 @@
     />
     <AwaitedRow text="Epoch" promise={tx.then((tx) => tx?.epoch || '')} />
     <AwaitedRow text="Round" promise={tx.then((tx) => tx?.round || '')} />
-    <AwaitedRow text="Date" promise={tx.then((tx) => tx?.date || '')} />
+    <AwaitedRow text="Date" promise={tx.then((tx) => tx?.date ? fullDateFormatter(tx.date) : '')} />
     <AwaitedRow text="Fee" promise={tx.then((tx) => tx?.fee || '')} />
 
     <AwaitedRow
