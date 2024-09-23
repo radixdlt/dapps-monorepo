@@ -76,6 +76,10 @@
     {/each}
 
     <slot name="extra-rows" />
+
+    {#if Object.keys(resolvedEntries).length === 0 && !$$slots['extra-rows']}
+      <span class="subtext">No metadata set for this entity</span>
+    {/if}
   {/await}
 </div>
 
