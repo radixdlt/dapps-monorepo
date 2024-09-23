@@ -8,7 +8,7 @@
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import type { TransactionIntentStatus } from '@common/gateway-sdk'
   import { getManifestClassDescription } from '@api/helpers/get-most-relevant-manifest-class'
-    import { fullDateFormatter } from '@dashboard/lib/formatters/full-date'
+  import { fullDateFormatter } from '@dashboard/lib/formatters/full-date'
 
   export let status: Promise<TransactionIntentStatus>
   export let timestamp: Promise<Date | undefined>

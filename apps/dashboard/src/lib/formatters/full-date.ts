@@ -10,7 +10,7 @@ export const fullDateFormatter = (date: Date | string): string => {
   })
 
   const timeFormatted = d.toLocaleTimeString('default', {
-    timeZone: 'UTC',
+    timeZone: 'UTC'
   })
 
   return `${dateFormatted}, ${timeFormatted}`
