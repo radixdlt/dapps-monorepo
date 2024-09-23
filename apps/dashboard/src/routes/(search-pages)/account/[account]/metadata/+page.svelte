@@ -3,10 +3,11 @@
   import type { LayoutData } from '../$types'
 
   export let data: LayoutData
-
-  const metadata = data.promises.account.then(({ metadata }) => metadata.all)
 </script>
 
 <div class="card">
-  <Metadata {metadata} />
+  <Metadata
+    --label-text-transform="none"
+    metadata={data.promises.account.then(({ metadata }) => metadata.all)}
+  />
 </div>

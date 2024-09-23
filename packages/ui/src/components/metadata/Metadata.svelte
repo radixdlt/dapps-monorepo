@@ -83,6 +83,7 @@
   .label {
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);
+    text-transform: var(--label-text-transform, uppercase);
     display: flex;
     align-items: center;
     gap: 5px;
