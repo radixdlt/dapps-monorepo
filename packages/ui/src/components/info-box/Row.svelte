@@ -55,5 +55,11 @@
         margin-bottom: 1rem;
       }
     }
+
+    &.no-capitalize {
+      .label {
+        text-transform: none;
+      }
+    }
   }
 </style>

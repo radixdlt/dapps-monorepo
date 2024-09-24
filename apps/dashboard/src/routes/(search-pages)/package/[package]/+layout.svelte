@@ -16,6 +16,10 @@
         label: 'Summary'
       },
       {
+        id: 'blueprints',
+        label: 'Blueprints'
+      },
+      {
         id: 'metadata',
         label: 'Metadata'
       },
