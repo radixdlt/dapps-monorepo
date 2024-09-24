@@ -1,13 +1,31 @@
+<script lang="ts" context="module">
+  export const getDateParts = (date: string) => {
+    const dateObject = new Date(date)
+    const [, day, , year, time] = dateObject.toUTCString().split(' ')
+    const month = dateObject.toLocaleString('en-us', {
+      month: 'long',
+      timeZone: 'UTC'
+    })
+    const [hours, minutes] = time.split(':')
+    const currentYear = String(new Date().getFullYear())
+    return {
+      day,
+      year,
+      month,
+      hours,
+      minutes,
+      currentYear
+    }
+  }
+</script>
+
 <script lang="ts">
   import { shortenAddress } from '@utils'
 
   export let id: string
   export let date: string
 
-  $: [, day, , year, time] = new Date(date).toUTCString().split(' ')
-  $: month = new Date(date).toLocaleString('en-us', { month: 'long' })
-  $: [hours, minutes] = time.split(':')
-  $: currentYear = String(new Date().getFullYear())
+  const { day, year, month, hours, minutes, currentYear } = getDateParts(date)
 </script>
 
 <div class="wrapper">

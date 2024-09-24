@@ -76,6 +76,10 @@
     {/each}
 
     <slot name="extra-rows" />
+
+    {#if Object.keys(resolvedEntries).length === 0 && !$$slots['extra-rows']}
+      <span class="subtext">No metadata set for this entity</span>
+    {/if}
   {/await}
 </div>
 
@@ -83,7 +87,7 @@
   .label {
     color: var(--color-grey-2);
     font-weight: var(--font-weight-bold-2);
-    text-transform: uppercase;
+    text-transform: var(--label-text-transform, uppercase);
     display: flex;
     align-items: center;
     gap: 5px;

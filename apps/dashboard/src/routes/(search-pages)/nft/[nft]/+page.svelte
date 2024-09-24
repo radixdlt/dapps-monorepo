@@ -8,9 +8,9 @@
 
 {#await data.promises.nft then nft}
   <SearchPage
-    title={nft?.type === 'generalNft'
-      ? 'Non Fungible'
-      : 'Radix Network Stake Claim Non-fungible'}
+    title={nft?.type === 'claimNft'
+      ? 'Radix Network Stake Claim Non-fungible'
+      : 'Non Fungible'}
     address={data.nftAddress}
   >
     <NonFungible

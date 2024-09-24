@@ -7,6 +7,7 @@
 
 <div class="card">
   <Metadata
+    --label-text-transform="none"
     metadata={data.promises.entity.then((data) => data.metadata.items)}
   />
 </div>

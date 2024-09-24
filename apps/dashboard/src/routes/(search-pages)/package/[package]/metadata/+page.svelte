@@ -1,10 +1,13 @@
 <script lang="ts">
-  import Metadata from '@dashboard-pages/search-pages/package/Metadata.svelte'
+  import Metadata from '@components/metadata/Metadata.svelte'
   import type { LayoutData } from '../$types'
 
   export let data: LayoutData
 </script>
 
-<Metadata
-  metadata={data.promises.package.then(({ metadata }) => metadata.all)}
-/>
+<div class="card">
+  <Metadata
+    --label-text-transform="none"
+    metadata={data.promises.package.then(({ metadata }) => metadata.all)}
+  />
+</div>

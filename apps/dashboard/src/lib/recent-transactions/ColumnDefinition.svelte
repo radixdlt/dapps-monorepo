@@ -49,7 +49,7 @@
     hideMobile: true,
     width: '150px',
     header: {
-      label: 'ID/DATE (GMT +00)'
+      label: 'ID/DATE (UTC)'
     },
     component: DateAndTxIdColumn,
     componentProps: {
