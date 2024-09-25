@@ -1,6 +1,6 @@
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 
-FROM node:21.6.2-bullseye-slim AS base
+FROM node:21.7.3-bullseye-slim AS base
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 ARG NETWORK_NAME
@@ -104,7 +104,7 @@ RUN npx turbo run prepare
 RUN npx turbo run build:prod --filter=dashboard
 RUN rm -f .npmrc
 
-FROM node:21.6.2-bullseye-slim AS dashboard
+FROM node:21.7.3-bullseye-slim AS dashboard
 
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
@@ -174,7 +174,7 @@ COPY --from=sandbox-installer /app/apps/sandbox/.nginx/nginx.conf /etc/nginx/ngi
 COPY --from=sandbox-installer /app/apps/sandbox/src/assets/favicon.png /usr/share/nginx/html/assets/favicon.png
 COPY --from=sandbox-installer /app/apps/sandbox/src/assets/sandbox_icon.png /usr/share/nginx/html/assets/sandbox_icon.png
 
-FROM node:21.6.2-bullseye-slim AS console
+FROM node:21.7.3-bullseye-slim AS console
 
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
