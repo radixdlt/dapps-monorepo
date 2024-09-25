@@ -5,7 +5,7 @@ import type {
   ValidatorCollectionItem,
   ValidatorUptimeCollectionItem
 } from '@common/gateway-sdk'
-import { getEnumStringMetadata, transformMetadata } from '../metadata'
+import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
 import {
   callApi,
@@ -17,6 +17,7 @@ import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
 import { YEARLY_XRD_EMISSIONS } from '@constants'
 import { timeToEpoch } from '@utils'
 import { Result, ResultAsync, errAsync, okAsync } from 'neverthrow'
+import { getEnumStringMetadata } from '@api/utils/metadata'
 
 export type Validator<
   WithOwner = false,

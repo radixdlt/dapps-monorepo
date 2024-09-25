@@ -1,5 +1,4 @@
 import { callApi } from '@api/gateway'
-import { getStringMetadata } from '@api/_deprecated/utils/metadata'
 import { getLinkedDappDefinitions } from '@api/utils/two-way-linking'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import { err, ok } from 'neverthrow'
@@ -16,6 +15,7 @@ import type {
 } from '@api/utils/auth'
 import { transformFungibleResource } from '@api/_deprecated/utils/entities/resource'
 import { transformNft } from '@api/utils/nfts'
+import { getStringMetadata } from '@api/utils/metadata'
 
 export const getDappDefinitionData = ({
   metadata,

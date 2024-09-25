@@ -3,14 +3,14 @@ import {
   getMetadataItem,
   transformMetadata,
   getStringMetadata,
-  createSystemMetadata
+  createSystemMetadata,
+  getStringMetadataValue
 } from '../../../metadata'
 import type { FungibleResource } from '.'
 import type {
   EntityMetadataCollection,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
-import { getStringMetadataValue } from '@api/_deprecated/utils/metadata'
 import { andThen, pipe } from 'ramda'
 
 const systemMetadata = createSystemMetadata({
