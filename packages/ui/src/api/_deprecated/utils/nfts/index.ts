@@ -3,12 +3,13 @@ import type {
   StateNonFungibleDetailsResponseItem
 } from '@common/gateway-sdk'
 import type { GeneralNft } from './general-nft'
-import { isUnstakeData, type ClaimNft } from './claim-nft'
+import { type ClaimNft } from './claim-nft'
 import {
   transformNftData,
   type NftDataItem,
   type KnownStandardTypes
 } from '../nft-data'
+import { isUnstakeData } from '@api/utils/nfts/claim-nft'
 
 export type _NonFungible<
   Type extends string,
