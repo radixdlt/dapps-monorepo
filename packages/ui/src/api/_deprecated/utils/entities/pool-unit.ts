@@ -1,15 +1,12 @@
 import { andThen, pipe } from 'ramda'
 import type { _Entity } from '.'
-import {
-  getMetadataItem,
-  getStringMetadataValue,
-  transformMetadata
-} from '../metadata'
+import { transformMetadata } from '../metadata'
 import type { FungibleResource } from './resource'
 import type {
   EntityMetadataCollection,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
+import { getMetadataItem, getStringMetadataValue } from '@api/utils/metadata'
 
 export type PoolUnit = Omit<FungibleResource, 'type'> &
   _Entity<'poolUnit', ['pool']>

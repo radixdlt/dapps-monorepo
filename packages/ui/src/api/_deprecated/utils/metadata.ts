@@ -8,8 +8,6 @@ import type {
   MetadataUrlValueTypeEnum,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
-import { isNil, pipe } from 'ramda'
-import sanitizeHtml from 'sanitize-html'
 
 export type KnownStandardTypes = {
   name: MetadataStringValueTypeEnum
@@ -33,40 +31,6 @@ export type MetadataTypeToNativeType = {
   [MetadataStringArrayValueTypeEnum.StringArray]: string[]
   [MetadataGlobalAddressValueTypeEnum.GlobalAddress]: string
 }
-
-export const getMetadataItem =
-  (key: string) => (metadata?: EntityMetadataCollection) =>
-    metadata?.items.find((item) => item.key === key)
-
-export const getEnumStringMetadataValue = (item: EntityMetadataItem): string =>
-  (item?.value?.programmatic_json as any)?.fields?.[0].value || ''
-
-export const getStringMetadataValue = (item: EntityMetadataItem): string =>
-  (item?.value?.typed as any)?.value || ''
-
-export const getVectorMetadataValue = (item: EntityMetadataItem): string[] =>
-  (item?.value.typed as any)?.values || []
-
-export const getEnumStringMetadata = (key: string) =>
-  pipe(
-    (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? '' : getStringMetadataValue(item)),
-    sanitizeHtml
-  )
-
-export const getStringMetadata = (key: string) =>
-  pipe(
-    (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? '' : getStringMetadataValue(item)),
-    sanitizeHtml
-  )
-
-export const getVectorMetadata = (key: string) =>
-  pipe(
-    (metadata: EntityMetadataCollection) => getMetadataItem(key)(metadata),
-    (item) => (isNil(item) ? [] : getVectorMetadataValue(item)),
-    (items) => items.map((value) => sanitizeHtml(value))
-  )
 
 const getValue = (typedValue: MetadataTypedValue) => {
   if ('values' in typedValue) {
