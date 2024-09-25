@@ -1,5 +1,4 @@
 import type {
-  EntityMetadataCollection,
   EntityMetadataItem,
   MetadataGlobalAddressValueTypeEnum,
   MetadataStringArrayValueTypeEnum,
