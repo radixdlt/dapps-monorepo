@@ -4,7 +4,6 @@ import {
   type KnownStandardTypes,
   type MetadataTypeToNativeType
 } from '../metadata'
-import type { Component } from './component'
 import type { PoolUnit } from './pool-unit'
 import type { Resource } from './resource'
 import type { Validator } from './validator'
@@ -14,7 +13,7 @@ import type {
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 
-export type Entity = Validator | Resource | PoolUnit | Component
+export type Entity = Validator | Resource | PoolUnit
 
 export type _Entity<
   Type extends string,
