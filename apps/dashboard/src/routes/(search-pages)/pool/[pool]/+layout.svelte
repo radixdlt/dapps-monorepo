@@ -7,6 +7,7 @@
 </script>
 
 <SearchPage
+  --border="var(--theme-border-separator)"
   title="Pool"
   address={data.address}
   menuItems={[
@@ -27,6 +28,12 @@
         id: 'auth',
         label: 'Configuration'
       }
+    ],
+    [
+      { id: 'tokens', label: 'Tokens' },
+      { id: 'nfts', label: 'NFTs' },
+      { id: 'pool-units', label: 'Pool Units' },
+      { id: 'staking', label: 'Staking' }
     ]
   ]}
   activeTab={data.pageName}
