@@ -6,6 +6,8 @@ import type { Account } from './entities/component/account'
 import type { NonFungible } from './nfts'
 import type { FungibleResource } from './entities/resource/fungible'
 import { isNil } from 'ramda'
+import type { Component } from './entities/component'
+import type { standardMetadata } from './metadata'
 
 type CommonStakeInfo<T extends string> = {
   type: T
@@ -32,7 +34,10 @@ export type StakeInfo = StakedInfo | UnstakingInfo | ReadyToClaimInfo
 export const getUnstakeAndClaimInfo =
   (validators: ValidatorListItem[]) =>
   (nfts: NonFungible[]) =>
-  (account: Account, currentEpoch: number) => {
+  (
+    account: Account | Component<unknown, typeof standardMetadata>,
+    currentEpoch: number
+  ) => {
     const claimNfts = nfts.filter(
       (nft): nft is ClaimNft => nft.type === 'claimNft'
     )
@@ -84,7 +89,7 @@ export const getUnstakeAndClaimInfo =
 
 export const getStakedInfo =
   (validators: ValidatorListItem[], fungibles: FungibleResource[]) =>
-  (account: Account) =>
+  (account: Account | Component<unknown, typeof standardMetadata>) =>
     account.resources.fungible
       .filter((token) =>
         validators.some(

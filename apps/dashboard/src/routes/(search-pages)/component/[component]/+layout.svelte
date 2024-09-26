@@ -7,6 +7,7 @@
 </script>
 
 <SearchPage
+  --border="var(--theme-border-separator)"
   title="Component"
   address={data.address}
   menuItems={[
@@ -14,7 +15,15 @@
       {
         id: 'summary',
         label: 'Summary'
-      },
+      }
+    ],
+    [
+      { id: 'tokens', label: 'Tokens' },
+      { id: 'nfts', label: 'NFTs' },
+      { id: 'pool-units', label: 'Pool Units' },
+      { id: 'staking', label: 'Staking' }
+    ],
+    [
       {
         id: 'metadata',
         label: 'Metadata'

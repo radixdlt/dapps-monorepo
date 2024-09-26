@@ -1,9 +1,4 @@
 <script lang="ts">
-  import StakingCardSection from '@dashboard/lib/staking-card/StakingCardSection.svelte'
-  import StakingIcon from '@icons/staking.svg'
-  import UnstakingIcon from '@icons/unstaking.svg'
-  import ClaimIcon from '@icons/claim.svg'
-  import Tags from '@components/_base/tags/Tags.svelte'
   import type { PageData } from './$types'
 
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
@@ -22,30 +17,6 @@
   })
 </script>
 
-<div class="card">
-  <h3>Radix Network XRD Stake Summary</h3>
-  <div class="card-content">
-    <StakingCardSection
-      icon={StakingIcon}
-      titleText="STAKED"
-      amount={stakeInfo.then((data) => data.totalStaked)}
-    />
-    <StakingCardSection
-      icon={UnstakingIcon}
-      titleText="UNSTAKING"
-      amount={stakeInfo.then((data) => data.totalUnstaking)}
-    />
-    <StakingCardSection
-      icon={ClaimIcon}
-      titleText="READY TO CLAIM"
-      amount={stakeInfo.then((data) => data.totalReadyToClaim)}
-    />
-  </div>
-
-  <div class="card-footer">
-    <Tags tags={[]} showNetworkTag />
-  </div>
-</div>
 <div class="validators">
   {#await splitValidators}
     <SkeletonLoader />

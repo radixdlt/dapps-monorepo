@@ -19,11 +19,15 @@
   import { groupBy } from '@common/groupBy'
   import { keyBy } from '@common/keyBy'
   import type { EntityNonFungible } from '@api/utils/entities'
+  import type { standardMetadata } from '@api/utils/metadata'
+  import type { Component } from '@api/utils/entities/component'
 
   export let nonFungibleResources: Promise<NonFungibleResource[]>
   export let nfts: Promise<GeneralNft[]>
   export let stateVersion: Promise<number>
-  export let account: Promise<Account>
+  export let account: Promise<
+    Account | Component<unknown, typeof standardMetadata>
+  >
 
   const loadedLaterNfts: Record<string, GeneralNft[]> = {}
   let isLoading = false
