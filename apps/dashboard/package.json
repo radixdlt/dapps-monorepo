@@ -21,7 +21,6 @@
     "lint": "eslint --cache --no-error-on-unmatched-pattern .",
     "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern .",
     "coverage": "vitest run --coverage",
-    "update:gateway": "ts-node --esm ./scripts/update-gateway.ts",
     "db:migrate:dev": "prisma migrate dev",
     "db:reset": "prisma migrate reset",
     "db:generate": "prisma generate",
