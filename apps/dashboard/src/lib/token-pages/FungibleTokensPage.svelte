@@ -28,6 +28,7 @@
         <div class="xrd">
           <FungibleTokenCard
             isXrd
+            name={xrd.name}
             address={xrd.address}
             linksTo={xrd.linksTo}
             amount={xrd.amount}
@@ -40,6 +41,7 @@
       {#each tokens as token}
         <div class="token">
           <FungibleTokenCard
+            name={token.name}
             address={token.address}
             linksTo={token.linksTo}
             amount={token.amount}

@@ -20,7 +20,7 @@
   import type { EntityNonFungible } from '@api/utils/entities'
   import type { standardMetadata } from '@api/utils/metadata'
   import type { Component } from '@api/utils/entities/component'
-    import NoTokens from '@dashboard/lib/token-pages/NoTokens.svelte'
+  import NoTokens from '@dashboard/lib/token-pages/NoTokens.svelte'
 
   export let nonFungibleResources: Promise<NonFungibleResource[]>
   export let nfts: Promise<GeneralNft[]>

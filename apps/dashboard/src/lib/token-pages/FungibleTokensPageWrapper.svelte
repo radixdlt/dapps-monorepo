@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Token } from '@dashboard-pages/search-pages/account/types'
   import { xrdAddress as xrdAddressStore } from '@stores'
   import { indexBy, prop } from 'ramda'
   import type { FungibleResource } from '@api/utils/entities/resource/fungible'
@@ -7,6 +6,7 @@
   import type { standardMetadata } from '@api/utils/metadata'
   import type { Component } from '@api/utils/entities/component'
   import FungibleTokensPage from './FungibleTokensPage.svelte'
+  import type { Token } from './types'
 
   export let data: {
     promises: {
@@ -20,7 +20,7 @@
     ({
       address,
       metadata: {
-        expected: { symbol, icon_url, tags }
+        expected: { symbol, icon_url, tags, name }
       }
     }: FungibleResource): Token => ({
       linksTo: `/resource/${address}`,
@@ -28,6 +28,7 @@
       amount: account.resources.fungible.find(
         (fungible) => fungible.address === address
       )!.value,
+      name: name?.typed?.value,
       symbol: symbol?.typed.value,
       address,
       iconUrl: icon_url?.typed.value

@@ -2,7 +2,7 @@
   import type BigNumber from 'bignumber.js'
   import PoolUnitCards from './PoolUnitCards.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-    import NoTokens from '@dashboard/lib/token-pages/NoTokens.svelte'
+  import NoTokens from '@dashboard/lib/token-pages/NoTokens.svelte'
 
   export let poolData: Promise<
     {
