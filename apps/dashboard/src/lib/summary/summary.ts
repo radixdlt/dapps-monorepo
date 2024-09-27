@@ -29,7 +29,24 @@ import { http } from '@common/http'
 import { type PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
 import BigNumber from 'bignumber.js'
 import type { standardMetadata } from '@api/utils/metadata'
+import { errorPage } from '@dashboard/stores'
 const ERROR_MSG = 'Failed to load entity data.'
+
+export type AccumulatedStakeInfo = {
+  validator: ValidatorListItem
+  staked: StakedInfo[]
+  unstaking: UnstakingInfo[]
+  readyToClaim: ReadyToClaimInfo[]
+  accumulatedStakes: BigNumber
+  accumulatedLiquidStakeUnits: BigNumber
+}
+
+export type LayoutDataStakeInfo = {
+  accumulatedStakes: Record<string, AccumulatedStakeInfo>
+  totalStaked: BigNumber
+  totalUnstaking: BigNumber
+  totalReadyToClaim: BigNumber
+}
 
 const getEntityTypes = async (
   addresses: string[]
@@ -58,10 +75,9 @@ const getPoolUnitData =
     )
 
     if (poolAddresses.some((a) => a === undefined)) {
-      // TODO
-      //    errorPage.set({
-      //     message: ERROR_MSG
-      //   })
+      errorPage.set({
+        message: ERROR_MSG
+      })
 
       throw 'Pool not found.'
     }
@@ -226,17 +242,7 @@ export const produceSummary = (
       let totalStaked = BigNumber(0)
       let totalUnstaking = BigNumber(0)
       let totalReadyToClaim = BigNumber(0)
-      const accumulatedStakes: Record<
-        string,
-        {
-          validator: ValidatorListItem
-          staked: StakedInfo[]
-          unstaking: UnstakingInfo[]
-          readyToClaim: ReadyToClaimInfo[]
-          accumulatedStakes: BigNumber
-          accumulatedLiquidStakeUnits: BigNumber
-        }
-      > = {}
+      const accumulatedStakes: Record<string, AccumulatedStakeInfo> = {}
 
       const stakeInfo: StakeInfo[] = [
         ...staked,
