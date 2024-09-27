@@ -5,41 +5,19 @@
   import StakedValidatorCard from '@dashboard/lib/staking-card/StakedValidatorCard.svelte'
 
   export let data: PageData
-  const stakeInfo = data.promises.stakeInfo
-
-  $: splitValidators = data.promises.stakeInfo.then((stakeInfo) => {
-    const values = Object.values(stakeInfo.accumulatedStakes)
-    const splitPoint = Math.ceil(values.length / 2)
-    return [
-      values.slice(0, splitPoint),
-      values.slice(splitPoint, values.length)
-    ] as const
-  })
 </script>
 
 <div class="validators">
-  {#await splitValidators}
+  {#await data.promises.stakeInfo}
     <SkeletonLoader />
-  {:then splitValidators}
-    {#each splitValidators as validators}
-      <div class="column">
-        {#each validators as validatorStakes}
-          <StakedValidatorCard {validatorStakes} />
-        {/each}
-      </div>
+  {:then validators}
+    {#each Object.values(validators.accumulatedStakes) as validatorStakes}
+      <StakedValidatorCard {validatorStakes} />
     {/each}
   {/await}
 </div>
 
 <style lang="scss">
-  h3 {
-    margin-bottom: 0;
-  }
-
-  .column {
-    width: 100%;
-  }
-
   .validators {
     @include mixins.desktop {
       display: flex;
@@ -50,52 +28,5 @@
     :global(.validator-card) {
       margin-top: var(--spacing-2xl);
     }
-  }
-
-  .card-content {
-    display: flex;
-
-    @include mixins.desktop {
-      padding: var(--spacing-2xl) 0;
-
-      & > :global(.stake-display) {
-        flex-grow: 1;
-        padding: 0 var(--spacing-2xl);
-
-        &:first-child {
-          padding-left: 0;
-        }
-
-        &:last-child {
-          padding-right: 0;
-        }
-
-        &:not(:last-child) {
-          border-right: var(--border-divider) var(--theme-border);
-        }
-      }
-    }
-
-    @include mixins.mobile {
-      flex-direction: column;
-
-      & > :global(.stake-display) {
-        padding: var(--spacing-xl) 0;
-
-        &:not(:last-child) {
-          border-bottom: var(--border-divider) var(--theme-border);
-        }
-      }
-    }
-  }
-  .card-footer {
-    padding: var(--spacing-lg) var(--spacing-2xl);
-    display: flex;
-    align-items: center;
-    border: var(--border) var(--theme-border);
-    border-top: none;
-    border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-    background: var(--theme-surface-1);
-    margin: 0 calc(-1 * var(--spacing-2xl)) calc(-1 * var(--spacing-2xl));
   }
 </style>

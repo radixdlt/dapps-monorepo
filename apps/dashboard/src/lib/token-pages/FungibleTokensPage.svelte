@@ -1,7 +1,7 @@
 <script lang="ts">
   import FungibleTokenCard from '@components/fungible-token-card/FungibleTokenCard.svelte'
-  import type { Token } from '../types'
-  import NoTokens from '../NoTokens.svelte'
+  import type { Token } from './types'
+  import NoTokens from './NoTokens.svelte'
   import BigNumber from 'bignumber.js'
 
   export let data: Promise<{

@@ -15,7 +15,14 @@
       {
         id: 'summary',
         label: 'Summary'
-      },
+      }
+    ],
+    [
+      { id: 'tokens', label: 'Tokens' },
+      { id: 'pool-units', label: 'Pool Units' },
+      { id: 'staking', label: 'Staking' }
+    ],
+    [
       {
         id: 'metadata',
         label: 'Metadata'
@@ -28,11 +35,6 @@
         id: 'auth',
         label: 'Configuration'
       }
-    ],
-    [
-      { id: 'tokens', label: 'Tokens' },
-      { id: 'pool-units', label: 'Pool Units' },
-      { id: 'staking', label: 'Staking' }
     ]
   ]}
   activeTab={data.pageName}

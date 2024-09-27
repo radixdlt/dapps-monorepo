@@ -15,7 +15,13 @@
       {
         id: 'summary',
         label: 'Summary'
-      },
+      }
+    ],
+    [
+      { id: 'tokens', label: 'Tokens' },
+      { id: 'staking', label: 'Staking' }
+    ],
+    [
       {
         id: 'metadata',
         label: 'Metadata'
@@ -24,10 +30,6 @@
         id: 'auth',
         label: 'Configuration'
       }
-    ],
-    [
-      { id: 'tokens', label: 'Tokens' },
-      { id: 'staking', label: 'Staking' }
     ]
   ]}
   activeTab={data.pageName}
