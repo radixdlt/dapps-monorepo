@@ -8,6 +8,7 @@
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import StakedValidatorCard from '@dashboard/lib/staking-card/StakedValidatorCard.svelte'
   import type { LayoutDataStakeInfo } from '../summary/summary'
+  import NoTokens from './NoTokens.svelte'
 
   export let stakeInfo: Promise<LayoutDataStakeInfo>
   export let withSummary: boolean
@@ -47,6 +48,12 @@
       <Tags tags={[]} showNetworkTag />
     </div>
   </div>
+{:else}
+  {#await stakeInfo then data}
+    {#if data.totalStaked.eq(0) && data.totalUnstaking.eq(0) && data.totalReadyToClaim.eq(0)}
+      <NoTokens>No staking tokens found</NoTokens>
+    {/if}
+  {/await}
 {/if}
 
 <div class="validators">

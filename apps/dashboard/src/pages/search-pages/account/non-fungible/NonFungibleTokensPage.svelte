@@ -10,7 +10,6 @@
   import InfiniteScroll from '@components/infinite-scroll/InfiniteScroll.svelte'
   import NonFungibleTokenCard from '@components/non-fungible-token-card/NonFungibleTokenCard.svelte'
   import { createEventDispatcher } from 'svelte'
-  import NoTokens from '../NoTokens.svelte'
   import type {
     DefaultNonFungibleResource,
     NonFungibleResource
@@ -21,6 +20,7 @@
   import type { EntityNonFungible } from '@api/utils/entities'
   import type { standardMetadata } from '@api/utils/metadata'
   import type { Component } from '@api/utils/entities/component'
+    import NoTokens from '@dashboard/lib/token-pages/NoTokens.svelte'
 
   export let nonFungibleResources: Promise<NonFungibleResource[]>
   export let nfts: Promise<GeneralNft[]>
