@@ -8,7 +8,7 @@
 <FungibleTokensPageWrapper
   data={{
     promises: {
-      entity: data.promises.account,
+      entity: data.promises.validator,
       fungibleResources: data.promises.fungibleResources
     }
   }}

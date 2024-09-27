@@ -8,6 +8,7 @@
 
   const tokens = [
     {
+      name: 'Radix',
       symbol: 'XRD',
       address:
         'account_tdx_c_1p9we7lz9az6fyarwzx2yxezx9ymfdtc6l4dsva4v36rqpek3pe',
@@ -17,6 +18,7 @@
       isXrd: true
     },
     {
+      name: 'Radix',
       symbol: 'PEPE',
       address:
         'account_tdx_c_1p9we7lz9az6fyarwzx2yxezx9ymfdtc6l4dsva4v36rqpek3pe',
@@ -26,6 +28,7 @@
       linksTo: 'https://radixdlt.com'
     },
     {
+      name: 'Radix',
       address:
         'account_tdx_c_1p9we7lz9az6fyarwzx2yxezx9ymfdtc6l4dsva4v36rqpek3pe',
       numberOfTags: 2,
@@ -71,6 +74,7 @@
   {#each tokens as token, index}
     <div style:margin-bottom="10px">
       <FungibleTokenCard
+        name={token.name}
         symbol={token.symbol}
         address={token.address}
         numberOfTags={token.numberOfTags}

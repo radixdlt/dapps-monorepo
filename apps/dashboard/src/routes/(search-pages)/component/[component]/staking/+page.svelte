@@ -5,4 +5,4 @@
   export let data: PageData
 </script>
 
-<StakingPageWrapper stakeInfo={data.promises.stakeInfo} withSummary={true} />
+<StakingPageWrapper stakeInfo={data.promises.stakeInfo} withSummary={false} />

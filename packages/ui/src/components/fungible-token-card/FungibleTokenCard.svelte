@@ -8,6 +8,7 @@
 
   export let isXrd = false
   export let numberOfTags = 0
+  export let name: string | undefined = undefined
   export let address: string | undefined = undefined
   export let amount: string | undefined = undefined
   export let symbol: string | undefined = undefined
@@ -27,6 +28,8 @@
       <div class:has-tags={isXrd || numberOfTags > 0} class="token-text">
         {#if symbol}
           <span class="token-symbol">{symbol.slice(0, 5)}</span>
+        {:else if name}
+          <span class="token-symbol">{name}</span>
         {/if}
 
         {#if address}
