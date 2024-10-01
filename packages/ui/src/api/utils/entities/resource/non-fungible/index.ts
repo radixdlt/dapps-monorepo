@@ -1,10 +1,9 @@
 import { transformResource, type Resource } from '..'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
-import type { Validator, ValidatorListItem } from '../../component/validator'
 import {
   systemMetadata as claimNftSystemMetadata,
   type ClaimNftCollection,
-  isClaimNftCollection
+  isClaimNft
 } from './claim-nft-collection'
 import {
   isPackageOwnerBadgeCollection,
@@ -21,22 +20,27 @@ export type NonFungibleResource =
   | ClaimNftCollection
   | PackageOwnerBadgeCollection
 
-export const transformNonFungibleResource = async (
-  entity: StateEntityDetailsVaultResponseItem,
-  validators?: (ValidatorListItem | Validator)[]
-): Promise<NonFungibleResource> => {
-  if (validators && isClaimNftCollection(entity, validators)) {
+export const transformNonFungibleResource = (
+  entity: StateEntityDetailsVaultResponseItem
+): NonFungibleResource => {
+  if (entity.details?.type !== 'NonFungibleResource') {
+    throw new Error('Invalid resource type')
+  }
+
+  if (isClaimNft(entity)) {
     return {
       ...transformResource(entity, claimNftSystemMetadata),
       resourceType: 'non-fungible',
+      nativeResourceDetails: entity.details.native_resource_details,
       nonFungibleType: 'claim-nft-collection'
     } as const
   }
 
-  if (await isPackageOwnerBadgeCollection(entity.address)) {
+  if (isPackageOwnerBadgeCollection(entity)) {
     return {
       ...transformResource(entity, PackageOwnerSystemMetadata),
       resourceType: 'non-fungible',
+      nativeResourceDetails: entity.details.native_resource_details,
       nonFungibleType: 'package-owner-badge-collection'
     } as const
   }
@@ -44,6 +48,7 @@ export const transformNonFungibleResource = async (
   return {
     ...transformResource(entity),
     resourceType: 'non-fungible',
+    nativeResourceDetails: entity.details.native_resource_details,
     nonFungibleType: 'default'
   } as const
 }

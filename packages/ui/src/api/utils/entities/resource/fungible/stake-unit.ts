@@ -1,15 +1,7 @@
-import { callApi } from '@api/_deprecated/gateway'
 import type { _Entity } from '../..'
-import {
-  getStringMetadata,
-  transformMetadata,
-  createSystemMetadata
-} from '../../../metadata'
+import { transformMetadata, createSystemMetadata } from '../../../metadata'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import type { FungibleResource } from '.'
-import { ok } from 'neverthrow'
-import { getValidatorMetadataValue } from '../../component/validator'
-import { getPoolUnitMetadataValue } from './pool-unit'
 
 const systemMetadata = createSystemMetadata({
   validator: 'GlobalAddress'
@@ -41,34 +33,6 @@ export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => {
   }
 }
 
-export const isStakeUnit = async (
-  entity: StateEntityDetailsVaultResponseItem
-) => {
-  const validator = await getStringMetadata('validator')(entity.metadata)
-  if (!validator) return false
-  const validatorEntityResult = await callApi(
-    'getEntityDetailsVaultAggregated',
-    [validator]
-  )
-  return validatorEntityResult.match(
-    (validatorEntity) =>
-      !!getStringMetadata('pool_unit')(validatorEntity[0].metadata),
-    () => false
-  )
-}
-
-const getEntityDetails = (address: string) =>
-  callApi('getEntityDetailsVaultAggregated', [address])
-
-export const verifyStakeUnit = async (
-  entity: StateEntityDetailsVaultResponseItem
-) => {
-  const validatorMetadataValue = getValidatorMetadataValue(entity)
-  if (!validatorMetadataValue) return false
-  const result = await ok(validatorMetadataValue)
-    .asyncAndThen(getEntityDetails)
-    .map(([entity]) => getPoolUnitMetadataValue(entity))
-    .map((poolUnit) => poolUnit === entity.address)
-
-  return result.isOk() && result.value === true
-}
+export const isStakeUnit = (entity: StateEntityDetailsVaultResponseItem) =>
+  entity.details?.type === 'FungibleResource' &&
+  entity.details.native_resource_details?.kind === 'ValidatorLiquidStakeUnit'

@@ -1,10 +1,21 @@
 <script lang="ts">
+  import { validatorsCacheModule } from '@api/utils/validators-cache-module'
   import type { PageData } from './$types'
 
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import StakedValidatorCard from '@dashboard/lib/staking-card/StakedValidatorCard.svelte'
 
   export let data: PageData
+
+  $: {
+    data.promises.stakeInfo.then((data) => {
+      validatorsCacheModule.queryValidators(
+        Object.values(data.accumulatedStakes).map(
+          (stake) => stake.validatorAddress
+        )
+      )
+    })
+  }
 </script>
 
 <div class="validators">

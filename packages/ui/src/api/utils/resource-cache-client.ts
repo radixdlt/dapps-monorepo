@@ -3,7 +3,6 @@ import { BehaviorSubject, combineLatest, map, distinctUntilChanged } from 'rxjs'
 import { callApi } from '@api/gateway'
 import {
   transformFungibleResource,
-  transformNonFungibleResource,
   type FungibleResource,
   type NftGlobalId,
   type NonFungibleResource

@@ -1,5 +1,6 @@
 import type {
   EntityMetadataItem,
+  NativeResourceDetails,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 import { transformEntity, type _Entity } from '..'
@@ -14,14 +15,13 @@ import { transformFungibleResource } from './fungible'
 import {
   getPoolUnits,
   hasPoolMetadataSet,
-  type GetEntityTypesFn,
-  type GetEntityDetailsFn
+  isPoolUnit,
+  resourceToPoolUnit
 } from './fungible/pool-unit'
 import { transformNonFungibleResource } from './non-fungible'
 import {
   createStandardMetadata,
-  type ExpectedMetadata,
-  type SystemMetadata
+  type ExpectedMetadata
 } from '@api/utils/metadata'
 
 type ResourceType = 'fungible' | 'non-fungible'
@@ -37,6 +37,7 @@ export type Resource<
   }
   behaviors: 'simple' | Behavior[]
   displayName: string
+  nativeResourceDetails?: NativeResourceDetails
 }
 
 export const standardMetadata = createStandardMetadata({
@@ -78,21 +79,12 @@ export const transformResource = <Metadata extends ExpectedMetadata>(
       } as const)
   )()
 
-export const transformUnknownResource = async (
-  entity: StateEntityDetailsVaultResponseItem,
-  getEntityTypesFn: GetEntityTypesFn,
-  getEntityDetailsFn: GetEntityDetailsFn
+export const transformUnknownResource = (
+  entity: StateEntityDetailsVaultResponseItem
 ) => {
   if (entity.details?.type === 'FungibleResource') {
     const fungible = transformFungibleResource(entity)
-    if (hasPoolMetadataSet(fungible)) {
-      return getPoolUnits(
-        [fungible],
-        getEntityTypesFn,
-        getEntityDetailsFn
-      ).then((res) => res[0] ?? fungible)
-    }
-    return fungible
+    return isPoolUnit(fungible) ? resourceToPoolUnit(fungible) : fungible
   }
 
   return transformNonFungibleResource(entity)

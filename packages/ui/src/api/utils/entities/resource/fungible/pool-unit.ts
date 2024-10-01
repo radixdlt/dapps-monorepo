@@ -9,6 +9,9 @@ import {
 import type { FungibleResource } from '.'
 import type {
   EntityMetadataCollection,
+  NativeResourceMultiResourcePoolUnitValue,
+  NativeResourceOneResourcePoolUnitValue,
+  NativeResourceTwoResourcePoolUnitValue,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 import { andThen, pipe } from 'ramda'
@@ -17,8 +20,18 @@ const systemMetadata = createSystemMetadata({
   pool: 'GlobalAddress'
 })
 
-export type PoolUnit = Omit<FungibleResource, 'type'> &
-  _Entity<'poolUnit', typeof systemMetadata>
+type PoolUnitNativeResourceDetails =
+  | NativeResourceOneResourcePoolUnitValue
+  | NativeResourceTwoResourcePoolUnitValue
+  | NativeResourceMultiResourcePoolUnitValue
+
+export type PoolUnit = Omit<
+  FungibleResource,
+  'type' | 'nativeResourceDetails'
+> &
+  _Entity<'poolUnit', typeof systemMetadata> & {
+    nativeResourceDetails: PoolUnitNativeResourceDetails
+  }
 export type GetEntityTypesFn = (
   address: string[]
 ) => Promise<{ [address: string]: string }>
@@ -37,6 +50,8 @@ type PoolResource = Record<PoolAddress, ResourceAddress>
 
 export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   ...resource,
+  nativeResourceDetails:
+    resource.nativeResourceDetails as PoolUnitNativeResourceDetails,
   type: 'poolUnit',
   metadata: {
     ...resource.metadata,
@@ -53,14 +68,6 @@ export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
     }
   }
 })
-
-const getPoolAddress = (resource: FungibleResource) => {
-  const poolMetadataEntry = getMetadataItem('pool')({
-    items: resource.metadata.all
-  })
-  if (poolMetadataEntry?.value.typed.type === 'GlobalAddress')
-    return poolMetadataEntry?.value.typed.value
-}
 
 export const hasPoolMetadataSet = (resource: FungibleResource) => {
   const poolMetadataEntry = getMetadataItem('pool')({
@@ -111,55 +118,17 @@ export const verify2WayLinking =
 const getPoolAddresses = (resources: FungibleResourceWithPoolAddress[]) =>
   resources.map(({ poolAddress }) => poolAddress)
 
-const filterByEntityType =
-  (validEntityTypes: Set<string>, getEntityTypesFn: GetEntityTypesFn) =>
-  async (resources: FungibleResourceWithPoolAddress[]) =>
-    pipe(
-      getPoolAddresses,
-      getEntityTypesFn,
-      andThen((entityTypes) =>
-        resources.filter(({ poolAddress }) => {
-          const poolEntityType = entityTypes[poolAddress]
-          return poolEntityType && validEntityTypes.has(poolEntityType)
-        })
-      )
-    )(resources)
+export const getPoolUnits = (resources: FungibleResource[]) =>
+  resources
+    .filter((resource) => isPoolUnit(resource))
+    .map((resource) => resourceToPoolUnit(resource))
 
-const extendWithPoolAddress = (resources: FungibleResource[]) =>
-  resources.map((resource) => ({
-    ...resource,
-    poolAddress: getPoolAddress(resource)!
-  }))
-
-export const verifyPoolUnit =
-  (
-    getEntityTypesFn: GetEntityTypesFn,
-    getEntityDetailsFn: GetEntityDetailsFn
-  ) =>
-  (resources: FungibleResource[]) =>
-    pipe(
-      (resources: FungibleResource[]) => resources.filter(hasPoolMetadataSet),
-      extendWithPoolAddress,
-      filterByEntityType(
-        new Set([
-          'GlobalOneResourcePool',
-          'GlobalTwoResourcePool',
-          'GlobalMultiResourcePool'
-        ]),
-        getEntityTypesFn
-      ),
-      andThen(verify2WayLinking(getEntityDetailsFn))
-    )(resources)
-
-export const getPoolUnits = (
-  resources: FungibleResource[],
-  getEntityTypesFn: GetEntityTypesFn,
-  getEntityDetailsFn: GetEntityDetailsFn
-) =>
-  pipe(
-    verifyPoolUnit(getEntityTypesFn, getEntityDetailsFn),
-    andThen((resources) => resources.map(resourceToPoolUnit))
-  )(resources)
+export const isPoolUnit = (resource: FungibleResource) =>
+  [
+    'TwoResourcePoolUnit',
+    'OneResourcePoolUnit',
+    'MultiResourcePoolUnit'
+  ].includes(resource.nativeResourceDetails?.kind || '')
 
 export const getPoolUnitMetadataValue = (
   entity: StateEntityDetailsVaultResponseItem

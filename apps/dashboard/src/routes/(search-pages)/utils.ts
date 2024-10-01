@@ -40,7 +40,10 @@ export const getLookupEntity = (
       callApi(
         'getEntityDetailsVaultAggregated',
         [address],
-        options,
+        options || {
+          dappTwoWayLinks: true,
+          nativeResourceDetails: true
+        },
         ledgerState
       ).andThen((entities) =>
         entities.length === 0

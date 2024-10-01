@@ -9,7 +9,9 @@ export const systemNftData = createSystemNftData({
   claim_epoch: 'String'
 })
 
-export type ClaimNft = _NonFungible<'claimNft', typeof systemNftData>
+export type ClaimNft = _NonFungible<'claimNft', typeof systemNftData> & {
+  validatorAddress: string
+}
 
 export const isUnstakeData = (
   data: StateNonFungibleDetailsResponseItem['data']

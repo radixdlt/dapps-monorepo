@@ -10,38 +10,10 @@ import { callApi } from '@api/_deprecated/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
-import type { EntityType } from '@common/ret'
-import { http } from '@common/http'
-import { hasValidatorMetadataSet } from '@api/utils/entities/component/validator'
-import { verifyStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
-import { verifyClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
+import { isStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
+import { isClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
 import { transformUnknownResource } from '@api/utils/entities/resource'
 import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
-
-const ERROR_MSG = 'Failed to load resource data.'
-
-const getEntityTypes = async (
-  addresses: string[]
-): Promise<{ [address: string]: EntityType }> =>
-  http.post('/api/ret/entity-type', {
-    addresses
-  })
-
-const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
-  pipe(
-    () =>
-      callApi(
-        'getEntityDetailsVaultAggregated',
-        addresses,
-        undefined,
-        stateVersion
-          ? {
-              state_version: stateVersion
-            }
-          : undefined
-      ),
-    handleGatewayResult((_) => ERROR_MSG)
-  )()
 
 const getRedeemableTokens = async (poolUnit: PoolUnit) => {
   const pool = poolUnit.metadata.expected.pool!.typed.value
@@ -68,21 +40,15 @@ export const load: LayoutLoad = async ({ params }) => {
 
   const resource = await getLookupEntity(params.resource)
 
-  const isValidStakeUnit = await verifyStakeUnit(resource)
-  const isValidClaimNft = await verifyClaimNft(resource)
+  const isValidStakeUnit = isStakeUnit(resource)
+  const isValidClaimNft = isClaimNft(resource)
 
-  if (hasValidatorMetadataSet(resource)) {
-    if (isValidStakeUnit) {
-      throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
-    } else if (isValidClaimNft) {
-      throw redirect(308, `/claim_nft/${encodeURIComponent(params.resource)}`)
-    }
+  if (isValidStakeUnit) {
+    throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)
+  } else if (isValidClaimNft) {
+    throw redirect(308, `/claim_nft/${encodeURIComponent(params.resource)}`)
   }
-  const transformedResource = await transformUnknownResource(
-    resource,
-    getEntityTypes,
-    getEntityDetails()
-  )
+  const transformedResource = transformUnknownResource(resource)
 
   const redeemableTokens =
     transformedResource.type === 'poolUnit'
