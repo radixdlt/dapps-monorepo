@@ -3,7 +3,7 @@ import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
 import {
   systemMetadata as claimNftSystemMetadata,
   type ClaimNftCollection,
-  isClaimNftCollection
+  isClaimNft
 } from './claim-nft-collection'
 import {
   isPackageOwnerBadgeCollection,
@@ -27,7 +27,7 @@ export const transformNonFungibleResource = (
     throw new Error('Invalid resource type')
   }
 
-  if (isClaimNftCollection(entity)) {
+  if (isClaimNft(entity)) {
     return {
       ...transformResource(entity, claimNftSystemMetadata),
       resourceType: 'non-fungible',

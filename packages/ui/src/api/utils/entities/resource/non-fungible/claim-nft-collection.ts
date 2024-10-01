@@ -1,7 +1,6 @@
-import { createSystemMetadata, getStringMetadata } from '@api/utils/metadata'
+import { createSystemMetadata } from '@api/utils/metadata'
 import type { Resource, standardMetadata } from '..'
 import type { StateEntityDetailsVaultResponseItem } from '@common/gateway-sdk'
-import { callApi } from '@api/gateway'
 
 import type { DefaultNonFungibleResource } from '.'
 import { transformMetadata } from '@api/utils/metadata'
@@ -20,18 +19,11 @@ export type ClaimNftCollection = Resource<
   nonFungibleType: 'claim-nft-collection'
 }
 
-export const getClaimNftMetadataValue = (
-  entity: StateEntityDetailsVaultResponseItem
-) => getStringMetadata('claim_nft')(entity.metadata)
-
-export const isClaimNftCollection = (
+export const isClaimNft = (
   resourceEntity: StateEntityDetailsVaultResponseItem
-) => {
-  return (
-    resourceEntity.details?.type === 'NonFungibleResource' &&
-    resourceEntity.details.native_resource_details?.kind === 'ValidatorClaimNft'
-  )
-}
+) =>
+  resourceEntity.details?.type === 'NonFungibleResource' &&
+  resourceEntity.details.native_resource_details?.kind === 'ValidatorClaimNft'
 
 export const resourceToClaimNftCollection = (
   resource: DefaultNonFungibleResource
@@ -54,7 +46,3 @@ export const resourceToClaimNftCollection = (
     }
   }
 })
-
-export const verifyClaimNft = (entity: StateEntityDetailsVaultResponseItem) =>
-  entity.details?.type === 'NonFungibleResource' &&
-  entity.details.native_resource_details?.kind === 'ValidatorClaimNft'

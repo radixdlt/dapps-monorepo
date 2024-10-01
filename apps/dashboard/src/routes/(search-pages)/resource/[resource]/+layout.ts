@@ -10,8 +10,8 @@ import { callApi } from '@api/_deprecated/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
-import { verifyStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
-import { verifyClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
+import { isStakeUnit } from '@api/utils/entities/resource/fungible/stake-unit'
+import { isClaimNft } from '@api/utils/entities/resource/non-fungible/claim-nft-collection'
 import { transformUnknownResource } from '@api/utils/entities/resource'
 import type { PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
 
@@ -40,8 +40,8 @@ export const load: LayoutLoad = async ({ params }) => {
 
   const resource = await getLookupEntity(params.resource)
 
-  const isValidStakeUnit = verifyStakeUnit(resource)
-  const isValidClaimNft = verifyClaimNft(resource)
+  const isValidStakeUnit = isStakeUnit(resource)
+  const isValidClaimNft = isClaimNft(resource)
 
   if (isValidStakeUnit) {
     throw redirect(308, `/stake_unit/${encodeURIComponent(params.resource)}`)

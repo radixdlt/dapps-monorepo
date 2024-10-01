@@ -33,6 +33,6 @@ export const resourceToStakeUnit = (resource: FungibleResource): StakeUnit => {
   }
 }
 
-export const verifyStakeUnit = (entity: StateEntityDetailsVaultResponseItem) =>
+export const isStakeUnit = (entity: StateEntityDetailsVaultResponseItem) =>
   entity.details?.type === 'FungibleResource' &&
   entity.details.native_resource_details?.kind === 'ValidatorLiquidStakeUnit'
