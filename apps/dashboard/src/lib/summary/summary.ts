@@ -46,30 +46,6 @@ export type LayoutDataStakeInfo = {
   totalReadyToClaim: BigNumber
 }
 
-const getEntityTypes = async (
-  addresses: string[]
-): Promise<{ [address: string]: EntityType }> =>
-  http.post('/api/ret/entity-type', {
-    addresses
-  })
-
-const getEntityDetailsFn = (stateVersion: number) => (addresses: string[]) =>
-  pipe(
-    () =>
-      callApi(
-        'getEntityDetailsVaultAggregated',
-        addresses,
-        {
-          dappTwoWayLinks: true,
-          nativeResourceDetails: true
-        },
-        {
-          state_version: stateVersion
-        }
-      ),
-    handleGatewayResult((_) => ERROR_MSG)
-  )()
-
 const getPoolUnitData =
   (
     stateVersion: number,
@@ -303,13 +279,10 @@ export const produceSummary = (
   const poolData = pipe(
     () => Promise.all([account, fungibleResources, ledgerState]),
     andThen(([account, fungibles, { stateVersion }]) =>
-      pipe(() => {
-        return getPoolUnits(
-          fungibles,
-          getEntityTypes,
-          getEntityDetailsFn(stateVersion)
-        )
-      }, andThen(getPoolUnitData(stateVersion, account)))()
+      pipe(
+        () => getPoolUnits(fungibles),
+        andThen(getPoolUnitData(stateVersion, account))
+      )()
     )
   )()
 

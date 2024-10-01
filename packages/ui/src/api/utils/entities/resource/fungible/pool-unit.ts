@@ -54,14 +54,6 @@ export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   }
 })
 
-const getPoolAddress = (resource: FungibleResource) => {
-  const poolMetadataEntry = getMetadataItem('pool')({
-    items: resource.metadata.all
-  })
-  if (poolMetadataEntry?.value.typed.type === 'GlobalAddress')
-    return poolMetadataEntry?.value.typed.value
-}
-
 export const hasPoolMetadataSet = (resource: FungibleResource) => {
   const poolMetadataEntry = getMetadataItem('pool')({
     items: resource.metadata.all
@@ -111,55 +103,19 @@ export const verify2WayLinking =
 const getPoolAddresses = (resources: FungibleResourceWithPoolAddress[]) =>
   resources.map(({ poolAddress }) => poolAddress)
 
-const filterByEntityType =
-  (validEntityTypes: Set<string>, getEntityTypesFn: GetEntityTypesFn) =>
-  async (resources: FungibleResourceWithPoolAddress[]) =>
-    pipe(
-      getPoolAddresses,
-      getEntityTypesFn,
-      andThen((entityTypes) =>
-        resources.filter(({ poolAddress }) => {
-          const poolEntityType = entityTypes[poolAddress]
-          return poolEntityType && validEntityTypes.has(poolEntityType)
-        })
+export const getPoolUnits = (resources: FungibleResource[]) => {
+  return Promise.resolve(
+    resources
+      .filter((resource) =>
+        [
+          'TwoResourcePoolUnit',
+          'OneResourcePoolUnit',
+          'MultiResourcePoolUnit'
+        ].includes(resource.nativeResourceDetails?.kind || '')
       )
-    )(resources)
-
-const extendWithPoolAddress = (resources: FungibleResource[]) =>
-  resources.map((resource) => ({
-    ...resource,
-    poolAddress: getPoolAddress(resource)!
-  }))
-
-export const verifyPoolUnit =
-  (
-    getEntityTypesFn: GetEntityTypesFn,
-    getEntityDetailsFn: GetEntityDetailsFn
-  ) =>
-  (resources: FungibleResource[]) =>
-    pipe(
-      (resources: FungibleResource[]) => resources.filter(hasPoolMetadataSet),
-      extendWithPoolAddress,
-      filterByEntityType(
-        new Set([
-          'GlobalOneResourcePool',
-          'GlobalTwoResourcePool',
-          'GlobalMultiResourcePool'
-        ]),
-        getEntityTypesFn
-      ),
-      andThen(verify2WayLinking(getEntityDetailsFn))
-    )(resources)
-
-export const getPoolUnits = (
-  resources: FungibleResource[],
-  getEntityTypesFn: GetEntityTypesFn,
-  getEntityDetailsFn: GetEntityDetailsFn
-) =>
-  pipe(
-    verifyPoolUnit(getEntityTypesFn, getEntityDetailsFn),
-    andThen((resources) => resources.map(resourceToPoolUnit))
-  )(resources)
+      .map((resource) => resourceToPoolUnit(resource))
+  )
+}
 
 export const getPoolUnitMetadataValue = (
   entity: StateEntityDetailsVaultResponseItem
