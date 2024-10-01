@@ -58,9 +58,17 @@ const getEntityTypes = async (
 const getEntityDetailsFn = (stateVersion: number) => (addresses: string[]) =>
   pipe(
     () =>
-      callApi('getEntityDetailsVaultAggregated', addresses, undefined, {
-        state_version: stateVersion
-      }),
+      callApi(
+        'getEntityDetailsVaultAggregated',
+        addresses,
+        {
+          dappTwoWayLinks: true,
+          nativeResourceDetails: true
+        },
+        {
+          state_version: stateVersion
+        }
+      ),
     handleGatewayResult((_) => ERROR_MSG)
   )()
 
@@ -87,7 +95,10 @@ const getPoolUnitData =
         callApi(
           'getEntityDetailsVaultAggregated',
           poolAddresses as string[],
-          undefined,
+          {
+            dappTwoWayLinks: true,
+            nativeResourceDetails: true
+          },
           { state_version: stateVersion }
         ),
       handleGatewayResult((_) => ERROR_MSG)
@@ -102,7 +113,10 @@ const getPoolUnitData =
           pools.flatMap(
             (pool) => pool.metadata.expected.pool_resources.typed.values
           ),
-          undefined,
+          {
+            dappTwoWayLinks: true,
+            nativeResourceDetails: true
+          },
           { state_version: stateVersion }
         ),
       handleGatewayResult((_) => ERROR_MSG)
@@ -165,29 +179,31 @@ export const produceSummary = (
       () =>
         callApi(
           'getEntityDetailsVaultAggregated',
-          acc.resources.fungible.map((token) => token.address)
+          acc.resources.fungible.map((token) => token.address),
+          {
+            dappTwoWayLinks: true,
+            nativeResourceDetails: true
+          }
         ),
       handleGatewayResult((_) => ERROR_MSG),
       andThen(map(transformFungibleResource))
     )()
   )
 
-  const nonFungibleResources = Promise.all([account, validatorResponse]).then(
-    ([acc, { validators }]) =>
-      pipe(
-        () =>
-          callApi(
-            'getEntityDetailsVaultAggregated',
-            acc.resources.nonFungible.map((token) => token.address)
-          ),
-        handleGatewayResult((_) => ERROR_MSG),
-        andThen(
-          pipe(
-            map((entity) => transformNonFungibleResource(entity, validators)),
-            (x) => Promise.all(x)
-          )
-        )
-      )()
+  const nonFungibleResources = account.then((acc) =>
+    pipe(
+      () =>
+        callApi(
+          'getEntityDetailsVaultAggregated',
+          acc.resources.nonFungible.map((token) => token.address),
+          {
+            dappTwoWayLinks: true,
+            nativeResourceDetails: true
+          }
+        ),
+      handleGatewayResult((_) => ERROR_MSG),
+      andThen(map(transformNonFungibleResource))
+    )()
   )
 
   const nfts = Promise.all([account, nonFungibleResources]).then(
@@ -228,16 +244,15 @@ export const produceSummary = (
     fungibleResources,
     nfts
   ])
-    .then(
-      ([response, accountData, fungibles, nonFungibles]) =>
-        [
-          getStakedInfo(response.validators, fungibles)(accountData),
-          getUnstakeAndClaimInfo(response.validators)(nonFungibles)(
-            accountData,
-            response.ledger_state.epoch
-          )
-        ] as const
-    )
+    .then(([response, accountData, fungibles, nonFungibles]) => {
+      return [
+        getStakedInfo(response.validators, fungibles)(accountData),
+        getUnstakeAndClaimInfo(response.validators)(nonFungibles)(
+          accountData,
+          response.ledger_state.epoch
+        )
+      ] as const
+    })
     .then(([staked, unstakeAndClaim]) => {
       let totalStaked = BigNumber(0)
       let totalUnstaking = BigNumber(0)

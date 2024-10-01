@@ -1,5 +1,6 @@
 import type {
   EntityMetadataItem,
+  NativeResourceDetails,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 import { transformEntity, type _Entity } from '..'
@@ -21,7 +22,6 @@ import { transformNonFungibleResource } from './non-fungible'
 import {
   createStandardMetadata,
   type ExpectedMetadata,
-  type SystemMetadata
 } from '@api/utils/metadata'
 
 type ResourceType = 'fungible' | 'non-fungible'
@@ -37,6 +37,7 @@ export type Resource<
   }
   behaviors: 'simple' | Behavior[]
   displayName: string
+  nativeResourceDetails?: NativeResourceDetails
 }
 
 export const standardMetadata = createStandardMetadata({

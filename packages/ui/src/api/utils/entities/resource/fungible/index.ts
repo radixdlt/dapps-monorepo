@@ -20,6 +20,7 @@ export const transformFungibleResource = (
         resourceType: 'fungible',
         divisibility: (
           entity.details as StateEntityDetailsResponseFungibleResourceDetails
-        ).divisibility
+        ).divisibility,
+        nativeResourceDetails: entity.details.native_resource_details
       } as const)
   )()

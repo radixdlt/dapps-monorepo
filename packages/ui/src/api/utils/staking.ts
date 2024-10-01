@@ -5,9 +5,9 @@ import type { ClaimNft } from './nfts/claim-nft'
 import type { Account } from './entities/component/account'
 import type { NonFungible } from './nfts'
 import type { FungibleResource } from './entities/resource/fungible'
-import { isNil } from 'ramda'
 import type { Component } from './entities/component'
 import type { standardMetadata } from './metadata'
+import type { NativeResourceValidatorLiquidStakeUnitValue } from '@common/gateway-sdk'
 
 type CommonStakeInfo<T extends string> = {
   type: T
@@ -89,26 +89,40 @@ export const getUnstakeAndClaimInfo =
 
 export const getStakedInfo =
   (validators: ValidatorListItem[], fungibles: FungibleResource[]) =>
-  (account: Account | Component<unknown, typeof standardMetadata>) =>
-    account.resources.fungible
-      .filter((token) =>
-        validators.some(
-          (validator) => validator.stakeUnitResourceAddress === token.address
-        )
+  (account: Account | Component<unknown, typeof standardMetadata>) => {
+    const stakeUnits: Map<string, NativeResourceValidatorLiquidStakeUnitValue> =
+      new Map(
+        fungibles
+          .filter(
+            (token) =>
+              token.nativeResourceDetails &&
+              token.nativeResourceDetails.kind === 'ValidatorLiquidStakeUnit'
+          )
+          .map((token) => {
+            return [
+              token.address,
+              token.nativeResourceDetails as NativeResourceValidatorLiquidStakeUnitValue
+            ]
+          })
       )
+
+    return account.resources.fungible
+      .filter((token) => stakeUnits.has(token.address))
       .map((stakeUnitToken) => {
+        const stakeUnitNativeResourceDetails = stakeUnits.get(
+          stakeUnitToken.address
+        )!
+        const multiplier =
+          stakeUnitNativeResourceDetails.unit_redemption_value[0].amount
+
+        const xrdAmount = new BigNumber(stakeUnitToken.value)
+          .multipliedBy(new BigNumber(multiplier!))
+          .toFixed(RET_DECIMAL_PRECISION)
+
         const validator = validators.find(
           (validator) =>
             validator.stakeUnitResourceAddress === stakeUnitToken.address
         )!
-
-        const xrdAmount = validator.totalStakeInXRD
-          .multipliedBy(stakeUnitToken.value)
-          .dividedBy(
-            fungibles.find((token) => token.address === stakeUnitToken.address)!
-              .totalSupply
-          )
-          .toFixed(RET_DECIMAL_PRECISION)
 
         return {
           type: 'staked',
@@ -119,3 +133,4 @@ export const getStakedInfo =
         } as StakedInfo
       })
       .filter((stakeInfo) => !new BigNumber(stakeInfo.xrdAmount).eq(0))
+  }

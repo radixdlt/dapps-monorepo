@@ -1,6 +1,6 @@
 import { createSystemMetadata } from '@api/utils/metadata'
 import type { Resource, standardMetadata } from '..'
-import { networkConfiguration } from '@stores'
+import type { StateEntityDetailsResponseItem } from '@common/gateway-sdk'
 
 export const systemMetadata = createSystemMetadata({
   name: 'String',
@@ -17,29 +17,7 @@ export type PackageOwnerBadgeCollection = Resource<
 }
 
 export const isPackageOwnerBadgeCollection = (
-  nonFungibleResourceAddress: string
-) => {
-  let resolve: (value: boolean) => void
-
-  const promise = new Promise<boolean>((res) => {
-    resolve = res
-  })
-
-  let unsub = networkConfiguration.subscribe((config) => {
-    if (config) {
-      if (
-        config?.well_known_addresses.package_owner_badge ===
-        nonFungibleResourceAddress
-      ) {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-    }
-  })
-
-  return promise.then((result) => {
-    unsub()
-    return result
-  })
-}
+  entity: StateEntityDetailsResponseItem
+) =>
+  entity.details?.type === 'NonFungibleResource' &&
+  entity.details.native_resource_details?.kind === 'PackageOwnerBadge'

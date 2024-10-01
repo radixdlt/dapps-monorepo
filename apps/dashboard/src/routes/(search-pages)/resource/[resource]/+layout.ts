@@ -33,7 +33,10 @@ const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
       callApi(
         'getEntityDetailsVaultAggregated',
         addresses,
-        undefined,
+        {
+          dappTwoWayLinks: true,
+          nativeResourceDetails: true
+        },
         stateVersion
           ? {
               state_version: stateVersion

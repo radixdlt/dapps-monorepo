@@ -34,16 +34,11 @@ const getEntityDetails = (address: string) =>
 
 export const isClaimNftCollection = (
   resourceEntity: StateEntityDetailsVaultResponseItem,
-  validators: (ValidatorListItem | Validator)[]
 ) => {
-  const validator = validators.find(
-    (validator) =>
-      validator.address ===
-        getStringMetadata('validator')(resourceEntity.metadata) &&
-      validator.unstakeClaimResourceAddress === resourceEntity.address
+  return (
+    resourceEntity.details?.type === 'NonFungibleResource' &&
+    resourceEntity.details.native_resource_details?.kind === 'ValidatorClaimNft'
   )
-
-  return validator !== undefined
 }
 
 export const resourceToClaimNftCollection = (
