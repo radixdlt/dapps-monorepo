@@ -276,15 +276,12 @@ export const produceSummary = (
       }
     })
 
-  const poolData = pipe(
-    () => Promise.all([account, fungibleResources, ledgerState]),
-    andThen(([account, fungibles, { stateVersion }]) =>
-      pipe(
-        () => getPoolUnits(fungibles),
-        andThen(getPoolUnitData(stateVersion, account))
-      )()
-    )
-  )()
+  const poolData = Promise.all([account, fungibleResources, ledgerState]).then(
+    ([account, fungibles, { stateVersion }]) => {
+      const poolUnits = getPoolUnits(fungibles)
+      return getPoolUnitData(stateVersion, account)(poolUnits)
+    }
+  )
 
   return {
     poolData,

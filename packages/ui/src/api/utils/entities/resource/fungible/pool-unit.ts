@@ -103,19 +103,17 @@ export const verify2WayLinking =
 const getPoolAddresses = (resources: FungibleResourceWithPoolAddress[]) =>
   resources.map(({ poolAddress }) => poolAddress)
 
-export const getPoolUnits = (resources: FungibleResource[]) => {
-  return Promise.resolve(
-    resources
-      .filter((resource) =>
-        [
-          'TwoResourcePoolUnit',
-          'OneResourcePoolUnit',
-          'MultiResourcePoolUnit'
-        ].includes(resource.nativeResourceDetails?.kind || '')
-      )
-      .map((resource) => resourceToPoolUnit(resource))
-  )
-}
+export const getPoolUnits = (resources: FungibleResource[]) =>
+  resources
+    .filter((resource) => isPoolUnit(resource))
+    .map((resource) => resourceToPoolUnit(resource))
+
+export const isPoolUnit = (resource: FungibleResource) =>
+  [
+    'TwoResourcePoolUnit',
+    'OneResourcePoolUnit',
+    'MultiResourcePoolUnit'
+  ].includes(resource.nativeResourceDetails?.kind || '')
 
 export const getPoolUnitMetadataValue = (
   entity: StateEntityDetailsVaultResponseItem

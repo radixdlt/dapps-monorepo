@@ -48,7 +48,7 @@ export const load: LayoutLoad = async ({ params }) => {
   } else if (isValidClaimNft) {
     throw redirect(308, `/claim_nft/${encodeURIComponent(params.resource)}`)
   }
-  const transformedResource = await transformUnknownResource(resource)
+  const transformedResource = transformUnknownResource(resource)
 
   const redeemableTokens =
     transformedResource.type === 'poolUnit'
