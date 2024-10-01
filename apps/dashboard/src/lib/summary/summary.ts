@@ -14,20 +14,12 @@ import {
   type StakeInfo,
   type UnstakingInfo
 } from '@api/utils/staking'
-import {
-  getRedeemablePoolTokenAmount,
-  transformPool
-} from '@api/utils/entities/component/pool'
 
 import { ResultAsync } from 'neverthrow'
 import { transformNft } from '@api/utils/nfts'
-
-import type { EntityType } from '@api/utils/entities/component'
-import { http } from '@common/http'
 import { type PoolUnit } from '@api/utils/entities/resource/fungible/pool-unit'
 import BigNumber from 'bignumber.js'
 import type { standardMetadata } from '@api/utils/metadata'
-import { errorPage } from '@dashboard/stores'
 const ERROR_MSG = 'Failed to load entity data.'
 
 export type AccumulatedStakeInfo = {
@@ -52,55 +44,25 @@ const getPoolUnitData =
     account: Account | Component<unknown, typeof standardMetadata>
   ) =>
   async (poolUnits: PoolUnit[]) => {
-    const poolAddresses = poolUnits.map(
-      (unit) => unit.metadata.expected.pool.typed.value
-    )
-
-    if (poolAddresses.some((a) => a === undefined)) {
-      errorPage.set({
-        message: ERROR_MSG
-      })
-
-      throw 'Pool not found.'
-    }
-
-    const poolEntities = await pipe(
-      () =>
-        callApi(
-          'getEntityDetailsVaultAggregated',
-          poolAddresses as string[],
-          {
-            dappTwoWayLinks: true,
-            nativeResourceDetails: true
-          },
-          { state_version: stateVersion }
-        ),
-      handleGatewayResult((_) => ERROR_MSG)
-    )()
-
-    const pools = poolEntities.map(transformPool)
+    const poolResources = [
+      ...new Set(
+        poolUnits.flatMap((unit) =>
+          unit.nativeResourceDetails.unit_redemption_value.map(
+            (value) => value.resource_address
+          )
+        )
+      )
+    ]
 
     const poolTokens = await pipe(
       () =>
-        callApi(
-          'getEntityDetailsVaultAggregated',
-          pools.flatMap(
-            (pool) => pool.metadata.expected.pool_resources.typed.values
-          ),
-          {
-            dappTwoWayLinks: true,
-            nativeResourceDetails: true
-          },
-          { state_version: stateVersion }
-        ),
+        callApi('getEntityDetailsVaultAggregated', poolResources, undefined, {
+          state_version: stateVersion
+        }),
       handleGatewayResult((_) => ERROR_MSG)
     )()
 
     return poolUnits.map((unit) => {
-      const pool = pools.find(
-        (pool) => pool.address === unit.metadata.expected.pool.typed.value
-      )!
-
       const poolUnitsBalance = account.resources.fungible.find(
         (resource) => resource.address === unit.address
       )!.value
@@ -113,22 +75,23 @@ const getPoolUnitData =
           icon: unit.metadata.expected.icon_url?.typed.value,
           accountAmount: poolUnitsBalance
         },
-        poolTokens: pool.metadata.expected.pool_resources.typed.values.map(
+        poolTokens: unit.nativeResourceDetails.unit_redemption_value.map(
           (poolToken) => {
             const token = transformFungibleResource(
-              poolTokens.find((token) => token.address === poolToken)!
+              poolTokens.find(
+                (token) => token.address === poolToken.resource_address
+              )!
             )
+
+            const redeemableAmount = new BigNumber(
+              poolToken.amount || '0'
+            ).multipliedBy(new BigNumber(poolUnitsBalance))
 
             return {
               name: token.metadata.expected.name?.typed.value,
               icon: token.metadata.expected.icon_url?.typed.value,
               address: token.address,
-              redeemableAmount: getRedeemablePoolTokenAmount(
-                token,
-                unit,
-                pool,
-                poolUnitsBalance
-              )
+              redeemableAmount
             }
           }
         )
@@ -155,7 +118,6 @@ export const produceSummary = (
           'getEntityDetailsVaultAggregated',
           acc.resources.fungible.map((token) => token.address),
           {
-            dappTwoWayLinks: true,
             nativeResourceDetails: true
           }
         ),
@@ -171,7 +133,6 @@ export const produceSummary = (
           'getEntityDetailsVaultAggregated',
           acc.resources.nonFungible.map((token) => token.address),
           {
-            dappTwoWayLinks: true,
             nativeResourceDetails: true
           }
         ),

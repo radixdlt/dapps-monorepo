@@ -9,6 +9,9 @@ import {
 import type { FungibleResource } from '.'
 import type {
   EntityMetadataCollection,
+  NativeResourceMultiResourcePoolUnitValue,
+  NativeResourceOneResourcePoolUnitValue,
+  NativeResourceTwoResourcePoolUnitValue,
   StateEntityDetailsVaultResponseItem
 } from '@common/gateway-sdk'
 import { andThen, pipe } from 'ramda'
@@ -17,8 +20,18 @@ const systemMetadata = createSystemMetadata({
   pool: 'GlobalAddress'
 })
 
-export type PoolUnit = Omit<FungibleResource, 'type'> &
-  _Entity<'poolUnit', typeof systemMetadata>
+type PoolUnitNativeResourceDetails =
+  | NativeResourceOneResourcePoolUnitValue
+  | NativeResourceTwoResourcePoolUnitValue
+  | NativeResourceMultiResourcePoolUnitValue
+
+export type PoolUnit = Omit<
+  FungibleResource,
+  'type' | 'nativeResourceDetails'
+> &
+  _Entity<'poolUnit', typeof systemMetadata> & {
+    nativeResourceDetails: PoolUnitNativeResourceDetails
+  }
 export type GetEntityTypesFn = (
   address: string[]
 ) => Promise<{ [address: string]: string }>
@@ -37,6 +50,8 @@ type PoolResource = Record<PoolAddress, ResourceAddress>
 
 export const resourceToPoolUnit = (resource: FungibleResource): PoolUnit => ({
   ...resource,
+  nativeResourceDetails:
+    resource.nativeResourceDetails as PoolUnitNativeResourceDetails,
   type: 'poolUnit',
   metadata: {
     ...resource.metadata,

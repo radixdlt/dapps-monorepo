@@ -55,23 +55,3 @@ export const transformPool = (
       componentType: 'pool' as const
     })
   )()
-
-export const getRedeemablePoolTokenAmount = (
-  poolToken: FungibleResource,
-  poolUnitResource: PoolUnit,
-  pool: Pool,
-  poolUnitsBalance: string
-) => {
-  const poolVaultBalance = pool.resources.fungible.find(
-    (resource) => resource.address === poolToken.address
-  )!.value
-
-  const totalSupplyOfPoolUnits = poolUnitResource.totalSupply
-
-  return new BigNumber(
-    new BigNumber(poolUnitsBalance)
-      .dividedBy(totalSupplyOfPoolUnits)
-      .multipliedBy(poolVaultBalance)
-      .toFixed(poolToken.divisibility)
-  )
-}
