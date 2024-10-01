@@ -21,7 +21,7 @@ import {
 import { transformNonFungibleResource } from './non-fungible'
 import {
   createStandardMetadata,
-  type ExpectedMetadata,
+  type ExpectedMetadata
 } from '@api/utils/metadata'
 
 type ResourceType = 'fungible' | 'non-fungible'

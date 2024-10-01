@@ -42,7 +42,7 @@ export const getLookupEntity = (
         [address],
         options || {
           dappTwoWayLinks: true,
-          nativeResourceDetails: true,
+          nativeResourceDetails: true
         },
         ledgerState
       ).andThen((entities) =>

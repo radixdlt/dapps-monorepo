@@ -69,6 +69,14 @@ export const transformNft = (
       ? 'packageOwnerBadge'
       : 'generalNft'
 
+  let validatorAddress = undefined
+  if (
+    typeof resource !== 'string' &&
+    resource.nativeResourceDetails?.kind === 'ValidatorClaimNft'
+  ) {
+    validatorAddress = resource.nativeResourceDetails.validator_address
+  }
+
   const resourceAddress =
     typeof resource === 'string' ? resource : resource.address
 
@@ -90,6 +98,7 @@ export const transformNft = (
     : type === 'claimNft'
     ? ({
         ...partial,
+        validatorAddress,
         nftData: transformNftData(data, {}, claimNftSystemData)
       } as ClaimNft)
     : ({

@@ -12,7 +12,7 @@ import type { NativeResourceValidatorLiquidStakeUnitValue } from '@common/gatewa
 type CommonStakeInfo<T extends string> = {
   type: T
   account: string
-  validator: ValidatorListItem
+  validatorAddress: string
   xrdAmount: string
 }
 
@@ -31,8 +31,7 @@ export type ReadyToClaimInfo = CommonStakeInfo<'readyToClaim'> & {
 
 export type StakeInfo = StakedInfo | UnstakingInfo | ReadyToClaimInfo
 
-export const getUnstakeAndClaimInfo =
-  (validators: ValidatorListItem[]) =>
+export const getUnstakeAndClaimInfoV2 =
   (nfts: NonFungible[]) =>
   (
     account: Account | Component<unknown, typeof standardMetadata>,
@@ -50,12 +49,6 @@ export const getUnstakeAndClaimInfo =
         claimNft.nftData.expected['claim_epoch']!.value
       ).lte(currentEpoch)
 
-      const validator = validators.find(
-        (validator) =>
-          validator.unstakeClaimResourceAddress ===
-          claimNft.address.resourceAddress
-      )!
-
       const xrdAmount = new BigNumber(
         claimNft.nftData.expected['claim_amount']!.value
       ).toFixed(RET_DECIMAL_PRECISION)
@@ -64,7 +57,7 @@ export const getUnstakeAndClaimInfo =
 
       const unstakeInfo = {
         account: account.address,
-        validator,
+        validatorAddress: claimNft.validatorAddress,
         xrdAmount,
         claimNft,
         claimEpoch: claimNft.nftData.expected['claim_epoch']!.value
@@ -88,7 +81,7 @@ export const getUnstakeAndClaimInfo =
   }
 
 export const getStakedInfo =
-  (validators: ValidatorListItem[], fungibles: FungibleResource[]) =>
+  (fungibles: FungibleResource[]) =>
   (account: Account | Component<unknown, typeof standardMetadata>) => {
     const stakeUnits: Map<string, NativeResourceValidatorLiquidStakeUnitValue> =
       new Map(
@@ -119,15 +112,10 @@ export const getStakedInfo =
           .multipliedBy(new BigNumber(multiplier!))
           .toFixed(RET_DECIMAL_PRECISION)
 
-        const validator = validators.find(
-          (validator) =>
-            validator.stakeUnitResourceAddress === stakeUnitToken.address
-        )!
-
         return {
           type: 'staked',
           account: account.address,
-          validator,
+          validatorAddress: stakeUnitNativeResourceDetails.validator_address,
           stakeUnitsAmount: stakeUnitToken.value,
           xrdAmount
         } as StakedInfo

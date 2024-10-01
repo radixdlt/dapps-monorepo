@@ -1,7 +1,6 @@
 import { callApi } from '@api/gateway'
 import type { Component } from '@api/utils/entities/component'
 import type { Account } from '@api/utils/entities/component/account'
-import { getValidators } from '@api/utils/entities/component/validator'
 import { transformFungibleResource } from '@api/utils/entities/resource/fungible'
 import { getPoolUnits } from '@api/utils/entities/resource/fungible/pool-unit'
 import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
@@ -9,7 +8,7 @@ import { handleGatewayResult } from '@dashboard/utils'
 import { andThen, flatten, map, pipe } from 'ramda'
 import {
   getStakedInfo,
-  getUnstakeAndClaimInfo,
+  getUnstakeAndClaimInfoV2,
   type ReadyToClaimInfo,
   type StakedInfo,
   type StakeInfo,
@@ -20,7 +19,6 @@ import {
   transformPool
 } from '@api/utils/entities/component/pool'
 
-import { type ValidatorListItem } from '@api/utils/entities/component/validator'
 import { ResultAsync } from 'neverthrow'
 import { transformNft } from '@api/utils/nfts'
 
@@ -33,7 +31,7 @@ import { errorPage } from '@dashboard/stores'
 const ERROR_MSG = 'Failed to load entity data.'
 
 export type AccumulatedStakeInfo = {
-  validator: ValidatorListItem
+  validatorAddress: string
   staked: StakedInfo[]
   unstaking: UnstakingInfo[]
   readyToClaim: ReadyToClaimInfo[]
@@ -165,13 +163,13 @@ const getPoolUnitData =
 export const produceSummary = (
   account: Promise<Account | Component<unknown, typeof standardMetadata>>
 ) => {
-  const validatorResponse = pipe(
-    () => getValidators(undefined, false, false),
-    (result) => handleGatewayResult((_) => ERROR_MSG)(result)
-  )()
-
-  const stateVersion = validatorResponse.then(
-    (response) => response.ledger_state.state_version
+  const ledgerState = handleGatewayResult(
+    () => "Couldn't fetch current ledger state"
+  )(
+    callApi('getCurrent').map((result) => ({
+      stateVersion: result.ledger_state.state_version,
+      epoch: result.ledger_state.epoch
+    }))
   )
 
   const fungibleResources = account.then((acc) =>
@@ -238,19 +236,11 @@ export const produceSummary = (
       )()
   )
 
-  const stakeInfo = Promise.all([
-    validatorResponse,
-    account,
-    fungibleResources,
-    nfts
-  ])
-    .then(([response, accountData, fungibles, nonFungibles]) => {
+  const stakeInfo = Promise.all([ledgerState, account, fungibleResources, nfts])
+    .then(([ledgerState, accountData, fungibles, nonFungibles]) => {
       return [
-        getStakedInfo(response.validators, fungibles)(accountData),
-        getUnstakeAndClaimInfo(response.validators)(nonFungibles)(
-          accountData,
-          response.ledger_state.epoch
-        )
+        getStakedInfo(fungibles)(accountData),
+        getUnstakeAndClaimInfoV2(nonFungibles)(accountData, ledgerState.epoch)
       ] as const
     })
     .then(([staked, unstakeAndClaim]) => {
@@ -266,11 +256,11 @@ export const produceSummary = (
       ]
 
       for (const stake of stakeInfo) {
-        const validator = stake.validator.address
+        const validator = stake.validatorAddress
 
         if (!accumulatedStakes[validator]) {
           accumulatedStakes[validator] = {
-            validator: stake.validator,
+            validatorAddress: stake.validatorAddress,
             staked: [],
             unstaking: [],
             readyToClaim: [],
@@ -311,8 +301,8 @@ export const produceSummary = (
     })
 
   const poolData = pipe(
-    () => Promise.all([account, fungibleResources, stateVersion]),
-    andThen(([account, fungibles, stateVersion]) =>
+    () => Promise.all([account, fungibleResources, ledgerState]),
+    andThen(([account, fungibles, { stateVersion }]) =>
       pipe(() => {
         return getPoolUnits(
           fungibles,
@@ -329,6 +319,6 @@ export const produceSummary = (
     fungibleResources,
     nonFungibleResources,
     nfts,
-    stateVersion
+    stateVersion: ledgerState.then((ledgerState) => ledgerState.stateVersion)
   }
 }

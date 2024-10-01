@@ -33,7 +33,7 @@ const getEntityDetails = (address: string) =>
   callApi('getEntityDetailsVaultAggregated', [address])
 
 export const isClaimNftCollection = (
-  resourceEntity: StateEntityDetailsVaultResponseItem,
+  resourceEntity: StateEntityDetailsVaultResponseItem
 ) => {
   return (
     resourceEntity.details?.type === 'NonFungibleResource' &&

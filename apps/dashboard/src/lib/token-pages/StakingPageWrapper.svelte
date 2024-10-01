@@ -9,6 +9,7 @@
   import StakedValidatorCard from '@dashboard/lib/staking-card/StakedValidatorCard.svelte'
   import type { LayoutDataStakeInfo } from '../summary/summary'
   import NoTokens from './NoTokens.svelte'
+  import { validatorsCacheModule } from '@api/utils/validators-cache-module'
 
   export let stakeInfo: Promise<LayoutDataStakeInfo>
   export let withSummary: boolean
@@ -21,6 +22,16 @@
       values.slice(splitPoint, values.length)
     ] as const
   })
+
+  $: {
+    stakeInfo.then((data) => {
+      validatorsCacheModule.queryValidators(
+        Object.values(data.accumulatedStakes).map(
+          (stake) => stake.validatorAddress
+        )
+      )
+    })
+  }
 </script>
 
 {#if withSummary}

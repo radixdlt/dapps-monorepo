@@ -6,89 +6,110 @@
   import { formatXRDValue, formatTokenValue } from '@utils'
   import BigNumber from 'bignumber.js'
   import ValueBox from './ValueBox.svelte'
-
   import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
-  export let validatorStakes: any
+  import type { AccumulatedStakeInfo } from '../summary/summary'
+  import { onMount } from 'svelte'
+  import { validatorsCacheModule } from '@api/utils/validators-cache-module'
+
+  export let validatorStakes: AccumulatedStakeInfo
+
+  let isLoading: boolean
+
+  onMount(() => {
+    const subscription = validatorsCacheModule.isLoading$.subscribe((data) => {
+      isLoading = data
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  })
 </script>
 
-<div class="card validator-card">
-  <Accordion>
-    <div class="validator-header" slot="header">
-      <NftImage
-        url={validatorStakes.validator.metadata.expected.icon_url?.typed.value}
-        defaultImageUrl={ValidatorPlaceholder}
-        width={64}
-        height={64}
-      />
-      <div class="validator-header-info">
-        <div class="validator-header-name">
-          <h4>
-            {validatorStakes.validator.metadata.expected.name?.typed.value ||
-              ''}
-          </h4>
-          <Address
-            value={validatorStakes.validator.address}
-            autoShorten
-            --background="var(--theme-surface-3)"
+{#key isLoading}
+  {#if validatorsCacheModule}
+    {@const validator = validatorsCacheModule.validators.get(
+      validatorStakes.validatorAddress
+    )}
+    <div class="card validator-card">
+      <Accordion>
+        <div class="validator-header" slot="header">
+          <NftImage
+            url={validator?.iconUrl}
+            defaultImageUrl={ValidatorPlaceholder}
+            width={64}
+            height={64}
           />
-        </div>
+          <div class="validator-header-info">
+            <div class="validator-header-name">
+              <h4>
+                {validator?.name || ''}
+              </h4>
+              <Address
+                value={validatorStakes.validatorAddress}
+                autoShorten
+                --background="var(--theme-surface-3)"
+              />
+            </div>
 
-        <div class="staked-header-info">
-          Staked {formatXRDValue(validatorStakes.accumulatedStakes)}
-        </div>
-      </div>
-    </div>
-    <svelte:fragment slot="content">
-      <div class="units-section">
-        <div class="content-section-header">
-          <TokenIcon
-            iconUrl="https://assets.radixdlt.com/icons/icon-liquid_stake_units.png"
-          />
-          <span class="text">Liquid Stake Units</span>
-          <span class="value"
-            >{formatTokenValue(validatorStakes.accumulatedLiquidStakeUnits)
-              .displayValue}</span
-          >
-        </div>
-
-        <ValueBox
-          header="Worth"
-          address={validatorStakes.validator.stakeUnitResourceAddress}
-          value={validatorStakes.accumulatedStakes}
-        />
-      </div>
-
-      {#if validatorStakes.unstaking.length || validatorStakes.readyToClaim.length}
-        <div class="units-section">
-          <div class="content-section-header">
-            <NftImage
-              url="https://assets.radixdlt.com/icons/icon-stake_claim_NFTs.png"
-              width={44}
-              height={44}
-            />
-
-            <span class="text">Stake Claims</span>
+            <div class="staked-header-info">
+              Staked {formatXRDValue(validatorStakes.accumulatedStakes)}
+            </div>
           </div>
-          {#each validatorStakes.unstaking as stakeEntry}
-            <ValueBox
-              header="Unstaking"
-              address={validatorStakes.validator.stakeUnitResourceAddress}
-              value={BigNumber(stakeEntry.xrdAmount)}
-            />
-          {/each}
-
-          {#each validatorStakes.readyToClaim as stakeEntry}
-            <ValueBox
-              header="Ready to Claim"
-              address={stakeEntry.claimNft.address.nonFungibleAddress}
-              value={BigNumber(stakeEntry.xrdAmount)}
-            />
-          {/each}
         </div>
-      {/if}
-    </svelte:fragment>
-  </Accordion>
-</div>
+        <svelte:fragment slot="content">
+          <div class="units-section">
+            <div class="content-section-header">
+              <TokenIcon
+                iconUrl="https://assets.radixdlt.com/icons/icon-liquid_stake_units.png"
+              />
+              <span class="text">Liquid Stake Units</span>
+              <span class="value"
+                >{formatTokenValue(validatorStakes.accumulatedLiquidStakeUnits)
+                  .displayValue}</span
+              >
+            </div>
+
+            <ValueBox
+              header="Worth"
+              address={validator?.poolUnitResourceAddress || ''}
+              value={validatorStakes.accumulatedStakes}
+            />
+          </div>
+
+          {#if validatorStakes.unstaking.length || validatorStakes.readyToClaim.length}
+            <div class="units-section">
+              <div class="content-section-header">
+                <NftImage
+                  url="https://assets.radixdlt.com/icons/icon-stake_claim_NFTs.png"
+                  width={44}
+                  height={44}
+                />
+
+                <span class="text">Stake Claims</span>
+              </div>
+              {#each validatorStakes.unstaking as stakeEntry}
+                <ValueBox
+                  header="Unstaking"
+                  address={validator?.poolUnitResourceAddress || ''}
+                  value={BigNumber(stakeEntry.xrdAmount)}
+                />
+              {/each}
+
+              {#each validatorStakes.readyToClaim as stakeEntry}
+                <ValueBox
+                  header="Ready to Claim"
+                  address={stakeEntry.claimNft.address.nonFungibleAddress}
+                  value={BigNumber(stakeEntry.xrdAmount)}
+                />
+              {/each}
+            </div>
+          {/if}
+        </svelte:fragment>
+      </Accordion>
+    </div>
+  {/if}
+{/key}
 
 <style lang="scss">
   .validator-card {
