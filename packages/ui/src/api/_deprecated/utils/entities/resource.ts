@@ -568,6 +568,18 @@ export const getAccountData = (
     )
   )()
 
+export const getAccountDataV2 = (
+  accounts: StateEntityDetailsVaultResponseItem[],
+  options?: StateEntityDetailsOptions,
+  ledgerState?: LedgerStateSelector,
+  getNonFungiblesForResources?: string[]
+) =>
+  transformResources(
+    options,
+    ledgerState,
+    getNonFungiblesForResources
+  )(accounts)
+
 export const getAccountFungibleTokens = (accounts: string) =>
   pipe(
     () => getSingleEntityDetails(accounts),
