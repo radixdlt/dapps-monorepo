@@ -1,6 +1,6 @@
 import { callApi, getTransactionDetailsNew } from '@api/_deprecated/gateway'
 import type { LayoutLoad } from './$types'
-import { transformResource } from '@api/_deprecated/utils/entities/resource'
+import { transformResource } from '@api/utils/entities/resource'
 import { ResultAsync } from 'neverthrow'
 import type { ComponentProps } from 'svelte'
 import type Summary from '@dashboard-pages/search-pages/transaction/summary/Summary.svelte'
@@ -12,34 +12,6 @@ import type {
 import { getNftData } from '@api/_deprecated/utils/nft-data'
 import { pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
-
-import type { EntityType } from '@common/ret'
-import { http } from '@common/http'
-
-const ERROR_MSG = 'Failed to load transaction data.'
-
-const getEntityTypes = async (
-  addresses: string[]
-): Promise<{ [address: string]: EntityType }> =>
-  http.post('/api/ret/entity-type', {
-    addresses
-  })
-
-const getEntityDetails = (stateVersion?: number) => (addresses: string[]) =>
-  pipe(
-    () =>
-      callApi(
-        'getEntityDetailsVaultAggregated',
-        addresses,
-        undefined,
-        stateVersion
-          ? {
-              state_version: stateVersion
-            }
-          : undefined
-      ),
-    handleGatewayResult((_) => ERROR_MSG)
-  )()
 
 export const load: LayoutLoad = ({ params, data }) => {
   const details = getTransactionDetailsNew(params.transaction).unwrapOr(
@@ -71,7 +43,9 @@ export const load: LayoutLoad = ({ params, data }) => {
       : undefined
 
     return entities
-      ? callApi('getEntityDetailsVaultAggregated', entities)
+      ? callApi('getEntityDetailsVaultAggregated', entities, {
+          nativeResourceDetails: true
+        })
       : undefined
   })
 
@@ -81,15 +55,13 @@ export const load: LayoutLoad = ({ params, data }) => {
 
       if (entitiesResult.isErr()) throw entitiesResult.error
 
-      const resources = await Promise.all(
-        entitiesResult.value.map((resource) =>
-          transformResource(resource, getEntityTypes, getEntityDetails())
-        )
+      const resources = entitiesResult.value.map((resource) =>
+        transformResource(resource)
       )
 
       const resourceInfo = resources.map((resource) => ({
         resource,
-        icon: resource.metadata.standard.icon_url?.value,
+        icon: resource.metadata.expected.icon_url?.typed.value,
         name: resource.displayName,
         address: resource.address
       }))
@@ -149,7 +121,7 @@ export const load: LayoutLoad = ({ params, data }) => {
             change: change.change.balance_change,
             token: {
               address: change.change.resource_address,
-              icon: icon?.href,
+              icon: icon,
               name
             }
           })
@@ -195,7 +167,7 @@ export const load: LayoutLoad = ({ params, data }) => {
             change: change.change.balance_change,
             token: {
               address: change.change.resource_address,
-              icon: icon?.href || '',
+              icon: icon || '',
               name: 'Radix (XRD)'
             }
           })
