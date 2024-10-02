@@ -239,7 +239,13 @@ export const produceSummary = (
 
   const poolData = Promise.all([account, fungibleResources, ledgerState]).then(
     ([account, fungibles, { stateVersion }]) => {
-      const poolUnits = getPoolUnits(fungibles)
+      const filterOutZeroBalanceUnits = (units: PoolUnit[]): PoolUnit[] =>
+        units.filter(
+          (unit) =>
+            account.resources.fungible.find((f) => f.address === unit.address)
+              ?.value !== '0'
+        )
+      const poolUnits = filterOutZeroBalanceUnits(getPoolUnits(fungibles))
       return getPoolUnitData(stateVersion, account)(poolUnits)
     }
   )
