@@ -12,12 +12,7 @@ import type {
 import { getBehaviors, type Behavior } from './behaviors'
 import { getAuthInfo } from '@api/utils/auth'
 import { transformFungibleResource } from './fungible'
-import {
-  getPoolUnits,
-  hasPoolMetadataSet,
-  isPoolUnit,
-  resourceToPoolUnit
-} from './fungible/pool-unit'
+import { isPoolUnit, resourceToPoolUnit } from './fungible/pool-unit'
 import { transformNonFungibleResource } from './non-fungible'
 import {
   createStandardMetadata,

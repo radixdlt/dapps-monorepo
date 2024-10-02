@@ -15,7 +15,6 @@ import { handleGatewayResult } from '../../../../utils'
 
 import type { EntityType } from '@common/ret'
 import { http } from '@common/http'
-import { typedError } from '@utils'
 
 const ERROR_MSG = 'Failed to load transaction data.'
 
