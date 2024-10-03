@@ -2,8 +2,9 @@
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import TokenIcon from '@components/_base/token-icon/TokenIcon.svelte'
   import { formatXRDValue } from '@utils'
+  import type { ResultAsync } from 'neverthrow'
 
-  export let xrdAvailableToStake: Promise<string>
+  export let xrdAvailableToStake: ResultAsync<string, { code: string }>
 </script>
 
 <div class="card available-to-stake">
@@ -11,9 +12,13 @@
   <div class="text">XRD available to be staked:</div>
   <div class="amount">
     {#await xrdAvailableToStake}
-      <SkeletonLoader />
+      <SkeletonLoader width={50} />
     {:then amount}
-      {formatXRDValue(amount)}
+      {#if amount.isOk()}
+        {formatXRDValue(amount.value)}
+      {:else}
+        <SkeletonLoader width={50} />
+      {/if}
     {/await}
   </div>
 </div>

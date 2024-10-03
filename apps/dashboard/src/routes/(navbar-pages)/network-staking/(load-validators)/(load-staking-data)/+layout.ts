@@ -12,6 +12,7 @@ import {
   getStakedInfo
 } from '@api/_deprecated/utils/staking'
 import { callApi } from '@api/gateway'
+import { errAsync } from 'neverthrow'
 
 export type AccumulatedStakes = {
   [validator: string]: {
@@ -167,29 +168,29 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
 
   const totalXrdBalance = derived(
     [xrdAddress, sharedAccountsEntityDetails],
-    async ([$xrdAddress, $details]) => {
+    ([$xrdAddress, $details]) => {
       if (!$xrdAddress) {
-        return '0'
+        return errAsync({ code: 'NO_XRD_ADDRESS' })
       }
 
-      const details = await $details
-      if (details.isOk()) {
-        return details.value
-          .reduce((acc, cur) => {
-            acc.plus(
-              cur.fungible_resources.items
+      return $details
+        .map((details) => {
+          return details
+            .reduce((acc, cur) => {
+              const xrdValueForSingleAccount = cur.fungible_resources.items
                 .find((token) => token.resource_address === $xrdAddress)
                 ?.vaults.items.reduce(
                   (vaultAcc, vault) => vaultAcc.plus(vault.amount),
                   new BigNumber(0)
-                ) || BigNumber(0)
-            )
-            return acc
-          }, new BigNumber(0))
-          .toString()
-      }
+                )
 
-      return '0'
+              return acc.plus(xrdValueForSingleAccount || BigNumber(0))
+            }, new BigNumber(0))
+            .toString()
+        })
+        .mapErr(() => ({
+          code: 'COULD_NOT_FETCH_ACCOUNTS_DETAILS'
+        }))
     }
   )
 

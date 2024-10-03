@@ -42,9 +42,10 @@
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
   import AvailableToStake from './available-to-stake/AvailableToStake.svelte'
   import { track } from '../../../routes/+layout.svelte'
+  import type { ResultAsync } from 'neverthrow'
 
   export let validators: Promise<ValidatorListItem<true, true, true>[]>
-  export let totalXrdBalance: Promise<string>
+  export let totalXrdBalance: ResultAsync<string, { code: string }>
   export let filteredValidators:
     | ValidatorListItem<true, true, true>[]
     | undefined = undefined
