@@ -14,8 +14,8 @@ export type OAuth2 = ReturnType<typeof OAuth2>
 export const OAuth2 = (input?: Partial<OAuth2Input>) => {
   const { secret, refreshToken, authToken }: OAuth2Input = {
     secret: JWT_SECRET,
-    refreshToken: { expiresIn: '30d', key: 'jwt' },
-    authToken: { expiresIn: '10m' },
+    refreshToken: { expiresIn: '90d', key: 'jwt' },
+    authToken: { expiresIn: '90d' },
     ...(input || {})
   }
 
@@ -84,16 +84,21 @@ export const OAuth2 = (input?: Partial<OAuth2Input>) => {
     const ONE_DAY = 1000 * 60 * 60 * 24
     return {
       httpOnly: true,
-      expires: new Date(Date.now() + ONE_DAY),
+      expires: new Date(Date.now() + ONE_DAY * 90),
       sameSite: 'lax',
       path: '/'
     }
+  }
+
+  const logout = (cookies: Cookies) => {
+    cookies.delete(refreshToken.key, createRefreshTokenOptions())
   }
 
   return {
     createTokens,
     rotateRefreshToken,
     renewAuthToken,
+    logout,
     createRefreshTokenCookie,
     verifyToken
   }

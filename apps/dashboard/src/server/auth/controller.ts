@@ -6,7 +6,7 @@ import { Rola } from '@common/rola'
 import { SignedChallenge } from '@common/rdt'
 import type { GatewayApiClient } from '@common/gateway-sdk'
 import { CURRENT_NETWORK } from '@networks'
-import { err, errAsync } from 'neverthrow'
+import { err, errAsync, okAsync } from 'neverthrow'
 import { OAuth2 } from './oauth2'
 import { UserModel } from '../user/model'
 import type { Cookies } from '@sveltejs/kit'
@@ -91,9 +91,14 @@ export const AuthController = ({
       : err({ reason: 'invalidToken' })
   }
 
+  const logout = (cookies: Cookies) => {
+    return oAuth2.logout(cookies)
+  }
+
   return {
     createChallenge,
     login,
+    logout,
     renewAuthToken,
     isValid: verifyAuthToken
   }

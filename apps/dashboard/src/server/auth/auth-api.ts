@@ -16,6 +16,15 @@ export const authApi = {
     fetchWrapper<{ challenge: string }>(
       (() => serverFetch ?? fetch)()('/api/auth/challenge')
     ).map(({ data }) => data.challenge),
+  logout: (serverFetch?: typeof fetch) =>
+    fetchWrapper<{ authToken: string }>(
+      (() => serverFetch ?? fetch)()('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    ),
   renewAuthToken: (serverFetch?: typeof fetch) =>
     fetchWrapper<{ authToken: string }>(
       (() => serverFetch ?? fetch)()('/api/auth/renew', {

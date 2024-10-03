@@ -88,7 +88,10 @@
       dAppDefinitionAddress: CURRENT_NETWORK.dashboardDappAddress,
       networkId: CURRENT_NETWORK?.id,
       logger: Logger(1),
-      onDisconnect: () => updateAccounts([])
+      onDisconnect: () => {
+        updateAccounts([])
+        authApi.logout()
+      }
     })
 
     rdt.walletApi.setRequestData(
@@ -110,6 +113,11 @@
 
     rdt.walletApi.walletData$.subscribe(({ accounts }) => {
       updateAccounts(accounts)
+      if (accounts.length > 0) {
+        authApi.renewAuthToken().mapErr((err) => {
+          rdt.disconnect()
+        })
+      }
     })
 
     resolveRDT(rdt)
