@@ -398,7 +398,7 @@ const appendUptime =
           uptimePercentages: _uptimes,
           apy: new BigNumber(YEARLY_XRD_EMISSIONS)
             .multipliedBy(
-              (1 - (entity.state as any).validator_fee_factor) *
+              (1 - (entity as any).effective_fee_factor.current.fee_factor) *
                 (_uptimes.alltime ?? 0)
             )
             .dividedBy(totalAmountStaked)
