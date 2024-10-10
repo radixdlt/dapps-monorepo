@@ -10,16 +10,10 @@
 <script lang="ts">
   import '@fonts'
   import { featureFlags } from '@featureFlags'
-  import { darkTheme, getCssText } from '@styles'
+  import { getCssText } from '@styles'
   import { navigating } from '$app/stores'
   import { onMount } from 'svelte'
-  import {
-    accounts,
-    dAppToolkit,
-    gatewayApi,
-    selectedAccount,
-    storage
-  } from '@stores'
+  import { accounts, dAppToolkit, gatewayApi, selectedAccount } from '@stores'
   import {
     RadixDappToolkit,
     Account,
@@ -89,12 +83,6 @@
 
     resolveRDT(rdt)
   })
-
-  $: if (mounted) {
-    document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
-      darkTheme
-    )
-  }
 
   navigating
 

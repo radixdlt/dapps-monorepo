@@ -99,7 +99,6 @@
     "ramda": "^0.28.0",
     "sanitize-html": "^2.11.0",
     "svelte-filepond": "^0.2.0",
-    "svelte-local-storage-store": "^0.3.1",
     "tslog": "^4.8.2",
     "zod": "^3.21.4"
   }

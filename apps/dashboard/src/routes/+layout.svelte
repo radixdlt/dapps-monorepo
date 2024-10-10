@@ -11,14 +11,12 @@
   import '@fonts'
   import Layout from '@components/layout/Layout.svelte'
   import { featureFlags } from '@featureFlags'
-  import { darkTheme } from '@styles'
   import { navigating, page } from '$app/stores'
   import { onMount } from 'svelte'
   import {
     accounts,
     externalNavigationConfirmation,
-    selectedAccount,
-    storage
+    selectedAccount
   } from '@stores'
   import {
     Account,
@@ -124,12 +122,6 @@
       path: '/network-staking'
     }
   ]
-
-  $: if (mounted) {
-    document.body.classList[$storage.theme === 'dark' ? 'add' : 'remove'](
-      darkTheme
-    )
-  }
 
   navigating
 

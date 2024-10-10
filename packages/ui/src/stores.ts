@@ -1,5 +1,4 @@
 import { derived, writable } from 'svelte/store'
-import { writable as localStorageStore } from 'svelte-local-storage-store'
 import {
   GatewayApiClient,
   type NetworkConfigurationResponse
@@ -21,8 +20,6 @@ export const connected = derived(
   [accounts],
   ([accounts]) => accounts.length > 0
 )
-
-export const storage = localStorageStore('storage', { theme: 'light' })
 
 export const networkConfiguration = writable<
   NetworkConfigurationResponse | undefined
