@@ -27,6 +27,10 @@
       {
         id: 'configuration',
         label: 'Configuration'
+      },
+      {
+        id: 'holders',
+        label: 'Top Holders'
       }
     ]
   ]}

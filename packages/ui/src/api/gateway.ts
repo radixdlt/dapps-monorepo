@@ -50,7 +50,8 @@ export const api = {
   ...extractMethods(gatewayApi.stream),
   ...extractMethods(gatewayApi.status),
   ...extractMethods(gatewayApi.transaction),
-  ...extractMethods(gatewayApi.statistics)
+  ...extractMethods(gatewayApi.statistics),
+  ...extractMethods(gatewayApi.extensions)
 }
 
 export const callApiWithCache = <T extends keyof typeof api>(

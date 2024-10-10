@@ -6,7 +6,7 @@ import {
 } from '../../utils'
 import { isNFTAddress } from '@utils'
 import { redirect } from '@sveltejs/kit'
-import { callApi } from '@api/_deprecated/gateway'
+import { callApi } from '@api/gateway'
 import { andThen, pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 import { getStringMetadata } from '@api/utils/metadata'
@@ -55,7 +55,13 @@ export const load: LayoutLoad = async ({ params }) => {
       ? getRedeemableTokens(transformedResource)
       : Promise.resolve(undefined)
 
+  const holders = pipe(
+    () => callApi('getResourceHolders', params.resource),
+    handleGatewayResult()
+  )()
+
   return {
+    holders,
     address: params.resource,
     resource: transformedResource,
     promises: {
