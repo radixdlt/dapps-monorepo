@@ -21,7 +21,6 @@
 </script>
 
 <script lang="ts">
-  import ValidatorList from './validator-list/ValidatorList.svelte'
   import Icon from '@components/_base/icon/IconNew.svelte'
   import StakingCard from '../../../lib/staking-card/StakingCard.svelte'
 
@@ -43,12 +42,12 @@
   import AvailableToStake from './available-to-stake/AvailableToStake.svelte'
   import { track } from '../../../routes/+layout.svelte'
   import type { ResultAsync } from 'neverthrow'
+  import ValidatorListWrapper from './validator-list/ValidatorListWrapper.svelte'
 
-  export let validators: Promise<ValidatorListItem<true, true, true>[]>
+  export let validators: Promise<ValidatorListItem<true, true>[]>
   export let totalXrdBalance: ResultAsync<string, { code: string }>
-  export let filteredValidators:
-    | ValidatorListItem<true, true, true>[]
-    | undefined = undefined
+  export let filteredValidators: ValidatorListItem<true, true>[] | undefined =
+    undefined
 
   const getTotal =
     (type: 'staked' | 'unstaking' | 'readyToClaim') =>
@@ -75,10 +74,6 @@
   $: totalReadyToClaim = $stakeInfo.then(getTotal('readyToClaim'))
 
   const dispatch = createEventDispatcher<{
-    'show-claim-all': undefined
-    'show-claim-single': string
-    'show-stake-multiple': undefined
-    'show-stake-single': string
     'show-filters': undefined
     'reset-filters': undefined
   }>()
@@ -102,11 +97,11 @@
           (key) => $selectedValidators[key]
         )
 
-        if (selected.length === 1) {
-          dispatch('show-stake-single', selected[0])
-        } else {
-          dispatch('show-stake-multiple')
-        }
+        goto(
+          selected.length === 1
+            ? `/network-staking/${selected[0]}/stake`
+            : '/network-staking/stake-multiple'
+        )
       }}
       on:clear-all={() => {
         $selectedValidators = {}
@@ -160,14 +155,14 @@
             size="big"
             on:click={() => {
               track('click:claim-all')
-              dispatch('show-claim-all')
+              goto('/network-staking/claim-multiple')
             }}>Claim All</ButtonNew
           >
         {/await}
       </div>
     </StakingCard>
 
-    <ValidatorList
+    <ValidatorListWrapper
       validators={validators.then((v) =>
         $stakeInfo.then((stakes) =>
           v.filter(
@@ -178,34 +173,12 @@
           )
         )
       )}
-    >
-      <svelte:fragment
-        slot="rows"
-        let:ValidatorRow
-        let:selectedUptime
-        let:validators
-      >
-        {#await validators}
-          {#each Array(3) as _}
-            <ValidatorRow input={'loading'} />
-          {/each}
-        {:then validators}
-          {#each validators as validator}
-            <ValidatorRow
-              input={{
-                validator,
-                selectedUptime
-              }}
-              showStakeInfo
-              on:click={() => goto(`/network-staking/${validator.address}`)}
-              on:claim-validator={(e) => {
-                dispatch('show-claim-single', e.detail)
-              }}
-            />
-          {/each}
-        {/await}
-      </svelte:fragment>
-    </ValidatorList>
+      showStakeInfo
+      amountOfPlaceholders={3}
+      on:claim-validator={(e) => {
+        goto(`/network-staking/claim/${e.detail}`)
+      }}
+    />
   </div>
 {/if}
 
@@ -237,36 +210,13 @@
   </div>
 </div>
 
-<ValidatorList
+<ValidatorListWrapper
   validators={filteredValidators ?? validators}
+  amountOfPlaceholders={15}
   on:click-validator={(e) => {
     goto(`/network-staking/${e.detail}`)
   }}
->
-  <svelte:fragment
-    slot="rows"
-    let:ValidatorRow
-    let:validators
-    let:selectedUptime
-    let:columnIds
-  >
-    {#await validators}
-      {#each Array(15) as _}
-        <ValidatorRow input={'loading'} />
-      {/each}
-    {:then validators}
-      {#each validators as validator}
-        <ValidatorRow
-          input={{
-            validator,
-            selectedUptime
-          }}
-          on:click={() => goto(`/network-staking/${validator.address}`)}
-        />
-      {/each}
-    {/await}
-  </svelte:fragment>
-</ValidatorList>
+/>
 
 <style lang="scss">
   .title-header {

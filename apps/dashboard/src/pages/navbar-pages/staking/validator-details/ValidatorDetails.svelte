@@ -22,8 +22,9 @@
   import StakeDisplay from '../validator-list/StakeDisplay.svelte'
   import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
   import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import ApyDetail from './ApyDetail.svelte'
 
-  export let validator: Promise<ValidatorListItem<true, true, true>>
+  export let validator: Promise<ValidatorListItem<true, true>>
   export let accumulatedValidatorStakes: Promise<AccumulatedStakes>
   export let currentEpoch: number
 
@@ -32,7 +33,7 @@
   }>()
 
   const getNonMetadataItems = pipe(
-    (validator: ValidatorListItem<true, true, true>) => [
+    (validator: ValidatorListItem<true, true>) => [
       validator.ownerAddress
         ? ['owner address', validator.ownerAddress, 'GlobalAddress']
         : undefined,
@@ -50,8 +51,8 @@
         `${truncateNumber(validator.fee(currentEpoch).percentage)} %`,
         'String'
       ],
-      ['apy', `${truncateNumber(validator.apy)} %`, 'String'],
-      ['recent uptime', validator.uptimePercentages, 'String'],
+      ['apy', validator, 'String'],
+      ['recent uptime', validator.address, 'String'],
       ['owner stake', formatXRDValue(validator.ownerStake.toString()), 'String']
     ],
     reject((item) => isNil(item)),
@@ -151,7 +152,7 @@
             label: 'Recent Uptime',
             component: RecentUptimeDetail,
             componentProperties: (item) => ({
-              uptimes: item.typed.type === 'String' ? item.typed.value : []
+              validatorAddress: item.typed.type === 'String' && item.typed.value
             })
           },
           'total stake': {
@@ -159,6 +160,13 @@
             component: StakeDisplay,
             componentProperties: (item) => ({
               validator
+            })
+          },
+          apy: {
+            label: 'APY',
+            component: ApyDetail,
+            componentProperties: (item) => ({
+              validator: item
             })
           }
         }}

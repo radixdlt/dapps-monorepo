@@ -1,14 +1,11 @@
 <script lang="ts">
+  import type { UptimeValue } from '@api/utils/entities/component/validator'
   import PercentageInput from '@components/_base/input/PercentageInput.svelte'
-  import SimplePicker from '@components/_base/picker/simple-picker/SimplePicker.svelte'
+  import UptimeSelector from '@dashboard/lib/validators/UptimeSelector.svelte'
 
   type T = $$Generic
 
-  export let options: {
-    label: string
-    value: T
-  }[]
-  export let selected: (typeof options)[number]
+  export let selected: UptimeValue
   export let percentage = 0
 </script>
 
@@ -19,9 +16,7 @@
       <PercentageInput bind:value={percentage} />
     </div>
     <span class="text"> OVER THE PAST </span>
-    <div class="picker">
-      <SimplePicker {options} bind:selected />
-    </div>
+    <UptimeSelector bind:selected --uptime-selector-width="7rem" />
   </div>
 </div>
 
@@ -42,10 +37,6 @@
     .text {
       font-size: var(--card-text-size);
       color: var(--card-text-color);
-    }
-
-    .picker {
-      width: 7rem;
     }
   }
 </style>
