@@ -76,7 +76,6 @@ export const PersonaDataCard = () => {
             )
           }
         )}
-        ;
         <Box mt={2}>
           <Checkbox
             disabled={!enabled}
