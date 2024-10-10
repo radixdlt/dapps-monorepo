@@ -75,8 +75,8 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
   )
 
   const stakeInfo = derived(
-    sharedAccountsEntityDetails,
-    async ($entityDetails) => {
+    [sharedAccountsEntityDetails, accounts],
+    async ([$entityDetails, $accounts]) => {
       const details = await $entityDetails
       if (details.isErr()) {
         return emptyStakeInfoObject
@@ -96,15 +96,16 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
 
         return entityDetails.reduce(
           (prev, cur) => {
+            const account = $accounts.find(
+              (a) => a.address === cur.address
+            ) || { address: cur.address }
             const data = accountData.find(
               (d) => d.accountAddress === cur.address
             )!
 
             const staked = getStakedInfo(_validators)(data).map((stake) => ({
               ...stake,
-              account: {
-                address: cur.address
-              }
+              account
             })) as LoggedInStakedInfo[]
 
             const { unstaking, readyToClaim } = getUnstakeAndClaimInfo(
@@ -116,17 +117,13 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
               unstaking: prev.unstaking.concat(
                 unstaking.map((unstake) => ({
                   ...unstake,
-                  account: {
-                    address: cur.address
-                  }
+                  account
                 })) as LoggedInUnstakingInfo[]
               ),
               readyToClaim: prev.readyToClaim.concat(
                 readyToClaim.map((claim) => ({
                   ...claim,
-                  account: {
-                    address: cur.address
-                  }
+                  account
                 })) as LoggedInReadyToClaimInfo[]
               )
             }
