@@ -12,7 +12,7 @@ import {
   getStakedInfo
 } from '@api/_deprecated/utils/staking'
 import { callApi } from '@api/gateway'
-import { errAsync } from 'neverthrow'
+import { errAsync, ResultAsync } from 'neverthrow'
 
 export type AccumulatedStakes = {
   [validator: string]: {
@@ -58,26 +58,31 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
 
   depends(_dependency)
 
-  const _validators = await (await parentData).promises.validators
-  const _ledger_state = await (await parentData).promises.ledger_state
-
   const sharedAccountsEntityDetails = derived(accounts, ($accounts) =>
-    callApi(
-      'getEntityDetailsVaultAggregated',
-      $accounts.map((a) => a.address),
-      {
-        explicitMetadata: ['validator']
-      },
-      {
-        state_version: _ledger_state.state_version
-      }
-    )
+    ResultAsync.fromSafePromise(parentData)
+      .andThen((data) =>
+        ResultAsync.fromSafePromise(data.promises.ledger_state)
+      )
+      .andThen((_ledger_state) =>
+        callApi(
+          'getEntityDetailsVaultAggregated',
+          $accounts.map((a) => a.address),
+          {
+            explicitMetadata: ['validator']
+          },
+          {
+            state_version: _ledger_state.state_version
+          }
+        )
+      )
   )
 
   const stakeInfo = derived(
     sharedAccountsEntityDetails,
     async ($entityDetails) => {
       const details = await $entityDetails
+      const _validators = await (await parentData).promises.validators
+      const _ledger_state = await (await parentData).promises.ledger_state
       if (details.isErr()) {
         return emptyStakeInfoObject
       }
@@ -141,6 +146,7 @@ export const load: LayoutLoad = async ({ depends, parent }) => {
 
   const validatorAccumulatedStakes = derived(stakeInfo, ($info) =>
     $info.then(async ({ staked, unstaking, readyToClaim }) => {
+      const _validators = await (await parentData).promises.validators
       return _validators.reduce<AccumulatedStakes>((prev, cur) => {
         const [
           accumulatedStakes,
