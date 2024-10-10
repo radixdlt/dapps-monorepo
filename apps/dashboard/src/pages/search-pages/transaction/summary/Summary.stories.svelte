@@ -8,7 +8,11 @@
   import type { ComponentProps } from 'svelte'
 
   const timestamp = Promise.resolve(new Date())
-  const status = Promise.resolve('CommittedSuccess' as const)
+  const status = Promise.resolve({
+    intent_status: 'CommittedSuccess' as const,
+    error_message: 'This is an error message',
+    known_payloads: []
+  })
   const message = Promise.resolve(
     'This transaction represents not just a transfer of cryptocurrency, but also a transfer of gratitude and recognition for your exceptional contributions.'
   )

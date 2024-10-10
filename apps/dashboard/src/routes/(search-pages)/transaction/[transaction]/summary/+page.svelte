@@ -8,7 +8,7 @@
 <Summary
   manifestClass={data.promises.tx.then((tx) => tx?.manifestClass)}
   balanceChanges={data.promises.balanceChanges}
-  status={data.promises.status.then((status) => status.intent_status)}
+  status={data.promises.status}
   timestamp={data.promises.tx.then((tx) => (tx?.date ? tx.date : undefined))}
   message={data.promises.tx.then((tx) => tx?.message)}
 />

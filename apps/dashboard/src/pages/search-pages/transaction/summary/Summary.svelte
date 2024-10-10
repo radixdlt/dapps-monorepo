@@ -6,11 +6,20 @@
   import type { ComponentProps } from 'svelte'
   import AccountBalanceChanges from './AccountBalanceChanges.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
-  import type { TransactionIntentStatus } from '@common/gateway-sdk'
+  import type {
+    TransactionIntentStatus,
+    TransactionStatusResponse
+  } from '@common/gateway-sdk'
   import { getManifestClassDescription } from '@api/helpers/get-most-relevant-manifest-class'
   import { fullDateFormatter } from '@dashboard/lib/formatters/full-date'
+  import CodeBox from '@components/code-box/CodeBox.svelte'
 
-  export let status: Promise<TransactionIntentStatus>
+  export let status: Promise<
+    Pick<
+      TransactionStatusResponse,
+      'intent_status' | 'known_payloads' | 'error_message'
+    >
+  >
   export let timestamp: Promise<Date | undefined>
   export let manifestClass: Promise<string | undefined>
   export let message: Promise<string>
@@ -63,13 +72,17 @@
   <div class="message-box">
     <div class="header">
       <div class="header-section">
-        {#await Promise.all([manifestClass, timestamp])}
+        {#await Promise.all([manifestClass, timestamp, status])}
           <SkeletonLoader />
-        {:then [manifestClass, timestamp]}
+        {:then [manifestClass, timestamp, status]}
           {#if timestamp}
             <div>{fullDateFormatter(timestamp)}</div>
             <div class="manifest-class">
               {getManifestClassDescription(manifestClass)}
+            </div>
+          {:else if status.intent_status === 'PermanentlyRejected'}
+            <div class="manifest-class">
+              {status.error_message}
             </div>
           {/if}
         {/await}
@@ -79,18 +92,20 @@
       {:then status}
         <div
           class="header-section status-section"
-          class:success={status === 'CommittedSuccess'}
-          class:failure={status === 'PermanentlyRejected' ||
-            status === 'CommittedFailure'}
+          class:success={status.intent_status === 'CommittedSuccess'}
+          class:failure={status.intent_status === 'PermanentlyRejected' ||
+            status.intent_status === 'CommittedFailure'}
         >
           <div class="main-status">
             <IconNew
-              icon={status === 'CommittedSuccess' ? Checkmark : Cross}
-            />{statusMessages[status].status}
+              icon={status.intent_status === 'CommittedSuccess'
+                ? Checkmark
+                : Cross}
+            />{statusMessages[status.intent_status].status}
           </div>
-          {#if statusMessages[status]?.info}
+          {#if statusMessages[status.intent_status]?.info}
             <span class="descriptive-status">
-              {statusMessages[status]?.info}
+              {statusMessages[status.intent_status]?.info}
             </span>
           {/if}
         </div>
@@ -130,6 +145,19 @@
           />
         {/each}
       </div>
+    {/if}
+  {/await}
+
+  {#await status}
+    <SkeletonLoader />
+  {:then status}
+    {#if ['LikelyButNotCertainRejection', 'PermanentlyRejected'].includes(status.intent_status)}
+      <h3 class="section-header">Errors</h3>
+      {#each status.known_payloads as payload}
+        {#if payload.error_message}
+          <CodeBox text={payload.error_message} />
+        {/if}
+      {/each}
     {/if}
   {/await}
 </div>
