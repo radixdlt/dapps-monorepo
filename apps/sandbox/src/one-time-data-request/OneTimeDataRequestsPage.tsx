@@ -12,6 +12,8 @@ import {
   OneTimeDataRequestBuilderItem
 } from '@common/rdt'
 import { useState } from 'react'
+import { PersonaProofCard } from './PersonaProof'
+import { AccountsProofCard } from './AccountsProof'
 export const OneTimeDataRequestsPage = () => {
   const [state, setState] = useState<{
     accounts: {
@@ -32,6 +34,18 @@ export const OneTimeDataRequestsPage = () => {
         phoneNumbers: boolean
       }
     }
+    personaProof: {
+      enabled: boolean
+      data: {
+        address: string
+      }
+    }
+    accountsProof: {
+      enabled: boolean
+      data: {
+        addresses: string[]
+      }
+    }
   }>({
     accounts: {
       enabled: true,
@@ -47,6 +61,18 @@ export const OneTimeDataRequestsPage = () => {
         emailAddresses: false,
         phoneNumbers: false
       }
+    },
+    personaProof: {
+      enabled: false,
+      data: {
+        address: ''
+      }
+    },
+    accountsProof: {
+      enabled: false,
+      data: {
+        addresses: []
+      }
     }
   })
 
@@ -54,7 +80,8 @@ export const OneTimeDataRequestsPage = () => {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(160px, 300px) minmax(200px, 1fr)',
+        gridTemplateColumns:
+          'minmax(160px, 300px) minmax(300px, 500px) minmax(200px, 1fr)',
         gap: 1
       }}
     >
@@ -74,6 +101,25 @@ export const OneTimeDataRequestsPage = () => {
           state={state.personaData}
           updateState={(personaDataState) => {
             setState((prev) => ({ ...prev, personaData: personaDataState }))
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 1
+        }}
+      >
+        <PersonaProofCard
+          state={state.personaProof}
+          updateState={(personaProof) => {
+            setState((prev) => ({ ...prev, personaProof }))
+          }}
+        />
+        <AccountsProofCard
+          state={state.accountsProof}
+          updateState={(accountsProof) => {
+            setState((prev) => ({ ...prev, accountsProof }))
           }}
         />
       </Box>
@@ -122,6 +168,23 @@ export const OneTimeDataRequestsPage = () => {
                     }
 
                     dataRequest.push(personaDataRequest)
+                  }
+
+                  if (
+                    state.personaProof.enabled ||
+                    state.accountsProof.enabled
+                  ) {
+                    let poo = OneTimeDataRequestBuilder.proofOfOwnership()
+                    dataRequest.push(
+                      state.accountsProof.enabled
+                        ? (state.personaProof.enabled
+                            ? poo.identity(state.personaProof.data.address)
+                            : poo
+                          ).accounts(
+                            state.accountsProof.data.addresses.filter(Boolean)
+                          )
+                        : poo
+                    )
                   }
 
                   rdt.walletApi.sendOneTimeRequest(...dataRequest)
