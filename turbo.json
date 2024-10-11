@@ -1,31 +1,47 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
     "build": {
-      "dependsOn": ["db:generate", "build:storybook"],
-      "outputs": [".svelte-kit/**"]
+      "dependsOn": [
+        "db:generate",
+        "build:storybook"
+      ],
+      "outputs": [
+        ".svelte-kit/**"
+      ]
     },
     "build:prod": {
-      "dependsOn": ["db:generate", "build:storybook"],
-      "outputs": [".svelte-kit/**"]
+      "dependsOn": [
+        "db:generate",
+        "build:storybook"
+      ],
+      "outputs": [
+        ".svelte-kit/**"
+      ]
     },
     "build:storybook": {
       "dependsOn": [],
-      "outputs": ["storybook-static/**"]
+      "outputs": [
+        "storybook-static/**"
+      ]
     },
     "svelte:check": {},
     "format": {},
     "prettier": {},
     "prettier:fix": {},
     "coverage": {
-      "dependsOn": ["db:generate"]
+      "dependsOn": [
+        "db:generate"
+      ]
     },
     "prepare": {},
     "lint": {},
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["db:generate"]
+      "dependsOn": [
+        "db:generate"
+      ]
     },
     "db:generate": {
       "cache": false
@@ -34,10 +50,19 @@
       "cache": false
     },
     "pre-push": {
-      "dependsOn": ["prettier", "lint", "svelte:check", "test"]
+      "dependsOn": [
+        "prettier",
+        "lint",
+        "svelte:check",
+        "test"
+      ]
     },
-    "storybook": { "cache": false },
+    "storybook": {
+      "cache": false
+    },
     "test": {},
-    "test:watch": { "cache": false }
+    "test:watch": {
+      "cache": false
+    }
   }
 }
