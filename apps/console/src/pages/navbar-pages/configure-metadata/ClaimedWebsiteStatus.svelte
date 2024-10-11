@@ -37,7 +37,7 @@
     if (isValidUrl(value)) {
       http
         .post('api/claimed-website', {
-          url: value,
+          url: value.endsWith('/') ? value.slice(0, -1) : value,
           expectedAddress: entityAddress
         })
         .then(({ output }) => {
