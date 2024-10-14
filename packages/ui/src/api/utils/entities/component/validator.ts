@@ -20,7 +20,6 @@ import {
 } from '@api/_deprecated/gateway'
 import BigNumber from 'bignumber.js'
 import { andThen, isNil, map, pick, pipe, prop, reject } from 'ramda'
-import { YEARLY_XRD_EMISSIONS } from '@constants'
 import { timeToEpoch } from '@utils'
 import { ResultAsync } from 'neverthrow'
 import {
@@ -385,17 +384,6 @@ const transformValidators = (
       ...transformValidatorListItem(validator),
       rank: i + 1
     }))
-
-export const calculateApy = (
-  validatorFeeFactor: number,
-  uptime: number | undefined,
-  totalAmountStaked: BigNumber
-) => {
-  return new BigNumber(YEARLY_XRD_EMISSIONS)
-    .multipliedBy((1 - validatorFeeFactor) * (uptime ?? 0))
-    .dividedBy(totalAmountStaked)
-    .toNumber()
-}
 
 const appendStakeUnits =
   <T, K>(validators: ValidatorListItem<T, K>[], ledger_state: LedgerState) =>

@@ -1,20 +1,41 @@
 import { BehaviorSubject } from 'rxjs'
 import {
-  calculateApy,
-  getValidatorUptimeSinceDate,
+  getValidatorUptimeSinceDate as getValidatorUptimeSinceDateOriginal,
   uptimePeriodDefinition,
   type UptimeValue
 } from '@api/utils/entities/component/validator'
 import BigNumber from 'bignumber.js'
 import type { ValidatorCollectionItem } from '@common/gateway-sdk'
+import { YEARLY_XRD_EMISSIONS } from '@constants'
 
-type ValidatorAddress = string
-
+/**
+ * Uptime Data is an object which contains validator->uptime mapping for a specific uptime period.
+ *
+ * Example of Uptime Data:
+ * {
+ *  '1day': {
+ *     'validator_xyz': 0.99,
+ *     'validator_xxx': 0.54,
+ *   },
+ *  '1month': {
+ *     'validator_abc': 0.99,
+ *     'validator_bcd': 0.54,
+ *   },
+ * }
+ */
 export type UptimeData = Partial<
-  Record<UptimeValue, Record<ValidatorAddress, number | undefined>>
+  Record<UptimeValue, Record<string, number | undefined>>
 >
 
-export const UptimeModule = () => {
+export type UptimeModule = ReturnType<typeof UptimeModule>
+export const UptimeModule = (
+  dependencies: {
+    getValidatorUptimeSinceDate: typeof getValidatorUptimeSinceDateOriginal
+  } = {
+    getValidatorUptimeSinceDate: getValidatorUptimeSinceDateOriginal
+  }
+) => {
+  const { getValidatorUptimeSinceDate } = dependencies
   const isLoading = new BehaviorSubject<boolean>(false)
   let validators:
     | Promise<{ address: string; totalStakeInXRD: BigNumber }[]>
@@ -35,18 +56,22 @@ export const UptimeModule = () => {
     },
     getDataForUptime: (uptime: UptimeValue) => uptimeData[uptime] || {},
     getApy: (validator: ValidatorCollectionItem, uptime: UptimeValue) => {
-      if (!totalAmountStaked) {
-        throw new Error('Total amount staked not set')
+      if (!totalAmountStaked || totalAmountStaked.isZero()) {
+        throw new Error('Invalid totalAmountStaked')
       }
       const address = validator.address
       const fee = Number(validator.effective_fee_factor?.current?.fee_factor)
       const uptimePercentage = uptimeData[uptime]?.[address]
-      return calculateApy(fee, uptimePercentage, totalAmountStaked)
+
+      return new BigNumber(YEARLY_XRD_EMISSIONS)
+        .multipliedBy((1 - fee) * (uptimePercentage ?? 0))
+        .dividedBy(totalAmountStaked)
+        .toNumber()
     },
-    maybeQueryUptime: async (uptime: UptimeValue | undefined) => {
+    maybeQueryUptime: (uptime: UptimeValue | undefined) => {
       if (!uptime) return
       if (!validators) {
-        throw new Error('Validators not set')
+        throw new Error('Validators not set. Call `setValidators` first.')
       }
       if (uptimeData[uptime]) {
         return uptimeData[uptime]
