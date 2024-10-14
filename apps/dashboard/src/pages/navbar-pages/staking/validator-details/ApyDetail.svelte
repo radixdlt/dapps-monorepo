@@ -2,11 +2,16 @@
   import { type UptimeValue } from '@api/utils/entities/component/validator'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
-  import UptimeSelector from '@dashboard/lib/validators/UptimeSelector.svelte'
   import { truncateNumber } from '@utils'
   import { onMount } from 'svelte'
+  import type { TransformedValidator } from '../validator-list/ValidatorList.svelte'
 
-  export let validatorAddress: string
+  export let validator: {
+    typed: {
+      type: 'String'
+      value: TransformedValidator
+    }
+  }
 
   let selected: UptimeValue = '1month'
   let isLoading: boolean
@@ -28,16 +33,19 @@
   }
 </script>
 
-<div class="uptime-detail">
-  <UptimeSelector bind:selected --uptime-selector-width="8rem" />
+{#key isLoading}
+  <div class="uptime-detail">
+    {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
+      {@const data = validator.typed.value}
 
-  {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
-    {@const uptime = validatorsUptimeData[validatorAddress]}
-    {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
-  {:else}
-    <SkeletonLoader width={50} />
-  {/if}
-</div>
+      {validator.typed.value.percentageTotalStake
+        ? `${truncateNumber(uptimeModule.getApy(data.validator, selected))}%`
+        : 'N/A'}
+    {:else}
+      <SkeletonLoader width={50} />
+    {/if}
+  </div>
+{/key}
 
 <style>
   .uptime-detail {

@@ -2,8 +2,7 @@ import type {
   ErrorResponse,
   LedgerState,
   StateEntityDetailsResponseFungibleResourceDetails,
-  ValidatorCollectionItem,
-  ValidatorUptimeCollectionItem
+  ValidatorCollectionItem
 } from '@common/gateway-sdk'
 import { transformMetadata } from '../metadata'
 import type { _Entity } from '.'
@@ -18,6 +17,7 @@ import { YEARLY_XRD_EMISSIONS } from '@constants'
 import { timeToEpoch } from '@utils'
 import { Result, ResultAsync, errAsync, okAsync } from 'neverthrow'
 import { getEnumStringMetadata } from '@api/utils/metadata'
+import { getUptimePercentages } from '@api/utils/entities/component/validator'
 
 export type Validator<
   WithOwner = false,
@@ -59,77 +59,6 @@ export type Validator<
         ownerStake: BigNumber
       }
     : {})
-
-const ONE_DAY_MS = 1000 * 60 * 60 * 24
-const ONE_WEEK_MS = ONE_DAY_MS * 7
-const ONE_MONTH_MS = ONE_DAY_MS * 30
-const THREE_MONTHS_MS = ONE_DAY_MS * 90
-const SIX_MONTHS_MS = ONE_DAY_MS * 180
-const ONE_YEAR_MS = ONE_DAY_MS * 365
-
-const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
-
-const getValidatorUptimeSinceDate =
-  (addresses: string[]) => (timestamp: Date | number) =>
-    callApi('getValidatorsUptimeFromTo', addresses, timestamp).map((uptimes) =>
-      uptimes.reduce((acc, cur) => {
-        acc[cur.address] = calculateUptimePercentage(cur)
-        return acc
-      }, {} as Record<string, number | undefined>)
-    )
-
-const calculateUptimePercentage = ({
-  proposals_made,
-  proposals_missed,
-  epochs_active_in
-}: ValidatorUptimeCollectionItem) => {
-  if (epochs_active_in === 0) return undefined
-  if (proposals_made === undefined || proposals_missed === undefined) return 0
-
-  let total_proposals = proposals_made! + proposals_missed!
-
-  let uptimePercentage = 100
-
-  if (total_proposals > 0) {
-    uptimePercentage = new BigNumber(proposals_made!)
-      .multipliedBy(100)
-      .dividedBy(total_proposals)
-      .toNumber()
-  }
-
-  return uptimePercentage
-}
-
-const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
-  pipe(
-    () => [
-      ONE_DAY_MS,
-      ONE_WEEK_MS,
-      ONE_MONTH_MS,
-      THREE_MONTHS_MS,
-      SIX_MONTHS_MS,
-      ONE_YEAR_MS
-    ],
-    map(dateMsAgo),
-    (timestamps) => [...timestamps, 1], // 1 is the first state version
-    map(getValidatorUptimeSinceDate(validators.map(({ address }) => address))),
-    (results) => ResultAsync.combine(results),
-    (result) =>
-      result.map((uptimes) =>
-        validators.map(({ address }) => ({
-          address: address,
-          uptimes: {
-            '1day': uptimes[0][address],
-            '1week': uptimes[1][address],
-            '1month': uptimes[2][address],
-            '3months': uptimes[3][address],
-            '6months': uptimes[4][address],
-            '1year': uptimes[5][address],
-            alltime: uptimes[6][address]
-          }
-        }))
-      )
-  )()
 
 function calculateFee(
   validator: ValidatorCollectionItem,

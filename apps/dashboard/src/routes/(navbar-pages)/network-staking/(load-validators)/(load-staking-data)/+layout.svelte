@@ -17,8 +17,6 @@
   import Validators from '@dashboard-pages/navbar-pages/staking/Validators.svelte'
   import type { LayoutData } from './$types'
   import { writable } from 'svelte/store'
-  import type { AccumulatedStakes } from './proxy+layout'
-  import { goto } from '$app/navigation'
   import FilterDetails, {
     DEFAULT_VALIDATORS_FILTER
   } from '@dashboard-pages/navbar-pages/staking/filter-details/FilterDetails.svelte'
@@ -28,6 +26,8 @@
     UnstakingInfo,
     ReadyToClaimInfo
   } from '@api/_deprecated/utils/staking'
+  import type { AccumulatedStakes } from './+layout'
+  import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
 
   export let data: LayoutData
 
@@ -51,6 +51,9 @@
     ) =>
     async (e: ComponentEvents<FilterDetails>['close']) => {
       const epoch = await $currentEpoch
+      const uptimeData = uptimeModule.getDataForUptime(
+        e.detail.uptimeFilter.timeframe
+      )
       const filtered = validators.filter((v) => {
         const {
           detail: {
@@ -71,8 +74,7 @@
           (withinTop100Filter ? !!v.percentageTotalStake : true) &&
           (acceptsStakeFilter ? v.acceptsStake : true) &&
           (bookmarkedFilter ? bookmarked[v.address] : true) &&
-          (v.uptimePercentages[uptimeFilter.timeframe] ?? 0) >=
-            uptimeFilter.percentage
+          (uptimeData?.[v.address] || 100) >= uptimeFilter.percentage
         )
       })
 
@@ -102,10 +104,6 @@
   validators={data.promises.validators}
   totalXrdBalance={$totalXrdBalance}
   {filteredValidators}
-  on:show-claim-all={() => goto('/network-staking/claim-multiple')}
-  on:show-claim-single={(e) => goto(`/network-staking/claim/${e.detail}`)}
-  on:show-stake-multiple={() => goto('/network-staking/stake-multiple')}
-  on:show-stake-single={(e) => goto(`/network-staking/${e.detail}/stake`)}
   on:show-filters={() => {
     filterOpen = true
   }}
