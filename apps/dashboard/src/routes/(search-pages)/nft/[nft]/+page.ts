@@ -6,8 +6,6 @@ import { map, pipe } from 'ramda'
 import { transformNft } from '@api/utils/nfts'
 import { handleGatewayResult } from '../../../../utils'
 import { transformNonFungibleResource } from '@api/utils/entities/resource/non-fungible'
-import { errorPage } from '@dashboard/stores'
-import type { KnownAddresses } from '@common/ret'
 
 export const load: PageLoad = async ({ params, fetch }) => {
   const [resourceAddress, nftId] = decodeURIComponent(params.nft).split(':')
@@ -20,27 +18,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
     () => callApi('getNonFungibleData', resourceAddress, [nftId]),
     handleGatewayResult()
   )()
-
-  nftData.then((data) => {
-    if (data.length === 0) {
-      return fetch('/api/ret/known-addresses')
-        .then((response) => response.json())
-        .then(({ resourceAddresses }: KnownAddresses) => {
-          if (
-            ![
-              resourceAddresses.ed25519SignatureVirtualBadge,
-              resourceAddresses.packageOfDirectCallerVirtualBadge,
-              resourceAddresses.secp256k1SignatureVirtualBadge,
-              resourceAddresses.globalCallerVirtualBadge
-            ].includes(resourceAddress)
-          ) {
-            errorPage.set({
-              message: 'NFT not found'
-            })
-          }
-        })
-    }
-  })
 
   const associatedDapps = resourceEntity
     .then(getLinkedDappDefinitions)
