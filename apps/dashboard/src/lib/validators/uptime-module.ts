@@ -1,3 +1,4 @@
+import { ResultAsync } from 'neverthrow'
 import { BehaviorSubject } from 'rxjs'
 import {
   getValidatorUptimeSinceDate as getValidatorUptimeSinceDateOriginal,
@@ -7,6 +8,7 @@ import {
 import BigNumber from 'bignumber.js'
 import type { ValidatorCollectionItem } from '@common/gateway-sdk'
 import { YEARLY_XRD_EMISSIONS } from '@constants'
+import { writable } from 'svelte/store'
 
 /**
  * Uptime Data is an object which contains validator->uptime mapping for a specific uptime period.
@@ -36,7 +38,8 @@ export const UptimeModule = (
   }
 ) => {
   const { getValidatorUptimeSinceDate } = dependencies
-  const isLoading = new BehaviorSubject<boolean>(false)
+  const isLoading = writable<boolean>(false)
+  const lastQueriedUptime = writable<UptimeValue>('1month')
   let validators:
     | Promise<{ address: string; totalStakeInXRD: BigNumber }[]>
     | undefined
@@ -73,31 +76,30 @@ export const UptimeModule = (
       if (!validators) {
         throw new Error('Validators not set. Call `setValidators` first.')
       }
+      lastQueriedUptime.set(uptime)
       if (uptimeData[uptime]) {
         return uptimeData[uptime]
       }
 
       uptimeData[uptime] = {}
 
-      isLoading.next(true)
+      isLoading.set(true)
 
-      return validators
-        .then((v) =>
+      return ResultAsync.fromPromise(validators, (e) => e)
+        .andThen((v) =>
           getValidatorUptimeSinceDate(v.map((v) => v.address))(
             uptimePeriodDefinition[uptime].getStartingPoint()
           )
         )
-        .then((value) => {
-          isLoading.next(false)
-          if (value.isOk()) {
-            uptimeData[uptime] = value.value
-            return uptimeData[uptime]
-          }
+        .map((value) => {
+          uptimeData[uptime] = value
+          isLoading.set(false)
+          return uptimeData[uptime]
         })
-        .catch((e) => {
-          console.error(e)
-          isLoading.next(false)
+        .mapErr((e) => {
           uptimeData[uptime] = undefined
+          isLoading.set(false)
+          return e
         })
     },
     clean: () => {
@@ -105,7 +107,8 @@ export const UptimeModule = (
       uptimeData = {}
       totalAmountStaked = undefined
     },
-    isLoading$: isLoading.asObservable()
+    isLoading,
+    lastQueriedUptime
   }
 }
 

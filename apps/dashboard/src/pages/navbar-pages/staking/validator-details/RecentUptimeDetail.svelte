@@ -4,39 +4,27 @@
   import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
   import UptimeSelector from '@dashboard/lib/validators/UptimeSelector.svelte'
   import { truncateNumber } from '@utils'
-  import { onMount } from 'svelte'
 
   export let validatorAddress: string
 
   let selected: UptimeValue = '1month'
-  let isLoading: boolean
-  let validatorsUptimeData = uptimeModule.getDataForUptime(selected)
 
-  onMount(() => {
-    const subscription = uptimeModule.isLoading$.subscribe((data) => {
-      isLoading = data
-      validatorsUptimeData = uptimeModule.getDataForUptime(selected)
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  })
-  $: {
-    validatorsUptimeData = uptimeModule.getDataForUptime(selected)
-    isLoading
-  }
+  const isLoading = uptimeModule.isLoading
 </script>
 
 <div class="uptime-detail">
   <UptimeSelector bind:selected --uptime-selector-width="8rem" />
-
-  {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
-    {@const uptime = validatorsUptimeData[validatorAddress]}
-    {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
-  {:else}
-    <SkeletonLoader width={50} />
-  {/if}
+  {#key $isLoading}
+    {#if uptimeModule}
+      {@const validatorsUptimeData = uptimeModule.getDataForUptime(selected)}
+      {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
+        {@const uptime = validatorsUptimeData[validatorAddress]}
+        {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
+      {:else}
+        <SkeletonLoader width={50} />
+      {/if}
+    {/if}
+  {/key}
 </div>
 
 <style>

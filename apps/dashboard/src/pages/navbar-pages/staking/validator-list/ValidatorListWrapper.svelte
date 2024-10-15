@@ -18,7 +18,7 @@
     let:validators
   >
     {#await validators}
-      {#each Array({ amountOfPlaceholders }) as _}
+      {#each Array(amountOfPlaceholders) as _}
         <ValidatorRow input={'loading'} />
       {/each}
     {:then validators}

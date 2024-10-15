@@ -3,7 +3,6 @@
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
   import { truncateNumber } from '@utils'
-  import { onMount } from 'svelte'
   import type { TransformedValidator } from '../validator-list/ValidatorList.svelte'
 
   export let validator: {
@@ -13,39 +12,29 @@
     }
   }
 
-  let selected: UptimeValue = '1month'
-  let isLoading: boolean
-  let validatorsUptimeData = uptimeModule.getDataForUptime(selected)
-
-  onMount(() => {
-    const subscription = uptimeModule.isLoading$.subscribe((data) => {
-      isLoading = data
-      validatorsUptimeData = uptimeModule.getDataForUptime(selected)
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  })
-  $: {
-    validatorsUptimeData = uptimeModule.getDataForUptime(selected)
-    isLoading
-  }
+  let isLoading = uptimeModule.isLoading
+  let lastQueriedUptime = uptimeModule.lastQueriedUptime
 </script>
 
-{#key isLoading}
-  <div class="uptime-detail">
-    {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
-      {@const data = validator.typed.value}
+<div class="uptime-detail">
+  {#key $isLoading}
+    {#if uptimeModule}
+      {@const validatorsUptimeData =
+        uptimeModule.getDataForUptime($lastQueriedUptime)}
+      {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
+        {@const data = validator.typed.value}
 
-      {validator.typed.value.percentageTotalStake
-        ? `${truncateNumber(uptimeModule.getApy(data.validator, selected))}%`
-        : 'N/A'}
-    {:else}
-      <SkeletonLoader width={50} />
+        {validator.typed.value.percentageTotalStake
+          ? `${truncateNumber(
+              uptimeModule.getApy(data.validator, $lastQueriedUptime)
+            )}%`
+          : 'N/A'}
+      {:else}
+        <SkeletonLoader width={50} />
+      {/if}
     {/if}
-  </div>
-{/key}
+  {/key}
+</div>
 
 <style>
   .uptime-detail {

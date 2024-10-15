@@ -76,7 +76,7 @@ describe('uptime module', () => {
 
       it('should call getValidatorUptimeSinceDate', () => {
         expect(getUptimeFromDateSpy).toHaveBeenCalled()
-        expect(data).toEqual({
+        expect(data.value).toEqual({
           '1': 0.5,
           '2': 0.75
         })

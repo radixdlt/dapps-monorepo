@@ -2,26 +2,15 @@
   import { truncateNumber } from '@utils'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
-  import { onMount } from 'svelte'
   import type { ValidatorRowInput } from '../ValidatorRow.svelte'
 
   export let input: ValidatorRowInput
 
-  let isLoading: boolean
-
-  onMount(() => {
-    const subscription = uptimeModule.isLoading$.subscribe((data) => {
-      isLoading = data
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  })
+  const isLoading = uptimeModule.isLoading
 </script>
 
 <span class="mobile-only apy-text-box-label">Apy</span>
-{#key isLoading}
+{#key $isLoading}
   {#if input === 'loading'}
     <SkeletonLoader width={80} />
   {:else}
