@@ -5,7 +5,7 @@
     totalXRDStakeFilter: [0, 100] as [number, number],
     uptimeFilterPercentage: 0,
     uptimeFilter: {
-      timeframe: '1month' as '1month',
+      timeframe: '1month' as UptimeValue,
       percentage: 0
     },
     acceptsStakeFilter: false,
@@ -21,7 +21,7 @@
   import SwitchFilterCard from './switch-filter-card/SwitchFilterCard.svelte'
   import { createEventDispatcher } from 'svelte'
   import SidePanelHeader from '@components/_base/side-panel/SidePanelHeader.svelte'
-  import type { Validator } from '@api/_deprecated/utils/entities/validator'
+  import { type UptimeValue } from '@api/utils/entities/component/validator'
 
   export let open: boolean
   export let feeValues: number[]
@@ -44,36 +44,10 @@
     uptimeFilterPercentage
   } = DEFAULT_VALIDATORS_FILTER
 
-  const recentUptimeOptions: {
-    label: string
-    value: keyof Validator<true, true, true>['uptimePercentages']
-    default?: boolean
-  }[] = [
-    { label: '1 day', value: '1day' },
-    { label: '1 week', value: '1week' },
-    { label: '1 month', value: '1month', default: true },
-    { label: '3 months', value: '3months' },
-    { label: '6 months', value: '6months' },
-    { label: '1 year', value: '1year' },
-    { label: 'All time', value: 'alltime' }
-  ]
-
-  const changeDefaultUptime = (
-    uptime: (typeof recentUptimeOptions)[number]['value']
-  ) => {
-    recentUptimeOptions.forEach((option) => {
-      option.default = option.value === uptime
-    })
-  }
-
-  $: changeDefaultUptime(selectedUptime.value)
-
-  let selectedUptime =
-    recentUptimeOptions.find((option) => option.default) ||
-    recentUptimeOptions[0]
+  let selectedUptime: UptimeValue = '1month'
 
   $: uptimeFilter = {
-    timeframe: selectedUptime.value,
+    timeframe: selectedUptime,
     percentage: uptimeFilterPercentage
   }
 
@@ -165,7 +139,6 @@
 
   <div class="card">
     <ManualFilterCard
-      options={recentUptimeOptions}
       bind:selected={selectedUptime}
       bind:percentage={uptimeFilterPercentage}
     />

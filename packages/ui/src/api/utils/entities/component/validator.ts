@@ -19,10 +19,9 @@ import {
   getNonFungibleLocation
 } from '@api/_deprecated/gateway'
 import BigNumber from 'bignumber.js'
-import { andThen, isNil, map, pick, pipe, prop, reduce, reject } from 'ramda'
-import { YEARLY_XRD_EMISSIONS } from '@constants'
+import { andThen, isNil, map, pick, pipe, prop, reject } from 'ramda'
 import { timeToEpoch } from '@utils'
-import { Result, ResultAsync, errAsync, okAsync } from 'neverthrow'
+import { ResultAsync } from 'neverthrow'
 import {
   transformComponent,
   type Component,
@@ -101,11 +100,7 @@ export type Validator = Component<ComponentState, typeof standardMetadata> & {
   unstakeClaimResourceAddress: string
 }
 
-export type ValidatorListItem<
-  WithOwner = false,
-  WithUptime = false,
-  WithStakeUnits = false
-> = {
+export type ValidatorListItem<WithOwner = false, WithStakeUnits = false> = {
   address: string
   totalStakeInXRD: BigNumber
   fee: (current_epoch: number) => {
@@ -119,21 +114,8 @@ export type ValidatorListItem<
   unstakeClaimResourceAddress: string
   isRegistered: boolean
   rank: number
+  validator: ValidatorCollectionItem
 } & (WithOwner extends true ? { ownerAddress: string | undefined } : {}) &
-  (WithUptime extends true
-    ? {
-        uptimePercentages: {
-          '1day'?: number
-          '1week'?: number
-          '1month'?: number
-          '3months'?: number
-          '6months'?: number
-          '1year'?: number
-          alltime?: number
-        }
-        apy: number
-      }
-    : {}) &
   (WithStakeUnits extends true
     ? {
         totalStakeUnits: BigNumber
@@ -148,9 +130,61 @@ const THREE_MONTHS_MS = ONE_DAY_MS * 90
 const SIX_MONTHS_MS = ONE_DAY_MS * 180
 const ONE_YEAR_MS = ONE_DAY_MS * 365
 
-const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
+export type UptimeValue =
+  | '1day'
+  | '1week'
+  | '1month'
+  | '3months'
+  | '6months'
+  | '1year'
+  | 'alltime'
 
-const getValidatorUptimeSinceDate =
+export const uptimePeriodDefinition: Record<
+  UptimeValue,
+  { label: string; getStartingPoint: () => Date | number; default?: boolean }
+> = {
+  '1day': {
+    label: '1 Day',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS)
+  },
+  '1week': {
+    label: '1 Week',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS * 7)
+  },
+  '1month': {
+    default: true,
+    label: '1 Month',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS * 30)
+  },
+  '3months': {
+    label: '3 Months',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS * 90)
+  },
+  '6months': {
+    label: '6 Months',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS * 180)
+  },
+  '1year': {
+    label: '1 Year',
+    getStartingPoint: () => new Date(Date.now() - ONE_DAY_MS * 365)
+  },
+  alltime: {
+    label: 'All Time',
+    getStartingPoint: () => 1 // epoch "1" is starting point for all time calculation
+  }
+}
+
+export const uptimeUiOptions = Object.entries(uptimePeriodDefinition).map(
+  ([key, value]) => ({
+    label: value.label,
+    value: key as UptimeValue,
+    default: value.default
+  })
+)
+
+export const dateMsAgo = (ms: number) => new Date(Date.now() - ms)
+
+export const getValidatorUptimeSinceDate =
   (addresses: string[]) => (timestamp: Date | number) =>
     callApi('getValidatorsUptimeFromTo', addresses, timestamp).map((uptimes) =>
       uptimes.reduce((acc, cur) => {
@@ -159,7 +193,7 @@ const getValidatorUptimeSinceDate =
       }, {} as Record<string, number | undefined>)
     )
 
-const calculateUptimePercentage = ({
+export const calculateUptimePercentage = ({
   proposals_made,
   proposals_missed,
   epochs_active_in
@@ -181,7 +215,7 @@ const calculateUptimePercentage = ({
   return uptimePercentage
 }
 
-const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
+export const getUptimePercentages = (validators: ValidatorCollectionItem[]) =>
   pipe(
     () => [
       ONE_DAY_MS,
@@ -246,13 +280,8 @@ const calculateFee = (state: ComponentState) => (current_epoch: number) => {
 }
 
 export const transformValidatorResponse =
-  <
-    WithOwner extends string | undefined,
-    WithUptime extends boolean,
-    WithStakeUnits extends boolean
-  >(
+  <WithOwner extends string | undefined, WithStakeUnits extends boolean>(
     validatorOwnerBadgeResource: WithOwner,
-    withUptime: WithUptime,
     withStakeUnits: WithStakeUnits
   ) =>
   ({
@@ -265,7 +294,6 @@ export const transformValidatorResponse =
     {
       validators: ValidatorListItem<
         WithOwner extends string ? true : false,
-        WithUptime,
         WithStakeUnits
       >[]
       ledger_state: LedgerState
@@ -284,16 +312,6 @@ export const transformValidatorResponse =
             ledger_state
           )(aggregatedEntities)
 
-        if (withUptime) {
-          const result = await appendUptime(returnedValidators)(
-            aggregatedEntities
-          )
-
-          if (result.isErr()) throw result.error
-
-          returnedValidators = result.value
-        }
-
         if (validatorOwnerBadgeResource) {
           returnedValidators = await appendOwner(
             returnedValidators,
@@ -304,7 +322,6 @@ export const transformValidatorResponse =
         return {
           validators: returnedValidators as ValidatorListItem<
             WithOwner extends string ? true : false,
-            WithUptime,
             WithStakeUnits
           >[],
           ledger_state
@@ -349,7 +366,8 @@ export const transformValidatorListItem = (
     unstakeClaimResourceAddress: state.claim_token_resource_address,
     totalStakeInXRD: new BigNumber(validator.stake_vault.balance),
     acceptsStake: state.accepts_delegated_stake,
-    isRegistered: state.is_registered
+    isRegistered: state.is_registered,
+    validator
   }
 }
 
@@ -367,52 +385,11 @@ const transformValidators = (
       rank: i + 1
     }))
 
-const appendUptime =
-  <T, K>(validators: ValidatorListItem<T, false, K>[]) =>
-  async (
-    entities: ValidatorCollectionItem[]
-  ): Promise<Result<ValidatorListItem<T, true, K>[], ErrorResponse>> => {
-    const result = await getUptimePercentages(entities)
-
-    if (result.isErr()) return errAsync(result.error)
-
-    const uptimes = result.value
-
-    const totalAmountStaked = pipe(
-      () => entities,
-      reduce(
-        (prev, cur) => prev.plus(cur.stake_vault.balance),
-        new BigNumber(0)
-      )
-    )()
-
-    return okAsync(
-      validators.map((validator) => {
-        const { uptimes: _uptimes } = uptimes.find(
-          (u) => u.address === validator.address
-        )!
-        const entity = entities.find((e) => e.address === validator.address)!
-
-        return {
-          ...validator,
-          uptimePercentages: _uptimes,
-          apy: new BigNumber(YEARLY_XRD_EMISSIONS)
-            .multipliedBy(
-              (1 - (entity as any).effective_fee_factor.current.fee_factor) *
-                (_uptimes.alltime ?? 0)
-            )
-            .dividedBy(totalAmountStaked)
-            .toNumber()
-        }
-      })
-    )
-  }
-
 const appendStakeUnits =
   <T, K>(validators: ValidatorListItem<T, K>[], ledger_state: LedgerState) =>
   async (
     entities: ValidatorCollectionItem[]
-  ): Promise<ValidatorListItem<T, K, true>[]> => {
+  ): Promise<ValidatorListItem<T, true>[]> => {
     const stakeUnits = await getEntityDetails(
       validators.map((v) => v.stakeUnitResourceAddress),
       undefined,
@@ -447,13 +424,13 @@ const appendStakeUnits =
   }
 
 const appendOwner =
-  <T, K>(
-    validators: ValidatorListItem<false, T, K>[],
+  <K>(
+    validators: ValidatorListItem<false, K>[],
     validatorOwnerBadgeResource: string
   ) =>
   async (
     entities: ValidatorCollectionItem[]
-  ): Promise<ValidatorListItem<true, T, K>[]> => {
+  ): Promise<ValidatorListItem<true, K>[]> => {
     const ownerBadgeIds = entities.map((entity) =>
       getEnumStringMetadata('owner_badge')(entity.metadata)
     )
@@ -500,17 +477,15 @@ const appendOwner =
 
 export const getValidators = <
   WithOwner extends string | undefined,
-  WithUptime extends boolean,
   WithStakeUnits extends boolean
 >(
   validatorOwnerBadge: WithOwner,
-  withUptime: WithUptime,
+
   withStakeUnits: WithStakeUnits
 ) =>
   callApi('getAllValidatorsWithLedgerState').andThen(
-    transformValidatorResponse<WithOwner, WithUptime, WithStakeUnits>(
+    transformValidatorResponse<WithOwner, WithStakeUnits>(
       validatorOwnerBadge,
-      withUptime,
       withStakeUnits
     )
   )

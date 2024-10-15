@@ -1,8 +1,11 @@
 <script lang="ts" context="module">
-  export type TransformedValidator = ValidatorListItem<true, true, true> &
-    ValidatorListItem<unknown, true, unknown>['uptimePercentages'] & {
-      feePercentage: number
-    }
+  export type TransformedValidator = ValidatorListItem<true, true> & {
+    feePercentage: number
+  }
+
+  export type ValidatorListInput =
+    | Promise<ValidatorListItem<true, true>[]>
+    | ValidatorListItem<true, true>[]
 
   export enum ColumnIds {
     stakingIconBookmark = 'staking-icon-or-bookmark',
@@ -24,14 +27,17 @@
   import { connected } from '@stores'
   import { bookmarkedValidatorsStore } from '../../../../stores'
   import GridTable from '@components/_base/table/grid-table/GridTable.svelte'
-  import type { UptimeValue } from './UptimeHeader.svelte'
   import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
   import type { Direction, SortableValues } from '@components/_base/table/types'
   import { sortBigNumber, sortBasic } from '@components/_base/table/sorting'
   import UptimeHeader from './UptimeHeader.svelte'
   import ValidatorRow from './ValidatorRow.svelte'
-  import type { ValidatorListItem } from '@api/utils/entities/component/validator'
+  import {
+    type UptimeValue,
+    type ValidatorListItem
+  } from '@api/utils/entities/component/validator'
   import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
+  import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
 
   interface $$Slots {
     rows: {
@@ -43,13 +49,11 @@
     }
   }
 
-  export let validators:
-    | Promise<ValidatorListItem<true, true, true>[]>
-    | ValidatorListItem<true, true, true>[]
+  export let validators: ValidatorListInput
 
   $: _validators = Promise.resolve(validators)
 
-  let selectedUptime: { label: string; value: UptimeValue }
+  let selectedUptime: UptimeValue
 
   let transformedValidators: Promise<TransformedValidator[]>
 
@@ -57,13 +61,6 @@
     ([validators, epoch]) =>
       (validators || []).map((validator) => ({
         ...validator,
-        '1day': validator.uptimePercentages['1day'],
-        '1week': validator.uptimePercentages['1week'],
-        '1month': validator.uptimePercentages['1month'],
-        '3months': validator.uptimePercentages['3months'],
-        '6months': validator.uptimePercentages['6months'],
-        '1year': validator.uptimePercentages['1year'],
-        alltime: validator.uptimePercentages['alltime'],
         feePercentage: validator.fee(epoch).percentage
       }))
   )
@@ -131,7 +128,15 @@
     },
     {
       id: ColumnIds.apy,
-      sortBy: sort('apy', sortBasic),
+      sortBy: (
+        v1: TransformedValidator,
+        v2: TransformedValidator,
+        direction: Direction
+      ) => {
+        const apy1 = uptimeModule.getApy(v1.validator, selectedUptime)
+        const apy2 = uptimeModule.getApy(v2.validator, selectedUptime)
+        return sortBasic(apy1, apy2, direction)
+      },
       header: {
         label: 'APY',
         tooltip: 'Estimated return based on recent uptime and current fee'
@@ -147,6 +152,16 @@
     },
     {
       id: ColumnIds.uptime,
+      sortBy: (
+        v1: TransformedValidator,
+        v2: TransformedValidator,
+        direction: Direction
+      ) => {
+        const data = uptimeModule.getDataForUptime(selectedUptime)
+        const uptime1 = data?.[v1.address] || 0
+        const uptime2 = data?.[v2.address] || 0
+        return sortBasic(uptime1, uptime2, direction)
+      },
       header: {
         label: 'Uptime',
         tooltip: '% of proposals made over the recent time frame selected'
@@ -175,41 +190,26 @@
     columns = columns.slice(1, -1)
   }
 
-  $: if (selectedUptime) {
-    columns = columns.map((column) => {
-      if (column?.id === 'uptime') {
-        return {
-          ...column,
-          sortBy: sort(selectedUptime.value, sortBasic)
-        }
-      }
-
-      return column
-    })
-  }
-
   $: columnIds = columns.map((column) => column.id) as ColumnIds[]
+
+  const onHeaderClick =
+    (sortFn: () => (data: TransformedValidator[]) => TransformedValidator[]) =>
+    () => {
+      transformedValidators = transformedValidators.then(sortFn())
+    }
 </script>
 
 <GridTable {columns} defaultSortedColumn="totalStake">
   <div class="header" slot="header-cell" let:column let:sort let:sortStatus>
+    {@const sorting = column?.sortBy ? sortStatus : undefined}
     {#if column?.id === 'uptime'}
       <UptimeHeader
-        on:click={async () => {
-          const validators = await transformedValidators
-          transformedValidators = Promise.resolve(sort()(validators))
-        }}
-        sorting={column?.sortBy ? sortStatus : undefined}
+        on:click={onHeaderClick(sort)}
+        {sorting}
         bind:selected={selectedUptime}
       />
     {:else}
-      <BasicHeader
-        on:click={async () => {
-          const validators = await transformedValidators
-          transformedValidators = Promise.resolve(sort()(validators))
-        }}
-        sorting={column?.sortBy ? sortStatus : undefined}
-      >
+      <BasicHeader on:click={onHeaderClick(sort)} {sorting}>
         {#if column?.header?.label}
           {column.header.label}
         {/if}
@@ -223,7 +223,7 @@
       validators={transformedValidators}
       {columns}
       {columnIds}
-      selectedUptime={selectedUptime?.value}
+      {selectedUptime}
       {ValidatorRow}
     />
   </div>

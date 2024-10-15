@@ -32,6 +32,9 @@
     "coverage": {
       "dependsOn": [
         "db:generate"
+      ],
+      "outputs": [
+        "coverage"
       ]
     },
     "prepare": {},

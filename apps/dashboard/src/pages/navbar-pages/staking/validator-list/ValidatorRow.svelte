@@ -1,3 +1,17 @@
+<script lang="ts" context="module">
+  type ValidatorAddress = string
+  export type UptimePercentageData = Partial<
+    Record<UptimeValue, Record<ValidatorAddress, number | undefined>>
+  >
+
+  export type ValidatorRowInput =
+    | {
+        validator: TransformedValidator
+        selectedUptime: UptimeValue
+      }
+    | 'loading'
+</script>
+
 <script lang="ts">
   import Address from '@components/_base/address/Address.svelte'
   import StakeDisplay from './StakeDisplay.svelte'
@@ -5,7 +19,6 @@
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { connected } from '@stores'
-  import type { UptimeValue } from './UptimeHeader.svelte'
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import StakingInfo from './staked/StakingInfo.svelte'
@@ -18,18 +31,13 @@
   import type { TransformedValidator } from './ValidatorList.svelte'
   import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import Warning from './Warning.svelte'
+  import type { UptimeValue } from '@api/utils/entities/component/validator'
+  import ValidatorRowApy from './row/ValidatorRowApy.svelte'
+  import ValidatorRowUptime from './row/ValidatorRowUptime.svelte'
 
-  export let input:
-    | {
-        validator: TransformedValidator
-        selectedUptime: UptimeValue
-      }
-    | 'loading'
+  export let input: ValidatorRowInput
 
   export let showStakeInfo = false
-
-  $: uptime =
-    input !== 'loading' ? input.validator[input.selectedUptime] : undefined
 
   $: top3Percent =
     input !== 'loading'
@@ -132,19 +140,7 @@
     </div>
 
     <div class="apy apy-text-box no-overflow bold center">
-      <span class="mobile-only apy-text-box-label">Apy</span>
-      {#if input === 'loading'}
-        <SkeletonLoader width={80} />
-      {:else}
-        <div>
-          {input.validator.percentageTotalStake
-            ? `${truncateNumber(input.validator.apy)}%`
-            : 'N/A'}
-          {#if input.validator.percentageTotalStake}
-            <span class="subtext">per year</span>
-          {/if}
-        </div>
-      {/if}
+      <ValidatorRowApy {input} />
     </div>
 
     <div class="apy-text-box no-overflow bold center fee">
@@ -159,12 +155,7 @@
     </div>
 
     <div class="uptime apy-text-box no-overflow bold center uptime">
-      <span class="mobile-only apy-text-box-label">Uptime</span>
-      {#if input === 'loading'}
-        <SkeletonLoader width={80} />
-      {:else}
-        {uptime ? `${truncateNumber(uptime)}%` : 'Not Measurable'}
-      {/if}
+      <ValidatorRowUptime {input} />
     </div>
 
     <div class="accepts-stake center">
