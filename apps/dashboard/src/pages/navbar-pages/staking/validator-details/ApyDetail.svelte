@@ -24,7 +24,7 @@
       {#if validatorsUptimeData && Object.keys(validatorsUptimeData).length > 0}
         {@const data = validator.typed.value}
         {@const apy = uptimeModule.getApy(data.validator, $lastQueriedUptime)}
-        {validator.typed.value.percentageTotalStake && apy
+        {validator.typed.value.percentageTotalStake && apy !== undefined
           ? `${truncateNumber(apy)}%`
           : 'N/A'}
       {:else}
