@@ -135,7 +135,7 @@
       ) => {
         const apy1 = uptimeModule.getApy(v1.validator, selectedUptime)
         const apy2 = uptimeModule.getApy(v2.validator, selectedUptime)
-        return sortBasic(apy1, apy2, direction)
+        return sortBasic(apy1 || 0, apy2 || 0, direction)
       },
       header: {
         label: 'APY',

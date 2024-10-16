@@ -32,10 +32,10 @@ describe('uptime module', () => {
       expect(uptimeModule.getDataForUptime('1month')).toEqual({})
     })
 
-    it('should throw when trying to get APY', () => {
-      expect(() =>
+    it('should return undefined when trying to get APY', () => {
+      expect(
         uptimeModule.getApy({} as ValidatorCollectionItem, '1month')
-      ).toThrowError(/Invalid totalAmountStaked/)
+      ).toBeUndefined()
     })
   })
 
