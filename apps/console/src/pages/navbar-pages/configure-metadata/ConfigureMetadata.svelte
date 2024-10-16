@@ -30,8 +30,9 @@
   import type { FormItem } from '$lib/form/Form.svelte'
   export let query: string | undefined = undefined
 
+  type AccountResource = { id: any; label: string }
   let entityDetails = writable<Entity | undefined>()
-  let accountsResources = writable<{ id: any; label: string }[]>([])
+  let accountsResources = writable<AccountResource[]>([])
 
   $: {
     callApi(
@@ -64,26 +65,32 @@
             }
           })
 
-          const nonFungibles = account.resources.nonFungible.map((resource) => {
-            const name = getStringMetadata('name')({
-              items: resource.explicitMetadata || []
+          const nonFungibles = account.resources.nonFungible
+            .map((resource) => {
+              if (!resource.ids.length) {
+                return undefined
+              }
+
+              const name = getStringMetadata('name')({
+                items: resource.explicitMetadata || []
+              })
+              return {
+                id: {
+                  address: resource.address,
+                  account: account.address,
+                  ids: resource.ids
+                },
+                label: `${name || 'Unnamed resource'} (${shortenAddress(
+                  resource.address
+                )})`
+              }
             })
-            return {
-              id: {
-                address: resource.address,
-                account: account.address,
-                ids: resource.ids
-              },
-              label: `${name || 'Unnamed resource'} (${shortenAddress(
-                resource.address
-              )})`
-            }
-          })
+            .filter((x) => !!x)
 
           return [...fungibles, ...nonFungibles]
         })
         .flat()
-      accountsResources.set(resources)
+      accountsResources.set(resources as AccountResource[])
       return resources
     })
   }
