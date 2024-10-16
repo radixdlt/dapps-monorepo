@@ -89,7 +89,6 @@
   .picker {
     display: flex;
     flex-direction: column;
-    z-index: 1;
   }
 
   .drawer {
@@ -97,6 +96,7 @@
     min-width: 100%;
     width: fit-content;
     overflow-y: auto;
+    z-index: 2;
   }
 
   .option {
