@@ -1,8 +1,5 @@
 # Radix dApps Monorepo 👋
 
-## Table of Contents
-[TOC]
-
 ## Prerequisites
 
 You need to have the following tools installed to run the local development server:
