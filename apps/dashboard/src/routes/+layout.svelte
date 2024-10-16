@@ -113,11 +113,6 @@
 
     rdt.walletApi.walletData$.subscribe(({ accounts }) => {
       updateAccounts(accounts)
-      if (accounts.length > 0) {
-        authApi.renewAuthToken().mapErr((err) => {
-          rdt.disconnect()
-        })
-      }
     })
 
     resolveRDT(rdt)
