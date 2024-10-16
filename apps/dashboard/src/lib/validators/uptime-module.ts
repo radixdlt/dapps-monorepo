@@ -60,7 +60,7 @@ export const UptimeModule = (
     getDataForUptime: (uptime: UptimeValue) => uptimeData[uptime] || {},
     getApy: (validator: ValidatorCollectionItem, uptime: UptimeValue) => {
       if (!totalAmountStaked || totalAmountStaked.isZero()) {
-        throw new Error('Invalid totalAmountStaked')
+        return undefined
       }
       const address = validator.address
       const fee = Number(validator.effective_fee_factor?.current?.fee_factor)

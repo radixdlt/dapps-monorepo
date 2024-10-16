@@ -21,7 +21,7 @@
     )}
     <div>
       {#if validators && Object.keys(validators).length > 0}
-        {input.validator.percentageTotalStake
+        {input.validator.percentageTotalStake && apy
           ? `${truncateNumber(apy)}%`
           : 'N/A'}
         {#if input.validator.percentageTotalStake}

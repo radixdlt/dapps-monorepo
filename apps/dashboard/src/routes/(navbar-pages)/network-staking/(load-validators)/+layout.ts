@@ -16,7 +16,7 @@ const ERROR_MSG = 'Failed to load validators.'
 
 const handleGatewayWithErrorMessage = handleGatewayResult((_) => ERROR_MSG)
 
-export const load: LayoutLoad = () => {
+export const load: LayoutLoad = ({ fetch }) => {
   uptimeModule.clean()
 
   const bookmarkedValidators = bookmarkedValidatorsApi
@@ -56,6 +56,7 @@ export const load: LayoutLoad = () => {
   uptimeModule.setValidators(
     validatorsResponse.then(({ validators }) => validators)
   )
+  uptimeModule.maybeQueryUptime('1month')
 
   return {
     promises: {
