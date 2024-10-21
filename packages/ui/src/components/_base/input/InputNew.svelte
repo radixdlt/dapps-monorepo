@@ -6,6 +6,9 @@
   export let format: (value: string) => string = (value) => value
   export let readonly = false
   export let type = 'text'
+  export let border = false
+  export let placeholder: string | undefined = undefined
+
   const dispatch = createEventDispatcher<{
     input: { value: string }
   }>()
@@ -22,11 +25,13 @@
   inputmode={type === 'number' ? 'decimal' : 'text'}
   {readonly}
   {maxlength}
+  {placeholder}
   on:focus
   on:blur
   on:input={(e) => {
     value = e.currentTarget.value
   }}
+  class:border
 />
 <slot name="postfix" />
 
@@ -37,5 +42,10 @@
     font-weight: var(--font-weight);
     text-align: var(--text-align);
     color: var(--text-color);
+  }
+
+  .border {
+    border: 2px solid var(--theme-border);
+    padding: var(--spacing-md);
   }
 </style>
