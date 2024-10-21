@@ -7,9 +7,10 @@
 
   export let selected: AccountType
 
-  $: options = $accounts.map((account) => ({
+  $: options = $accounts.map((account, i) => ({
     label: account.label,
-    value: account
+    value: account,
+    default: i === 0
   }))
 </script>
 
@@ -21,7 +22,7 @@
   }}
 >
   <svelte:fragment slot="selected" let:open let:selected>
-    <Account account={selected.value}>
+    <Account account={selected?.value}>
       <div class="icon" style:transform={`rotate(${open ? '-180deg' : 0})`}>
         <IconNew icon={AccountPickerExpandIcon} size="small" />
       </div>

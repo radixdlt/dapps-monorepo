@@ -25,10 +25,10 @@
     selected: (typeof options)[number]
   }>()
 
-  $: selected = options.find((option) => option.default) || options[0]
+  $: selected = options.find((option) => option.default)
 
   onMount(() => {
-    dispatch('selected', selected)
+    if (selected) dispatch('selected', selected)
   })
 
   let picker: HTMLElement
