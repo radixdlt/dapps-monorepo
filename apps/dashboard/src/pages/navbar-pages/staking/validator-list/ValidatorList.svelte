@@ -53,6 +53,12 @@
 
   $: _validators = Promise.resolve(validators)
 
+  let showTable = true
+
+  $: _validators.then((validators) => {
+    showTable = validators.length > 0
+  })
+
   let selectedUptime: UptimeValue
 
   let transformedValidators: Promise<TransformedValidator[]>
@@ -199,35 +205,37 @@
     }
 </script>
 
-<GridTable {columns} defaultSortedColumn="totalStake">
-  <div class="header" slot="header-cell" let:column let:sort let:sortStatus>
-    {@const sorting = column?.sortBy ? sortStatus : undefined}
-    {#if column?.id === 'uptime'}
-      <UptimeHeader
-        on:click={onHeaderClick(sort)}
-        {sorting}
-        bind:selected={selectedUptime}
-      />
-    {:else}
-      <BasicHeader on:click={onHeaderClick(sort)} {sorting}>
-        {#if column?.header?.label}
-          {column.header.label}
-        {/if}
-      </BasicHeader>
-    {/if}
-  </div>
+{#if showTable}
+  <GridTable {columns} defaultSortedColumn="totalStake">
+    <div class="header" slot="header-cell" let:column let:sort let:sortStatus>
+      {@const sorting = column?.sortBy ? sortStatus : undefined}
+      {#if column?.id === 'uptime'}
+        <UptimeHeader
+          on:click={onHeaderClick(sort)}
+          {sorting}
+          bind:selected={selectedUptime}
+        />
+      {:else}
+        <BasicHeader on:click={onHeaderClick(sort)} {sorting}>
+          {#if column?.header?.label}
+            {column.header.label}
+          {/if}
+        </BasicHeader>
+      {/if}
+    </div>
 
-  <div class="rows" slot="rows">
-    <slot
-      name="rows"
-      validators={transformedValidators}
-      {columns}
-      {columnIds}
-      {selectedUptime}
-      {ValidatorRow}
-    />
-  </div>
-</GridTable>
+    <div class="rows" slot="rows">
+      <slot
+        name="rows"
+        validators={transformedValidators}
+        {columns}
+        {columnIds}
+        {selectedUptime}
+        {ValidatorRow}
+      />
+    </div>
+  </GridTable>
+{/if}
 
 <style>
   .rows {

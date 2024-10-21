@@ -48,10 +48,6 @@
     grid-template-rows: 100px 1fr;
 
     @include mixins.desktop {
-      grid-template-rows: unset;
-    }
-
-    @include mixins.desktop {
       grid-template-rows: 4.6875rem auto;
     }
 
