@@ -7,7 +7,9 @@ import {
   type StateEntityDetailsOptions,
   type StateNonFungibleDetailsResponseItem,
   type LedgerStateSelector,
-  type StreamTransactionsResponse
+  type StreamTransactionsResponse,
+  ManifestClass,
+  StreamTransactionsRequestEventFilterItemEventEnum
 } from '@common/gateway-sdk'
 
 const gatewayApi = GatewayApiClient.initialize({
@@ -68,18 +70,65 @@ export const callApi = <T extends keyof typeof api>(
   ReturnType<typeof handleError>
 > => fromPromise((api[methodName] as any)(...args), handleError)
 
-export const getRecentTransactions = (address: string, cursor?: string) =>
+export const getRecentTransactions = (
+  address: string,
+  cursor?: string,
+  filters?: {
+    withdrawnFrom?: string[]
+    depositedTo?: string[]
+    badges?: string[]
+    resources?: string[]
+    affectedEntities?: string[]
+    transactionType?: ManifestClass
+  }
+) =>
   gatewayApi.stream.innerClient.streamTransactions({
     streamTransactionsRequest: {
-      affected_global_entities_filter: [address],
+      affected_global_entities_filter: [
+        address,
+        ...(filters?.affectedEntities ?? [])
+      ],
       cursor,
       opt_ins: {
         balance_changes: true
-      }
+      },
+      manifest_badges_presented_filter: filters?.badges,
+      manifest_resources_filter: filters?.resources,
+      events_filter:
+        filters?.withdrawnFrom || filters?.depositedTo
+          ? [
+              ...(filters?.withdrawnFrom || []).map((address) => ({
+                event:
+                  StreamTransactionsRequestEventFilterItemEventEnum.Withdrawal,
+                address
+              })),
+              ...(filters?.depositedTo || []).map((address) => ({
+                event:
+                  StreamTransactionsRequestEventFilterItemEventEnum.Deposit,
+                address
+              }))
+            ]
+          : undefined,
+      manifest_class_filter: filters?.transactionType
+        ? {
+            _class: filters?.transactionType,
+            match_only_most_specific: true
+          }
+        : undefined
     }
   })
 
-export const getRecentNetworkTransactions = (cursor?: string) =>
+export const getRecentNetworkTransactions = (
+  cursor?: string,
+  filters?: {
+    withdrawnFrom?: string[]
+    depositedTo?: string[]
+    badges?: string[]
+    resources?: string[]
+    affectedEntities?: string[]
+    transactionType?: ManifestClass
+  }
+) =>
   fromPromise(
     gatewayApi.stream.innerClient.streamTransactions({
       streamTransactionsRequest: {
@@ -88,7 +137,31 @@ export const getRecentNetworkTransactions = (cursor?: string) =>
         opt_ins: {
           receipt_output: false,
           balance_changes: true
-        }
+        },
+        manifest_badges_presented_filter: filters?.badges,
+        manifest_resources_filter: filters?.resources,
+        affected_global_entities_filter: filters?.affectedEntities,
+        events_filter:
+          filters?.withdrawnFrom || filters?.depositedTo
+            ? [
+                ...(filters?.withdrawnFrom || []).map((address) => ({
+                  event:
+                    StreamTransactionsRequestEventFilterItemEventEnum.Withdrawal,
+                  address
+                })),
+                ...(filters?.depositedTo || []).map((address) => ({
+                  event:
+                    StreamTransactionsRequestEventFilterItemEventEnum.Deposit,
+                  address
+                }))
+              ]
+            : undefined,
+        manifest_class_filter: filters?.transactionType
+          ? {
+              _class: filters?.transactionType,
+              match_only_most_specific: true
+            }
+          : undefined
       }
     }),
     handleError

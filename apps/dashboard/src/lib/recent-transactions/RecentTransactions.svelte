@@ -7,7 +7,6 @@
     recentTransactionsTableConfig
   } from './ColumnDefinition.svelte'
   import BalanceChangesColumn from './BalanceChangesColumn.svelte'
-  import ExportCsvButton from '@dashboard-pages/search-pages/export-csv-button/ExportCsvButton.svelte'
   import { getRecentTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
   import type { ComponentProps } from 'svelte'
@@ -29,12 +28,17 @@
   import InfoBar from '@components/info-bar/InfoBar.svelte'
 
   export let entityAddress: string
+  export let filters: Parameters<typeof getRecentTransactions>[2] = undefined
 
-  const queryFunction = (cursor?: string) =>
+  let queryFunction: (
+    cursor?: string
+  ) => ReturnType<typeof createBalanceChanges>
+
+  $: queryFunction = (cursor?: string) =>
     createBalanceChanges(
       entityAddress,
       createManifestClassProperty(
-        getRecentTransactions(entityAddress, cursor).then((data) => {
+        getRecentTransactions(entityAddress, cursor, filters).then((data) => {
           fillResourceCacheWithTransactionsData(data)
           return data
         })
@@ -76,10 +80,6 @@
     (entry.withdrawals.length === 0 && entry.deposits.length === 0)
 </script>
 
-<div class="export-button">
-  <ExportCsvButton {entityAddress} />
-</div>
-
 <PaginatedTable
   --table-row-cell-vertical-padding="25px"
   config={recentTransactionsTableConfig}
@@ -120,18 +120,3 @@
     {/if}
   </svelte:fragment>
 </PaginatedTable>
-
-<style lang="scss">
-  .export-button {
-    text-align: right;
-    margin-bottom: var(--spacing-xl);
-
-    @include mixins.minWidthMedia(820px) {
-      transform: translateY(-1rem);
-      position: absolute;
-      right: 0;
-      transform: none;
-      top: 90px;
-    }
-  }
-</style>
