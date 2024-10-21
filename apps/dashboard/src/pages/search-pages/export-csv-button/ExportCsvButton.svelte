@@ -212,7 +212,6 @@
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    height: 40px;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     background: var(--color-grey-4);

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getRecentNetworkTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
-  import type { ComponentProps } from 'svelte'
+  import { createEventDispatcher, type ComponentProps } from 'svelte'
   import {
     chevronColumnDefinition,
     dateAndTxIdColumnDefinition,
@@ -19,11 +19,10 @@
   import ResponsiveTableCell from '@components/_base/table/basic-table/ResponsiveTableCell.svelte'
   import InfoBar from '@components/info-bar/InfoBar.svelte'
 
-  const queryFunction = (cursor?: string) => {
-    return getRecentNetworkTransactions(cursor).unwrapOr({
+  export let queryFunction = (cursor?: string) =>
+    getRecentNetworkTransactions(cursor).unwrapOr({
       items: []
     })
-  }
 
   const feeColumnDefinition = getFeeColumnDefinition()
 

@@ -39,10 +39,6 @@
     padding: var(--spacing-2xl);
   }
 
-  .search-page {
-    position: relative;
-  }
-
   .content {
     margin-top: var(--spacing-2xl);
   }
