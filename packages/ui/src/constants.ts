@@ -24,9 +24,9 @@ export const NETWORK_CONFIG = {
     id: 33,
     url: 'https://enkinet-gateway.radixdlt.com',
     consoleDappAddress:
-      'account_tdx_21_129c3uarzmguw2rtmmuq3hv0eycktvj3achtzzkh5qra4ctsv6nl5fu',
+      'account_tdx_21_12xxgwf2z8z65kntvlcrgztkslvr3flrw4clpu7w0gyh7gg6guz59zn',
     dashboardDappAddress:
-      'account_tdx_21_129c3uarzmguw2rtmmuq3hv0eycktvj3achtzzkh5qra4ctsv6nl5fu'
+      'account_tdx_21_12y4t72zdec7xpztgjrdtru584hqs7nz0zg2ytxhed8n37a8k6f8kq4'
   },
   [Network.GILGANET]: {
     id: 32,
