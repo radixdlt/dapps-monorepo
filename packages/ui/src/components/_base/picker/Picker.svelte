@@ -11,12 +11,13 @@
   type $$Slots = {
     selected: {
       open: boolean
-      selected: (typeof options)[number]
+      selected: (typeof options)[number] | undefined
     }
     option: {
       option: {
         label: string
         value: T
+        default?: boolean
       }
     }
   }

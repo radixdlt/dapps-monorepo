@@ -6,13 +6,15 @@
 
   type T = $$Generic
 
-  export let selected: (typeof options)[number]
+  export let selected: (typeof options)[number] | undefined
   export let options: {
     label: string
     value: T
+    default?: boolean
   }[]
   export let open = false
   export let selectionText: string | undefined = undefined
+  export let placeholder: string | undefined = undefined
 </script>
 
 <Picker
@@ -23,8 +25,15 @@
   }}
   bind:open
 >
-  <button slot="selected" class="selected option" let:selected>
-    {selected.label}
+  <button slot="selected" class="selected option">
+    {#if selected?.label}
+      {selected.label}
+    {:else}
+      <i>
+        {placeholder ?? 'Select an option'}
+      </i>
+    {/if}
+
     <div class="icon" style:transform={`rotate(${open ? 0 : '180deg'})`}>
       <IconNew icon={PickerExpandIcon} size="small" />
     </div>
@@ -33,7 +42,7 @@
   <div slot="option" let:option class="option-background">
     <button class="option">
       {option.label}
-      {#if option.value === selected.value}
+      {#if option.value === selected?.value}
         <IconNew icon={SelectedOptionIcon} size="small" />
       {/if}
     </button>
