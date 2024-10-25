@@ -252,6 +252,7 @@ const config = {
           'https://t.co/',
           'https://analytics.twitter.com/',
           'https://www.facebook.com/tr/',
+          'https://www.facebook.com/privacy_sandbox/',
           'https://image-service-dev.extratools.works',
           'https://image-service.radixdlt.com',
           ...googleTopLevelDomains
@@ -268,6 +269,7 @@ const config = {
           'https://region1.google-analytics.com/',
           'https://analytics.tiktok.com/',
           'https://www.redditstatic.com/',
+          'https://pixel-config.reddit.com/',
           'https://api.eu.amplitude.com/2/httpapi'
         ],
         'script-src': [
