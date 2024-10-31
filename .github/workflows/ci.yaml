@@ -21,6 +21,13 @@ on:
       - ".github/workflows/sandbox-ci.yaml"
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - labeled
+      - unlabeled
   release:
     types:
       - prereleased
@@ -342,7 +349,7 @@ jobs:
         NPM_LOCAL_CACHE=.cache/
 
   deploy_pull_request:
-    if: ${{ github.event.pull_request }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-pr') }}
     name: Deploy PR
     needs:
       - push-dashboard
