@@ -12,7 +12,7 @@ import {
   StreamTransactionsRequestEventFilterItemEventEnum
 } from '@common/gateway-sdk'
 
-const gatewayApi = GatewayApiClient.initialize({
+export const gatewayApi = GatewayApiClient.initialize({
   applicationName: 'Radix Dashboard',
   basePath: CURRENT_NETWORK?.url
 })
@@ -233,26 +233,37 @@ export const getTransactionDetailsNew = (
   intentHashHex: string,
   optIns?: Parameters<typeof gatewayApi.transaction.getCommittedDetails>[1]
 ) => {
-  return callApi('getCommittedDetails', intentHashHex, optIns).map((res) => ({
-    epoch: res.transaction.epoch,
-    round: res.transaction.round,
-    status: res.transaction.transaction_status,
-    date: res.transaction.confirmed_at,
-    fee: res.transaction.fee_paid,
-    message: (res.transaction.message as any)?.content?.value,
-    encodedManifest: res.transaction.raw_hex,
-    receipt: res.transaction.receipt,
-    manifestClass: getMostRelevantManifestClass(
-      res.transaction.manifest_classes
-    ),
-    events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
-    affectedEntities: res.transaction.affected_global_entities || [],
-    createdEntities:
-      ((res.transaction.receipt?.state_updates as any)
-        ?.new_global_entities as any[]) || [],
-    stateVersion: res.transaction.state_version,
-    balanceChanges: res.transaction.balance_changes
-  }))
+  return callApi('getCommittedDetails', intentHashHex, optIns).map((res) => {
+    return {
+      epoch: res.transaction.epoch,
+      round: res.transaction.round,
+      status: res.transaction.transaction_status,
+      date: res.transaction.confirmed_at,
+      fee: res.transaction.fee_paid,
+      message: (res.transaction.message as any)?.content?.value,
+      encodedManifest: res.transaction.raw_hex,
+      receipt: res.transaction.receipt,
+      manifestClass: getMostRelevantManifestClass(
+        res.transaction.manifest_classes
+      ),
+      manifest: res.transaction.manifest_instructions,
+      subintents: (res.transaction as any).subintent_details as {
+        subintent_hash: string
+        manifest_instructions: string
+        child_subintent_hashes: string[]
+        message?: string
+      }[],
+      child_subintents: (res.transaction as any)
+        .child_subintent_hashes as string[],
+      events: JSON.stringify(res.transaction.receipt?.events || '', null, 2),
+      affectedEntities: res.transaction.affected_global_entities || [],
+      createdEntities:
+        ((res.transaction.receipt?.state_updates as any)
+          ?.new_global_entities as any[]) || [],
+      stateVersion: res.transaction.state_version,
+      balanceChanges: res.transaction.balance_changes
+    }
+  })
 }
 
 export const getNetworkConfiguration = () =>

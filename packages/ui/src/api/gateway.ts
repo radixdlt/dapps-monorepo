@@ -3,7 +3,7 @@ import { CURRENT_NETWORK } from '../../src/network'
 import { GatewayApiClient, type ErrorResponse } from '@common/gateway-sdk'
 import { cache } from './cache'
 
-const gatewayApi = GatewayApiClient.initialize({
+export const gatewayApi = GatewayApiClient.initialize({
   applicationName: 'Radix Dashboard',
   basePath: CURRENT_NETWORK?.url
 })

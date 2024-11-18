@@ -12,4 +12,4 @@
   })
 </script>
 
-<Overview tx={data.promises.tx} manifest={data.promises.manifest} />
+<Overview txId={data.address} tx={data.promises.tx} />
