@@ -48,18 +48,18 @@
       justify-content: space-between;
     }
 
-    &.label-full {
-      flex-wrap: wrap;
-      .label {
-        width: 100%;
-        margin-bottom: 1rem;
-      }
-    }
-
     &.no-capitalize {
       .label {
         text-transform: none;
       }
+    }
+  }
+
+  .label-full {
+    flex-wrap: wrap;
+    .label {
+      width: 100%;
+      margin-bottom: 1rem;
     }
   }
 </style>

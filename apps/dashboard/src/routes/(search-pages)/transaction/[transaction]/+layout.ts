@@ -13,7 +13,7 @@ import { getNftData } from '@api/_deprecated/utils/nft-data'
 import { pipe } from 'ramda'
 import { handleGatewayResult } from '../../../../utils'
 
-export const load: LayoutLoad = ({ params, data }) => {
+export const load: LayoutLoad = ({ params }) => {
   const details = getTransactionDetailsNew(params.transaction).unwrapOr(
     undefined
   )
@@ -204,8 +204,7 @@ export const load: LayoutLoad = ({ params, data }) => {
     promises: {
       tx: details,
       status,
-      balanceChanges,
-      manifest: data.promises.manifest
+      balanceChanges
     }
   }
 }

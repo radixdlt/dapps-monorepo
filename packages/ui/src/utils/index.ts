@@ -112,7 +112,8 @@ export const addressToRoute = async (address: string) =>
     txid: `/transaction/${encodeURIComponent(address)}`,
     validator: `/validator/${encodeURIComponent(address)}`,
     identity: `/identity/${encodeURIComponent(address)}`,
-    pool: `/pool/${encodeURIComponent(address)}`
+    pool: `/pool/${encodeURIComponent(address)}`,
+    subtxid: `/subintent/${encodeURIComponent(address)}`
   }[getAddressPrefix(address)] ?? `/component/${encodeURIComponent(address)}`)
 
 export const useContext = <
