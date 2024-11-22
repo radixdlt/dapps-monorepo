@@ -252,13 +252,21 @@ jobs:
       - setup-tags
       - push-console
     steps:
+      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
+        with:
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
+          app_name: 'console'
+          step_name: 'snyk-monitor'
+          secret_prefix: 'SNY'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
+          parse_json: true
       - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
         with:
           role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'console'
           dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials'
           snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          snyk_org_id: ${{ secrets.SNYK_ORG_ID }}
+          snyk_org_id: ${{ env.SNY_ORG_ID }}
           image: docker.io/radixdlt/dapps-console:${{ needs.setup-tags.outputs.tag-with-network }}
           target_ref: ${{ github.ref_name }}
 
@@ -277,11 +285,11 @@ jobs:
           node-version: 20.3.0
       - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
         with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-dapps-monorepo-secrets-read-access'
+          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
           app_name: 'console'
           step_name: 'sonar'
           secret_prefix: 'GH'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/radixdlt/dapps-monorepo/console/sonar-token-xXTI1Y'
+          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/sonar-token-CgrUGD'
           parse_json: true
       - name: SonarCloud Scan
         uses: RDXWorks-actions/sonarcloud-github-action@master
