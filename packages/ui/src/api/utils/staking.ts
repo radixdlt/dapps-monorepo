@@ -106,7 +106,7 @@ export const getStakedInfo =
           stakeUnitToken.address
         )!
         const multiplier =
-          stakeUnitNativeResourceDetails.unit_redemption_value[0].amount
+          stakeUnitNativeResourceDetails.unit_redemption_value[0].amount || '1'
 
         const xrdAmount = new BigNumber(stakeUnitToken.value)
           .multipliedBy(new BigNumber(multiplier!))
