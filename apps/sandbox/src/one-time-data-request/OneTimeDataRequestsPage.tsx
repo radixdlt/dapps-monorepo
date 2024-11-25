@@ -175,16 +175,28 @@ export const OneTimeDataRequestsPage = () => {
                     state.accountsProof.enabled
                   ) {
                     let poo = OneTimeDataRequestBuilder.proofOfOwnership()
-                    dataRequest.push(
+                    if (
+                      state.personaProof.enabled &&
                       state.accountsProof.enabled
-                        ? (state.personaProof.enabled
-                            ? poo.identity(state.personaProof.data.address)
-                            : poo
-                          ).accounts(
+                    ) {
+                      dataRequest.push(
+                        poo
+                          .accounts(
                             state.accountsProof.data.addresses.filter(Boolean)
                           )
-                        : poo
-                    )
+                          .identity(state.personaProof.data.address)
+                      )
+                    } else if (state.personaProof.enabled) {
+                      dataRequest.push(
+                        poo.identity(state.personaProof.data.address)
+                      )
+                    } else if (state.accountsProof.enabled) {
+                      dataRequest.push(
+                        poo.accounts(
+                          state.accountsProof.data.addresses.filter(Boolean)
+                        )
+                      )
+                    }
                   }
 
                   rdt.walletApi.sendOneTimeRequest(...dataRequest)
