@@ -95,7 +95,7 @@
     "database": "*",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.8",
-    "neverthrow": "^6.2.1",
+    "neverthrow": "^8.0.0",
     "ramda": "^0.28.0",
     "sanitize-html": "^2.11.0",
     "svelte-filepond": "^0.2.0",
