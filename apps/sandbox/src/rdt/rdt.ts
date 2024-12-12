@@ -1,6 +1,7 @@
 import { BehaviorSubject, tap } from 'rxjs'
 import {
   DataRequestBuilder,
+  EnvironmentModule,
   GatewayModule,
   LocalStorageModule,
   RadixDappToolkit,
@@ -87,8 +88,15 @@ export const gatewayApi = GatewayApiClient({
   applicationVersion
 })
 
+const environmentModule = EnvironmentModule()
+
 const storageModule = LocalStorageModule(
-  `rdt:${dAppDefinitionAddress.value}:${networkId}`
+  `rdt:${dAppDefinitionAddress.value}:${networkId}`,
+  {
+    providers: {
+      environmentModule
+    }
+  }
 )
 
 const stateModule = StateModule({
@@ -116,7 +124,8 @@ const walletRequestModule = WalletRequestModule({
   providers: {
     stateModule,
     storageModule,
-    gatewayModule
+    gatewayModule,
+    environmentModule
   }
 })
 
