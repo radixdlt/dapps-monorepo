@@ -7,7 +7,7 @@
     "@floating-ui/dom": "^1.5.3",
     "@radixdlt/babylon-core-api-sdk": "^1.2.3",
     "@radixdlt/babylon-gateway-api-sdk": "^1.8.1",
-    "@radixdlt/radix-dapp-toolkit": "2.2.0-dev.19",
+    "@radixdlt/radix-dapp-toolkit": "2.2.0-dev.21",
     "@radixdlt/radix-engine-toolkit": "^1.0.5",
     "@radixdlt/rola": "^2.1.0",
     "dayjs": "^1.11.10",
