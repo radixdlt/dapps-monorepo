@@ -197,7 +197,8 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
-      - run: |
+      - name: Create .snyk file
+        run: |
           echo "${{ vars.DOT_SNYK_FILE }}" > .snyk
           cp .snyk ./packages/ui/.snyk
           cp .snyk ./packages/common/.snyk
@@ -224,7 +225,8 @@ jobs:
           secret_prefix: 'SNYK'
           secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
           parse_json: true
-      - run: |
+      - name: Create .snyk file
+        run: |
           echo "${{ vars.DOT_SNYK_FILE }}" > .snyk
           cp .snyk ./packages/ui/.snyk
           cp .snyk ./packages/common/.snyk
