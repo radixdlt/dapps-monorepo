@@ -288,6 +288,20 @@
       }
     },
     {
+      key: 'account_locker',
+      label: 'account_locker',
+      placeholder: 'Enter locker address',
+      formItemType: 'input',
+      metadata: { type: MetadataType.Address },
+      showCondition: (formState) =>
+        formState.account_type === 'dapp definition',
+      transformValue: function (value) {
+        return value
+          ? setAddressMetaData($entityDetails?.address || '', this.key, value)
+          : removeMetadata($entityDetails?.address || '', this.key)
+      }
+    },
+    {
       key: 'claimed_websites',
       label: 'claimed_websites',
       placeholder: 'Enter page URL',
@@ -475,6 +489,7 @@
         'claimed_entities',
         'claimed_websites',
         'dapp_definitions',
+        'account_locker',
         'name',
         'description',
         'tags',
@@ -485,6 +500,7 @@
         claimed_entities: 'GlobalAddressArray',
         claimed_websites: 'OriginArray',
         dapp_definitions: 'GlobalAddressArray',
+        account_locker: 'GlobalAddress',
         name: 'String',
         description: 'String',
         tags: 'StringArray',
@@ -495,6 +511,7 @@
         name: '',
         description: '',
         icon_url: '',
+        account_locker: '',
         tags: '',
         claimed_entities: [],
         claimed_websites: [],
@@ -505,6 +522,7 @@
           ...extractedValues,
           claimed_entities: expected.claimed_entities?.typed.values || [],
           claimed_websites: expected.claimed_websites?.typed.values || [],
+          account_locker: expected.account_locker?.typed.value || '',
           dapp_definitions: expected.dapp_definitions?.typed.values || [],
           account_type: expected.account_type?.typed.value
             ? 'dapp definition'
