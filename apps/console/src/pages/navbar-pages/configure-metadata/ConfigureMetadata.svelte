@@ -312,6 +312,9 @@
       }),
       metadata: {},
       addLabel: '+ Add Claimed Website',
+      schema: z.string().regex(/^.*[^/]$/, {
+        message: 'Must not end with /'
+      }),
       showCondition: (formState: Record<string, any>) =>
         formState.account_type === 'dapp definition' ||
         formState.claimed_websites.length,
