@@ -292,6 +292,9 @@
       label: 'account_locker',
       placeholder: 'Enter locker address',
       formItemType: 'input',
+      schema: z.string().startsWith('locker_', {
+        message: 'Must start with locker_'
+      }),
       metadata: { type: MetadataType.Address },
       showCondition: (formState) =>
         formState.account_type === 'dapp definition',
