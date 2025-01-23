@@ -45,7 +45,10 @@
       | 'Package'
   ): EntityType => {
     if (type === 'Component' && address.startsWith('account_')) return 'Account'
-    if (type === 'Component' && address.startsWith('component_'))
+    if (
+      type === 'Component' &&
+      (address.startsWith('component_') || address.startsWith('locker_'))
+    )
       return 'Component'
     if (type === 'Package' && address.startsWith('package_')) return 'Package'
     if (type === 'FungibleResource' && address.startsWith('resource_'))
