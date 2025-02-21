@@ -257,7 +257,7 @@ jobs:
         IS_PUBLIC=${{needs.setup-build-args.outputs.is_public}}
 
   snyk-monitor:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - push-sandbox
@@ -283,7 +283,7 @@ jobs:
           command: monitor
 
   snyk-container-monitor:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-22.04
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs:
       - build
