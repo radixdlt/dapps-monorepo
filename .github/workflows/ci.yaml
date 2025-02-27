@@ -79,7 +79,7 @@ jobs:
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
   build:
-    runs-on: selfhosted-ubuntu-22.04
+    runs-on: ubuntu-22.04
     needs:
       - trigger
     steps:
@@ -558,7 +558,7 @@ jobs:
       secrets_account_id: ${{ secrets.SECRETS_ACCOUNT_ID }}
 
   # storybook-tests:
-  #   runs-on: selfhosted-ubuntu-22.04
+  #   runs-on: ubuntu-22.04
   #   permissions:
   #     id-token: write
   #     pull-requests: read
