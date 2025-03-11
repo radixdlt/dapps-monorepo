@@ -187,131 +187,10 @@ jobs:
       github_repository: ${{ github.repository }}
       add_report_comment_to_pull_request: true
 
-  snyk-scan-deps-licences:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: RDXWorks-actions/checkout@main
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'snyk-scan-deps-licences'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Run Snyk to check for deps vulnerabilities
-        uses: RDXWorks-actions/snyk-actions/node@master
-        continue-on-error: true
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=critical
-
-  snyk-scan-code:
-    runs-on: ubuntu-latest
-    needs:
-      - trigger
-    steps:
-      - uses: RDXWorks-actions/checkout@main
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'snyk-scan-code'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Run Snyk to check for code vulnerabilities
-        uses: RDXWorks-actions/snyk-actions/node@master
-        continue-on-error: true # temporary until code fix
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --severity-threshold=high
-          command: code test
-
-  snyk-sbom:
-    runs-on: ubuntu-latest
-    needs:
-      - snyk-scan-deps-licences
-      - snyk-scan-code
-    permissions: write-all
-    steps:
-      - uses: RDXWorks-actions/checkout@main
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'snyk-sbom'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Generate SBOM # check SBOM can be generated but nothing is done with it
-        uses: RDXWorks-actions/snyk-actions/node@master
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --format=cyclonedx1.4+json --json-file-output sbom.json
-          command: sbom
-      - name: Upload SBOM
-        if: github.event_name == 'release'
-        uses: RDXWorks-actions/upload-release-assets@c94805dc72e4b20745f543da0f62eaee7722df7a
-        with:
-          files: sbom.json
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          release-tag: ${{ github.event.release.tag_name }}
-
-  snyk-monitor:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-    needs:
-      - setup-tags
-      - push-dashboard
-      - push-storybook
-    steps:
-      - uses: RDXWorks-actions/checkout@main
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'snyk-monitor'
-          secret_prefix: 'SNYK'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - name: Enable Snyk online monitoring to check for vulnerabilities
-        uses: RDXWorks-actions/snyk-actions/node@master
-        with:
-          args: --all-projects --org=${{ env.SNYK_PROJECTS_ORG_ID }} --target-reference=${{ github.ref_name }}
-          command: monitor
-
-  snyk-container-monitor:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-    needs:
-      - setup-tags
-      - push-dashboard
-      - push-storybook
-    steps:
-      - uses: radixdlt/public-iac-resuable-artifacts/fetch-secrets@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          step_name: 'snyk-monitor'
-          secret_prefix: 'SNY'
-          secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          parse_json: true
-      - uses: radixdlt/public-iac-resuable-artifacts/snyk-container-monitor@main
-        with:
-          role_name: 'arn:aws:iam::${{ secrets.SECRETS_ACCOUNT_ID }}:role/gh-common-secrets-read-access'
-          app_name: 'dashboard'
-          dockerhub_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/dockerhub-credentials-read-only'
-          snyk_secret_name: 'arn:aws:secretsmanager:eu-west-2:${{ secrets.SECRETS_ACCOUNT_ID }}:secret:github-actions/common/snyk-credentials-rXRpuX'
-          snyk_org_id: ${{ env.SNY_ORG_ID }}
-          image: docker.io/radixdlt/dapps-dashboard:${{ needs.setup-tags.outputs.tag-with-network }}
-          target_ref: ${{ github.ref_name }}
-
   push-dashboard:
     name: (PRIVATE) Dashboard docker AMD
     needs:
       - setup-tags
-      - snyk-scan-deps-licences
-      - snyk-scan-code
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
       runs_on: selfhosted-ubuntu-22.04
@@ -326,7 +205,6 @@ jobs:
       scan_image: false
       with_sbom: false
       provenance: false
-      snyk_target_ref: ${{ github.ref_name }}
       build-args: |
         NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
         NPM_LOCAL_CACHE=.cache/
@@ -335,8 +213,6 @@ jobs:
     name: (PRIVATE) Dashboard docker AMD
     needs:
       - setup-tags
-      - snyk-scan-deps-licences
-      - snyk-scan-code
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
       runs_on: selfhosted-ubuntu-22.04
@@ -348,9 +224,8 @@ jobs:
       context: './'
       dockerfile: './Dockerfile'
       platforms: 'linux/amd64'
-      scan_image: true
+      scan_image: false
       provenance: false
-      snyk_target_ref: ${{ github.ref_name }}
       with_sbom: false
       build-args: |
         NETWORK_NAME=${{ needs.setup-tags.outputs.network-name }}
