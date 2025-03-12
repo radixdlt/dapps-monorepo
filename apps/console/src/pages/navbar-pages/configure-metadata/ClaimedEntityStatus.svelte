@@ -28,6 +28,7 @@
       (value.startsWith('account_') ||
         value.startsWith('component_') ||
         value.startsWith('package_') ||
+        value.startsWith('locker_') ||
         value.startsWith('resource_') ||
         value.startsWith('validator_'))
     ) {
@@ -45,7 +46,11 @@
             expectedType = 'GlobalAddressArray'
           }
 
-          if (value.startsWith('component_') || value.startsWith('package_')) {
+          if (
+            value.startsWith('component_') ||
+            value.startsWith('package_') ||
+            value.startsWith('locker_')
+          ) {
             keyToCheck = 'dapp_definition'
             expectedType = 'GlobalAddress'
           }
