@@ -94,7 +94,7 @@ export const getRecentTransactions = (
       },
       manifest_badges_presented_filter: filters?.badges,
       transaction_status_filter: filters?.transactionStatus,
-      balance_change_resources: filters?.resources,
+      balance_change_resources_filter: filters?.resources,
       affected_global_entities_filter: [
         ...(address ? [address] : []),
         ...(filters?.affectedEntities ?? [])
@@ -125,7 +125,7 @@ export const getRecentTransactions = (
 
 export const getRecentNetworkTransactions = (
   input: {
-    cursor?: string,
+    cursor?: string
     address?: string
   } = {},
   filters?: {
