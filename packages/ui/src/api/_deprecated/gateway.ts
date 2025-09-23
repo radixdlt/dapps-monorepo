@@ -11,6 +11,7 @@ import {
   ManifestClass,
   StreamTransactionsRequestEventFilterItemEventEnum
 } from '@common/gateway-sdk'
+import { get } from 'svelte/store'
 
 export const gatewayApi = GatewayApiClient.initialize({
   applicationName: 'Radix Dashboard',
@@ -71,29 +72,33 @@ export const callApi = <T extends keyof typeof api>(
 > => fromPromise((api[methodName] as any)(...args), handleError)
 
 export const getRecentTransactions = (
-  address: string,
+  address?: string,
   cursor?: string,
   filters?: {
     withdrawnFrom?: string[]
     depositedTo?: string[]
     badges?: string[]
     resources?: string[]
+    transactionStatus?: 'Success' | 'Failure' | 'All'
     affectedEntities?: string[]
     transactionType?: ManifestClass
   }
 ) =>
   gatewayApi.stream.innerClient.streamTransactions({
     streamTransactionsRequest: {
-      affected_global_entities_filter: [
-        address,
-        ...(filters?.affectedEntities ?? [])
-      ],
       cursor,
+      limit_per_page: 15,
       opt_ins: {
+        receipt_output: false,
         balance_changes: true
       },
       manifest_badges_presented_filter: filters?.badges,
-      manifest_resources_filter: filters?.resources,
+      transaction_status_filter: filters?.transactionStatus,
+      balance_change_resources_filter: filters?.resources,
+      affected_global_entities_filter: [
+        ...(address ? [address] : []),
+        ...(filters?.affectedEntities ?? [])
+      ],
       events_filter:
         filters?.withdrawnFrom || filters?.depositedTo
           ? [
@@ -119,51 +124,22 @@ export const getRecentTransactions = (
   })
 
 export const getRecentNetworkTransactions = (
-  cursor?: string,
+  input: {
+    cursor?: string
+    address?: string
+  } = {},
   filters?: {
     withdrawnFrom?: string[]
     depositedTo?: string[]
     badges?: string[]
     resources?: string[]
+    transactionStatus?: 'Success' | 'Failure' | 'All'
     affectedEntities?: string[]
     transactionType?: ManifestClass
   }
 ) =>
   fromPromise(
-    gatewayApi.stream.innerClient.streamTransactions({
-      streamTransactionsRequest: {
-        cursor,
-        limit_per_page: 15,
-        opt_ins: {
-          receipt_output: false,
-          balance_changes: true
-        },
-        manifest_badges_presented_filter: filters?.badges,
-        manifest_resources_filter: filters?.resources,
-        affected_global_entities_filter: filters?.affectedEntities,
-        events_filter:
-          filters?.withdrawnFrom || filters?.depositedTo
-            ? [
-                ...(filters?.withdrawnFrom || []).map((address) => ({
-                  event:
-                    StreamTransactionsRequestEventFilterItemEventEnum.Withdrawal,
-                  address
-                })),
-                ...(filters?.depositedTo || []).map((address) => ({
-                  event:
-                    StreamTransactionsRequestEventFilterItemEventEnum.Deposit,
-                  address
-                }))
-              ]
-            : undefined,
-        manifest_class_filter: filters?.transactionType
-          ? {
-              _class: filters?.transactionType,
-              match_only_most_specific: true
-            }
-          : undefined
-      }
-    }),
+    getRecentTransactions(input.address, input.cursor, filters),
     handleError
   )
 

@@ -13,6 +13,10 @@
   export let affectedEntities: string[] = []
   export let transactionType: ManifestClass | undefined = undefined
   export let filterPanelOpen = false
+  export let selectedTransactionStatus: { label: string; value: string } = {
+    label: 'All',
+    value: 'All'
+  }
 
   const dispatch = createEventDispatcher<{
     'apply-filters': string
@@ -68,13 +72,18 @@
       ? `transactionType=${transactionType}`
       : undefined
 
+    const transactionStatusParam = selectedTransactionStatus
+      ? `transactionStatus=${selectedTransactionStatus.value}`
+      : undefined
+
     const params = [
       withdrawnFromParam,
       depositedToParam,
       badgesParam,
       resourcesParam,
       affectedEntitiesParam,
-      transactionTypeParam
+      transactionTypeParam,
+      transactionStatusParam
     ]
       .filter(Boolean)
       .join('&')
@@ -147,6 +156,17 @@
       ]}
     />
 
+    <OptionsFilter
+      title="Transaction Status"
+      description="Show only transactions with the selected status"
+      bind:selected={selectedTransactionStatus}
+      options={[
+        { label: 'Success', value: 'Success' },
+        { label: 'Failure', value: 'Failure' },
+        { label: 'All', value: 'All' }
+      ]}
+    />
+
     <EntityFilterCard
       title="Withdrawn From Account"
       description="Show only transactions with withdrawals from these accounts"
@@ -167,7 +187,7 @@
 
     <EntityFilterCard
       title="Resources"
-      description="Shows only successful transactions which referenced this resource"
+      description="Shows only transactions which resulted in a non-fee balance change of this resource"
       bind:values={resources}
     />
 
