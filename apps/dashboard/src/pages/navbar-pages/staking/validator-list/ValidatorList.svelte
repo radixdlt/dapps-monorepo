@@ -206,7 +206,7 @@
 </script>
 
 {#if showTable}
-  <GridTable {columns} defaultSortedColumn="totalStake">
+  <GridTable {columns} defaultSortedColumn="apy">
     <div class="header" slot="header-cell" let:column let:sort let:sortStatus>
       {@const sorting = column?.sortBy ? sortStatus : undefined}
       {#if column?.id === 'uptime'}

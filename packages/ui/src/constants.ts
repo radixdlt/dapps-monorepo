@@ -91,4 +91,4 @@ export const PROD_SAFE_IMAGE_SERVICE_URL = 'https://image-service.radixdlt.com'
 
 export const NON_EXTERNAL_ORIGINS = ['https://www.radixdlt.com']
 
-export const PERCENTAGE_TOTAL_STAKE_WARNING = 3
+export const PERCENTAGE_TOTAL_STAKE_WARNING = 4
