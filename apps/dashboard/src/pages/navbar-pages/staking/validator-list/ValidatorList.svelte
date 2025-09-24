@@ -24,6 +24,7 @@
 
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
+  import { onMount } from 'svelte'
   import { connected } from '@stores'
   import { bookmarkedValidatorsStore } from '../../../../stores'
   import GridTable from '@components/_base/table/grid-table/GridTable.svelte'
@@ -38,6 +39,7 @@
   } from '@api/utils/entities/component/validator'
   import { currentEpoch } from '@dashboard/routes/(navbar-pages)/network-staking/(load-validators)/(load-staking-data)/+layout.svelte'
   import { uptimeModule } from '@dashboard/lib/validators/uptime-module'
+  import { get } from 'svelte/store'
 
   interface $$Slots {
     rows: {
@@ -53,13 +55,11 @@
 
   $: _validators = Promise.resolve(validators)
 
-  let showTable = true
+  let showTable = false
 
-  $: _validators.then((validators) => {
-    showTable = validators.length > 0
-  })
+  $: _validators
 
-  let selectedUptime: UptimeValue
+  let selectedUptime: UptimeValue = '1month'
 
   let transformedValidators: Promise<TransformedValidator[]>
 
@@ -203,6 +203,21 @@
     () => {
       transformedValidators = transformedValidators.then(sortFn())
     }
+
+  onMount(async () => {
+    while (get(uptimeModule.isLoading)) {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    }
+
+    transformedValidators = transformedValidators.then((validators) => {
+      return validators.sort((a, b) => {
+        const apy1 = uptimeModule.getApy(a.validator, selectedUptime)
+        const apy2 = uptimeModule.getApy(b.validator, selectedUptime)
+        return sortBasic(apy2 || 0, apy1 || 0, 'ascending')
+      })
+    })
+    showTable = true
+  })
 </script>
 
 {#if showTable}
