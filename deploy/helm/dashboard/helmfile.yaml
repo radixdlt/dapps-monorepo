@@ -63,4 +63,7 @@ releases:
             size: "1Gi"
             enabled: true
         image:
-          tag: 15.2.0-debian-11-r26
+          registry: public.ecr.aws
+          repository: bitnami/postgresql
+          repository: u2o0d2a1/bitnami-postgresql
+          tag: 15.4.0-debian-11-r56
