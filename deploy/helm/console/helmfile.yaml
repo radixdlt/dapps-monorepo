@@ -12,7 +12,7 @@ environments:
 helmDefaults:
   verify: false
   wait: false
-  timeout: 600
+  timeout: 60
   recreatePods: false
   force: false
   createNamespace: false
