@@ -47,16 +47,16 @@ dashboard:
 
   autoscaling:
     enabled: true
-    minReplicas: 2
-    maxReplicas: 10
-    targetCPUUtilizationPercentage: 70
-    targetMemoryUtilizationPercentage: 70
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   resources:
     limits:
-      memory: 500Mi
+      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 300Mi
+      cpu: 50m
+      memory: 320Mi
 
   alerts:
     aws_infrastructure_enabled: true

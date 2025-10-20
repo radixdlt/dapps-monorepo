@@ -21,15 +21,15 @@ console:
             pathType: ImplementationSpecific
 
   autoscaling:
-    enabled: true
-    minReplicas: 2
-    maxReplicas: 20
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
     targetCPUUtilizationPercentage: 70
-    targetMemoryUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
 
   resources:
     limits:
-      cpu: 475m
+      cpu: 250m
       memory: 256Mi
     requests:
       cpu: 50m
