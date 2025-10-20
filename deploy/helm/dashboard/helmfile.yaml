@@ -12,7 +12,7 @@ environments:
 helmDefaults:
   verify: false
   wait: false
-  timeout: 600
+  timeout: 120
   recreatePods: false
   force: false
   createNamespace: false
@@ -64,6 +64,5 @@ releases:
             enabled: true
         image:
           registry: public.ecr.aws
-          repository: bitnami/postgresql
           repository: u2o0d2a1/bitnami-postgresql
           tag: 15.4.0-debian-11-r56

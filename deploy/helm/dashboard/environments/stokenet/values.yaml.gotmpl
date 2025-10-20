@@ -46,18 +46,18 @@ dashboard:
             pathType: ImplementationSpecific
 
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 20
     targetCPUUtilizationPercentage: 70
     targetMemoryUtilizationPercentage: 70
   resources:
     limits:
-      cpu: 475m
+      cpu: 200m
       memory: 512Mi
     requests:
       cpu: 50m
-      memory: 512Mi
+      memory: 256Mi
 
 developerAccess:
   pod:
