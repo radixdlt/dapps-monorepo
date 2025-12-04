@@ -8,6 +8,7 @@ metadata:
     release: prometheus-operator
     {{- include "dapps-console.labels" . | nindent 4 }}
 spec:
+  fallbackScrapeProtocol: PrometheusText0.0.4
   endpoints:
   - port: metrics
   namespaceSelector:
