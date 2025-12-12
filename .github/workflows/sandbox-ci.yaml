@@ -70,19 +70,6 @@ jobs:
           echo "This is triggered by ${{ github.event_name }}." >> $GITHUB_STEP_SUMMARY
           echo "Github action is ${{ github.event.action }}." >> $GITHUB_STEP_SUMMARY
 
-  phylum_analyze:
-    if: ${{ github.event.pull_request }}
-    uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/phylum-analyze.yml@main
-    secrets:
-      phylum_api_key: ${{ secrets.PHYLUM_API_KEY }}
-    with:
-      phylum_pr_number: ${{ github.event.number }}
-      phylum_pr_name: ${{ github.head_ref }}
-      phylum_group_name: dApp-engineering
-      phylum_project_id: 70969afc-325a-413c-8001-2092940e0d7d
-      github_repository: ${{ github.repository }}
-      add_report_comment_to_pull_request: true
-
   build:
     runs-on: ubuntu-latest
     needs:
@@ -140,7 +127,7 @@ jobs:
       - setup-build-args
     uses: radixdlt/public-iac-resuable-artifacts/.github/workflows/docker-build.yml@main
     with:
-      runs_on: selfhosted-ubuntu-22.04
+      runs_on: ubuntu-latest
       image_registry: 'docker.io'
       image_organization: 'radixdlt'
       target: 'sandbox'
