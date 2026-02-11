@@ -22,18 +22,6 @@ dashboard:
     URL: https://gilganet-dashboard.rdx-works-main.extratools.works
     PUBLIC_NETWORK_NAME: "gilganet"
 
-  secrets:
-  - name: database-url-v2
-    variable: "DATABASE_URL"
-    path: "rdx-works-main-dev/eks/dashboard/postgres"
-    secretProperty: "database-url-gilganet"
-    secretName: "database-url"
-  - name: jwt-secret-v2
-    variable: "JWT_SECRET"
-    path: "rdx-works-main-dev/eks/dashboard/jwt"
-    secretProperty: "jwt-secret"
-    secretName: "jwt-secret"
-
   ingress:
     enabled: true
     annotations:

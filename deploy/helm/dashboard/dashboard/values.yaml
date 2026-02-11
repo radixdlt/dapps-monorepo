@@ -1,8 +1,6 @@
 dashboard:
   replicaCount: 1
 
-  enable_db_migrations: true
-
   metrics:
     enabled: true
     port: 9209
@@ -71,8 +69,5 @@ dashboard:
       name: docker.io/radixdlt
 
   # Set it to true if you want to secret to be deployed.
-  docker_secret: 
+  docker_secret:
       enabled: true
-
-  alerts:
-    aws_infrastructure_enabled: false

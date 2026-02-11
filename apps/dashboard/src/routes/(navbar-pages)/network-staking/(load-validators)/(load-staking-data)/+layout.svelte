@@ -45,10 +45,7 @@
   let filter: FilterDetails
 
   const applyFilter =
-    (
-      validators: Awaited<typeof data.promises.validators>,
-      bookmarked: Awaited<typeof data.promises.bookmarkedValidators>
-    ) =>
+    (validators: Awaited<typeof data.promises.validators>) =>
     async (e: ComponentEvents<FilterDetails>['close']) => {
       const epoch = await $currentEpoch
       const uptimeData = uptimeModule.getDataForUptime(
@@ -60,7 +57,6 @@
             feeFilter,
             totalXRDStakeFilter,
             acceptsStakeFilter,
-            bookmarkedFilter,
             withinTop100Filter,
             uptimeFilter
           }
@@ -73,7 +69,6 @@
           v.percentageTotalStake <= totalXRDStakeFilter[1] &&
           (withinTop100Filter ? !!v.percentageTotalStake : true) &&
           (acceptsStakeFilter ? v.acceptsStake : true) &&
-          (bookmarkedFilter ? bookmarked[v.address] : true) &&
           (uptimeData?.[v.address] || 100) >= uptimeFilter.percentage
         )
       })
@@ -86,14 +81,10 @@
     }
 
   onMount(() => {
-    Promise.all([
-      data.promises.validators,
-      data.promises.bookmarkedValidators
-    ]).then(([validators, bookmarked]) => {
-      applyFilter(
-        validators,
-        bookmarked
-      )({ detail: DEFAULT_VALIDATORS_FILTER } as CustomEvent<any>)
+    data.promises.validators.then((validators) => {
+      applyFilter(validators)({
+        detail: DEFAULT_VALIDATORS_FILTER
+      } as CustomEvent<any>)
     })
   })
 
@@ -113,14 +104,14 @@
   }}
 />
 
-{#await Promise.all( [data.promises.validators, data.promises.bookmarkedValidators, $currentEpoch] ) then [validators, bookmarked, epoch]}
+{#await Promise.all( [data.promises.validators, $currentEpoch] ) then [validators, epoch]}
   <FilterDetails
     bind:this={filter}
     bind:open={filterOpen}
     feeValues={validators.map((v) => v.fee(epoch).percentage)}
     totalXRDStakeValues={validators.map((v) => v.percentageTotalStake)}
     on:close={(e) => {
-      applyFilter(validators, bookmarked)(e)
+      applyFilter(validators)(e)
       filterOpen = false
     }}
   />

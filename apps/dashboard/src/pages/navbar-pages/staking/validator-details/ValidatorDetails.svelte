@@ -8,7 +8,6 @@
   import InfoBox from '@components/info-box/InfoBox.svelte'
   import Address from '@components/_base/address/Address.svelte'
   import AcceptsStake from '../accepts-stake/AcceptsStake.svelte'
-  import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import SelectValidator from '../select-validator/SelectValidator.svelte'
   import { createEventDispatcher } from 'svelte'
   import RecentUptimeDetail from './RecentUptimeDetail.svelte'
@@ -61,9 +60,7 @@
 </script>
 
 <SidePanel useBackdrop on:close>
-  <SidePanelHeader text="Validator" on:closeClick={() => dispatch('close')}>
-    <BookmarkValidator {validator} withText />
-  </SidePanelHeader>
+  <SidePanelHeader text="Validator" on:closeClick={() => dispatch('close')} />
 
   <div class="header">
     <div class="validator-name">

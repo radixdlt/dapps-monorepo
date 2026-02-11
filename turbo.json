@@ -3,7 +3,6 @@
   "tasks": {
     "build": {
       "dependsOn": [
-        "db:generate",
         "build:storybook"
       ],
       "outputs": [
@@ -12,7 +11,6 @@
     },
     "build:prod": {
       "dependsOn": [
-        "db:generate",
         "build:storybook"
       ],
       "outputs": [
@@ -30,9 +28,7 @@
     "prettier": {},
     "prettier:fix": {},
     "coverage": {
-      "dependsOn": [
-        "db:generate"
-      ],
+      "dependsOn": [],
       "outputs": [
         "coverage"
       ]
@@ -41,16 +37,7 @@
     "lint": {},
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "db:generate"
-      ]
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
+      "persistent": true
     },
     "pre-push": {
       "dependsOn": [

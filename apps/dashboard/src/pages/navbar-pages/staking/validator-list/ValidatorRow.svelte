@@ -22,10 +22,7 @@
   import NftImage from '@components/_base/nft-image/NftImage.svelte'
   import SkeletonLoader from '@components/_base/skeleton-loader/SkeletonLoader.svelte'
   import StakingInfo from './staked/StakingInfo.svelte'
-  import IconNew from '@components/_base/icon/IconNew.svelte'
-  import StakingIcon from '@icons/staking.svg'
   import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
-  import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
@@ -59,21 +56,7 @@
     class:top3Percent
     on:click
   >
-    {#if $connected}
-      <div class="icon" style:min-width="2rem">
-        {#if showStakeInfo}
-          <div style:transform="translateX(-0.4rem)">
-            <IconNew icon={StakingIcon} --size="2.5rem" />
-          </div>
-        {:else if input === 'loading'}
-          <SkeletonLoader width={30} />
-        {:else}
-          <BookmarkValidator validator={input.validator} />
-        {/if}
-      </div>
-    {/if}
-
-    <div class="padding image" class:left-padded={!$connected}>
+    <div class="padding image">
       {#if input === 'loading'}
         <NftImage />
       {:else}
@@ -293,11 +276,6 @@
     border-top: none;
   }
 
-  .icon {
-    display: flex;
-    align-items: center;
-  }
-
   .center {
     display: flex;
     align-items: center;
@@ -401,15 +379,10 @@
   }
 
   @include mixins.mobile {
-    .icon,
-    .select {
-      grid-area: icon;
-      justify-content: center;
-      align-items: center;
-    }
-
     .select {
       grid-area: header;
+      justify-content: center;
+      align-items: center;
     }
 
     .name,

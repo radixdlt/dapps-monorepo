@@ -22,18 +22,6 @@ dashboard:
     PUBLIC_NETWORK_NAME: "mardunet"
     URL: https://mardunet-dashboard.rdx-works-main.extratools.works
 
-  secrets:
-  - name: database-url-v2
-    variable: "DATABASE_URL"
-    path: "rdx-works-main-dev/eks/dashboard/postgres"
-    secretProperty: "database-url-mardunet"
-    secretName: "database-url"
-  - name: jwt-secret-v2
-    variable: "JWT_SECRET"
-    path: "rdx-works-main-dev/eks/dashboard/jwt"
-    secretProperty: "jwt-secret"
-    secretName: "jwt-secret"
-
   ingress:
     enabled: true
     annotations:
