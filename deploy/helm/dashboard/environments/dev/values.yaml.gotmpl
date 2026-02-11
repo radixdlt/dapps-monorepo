@@ -21,20 +21,6 @@ dashboard:
   params:
     URL: https://dev-dashboard.rdx-works-main.extratools.works
 
-  enable_db_migrations: true
-
-  secrets:
-  - name: database-url-v2
-    variable: "DATABASE_URL"
-    path: "rdx-works-main-dev/eks/dashboard/postgres"
-    secretProperty: "database-url-hammunet"
-    secretName: "database-url"
-  - name: jwt-secret-v2
-    variable: "JWT_SECRET"
-    path: "rdx-works-main-dev/eks/dashboard/jwt"
-    secretProperty: "jwt-secret"
-    secretName: "jwt-secret"
-
   ingress:
     enabled: true
     annotations:
@@ -57,17 +43,6 @@ dashboard:
     requests:
       cpu: 50m
       memory: 256Mi
-
-  alerts:
-    aws_infrastructure_enabled: true
-    rds_cluster_name: dashboard-dev
-    labels:
-      cluster: rdx-works-main-dev
-      env: dev
-    free_rds_ram_warning_threshold_in_bytes: "100000000"
-    free_rds_ram_warning_threshold: "100 MB"
-    free_rds_ram_critical_threshold_in_bytes: "50000000"
-    free_rds_ram_critical_threshold: "50 MB"
 
 developerAccess:
   pod:

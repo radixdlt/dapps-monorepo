@@ -26,7 +26,6 @@
   import type { ComponentProps } from 'svelte'
   import { onMount } from 'svelte'
   import { connected } from '@stores'
-  import { bookmarkedValidatorsStore } from '../../../../stores'
   import GridTable from '@components/_base/table/grid-table/GridTable.svelte'
   import BasicHeader from '@components/_base/table/basic-header/BasicHeader.svelte'
   import type { Direction, SortableValues } from '@components/_base/table/types'
@@ -81,20 +80,8 @@
       v2: TransformedValidator,
       direction: Direction
     ) => {
-      if (
-        $bookmarkedValidatorsStore[v1.address] &&
-        !$bookmarkedValidatorsStore[v2.address]
-      ) {
-        return -1
-      } else if (
-        !$bookmarkedValidatorsStore[v1.address] &&
-        $bookmarkedValidatorsStore[v2.address]
-      ) {
-        return 1
-      } else {
-        // @ts-ignore
-        return sortFn(v1[key], v2[key], direction)
-      }
+      // @ts-ignore
+      return sortFn(v1[key], v2[key], direction)
     }
 
   let columns: ComponentProps<GridTable<TransformedValidator>>['columns'] = [

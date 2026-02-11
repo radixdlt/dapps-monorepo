@@ -22,18 +22,6 @@ dashboard:
     URL: https://dashboard.radixdlt.com
     NETWORK_GATEWAY_API: https://mainnet.radixdlt.com
     PUBLIC_NETWORK_NAME: "mainnet"
-  secrets:
-  - name: database-url-v2
-    variable: "DATABASE_URL"
-    path: "rtlj-prod/eks/dashboard/mainnet/postgres"
-    secretProperty: "database-url"
-    secretName: "database-url"
-  - name: jwt-secret-v2
-    variable: "JWT_SECRET"
-    path: "rtlj-prod/eks/dashboard/jwt"
-    secretProperty: "jwt-secret"
-    secretName: "jwt-secret"
-
 
   ingress:
     enabled: true
@@ -57,17 +45,6 @@ dashboard:
     requests:
       cpu: 50m
       memory: 320Mi
-
-  alerts:
-    aws_infrastructure_enabled: true
-    rds_cluster_name: dashboard-prod
-    labels:
-      cluster: rtlj-prod
-      env: mainnet
-    free_rds_ram_warning_threshold_in_bytes: "500000000"
-    free_rds_ram_warning_threshold: "500 MB"
-    free_rds_ram_critical_threshold_in_bytes: "250000000"
-    free_rds_ram_critical_threshold: "250 MB"
 
 developerAccess:
   pod:

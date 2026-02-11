@@ -17,8 +17,6 @@ helmDefaults:
   force: false
   createNamespace: false
 repositories:
-  - name: bitnami
-    url: https://charts.bitnami.com/bitnami
   - name: rdx-works
     url: https://raw.githubusercontent.com/radixdlt/helm-charts/master/
     username: {{ requiredEnv "HELM_GH_USER" }}
@@ -49,20 +47,3 @@ releases:
     values:
       - environments/{{ .Environment.Name }}/values.yaml.gotmpl
 
-  - name: postgres
-    chart: bitnami/postgresql
-    version:  12.4.2
-    installed: {{ eq .Environment.Name "pr" }}
-    values:
-      - auth:
-          postgresPassword: secret
-          database: dashboard
-        primary:
-          persistence:
-            storageClass: "gp3-no-retain"
-            size: "1Gi"
-            enabled: true
-        image:
-          registry: public.ecr.aws
-          repository: u2o0d2a1/bitnami-postgresql
-          tag: 15.4.0-debian-11-r56

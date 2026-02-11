@@ -8,8 +8,7 @@
       timeframe: '1month' as UptimeValue,
       percentage: 0
     },
-    acceptsStakeFilter: false,
-    bookmarkedFilter: false
+    acceptsStakeFilter: false
   }
 </script>
 
@@ -29,7 +28,6 @@
 
   export const reset = () => {
     feeFilter = DEFAULT_VALIDATORS_FILTER.feeFilter
-    bookmarkedFilter = DEFAULT_VALIDATORS_FILTER.bookmarkedFilter
     withinTop100Filter = DEFAULT_VALIDATORS_FILTER.withinTop100Filter
     acceptsStakeFilter = DEFAULT_VALIDATORS_FILTER.acceptsStakeFilter
     totalXRDStakeFilter = DEFAULT_VALIDATORS_FILTER.totalXRDStakeFilter
@@ -37,7 +35,6 @@
   }
   let {
     feeFilter,
-    bookmarkedFilter,
     withinTop100Filter,
     acceptsStakeFilter,
     totalXRDStakeFilter,
@@ -57,8 +54,7 @@
       totalXRDStakeFilter,
       uptimeFilter,
       withinTop100Filter,
-      acceptsStakeFilter,
-      bookmarkedFilter
+      acceptsStakeFilter
     })
   }
 
@@ -69,7 +65,6 @@
       totalXRDStakeFilter: typeof totalXRDStakeFilter
       uptimeFilter: typeof uptimeFilter
       acceptsStakeFilter: boolean
-      bookmarkedFilter: boolean
     }
   }>()
 </script>
@@ -88,12 +83,6 @@
       title="Accepts Stake"
       description="Show only validators that currently accepts new stake"
       bind:on={acceptsStakeFilter}
-    />
-
-    <SwitchFilterCard
-      title="Bookmarked"
-      description="Show only validators that you have bookmarked"
-      bind:on={bookmarkedFilter}
     />
   </div>
 

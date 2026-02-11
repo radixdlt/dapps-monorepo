@@ -27,7 +27,6 @@
   import { CURRENT_NETWORK } from '@networks'
   import Theme from '@components/_base/theme/Theme.svelte'
   import { accountLabel } from '@utils'
-  import { authApi } from '../server/auth/auth-api'
   import ValidatorsIcon from '@icons/validators-menu.svg'
   import { resolveRDT } from '../../../../packages/ui/src/radix'
   import LogoIcon from '@images/dashboard-logo.svg'
@@ -48,8 +47,6 @@
   // @ts-ignore
   import * as amplitude from '@amplitude/analytics-browser'
   let mounted = false
-
-  const { createChallenge } = authApi
 
   $: {
     $page
@@ -90,26 +87,10 @@
       logger: Logger(1),
       onDisconnect: () => {
         updateAccounts([])
-        authApi.logout()
       }
     })
 
-    rdt.walletApi.setRequestData(
-      DataRequestBuilder.accounts().atLeast(1),
-      DataRequestBuilder.persona().withProof()
-    )
-
-    rdt.walletApi.provideChallengeGenerator(() =>
-      createChallenge().unwrapOr('')
-    )
-
-    rdt.walletApi.dataRequestControl(async ({ proofs }) => {
-      const personaProof = proofs.find((proof) => proof.type === 'persona')
-      if (personaProof) {
-        const result = await authApi.login(personaProof)
-        if (result.isErr()) throw new Error("Couldn't login")
-      }
-    })
+    rdt.walletApi.setRequestData(DataRequestBuilder.accounts().atLeast(1))
 
     rdt.walletApi.walletData$.subscribe(({ accounts }) => {
       updateAccounts(accounts)

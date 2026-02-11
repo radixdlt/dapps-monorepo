@@ -14,7 +14,6 @@
   export const context = useContext<{
     connected: Writable<boolean>
     validators: Writable<Validator[]>
-    bookmarkedValidators: Writable<Record<string, boolean>>
   }>()
 
   export const selectedValidators = writable<Record<string, boolean>>({})

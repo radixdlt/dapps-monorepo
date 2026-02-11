@@ -25,7 +25,6 @@
   import IconNew from '@components/_base/icon/IconNew.svelte'
   import StakingIcon from '@icons/staking.svg'
   import ValidatorPlaceholder from '@icons/validator-placeholder.svg'
-  import BookmarkValidator from '../bookmark-validator/BookmarkValidator.svelte'
   import { PERCENTAGE_TOTAL_STAKE_WARNING } from '@constants'
   import TopValidatorWarning from '../TopValidatorWarning.svelte'
   import type { TransformedValidator } from './ValidatorList.svelte'
@@ -65,10 +64,8 @@
           <div style:transform="translateX(-0.4rem)">
             <IconNew icon={StakingIcon} --size="2.5rem" />
           </div>
-        {:else if input === 'loading'}
-          <SkeletonLoader width={30} />
         {:else}
-          <BookmarkValidator validator={input.validator} />
+          <div />
         {/if}
       </div>
     {/if}
