@@ -8,7 +8,6 @@
     | ValidatorListItem<true, true>[]
 
   export enum ColumnIds {
-    stakingIconBookmark = 'staking-icon-or-bookmark',
     icon = 'icon',
     name = 'name',
     address = 'address',
@@ -174,13 +173,9 @@
   }
 
   $: if ($connected) {
-    columns = [
-      { id: ColumnIds.stakingIconBookmark },
-      ...columns,
-      { id: ColumnIds.select }
-    ]
-  } else if (isEmpty(columns[0]) && isEmpty(columns[columns.length - 1])) {
-    columns = columns.slice(1, -1)
+    columns = [...columns, { id: ColumnIds.select }]
+  } else if (isEmpty(columns[columns.length - 1])) {
+    columns = columns.slice(0, -1)
   }
 
   $: columnIds = columns.map((column) => column.id) as ColumnIds[]
