@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getRecentNetworkTransactions } from '@api/_deprecated/gateway'
   import PaginatedTable from '@components/_base/table/basic-table/PaginatedTable.svelte'
-  import { createEventDispatcher, type ComponentProps } from 'svelte'
+  import { type ComponentProps } from 'svelte'
   import {
     chevronColumnDefinition,
     dateAndTxIdColumnDefinition,
@@ -20,7 +20,7 @@
   import InfoBar from '@components/info-bar/InfoBar.svelte'
 
   export let queryFunction = (cursor?: string) =>
-    getRecentNetworkTransactions(cursor).unwrapOr({
+    getRecentNetworkTransactions({ cursor }).unwrapOr({
       items: []
     })
 

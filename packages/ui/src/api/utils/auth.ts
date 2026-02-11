@@ -139,7 +139,9 @@ export const isAllowed =
 
 const getEntryInfo = (entry: ComponentEntityRoleAssignmentEntry) => {
   const assignment = entry.assignment
-  const rule = assignment.explicit_rule as AccessRule | undefined
+  const rule =
+    assignment.resolution === 'Explicit' &&
+    (assignment.explicit_rule as AccessRule | undefined)
 
   const roleKey = entry.role_key.name
   const module = entry.role_key.module
