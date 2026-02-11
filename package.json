@@ -7,8 +7,6 @@
     "dev": "turbo run dev",
     "prepare": "husky install",
     "svelte:check": "turbo run svelte:check",
-    "db:generate": "turbo run db:generate",
-    "db:push": "turbo run db:push",
     "coverage": "turbo run coverage",
     "pre-push": "turbo run pre-push",
     "storybook": "turbo run storybook",

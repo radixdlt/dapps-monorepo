@@ -90,22 +90,6 @@ The wallet and Radix dApp Toolkit is instantiated in the root layout file (`src/
 
 Sending transactions to the wallet is done through a utility in `packages/ui/src/radix.ts`.
 
-#### Database
-
-We use a database to store information about bookmarked validators. We associate each user's on-chain identity address to a list of validator addresses. The schema can be found at `prisma/schema.prisma` and database client at `src/server/db/db-client.ts`.
-
-#### Authentication
-
-Authentication in the dashboard is handled through the Radix Wallet and persisted server-side:
-
-1. **Initial Connection**: When a user connects their Radix Wallet, they receive a login challenge.
-2. **Challenge Signing**: The user signs this challenge with their wallet to prove ownership of their account.
-3. **Session Management**: After successful authentication:
-   - A session is created server-side
-   - A session cookie is set in the browser
-   - The user's identity address is stored in the session.
-4. **Authorization**: Protected routes and API endpoints verify the session cookie to ensure the user is authenticated.
-
 #### Configuration
 
 Environment-specific configuration is managed through `.env` files with different settings for development, testing, and production environments. Read more here https://svelte.dev/docs/kit/$env-dynamic-public.
