@@ -81,6 +81,50 @@ Set of svelte components reused between Dev Console and Dashboard apps. Contains
 
 Custom ESLint configuration used by other packages and apps.
 
+# Deployment
+
+Each app is a SvelteKit application. The default adapter is `@sveltejs/adapter-node`, which produces a standalone Node.js server. But, you can easily deploy to a serverless environment like Vercel, instructions are included below.
+
+## Environment variables
+
+The apps use the following environment variables (set via `.env` files or your platform's environment configuration):
+
+| Variable | Description |
+|---|---|
+| `PUBLIC_NETWORK_NAME` | Radix network to target (e.g. `mainnet`, `stokenet`) |
+| `PUBLIC_AMPLITUDE_API_KEY` | Amplitude analytics key (optional) |
+| `PUBLIC_APP_ENV` | App environment identifier (e.g. `production`, `development`) |
+
+## Node.js (default)
+
+Build and run an individual app:
+
+```bash
+npm install
+npx turbo run build --filter=dashboard
+node apps/dashboard/build
+```
+
+Replace `dashboard` with `console` or `sandbox` as needed.
+
+The build output is written to `apps/<app>/build/` by default. The Node.js server listens on port `3000` (configurable via the `PORT` environment variable).
+
+## Serverless (Vercel)
+
+To deploy on Vercel, you need to switch SvelteKit from the Node adapter to the Vercel adapter:
+
+1. In `packages/ui/svelte.config.js`, change the import from `@sveltejs/adapter-node` to `@sveltejs/adapter-vercel`, and change `adapter: adapter({ out: 'build' })` to `adapter: adapter()`.
+2. In the `devDependencies` of each app's `package.json` (`apps/console/package.json`, `apps/dashboard/package.json`) and `packages/ui/package.json`, replace `"@sveltejs/adapter-auto"` with `"@sveltejs/adapter-vercel": "^5"`.
+3. Deploy on Vercel (repeat for each app you want to deploy):
+   1. Go to [vercel.com](https://vercel.com) and open your dashboard.
+   2. Click **Add New** → **Project**.
+   3. Select this repository (fork/clone it to your GitHub account first if needed). Vercel should automatically detect it as a Turborepo monorepo.
+   4. Under **Root Directory**, change it to the app you want to deploy (e.g. `apps/dashboard`, `apps/console`, or `apps/sandbox`).
+   5. Configure the environment variables listed above under **Environment Variables**.
+   6. Click **Deploy**.
+
+   You need to create a separate Vercel project for each app you want to deploy.
+
 # License
 
 * [Radix Dashboard](apps/dashboard/README.md#license) 
