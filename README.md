@@ -83,7 +83,7 @@ Custom ESLint configuration used by other packages and apps.
 
 # Deployment
 
-Each app is a SvelteKit application. The default adapter is `@sveltejs/adapter-node`, which produces a standalone Node.js server.
+Each app is a SvelteKit application. The default adapter is `@sveltejs/adapter-node`, which produces a standalone Node.js server. But, you can easily deploy to a serverless environment like Vercel, instructions are included below.
 
 ## Environment variables
 
