@@ -92,8 +92,18 @@ The apps use the following environment variables (set via `.env` files or your p
 | Variable | Description |
 |---|---|
 | `PUBLIC_NETWORK_NAME` | Radix network to target (e.g. `mainnet`, `stokenet`) |
+| `PUBLIC_DAPP_DEFINITION_ADDRESS` | dApp definition address (optional, overrides the default for the selected network) |
 | `PUBLIC_AMPLITUDE_API_KEY` | Amplitude analytics key (optional) |
 | `PUBLIC_APP_ENV` | App environment identifier (e.g. `production`, `development`) |
+
+### dApp Definition
+
+Each deployed instance of Console or Dashboard needs a dApp definition on the Radix Network. To set one up:
+
+1. Follow the [dApp Definition Setup Guide](https://docs.radixdlt.com/docs/dapp-definition-setup#setting-up-a-dapp-definition-using-dev-console) to create a dApp definition account on the network you are targeting.
+2. Set the `PUBLIC_DAPP_DEFINITION_ADDRESS` environment variable to the address of the account you created.
+
+If left empty, the apps will fall back to the default addresses defined in `packages/ui/src/constants.ts`, which do not point to your front-end and will cause errors.
 
 ## Node.js (default)
 
